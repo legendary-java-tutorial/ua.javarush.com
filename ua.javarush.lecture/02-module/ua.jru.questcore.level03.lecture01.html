@@ -1,0 +1,51 @@
+<p>- Привіт, Аміго! Хочу сьогодні тобі розповісти про причини існування інтерфейсів. Тобі дуже часто доведеться чути, що такий клас, об'єкт чи сутність підтримує певний інтерфейс. Що ж це означає - <strong>підтримувати інтерфейс</strong> ?</p><a href="https://cdn.javarush.com/images/article/6c1c13b8-2a0d-457d-be06-09dbc5e92910/original.jpeg" target="_blank"><img data-id="6c1c13b8-2a0d-457d-be06-09dbc5e92910" data-max-width="850" alt="Причини існування інтерфейсів - підтримка заявленої поведінки." src="https://cdn.javarush.com/images/article/6c1c13b8-2a0d-457d-be06-09dbc5e92910/800.jpeg" style="width: 850px;"></a>
+<p>У більш широкому значенні інтерфейс якоїсь речі – це механізм взаємодії цієї речі з іншими предметами. Наприклад, пульт від телевізора – це дистанційний інтерфейс. Собака розуміє та виконує команди – це означає, що собака підтримує голосовий інтерфейс (управління). Якщо все це підсумувати, можна сказати, що інтерфейс – це стандартизований спосіб взаємодії двох речей, і цей стандарт відомий двом сторонам. Коли людина каже собаці «сидіти», вона віддає команду відповідно до «голосового інтерфейсу управління собакою», і якщо собака виконує цю команду, то ми говоримо, що собака підтримує цей інтерфейс.</p>
+<p>Так само й у програмуванні. Методи – це події над об'єктом, з його даними. І якщо клас реалізує певні методи, він «підтримує виконання» певних команд. Які переваги дає об'єднання методів в інтерфейс?</p>
+<p><strong>1)</strong> Кожен <strong>interface</strong> , як і <strong>class</strong> , має унікальне ім'я. Обидві сторони можуть бути на 100% впевнені, що друга сторона підтримує саме потрібний інтерфейс, а не схожий.</p>
+<p><strong>2)</strong> Кожен інтерфейс накладає певні обмеження той клас, який збирається підтримувати його. Клас сам вирішує (його розробник), що він робитиме у разі виклику його методів, які він успадкував від інтерфейсу, але результат повинен перебувати в межах очікувань. Якщо ми скомандували собаці «сидіти», і вона покрутилася 5 хвабон на місці та села, то це – підтримка інтерфейсу. А якщо вона замість цього вчепилася вам у ногу, то ні про яку підтримку тут не може бути й мови. Виконання команди не призвело до очікуваних результатів.</p>
+<p>Допустимо, ти з друзями береш участь у написанні комп'ютерної гри. І тобі дісталася робота запрограмувати поведінку одного персонажа. Один ваш колега вже написав код для відображення всіх персонажів на екран. Другий, який відповідає за збереження гри на диск, написав код для збереження всіх об'єктів гри у файл. Кожен із них написав багато коду і зробив інтерфейс для взаємодії з ним. Наприклад, це може виглядати так:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код на Java</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">interface</span> <span class="token class-name"><span class="text-red">Saveable</span></span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">void</span> <span class="token function">saveToMap</span><span class="token punctuation">(</span><span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">&gt;</span></span> map<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token keyword">void</span> <span class="token function">loadFromMap</span><span class="token punctuation">(</span><span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">&gt;</span></span> map<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>- Інтерфейс зі збереження/завантаження об'єкта з map'а.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">interface</span> <span class="token class-name"><span class="text-red">Drawable</span></span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">void</span> <span class="token function">draw</span><span class="token punctuation">(</span><span class="token class-name">Screen</span> screen<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>- Інтерфейс з відтворення об'єкта всередині переданого об'єкта screen.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">PacMan</span> <span class="token keyword"></span><span class="text-red"><span class="token keyword">implements</span> <span class="token class-name">Saveable</span><span class="token punctuation">,</span> <span class="token class-name">Drawable</span></span><span class="token class-name"></span>
+<span class="token punctuation">{</span>
+…
+<span class="token punctuation">}</span></code></pre></td>
+    <td>- Твій клас, що реалізує підтримку двох інтерфейсів.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Іншими словами, щоб підтримати реалізацію якогось інтерфейсу (групи інтерфейсів) у своєму класі потрібно:</p>
+<p><strong>1)</strong> Успадкуватися від них</p>
+<p><strong>2)</strong> Реалізувати оголошені у них методи</p>
+<p><strong>3)</strong> Методи повинні робити те, навіщо вони призначені.</p>
+<p>Тоді решта коду програми, який нічого не знає про твій клас та його об'єкти, зможе успішно працювати з ним.</p>
+<p><span class="text-user">— А чому код може нічого не знати про мій клас?</span></p>
+<p>— Допустимо, ти взяв код програми, який хтось написав рік тому. Або твої друзі купабо/ліцензували двигун гри у когось ще. Існує робочий код гри. Тисячі об'єктів, що взаємодіють один з одним. І вони можуть легко <strong>взаємодіяти з твоїми об'єктами</strong> , якщо взаємодія організована через інтерфейси, і ти правильно реалізував ці інтерфейси у своїх класах.</p>
+<p><span class="text-user">- Круто! Не знав, що так можна.</span></p>
+<p>— На цьому принципі ґрунтуються все більші проекти. Вже давно ніхто нічого не пише з нуля.</p>
+<p>Люди теж не винаходять математику та алфавіт щоразу заново, а вивчають усе те, що було вигадано до них.</p>

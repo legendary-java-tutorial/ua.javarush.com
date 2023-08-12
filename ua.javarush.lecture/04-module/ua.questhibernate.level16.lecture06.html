@@ -1,0 +1,129 @@
+Тестування Hibernate коду
+<p>----------------------------------------</p>
+База в пам'яті та тестування.
+Тестові дані.
+<p>----------------------------------------</p>
+<h2>База в пам'яті та тестування</h2>
+
+<p>А тепер найцікавіше. При тестуванні коду Hibernate дуже часто хочеться працювати не з реальною базою, а з якоюсь заглушкою, що реалізує мінімальну функціональність.</p>
+
+<p>А ти уявляєш заглушку, яка реалізує більшу частину стандарту SQL-сервера? Я – ні. Однак як така відмінно підходять бази даних у пам'яті. Працює це приблизно за такою схемою:</p>
+
+<ul>
+<li>У методі @BeforeAll ми ініціалізуємо з'єднання з базою даних у пам'яті.</li>
+<li>У методі @BeforeEach ми отримуємо сесію та відкриваємо транзакцію.</li>
+<li>У методі @Test ми працюємо з поточною сесією та транзакцією.</li>
+<li>У методі @AfterEach ми дотримуємося транзакції.</li>
+<li>І нарешті у методі AfterAll ми закриваємо з'єднання з базою.</li>
+</ul>
+
+<p>Ось як виглядає підготовка до роботи тесту:</p>
+
+<pre class='language-java line-numbers'><code>
+@Test
+public class HelloTest {
+  private static SessionFactory sessionFactory = null;
+  private Session session = null;
+ 
+  @BeforeAll
+  static void setup(){
+    try {
+  StandardServiceRegistry standardRegistry = New StandardServiceRegistryBuilder()
+      .configure("hibernate-test.cfg.xml").build();
+ 
+  Metadata metadata = New MetadataSources(standardRegistry)
+      .addAnnotatedClass(Employee.class)
+      .getMetadataBuilder()
+      .build();
+ 
+      sessionFactory = metadata.getSessionFactoryBuilder().build();
+ 
+    } catch (Throwable ex) {
+        throw new ExceptionInInitializerError(ex);
+    }
+  }
+ 
+  @BeforeEach
+  void setupThis(){
+      session = sessionFactory.openSession();
+      session.beginTransaction();
+  }
+ 
+  @AfterEach
+  void tearThis(){
+      session.getTransaction().commit();
+  }
+ 
+  @AfterAll
+  static void tear(){
+      sessionFactory.close();
+  }
+</code></pre>
+ 
+<p>А ось так виглядає сам тест із роботою Hibernate:</p>
+
+<pre class='language-java line-numbers'><code>
+  @Test
+public class HelloTest {
+ 
+  @Test
+  void createSessionFactoryWithXML() {
+       Employee emp = New Employee();
+       emp.setEmail("demo-user@mail.com");
+       emp.setFirstName("demo");
+       emp.setLastName("user");
+ 
+       Assertions.assertNull(emp.getEmployeeId());
+       session.persist(emp);
+       Assertions.assertNotNull(emp.getEmployeeId());
+  }
+}
+</code></pre>
+
+<h2>Тестові дані</h2>
+
+<p>Також можеш заповнити свою тестову базу тестовими даними.</p>
+
+<p>Зазвичай для цього роблять два sql-файли:</p>
+
+<ul>
+<li>schema.sql містить скрипт, який створює таблиці в базі</li>
+<li>test-data.sql містить скрипт, який заповнює таблиці тестовими даними</li>
+</ul>
+
+<p>Створення таблиці та тестові дані зазвичай розносять по різних файлах, оскільки практично завжди з'являються свої групи тестових даних для різних груп тестів.</p>
+
+<p>Виконання цих файлів виглядає так:</p>
+ 
+<pre class='language-java line-numbers'><code>
+  void runSqlScriptFile(String filePath){
+    String sqlScript = new String( Files.readAllBytes(Paths.get(filePath)) );
+    Session session = sessionFactory.openSession();
+        Query query = session.createNativeQuery("BEGIN" + sqlScript + "END;");
+        query.executeUpdate()
+  }
+</code></pre>
+ 
+<p>І твій метод <span class="code text-orange">setup</span> трохи зміниться:</p>
+
+<pre class='language-java line-numbers'><code>
+  @BeforeAll
+  static void setup(){
+    try {
+  StandardServiceRegistry standardRegistry = New StandardServiceRegistryBuilder()
+      .configure("hibernate-test.cfg.xml").build();
+ 
+  Metadata metadata = New MetadataSources(standardRegistry)
+      .addAnnotatedClass(Employee.class)
+      .getMetadataBuilder()
+      .build();
+ 
+  sessionFactory = metadata.getSessionFactoryBuilder().build();
+  runSqlScriptFile(“scema.sql”);
+  runSqlScriptFile(“test-data.sql”);
+ 
+    } catch (Throwable ex) {
+        throw new ExceptionInInitializerError(ex);
+    }
+  }
+</code></pre>

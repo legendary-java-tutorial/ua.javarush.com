@@ -1,0 +1,114 @@
+<p>- Привіт, Аміго! Ось цікаве питання, з яким ти вже зіткнувся чи зіткнешся найближчим часом. А&nbsp; <strong><span class="text-red">як зупинити запущену нитку</span></strong> ?</p>
+<p>Допустимо, користувач віддав програмі команду "завантажити файл з інтернету". Головна нитка створила для цього завдання окрему дочірню нитку і передала їй об'єкт, метод run якого містить усі необхідні дії для завантаження файлу.</p>
+<p>А тут користувач – раз і передумав. Не хоче він качати цей файл.&nbsp;<span class="text-red">Як скасувати завдання та зупинити нитку?</span></p>
+<p><span class="text-user">- Та як?</span></p>
+<p>-&nbsp; <strong><span class="text-red">Ніяк</span></strong> . Це і є найзагальніша і найправильніша відповідь.&nbsp;<span class="text-red">Нитку зупинити не можна, вона може зупинитися лише сама.</span></p>
+<p>Але можна дати нитки сигнал, повідомити її якимось чином, що роботу більше виконувати не потрібно, і їй потрібно завершитись. Так само, як головна нитка завершується разом із виходом з методу main, щоб завершити дочірню нитку, вона має закінчити виконання методу run.</p>
+<p><span class="text-user">— І як це найкраще зробити?</span></p>
+<p>— Можна завести якусь змінну, наприклад, типу&nbsp; <strong>boolean</strong> . Якщо вона&nbsp; <strong>true</strong> &nbsp;– нитка працює. Якщо ж вона стала&nbsp; <strong>false</strong> &nbsp;– нитка має завершитись. Наприклад, так:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Clock</span> <span class="token keyword"></span><span class="text-user"><span class="token keyword">implements</span> <span class="token class-name">Runnable</span></span><span class="token class-name"></span>
+<span class="token punctuation">{</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token keyword"></span><span class="text-user"><span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span></span><span class="token punctuation"></span>
+<span class="token punctuation">{</span>
+<span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Tik"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword"></span><span class="text-red"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token class-name">ClockManager</span><span class="token punctuation">.</span>isClockRun<span class="token punctuation">)</span>
+<span class="token keyword">return</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Клас Clock (годинник) буде вічно писати в консоль раз на секунду слово Tik
+     <p></p>
+     <p><span class="text-red">Якщо змінна ClockManager.isClockRun дорівнює false – метод run завершиться.</span></p></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">ClockManager</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">boolean</span> isClockRun <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token class-name"></span><span class="text-user"><span class="token class-name">Clock</span> clock <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Clock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Thread</span> clockThread <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span>clock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+clockThread<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+
+<span class="token class-name"></span><span class="text-green"><span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">10000</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="text-red">isClockRun <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span></code></pre></td>
+    <td><span class="text-user">Головна нитка, запускає дочірню нитку – годинник, який має працювати вічно.</span>
+     <p></p>
+     <p><span class="text-green">Чекає 10 секунд </span> <span class="text-red">і подає годиннику сигнал на завершення.</span></p>
+     <p>Головна нитка завершує свою роботу.</p>
+     <p>Нитка годинника завершує свою роботу.</p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">— А як у нас кілька ниток, що тоді?</span></p>
+<p>— Тоді краще завести таку змінну для кожної нитки. Найзручніше додати її прямо в клас. Можна додати туди змінну&nbsp; <strong>boolean </strong> <strong>isRun</strong> . Хоча краще додати змінну boolean&nbsp; <strong>isCancel</strong> , яка прийматиме значення&nbsp; <strong>true</strong> , якщо завдання скасовано.</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Clock</span> <span class="token keyword">implements</span> <span class="token class-name">Runnable</span>
+<span class="token punctuation">{</span>
+<span class="token keyword"></span><span class="text-red"><span class="token keyword">private</span> <span class="token keyword">boolean</span> isCancel <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function"><span class="text-red">cancel</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token keyword"></span><span class="text-red"><span class="token keyword">this</span><span class="token punctuation">.</span>isCancel <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token operator"></span><span class="text-red"><span class="token operator">!</span>isCancel</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Tik"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Клас Clock (годинник) буде писати в консоль раз на секунду слово "Тік", поки змінна&nbsp; <span class="text-red">isCancel</span> дорівнює false.
+     <p></p>
+     <p>Коли змінна&nbsp; <span class="text-red">isCancel</span> &nbsp;стане рівною true, метод run завершиться.</p></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token class-name"></span><span class="text-user"><span class="token class-name">Clock</span> clock <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Clock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Thread</span> clockThread <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span>clock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+clockThread<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+
+<span class="token class-name"></span><span class="text-green"><span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">10000</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="text-red">clock<span class="token punctuation">.</span><span class="token function">cancel</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td><span class="text-user">Головна нитка, запускає дочірню нитку – годинник, який має працювати вічно.</span>
+     <p></p>
+     <p><span class="text-green">Чекає 10 секунд і </span>&nbsp;<span class="text-red">скасовує завдання, виклик методу cancel.</span></p>
+     <p>Головна нитка завершує свою роботу.</p>
+     <p>Нитка годинника завершує свою роботу.</p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">— Знатиму, дякую, Еллі.</span></p>

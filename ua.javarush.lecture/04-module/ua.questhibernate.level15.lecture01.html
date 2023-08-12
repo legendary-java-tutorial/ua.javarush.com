@@ -1,0 +1,110 @@
+Єдина таблиця для всієї ієрархії класів
+<p>----------------------------------------</p>
+Опис
+Як дані зберігаються.
+<p>----------------------------------------</p>
+<h2>Опис</h2>
+
+<p>Наступний підхід до зберігання ієрархії класів – це <span class="text-green">зберігати всі класи ієрархії в одній таблиці</span>. Така стратегія називається <strong>Single Table</strong>.</p>
+
+<p>Наприклад, так:</p>
+
+<pre class='language-java line-numbers'><code>
+CREATE TABLE user_ employee_client {
+  id INT,
+  name VARCHAR,
+  birthday DATE,
+  occupation VARCHAR,
+  salary INT,
+  join DATE,
+  address VARCHAR,
+  DTYPE VARCHAR
+}
+</code></pre>
+
+<p>Тобто, у нас є одна таблиця, у якої колонки для всіх класів нашої ієрархії позначені різними кольорами. Також є спеціальна службова колонка <strong>DTYPE VARCHAR</strong>, де Hibernate зберігатиме ім'я Entity-класу.</p>
+
+<p>Справа залишилася за малим – пояснити Hibernate, що дані Entity-класів тепер зберігаються у базі в одній таблиці. Зробити це можна за допомогою анотації <span class="text-yellow"><span class="text-bold">@Inheritance</span></span>:</p>
+ 
+    <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-red"><strong>@Inheritance(strategy = InheritanceType.SINGLE_TABLE)</strong></span></code></pre>
+    </div>
+
+<p>Приклад наших класів:</p>
+
+<pre class='language-java line-numbers'><code>
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Entity
+class User {
+  int id;
+  String name;
+  LocalDate birthday;
+}
+</code></pre>
+
+<pre class='language-java line-numbers'><code>
+@Entity
+class Employee extends User {
+ String occupation;
+ int salary;
+ LocalDate join;
+}
+</code></pre>
+
+<pre class='language-java line-numbers'><code>
+@Entity
+class Client extends User {
+   String address;
+}
+</code></pre>
+
+<h2>Як дані зберігаються</h2>
+
+<p>Тепер давай напишемо приклад, де створимо парочку наших сутностей та збережемо їх у базу:</p>
+
+<pre class='language-java line-numbers'><code>
+Employee employee = New Employee();
+employee.id = 101;
+employee.name = "Іванів";
+employee.birthday = LocalDate.of("01-01-1999");
+employee.occupation = "Програміст"
+employee.salary = 100000;
+employee.join = LocalDate.of("12-01-2018");
+session.persist(employee);
+ 
+Client client = new Client();
+client.id = 102;
+client.name = "Петрів";
+client.birthday = LocalDate.of("15-11-1988");
+client.address = "Шандара";
+session.persist(client);
+</code></pre>
+
+<p>При збереженні до бази даних буде виконано такий SQL-запит:</p>
+
+<pre class='language-java line-numbers'><code>
+INSERT INTO user_ employee_client (id, name, напередодні, occupation, salary, join, DTYPE)
+VALUES (101, 'Іванів', '01-01-1999', 'Програміст', 100000, '12-01-2018', 'Employee')
+ 
+INSERT INTO user_ employee_client (id, name, birthday, address, DTYPE)
+VALUES (102, 'Петрів', '15-11-1988', 'Шандара', 'Client')
+</code></pre>
+ 
+<p>При збереженні даних у таблицю Hibernate передає лише відомі йому поля сутностей. Це означає, що невказані колонки матимуть значення NULL.</p>
+
+<p>А це означає, що ти не можеш вказати для колонки occupation тип NOT NULL, тому що при зберіганні клієнта в цій же таблиці його occupation буде NULL. Це один із мінусів зберігання різних сутностей в одній таблиці.</p>
+
+<p>Останнє поле SQL-запиту – це колонка DTYPE, у ній передається ім'я Entity-класу. Він використовується Hibernate, коли ти хочеш прочитати дані зі своєї таблиці.</p>
+
+<p>Приклад:</p>
+ 
+<pre class='language-java line-numbers'><code>
+ List&lt;User> accounts = session.createQuery("from User").list();
+</code></pre>
+ 
+<p>Цей запит поверне список усіх збережених у базі об'єктів типу користувач: User, Employee та Client. <span class="text-neon">На основі колонки DTYPE буде правильно визначено тип сутності та створено об'єкт правильного класу.</span></p>
+
+<p>У нашому випадку в списку accounts будуть два об'єкти: типу Employee та типу Client.</p>
+
+<p>HQL рулює.</p>

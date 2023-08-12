@@ -1,0 +1,84 @@
+Видалення даних у таблиці
+<p>----------------------------------------</p>
+Оператор DELETE FROM
+Видаляємо взагалі все
+<p>----------------------------------------</p>
+<h2>5.1 Оператор DELETE FROM</h2>
+Що просто робити в SQL, так це видаляти дані. Ти можеш видалити все дуже швидко, і в тебе навіть ніхто не запитає жодних підтверджень.</p>
+<p>Почнемо з найпростішого сценарію: <strong>як видалити один рядок у таблиці</strong>.</p>
+<p>Цей сценарій ти зустрічатимеш найчастіше, зазвичай це видалення якогось конкретного запису, і стандартний запит зазвичай має вигляд:</p>
+<div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-brown">DELETE FROM</span> <span class="text-yellow">таблиця</span>
+<span class="text-brown">WHERE</span> <span class="text-green">id</span> = <span class="text-viola">133</span>;
+        </code></pre>
+</div>
+<p>Це єдиний запит, де не потрібно вказувати імена колонок: адже дані видаляються відразу рядками.</p>
+<p>Другий сценарій – це <strong>видалення рядків, які задані списком id</strong>, тут теж все досить просто:</p>
+<div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-brown">DELETE FROM</span> <span class="text-yellow">таблиця</span>
+<span class="text-brown">WHERE</span> <span class="text-green">id</span> <span class="text-brown">IN</span> <span class=" text-viola">(1, 2, 3, …)</span>;
+        </code></pre>
+</div>
+<p>Третій сценарій – видалення рядків, які відповідають певній умові:</p>
+<div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-brown">DELETE FROM</span> <span class="text-yellow">таблиця</span>
+<span class="text-brown">WHERE</span> <span class="text-user">умова</span>;
+        </code></pre>
+</div>
+<p>Допустимо, ми хочемо звільнити всіх наших програмістів, тоді потрібно написати запит типу:</p>
+<div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-brown">DELETE FROM</span> <span class="text-yellow">employee</span>
+<span class="text-brown">WHERE</span> <span class="text-green">occupation</span> = <span class="text-user">'Програміст'</span>;
+        </code></pre>
+</div>
+<p>І, нарешті, якщо ти хочеш видалити всі записи, то можеш написати такий запит:</p>
+<div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-brown">DELETE FROM</span> <span class="text-yellow">таблиця</span>
+</code></pre>
+</div>
+<p>Такого простого запиту достатньо, щоб видалити всі записи з таблиці. До речі, ніякого Ctrl+Z при цьому не буде. Записи просто видаляються без можливості відновлення та все. <strong>Так що роби бекапи, та частіше </strong>.</p>
+<h2>5.2 Видаляємо взагалі все</h2>
+<p>Для швидкого видалення (щоб додати користувачам головного болю) у SQL є ще кілька команд.</p>
+<p>Як швидко видалити всі дані у таблиці? Скористайтеся <strong>оператором</strong> <code>TRUNCATE</code>:</p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-brown">TRUNCATE TABLE</span> <span class="text-yellow">таблиця</span>
+        </code></pre>
+</div>
+<p>Одна помилка в назві таблиці - і кілька днів відновлення даних тобі забезпечені. Радуйся, що ти не адмін баз даних.</p>
+<p>Якщо потрібно видалити не просто дані в таблиці, а й саму таблицю, то для цього є <strong>оператор</strong> <code>DROP</code>:</p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-brown">DROP TABLE</span> <span class="text-yellow">таблиця</span>
+        </code></pre>
+</div>
+<p>До речі, аналогічні варіанти існують і зі <strong>схемами баз даних</strong>. Якщо хочеш видалити саму базу, то:</p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-brown">DROP SCHEME</span> <span class="text-yellow">база_даних</span>
+        </code></pre>
+</div>
+<p>або:</p>
+<div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-brown">DROP DATABASE</span> <span class="text-yellow">база_даних</span>
+        </code></pre>
+</div>
+<p>Також за допомогою DROP можна видаляти:</p>
+<ul>
+<li>EVENT</li>
+<li>FUNCTION</li>
+<li>PROCEDURE</li>
+<li>INDEX</li>
+<li>VIEW</li>
+<li>TRIGGER</li>
+</ul>
+<p>І ось тобі кілька цікавих історій, пов'язаних із видаленням даних:</p>
+<p><a href="https://secretmag.ru/news/proval-dnya-gitlab-udalil-300-gb-dannyh-klientov-iz-za-oshibki-sisadmina-01-02-2017.htm" target="_blank">Провал дня. GitLab видалив 300 ГБ даних клієнтів через помилку сисадміну</a></p>
+<p><a href="https://habr.com/ua/company/southbridge/blog/321074/" target="_blank">sudo rm -rf, або Хроніка інциденту з базою даних GitLab.com від 2017/ 01/31</a></p>
+<p><a href="https://www.youtube.com/watch?v=SOuhTLeyVCE" target="_blank">Кремнієва Долина "Silicon Valley" - Видалення даних</a> </p>

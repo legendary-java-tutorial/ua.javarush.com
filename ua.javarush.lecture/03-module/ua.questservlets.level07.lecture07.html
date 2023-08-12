@@ -1,0 +1,101 @@
+<h2>8.1 Підключення jQuery</h2>
+<p>Нарешті ми дісталися бібліотеки jQuery. <span class="text-red">На момент написання цієї статті вона вже морально застаріла і майже не користуються в нових проектах</span> . <span class="text-green">Але свого часу вона була дуже популярна, дуже добре документована і в інтернеті є багато прикладів з її використанням</span> .</p>
+<p>Тому якщо ти пишеш невеликий web-проект і не бажаєш витрачати місяці на вивчення сучасних фреймворків, рекомендую тобі скористатися бібліотекою jQuery.</p><pво-первых, jquery="" –="" это="" библиотека,="" а="" не="" фреймворк,="" значит="" она="" задает="" свой="" собственный="" формат="" устройства="" frontend-а.="" ты="" можешь="" подключить="" ее="" в="" абсолютно="" любую="" html-сторінку="" и="" вызывать="" функции.="">
+ <p></p>
+ <p>Щоб ти міг користуватися тисячами функцій jQuery, тобі потрібно просто підключити її до своєї сторінки. Зробити це можна так:</p>
+ <pre class="line-numbers"><code>
+   &lt;head&gt;
+    &lt;script src="https://code.jquery.com/jquery-3.6.0.min.js"&gt;&lt;/script&gt;
+   &lt;/head&gt;
+</code></pre>
+ <p>Роботу з jQuery можна поділити на два типи.</p>
+ <p>По-перше, ти можеш отримати об'єкт бібліотеки jQuery, який являє собою звичайний HTML-елемент, обернутий на спеціальний об'єкт з jQuery.</p>
+ <p>По-друге, jQuery має кілька глобальних об'єктів не прив'язаних до HTML-елементів. Їх теж потрібно використовувати.</p>
+ <p>Почнемо із перших.</p>
+ <h2>8.2 Робота з селекторами</h2>
+ <p>Для роботи з об'єктами в jQuery використовуються селектори (пам'ятаєш CSS та його класи?). Так от, у jQuery, якщо хочеш вибрати якийсь об'єкт чи групу об'єктів, тобі потрібно задати їхній селектор.</p>
+ <p>Приклади:</p>
+ <div class="table-container">
+  <table>
+   <tbody>
+    <tr>
+     <th></th>
+     <th>Код</th>
+     <th>Опис</th>
+     <th>Примітка</th>
+    </tr>
+    <tr>
+     <td>1</td>
+     <td><strong>$("div")</strong></td>
+     <td>Вибирає всі об'єкти з тегом DIV</td>
+     <td>багато об'єктів</td>
+    </tr>
+    <tr>
+     <td>2</td>
+     <td><strong>$("img.#image123")</strong></td>
+     <td>Вибирає всі об'єкти з тегом IMG та ID == image123</td>
+     <td>один об'єкт</td>
+    </tr>
+    <tr>
+     <td>3</td>
+     <td><strong>$("#image123")</strong></td>
+     <td>Вибирає всі об'єкти з ID == image123</td>
+     <td>один об'єкт</td>
+    </tr>
+    <tr>
+     <td>4</td>
+     <td><strong>$("div.article")</strong></td>
+     <td>Вибирає всі об'єкти з тегом DIV, у яких є class article</td>
+     <td>багато об'єктів</td>
+    </tr>
+   </tbody>
+  </table>
+ </div>
+ <p>Допустимо, ми хочемо всім посиланням додати обробку події <code>onclick</code>, ось як це можна зробити за допомогою jQuery:</p>
+ <pre class="line-numbers"><code>
+<span class="text-orange">  $("a")</span>.<span class="text-red">click</span>(<span class="text-green">function() {
+    alert("Click");
+  }</span>);
+</code></pre>
+ <p>Тут робляться три дії:</p>
+ <ol>
+  <li>Отримує об'єкт(и), які задовольняють селектору <code>"a"</code>.</li>
+  <li>Створюємо анонімну функцію, що викликає метод <code>alert()</code>.</li>
+  <li>Встановлюємо цю функцію як обробник на подію <code>click</code>для всіх об'єктів пункту 1.</li>
+ </ol>
+ <p>Чим ще хороший jQuery, то це тим, що його код зручно читати. Не треба сильно розумітися, як усе працює. Якщо є робочий код, досить просто зрозуміти, що він робить.</p>
+ <h2>8.3 Робота з елементами документа</h2>
+ <p>Давайте розберемо кілька сценаріїв роботи з документом за допомогою jQuery.</p>
+ <p>Отримати значення елемента (для елементів, які мають значення):</p>
+ <div class="lesson-example lesson-example--center">
+  <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token keyword">var</span> <span class="text-user">result</span> <span class="token operator">=</span> <span class="text-orange">$</span> <span class="token punctuation">(</span><span class="token string"><span class="text-green">"selector"</span></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">value</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+ </div>
+ <p>Задати значення елемента (для елементів, які мають значення):</p>
+ <div class="lesson-example lesson-example--center">
+  <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="text-orange">$</span> <span class="token punctuation">(</span><span class="token string"><span class="text-green">"selector"</span></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">value</span></span><span class="token punctuation">(</span><span class="text-user">newValue</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+ </div>
+ <p>Як додати HTML всередину якогось елемента?</p>
+ <div class="lesson-example lesson-example--center">
+  <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="text-orange">$</span> <span class="token punctuation">(</span><span class="token string"><span class="text-green">"selector"</span></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">html</span></span><span class="token punctuation">(</span><span class="text-user">newHTML</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+ </div>
+ <p>А як отримати HTML, який усередині елемента?</p>
+ <div class="lesson-example lesson-example--center">
+  <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token keyword">var</span> <span class="text-user">html</span> <span class="token operator">=</span> <span class="text-orange">$</span> <span class="token punctuation">(</span><span class="token string"><span class="text-green">"selector"</span></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">html</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+ </div>
+ <p>А якщо хочу отримати/додати не HTML, а простий текст? Тут теж жодних сюрпризів:</p>
+ <div class="lesson-example lesson-example--center">
+  <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token keyword">var</span> <span class="text-user">html</span> <span class="token operator">=</span> <span class="text-orange">$</span> <span class="token punctuation">(</span><span class="token string"><span class="text-green">"selector"</span></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">text</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+ </div>
+ <p>А якщо я хочу отримати/змінити колір елемента?</p>
+ <div class="lesson-example lesson-example--center">
+  <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="text-orange">$</span> <span class="token punctuation">(</span><span class="token string"><span class="text-green">"selector"</span></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">color</span></span><span class="token punctuation">(</span><span class="token string"><span class="text-user">"red"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+ </div>
+ <p>Якщо потрібно працювати зі стилями, це теж просто зробити:</p>
+ <div class="lesson-example lesson-example--center">
+  <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="text-orange">$</span> <span class="token punctuation">(</span><span class="token string"><span class="text-green">"selector"</span></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">css</span></span><span class="token punctuation">(</span><span class="token string"></span><span class="text-user"><span class="token string">"color"</span><span class="token punctuation">,</span> <span class="token string">"red"</span></span><span class="token string"></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+ </div>
+ <p>Як додати новий елемент?</p>
+ <div class="lesson-example lesson-example--center">
+  <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="text-orange">$</span> <span class="token punctuation">(</span><span class="token string"><span class="text-green">".container"</span></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">append</span></span><span class="token punctuation">(</span><span class="text-orange">$</span><span class="token punctuation">(</span><span class="token string"><span class="text-green">"h3"</span></span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+ </div>
+</pво-первых,>

@@ -1,0 +1,55 @@
+<p>- Привіт, Аміго!</p>
+<p>Є така величезна тема, називається Java Memory Model. В принципі, знати її тобі поки не обов'язково, але почути про це – буде корисно.</p>
+<p>З метою усунути всі можливі проблеми, Java змінабо механізм роботи пам'яті. Тепер не просто пам'ять ділиться на локальний кеш нитки та глобальну, а й механізм став ще кращим.</p>
+<p><span class="text-user">- І складніше!</span></p>
+<p>— Так, краще та складніше. Це як літак. Літати літаком краще, ніж йти пішки, але складніше. Спробую пояснити тобі нову ситуацію дуже спрощено.</p>
+<p>Ось що було вигадано.&nbsp;<span class="text-red"><strong>У код було додано механізм синхронізації локальної пам'яті ниток, названий «happens before» (дослівно «трапилося перед»). Було вигадано ряд правил/умов, при настанні яких пам'ять синхронізується – оновлюється до актуального стану.</strong></span></p>
+<p>Приклад:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Порядок</th>
+    <th>Нитка 1</th>
+    <th>Нитка 2</th>
+   </tr>
+   <tr>
+    <td><strong>1 </strong><br><strong>2 </strong><br><strong>… </strong><br><strong>101 </strong><br><strong>102 </strong><br><strong>103 </strong><br><strong>104 </strong><br><strong>105 </strong><br><strong>… </strong><br><strong>201 </strong><br><strong>202 </strong><br><strong>203 </strong><br><strong>204 </strong><br><strong>205</strong></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword"><strong>public</strong></span> <span class="token keyword">int</span> y <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token keyword"><strong>public</strong></span> <span class="token keyword">int</span> x <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+
+x<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">;</span>
+<span class="token keyword">synchronized</span><span class="token punctuation">(</span>mutex<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ y <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>нитка чекає на звільнення мютексу — mutex
+     <p></p>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">synchronized</span><span class="token punctuation">(</span>mutex<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<strong> <span class="token keyword">if</span></strong><span class="token keyword"></span> <span class="token punctuation">(</span>y <span class="token operator">==</span> x<span class="token punctuation">)</span>
+ <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"YES"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Однією з таких умов є захоплення звільненого мютексу. Якщо мютекс був звільнений і знову захоплений, перед захопленням обов'язково виконається синхронізація пам'яті. Нитка 2 побачить найновіші значення змінних x і y, навіть якщо не оголошувати їх volatile.</p>
+<p><span class="text-user">- Як цікаво. І чи багато таких умов?</span></p>
+<p>— Достатньо, ось деякі умови синхронізації пам'яті:</p>
+<ul>
+ <li>В рамках однієї нитки будь-яка команда&nbsp; <strong>happens-before</strong> &nbsp;(читається «трапляється перед») будь-якою операцією, яка йде за нею у вихідному коді.</li>
+ <li>Звільнення локу (unlock)&nbsp; <strong>happens-before&nbsp;</strong> захопленням того ж лока (lock).</li>
+ <li>Вихід з&nbsp; <strong>synchronized</strong> &nbsp;блок/метод&nbsp; <strong>happens-before</strong> &nbsp;вхід у synchronized блок/метод на тому ж моніторі.</li>
+ <li>Запис volatile поля&nbsp; <strong>happens-before</strong> &nbsp;читання того ж volatile поля.</li>
+ <li>Завершення методу run екземпляра класу Thread&nbsp; <strong>happens-before</strong> &nbsp;вихід із методу join() або повернення false методом isAlive() екземпляром тієї ж нитки.</li>
+ <li>Виклик методу start() екземпляра класу Thread&nbsp; <strong>happens-before</strong> &nbsp;початок методу run() екземпляра тієї ж нитки.</li>
+ <li>Завершення конструктора&nbsp; <strong>happens-before</strong> &nbsp;початок методу finalize() цього класу</li>
+ <li>Виклик методу interrupt() на нитці&nbsp; <strong>happens-before</strong> , коли нитка виявила, що даний метод був викликаний, або шляхом викидання виключення InterruptedException, або за допомогою методів isInterrupted() або interrupted()</li>
+</ul>
+<p><span class="text-user">- Тобто. все трохи складніше, ніж я думав?</span></p>
+<p>— Так, трохи складніше…</p>
+<p><span class="text-user">— Дякую, Ріша, думатиму.</span></p>
+<p>— Не заморочуйся сильно на цю тему. Настане час, сам усе зрозумієш. Поки що тобі краще розбиратися в основах, ніж лізти в нетрі внутрішнього пристрою Java-машини.</p>
+<p><span class="text-user">- О_о. М-так. Деякі речі краще не знати.</span></p>

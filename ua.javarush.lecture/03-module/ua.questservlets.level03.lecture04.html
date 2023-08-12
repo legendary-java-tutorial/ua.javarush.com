@@ -1,0 +1,71 @@
+<h2>5.1 Анотація @ParameterizedTest</h2>
+<p>Іноді просто хочеться викликати тест кілька разів із різними параметрами: різні значення, різні вхідні параметри, різні імена користувачів. JUnit прагне спростити тобі життя, тому на цей випадок він має таку річ як параметризовані тести.</p>
+<p>Для використання параметризованих тестів треба додати ще одну залежність до вашого <code>pom.xml</code>:</p>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.junit.jupiter&lt;/groupId&gt;
+    &lt;artifactId&gt;junit-jupiter-params&lt;/artifactId&gt;
+    &lt;version&gt;5.8.2&lt;/version&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>Після цього можемо розглянути приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@ParameterizedTest</span>
+<span class="token annotation punctuation">@ValueSource</span><span class="token punctuation">(</span>ints <span class="token operator">=</span> <span class="token punctuation">{</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token keyword">void</span> <span class="token function">testMethod</span><span class="token punctuation">(</span><span class="token keyword">int</span> argument<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">//test code</span>
+<span class="token punctuation">}</span>
+
+<span class="token annotation punctuation">@ParameterizedTest</span>
+<span class="token annotation punctuation">@ValueSource</span><span class="token punctuation">(</span>ints <span class="token operator">=</span> <span class="token punctuation">{</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token keyword">void</span> <span class="token function">testMethodWithAutoboxing</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> argument<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">//test code</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Кожен тестовий метод викликається по 3 рази і при кожному виклику до нього буде передано черговий параметр. Значення задаються за допомогою іншої анотації - <span class="text-yellow"><span class="text-bold">@ ValueSource</span></span> . Але про неї треба розповісти докладніше.</p>
+<h2>5.2 Анотація @ValueSource</h2>
+<p>Анотація <span class="text-yellow"><span class="text-bold">@ValueSource</span></span> відмінно підходить для роботи з примітивами та літералами. Просто перерахуй значення параметра через кому і тест буде викликаний по одному разу для кожного значення.</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@ParameterizedTest</span>
+<span class="token annotation punctuation">@ValueSource</span><span class="token punctuation">(</span>ints <span class="token operator">=</span> <span class="token punctuation">{</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token keyword">void</span> <span class="token function">testMethodWithAutoboxing</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> argument<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">//test code</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Але є і мінус - ця інструкція не підтримує null, так що для нього потрібно буде використовувати спеціальний мабоця - <span class="text-yellow"><span class="text-bold">@ NullSource</span></span> . Виглядає це так:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@ParameterizedTest</span>
+<span class="token annotation punctuation">@NullSource</span>
+<span class="token keyword">void</span> <span class="token function">testMethodNullSource</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> argument<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">assertTrue</span><span class="token punctuation">(</span>argument <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h2>5.3 Анотація @EnumSource</h2>
+<p>Також є спеціальна анотація <span class="text-yellow"><span class="text-bold">@EnumSource</span></span> , яка передає в метод усі значення певного Enum'а. Її застосування виглядає так:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">enum</span> <span class="token class-name">Direction</span> <span class="token punctuation">{</span>
+    EAST<span class="token punctuation">,</span> WEST<span class="token punctuation">,</span> NORTH<span class="token punctuation">,</span> SOUTH
+<span class="token punctuation">}</span>
+
+<span class="token annotation punctuation">@ParameterizedTest</span>
+<span class="token annotation punctuation">@EnumSource</span><span class="token punctuation">(</span><span class="token class-name">Direction</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+<span class="token keyword">void</span> <span class="token function">testWithEnumSource</span><span class="token punctuation">(</span><span class="token class-name">Direction</span> d<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">assertNotNull</span><span class="token punctuation">(</span>d<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h2>5.4 Анотація @MethodSource</h2>
+<p>А як передавати як параметри об'єкти? Особливо якщо вони мають складний алгоритм побудови. Для цього можна просто вказати спеціальний допоміжний метод, який повертатиме список (Stream) з таких значень.</p>
+<p>Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@ParameterizedTest</span>
+<span class="token annotation punctuation">@MethodSource</span><span class="token punctuation">(</span><span class="token string">"argsProviderFactory"</span><span class="token punctuation">)</span>
+<span class="token keyword">void</span> <span class="token function">testWithMethodSource</span><span class="token punctuation">(</span><span class="token class-name">String</span> argument<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">assertNotNull</span><span class="token punctuation">(</span>argument<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">static</span> <span class="token class-name">Stream</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> <span class="token function">argsProviderFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token class-name">Stream</span><span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span><span class="token string">"один"</span><span class="token punctuation">,</span> <span class="token string">"два"</span><span class="token punctuation">,</span>  <span class="token string">"три"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h2>Параметризовані тести з кількома аргументами</h2>
+<p>Звичайно, ви вже задалися питанням, а що робити, якщо в метод хочеться передати кілька параметрів. Для цього є дуже класна інструкція <span class="text-yellow"><span class="text-bold">@CSVSource</span></span> . Вона дозволяє перерахувати значення параметрів методу просто через кому.</p>
+<p>Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@ParameterizedTest</span>
+<span class="token annotation punctuation">@CsvSource</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    <span class="token string">"alex, 30, Програміст, Працює"</span><span class="token punctuation">,</span>
+    <span class="token string">"brian, 35, Тестувальник, Працює"</span><span class="token punctuation">,</span>
+	<span class="token string">"charles, 40, Менеджер, Пінає"</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token keyword">void</span> <span class="token function">testWithCsvSource</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">,</span> <span class="token keyword">int</span> age<span class="token punctuation">,</span> <span class="token class-name">String</span> occupation<span class="token punctuation">,</span> <span class="token class-name">String</span> status<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token comment">//код методу</span>
+<span class="token punctuation">}</span></code></pre>

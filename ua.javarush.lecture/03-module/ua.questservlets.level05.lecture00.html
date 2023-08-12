@@ -1,0 +1,61 @@
+<h2>1.1 Знайомство з логами</h2>
+<p><strong>Лог</strong> – це список подій, що відбулися. Майже як морський журнал чи щоденник. Ну, а відповідно, <strong>логер</strong> — це об'єкт, за допомогою якого можна вести логування. У програмуванні прийнято логувати майже всі. А в Java - так взагалі все і навіть трохи більше.</p><img data-max-width="800" data-id="df09efd4-dece-47be-a17c-a89c3b63974e" alt="logger java" src="https://cdn.javarush.com/images/article/df09efd4-dece-47be-a17c-a89c3b63974e/800.jpeg" style="width: 800px;">
+<p>Справа в тому, що Java-програми - це дуже часто великі серверні програми без UI, консолі і так далі. Вони обробляють одночасно запити тисяч користувачів і часто у своїй виникають різні помилки. Особливо коли різні нитки починають один одному заважати.</p>
+<p>І, фактично, єдиним способом пошуку помилок і збоїв, що рідко відтворюються, в такій ситуації є <strong>запис у лог/файл всього</strong> , що відбувається в кожній нитці.</p>
+<p>Найчастіше в балку пишеться інформація про параметри методу, з якими він був викликаний, всі перехоплені помилки, і ще багато проміжної інформації. Чим повніше лог, тим легше відновити послідовність подій та відстежити причини виникнення збою чи помилки.</p>
+<p>Але чим більше лог, тим складніше з ним працювати. Іноді логи досягають кількох гігабайт на добу. Це нормально.</p>
+<h2>1.2 Невдалі логи</h2>
+<p>Як перші ліги розробники використовували просто <strong>виведення в консоль</strong> . Це зручно робити під час дебагу програми – коли в консоль пишеться вся важлива інформація та значення змінних. Але такий лог зовсім не застосовується під час звичайної роботи програми.</p>
+<p>По-перше, <span class="text-green">програма може хотіти саме щось вивести в консоль і користувач зовсім не хоче бачити службову інформацію, призначену програмісту.</span></p>
+<p>По-друге, <span class="text-red">розмір буфера консолі обмежений, багато туди не напишеш.</span></p>
+<p>І нарешті, <span class="text-user">по-третє, інформацію про помилки програми, яка збирається за довгий час, потрібно надіслати розробникам програми. І найзручніше писати всю цю інформацію відразу у файл.</span></p>
+<p>Першу проблему розробники швидко вирішабо - вигадали ще один потік виведення - <code>System.err</code>. Ви можете писати в нього повідомлення, і вони будуть надсилатися в окремий потік, а не на стандартну консоль.</p>
+<p>І навіть проблему із записом у файл вдалося вирішити:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token comment">// Визначаємо файл, в який будемо писати лог</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">setErr</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">PrintStream</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span><span class="token string">"log.txt"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// Виводимо повідомлення</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>err<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Повідомлення 1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>err<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Повідомлення 2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// Виводимо повідомлення про помилку</span>
+<span class="token keyword">try</span> <span class="token punctuation">{</span>
+    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Exception</span><span class="token punctuation">(</span><span class="token string">"Повідомлення про помилку"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Але навіть у такому вигляді, це не вирішувало всієї проблеми, тому було вирішено створити спеціальну бібліотеку, яка писала б повідомлення лога у файл. Вона робила це по-розумному і дозволяла гнучко налаштовувати фільтри подій і даних, що логуються.</p>
+<p>Весь процес логування по суті складається з трьох частин:</p>
+<ul>
+ <li>Перша частина – це <strong>збирання</strong> інформації.</li>
+ <li>Друга частина – це <strong>фільтрування</strong> зібраної інформації.</li>
+ <li>Третя частина – це <strong>запис</strong> відібраної інформації.</li>
+</ul>
+<h2>1.3 Знайомство з логером log4j</h2>
+<p>Першим популярним логером в Java-спільноті став логер <code>log4j</code>. Підключити його до проекту дуже просто, для цього потрібно додати всього кілька рядків у ваш pom.xml</p>
+<pre class="line-numbers"><code>
+&lt;dependency&gt;
+    &lt;groupId&gt;log4j&lt;/groupId&gt;
+    &lt;artifactId&gt;log4j&lt;/artifactId&gt;
+    &lt;version&gt;2.2.17&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>Взаємодія твоєї програми з таким логером виглядала б приблизно так:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Manager</span> <span class="token punctuation">{</span>
+<span class="text-green">   <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">Logger</span> logger <span class="token operator">=</span> <span class="token class-name">LoggerFactory</span><span class="token punctuation">.</span><span class="token function">getLogger</span><span class="token punctuation">(</span><span class="token class-name">Manager</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+
+   <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">processTask</span><span class="token punctuation">(</span><span class="token class-name">Task</span> task<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+ <span class="text-user">       logger<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"processTask id = "</span> <span class="token operator">+</span> task<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            task<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            task<span class="token punctuation">.</span><span class="token function">progress</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            task<span class="token punctuation">.</span><span class="token function">complete</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+ <span class="text-red">           logger<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"Unknown error"</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+            <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Тут відбувається три речі:</p>
+<p><span class="text-green">Зеленим кольором виділено створення об'єкта</span> <code>Logger</code> . Його об'єкт зберігається в статичну змінну для зручної роботи з ним. А також метод <code>getLogger()</code>передається інформація про клас, в якому відбувається збір інформації.</p>
+<p><span class="text-user">Синім кольором виділено рядок, де ми логуємо інформацію, що представляє цінність тільки під час дебагу</span> . Для цього використовується спеціальний метод –<code>debug()</code></p>
+<p>Ну і нарешті <span class="text-red">червоним кольором виділено рядок, де ми зберігаємо в лог виник виняток</span> . Винятки – це потенційні помилки, для запису в лог використовується метод <code>error()</code>.</p>

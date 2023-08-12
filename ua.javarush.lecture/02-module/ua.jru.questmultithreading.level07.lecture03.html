@@ -1,0 +1,68 @@
+<a href="https://cdn.javarush.com/images/article/5a51d025-cb79-4d26-9742-812799c919ff/original.jpeg" target="_blank"><img data-id="5a51d025-cb79-4d26-9742-812799c919ff" data-max-width="1024" alt="DeadLock, і його причини - 1" src="https://cdn.javarush.com/images/article/5a51d025-cb79-4d26-9742-812799c919ff/1024.jpeg" style="width: 1024px;"></a>
+<p>- Привіт, Аміго!</p>
+<p>Сьогодні я тобі розповім, що таке дідлок (DeadLock) – взаємне блокування.</p>
+<p><span class="text-user">— То ти вже щось таке розповідала.</span></p>
+<p>- Ага, було діло. Але сьогодні ми розглянемо цю тему детальніше.</p>
+<p>У найпростішому випадку в дідлоку беруть участь дві нитки та два об'єкти-мютекси. Взаємне блокування виникає, коли:</p>
+<p><strong>А)&nbsp;</strong> Кожній нитці в процесі роботи потрібно захопити обидва мютекси.</p>
+<p><strong>Б)</strong> &nbsp;Перша нитка захопила перший мютекс і чекає на звільнення другого.</p>
+<p><strong>В)</strong> &nbsp;Друга нитка захопила другий мютекс і чекає на звільнення першого.</p>
+<p>Приклади:</p>
+<div class="code-heading">
+ приклад
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Student</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">private</span> <span class="token class-name">ArrayList</span> <span class="text-red">friends</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ <span class="token keyword">public</span> <span class="token keyword">synchronized</span> <span class="token class-name">ArrayList</span> <span class="token function">getFriends</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">synchronized</span><span class="token punctuation">(</span><span class="text-red">friends</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+   <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token punctuation">(</span><span class="text-red">friends</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token keyword">public</span> <span class="token keyword">synchronized</span> <span class="token keyword">int</span> <span class="token function">getFriendsCount</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="text-red">friends</span><span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">addFriend</span><span class="token punctuation">(</span><span class="token class-name">Student</span> student<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">synchronized</span><span class="token punctuation">(</span><span class="text-red">friends</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+   <span class="text-red">friends</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>student<span class="token punctuation">)</span>
+   <span class="token keyword">return</span> <span class="token function">getFriendsCount</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Допустимо, перша нитка викликала метод&nbsp; <strong>getFriends</strong> , тоді вона спочатку захопить мютекс об'єкта&nbsp; <strong>цього</strong> , а потім мютекс об'єкта&nbsp; <strong>friends</strong> .</p>
+<p>Друга нитка при цьому викликала метод&nbsp; <strong>addFriend</strong> , вона спочатку захоплює мютекс об'єкта&nbsp; <strong>friends</strong> , а потім мютекс об'єкта this (при виклику <strong>getFriendsCount</strong> ).</p>
+<p>Спочатку все буде добре, але як говорить Закон Мерфі - якщо неприємність може статися, вона трапляється. Обов'язково виникне ситуація, коли перша нитка встигне захопити лише один мютекс, а друга нитка тим часом захопить другий. Вони так і висітимуть вічно в очікуванні, що хтось із них першим звільнить мютекс.</p>
+<p>Ще один простий приклад, знайшла у книзі:</p>
+<div class="code-heading">
+ приклад
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">KnightUtil</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">kill</span><span class="token punctuation">(</span><span class="token class-name">Knight</span> knight1<span class="token punctuation">,</span> <span class="token class-name">Knight</span> knight2<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">synchronized</span><span class="token punctuation">(</span>knight1<span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+   <span class="token keyword">synchronized</span><span class="token punctuation">(</span>knight2<span class="token punctuation">)</span>
+   <span class="token punctuation">{</span>
+    knight2<span class="token punctuation">.</span>live <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    knight1<span class="token punctuation">.</span>experience <span class="token operator">+=</span><span class="token number">100</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Є гра, де два лицарі борються один з одним. Один лицар вбиває іншого. Ця поведінка відображена у методі&nbsp; <strong>kill</strong> . Туди передаються два об'єкти-лицаря.</p>
+<p>Спочатку ми захищаємо обидва об'єкти, щоб ніхто більше не міг їх змінити.</p>
+<p>Другий лицар помирає (live=0)</p>
+<p>Перший лицар отримує 100 досвіду.</p>
+<p>Все начебто чудово, але іноді може виникнути ситуація, коли другий лицар у цей час атакує першого. Він теж викликається цей метод, але лицарі передаються іншому порядку.</p>
+<p><span class="text-user">- Тобто. нам навіть не потрібно кілька методів для отримання дідлок?</span></p>
+<p>- Ага. Іноді буває достатньо одного простого методу, в якому можуть відбуватися процеси, що призводять до зависання ниток і всієї програми.</p>
+<p><span class="text-user">— Так, виявляється, це явище зустрічається частіше, ніж я гадав. Дякую, Еллі.</span></p>

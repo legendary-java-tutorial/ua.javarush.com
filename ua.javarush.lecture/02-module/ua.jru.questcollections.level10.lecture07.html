@@ -1,0 +1,85 @@
+<p>- Привіт, Аміго!</p>
+<p><span class="text-user">- Здорово, Ріша!</span></p>
+<p>— Тема сьогоднішньої лекції – Сокети. Socket у перекладі англійської – Розетка.</p>
+<p>Ти вже знаєш, що кожен комп'ютер у мережі має унікальну IP-адресау.</p>
+<p><span class="text-user">- Ага.</span></p>
+<p>— І ось уяви, що ти маєш кілька комп'ютерів і на кожному комп'ютері запущено з десяток програм, які працюють з інтернетом: Skype, ICQ, тощо.</p>
+<p>І ці програми хочуть спілкуватись між собою.</p>
+<p>Треба зробити так, щоб вони один одному не заважали. Щоб Skype зв'язувався зі Skype'ом, ICQ з ICQ тощо.</p>
+<p>Пам'ятаєш, як цю проблему вирішабо з URL та веб-серверами?</p>
+<p><span class="text-user">- Ага, додали порти.</span></p>
+<p>- Саме.</p>
+<p>Це все одно, що в будинку зробити багато маленьких кімнат та оголосити його багатоквартирним.&nbsp;<strong><span class="text-green">Кожен порт – це окрема квартира.</span></strong></p>
+<p>Так ось IP-адресаа – це унікальний номер комп'ютера, а&nbsp; <span class="text-corporate">IP-адресаа + порт – це унікальний номер якоїсь «квартири» (комірки) в комп'ютері, яку може зайняти програма.</span></p>
+<p><span class="text-corporate">Ось такий унікальний осередок і називається&nbsp; <strong>сокет</strong> .</span></p>
+<p>Сокет має його унікальний номер, і складається <strong><span class="text-corporate">з IP-адресаи і номера порту.</span></strong></p>
+<p><span class="text-user">- Ага. Тобто. сокет – це номер якогось віртуального осередку в комп'ютері, який може займати програма? А інша програма буде надсилати їй у цей осередок повідомлення, і таким чином вони спілкуватимуться?</span></p>
+<p>— Не знаю, як ти це зрозумів, але так і є.</p>
+<p><span class="text-user">— Це моя робоінтуїція підказала.</span></p>
+<p>- Чудово. Тоді давай трохи подробиць.</p>
+<p>Сокети – це фактично найбільш базовий і найпримітивніший спосіб міжмережевої взаємодії програм.</p>
+<p>У Java для роботи з сокетами є два класи. Це класи&nbsp; <strong>Socket</strong> &nbsp;та&nbsp; <strong>ServerSocket</strong> .</p>
+<p><strong>ServerSocket</strong> &nbsp;– це особливий клас, об'єкти якого виконують роль сервера – тобто. можу обслуговувати запити, які на певний сокет.</p>
+<p>Клас&nbsp; <strong>Socket</strong> &nbsp;- це власне Socket-клієнт, за допомогою нього ми можемо надіслати повідомлення деякому сокету і отримати відповідь.</p>
+<p>Як надіслати повідомлення якомусь сокету:</p>
+<div class="code-heading">
+ приклад
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token comment">//создаем сокет</span>
+<span class="token class-name"></span><span class="text-red"><span class="token class-name">Socket</span> <strong>clientSocket</strong></span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-red">Socket</span></span><span class="token punctuation">(</span><span class="token string">"<span class="text-green">localhost</span>"</span><span class="token punctuation">,</span> <span class="token number">4444</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">//получаем OutputStream</span>
+<span class="token class-name"></span><span class="text-green"><span class="token class-name">OutputStream</span> outputStream</span> <span class="token operator">=</span> <span class="text-red">clientSocket</span><span class="token punctuation">.</span><span class="token function"><strong>getOutputStream</strong></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">PrintWriter</span> <span class="text-user">out</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PrintWriter</span><span class="token punctuation">(</span><span class="text-user">outputStream</span><span class="token punctuation">,</span> <span class="token boolean"><strong>true</strong></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="text-user">out</span><span class="token punctuation">.</span><span class="token function"><strong>println</strong></span><span class="token punctuation">(</span><span class="token string">"Kiss my shiny metal ass!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="text-user">out</span><span class="token punctuation">.</span><span class="token function"><strong>flush</strong></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">//читаем ответ</span>
+<span class="token class-name"></span><span class="text-green"><span class="token class-name">InputStream</span> inputStream</span> <span class="token operator">=</span> <span class="text-red">clientSocket</span><span class="token punctuation">.</span><span class="token function">getInputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">BufferedReader</span> <span class="text-green">in</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BufferedReader</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">InputStreamReader</span><span class="token punctuation">(</span><span class="text-green">inputStream</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">String</span> <span class="text-viola">answer</span> <span class="token operator">=</span> <span class="text-green">in</span><span class="token punctuation">.</span><span class="token function">readLine</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p><span class="text-user">— Все дуже нагадує завантаження файлу з інтернету.</span></p>
+<p>— Це тому, дитинко, що там також використовуються сокети.</p>
+<p><span class="text-red">Сокети використовуються в основі всього пов'язаного з мережею, або майже всього.</span></p>
+<p>Ось&nbsp; <a href="http://www.tutorialspoint.com/java/java_networking.htm" target="_blank">тут</a> &nbsp;можеш прочитати додаткову інформацію.</p>
+<p><span class="text-user">— Дякую за лекцію, Ріша.</span></p>
+<p>- Це ще не все. Розмріявся.</p>
+<p>Тепер ми розберемося, як працює серверний сокет.</p>
+<p>Він працює трохи складніше.</p>
+<div class="code-heading">
+ приклад
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token comment">//создаем об'єкт сервер-сокет</span>
+<span class="token class-name"></span><span class="text-red"><span class="token class-name">ServerSocket</span> serverSocket</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-red">ServerSocket</span></span><span class="token punctuation">(</span><span class="token number">4444</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//порт</span>
+
+<span class="token comment">//в цикле обрабатываем входящие соединения.</span>
+<span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token comment">//метод accept ждет, пока кто-то не подключится.</span>
+ <span class="token class-name"></span><span class="text-red"><span class="token class-name">Socket</span> socket</span> <span class="token operator">=</span> <span class="text-red">serverSocket</span><span class="token punctuation">.</span><span class="token function">accept</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ <span class="token comment">//читаем сообщение</span>
+<span class="text-green"> <span class="token class-name">InputStream</span> inputStream</span> <span class="token operator">=</span> <span class="text-red">socket</span><span class="token punctuation">.</span><span class="token function">getInputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token class-name">BufferedReader</span> <span class="text-green">in</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BufferedReader</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">InputStreamReader</span><span class="token punctuation">(</span>inputStream<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token class-name">String</span> <span class="text-viola">message</span> <span class="token operator">=</span> <span class="text-green">in</span><span class="token punctuation">.</span><span class="token function">readLine</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ <span class="token comment">//придумываем ответ – просто разворачиваем строку задом наперед</span>
+ <span class="token class-name">String</span> <span class="text-corporate">reverseMessage</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="text-viola">message</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">reverse</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ <span class="token comment">//отправляем ответ</span>
+<span class="text-user"> <span class="token class-name">OutputStream</span> outputStream</span> <span class="token operator">=</span> <span class="text-red">socket</span><span class="token punctuation">.</span><span class="token function">getOutputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token class-name">PrintWriter</span> <span class="text-user">out</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PrintWriter</span><span class="token punctuation">(</span><span class="text-user">outputStream</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="text-user"> out</span><span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="text-corporate">reverseMessage</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="text-user">out</span><span class="token punctuation">.</span><span class="token function">flush</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Хочу звернути твою увагу на кілька моментів.</p>
+<p><span class="text-viola">Момент 1: Для створення сокету потрібно вказувати IP-адресау (або домен) та порт. Для створення серверного сокету лише порт. Серверний сокет з'являється лише тому комп'ютері, де його створабо.</span></p>
+<p><span class="text-green">Момент 2: У класу ServerSocket є метод accept(), який, якщо його викликати, чекатиме вхідне з'єднання. Тобто. метод буде виконуватися нескінченно довго, доки якийсь клієнтський сокет не спробує звернутися до нього. Тоді метод accept() прийме з'єднання, створить об'єкт сокету для комунікації і після цього поверне цей об'єкт.</span></p>
+<p>З точки зору Java-програміста, сокет – це два потоки – InputStream з якого можна читати повідомлення/дані та OutputStream, куди можна писати повідомлення/дані.</p>
+<p>Коли створюєш серверний сокет, фактично з'являється порт, до якого можуть підключатися сокети з інших комп'ютерів. Але для цього їм треба правильно вказати номер порту нашого сокету та IP-адресау нашого комп'ютера. Ну, чи його доменне ім'я.</p>
+<p>Ось тобі цікавий приклад, можеш спробувати розібрати його та виконати:</p>
+<p><a href="http://habrahabr.ru/post/69136/" target="_blank">http://habrahabr.ru/post/69136/</a></p>
+<p>Там весь сенс у тому, що за допомогою серверного сокету пишеться найпримітивніший веб-сервер, до якого можна просто звертатися з браузера.</p>
+<p><span class="text-user">- Ого! Веб-сервер? Круто! Я вивчу його дуже уважно.</span></p>
+<p><span class="text-user">Дякую, Ріша.</span></p>
+<p>- Все, Аміго, йди відпочивати!</p>

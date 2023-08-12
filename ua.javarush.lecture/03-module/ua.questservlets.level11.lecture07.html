@@ -1,0 +1,223 @@
+<h2>8.1 Знайомство з інструкціями сервлетів</h2>
+<p>Починаючи з 7-ї версії Tomcat почав підтримувати специфікацію веб-сервлетів <strong>Servlet API 3.0</strong> . У ній зокрема з'явився пакет під назвою <code>javax.servlet.annotation</code>. Він містить різні типи інструкцій, які можна використовувати для інструкції класу сервлета. Якщо ти використовуєш інструкцію, то дескриптор розгортання (web.xml) не потрібен.</p>
+<p>Список найкорисніших анотацій:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th></th>
+    <th>Анотація</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>1</td>
+    <td><code>@WebServlet</code></td>
+    <td>Оголошує сервлет</td>
+   </tr>
+   <tr>
+    <td>2</td>
+    <td><code>@WebInitParam</code></td>
+    <td>Вказує параметр ініціалізації</td>
+   </tr>
+   <tr>
+    <td>3</td>
+    <td><code>@WebFilter</code></td>
+    <td>Оголошує веб-фільтр</td>
+   </tr>
+   <tr>
+    <td>4</td>
+    <td><code>@WebListener</code></td>
+    <td>Оголошує веб-лісенер</td>
+   </tr>
+   <tr>
+    <td>5</td>
+    <td><code>@ServletSecurity</code></td>
+    <td>Дозволяє налаштувати параметри безпеки</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation"></span><span class="text-green"><span class="token annotation punctuation">@WebServlet</span><span class="token punctuation">(</span> urlPatterns <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">"/api/*"</span><span class="token punctuation">}</span> <span class="token punctuation">)</span></span><span class="token punctuation"></span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Example</span> <span class="token keyword">extends</span> <span class="token class-name">HttpServlet</span> <span class="token punctuation">{</span>
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">doGet</span><span class="token punctuation">(</span> <span class="token class-name">HttpServletRequest</span> request<span class="token punctuation">,</span> <span class="token class-name">HttpServletResponse</span> response<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+         response<span class="token punctuation">.</span><span class="token function">setContentType</span><span class="token punctuation">(</span><span class="token string">"text/html"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+         <span class="token class-name">PrintWriter</span> out <span class="token operator">=</span> response<span class="token punctuation">.</span><span class="token function">getWriter</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+         out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Hello World!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Одної інструкції достатньо, щоб оголосити сервлет і замапити його на обслуговування всіх запитів, які будуть приходити на URL, заданий шаблоном <code>/api/*</code>.</p>
+<h2>8.2 Налаштування мапінгу сервлету</h2>
+<p>Анотація <code>@WebServlet</code>має багато параметрів, які дозволяють дуже гнучко конфігурувати сервлет, які вона описує. Давай ознайомимося з основними з них:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th></th>
+    <th>Атрибут</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>1</td>
+    <td><code>name</code></td>
+    <td>Унікальне ім'я сервлета (як у web.xml)</td>
+   </tr>
+   <tr>
+    <td>2</td>
+    <td><code>displayName</code></td>
+    <td>Ім'я сервлета, що читається для людини</td>
+   </tr>
+   <tr>
+    <td>3</td>
+    <td><code>description</code></td>
+    <td>Опис сервлету</td>
+   </tr>
+   <tr>
+    <td>4</td>
+    <td><code>value</code></td>
+    <td>Задає url для мапінгу</td>
+   </tr>
+   <tr>
+    <td>5</td>
+    <td><code>urlPatterns</code></td>
+    <td>Задає список url-ів для мапінгу (використовується замість value)</td>
+   </tr>
+   <tr>
+    <td>6</td>
+    <td><code>initParams</code></td>
+    <td>Дозволяє задати стартові параметри сервлету</td>
+   </tr>
+   <tr>
+    <td>7</td>
+    <td><code>asyncSupported</code></td>
+    <td>Вказує, що сервлет може працювати асинхронно (HTTP/2)</td>
+   </tr>
+   <tr>
+    <td>8</td>
+    <td><code>loadOnStartup</code></td>
+    <td>Порядковий номер для керування пріоритетом старту сервлетів</td>
+   </tr>
+   <tr>
+    <td>9</td>
+    <td><code>smallIcon</code></td>
+    <td>Задає маленьку іконку сервлету</td>
+   </tr>
+   <tr>
+    <td>10</td>
+    <td><code>largeIcon</code></td>
+    <td>Задає велику іконку сервлету</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Цікавих моментів тут є кілька.</p>
+<p>По-перше, зверни увагу, що <code>value</code>і <code>urlPatterns</code>взаємозамінні атрибути. Вони обидва дозволяють встановити список урлів, на які повинен замапитися сервлет.</p>
+<p>По-друге, параметр <code>asyncSupported</code>вказує, чи сервлет коректно обробляти асинхронні запити за протоколом HTTP/2.</p>
+<p>І третій важливий атрибут - це <code>initParams</code>, він дозволяє встановити список параметрів, які будуть поміщені в ServletContext.</p>
+<p>Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation"></span><span class="text-green"><span class="token annotation punctuation">@WebServlet</span><span class="token punctuation">(</span>
+        urlPatterns <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">"/sendFile"</span><span class="token punctuation">,</span> <span class="token string">"/uploadFile"</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        loadOnStartup <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span>
+        asyncSupported <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+        initParams <span class="token operator">=</span> <span class="token punctuation">{</span>
+            <span class="token annotation punctuation">@WebInitParam</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"saveDir"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"c:/uploaded"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            <span class="token annotation punctuation">@WebInitParam</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"allowedTypes"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"jpg,gif,png"</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+<span class="token punctuation">)</span></span><span class="token punctuation"></span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ImageUploadServlet</span> <span class="token keyword">extends</span> <span class="token class-name">HttpServlet</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">doGet</span><span class="token punctuation">(</span><span class="token class-name">HttpServletRequest</span> request<span class="token punctuation">,</span> <span class="token class-name">HttpServletResponse</span> response<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+        <span class="token class-name">String</span> saveDir <span class="token operator">=</span> <span class="token function">getInitParameter</span><span class="token punctuation">(</span><span class="token string">"saveDir"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">String</span> fileTypes <span class="token operator">=</span> <span class="token function">getInitParameter</span><span class="token punctuation">(</span><span class="token string">"allowedTypes"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">PrintWriter</span> writer <span class="token operator">=</span> response<span class="token punctuation">.</span><span class="token function">getWriter</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        writer<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"saveDir = "</span> <span class="token operator">+</span> saveDir<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        writer<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"fileTypes = "</span> <span class="token operator">+</span> fileTypes<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h2>8.3 Налаштування мапінгу фільтрів</h2>
+<p>Як уже говорилося вище, фільтри — це службовий різновид сервлетів, і налаштовуються вони подібно до сервлетів. Ось які атрибути є в анотації <code>@WebFilter</code>:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th></th>
+    <th>Атрибут</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>1</td>
+    <td><code>filterName</code></td>
+    <td>Унікальне ім'я фільтра (як у web.xml)</td>
+   </tr>
+   <tr>
+    <td>2</td>
+    <td><code>displayName</code></td>
+    <td>Ім'я фільтра, що читається для людини</td>
+   </tr>
+   <tr>
+    <td>3</td>
+    <td><code>description</code></td>
+    <td>Опис фільтра</td>
+   </tr>
+   <tr>
+    <td>4</td>
+    <td><code>value / urlPatterns</code></td>
+    <td>Задає список url-ів для мапінгу</td>
+   </tr>
+   <tr>
+    <td>5</td>
+    <td><code>dispatcherTypes</code></td>
+    <td>Визначає список типів DispatcherType</td>
+   </tr>
+   <tr>
+    <td>6</td>
+    <td><code>servletNames</code></td>
+    <td>Задає список сервлетів, до яких застосовується</td>
+   </tr>
+   <tr>
+    <td>7</td>
+    <td><code>initParams</code></td>
+    <td>Дозволяє задати стартові параметри фільтра</td>
+   </tr>
+   <tr>
+    <td>8</td>
+    <td><code>asyncSupported</code></td>
+    <td>Вказує, що фільтр може працювати асинхронно (HTTP/2)</td>
+   </tr>
+   <tr>
+    <td>9</td>
+    <td><code>smallIcon</code></td>
+    <td>Задає маленьку іконку фільтра</td>
+   </tr>
+   <tr>
+    <td>10</td>
+    <td><code>largeIcon</code></td>
+    <td>Задає велику іконку фільтра</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Приклад фільтра, який <strong>перехоплює всі запити до певних сервлетів</strong> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation"></span><span class="text-green"><span class="token annotation punctuation">@WebFilter</span><span class="token punctuation">(</span>servletNames <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">"MyOwnServlet"</span><span class="token punctuation">,</span> <span class="token string">"UploadServlet"</span><span class="token punctuation">}</span><span class="token punctuation">)</span></span><span class="token punctuation"></span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyFilter</span> <span class="token keyword">implements</span> <span class="token class-name">Filter</span> <span class="token punctuation">{</span>
+    <span class="token comment">// implements Filter's methods here...</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Приклад фільтра, якому <strong>задано кілька параметрів</strong> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation"></span><span class="text-green"><span class="token annotation punctuation">@WebFilter</span><span class="token punctuation">(</span>
+        urlPatterns <span class="token operator">=</span> <span class="token string">"/uploadFilter"</span><span class="token punctuation">,</span>
+        initParams <span class="token operator">=</span> <span class="token annotation punctuation">@WebInitParam</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"fileTypes"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"doc;xls;zip;txt;jpg;png;gif"</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span></span><span class="token punctuation"></span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">UploadFilter</span> <span class="token keyword">implements</span> <span class="token class-name">Filter</span> <span class="token punctuation">{</span>
+    <span class="token comment">// implements Filter's methods here...</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Приклад фільтра, якому <strong>задані типи для RequestDispatcher</strong> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation"></span><span class="text-green"><span class="token annotation punctuation">@WebFilter</span><span class="token punctuation">(</span>
+        urlPatterns <span class="token operator">=</span> <span class="token string">"/admin"</span><span class="token punctuation">,</span>
+        dispatcherTypes <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token class-name">DispatcherType</span><span class="token punctuation">.</span>REQUEST<span class="token punctuation">,</span> <span class="token class-name">DispatcherType</span><span class="token punctuation">.</span>FORWARD<span class="token punctuation">}</span>
+<span class="token punctuation">)</span></span><span class="token punctuation"></span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyFilter</span> <span class="token keyword">implements</span> <span class="token class-name">Filter</span> <span class="token punctuation">{</span>
+    <span class="token comment">// implements Filter's methods here...</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Більш детально про призначення фільтрів та сервлетів ти дізнаєшся у наступних лекціях.</p>

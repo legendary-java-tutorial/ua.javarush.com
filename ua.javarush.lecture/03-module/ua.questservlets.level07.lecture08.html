@@ -1,0 +1,58 @@
+<h2>9.1 Об'єкт $ та метод ajax у jQuery</h2>
+<p>jQuery також має спеціальний глобальний об'єкт для роботи з мережею. Як ти можеш здогадатися, називається він <code>$</code>. Так, таке ім'я. Зате просто та зручно.</p>
+<p>Допустимо, ти хочеш у своєму JavaScript відправити запит на API та обробити отриману відповідь. Це можна зробити так:</p>
+<pre class="line-numbers"><code>
+$.ajax({
+  type: <span class="text-green">"POST"</span>,
+  url: <span class="text-green">"api.codegym.cc"</span>,
+  data: <span class="text-user">{name: 'Bill', location: 'Radmond'},</span>
+  success: <span class="text-red">function(msg){
+    alert( "Person found: " + msg );
+  }</span>
+});
+
+</code></pre>
+<p>Все це весь код. У об'єкта <code>$</code>ми викликаємо метод <code>ajax()</code>, куди передаємо об'єкт, який описує все, що нам потрібно: і запит, і відповідь.</p>
+<ul>
+ <li><span class="text-green">Поле <code>type</code>визначає тип HTTP-запиту: <code>GET</code>або<code>POST</code></span></li>
+ <li><span class="text-green">Поле <code>url</code>задає <code>url</code>, на який буде надіслано запит</span></li>
+ <li><span class="text-user">Поле <code>data</code>задає дані запиту у форматі JSON</span></li>
+ <li><span class="text-red">Поле success задає функцію, яку потрібно буде викликати</span> після того, як прийде успішна відповідь від сервера.</li>
+</ul>
+<h2>9.2 Корисні запити</h2>
+<p>А якщо не потрібно передавати жодних даних, то запит можна записати ще коротше. Наприклад, так можна записати простий <strong>POST-запит</strong> :</p>
+<pre class="line-numbers"><code>
+$.post(<span class="text-green">"ajax/test.html"</span>, <span class="text-red">function( data ) {
+  $( ".result" ).html( data );
+}</span>);
+</code></pre>
+<p>А знаєш що робить код <code class="text-red">$( ".result" ).html( data );</code>? Спробуємо здогадатися.</p>
+<p>Він знаходить у документі елемент із класом result, і додає йому всередину HTML-код - дані <code>data</code>. Так за пару рядків ти можеш завантажити дані з сервера та додати їх до своєї сторінки. Ну, не краса хіба? :)</p>
+<p><strong>GET-запит</strong> також можна написати в пару рядків:</p>
+<pre class="line-numbers"><code>
+$.get(<span class="text-green">"ajax/test.html"</span>., <span class="text-red">function( data ) {
+  $( ".result" ).html( data );
+}</span>);
+</code></pre>
+<p><strong>Хочеш завантажити та виконати скрипт?</strong></p>
+<pre class="line-numbers"><code>
+$.ajax({
+  method: <span class="text-green">"GET"</span>,
+  url: <span class="text-green">"test.js"</span>,
+<span class="text-red">  dataType: "script"</span>
+});
+</code></pre>
+<p><strong>Отримати останню версію HTML-сторінки?</strong></p>
+<pre class="line-numbers"><code>
+$.ajax({
+  url: "test.html",
+<span class="text-red">  cache: false</span>
+})
+  .done(function( html ) {
+<span class="text-user">    $( "#results" ).append( html );</span>
+  });
+</code></pre>
+<p>В інтернеті є дуже хороша документація з jQuery:</p>
+<p><a href="https://api.jquery.com/" target="_blank">jQuery API</a></p>
+<p><a href="https://api.jquery.com/jquery.ajax/" target="_blank">jQuery.ajax()</a></p>
+<p>Крім того, всі поширені питання легко гугляться і є на StackOverflow.</p>

@@ -1,0 +1,99 @@
+<h2>Метод init()</h2>
+<p>І ще пара корисних дрібниць. Звичайно, я про ініціалізацію сервлету. Як ти вже знаєш, після того, як веб-сервер створив об'єкт сервлета та помістив його в контейнер, він викликає у сервлета метод <span class="code text-orange">init()</span> . Ти можеш перевизначити цей метод та ініціалізувати у ньому все, що тобі потрібно.</p>
+<p>А чому б не використати конструктор?</p>
+<p>Тому що процес створення сервлету відбувається приблизно так:</p>
+<ul>
+ <li>Створюємо об'єкт, успадкований від<mark class="green">HttpServlet</mark></li>
+ <li>Створюємо об'єкт<mark class="green">ServletContext</mark>, додаємо його змінну сервлета</li>
+ <li>Створюємо об'єкт<mark class="green">ServletConfig</mark>, додаємо його змінну сервлета</li>
+ <li>…</li>
+ <li>Веб-сервер приєднує сервлет до контейнера</li>
+ <li>Викликаємо метод <span class="code text-orange">init()</span></li>
+</ul>
+<p><span class="text-red">У конструкторі твого сервлета ще багато його внутрішніх змінних не ініціалізовано. </span>Контейнер нічого не знає про твій сервлет, твій сервлет нічого не знає про його контекст. Думаю, тут і так зрозуміло.</p>
+<p>Давай напишемо сервлет, який при ініціалізації знаходить properties-файл з налаштуваннями:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PropertiesServlet</span> <span class="token keyword">extends</span> <span class="token class-name">HttpServlet</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+         <span class="token keyword">try</span> <span class="token punctuation">(</span><span class="token class-name">InputStream</span> input <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span><span class="token string">"c:/path/to/config.properties"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+             <span class="token class-name">Properties</span> prop <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Properties</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+             prop<span class="token punctuation">.</span><span class="token function">load</span><span class="token punctuation">(</span>input<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+             <span class="token class-name">String</span> databaseURL <span class="token operator">=</span> prop<span class="token punctuation">.</span><span class="token function">getProperty</span><span class="token punctuation">(</span><span class="token string">"db.url"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+             <span class="token class-name">String</span> databaseUser <span class="token operator">=</span> prop<span class="token punctuation">.</span><span class="token function">getProperty</span><span class="token punctuation">(</span><span class="token string">"db.user "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+             <span class="token class-name">String</span> databasePassword <span class="token operator">=</span> prop<span class="token punctuation">.</span><span class="token function">getProperty</span><span class="token punctuation">(</span><span class="token string">"db.password"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	 <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Тут ми створюємо об'єкт<mark class="green">Properties</mark>і завантажуємо в нього дані із файлу <span class="text-bold">config.properties</span> . Ну і надалі можна діставати з об'єкту<mark class="green">Properties</mark>різні параметри, такі як дані для доступу до бази даних, наприклад.</p>
+<h2>Як правильно завантажити properties-файл</h2>
+<p>До речі, а що робити, якщо твій сервлет виконується не на комп'ютері?</p>
+<p>Скажімо, написали його тут, а він виконується на сервері десь в іншій частині світу. Або на кількох серверах. Як правильно завантажити properties-файл у цьому випадку?</p>
+<p>Гарне питання. Зазвичай у процесі роботи <span class="text-bold">сервлет знає лише відносний шлях</span> своїх properties-файлів, але з знає їх абсолютного шляху, оскільки war-файли з сервлетами можуть зберігатися будь-де.</p>
+<p>Значить, нам потрібно дізнатися шлях, де зберігатись наш сервлет (сервлет уже проініціалізований) і додати до нього відносний шлях :)</p>
+<p>Виглядає це приблизно так:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">String</span> path <span class="token operator">=</span> absoluteServletParh <span class="token operator">+</span> <span class="token string">"відносний шлях"</span><span class="token punctuation">;</span></code></pre>
+<p>І, як завжди, таке елементарне завдання часто має своє маленьке “але”. Твій сервлет та його properties-файл зберігаються всередині архіву :) Не обов'язково, звичайно, але й таке буває. properties-файл часто зберігається всередині jar-або war-файлів.</p>
+<p>Тобто фізичного шляху на диску твій файл може не мати. Але оскільки контейнер зумів завантажити твій сервлет, він, швидше за все, зможе завантажити і твій properties-файл.</p>
+<p>Для цього тобі потрібно отримати об'єкт завантажувача класу (<mark class="green">ClassLoader</mark>) та попросити його завантажити твій файл. Ось як це виглядатиме:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">ClassLoader</span> loader <span class="token operator">=</span> <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getContextClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">InputStream</span> stream <span class="token operator">=</span> loader<span class="token punctuation">.</span><span class="token function">getResourceAsStream</span><span class="token punctuation">(</span><span class="token string">"/config.properties"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token class-name">Properties</span> prop <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Properties</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+prop<span class="token punctuation">.</span><span class="token function">load</span><span class="token punctuation">(</span>stream<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h2>Метод getConfig()</h2>
+<p>До речі, не всі параметри можна передавати в сервлет у properties-файлух. Наприклад, ваш сервлет взаємодіє з іншими сервлетами в розподіленому веб-додатку.</p>
+<p>Тоді потрібно зробити так, щоб контейнер передав твоєму сервлет всю необхідну інформацію, коли він буде викликати його метод <span class="code text-orange">init()</span> . Більше того, він так і робить.</p>
+<p>У твого сервлета (адже ти пам'ятаєш, що він успадкований від класу <span class="text-green">HttpServlet</span> ) є метод <span class="code text-orange">getServletConfig()</span> . Який повертає об'єкт<mark class="green">ServletConfig</mark>, створений та ініціалізований контейнером. Цей об'єкт має такі методи:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td><span class="code text-orange">getInitParameterNames()</span></td>
+    <td>Повертає список імен параметрів сервлету</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">getInitParameter(String name)</span></td>
+    <td>Повертає параметр сервлета на його ім'я</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">getServletName()</span></td>
+    <td>Повертає власне ім'я сервлету</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">getServletContext()</span></td>
+    <td>Повертає об'єкт<mark class="green">ServletContext</mark></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Давай напишемо сервлет, який повертає список своїх параметрів з<mark class="green">ServletConfig</mark>Та. Класти їх туди буде через файл web.xml:</p>
+<pre><code>	&lt;web-app&gt; 
+ 	
+        &lt;servlet&gt; 
+            &lt;servlet-name&gt;Print-Servlet&lt;/servlet-name&gt; 
+            &lt;servlet-class&gt;PrintServlet&lt;/servlet-class&gt; 
+            &lt;init-param&gt; 
+                &lt;param-name&gt;jdbc-driver&lt;/param-name&gt; 
+    	        &lt;param-value&gt;sun.jdbc.odbc.JdbcOdbcDriver&lt;/param-value&gt; 
+	        &lt;/init-param&gt; 
+        &lt;/servlet&gt; 
+  	
+        &lt;servlet-mapping&gt; 
+            &lt;servlet-name&gt;Print-Servlet&lt;/servlet-name&gt; 
+            &lt;url-pattern&gt;/print&lt;/url-pattern&gt; 
+        &lt;/servlet-mapping&gt; 
+  	
+    &lt;/web-app&gt;</code></pre>
+<p>Отримати свої параметри сервлет може за допомогою коду:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PrintServlet</span> <span class="token keyword">extends</span> <span class="token class-name">HttpServlet</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">ServletConfig</span> config <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getServletConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Enumeration</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> initParameterNames <span class="token operator">=</span> config<span class="token punctuation">.</span><span class="token function">getInitParameterNames</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>initParameterNames<span class="token punctuation">.</span><span class="token function">hasMoreElements</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+       	     <span class="token class-name">String</span> key <span class="token operator">=</span> initParameterNames<span class="token punctuation">.</span><span class="token function">nextElement</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+             <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"%s: %s\n"</span><span class="token punctuation">,</span> key<span class="token punctuation">,</span> config<span class="token punctuation">.</span><span class="token function">getInitParameter</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    	<span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>

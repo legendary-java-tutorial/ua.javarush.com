@@ -1,0 +1,92 @@
+Підключаємося до бази даних із Java-додатку
+<p>----------------------------------------</p>
+Java DataBase Connectivity.
+JDBC Driver Manager.
+Підключаємось до MySQL-сервера.
+<p>----------------------------------------</p>
+<h2>Java DataBase Connectivity</h2>
+
+<p>Ти знаєш основи SQL. Це добре. Але сьогодні тобі стане ще краще. Сьогодні ти почнеш вивчати, як працювати з базою даних із Java-додатку.</p>
+
+<p>Різних СУБД дуже багато, тому творці Java вирішили стандартизувати роботу Java-додатків з базами даних. І назвали вони цей стандарт - <strong><span class="text-red">JDBC</span>: Java DataBase Connectivity</strong>.</p>
+
+<img data-max-width="512" data-id="04001c5f-340f-421f-9e18-cca890d35d6f" src="https://cdn.javarush.com/images/article/04001c5f-340f-421f -cca890d35d6f/original.png" alt="">
+
+<p>У JDBC є 3 основні інтерфейси:</p>
+
+<ul>
+<li><strong>Connection</strong> – відповідає за з'єднання з базою даних</li>
+<li><strong>Statement</strong> – відповідає за запит до бази даних</li>
+<li><strong>ResultSet</strong> – відповідає за результат запиту до бази даних</li>
+</ul>
+
+<p>Фактично це все. І ми навіть не вивчатимемо всі методи всіх інтерфейсів. Тільки робочі приклади, які потроху ускладнюватимемо.</p>
+
+<p>JDBC чимось нагадує роботу із сервлетами. Творці JDBC написали кілька інтерфейсів і назвали це Java DataBase API. А реалізацію цих інтерфейсів поклали на творців СУБД. Як воно там реалізовано – нікого не цікавить. Працює і добре.</p>
+
+<p>Є чотири версії JDBC і ми будемо вивчати останню. І не тому, що вона найкрутіша, а тому що вона найпростіша.</p>
+
+<h2>JDBC Driver Manager</h2>
+
+<p>Java-додаток та база даних спілкуються один з одним за допомогою бібліотеки, яка називається JDBC Driver. Це набір класів, які реалізують JDBC API для конкретної СУБД.</p>
+
+<p>Правильні JDBC драйвер вибирається за допомогою класу під назвою <strong>DriverManager</strong>. Їхню взаємодію можна представити таким малюнком:</p>
+
+<img data-max-width="800" data-id="25dcf3c0-0d46-4dde-af85-3c1f0233a3d6" src="https://cdn.javarush.com/images/article/25dcf3c0-0d46-4d-af -3c1f0233a3d6/original.png" alt="">
+
+<p>Штука в тому, що ти можеш використовувати In-Memory-DB, No-SQL-DB або навіть базу даних, вбудовану в Android-додаток. Тебе як Java-розробника ці нюанси взагалі не стосуються. <span class="text-green">Driver Manager вибере вам правильний JDBC драйвер</span> і все буде працювати як годинник.</p>
+
+<p>До речі, а як він це робить?</p>
+
+<h2>Підключаємося до MySQL-серверу</h2>
+
+<p>Пам'ятаєш, що тобі потрібно було, щоб підключитися до локального SQL-сервера через MySQL Workbench? Якщо забув, то я нагадаю, тобі були потрібні три речі: </p>
+
+<ul>
+<li>host</li>
+<li>login</li>
+<li>password</li>
+</ul>
+
+<p>З логіном та паролем все зрозуміло, а host, якщо ти пам'ятаєш – це ім'я комп'ютера, на якому розташований сервер. Якщо він розташований у тебе на локальному комп'ютері, то як ім'я хоста потрібно вказати localhost. А якщо не на локальному?</p>
+
+<p>Тоді потрібно використовувати URL. URL розшифровується як <strong>Universal Resource Locator</strong>. Його можна використовувати для вказівки розташування чого-небудь в мережі: сайту, принтера, SQL-сервера. Насправді URL використовується для доступу до локального SQL-серверу. Він має приблизно такий вигляд:</p>
+ 
+    <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-red">mysql</span>://<span class="text-green">localhost</span>:<span class="text-neon">3306</span>/ <span class="text-viola">db_scheme</span></code></pre>
+    </div>
+
+<ul>
+<li><span class="text-red"><strong>mysql</strong></span> – це протокол роботи з сервером</li>
+<li><span class="text-green"><strong>localhost</strong></span> – ім'я хоста в мережі</li>
+<li><span class="text-neon"><strong>3306</strong></span> – порт, яким йдуть запити</li>
+<li><span class="text-viola"><strong>db_scheme</strong></span> – ім'я схеми (ім'я бази даних)</li>
+</ul>
+
+<p><strong>Примітка.</strong> Ім'я бази даних не можна вказувати. Але якщо сервер зберігає багато схем баз даних, то зазвичай до них створюють різних користувачів та різні права доступу. І якщо у користувача, під яким ти логінишся на SQL-сервер, немає доступу до всіх баз, то тобі обов'язково потрібно вказати ім'я конкретної бази, до якої маєш доступ.</p>
+
+<p>Наприкінці цього URL можуть йти різні параметри, типи кодування, timezone, які вважаються параметрами для нового з'єднання з базою даних.</p>
+
+<p>Також протокол може бути складеним. Якщо все спілкування з сервером бази даних йде зашифрованим каналом за допомогою SSH-протоколу, тоді URL може бути вказано так:</p>
+ 
+    <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-red">ssh:<span class="text-red">mysql</span>://<span class="text-green">localhost</span>:<span class= "text-neon">3306</span>/<span class="text-viola">db_scheme</span></code></pre>
+    </div>
+ 
+<p>Протокол – це не обов'язково зовнішня програма. Наприклад, якщо ти працюєш із сервером за протоколом JNDI, то можеш вказати його так:</p>
+ 
+    <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-red">jndi</span>:<span class="text-red">mysql</span>://<span class="text-green">localhost</span>: <span class="text-neon">3306</span>/<span class="text-viola">db_scheme</span></code></pre>
+    </div>
+ 
+<p>А якщо хочеш працювати за протоколом JDBC API, то потрібно писати так:</p>
+ 
+    <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-red">jdbc</span>:<span class="text-red">mysql</span>://<span class="text-green">localhost</span>: <span class="text-neon">3306</span>/<span class="text-viola">db_scheme</span></code></pre>
+    </div>
+ 
+<p>Коли ти намагаєшся створити підключення до бази даних, то JDBC Driver Manager аналізує вашу SQL-db-URL і визначає ім'я JDBC-драйвера на ім'я протоколу. Ось така маленька хитрість.</p>

@@ -1,0 +1,37 @@
+<h2>6.1 Мокування статичного методу mockStatic()</h2>
+<p>І ще один важливий момент – мокування та верифікація статичних методів. "А що в цьому такого?", - Запитаєш ти. Так, статичні, але ж методи ж. І будете неправі.</p>
+<p>Пам'ятай, із чого ми почали вивчення мок-об'єктів? З того що ці об'єкти штучно створюються через клас <code>DynamicProxy</code>. <span class="text-red">А статичні методи до жодних об'єктів не прив'язані і перехопити виклики до них через <code>DynamicProxy</code>не можна</span> . От і все.</p>
+<p>Але творці Mockito і тут змогли викрутитись – написали свій завантажувач класів і з його допомогою змогли підміняти класи на льоту. Велика і складна робота, але вони таки змогли це зробити.</p>
+<p>Потрібно додати додаткову бібліотеку до <code>pom.xml</code>:</p>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.mockito&lt;/groupId&gt;
+    &lt;artifactId&gt;mockito-inline&lt;/artifactId&gt;
+    &lt;version&gt;4.2.0&lt;/version&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>Ось як потрібно працювати, якщо вам потрібно макувати статичний метод.</p>
+<p><strong>1 Створюємо спеціальний мок-об'єкт класу:</strong></p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present"><code>MockedStatic&lt;<span class="text-user">Ім'яКласа</span>&gt;<span class="text-green">керуючийОб'єкт</span> = Mockito.<span class="text-red">mockStatic</span>(<span class="text-user">Ім'яКласа.class</span>);</code></pre>
+</div>
+<p><strong>2 Додаємо до цього об'єкта правила роботи:</strong></p>
+<p>До цього об'єкту правила треба чіпляти іншими способами.</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present"><code><span class="text-green">керуючийОб'єкт</span>.when(<span class="text-user">Ім'яКласа</span>::<span class="text-orange">ім'яМетоду</span>).thenReturn(<span class="text-violet">результат</span>);</code></pre>
+</div>
+<p><strong>3</strong> Обов'язково <strong>загортаємо використання цього об'єкта в<code>try-with-resources</code></strong> , щоб об'єкт відразу вийшов і Mockito могло очистити пов'язані з ним правила.</p>
+<p>Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation"><span class="text-green">@Test</span></span>
+<span class="token keyword">void</span> givenStaticMethodWithNoArgs <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">try</span> <span class="token punctuation">(</span><span class="token class-name"><span class="text-red">MockedStatic</span></span><span class="token generics"><span class="token punctuation">&lt;</span> <span class="token class-name"><span class="text-user">StaticUtils</span></span><span class="token punctuation">&gt;</span></span> utilities <span class="token operator">=</span>  <span class="token class-name"></span><span class="text-red"><span class="token class-name">Mockito</span><span class="token punctuation">.</span><span class="token function">mockStatic</span></span><span class="token function"></span><span class="token punctuation">(</span> <span class="token class-name"></span><span class="text-user"><span class="token class-name">StaticUtils</span><span class="token punctuation">.</span><span class="token keyword">class</span></span><span class="token keyword"></span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">//додаємо правило</span>
+ <span class="text-yellow">        utilities</span><span class="token punctuation">.</span><span class="token function">when</span><span class="token punctuation">(</span><span class="token class-name"><span class="text-user">StaticUtils</span></span><span class="token operator">::</span><span class="token function"><span class="text-orange">name</span></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenReturn</span><span class="token punctuation">(</span><span class="token string">"Вітання"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">//перевіряємо, що правило працює</span>
+        <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token string">"Вітання"</span><span class="token punctuation">,</span> <span class="token class-name"><span class="text-red">StaticUtils</span></span><span class="token punctuation">.</span><span class="token function"><span class="text-orange">name</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Не так красиво, як з анотаціями <code>@Mock</code>і <code>@Spy</code>зате дуже практично. Було дуже важко писати тести, коли не можна було замокати простий статичний метод, який використовувався усередині методів, що тестуються.</p>
+<p></p>
+<p></p>

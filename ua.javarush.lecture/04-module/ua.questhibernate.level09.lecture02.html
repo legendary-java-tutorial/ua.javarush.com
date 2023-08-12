@@ -1,0 +1,217 @@
+Підключаємось до бази даних
+<p>----------------------------------------</p>
+Зв'язуємо Hibernate та бази даних
+Авторизація у базі даних
+Отримуємо SessionFactory
+Вказуємо, де шукати Entiry-класи
+Фінальний приклад
+<p>----------------------------------------</p>
+<h2>3.1 Зв'язуємо Hibernate та бази даних</h2>
+<p>Ми навчилися підключати Hibernate до нашої програми за допомогою Maven, а також мапит таблиці на класи за допомогою анотацій. І тепер виникає наступне питання — а як нам прочитати об'єкти з бази даних чи зберегти їх туди?</p>
+<p>Не так швидко. Насамперед потрібно розібратися ще з трьома речами:</p>
+<ul>
+<li><strong>Конфігурування підключення до бази даних</strong></li>
+<li><strong>Налаштування Hibernate</strong></li>
+<li><strong>Робота з EntityManager</strong></li>
+</ul>
+<img data-max-width="1024" data-id="2f7dae23-c127-4d4b-8041-9530f765996a" src="https://cdn.javarush.com/images/article/2f7dae23-c127-4d4 -9530f765996a/1024.jpeg" alt="">
+<p>Hibernate повністю приховує від твого застосування роботу з базою даних, але щоб не було жодних ексцесів, його потрібно правильно налаштувати. Пропустити цей етап не можна — як інакше Hibernate дізнається, яку базу даних йому зберігати об'єкти?</p>
+<p>Конфігурувати Hibernate та задати йому інформацію про базу даних можна трьома способами</p>
+<ul>
+<li>Використовувати Properties-файл</li>
+<li>Використовувати файл hibernate.cfg.xml</li>
+<li>Використовувати методи бина Configuration</li>
+</ul>
+<p>І хоча мені найбільше подобається останній, ти точно зіштовхуватимешся з усіма трьома, так що ми всі три тут і розберемо.</p>
+<h2>3.2 Авторизація у базі даних</h2>
+<p>Почнемо з найважливішого – підключення бази даних. Для цього тобі потрібно буде вказати дані, щоб Hibernate міг авторизуватись у потрібній базі даних.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Properties File Configuration</th>
+    </tr>
+    <tr>
+        <td>hibernate.properties</td>
+    </tr>
+    <tr>
+        <td>
+<pre class='language-java line-numbers'><code>
+<span class="text-green">hibernate.dialect= org.hibernate.dialect.Oracle9Dialect
+hibernate.connection.driver_class=oracle.jdbc.driver.OracleDriver</span>
+<span class="text-brown">hibernate.connection.url= jdbc:oracle:thin:@localhost:1521:supershop
+hibernate.connection.username=root
+hibernate.connection.password=secret</span>
+<span class="text-user">hibernate.show_sql=true
+hibernate.hbm2ddl=update</span>
+</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Ці ж установки можна задати у вигляді xml-файлу:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>XML Based Configuration</th>
+    </tr>
+    <tr>
+        <td>hibernate.cfg.xml</td>
+    </tr>
+    <tr>
+        <td>
+<pre class='line-numbers'><code>
+&lt;hibernate-configuration&gt;
+&lt;session-factory&gt;
+        
+    <span class="text-green">&lt;property name="dialect"&gt;org.hibernate.dialect.Oracle9Dialect&lt;/property&gt;
+    &lt;property name="connection.driver_class"&gt;oracle.jdbc.driver.OracleDriver&lt;/property&gt;</span>
+    <span class="text-brown">&lt;property name="connection.url"&gt;jdbc:oracle:thin:@localhost:1521:supershop&lt;/property&gt;
+    &lt;property name="connection.username"&gt;root&lt;/property&gt;
+    &lt;property name="connection.password"&gt;secret&lt;/property&gt;</span>
+    <span class="text-user">&lt;property name="hibernate.show_sql "&gt;true&lt;/property&gt;
+    &lt;property name="hbm2ddl.auto"&gt;update&lt;/property&gt; </span>
+     
+&lt;/session-factory&gt;
+&lt;/hibernate-configuration&gt;
+
+</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>В обох прикладах ми бачимо ті самі налаштування з одними й тими самими значеннями. Просто перший приклад представляє їх у вигляді <strong>properties-файлу</strong>, а другий - у вигляді <strong>xml-файлу</strong>.</p>
+<p>Ці параметри поділяються на три групи:</p>
+<ol>
+<li><span class="text-green">Вказуємо тип СУБД</span></li>
+<ul>
+<li>Вказуємо діалект (тип СУБД), наприклад, Oracle 9.0</li>
+<li>Вказуємо ім'я JDBC-драйвера для роботи з даною СУБД</li>
+</ul>
+<li><span class="text-brown">Вказуємо дані для авторизації в базі</span></li>
+<ul>
+<li>url бази</li>
+<li>username</li>
+<li>password</li>
+</ul>
+<li><span class="text-user">Конфігуруємо двигун Hibernate</span></li>
+<ul>
+<li><code>hibernate.show_sql</code> — Hibernate дублюватиме в консоль усі запити, які виконує</li>
+<li><code>hbm2ddl.auto</code> — Hibernate змінить структуру бази даних, якщо треба</li>
+</ul>
+</ol>
+<p>Є ще третій спосіб завдань конфігурації через біни. Зазвичай він використовується в парі зі Spring, тому ми розглянемо його, коли вивчатимемо SpringFramework.</p>
+<h2>3.3 Отримуємо SessionFactory</h2>
+<p>Наступний етап – це отримати об'єкт SessionFactory. Є кілька способів зробити це:</p>
+<p>Спосіб перший — <strong>використовується файл hibernate.properties</strong>.</p>
+<p>Для цього потрібно просто написати такий код:</p>
+<pre class='language-java'><code>
+<span class="text-brown">SessionFactory</span> sessionFactory = новий Configuration().<span class="text-brown">buildSessionFactory</span>();
+</code></pre>
+<p>Якщо файл hibernate.properties не буде знайдений у поточній директорії проекту, то кинеться виняток.</p>
+<p>Спосіб другий — <strong>конфігурація за допомогою hibernate.cfg.xml</strong>.</p>
+<pre class='language-java'><code>
+<span class="text-brown">SessionFactory</span> sessionFactory = новий Configuration().<span class="text-red">configure()</span>.<span class="text-brown"> buildSessionFactory</span>();
+</code></pre>
+<p>Якщо ти напишеш такий код, то як джерело налаштувань буде використаний файл <code>hibernate.cfg.xml</code>. Якщо такий файл не буде знайдено, метод <code>buildSessionFactory()</code> кине виняток.</p>
+<p>Спосіб третій — <strong>задаємо файл із конфігурацією вручну</strong>.</p>
+<p>Іноді в процесі розробки виникає необхідність переключитися на тестову базу або змінити інші налаштування для роботи з базою, для цього можна задати файл конфігурації вручну:</p>
+<pre class='language-java'><code>
+<span class="text-brown">SessionFactory</span> sessionFactory = новий Configuration().configure("hibernate-dev.cfg.xml").<span class="text-brown">buildSessionFactory</span> ();
+</code></pre>
+<p>Спосіб четвертий — <strong>використовується кастомний файл hibernate.properties:</strong></p>
+<pre class='language-java line-numbers'><code>
+ClassLoader <span class="text-yellow">classLoader</span> = Thread.currentThread().getClassLoader();
+ 
+Properties <span class="text-user">properties</span> = new Properties();
+<span class="text-user">properties</span>.load(<span class="text-yellow">classLoader</span>.getResourceAsStream("hibernate-dev.properties"));
+ 
+<span class="text-brown">SessionFactory</span> sessionFactory = новий Configuration()
+            .addProperties(<span class="text-user"><span class="text-user">properties</span></span>)
+            .<span class="text-brown">buildSessionFactory</span>();
+
+</code></pre>
+<p>І нарешті можна просто зашити всі потрібні параметри прямо в код:</p>
+<pre class='language-java line-numbers'><code>
+Properties <span class="text-user">properties</span> = new Properties();
+<span class="text-user">properties</span>.put(<span class="text-brown">Environment.DRIVER</span>, "com.mysql.jdbc.Driver");
+<span class="text-user">properties</span>.put(<span class="text-brown">Environment.URL</span>, "jdbc:mysql://localhost:3306/supershop") ;
+<span class="text-user">properties</span>.put(<span class="text-brown">Environment.USER</span>, "root");
+<span class="text-user">properties</span>.put(<span class="text-brown">Environment.PASS</span>, "password");
+ 
+<span class="text-brown">SessionFactory</span> sessionFactory = новий Configuration()
+            .setProperties(<span class="text-user">properties</span>)
+            .<span class="text-brown">buildSessionFactory</span>();
+
+</code></pre>
+<h2>3.4 Вказуємо, де шукати Entity-класи</h2>
+<p>Але це ще не все. Коли ми конфігуруємо об'єкт <strong>SessionFactory</strong> в Hibernate, цей <strong>SessionFactory</strong> перевіряє, що в базі даних існують всі необхідні таблиці з колонками необхідних типів.</p>
+<p>І щоб <strong>SessionFactory</strong> міг це зробити, йому потрібно передати список entity-класів, які йому потрібно зіставити з базою даних.</p>
+<p>Передати список entity-класів можна трьома способами:</p>
+<p><strong>Спосіб перший.</strong> У <code>hibernate.cfg.xml</code> додати рядок вигляду:</p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+&lt;<span class="text-brown">mapping</span> class="повне ім'я класу" /&gt;
+        </code></pre>
+</div>
+<p>Приклад:</p>
+<pre class='language-java line-numbers'><code>
+    &lt;mapping class="com.javarush.data.User" /&gt;
+    &lt;mapping class="com.javarush.data.Employee" /&gt;
+    &lt;mapping class="com.javarush.data.Task" /&gt;
+
+</code></pre>
+<p><strong>Спосіб другий.</strong> Викликати в об'єкті <strong>Configuration</strong> метод <code>addAnnotatedClass()</code>. Приклад:</p>
+<pre class='language-java line-numbers'><code>
+<span class="text-brown">SessionFactory</span> sessionFactory = новий Configuration()
+   .configure()
+   .<span class="text-red">addAnnotatedClass</span>(<span class="text-viola">com.javarush.data.User.class</span>)
+   .<span class="text-brown">buildSessionFactory</span>();
+</code></pre>
+<p>
+Якщо класів багато, можна додавати їх цілими пакетами:</p>
+<pre class='language-java line-numbers'><code>
+<span class="text-brown">SessionFactory</span> sessionFactory = новий Configuration()
+   .configure()
+   .<span class="text-red">addPackage</span>(<span class="text-green">"com.javarush.data"</span>)
+   .<span class="text-brown">buildSessionFactory</span>();
+</code></pre>
+<h2>3.5 Фінальний приклад</h2>
+<p>Після того, як ми навчилися конфігурувати об'єкт SessionFactory, давай напишемо код, який його використовуватиме.</p>
+<p>Він складатиметься з трьох методів:</p>
+<ol>
+<li>Конфігуруємо Hibernate</li>
+<li>Метод, який отримує всіх співробітників із бази</li>
+<li>Метод, який зберігає нового співробітника в базу</li>
+</ol>
+<p>Шаблон цього коду буде виглядати приблизно так:</p>
+<pre class='language-java line-numbers'><code>
+class EmployeeManager {
+    private SessionFactory <span class="text-yellow">sessionFactory</span>;
+ 
+    <span class="text-brown">public void class init()</span> {
+    this.sessionFactory = новий Configuration()
+        .configure()
+        .buildSessionFactory();
+   }
+ 
+   <span class="text-brown">public List&lt;Employee&gt; getAllEmployes()</span> {
+         try (Session <span class="text-user">session</span> = <span class="text-yellow">sessionFactory</span>.openSession()) {
+  Query&lt;Employee&gt; query = <span class="text-user">session</span>.createQuery("from Employee", Employee.class);
+    return <span class="text-viola">query</span>.list();
+         }
+   }
+ 
+   <span class="text-brown">public void addEmployee(Employee</span> <span class="text-red">employee</span> <span class="text-brown">)</span> {
+     try (Session <span class="text-user">session</span> = <span class="text-yellow">sessionFactory</span>.openSession()) {
+            Transaction <span class="text-viola">transaction</span> = <span class="text-user">session</span>.beginTransaction();
+       <span class="text-user">session</span>.save(<span class="text-red">employee</span>);
+            <span class="text-viola">transaction</span>.commit();
+     }
+   }
+}
+
+</code></pre>
+<p>Перш ніж виконати запит до бази, потрібно створити окрему сесію. Якщо запити пов'язані, вони можуть виконуватися в одній сесії. Якщо запити не пов'язані (і між ними може пройти кілька хвилин), то для них потрібно робити власні сесії.</p>
+<p>Якщо ти хочеш прочитати дані з бази або виконати складний запит, потрібно спочатку створити об'єкт Query і за допомогою нього виконати свій запит. </p>
+<p>Також кожен запит до бази виконується у власній транзакції. Її потрібно відкрити, виконати потрібні операції, а потім закрити (закоммітити). </p>
+<p>У наступних лекціях ми детальніше розберемо, як це все працює.</p>

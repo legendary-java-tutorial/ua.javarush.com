@@ -1,0 +1,124 @@
+<h2>7.1 c:if, c:forEach</h2>
+<p>Код із використанням тегів замість Java-коду всім сподобався, тому область застосування вирішабо розширити. Але створенням об'єктів і читанням їх властивостей програмування не обмежується. Необхідно викликати способи об'єктів, працювати з базою даних та іншими сервісами. Що робити?</p>
+<p>Потрібно просто кожен оператор Java подати у вигляді тега. Був <code>if</code>, стане <code class="text-green">&lt;if&gt;</code>, був <code>for</code>, стане <code class="text-green">&lt;for&gt;</code>і так далі. Гаразд, гаразд, жартую, не було такого. Ну, не може бути так, щоб люди реально вирішабо так робити. А ні, може!</p>
+<p>Програмісти дозволабо додавати до коду будь-які теги. Тут у принципі нічого страшного – JSP стандарт розширюється. Але вони пішли далі та випустабо JSP Standard Tag Library – JSTL. Сторінка з його використанням виглядає так:</p>
+<pre class="line-numbers"><code>
+
+<span class="text-user">&lt;%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %&gt;</span>
+ 
+&lt;html&gt;
+   &lt;head&gt;
+       &lt;title&gt; JSTL Example&lt;/title&gt;
+   &lt;/head&gt;
+ 
+   &lt;body&gt;
+<span class="text-red">        &lt;c:set var</span> = <span class="text-green">"salary"</span> <span class="text-red">scope = "session" value = "${2000*5}"/&gt;
+        &lt;c:if test = "${</span> <span class="text-green">salary</span><span class="text-red"> &gt; 2000}"&gt;</span>
+            &lt;p&gt;My salary is: <span class="text-red">&lt;c:out value = "${</span><span class="text-green">salary</span><span class="text-red">}"/&gt;</span>&lt;p&gt;
+<span class="text-red">        &lt;/c:if&gt;</span>
+   &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Цілком можливо, ти зустрінеш такий код у своїх майбутніх проектах, там що дам деякі пояснення.</p>
+<h2>7.2 Функції JSTL</h2>
+<p>Функції JSTL поділяються на 5 категорій:</p>
+<ul>
+ <li><strong>Основні теги;</strong></li>
+ <li><strong>Теги форматування;</strong></li>
+ <li><strong>SQL-теги;</strong></li>
+ <li><strong>XML-теги;</strong></li>
+ <li><strong>Виклик функцій.</strong></li>
+</ul>
+<p>Все наводити я не буду, але найпопулярніші вкажу. Почнемо з основних тегів:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>1</td>
+    <td><code>&lt;c:out&gt;</code></td>
+    <td>Виводить вказаний вираз – аналог &lt;%= %&gt;</td>
+   </tr>
+   <tr>
+    <td>2</td>
+    <td><code>&lt;c:set&gt;</code></td>
+    <td>Записує результат вираження у змінну</td>
+   </tr>
+   <tr>
+    <td>3</td>
+    <td><code>&lt;c:remove&gt;</code></td>
+    <td>Видаляє змінну</td>
+   </tr>
+   <tr>
+    <td>4</td>
+    <td><code>&lt;c:catch&gt;</code></td>
+    <td>Захоплює винятки</td>
+   </tr>
+   <tr>
+    <td>5</td>
+    <td><code>&lt;c:if&gt;</code></td>
+    <td>Аналог if</td>
+   </tr>
+   <tr>
+    <td>6</td>
+    <td><code>&lt;c:choose&gt;</code></td>
+    <td>Аналог switch</td>
+   </tr>
+   <tr>
+    <td>7</td>
+    <td><code>&lt;c:when&gt;</code></td>
+    <td>Використовується разом із choose</td>
+   </tr>
+   <tr>
+    <td>8</td>
+    <td><code>&lt;c:otherwise&gt;</code></td>
+    <td>Використовується разом із choose</td>
+   </tr>
+   <tr>
+    <td>9</td>
+    <td><code>&lt;c:import&gt;</code></td>
+    <td>Дозволяє включити в код контент (еквівалентний директиві import)</td>
+   </tr>
+   <tr>
+    <td>10</td>
+    <td><code>&lt;c:forEach&gt;</code></td>
+    <td>Цикл for each</td>
+   </tr>
+   <tr>
+    <td>11</td>
+    <td><code>&lt;c:param&gt;</code></td>
+    <td>Дозволяє встановити параметри для import</td>
+   </tr>
+   <tr>
+    <td>12</td>
+    <td><code>&lt;c:redirect&gt;</code></td>
+    <td>Редирект</td>
+   </tr>
+   <tr>
+    <td>13</td>
+    <td><code>&lt;c:url&gt;</code></td>
+    <td>Створює URL із параметрами</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Наведу лише один приклад і закінчимо з цим. В принципі, читати такий код після деякої вправності цілком можна. А писати все ж таки не раджу:</p>
+<pre class="line-numbers"><code>
+
+<span class="text-user">&lt;%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %&gt;</span>
+ 
+&lt;html&gt;
+   &lt;head&gt;
+      &lt;title&gt; Each Tag Example&amp;&lt;/title&gt;
+   &lt;/head&gt;
+ 
+   &lt;body&gt;
+<span class="text-red">       &lt;c:forEach var = "i" begin = "1" end = "5"&gt;</span>
+            Item <span class="text-red">&lt;c:out value = "${i}"/&gt;</span>&lt;p&gt;
+<span class="text-red">       &lt;/c:forEach&gt;</span>
+   &lt;/body&gt;
+&lt;/html&gt;
+
+</code></pre>
+<p>Вдумайтеся, ми записуємо Java-код у вигляді тегів, щоб потім JSP-парсер перетворив ці теги на Java-код. Щось у цьому світі пішло не так.</p>
+<p>До речі, можна писати власні бібліотеки тегів. Я навіть колись працював у проекті, де вони були. Шикарний досвід. Як тільки в бібліотеку вносяться якісь зміни, відразу ламається весь jsp.</p>
+<p>А що ви хотіли? Компілятор не відстежує таких змін. Їх можна знайти лише візуально під час перегляду згенерованих HTML-сторінок. А якщо це якісь рідкісні сценарії, які виникають у нетривіальних ситуаціях… Господи, благослови backend-розробку та статичну типізацію!</p>

@@ -1,0 +1,223 @@
+<h2>5.1 Список фільтрів</h2>
+<p>Логгер дозволяє дуже круто настроїти фільтрацію повідомлень. Для цього він має пару десятків фільтрів з різними параметрами. Нижче в таблиці наведено найпопулярніші з них</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th></th>
+    <th width="200">Фільтри</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>1</td>
+    <td>BurstFilter</td>
+    <td>Дозволяє керувати частотою повідомлень за секунду для заданого рівня логування.</td>
+   </tr>
+   <tr>
+    <td>2</td>
+    <td>CompositeFilter</td>
+    <td>Дозволяє задати кілька послідовних фільтрів.</td>
+   </tr>
+   <tr>
+    <td>3</td>
+    <td>DynamicThresholdFilter</td>
+    <td>Дозволяє включати детальне логування, якщо у лозі зустрілася певна інформація.</td>
+   </tr>
+   <tr>
+    <td>4</td>
+    <td>MapFilter</td>
+    <td>Дозволяє побудувати складний логічний вираз для фільтра з кількох параметрів.</td>
+   </tr>
+   <tr>
+    <td>5</td>
+    <td>MarkerFilter</td>
+    <td>Дозволяє фільтрувати повідомлення за тегами, тег попередньо має бути доданий під час логування події.</td>
+   </tr>
+   <tr>
+    <td>6</td>
+    <td>RegexFilter</td>
+    <td>Дозволяє задати маску – регулярне вираження.</td>
+   </tr>
+   <tr>
+    <td>7</td>
+    <td>StructuredDataFilter</td>
+    <td>Дозволяє фільтрувати повідомлення щодо наявності в них певних даних.</td>
+   </tr>
+   <tr>
+    <td>8</td>
+    <td>ThreadContextMapFilter</td>
+    <td>Дозволяє керувати фільтрами на основі даних, взятих із контексту поточного потоку.</td>
+   </tr>
+   <tr>
+    <td>9</td>
+    <td>ThresholdFilter</td>
+    <td>Управління логуванням на основі рівня повідомлення лога.</td>
+   </tr>
+   <tr>
+    <td>10</td>
+    <td>TimeFilter</td>
+    <td>Дозволяє вмикати та вимикати фільтри у певний час.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Нижче ми розповімо лише про три з них. Більш детально ви можете ознайомитись з цими фільтрами на їхньому <a href="https://logging.apache.org/log4j/2.x/manual/filters.html" target="_blank">офіційному сайті</a> .</p>
+<h2>5.2 TimeFilter</h2>
+<p>Фільтр <code>TimeFilter</code>дозволяє включати та вимикати фільтри у певний час, має 5 параметрів:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th></th>
+    <th width="150"></th>
+    <th></th>
+   </tr>
+   <tr>
+    <td>1</td>
+    <td>start</td>
+    <td>Час старту логування у форматі<code>HH:mm:ss</code></td>
+   </tr>
+   <tr>
+    <td>2</td>
+    <td>end</td>
+    <td>Час вимкнення логування у форматі<code>HH:mm:ss</code></td>
+   </tr>
+   <tr>
+    <td>3</td>
+    <td>timezone</td>
+    <td>Задає часову зону.</td>
+   </tr>
+   <tr>
+    <td>4</td>
+    <td>onMatch</td>
+    <td>Як логувати, якщо умова фільтра <strong>є істинною</strong> . Можливо <code>ACCEPT</code>, <code>DENY</code>або <code>NEUTRAL</code>. За замовчуванням <code>NEUTRAL</code>.</td>
+   </tr>
+   <tr>
+    <td>5</td>
+    <td>onMismatch</td>
+    <td>Як логувати, якщо умова фільтра <strong>помилкова</strong> . Можливо <code>ACCEPT</code>, <code>DENY</code>або <code>NEUTRAL</code>. За замовчуванням <code>NEUTRAL</code>.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Давайте налаштуємо фільтр, який включатиме логування о 5 ранку і вимикатиме його о 5:30 ранку щодня. Приклад із повною конфігурацією фільтра нижче:</p>
+<pre class="line-numbers"><code>
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;Configuration status="warn" name="MyApp" packages=""&gt;
+    &lt;Appenders&gt;
+        &lt;RollingFile name="RollingFile" fileName="logs/app.log" filePattern="logs/app-%d{MM-dd-yyyy}.log.gz"&gt;
+<span class="text-red">        &lt;TimeFilter start="05:00:00" end="05:30:00" onMatch="ACCEPT" onMismatch="DENY"/&gt;</span>
+        &lt;PatternLayout&gt;
+            &lt;pattern&gt;%d %p %c{1.} [%t] %m%n&lt;/pattern&gt;
+        &lt;/PatternLayout&gt;
+        &lt;TimeBasedTriggeringPolicy /&gt;
+        &lt;/RollingFile&gt;
+    &lt;/Appenders&gt;
+    &lt;Loggers&gt;
+        &lt;Root level="error"&gt;
+        &lt;AppenderRef ref="RollingFile"/&gt;
+        &lt;/Root&gt;
+    &lt;/Loggers&gt;
+    &lt;/Configuration&gt;
+</code></pre>
+<h2>5.3 RegexFilter</h2>
+<p>Фільтр <code>RegexFilter</code>дозволяє встановити маску (регулярний вираз) для фільтрації повідомлень. Цей фільтр має 4 параметри:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th></th>
+    <th width="150"></th>
+    <th></th>
+   </tr>
+   <tr>
+    <td>1</td>
+    <td>regex</td>
+    <td>Задає регулярний вираз – маску, яка застосовується для фільтрації повідомлень.<code>HH:mm:ss</code></td>
+   </tr>
+   <tr>
+    <td>2</td>
+    <td>useRawMsg</td>
+    <td>Маска застосовується у повідомленні до форматування (true) або після форматування (false)</td>
+   </tr>
+   <tr>
+    <td>3</td>
+    <td>onMatch</td>
+    <td>Як логувати, якщо умова фільтра <strong>є істинною</strong> . Можливо <code>ACCEPT</code>, <code>DENY</code>або <code>NEUTRAL</code>. За замовчуванням <code>NEUTRAL</code>.</td>
+   </tr>
+   <tr>
+    <td>4</td>
+    <td>onMismatch</td>
+    <td>Як логувати, якщо умова фільтра <strong>помилкова</strong> . Можливо <code>ACCEPT</code>, <code>DENY</code>або <code>NEUTRAL</code>. За замовчуванням <code>NEUTRAL</code>.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Давайте налаштуємо фільтр, який пропускатиме лише повідомлення, що містять слово codegym. Приклад із повною конфігурацією фільтра нижче:</p>
+<pre class="line-numbers"><code>
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;Configuration status="warn" name="MyApp" packages=""&gt;
+    &lt;Appenders&gt;
+        &lt;RollingFile name="RollingFile" fileName="logs/app.log"   filePattern="logs/app-%d{MM-dd-yyyy}.log.gz"&gt;
+<span class="text-red">        &lt;RegexFilter regex=".* codegym .*" onMatch="ACCEPT" onMismatch="DENY"/&gt;</span>
+        &lt;PatternLayout&gt;
+            &lt;pattern&gt;%d %p %c{1.} [%t] %m%n&lt;/pattern&gt;
+        &lt;/PatternLayout&gt;
+        &lt;TimeBasedTriggeringPolicy /&gt;
+        &lt;/RollingFile&gt;
+      &lt;/Appenders&gt;
+    &lt;Loggers&gt;
+        &lt;Root level="error"&gt;
+        &lt;AppenderRef ref="RollingFile"/&gt;
+        &lt;/Root&gt;
+    &lt;/Loggers&gt;
+    &lt;/Configuration&gt;
+</code></pre>
+<h2>5.4 ThresholdFilter</h2>
+<p>Фільтр <strong>ThresholdFilter</strong> дозволяє настроїти фільтрацію за рівнем повідомлень. Він має всього 3 параметри:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th></th>
+    <th width="150"></th>
+    <th></th>
+   </tr>
+   <tr>
+    <td>1</td>
+    <td>level</td>
+    <td>Вказує ім'я рівня логування повідомлень: <code>ERROR</code>, <code>DEBUG</code>, …</td>
+   </tr>
+   <tr>
+    <td>2</td>
+    <td>onMatch</td>
+    <td>Як логувати, якщо умова фільтра <strong>є істинною</strong> . Можливо <code>ACCEPT</code>, <code>DENY</code>або <code>NEUTRAL</code>. За замовчуванням <code>NEUTRAL</code>.</td>
+   </tr>
+   <tr>
+    <td>3</td>
+    <td>onMismatch</td>
+    <td>Як логувати, якщо умова фільтра <strong>помилкова</strong> . Можливо <code>ACCEPT</code>, <code>DENY</code>або <code>NEUTRAL</code>. За замовчуванням <code>NEUTRAL</code>.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Давайте налаштуємо фільтр, який пропускатиме лише повідомлення рівня <code>DEBUG</code>. Приклад із повною конфігурацією фільтра нижче:</p>
+<pre class="line-numbers"><code>
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;Configuration status="warn" name="MyApp" packages=""&gt;
+    &lt;Appenders&gt;
+        &lt;RollingFile name="RollingFile" fileName="logs/app.log" filePattern="logs/app-%d{MM-dd-yyyy}.log.gz"&gt;
+<span class="text-red">           &lt;ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/&gt;</span>
+        &lt;PatternLayout&gt;
+            &lt;pattern&gt;%d %p %c{1.} [%t] %m%n&lt;/pattern&gt;
+        &lt;/PatternLayout&gt;
+        &lt;TimeBasedTriggeringPolicy /&gt;
+        &lt;/RollingFile&gt;
+    &lt;/Appenders&gt;
+    &lt;Loggers&gt;
+        &lt;Root level="error"&gt;
+        &lt;AppenderRef ref="RollingFile"/&gt;
+        &lt;/Root&gt;
+    &lt;/Loggers&gt;
+    &lt;/Configuration&gt;
+</code></pre>

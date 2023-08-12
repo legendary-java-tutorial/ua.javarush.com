@@ -1,0 +1,288 @@
+<a href="https://cdn.javarush.com/images/article/f805c497-ff06-4bbf-b454-7cc57c9b9d92/original.jpeg" target="_blank"><img data-id="f805c497-ff06-4bbf-b454-7cc57c9b9d92" data-max-width="850" alt="Внутрішні анонімні класи, приклади - 1" src="https://cdn.javarush.com/images/article/f805c497-ff06-4bbf-b454-7cc57c9b9d92/800.jpeg" style="width: 850px;"></a>
+<p>- Привіт, Аміго!</p>
+<p><span class="text-user">- Так віталися вже, Еллі!</span></p>
+<p>— Так, не сперечайся з тіткою. У 31 столітті прийнято вітатись знову, якщо не бачила людину більше півгодини. Тож не виникай!</p>
+<p>Так ось, нова цікава тема – розмноження роботів!</p>
+<p><span class="text-user">- О_О.</span></p>
+<p>— Жартую, нова тема – <strong>анонімні вкладені класи.</strong></p>
+<p>Іноді Java зустрічається ситуація, коли потрібно успадкувати клас від декількох класів. Т.к. множинне спадкування класів у Java заборонено, цю проблему вирішують за допомогою внутрішніх класів: у потрібному класі ми оголошуємо внутрішній клас і успадковуємо його від необхідного класу. Приклад:</p>
+<div class="code-heading">
+ Приклад внутрішнього класу, успадкованого від Thread
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name"><span class="text-green">Tiger</span></span> <span class="token keyword">extends</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function"><span class="text-green">tigerRun</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function"><span class="text-green">startTiger</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name"><span class="text-viola">TigerThread</span></span> <span class="text-user">thread</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-viola">TigerThread</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="text-user">thread</span><span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token keyword">class</span> <span class="token class-name"><span class="text-viola">TigerThread</span></span> <span class="token keyword">extends</span> <span class="token class-name">Thread</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+   <span class="token function"><span class="text-green">tigerRun</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Давай розберемо цей приклад:</p>
+<p>Нам потрібен клас, успадкований від Thread, щоб перевизначити у нього метод run.</p>
+<p>Для цього всередині класу Tiger ми оголосабо внутрішній клас <strong>Tiger Thread</strong> , який успадкували від Thread і у якого перевизначабо метод run.</p>
+<p>Для нашої зручності в класі Tiger ми оголосабо два методи (аналоги методів run та start класу Thread) – методи <strong>tigerRun та startTiger</strong> .</p>
+<p>У методі startTiger ми створюємо об'єкт типу <strong>TigerThread</strong> і викликаємо метод start().</p>
+<p>При цьому Java-машина створить нову нитку, і ця нитка почне роботу з виклику методу run класу <strong>TigerThread</strong> .</p>
+<p>А цей метод, у свою чергу, викличе наш метод <strong>run</strong> – метод <strong>tigerRun</strong> .</p>
+<p><span class="text-user">— З нитками я вже мав справу, тож начебто не дуже складно.</span></p>
+<p><span class="text-user">А чи обов'язково називати методи tigerRun і startTiger?</span></p>
+<p>- Ні, можна було назвати <strong>run</strong> і <strong>start</strong> , але я хотіла додатково показати, що ми не успадковуємося від Thread, до того ж ти міг сильніше заплутатися в моєму поясненні.</p>
+<p><span class="text-user">- Ок. Тоді все начебто зрозуміло. Тільки за виклику методу startTiger вдруге ми створимо ще один клас Thread і запустимо його. Чи не вийде, що у нас «один тигр бігатиме у двох різних нитках»?</span></p>
+<p>— Ну ти й окористий. Згодна, це не добре. Тоді давай перепишемо код так:</p>
+<div class="code-heading">
+ Код
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name"><span class="text-green">Tiger</span></span> <span class="token keyword">extends</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function"><span class="text-green">tigerRun</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function"><span class="text-green">startTiger</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  thread<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token keyword">private</span> <span class="token class-name"><span class="text-viola">TigerThread</span></span> <span class="text-user">thread</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-viola">TigerThread</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ <span class="token keyword">private</span> <span class="token keyword">class</span> <span class="token class-name"><span class="text-viola">TigerThread</span></span> <span class="token keyword">extends</span> <span class="token class-name">Thread</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+   <span class="token function"><span class="text-green">tigerRun</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><span class="text-user">— Не те щоб чудово. Двічі однаково викликати такий метод не можна. Але цього разу ми хоча б не створюватимемо другу нитку і вдаватимемо, що все добре.</span></p>
+<p>— Правильно, запустив вдруге, тигра – отримай Exception.</p>
+<p><span class="text-user">— Я вже краще за тебе бачу всі помилки, Еллі!</span></p>
+<p>Та ти молодець. Тоді перейдемо до анонімних внутрішніх класів.</p>
+<p>Зверніть увагу на кілька аспектів вищеописаного коду:</p>
+<p><strong>1)</strong> Ми успадкувалися від класу Thread, але фактично не дописали туди жодного коду. Нам швидше довелося успадкуватись, а не «ми успадкувалися з метою розширити клас Thread»</p>
+<p><strong>2)</strong> Буде створено лише один об'єкт класу TigerThread.</p>
+<p>Тобто. щоб перевизначити один метод і створити один об'єкт, ми написали цілу купу коду.</p>
+<p>Пам'ятаєш, як я розповідала про появу конструкторів?</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>До винаходу</th>
+    <th>Після винаходу</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name"><span class="text-viola">TigerThread</span></span> <span class="text-user">thread</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-viola">TigerThread</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">private</span> <span class="token keyword">class</span> <span class="token class-name"><span class="text-viola">TigerThread</span></span> <span class="token keyword">extends</span> <span class="token class-name">Thread</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token function"><span class="text-green">tigerRun</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Thread</span> <span class="text-user">thread</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token function"><span class="text-green">tigerRun</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">— Бачу, що код став компактнішим, але не зовсім розумію, що сталося.</span></p>
+<p>— Ми можемо поєднати в одному місці чотири речі:</p>
+<p>1) оголошення класу-спадкоємця</p>
+<p>2) перевизначення методу</p>
+<p>3) оголошення змінної</p>
+<p>4) створення об'єкта класу-спадкоємця.</p>
+<p>Фактично ми об'єднуємо дві операції – оголошення класу-спадкоємця і створення його об'єкта:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Без анонімного класу</th>
+    <th>З використанням анонімного класу</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Cat</span> tiger <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"></span><del><span class="token class-name">Tiger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></del><span class="token punctuation"></span>
+
+<span class="token keyword"></span><del><span class="token keyword">class</span> <span class="token class-name">Tiger</span> <span class="token keyword">extends</span></del><span class="token keyword"></span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Cat</span> tiger <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Cat</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Ще раз розбираємо синтаксис:</p>
+<div class="code-heading">
+ Оголошення змінної типу Thread
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">Thread</span> thread <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<div class="code-heading">
+ Оголошення змінної типу "анонімний клас-спадкоємець Thread"
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Thread</span> thread <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+<p>Зверни увагу – ми не просто оголошуємо новий клас – ми створюємо змінну – наприкінці ставиться крапка з комою!</p>
+<p><span class="text-user">— А якщо ми хочемо перевизначити метод run, то треба писати так:</span></p>
+<div class="code-heading">
+ Оголошення змінної типу Thread
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Thread</span> thread <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+   <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"new run-method"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+<p>- Швидко схоплюєш - молодець!</p>
+<p><span class="text-user">- Дякую. А якщо мені ще потрібні методи, яких немає у класу Thread?</span></p>
+<p>- Ти можеш їх дописати.</p>
+<p>Це ж повноцінний внутрішній клас, хоч і анонімний:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код на Java</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name"></span><span class="text-red"><span class="token class-name">Thread</span> thread</span> <span class="token operator"></span><span class="text-green"><span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token punctuation">)</span></span><span class="token punctuation"></span>
+<span class="token punctuation"></span><span class="text-user"><span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+   <span class="token function">printHi</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printHi</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+   <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Hi!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>	 </span></code></pre></td>
+    <td><span class="text-red">Червоним кольором відзначено код створення змінної.</span>
+     <p></p>
+     <p><span class="text-green">Зеленим – створення об'єкта.</span></p>
+     <p><span class="text-user">Синім – код анонімного класу-спадкоємця.</span></p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">- Повноцінний внутрішній клас?</span></p>
+<p><span class="text-user">Тобто. я можу використовувати і змінні зовнішнього класу?</span></p>
+<p>— Так, звичайно, можеш.</p>
+<p><span class="text-user">— А конструктор я можу щось передавати?</span></p>
+<p>— Так, але лише параметри конструктора базового класу:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Клас</th>
+    <th>Об'єкт анонімного внутрішнього класу</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">int</span> x<span class="token punctuation">,</span> y<span class="token punctuation">;</span>
+ <span class="token class-name">Cat</span><span class="token punctuation">(</span><span class="token keyword">int</span> x<span class="token punctuation">,</span> <span class="token keyword">int</span> y<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>x <span class="token operator">=</span> x<span class="token punctuation">;</span>
+  thix<span class="token punctuation">.</span>y <span class="token operator">=</span> y<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Cat</span> cat <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Cat</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+   <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>x<span class="token operator">+</span><span class="token string">" "</span><span class="token operator">+</span>y<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Ми не можемо додати свої параметри до чужого конструктора. Зате можемо використовувати змінні зовнішнього класу – це досить сильно компенсує цей недолік.</p>
+<p><span class="text-user">— А якщо мені все-таки дуже треба додати до конструктора ще параметри?</span></p>
+<p>- Тоді оголоси звичайний не анонімний внутрішній клас і використовуй його.</p>
+<p><span class="text-user">— Справді, я мало не забув про це.</span></p>
+<p><span class="text-user">Якщо ж я оголошу статичну змінну, тоді анонімний клас буде вкладеним, а чи не внутрішнім — тобто. без посилання на зовнішній клас?</span></p>
+<p>- Ні. Буде саме анонімний внутрішній клас. Дивись приклади:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>З анонімним класом</th>
+    <th>Без анонімного класу</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Thread</span> <span class="text-user">thread</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+   <span class="token function"><span class="text-green">tigerRun</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name"><span class="text-viola">TigerThread</span></span> <span class="text-user">thread</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-viola">TigerThread</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">private</span> <span class="token keyword">class</span> <span class="token class-name"><span class="text-viola">TigerThread</span></span> <span class="token keyword">extends</span> <span class="token class-name">Thread</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token function"><span class="text-green">tigerRun</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword"><span class="text-red">static</span></span> <span class="token class-name">Thread</span> <span class="text-user">thread</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+   <span class="token function"><span class="text-green">tigerRun</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword"><span class="text-red">static</span></span> <span class="token class-name"><span class="text-viola">TigerThread</span></span> <span class="text-user">thread</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-viola">TigerThread</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">private</span> <span class="token keyword">class</span> <span class="token class-name"><span class="text-viola">TigerThread</span></span> <span class="token keyword">extends</span> <span class="token class-name">Thread</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token function"><span class="text-green">tigerRun</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">- Ясно. Статичною стає лише змінна, але не клас.</span></p>
+<p>- Ага.</p>
+<p>Насправді, у процесі компіляції Компілятор створює внутрішні класи всім анонімних внутрішніх класів. Такі класи зазвичай отримують імена "1", "2", "3", і т.д.</p>

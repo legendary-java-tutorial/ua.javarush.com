@@ -1,0 +1,102 @@
+<p>- Привіт, Аміго! Білаабо сьогодні розповідатиме про порядок ініціалізації змінних.</p>
+<p>Уяви, що ти бачиш код. Які значення набудуть змінних?</p>
+<div class="code-heading">
+ Код
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+ <span class="token keyword">public</span> <span class="token keyword">int</span> b <span class="token operator">=</span> a <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
+ <span class="token keyword">public</span> <span class="token keyword">int</span> c <span class="token operator">=</span> a <span class="token operator">*</span> b<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<div class="code-heading">
+ Код
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token function">getSum</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token keyword">public</span> <span class="token keyword">int</span> b <span class="token operator">=</span> <span class="token function">getSum</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> a<span class="token punctuation">;</span>
+ <span class="token keyword">public</span> <span class="token keyword">int</span> c <span class="token operator">=</span> <span class="token function">getSum</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> a <span class="token operator">-</span> b<span class="token punctuation">;</span>
+
+ <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getSum</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> a <span class="token operator">+</span> b <span class="token operator">+</span> c<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><span class="text-user">— А хіба можна так?</span></p>
+<p>- Звичайно. Порядок оголошення між методами та полями класу неважливий.</p>
+<p>Клас завантажується зверху вниз, тому важливо, щоб поле класу зверталося лише до вже завантаженим іншим полям. У прикладі поле b може звертатися до a але нічого не знає про c.</p>
+<p><span class="text-user">— І що буде?</span></p>
+<p>— Коли змінні створюються, вони набувають дефолтових значень (значення за замовчуванням).</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код</th>
+    <th>Що відбувається насправді</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token keyword"></span><span class="text-green"><span class="token keyword">int</span> a</span> <span class="token operator">=</span> <span class="token number"><span class="text-red">5</span></span><span class="token punctuation">;</span>
+ <span class="token keyword">public</span> <span class="token keyword"></span><span class="text-green"><span class="token keyword">int</span> b</span> <span class="token operator">=</span> <span class="text-red">a <span class="token operator">+</span> <span class="token number">1</span></span><span class="token number"></span><span class="token punctuation">;</span>
+ <span class="token keyword">public</span> <span class="token keyword"></span><span class="text-green"><span class="token keyword">int</span> c</span> <span class="token operator">=</span> <span class="text-red">a <span class="token operator">*</span> b</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token keyword"></span><span class="text-green"><span class="token keyword">int</span> a</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+ <span class="token keyword">public</span> <span class="token keyword"></span><span class="text-green"><span class="token keyword">int</span> b</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+ <span class="token keyword">public</span> <span class="token keyword"></span><span class="text-green"><span class="token keyword">int</span> c</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+ <span class="token keyword"></span><span class="text-user"><span class="token keyword">public</span> <span class="token class-name">Cat</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+
+<span class="text-red">  a <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="text-red">  b <span class="token operator">=</span> a <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span></span><span class="token punctuation"></span> <span class="token comment">//5+1 = 6</span>
+<span class="text-red">  c <span class="token operator">=</span> a <span class="token operator">*</span> b<span class="token punctuation">;</span></span><span class="token punctuation"></span> <span class="token comment">//5*6 = 30</span>
+ <span class="token punctuation"><span class="text-user">}</span></span>
+<span class="token punctuation">}</span></code></pre></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token keyword"></span><span class="text-green"><span class="token keyword">int</span> a</span> <span class="token operator">=</span> <span class="token function"></span><span class="text-red"><span class="token function">getSum</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+ <span class="token keyword">public</span> <span class="token keyword"></span><span class="text-green"><span class="token keyword">int</span> b</span> <span class="token operator">=</span> <span class="token function"></span><span class="text-red"><span class="token function">getSum</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> a<span class="token punctuation">;</span></span><span class="token punctuation"></span>
+ <span class="token keyword">public</span> <span class="token keyword"></span><span class="text-green"><span class="token keyword">int</span> c</span> <span class="token operator">=</span> <span class="token function"></span><span class="text-red"><span class="token function">getSum</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> a <span class="token operator">-</span> b<span class="token punctuation">;</span></span><span class="token punctuation"></span>
+
+ <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getSum</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> a <span class="token operator">+</span> b <span class="token operator">+</span> c<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token keyword"></span><span class="text-green"><span class="token keyword">int</span> a</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+ <span class="token keyword">public</span> <span class="token keyword"></span><span class="text-green"><span class="token keyword">int</span> b</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+ <span class="token keyword">public</span> <span class="token keyword"></span><span class="text-green"><span class="token keyword">int</span> c</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+ <span class="token keyword"></span><span class="text-user"><span class="token keyword">public</span> <span class="token class-name">Cat</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+
+  <span class="text-red">a <span class="token operator">=</span> <span class="token function">getSum</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span> <span class="token comment">//(a+b+c)=0</span>
+ <span class="text-red"> b <span class="token operator">=</span> <span class="token function">getSum</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> a<span class="token punctuation">;</span></span><span class="token punctuation"></span> <span class="token comment">//(a+b+c)-a=b=0</span>
+  <span class="text-red">c <span class="token operator">=</span> <span class="token function">getSum</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> a <span class="token operator">-</span> b<span class="token punctuation">;</span></span><span class="token punctuation"></span> <span class="token comment">//(a+b+c)-a-b=c=0</span>
+ <span class="token punctuation"><span class="text-user">}</span></span>
+
+ <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getSum</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> a <span class="token operator">+</span> b <span class="token operator">+</span> c<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">- Ух ти! Виявляється, це так просто. Спасибі Білаабо, ти – справжній друг!</span></p>
+<p>- Ура! У Білаабо з'явився друг!</p>

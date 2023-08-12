@@ -1,0 +1,29 @@
+<a href="https://cdn.javarush.com/images/article/263ae66f-8073-43c1-b216-05e5b8d8e419/original.jpeg" target="_blank"><img data-id="263ae66f-8073-43c1-b216-05e5b8d8e419" data-max-width="850" alt="Стратегії уникнення DeadLock - 1" src="https://cdn.javarush.com/images/article/263ae66f-8073-43c1-b216-05e5b8d8e419/800.jpeg" style="width: 850px;"></a>
+<p>- Привіт, Аміго!</p>
+<p>Хочу розповісти тобі про пару стратегій уникнення дідлок.</p>
+<p>Найкраща стратегія – це продумана архітектура та набір правил, коли можна використовувати блокування (захоплення мютексів) та в якому порядку. Класичний спосіб боротьби із проблемою — розробка ієрархії блокувань, встановлення правила, що деякі блокування ніколи не можуть захоплюватися в стані, в якому вже захоплено якісь інші блокування.</p>
+<p>Іноді, наприклад, блокування присвоюють рівні, вимагаючи при цьому від нитки захоплювати блокування в порядку від більшого рівня до меншого, але не в зворотному. Також не можна захоплювати кілька блокувань одного рівня.</p>
+<p>Наприклад, у попередньому прикладі про лицарів, кожному лицареві можна додати його унікальний номер (id) і зажадати, щоб блокування походило від більшого id до меншого.</p>
+<div class="code-heading">
+ приклад
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword"><strong>class</strong></span> <span class="token class-name">KnightUtil</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword"><strong>public</strong></span> <span class="token keyword"><strong>static</strong></span> <span class="token keyword">void</span> <span class="token function">kill</span><span class="token punctuation">(</span><span class="token class-name">Knight</span> knight1<span class="token punctuation">,</span> <span class="token class-name">Knight</span> knight2<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name">Knight</span> knightMax <span class="token operator">=</span> knight1<span class="token punctuation">.</span>id <span class="token operator">&gt;</span> knight2<span class="token punctuation">.</span>id <span class="token operator">?</span> knight1<span class="token operator">:</span> knight2<span class="token punctuation">;</span>
+  <span class="token class-name">Knight</span> knightMin <span class="token operator">=</span> knight1<span class="token punctuation">.</span>id <span class="token operator">&gt;</span> knight2<span class="token punctuation">.</span>id <span class="token operator">?</span> knight2<span class="token operator">:</span> knight1<span class="token punctuation">;</span>
+
+  <span class="token keyword"><strong>synchronized</strong></span><span class="token punctuation">(</span>knightMax<span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+   <span class="token keyword"><strong>synchronized</strong></span><span class="token punctuation">(</span>knightMin<span class="token punctuation">)</span>
+   <span class="token punctuation">{</span>
+    knight2<span class="token punctuation">.</span>live <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    knight1<span class="token punctuation">.</span>experience <span class="token operator">+=</span><span class="token number">100</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><span class="text-user">- Гарне рішення.</span></p>
+<p>- Це дуже просте рішення, але мені подобається. Сподіваюся, воно тобі стане в нагоді, коли ти думатимеш, як вирішувати можливі проблеми з дідлоками.</p>
+<p><span class="text-user">- Дякую, Еллі.</span></p>

@@ -1,0 +1,113 @@
+<h2>Знайомство з Apache Commons</h2>
+<p>Звісно, ​​почнемо з історії!</p>
+<p>Все почалося в 1999 році з реєстрації Apache Group від імені Apache Software Foundation (далі ASF). Проектом, що підтримувався фондом, був Apache HTTPD Web Server, створений між 1995 та 1999 роками.</p>
+<p>Таким же став і проект Jakarta Project (проект Jakarta), який з'явився в результаті співпраці Sun Microsystems, IBM, Oracle та хлопців із Apache. І в 2001 в ході роботи команда розробників помітила, що вони часто пишуть однакову функціональність, іноді просто копіюють її один у одного. Такий код називається шаблонним. У них вдалося зібрати велику кількість коду, який допомагав розробникам, але не було бібліотеки для його зберігання.</p>
+<p>Так з'явився проект Jakarta Commons, який додавали компоненти на Java (в основному на основі вже існуючого коду). Пізніше проект було перейменовано на Apache Commons.</p>
+<p>Якщо говорити ширше, то Apache Commons - це "велика колекція маленьких Java-утиліт". Вона використовується в багатьох проектах із відкритим вихідним кодом.</p>
+<p>Утиліти Apache Commons лежать в основі таких проектів, як Apache Tomcat, Struts, Hibernate та ін.</p>
+<p>Звичайно, все це можна підключити ручками, без системи складання (Maven, Gradle), але ми цього не робитимемо і просто додамо їх в наш проект.</p>
+<p>Для роботи з Maven спочатку додаємо відповідну залежність:</p>
+<pre><code>&lt;dependency&gt;
+   &lt;groupId&gt;org.apache.commons&lt;/groupId&gt;
+   &lt;artifactId&gt;commons-lang3&lt;/artifactId&gt;
+   &lt;version&gt;${apache.common.version}&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>Де <span class="code">${apache.common.version}</span> — версія цієї бібліотеки.</p>
+<p>Для Gradle (Groovy):</p>
+<pre><code>implementation 'org.apache.commons:commons-lang3:3.12.0'
+</code></pre>
+<h2>Популярні бібліотеки Apache Commons</h2>
+<p>Ось список найбільш використовуваних класів та методів:</p>
+<h3>Apache Commons: Lang</h3>
+<p>У цій бібліотеці є такі пакети:</p>
+<pre class="line-numbers"><code>
+Packages
+org.apache.commons.lang
+org.apache.commons.lang.builder
+org.apache.commons.lang.enum
+org.apache.commons.lang.enums
+org.apache.commons.lang.exception
+org.apache.commons.lang.math
+org.apache.commons.lang.mutable
+org.apache.commons.lang.reflect
+org.apache.commons.lang.text
+org.apache.commons.lang.time
+</code></pre>
+<p>Тут можна зручно та швидко працювати з рядками, reflection, серіалізацією, об'єктами та системою. Зазначимо найбільш використовувані методи:</p>
+<h4>StringUtils</h4>
+<p>Безліч методів для маніпуляцій з рядками.</p>
+<ul>
+ <li><span class="code text-orange">is(Not)Blank/Empty(String)</span> — про перевірку такого типу: <span class="code">if (s!=null &amp;&amp; s.trim().length()&gt;0)</span> час забути, і тут є хороша заміна</li>
+</ul>
+<h4>StringEscapeUtils</h4>
+<ul>
+ <li><span class="code text-orange">(un)escapeSql(String)</span> — заміна <span class="code text-orange">PreparedStatment</span></li>
+ <li><span class="code text-orange">(un)escapeHtml(String)</span> — для обробки значень з HTML</li>
+</ul>
+<h4>ToStringBuilder</h4>
+<ul>
+ <li><span class="code text-orange">reflectionToString(Object)</span> - реалізація <span class="code text-orange">toString()</span> , заснована на рефлексії. При видаленні якогось поля за допомогою рефлексії результат методу зміниться.</li>
+</ul>
+<h4>EqualsBuilder &amp; HashCodeBuilder</h4>
+<ul>
+ <li><span class="code text-orange">reflectionEquals/HashCode(Object)</span> — хороша заміна автоматичної генерації зі своїм плюсом: ці два методи враховують структурні зміни об'єкта в процесі роботи, наприклад, додавання полів</li>
+</ul>
+<h4>ExceptionUtils</h4>
+<ul>
+ <li><span class="code text-orange">getFullStackTrace(Throwable)</span> — виведення всього StackTrace у вигляді рядка</li>
+</ul>
+<h3>Apache Commons: Collections</h3>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Packages</span>
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>collections4
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>collections4<span class="token punctuation">.</span>bag
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>collections4<span class="token punctuation">.</span>bidimap
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>collections4<span class="token punctuation">.</span>collection
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>collections4<span class="token punctuation">.</span>comparators
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>collections4<span class="token punctuation">.</span>functors
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>collections4<span class="token punctuation">.</span>iterators
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>collections4<span class="token punctuation">.</span>keyvalue
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>collections4<span class="token punctuation">.</span>list
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>collections4<span class="token punctuation">.</span>map
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>collections4<span class="token punctuation">.</span>multimap
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>collections4<span class="token punctuation">.</span>multiset
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>collections4<span class="token punctuation">.</span>properties
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>collections4<span class="token punctuation">.</span>queue
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>collections4<span class="token punctuation">.</span>sequence
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>collections4<span class="token punctuation">.</span>set
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>collections4<span class="token punctuation">.</span>splitmap
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>collections4<span class="token punctuation">.</span>trie
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>collections4<span class="token punctuation">.</span>trie<span class="token punctuation">.</span>analyzer</code></pre>
+<p>Бібліотека, яка чудово доповнює Java SE Collections Framework.</p>
+<p><span class="code"><span class="text-green">CollectionUtils</span></span> - клас для зручної роботи з колекціями:</p>
+<ul>
+ <span class="code text-orange">filter/find(Collection, Predicate)</span> — фільтрація та пошук за предикатом <span class="code text-orange">forAllDo(Collection, Closure)</span> — виконує Closure для кожного елемента, але цей метод <em>deprecated</em> , використовуйте <span class="code text-orange">Iterator.forEach() </span> <span class="code text-orange">is(Not)Empty(Collection)</span> — дозволяє не перевіряти на null перед викликом <span class="code text-orange">isEqualCollection(Collection, Collection)</span> — допомагає порівняти дві колекції
+</ul>
+<p>Є також багато інших класів різного рівня корисності. Тут і далі я перераховую найчастіше використовувані в моєму випадку.</p>
+<h3>Apache Commons: IO</h3>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Packages</span>
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>io
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>io<span class="token punctuation">.</span>comparator
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>io<span class="token punctuation">.</span>file
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>io<span class="token punctuation">.</span>file<span class="token punctuation">.</span>spi
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>io<span class="token punctuation">.</span>filefilter
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>io<span class="token punctuation">.</span>function
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>io<span class="token punctuation">.</span>input
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>io<span class="token punctuation">.</span>input<span class="token punctuation">.</span>buffer
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>io<span class="token punctuation">.</span>monitor
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>io<span class="token punctuation">.</span>output
+org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>io<span class="token punctuation">.</span>serialization</code></pre>
+<p>Додатково допомагає працювати з файлуми в Java:</p>
+<h4>FileUtils</h4>
+<ul>
+ <li><span class="code text-orange">copyDirectory(File, File)</span> - копіювання директорій</li>
+ <li><span class="code text-orange">copyFile(File, File)</span> — копіювання файлів</li>
+ <li><span class="code text-orange">listFiles(File, String[], boolean)</span> — список файлів з розширення та рекурсивно</li>
+ <li><span class="code text-orange">readFileToString(File, String)</span></li>
+ <li><span class="code text-orange">writeStringToFile(File, String)</span></li>
+</ul>
+<h4>IOUtils</h4>
+<ul>
+ <li><span class="code text-orange">closeQuietly(Reader/Writer/InputStream/OutputStream)</span> - закриває потік даних</li>
+ <li><span class="code text-orange">copy(InputStream, OutputStream)</span> - копіювання з одного потоку в інший</li>
+</ul>

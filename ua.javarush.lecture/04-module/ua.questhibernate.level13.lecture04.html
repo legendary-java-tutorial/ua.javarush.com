@@ -1,0 +1,118 @@
+@OneToOne
+<p>----------------------------------------</p>
+Різні форми зв'язку один до одного
+@Embedded
+Односторонній OneToOne
+Двосторонній OneToOne
+<p>----------------------------------------</p>
+<h2>5.1 Різні форми зв'язку один до одного</h2>
+<p>Є ще один цікавий і досить специфічний випадок відносин між двома Entity-класами – це відношення один до одного.</p>
+<p>Я називаю цей випадок дуже специфічним, оскільки це більше про Java-об'єкти, ніж про базу даних. У базі даних є лише два варіанти зв'язку між таблицями:</p>
+<ul>
+<li>Рядок таблиці містить посилання на id іншої таблиці.</li>
+<li>Службова таблиця використовується для зв'язку many-to-many.</li>
+</ul>
+<p>У випадку з Entity-класами можуть бути варіанти, які описуються кількома анотаціями:</p>
+<ul>
+<li>@Embedded</li>
+<li>Односторонній OneToOne</li>
+<li>Двосторонній OneToOne</li>
+<li>@MapsId</li>
+</ul>
+<p>Нижче ми розглянемо найпопулярніші з них.</p>
+<h2>5.2 @Embedded</h2>
+<p>Найпростіший варіант зв'язку <strong>one-to-one</strong> ми, до речі, вже розглянули – це інструкція <code>@Embedded</code>. У цьому випадку у нас два класи зберігаються в одній таблиці.</p>
+<p>Допустимо, ми хочемо зберігати адресу користувача в класі <strong>UserAddress</strong>:</p>
+<pre class='line-numbers'><code>
+<span class="text-brown">@Embeddable</span>
+class UserAddress {
+   <span class="text-user">@Column(name="user_address_country")
+   public String country;
+   @Column(name="user_address_city")
+   public String city;
+   @Column(name="user_address_street")
+   public String street;
+   @Column(name="user_address_home")
+   public String home;</span>
+}
+</code></pre>
+<p>Тоді нам потрібно просто додати поле з цією адресою до класу <strong>User</strong>:</p>
+<pre class='line-numbers'><code>
+<span class="text-brown">@Entity
+@Table(name</span>=<span class="text-green">"user"</span><span class="text-brown">)</span>
+class User {
+   @Column(name="id")
+   public Integer id;
+ 
+   <span class="text-red">@Embedded</span>
+   <span class="text-user">public UserAddress address</span>;
+ 
+   @Column(name="created_date")
+   public Date createdDate;
+}
+</code></pre>
+<p>Все інше зробить Hibernate: дані зберігатимуться в одній таблиці, але при написанні HQL-запитів тобі потрібно буде оперувати саме полями класів.</p>
+<p>Приклад HQL-запиту:</p>
+<pre><code><span class="text-brown">select from</span> User <span class="text-brown">where</span> address.city = 'Paris'
+</code></pre>
+<h2>5.3 Односторонній OneToOne</h2>
+<p>Уявимо тепер ситуацію: у нас є вихідна таблиця employee і task, який посилається на employee. Але ми точно знаємо, що на одного користувача може бути призначено максимум одне завдання. Тоді для опису цієї ситуації ми можемо скористатися анотацією <code>@OneToOne</code>.</p>
+<p>Приклад:</p>
+<pre class='line-numbers'><code>
+<span class="text-brown">@Entity
+@Table(name</span>=<span class="text-green">"task"</span><span class="text-brown">)</span>
+class EmployeeTask {
+   <span class="text-brown">@Column(name="id")</span>
+   public Integer id;
+ 
+   <span class="text-brown">@Column(name="name")</span>
+   public String description;
+ 
+   <span class="text-red">@OneToOne
+   @JoinColumn(name = "employee_id")</span>
+   public Employee <span class="text-user">employee</span>;
+ 
+   <span class="text-brown">@Column(name="deadline")</span>
+   public Date deadline;
+}
+</code></pre>
+<p>Hibernate стежитиме за тим, щоб не тільки в одного завдання був один користувач, а й щоб у одного користувача було лише одне завдання. Загалом цей випадок практично нічим не відрізняється від <code>@ManyToOne</code>.</p>
+<h2>5.4 Двосторонній OneToOne</h2>
+<p>Попередній варіант може бути трохи незручним, тому що часто хочеться не просто завдання привласнити співробітника, а й співробітнику призначити завдання.</p>
+<p>Для цього можна додати поле EmployeeTask до класу Employee та виставити йому правильні анотації.</p>
+<pre class='line-numbers'><code>
+<span class="text-brown">@Entity
+@Table(name</span>=<span class="text-green">"employee"</span><span class="text-brown">)</span>
+class Employee {
+   <span class="text-brown">@Column(name="id")</span>
+   public Integer id;
+ 
+   <span class="text-red">@OneToOne(cascade = CascadeType.ALL, mappedBy="employee")</span>
+   private <span class="token keyword">EmployeeTask</span> <span class="text-user">task</span>;
+}
+</code></pre>
+<p><mark class="red">Важливо!</mark> У таблиці employee немає поля <strong>task_id</strong>, натомість для встановлення зв'язку між таблицями використовується поле <strong>employee_id </strong>таблиці < strong>task</strong>.</p>
+<p>Встановлення зв'язку між об'єктами виглядає так:</p>
+<pre class='line-numbers'><code>
+Employee <span class="text-viola">director</span> = <span class="text-brown">session</span>.<span class="text-red">find</span>(Employee .class, 4);
+EmployeeTask <span class="text-user">task</span> = <span class="text-brown">session</span>.<span class="text-red">find</span>(EmployeeTask . class, 101);
+<span class="text-user">task</span>.employee = <span class="text-viola">director</span>;
+<span class="text-viola">director</span>.task = <span class="text-user">task</span>;
+ 
+<span class="text-brown">session</span>.<span class="text-red">update</span>(<span class="text-user">task</span>);
+<span class="text-brown">session</span>.<span class="text-red">flush</span>();
+</code></pre>
+<p>Для видалення зв'язку посилання також потрібно видалити в обох об'єктів:</p>
+<pre class='line-numbers'><code>
+Employee <span class="text-viola">director</span> = <span class="text-brown">session</span>.<span class="text-red">find</span>(Employee .class, 4);
+EmployeeTask <span class="text-user">task</span> = <span class="text-viola">director</span>.<span class="text-user">task</span>;
+ 
+task.employee = null;
+<span class="text-brown">session</span>.<span class="text-red">update</span>(<span class="text-user">task</span>);
+ 
+<span class="text-viola">director</span>.task = <span class="text-user">null</span>;
+<span class="text-brown">session</span>.<span class="text-red">update</span>(<span class="text-viola">director</span>);
+ 
+<span class="text-brown">session</span>.<span class="text-red">flush</span>();
+
+</code></pre>

@@ -1,0 +1,282 @@
+<h2>1. Інтерфейси</h2>
+<p>Щоб розуміти, що таке лямбда функції, спочатку потрібно розуміти, що таке інтерфейси. Тому нагадаємо основні моменти.</p>
+<p><strong>Інтерфейс</strong> – це різновид класу. Сильно урізана, якщо можна сказати. У інтерфейсу, на відміну класу, може бути своїх змінних (крім статичних). Також не можна створювати об'єкти типу Інтерфейс:</p>
+<ul>
+ <li>Не можна оголошувати змінні класу</li>
+ <li>Не можна створювати об'єкти</li>
+</ul>
+<p>Приклад:</p>
+<div class="lesson-example">
+ <pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token keyword">interface</span> <span class="token class-name"><span class="code text-viola">Runnable</span></span>
+<span class="token punctuation">{</span>
+   <span class="token keyword">void</span> <span class="token function"><span class="text-red">run</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+ <div class="lesson-example-caption">
+  Приклад стандартного інтерфейсу
+ </div>
+</div>
+<p><strong>Використання інтерфейсу</strong></p>
+<p>То навіщо ж інтерфейс потрібен? Інтерфейси використовуються лише спільно з успадкуванням. <span class="code text-viola">Один і</span> той же інтерфейс можуть успадковувати різні класи, або ще кажуть, що реалізують <span class="term text-user">інтерфейс</span> .<span class="code text-viola"></span></p>
+<p>Якщо клас реалізує інтерфейс, він повинен реалізувати у собі всередині ті способи, які були оголошені, але з реалізовані всередині інтерфейсу. Приклад:</p>
+<pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token keyword">interface</span> <span class="token class-name"><span class="code text-viola">Runnable</span></span>
+<span class="token punctuation">{</span>
+   <span class="token keyword">void</span> <span class="token function"><span class="text-red">run</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">class</span> <span class="token class-name"><span class="code text-user">Timer</span></span> <span class="token keyword">implements</span> <span class="token class-name"><span class="code text-viola">Runnable</span></span>
+<span class="token punctuation">{</span>
+   <span class="token keyword">void</span> <span class="token function"><span class="text-red">run</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+   <span class="token punctuation">{</span>
+      <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name"></span><span class="text-green"><span class="token class-name">LocalTime</span><span class="token punctuation">.</span><span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span></span><span class="token punctuation"></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">class</span> <span class="token class-name"><span class="code text-user">Calendar</span></span> <span class="token keyword">implements</span> <span class="token class-name"><span class="code text-viola">Runnable</span></span>
+<span class="token punctuation">{</span>
+   <span class="token keyword">void</span> <span class="token function"><span class="text-red">run</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+   <span class="token punctuation">{</span>
+      <span class="token keyword">var</span> date <span class="token operator">=</span> <span class="token class-name">LocalDate</span><span class="token punctuation">.</span><span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string"></span><span class="text-user"><span class="token string">"Сегодня "</span> <span class="token operator">+</span> date<span class="token punctuation">.</span><span class="token function">getDayOfWeek</span><span class="token punctuation">(</span><span class="token punctuation">)</span></span><span class="token punctuation"></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Клас <code class="text-user">Timer</code>реалізує (implements) інтерфейс <code class="text-viola">Runnable</code>, тому повинен оголосити в собі всі способи, які є у інтерфейсі <code class="text-viola">Runnable</code>&nbsp;і продати їх: написати код у тілі способу. Те саме стосується і класу <code class="text-user">Calendar</code>.</p>
+<p>Зате тепер змінні типу <code class="text-viola">Runnable</code>можна зберігати посилання об'єкти класів, які реалізують інтерфейс <code class="text-viola">Runnable</code>.</p>
+<p>Приклад:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код</th>
+    <th>Примітка</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token class-name"><span class="text-green">Timer</span></span> timer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-green">Timer</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+timer<span class="token punctuation">.</span><span class="token function"><span class="text-red">run</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token class-name"><span class="code text-viola">Runnable</span></span> r1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-green">Timer</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+r1<span class="token punctuation">.</span><span class="token function"><span class="text-red">run</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token class-name"><span class="code text-viola">Runnable</span></span> r2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-user">Calendar</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+r2<span class="token punctuation">.</span><span class="token function"><span class="text-red">run</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td><br>
+     Буде викликано метод <code><span class="text-red">run</span>()</code>класу <code><span class="text-green">Timer</span></code><br><br><br>
+     Буде викликано метод <code><span class="text-red">run</span>()</code>класу <code><span class="text-green">Timer</span></code><br><br><br>
+     Буде викликано метод <code><span class="text-red">run</span>()</code>класу<code><span class="text-user">Calendar</span></code></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Ви <span class="text-green">завжди можете надати посилання на об'єкт змінної будь-якого типу, якщо цей тип — один із класів-батьків об'єкта. </span>Для класів <code><span class="text-green">Timer</span></code>та <code><span class="text-user">Calendar</span></code>таких типів два: <code>Object</code>і <code><span class="text-viola">Runnable</span></code>.</p>
+<p>Якщо ви надаєте посилання на об'єкт змінної типу <code>Object</code>, зможете викликати в неї тільки методи, оголошені в класі <code>Object</code>. А якщо привласнити посилання на об'єкт змінної типу <code><span class="text-viola">Runnable</span></code>, зможете викликати у неї методи, які є в типі <code><span class="text-viola">Runnable</span></code>.</p>
+<p>Приклад 2:</p>
+<pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-viola">Runnable</span></span><span class="token punctuation">&gt;</span></span> <span class="text-viola">list</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-viola">Runnable</span></span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="text-viola">list</span><span class="token punctuation">.</span>add <span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name"><span class="text-green">Timer</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="text-viola">list</span><span class="token punctuation">.</span>add <span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name"><span class="text-user">Calendar</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name"><span class="text-viola">Runnable</span></span> <span class="text-orange">element</span><span class="token operator">:</span> <span class="text-viola">list</span><span class="token punctuation">)</span>
+    <span class="text-orange">element</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">run</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Такий код працюватиме, адже об'єкти <code><span class="text-green">Timer</span></code>мають <code><span class="text-user">Calendar</span></code>&nbsp;чудові робочі методи run. Тому немає жодних проблем для того, щоб їх викликати. Якби ми просто додали метод run() в обидва класи, не змогли б викликати їх у такий простий спосіб.</p>
+<p>Інтерфейс <code><span class="text-viola">Runnable</span></code>фактично використовується лише для того, щоб було куди помістити метод run.</p>
+<hr>
+<hr>
+<h2>2. Сортування</h2>
+<p>Давайте перейдемо до чогось більш практичного. Наприклад, розглянемо сортування рядків.</p>
+<p>Щоб сортувати колекцію рядків в алфавітному порядку, Java має відмінний метод.<code><span class="text-viola">Collections</span>.<span class="text-red">sort</span>(<span class="text-green">коллекция</span>);</code></p>
+<p>Цей статичний метод виконує сортування переданої колекції і в процесі сортування попарно порівнює її елементи: щоб зрозуміти, міняти елементи місцями чи ні.</p>
+<p>Порівняння елементів у процесі сортування виконується за допомогою методу <code>compareTo</code>(), який є у всіх стандартних класів: <code>Integer</code>, <code>String</code>, ...</p>
+<p>Метод compareTo() класу Integer порівнює значення двох чисел, а метод compareTo() класу String дивиться на алфавітний порядок рядків.</p>
+<p>Таким чином, колекція чисел буде відсортована в порядку зростання, а колекція рядків — в алфавітному порядку.</p>
+<p><strong>Альтернативне сортування</strong></p>
+<p>А якщо ми хочемо сортувати рядки не за абеткою, а за їхньою довжиною? І числа хочемо сортувати в порядку зменшення. Як бути у цій ситуації?</p>
+<p>Для цього клас <code class="text-neon">Collections</code>має ще один метод <code class="code-raw"><span class="code text-red">sort</span>()</code>, але вже з двома параметрами:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token class-name"><span class="code text-neon">Collections</span></span><span class="token punctuation">.</span><span class="token function"><span class="code text-red">sort</span></span><span class="token punctuation">(</span><span class="code text-green">коллекция</span><span class="token punctuation">,</span> <span class="code text-user">компаратор</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</div>
+<p>Де <span class="text-user"><span class="term text-user">компаратор</span></span> &nbsp;це спеціальний об'єкт, який знає, як <span class="text-user">порівнювати об'єкти</span> в <span class="term text-green">колекції</span> в процесі <span class="term text-red">сортування</span> . Компаратор походить від англійського слова <code>Comparator</code>(порівняльник), а <code>Comparator</code>– від слова <span class="term">Compare</span> – порівнювати.</p>
+<p>То що ж це за спеціальний об'єкт такий?</p>
+<p><strong>Інтерфейс<code>Comparator</code></strong></p>
+<p>Насправді, все дуже просто. Тип другого параметра <code><span class="text-user">sort</span>()</code>методу<code><span class="text-neon">Comparator</span>&lt;<span class="text-orange">T</span>&gt;</code></p>
+<p>Де T – це тип-параметр, такий самий, як і тип елементів <span class="text-green">колекції</span> , а <code><span class="text-neon">Comparator</span></code>&nbsp;– це інтерфейс, який має єдиний метод<code>int <span class="text-red">compare</span>(<span class="text-orange">T</span> obj1, <span class="text-orange">T</span> obj2);</code></p>
+<p>Іншими словами, об'єкт-компаратор – це будь-який об'єкт класу, який продає інтерфейс Comparator. Виглядає інтерфейс Comparator дуже просто:</p>
+<div class="lesson-example">
+ <pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name"><span class="text-neon">Comparator</span></span><span class="token operator">&lt;</span><span class="token class-name"></span><span class="text-orange"><span class="token class-name">T</span> іп</span><span class="token operator">&gt;</span>
+<span class="token punctuation">{</span>
+   <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function"><span class="text-red">compare</span></span><span class="token punctuation">(</span><span class="token class-name"></span><span class="text-orange"><span class="token class-name">T</span> іп</span> obj1<span class="token punctuation">,</span> <span class="token class-name"></span><span class="text-orange"><span class="token class-name">T</span> іп</span> obj2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+ <div class="lesson-example-caption">
+  Код інтерфейсу Comparator
+ </div>
+</div>
+<p>Метод <code><span class="text-red">compare</span>()</code>порівнює два параметри, які передають.</p>
+<p>Якщо спосіб повертає негативне число, то <code>obj1 &lt; obj2</code>. Якщо спосіб повертає позитивне число, то <code>obj1 &gt; obj2</code>. Якщо метод повертає 0, вважається, що <code>obj1 == obj2</code>.</p>
+<p>Ось як виглядатиме об'єкт компаратор, який порівнює рядки за їх довжиною:</p>
+<div class="lesson-example">
+ <pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name"><span class="text-viola">StringLengthComparator</span></span> <span class="token keyword">implements</span> <span class="token class-name"><span class="text-neon">Comparator</span></span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-orange">String</span></span><span class="token punctuation">&gt;</span></span>
+<span class="token punctuation">{</span>
+   <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="text-red">compare</span> <span class="token punctuation">(</span><span class="token class-name"><span class="text-orange">String</span></span> <span class="text-green">obj1</span><span class="token punctuation">,</span> <span class="token class-name"><span class="text-orange">String</span></span> <span class="text-user">obj2</span><span class="token punctuation">)</span>
+   <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="text-green">obj1</span><span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="text-user">obj2</span><span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+ <div class="lesson-example-caption">
+  Код класу<code>StringLengthComparator</code>
+ </div>
+</div>
+<p>Для того, щоб порівняти довжини рядків, досить просто відняти одну довжину з іншого.</p>
+<p>Повний код програми, яка сортує рядки по довжині, виглядатиме ось так:</p>
+<div class="lesson-example">
+ <pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Solution</span>
+<span class="token punctuation">{</span>
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span>   <span class="token punctuation">{</span>
+</span><span>      <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-orange">String</span></span><span class="token punctuation">&gt;</span></span> <span class="text-user">list</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-orange">String</span></span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</span><span>      <span class="token class-name"><span class="text-neon">Collections</span></span><span class="token punctuation">.</span><span class="token function">addAll</span><span class="token punctuation">(</span><span class="text-user">list</span><span class="token punctuation">,</span> <span class="token string">"<span class="text-green">Привет</span>"</span><span class="token punctuation">,</span> <span class="token string">"<span class="text-green">як</span>"</span><span class="token punctuation">,</span> <span class="token string">"<span class="text-green">дела?</span>"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</span><span>      <span class="token class-name"><span class="text-neon">Collections</span></span><span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span><span class="text-user">list</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">StringLengthComparator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</span><span>   <span class="token punctuation">}</span>
+</span><span class="token punctuation"></span><span><span class="token punctuation">}</span>
+</span><span>
+<span class="token keyword">class</span> <span class="token class-name"><span class="text-viola">StringLengthComparator</span></span> <span class="token keyword">implements</span> <span class="token class-name"><span class="text-neon">Comparator</span></span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-orange">String</span></span><span class="token punctuation">&gt;</span></span>
+</span><span class="token punctuation"></span><span><span class="token punctuation">{</span>
+</span><span>   <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="text-red">compare</span> <span class="token punctuation">(</span><span class="token class-name"><span class="text-orange">String</span></span> <span class="text-green">obj1</span><span class="token punctuation">,</span> <span class="token class-name"><span class="text-orange">String</span></span> <span class="text-user">obj2</span><span class="token punctuation">)</span>
+</span><span>   <span class="token punctuation">{</span>
+</span><span>      <span class="token keyword">return</span> <span class="text-green">obj1</span><span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="text-user">obj2</span><span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</span><span>   <span class="token punctuation">}</span>
+</span><span class="token punctuation"><span>}</span></span></code></pre>
+ <div class="lesson-example-caption">
+  Сортування рядків за довжиною
+ </div>
+</div>
+<hr>
+<hr>
+<h2>3. Синтаксичний цукор</h2>
+<p>А як ви вважаєте, чи можна записати цей код коротше? По суті, тут лише один рядок, який несе корисну інформацію — <code>obj1.length() - obj2.length();</code>.</p>
+<p>Але код не може існувати поза методом, тому довелося додати метод <code>compare()</code>, а для методу довелося додати новий клас - <code class="text-viola">StringLengthComparator</code>. І ще типи змінних треба вказувати... Загалом, начебто все правильно.</p>
+<p>Однак є способи записати цей код коротше. У нас вам припасено трохи синтаксичного цукру. Відра десь два!</p>
+<p><b>Анонімний внутрішній клас</b></p>
+<p>Ви можете записати код компаратора прямо всередині методу <code>main()</code>, а компілятор сам зробить все інше. Приклад:</p>
+<div class="lesson-example">
+ <pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Solution</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span>    <span class="token punctuation">{</span>
+</span><span>        <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-orange">String</span></span><span class="token punctuation">&gt;</span></span> <span class="text-user">list</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-orange">String</span></span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</span><span>        <span class="token class-name"><span class="text-neon">Collections</span></span><span class="token punctuation">.</span><span class="token function">addAll</span><span class="token punctuation">(</span><span class="text-user">list</span><span class="token punctuation">,</span> <span class="token string">"<span class="text-green">Привет</span>"</span><span class="token punctuation">,</span> <span class="token string">"<span class="text-green">як</span>"</span><span class="token punctuation">,</span> <span class="token string">"<span class="text-green">дела?</span>"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+</span><span>        <span class="token class-name"><span class="text-neon">Comparator</span></span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-orange">String</span></span><span class="token punctuation">&gt;</span></span> <span class="text-viola">comparator</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Comparator</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-orange">String</span></span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</span><span>        <span class="token punctuation">{</span>
+</span><span>            <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="text-red">compare</span> <span class="token punctuation">(</span><span class="token class-name"><span class="text-orange">String</span></span> <span class="text-green">obj1</span><span class="token punctuation">,</span> <span class="token class-name"><span class="text-orange">String</span></span> <span class="text-user">obj2</span><span class="token punctuation">)</span>
+</span><span>            <span class="token punctuation">{</span>
+</span><span>                <span class="token keyword">return</span> <span class="text-green">obj1</span><span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="text-user">obj2</span><span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</span><span>            <span class="token punctuation">}</span>
+</span><span>        <span class="token punctuation">}</span><span class="token punctuation">;</span>
+</span><span>
+        <span class="token class-name"><span class="text-neon">Collections</span></span><span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span><span class="text-user">list</span><span class="token punctuation">,</span> <span class="text-viola">comparator</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</span><span>    <span class="token punctuation">}</span>
+</span><span class="token punctuation"><span>}</span></span></code></pre>
+ <div class="lesson-example-caption">
+  Сортування рядків за довжиною
+ </div>
+</div>
+<p>Ви можете створити об'єкт спадкоємець інтерфейсу <code class="text-green">Comparator</code>, не створюючи сам клас! Компілятор створить його автоматично і дасть йому якесь тимчасове ім'я. Порівняйте:</p>
+<div class="lesson-example">
+ <pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token class-name"><span class="code text-green">Comparator</span></span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> comparator <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="code text-green">Comparator</span></span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation"><span>{</span></span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> compare <span class="token punctuation">(</span><span class="token class-name">String</span> obj1<span class="token punctuation">,</span> <span class="token class-name">String</span> obj2<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> obj1<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> obj2<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+ <div class="lesson-example-caption">
+  Анонімний внутрішній клас
+ </div>
+</div>
+<div class="lesson-example">
+ <pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token class-name"><span class="code text-green">Comparator</span></span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> comparator <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="code text-viola">StringLengthComparator</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">class</span> <span class="token class-name"><span class="code text-viola">StringLengthComparator</span></span> <span class="token keyword">implements</span> <span class="token class-name"><span class="code text-green">Comparator</span></span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> compare <span class="token punctuation">(</span><span class="token class-name">String</span> obj1<span class="token punctuation">,</span> <span class="token class-name">String</span> obj2<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> obj1<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> obj2<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+ <div class="lesson-example-caption">
+  Клас<code>StringLengthComparator</code>
+ </div>
+</div>
+<p>Одинаковим кольором розфарбовані однакові блоки коду двох різних випадках. Відмінності зовсім невеликі насправді.</p>
+<p>Коли компілятор зустріне в коді перший блок коду, він просто згенерує йому другий блок коду і дасть класу якесь випадкове ім'я.</p>
+<hr>
+<h2>4. Лямбда-вирази в Java</h2>
+<p>Допустимо, ви вирішабо використовувати у вашому коді анонімний внутрішній клас. У цьому випадку у вас буде блок коду типу:</p>
+<div class="lesson-example">
+ <pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token class-name"><span class="text-neon">Comparator</span></span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-orange">String</span></span><span class="token punctuation">&gt;</span></span> comparator <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-neon">Comparator</span></span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-orange">String</span></span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation"></span><span><span class="token punctuation">{</span>
+</span>    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="text-red">compare</span> <span class="token punctuation">(</span><span class="token class-name"><span class="text-orange">String</span></span> <span class="text-green">obj1</span><span class="token punctuation">,</span> <span class="token class-name"><span class="text-orange">String</span></span> <span class="text-green">obj2</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="text-green">obj1</span><span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="text-green">obj2<span class="token punctuation">.</span></span><span class="token punctuation"></span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+ <div class="lesson-example-caption">
+  Анонімний внутрішній клас
+ </div>
+</div>
+<p>Тут і оголошення змінної, і створення анонімного класу все разом. Однак є спосіб записати цей код коротше. Наприклад, так:</p>
+<pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token class-name"><span class="text-neon">Comparator</span></span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-orange">String</span></span><span class="token punctuation">&gt;</span></span> <span class="text-viola">comparator</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name"><span class="text-orange">String</span></span> <span class="text-green">obj1</span><span class="token punctuation">,</span> <span class="token class-name"><span class="text-orange">String</span></span> <span class="text-user">obj2</span><span class="token punctuation">)</span> <span class="token operator">-&gt;</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="text-green">obj1</span><span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="text-user">obj2</span><span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+<p>Крапка з комою потрібна, т.к. у вас тут не тільки лише приховане оголошення класу, та й створення змінної.</p>
+<p>Такий запис називається <strong><span class="text-red">лямбда-виразом.</span></strong></p>
+<p>Якщо компілятор зустріне такий запис у вашому коді, він просто згенерує повну версію коду (з анонімним внутрішнім класом).</p>
+<p>Зверніть увагу: під час запису лямбда-вирази ми опустабо як ім'я класу , а й ім'я методу .<code><span class="text-neon">Comparator</span>&lt;<span class="text-orange">String</span>&gt;</code><code>int <span class="text-red">compare</span>()</code></p>
+<p>У компілятора <strong>немає проблем із визначенням методу</strong> , т.к. лямбда-вираз можна писати <strong>лише інтерфейсів, які мають метод один. </strong>Втім, є спосіб обійти це правило, але про це ви дізнаєтеся, коли почнете вивчати ООП активніше (ми говоримо про default-методи).</p>
+<p>Давайте ще раз подивимося на повну версію коду, тільки розфарбуємо сірим кольором ту частину, яку можна опустити при записі лямбда виразу:</p>
+<div class="lesson-example">
+ <pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token class-name"><span class="text-neon">Comparator</span></span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-orange">String</span></span><span class="token punctuation">&gt;</span></span> <span class="text-viola">comparator</span> <span class="token operator">=</span> <span class="token keyword"></span><span class="text-gray"><span class="token keyword">new</span> <span class="token class-name">Comparator</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span></span><span class="token punctuation"></span>
+<span class="token punctuation">{</span>
+    <span class="token keyword"></span><span class="text-gray"><span class="token keyword">public</span> <span class="token keyword">int</span> compare</span> <span class="token punctuation">(</span><span class="token class-name"><span class="text-orange">String</span></span> <span class="text-green">obj1</span><span class="token punctuation">,</span> <span class="token class-name"><span class="text-orange">String</span></span> <span class="text-user">obj2</span><span class="token punctuation">)</span>
+   <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="text-green">obj1</span><span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="text-user">obj2</span><span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+ <div class="lesson-example-caption">
+  Анонімний внутрішній клас
+ </div>
+</div>
+<p>Начебто нічого важливого не прогавабо. Дійсно, якщо в інтерфейсу <code><span class="text-neon">Comparator</span></code>є тільки один метод <code><span class="text-viola">compare</span>()</code>, по коду, що залишився, компілятор цілком може відновити сірий код.</p>
+<p><strong>Сортування</strong></p>
+<p>До речі, код виклику сортування тепер можна записати так:</p>
+<pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token class-name"><span class="text-neon">Comparator</span></span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> <span class="text-viola">comparator</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name"><span class="text-orange">String</span></span> <span class="text-green">obj1</span><span class="token punctuation">,</span> <span class="token class-name"><span class="text-orange">String</span></span> <span class="text-user">obj2</span><span class="token punctuation">)</span> <span class="token operator">-&gt;</span>
+<span class="token punctuation">{</span>
+   <span class="token keyword">return</span> <span class="text-green">obj1</span><span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="text-user">obj2</span><span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token class-name"><span class="text-neon">Collections</span></span><span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span><span class="text-user">list</span><span class="token punctuation">,</span> <span class="text-viola">comparator</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Або навіть так:</p>
+<pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token class-name"><span class="text-neon">Collections</span></span><span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span><span class="text-user">list</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token class-name"><span class="text-orange">String</span></span> <span class="text-green">obj1</span><span class="token punctuation">,</span> <span class="token class-name"><span class="text-orange">String</span></span> <span class="text-user">obj2<span class="token punctuation">)</span></span><span class="token punctuation"></span> <span class="token operator">-&gt;</span>
+   <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="text-green">obj1</span><span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="text-user">obj2</span><span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Ми просто підставабо замість змінної <code><span class="text-viola">comparator</span></code>відразу те значення, яке надавали змінної <code><span class="text-viola">comparator</span></code>.</p>
+<p><strong>Виведення типів</strong></p>
+<p>Але це ще не все. Код у цих прикладах можна записати ще коротше. По-перше, компілятор може сам визначити, що у змінних <code><span class="text-green">obj1</span></code>і <code><span class="text-user">obj2</span></code>тип <code>String</code>. А по-друге, фігурні дужки та оператор return теж можна не писати, якщо у вас у коді методу лише одна команда.</p>
+<p>Скорочений варіант буде таким:</p>
+<pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token class-name"><span class="text-neon">Comparator</span></span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> <span class="text-viola">comparator</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="text-green">obj1</span><span class="token punctuation">,</span> <span class="text-user">obj2</span><span class="token punctuation">)</span> <span class="token operator">-&gt;</span>
+   <span class="text-green">obj1</span><span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="text-user">obj2</span><span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token class-name"><span class="text-neon">Collections</span></span><span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span><span class="text-user">list</span><span class="token punctuation">,</span> <span class="text-viola">comparator</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>А якщо замість змінної <code><span class="text-viola">comparator</span></code>&nbsp;одразу підставити її значення, то отримаємо такий варіант:</p>
+<pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token class-name"><span class="text-neon">Collections</span></span><span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span><span class="text-user">list</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="text-green">obj1</span><span class="token punctuation">,</span> <span class="text-user">obj2</span><span class="token punctuation">)</span> <span class="token operator">-&gt;</span>  <span class="text-green">obj1</span><span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="text-user">obj2</span><span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p><span class="text-viola">Ну і як вам: лише один рядок коду, жодної зайвої інформації — лише змінні та код. Коротше вже нікуди! Чи є куди?</span></p>
+<hr>
+<hr>
+<h2>5. Як це працює</h2>
+<p>Насправді код можна записати ще коротше. Але про це трохи згодом.</p>
+<p>Лямбда-вираз можна записати там, де використовується <strong>тип-інтерфейс з одним методом.</strong></p>
+<p>Наприклад, у цьому коді можна записати лямбда-вираз, т.к. сигнатура методу має вигляд:<code><span class="text-neon">Collections</span>.sort(<span class="text-user">list</span>, (<span class="text-green">obj1</span>, <span class="text-user">obj2</span>) -&gt; <span class="text-green">obj1</span>.length() - <span class="text-user">obj2</span>.length());</code><code>sort()</code></p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token function">sort</span><span class="token punctuation">(</span><span class="token class-name"><span class="text-viola">Collection</span></span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-orange">T</span></span><span class="token punctuation">&gt;</span></span> colls<span class="token punctuation">,</span> <span class="token class-name"><span class="text-neon">Comparator</span></span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-orange">T</span></span><span class="token punctuation">&gt;</span></span> comp<span class="token punctuation">)</span></code></pre>
+</div>
+<p>Коли ми передали в метод sort як перший параметр колекцію <code>ArrayList&lt;String&gt;</code>, компілятор зміг визначити тип другого параметра як . А з цього дійшов висновку, що цей інтерфейс має єдиний спосіб . Решта вже справа техніки.<code><span class="text-neon">Comparator</span>&lt;<span class="text-orange">String</span>&gt;</code><code>int compare(String obj1, String obj2)</code></p>

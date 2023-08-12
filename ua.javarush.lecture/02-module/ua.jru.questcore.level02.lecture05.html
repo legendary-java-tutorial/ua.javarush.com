@@ -1,0 +1,81 @@
+<p>- Привіт, Аміго! Нова цікава тема.</p>
+<p><span class="text-user">— Та сьогодні просто день цікавих тем!</span></p>
+<p>- Дякую!</p>
+<p><span class="text-user">- Та немає за що.</span></p>
+<p>— Пам'ятаєш ситуацію, коли&nbsp; <span class="text-corporate">ми запровадабо базовий клас ChessItem для спрощення всіх класів шахових фігур?</span></p>
+<p><span class="text-user">- Так.</span></p>
+<p>— Тепер уяви, що кожна фігура має метод, який займається її малюванням на екрані. Викликаєш метод, і фігура сама себе малює у своїх поточних координатах. Чи зручно було б винести цей метод у базовий клас?</p>
+<p><span class="text-user">- Так. Після того, що я дізнався про поліморфізм, можна було б викликати метод малювання для всіх фігур незалежно від їхнього типу. Приблизно так:</span></p>
+<div class="code-heading">
+ приклад
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">ChessBoard</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">drawAllChessItems</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+  <span class="token comment">//добавляем фигуры в список</span>
+  <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">ChessItem</span><span class="token punctuation">&gt;</span></span> <mark>items</mark> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <mark>items</mark><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">King</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <mark>items</mark><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Queen</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <mark>items</mark><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Bishop</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">//рисуем их независимо от их типа.</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">ChessItem</span> item<span class="token operator">:</span> <mark>items</mark><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+   item<span class="token punctuation">.</span><span class="token function">draw</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>- Молодець. Саме так. А що б змалював на екрані метод draw самого класу ChessItem?</p>
+<p><span class="text-user">- Не знаю. Такої фігури в шахах немає. Значить, і зображення в неї немає.</span></p>
+<p>- Саме. Більше того, створювати об'єкти типу ChessItem – немає сенсу. Це не фігура з шахів, <span class="text-red">лише <em>абстракція</em> — клас, який ми зробабо для зручності. </span>Так працює абстракція з ООП: ми винесли важливі (загальні всім фігур) дані та методи до базового класу, які відмінності залишабо у тому класах.</p><a href="https://cdn.javarush.com/images/article/2129890f-7564-412c-b4b8-e0830036e767/original.jpeg" target="_blank"><img data-id="2129890f-7564-412c-b4b8-e0830036e767" data-max-width="850" alt="Абстрактні класи - 1" src="https://cdn.javarush.com/images/article/2129890f-7564-412c-b4b8-e0830036e767/800.jpeg" style="width: 850px;"></a>
+<p>Для такого випадку Java має спеціальний тип класів – <strong>абстрактні класи</strong> . Ось чотири речі, які варто пам'ятати про абстрактні класи.</p>
+<p><strong>1) </strong> <span class="text-green">Абстрактний клас може містити оголошення методу без реалізації. </span>Такий метод називається абстрактним.</p>
+<div class="code-heading">
+ приклад
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword"><span class="text-red">abstract</span></span> <span class="token keyword">class</span> <span class="token class-name">ChessItem</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token keyword">int</span> x<span class="token punctuation">,</span> y<span class="token punctuation">;</span> <span class="token comment">//координаты</span>
+ <span class="token keyword">private</span> <span class="token keyword">int</span> value<span class="token punctuation">;</span> <span class="token comment">// «ценность» фигуры</span>
+
+ <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">//обычный метод, возвращает значення value</span>
+ <span class="token punctuation">{</span>
+   <span class="token keyword">return</span> value<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token keyword"></span><span class="text-red"><span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">void</span> <span class="token function">draw</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span> <span class="token comment">//абстрактный метод. Реализация отсутствует.</span>
+
+<span class="token punctuation">}</span></code></pre>
+<div class="task-widget-container" showcover="true" taskkey="com.codegym.task.task12.task1234"></div>
+<p><strong>2) </strong> <span class="text-green">Абстрактний метод позначається спеціальним ключовим словом <strong>abstract</strong> .</span></p>
+<p>Якщо у класі є хоч один абстрактний метод, клас теж позначається ключовим словом abstract.</p>
+<p><strong>3) </strong> <span class="text-red">Створювати об'єкти абстрактного класу не можна. </span>Такий код просто не скомпілюється.</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код на Java</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">ChessItem</span> item <span class="token operator">=</span> <span class="token keyword"></span><span class="text-red"><span class="token keyword">new</span> <span class="token class-name">ChessItem</span></span><span class="token class-name"></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+item<span class="token punctuation">.</span><span class="token function">draw</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td><span class="text-red">Цей код не скомпілюється</span></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">ChessItem</span> item <span class="token operator">=</span> <span class="token keyword"></span><span class="text-green"><span class="token keyword">new</span> <span class="token class-name">Queen</span></span><span class="token class-name"></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+item<span class="token punctuation">.</span><span class="token function">draw</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td><span class="text-green">А так можна.</span></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><strong>4)</strong> Якщо ти успадкував свій клас від абстрактного класу, то потрібно перевизначити всі успадковані абстрактні методи – написати їм реалізацію. Інакше такий клас також доведеться оголосити абстрактним. <span class="text-red">Якщо в класі є хоча б один нереалізований метод, оголошений прямо в ньому або успадкований від класу-батька, то клас вважається абстрактним.</span></p>
+<p><span class="text-user">— А навіщо це все потрібне? Для чого потрібні абстрактні класи? Хіба не можна замість них використати звичайні? А замість абстрактних методів просто писати дві дужки як тіло методу — {} ?</span></p>
+<p>- Можна, можливо. Але ці обмеження схожі на модифікатор <code>private</code>. Ми спеціально забороняли за допомогою <code>private</code>прямий доступ до даних, щоб інші програмісти та їх класи користувалися лише написаними нами <code>public</code>методами.</p>
+<p>Те саме і з абстрактним класом. <span class="text-green">Той, хто написав цей клас, не хоче, щоби створювалися його об'єкти. </span>Навпаки, він розраховує на те, щоб від його абстрактного класу успадковувалися та перевизначали абстрактні методи.</p>
+<p><span class="text-user">— Все одно незрозуміло, навіщо ускладнювати собі життя?</span></p>
+<p>— Перевага цього виявляється у великих проектах. Що більше класів, то чіткіше доводиться окреслювати їхні ролі. Ти побачиш перевагу цього, і вже найближчим часом. Усі через це проходять.</p>

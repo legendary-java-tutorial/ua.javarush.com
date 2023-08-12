@@ -1,0 +1,78 @@
+<a href="https://cdn.javarush.com/images/article/e6882b0c-4466-408c-920e-f8e6823aab5d/original.jpeg" target="_blank"><img data-id="e6882b0c-4466-408c-920e-f8e6823aab5d" data-max-width="850" alt="Метод finalize, closeable інтерфейс, try-with-resources(java7) - 1" src="https://cdn.javarush.com/images/article/e6882b0c-4466-408c-920e-f8e6823aab5d/800.jpeg" style="width: 850px;"></a>
+<p>- Привіт, Аміго!</p>
+<p>Я тут вирішила з тобою ще раз обговорити метод <strong>finalize</strong> ().</p>
+<p>Якщо ти пам'ятаєш, finalize() – це спеціальний метод, який викликається у об'єкта перед тим, як <br>
+  збирач сміття його знищить.</p>
+<p>Основна мета цього методу – звільнити зовнішні не-Java ресурси, що використовуються: закрити файли, потоки вводу-виводу і т.п.</p>
+<p>На жаль, цей метод не виправдовує покладених на нього надій. Java-машина може відкласти знищення об'єкта, як і виклик методу finalize скільки завгодно. Більше того, вона взагалі не гарантує, що цей метод буде викликано. У купі ситуацій заради «оптимізації» він не викликається.</p>
+<p>Наведу тобі дві цитати:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>У Джошуа Блох добре написано про цей метод: <a href="http://www.informit.com/articles/article.aspx?p=1216151&amp;seqNum=7">link</a><br>
+      Коротка витримка:
+     <p></p>
+     <ol>
+      <li>finalize() можна використовувати лише у двох випадках: 
+       <ol start="1.2">
+        <li><span style="font-family: inherit; font-size: inherit; color: inherit;">Перевірка/підчистка ресурсів із логуванням.</span></li>
+        <li>Працюючи з нативним кодом, який критичний до витоку ресурсів.</li>
+       </ol></li>
+      <li>finalize() уповільнює роботу GC з очищення об'єкта у 430 разів</li>
+      <li>finalize() може бути не викликаний</li>
+     </ol></td>
+   </tr>
+   <tr>
+    <td>Якщо я на співбесіді скажу, що finalize - це шкідливий і небезпечний мабоця, який своїм існуванням збиває з пантелику, то буду правий?</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">- М-да, зраділа ти мене, Еллі.</span></p>
+<p>— На заміну методу <strong>finalize</strong> у Java 7 з'явилася нова конструкція. Називається вона – <strong>try-with-resources</strong> . Це не зовсім заміна <strong>finalize</strong> – скоріше альтернативний підхід.</p>
+<p><span class="text-user">— Як try-catch, лише з ресурсами?</span></p>
+<p>- Майже як <strong>try-catch</strong> . Справа в тому, що на відміну від методу <strong>finalize</strong> (), блок <strong>finally</strong> з конструкції <strong>try-catch-finally</strong> викликається завжди. Цим і користувалися програмісти, коли було гарантовано звільнити ресурси, закрити потоки тощо. <br>
+  Приклад:</p>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">InputStream</span> is <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+<span class="token keyword">try</span>
+<span class="token punctuation">{</span>
+ is <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span><span class="token string">"c:/file.txt"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ is<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span>…<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">finally</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">if</span> <span class="token punctuation">(</span>is <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+ is<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Незалежно від того, чи нормально відпрацював блок <strong>try</strong> , чи там виник виняток, блок <strong>finally</strong> викликається завжди, і там можна буде звільнити зайняті ресурси.</p>
+<p>Тому в Java 7 цей підхід вирішабо зробити офіційним, і ось що з цього вийшло:</p>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">try</span><span class="token punctuation">(</span><span class="token class-name">InputStream</span> is <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span><span class="token string">"c:/file.txt"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ is<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span>…<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Це спеціальна конструкція <strong>try</strong> , звана <strong>try-with-resources</strong> (як і другий <strong>for</strong> для колекцій називається <strong>foreach</strong> ).</p>
+<p>Зверніть увагу – після try йдуть круглі дужки, де оголошуються змінні та створюються об'єкти. Ці об'єкти можна використовувати всередині блоку try, позначеного дужками {}. Коли виконання команд блоку try закінчиться, незалежно від того – нормально він закінчився або був виняток, для об'єкта, створеного всередині круглих дужок (), буде викликаний метод close ();</p>
+<p><span class="text-user">- Як цікаво. Такий запис набагато компактніший, ніж попередній. Зрозуміти її ще.</span></p>
+<p>— Все не так складно, як ти гадаєш.</p>
+<p><span class="text-user">— А я можу вказувати у круглих дужках об'єкти своїх класів?</span></p>
+<p>— Так, звичайно, інакше від цих дужок мало б користі.</p>
+<p><span class="text-user">— А якщо мені потрібно викликати інший метод при виході з блоку try, де його вказати?</span></p>
+<p>— Тут дещо тонше. У Java 7 з'явився такий інтерфейс:</p>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">AutoCloseable</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">void</span> <span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Ти можеш успадкувати свій клас від такого інтерфейсу. І тоді його об'єкти можна використовувати всередині try-with-resources. Тільки об'єкти такого типу можна використовувати всередині круглих дужок try-with-resources для автоматичного закриття.</p>
+<p><span class="text-user">- Тобто. мені потрібно буде перевизначити метод close і написати в ньому код з очищення мого об'єкта, а вказати інший метод не можна?</span></p>
+<p>- Ага. Зате можна вказувати кілька об'єктів, розділивши їх крапкою з комою:</p>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">try</span><span class="token punctuation">(</span>
+<span class="token class-name">InputStream</span> is <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span><span class="token string">"c:/file.txt"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">OutputStream</span> os <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileOutputStream</span><span class="token punctuation">(</span><span class="token string">"c:/output.txt"</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ is<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span>…<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ os<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>…<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p><span class="text-user">— Вже краще, але не так круто, як я сподівався.</span></p>
+<p>- Все не так погано, ти звикнеш. З часом.</p>

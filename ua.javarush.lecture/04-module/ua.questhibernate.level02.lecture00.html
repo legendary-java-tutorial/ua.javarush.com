@@ -1,0 +1,98 @@
+Умовні функції
+<p>----------------------------------------</p>
+Список умовних функцій
+Функція IF()
+Функція IFNULL() та NULLIF()
+<p>----------------------------------------</p>
+<h2>1.1 Список умовних функцій</h2>
+<p>У мові SQL є список функцій, які чимось схожі на оператор <code>if-else</code> та <code>switch</code> у Java.</p>
+<p>Усього таких функцій 4: </p>
+<table>
+    <tbody>
+    <tr>
+        <th></th>
+        <th>Функції</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>CASE</td>
+        <td>Аналог switch</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>IF()</td>
+        <td>Аналог тернарного оператора або if-else</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>IFNULL()</td>
+        <td>Аналог if-else</td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>NULLIF()</td>
+        <td>Аналог if-else</td>
+    </tr>
+
+    </tbody>
+</table>
+<p>Три останні в SQL представлені у вигляді функцій, а <code>CASE</code> - це повноцінний оператор, тому ми розглянемо його окремо в самому кінці.</p>
+<h2>1.2 Функція IF()</h2>
+<p>Функція <code>IF()</code> у SQL чимось нагадує тернарний оператор Java. У мові SQL вона набуває 3 параметрів і має вигляд:</p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-red">IF</span> (<span class="text-orange">умова</span>, <span class="text-user">справжня</span>, <span class="text-green">хибне</span>)
+        </code></pre>
+</div>
+<p>У функцію <code>IF</code> потрібно передати три вирази:</p>
+<ul>
+<li>умова, яка перевіряється на істинність;</li>
+<li>вираз, який повертається, коли умова є істинною;</li>
+<li>вираз, який повертається, коли умова хибна.</li>
+</ul>
+<p>Нижче я наведу кілька прикладів, щоб було легше зрозуміти, як це працює:</p>
+<table>
+    <tbody>
+    <tr>
+        <th></th>
+        <th>Запит</th>
+        <th>Результат</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>SELECT IF(<span class="text-red">1>2</span>, 2, 3)</td>
+        <td>3</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>SELECT IF(<span class="text-red">1<2</span>, 'yes', 'no')</td>
+        <td>'yes'</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>SELECT IF(<span class="text-red">STRCMP('test','test1'</span>), 'no', 'yes')</td>
+        <td>'no'</td>
+    </tr>
+    </tbody>
+</table>
+<p>1.3 Функція IFNULL() та NULLIF()</p>
+<p>Також є дві модифікації функції <code>IF()</code>.</p>
+<p>Перша модифікація – це функція <code>IFNULL()</code>. Вона приймає лише два значення:</p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-red">IFNULL</span> (<span class="text-orange">вираз1</span>, <span class="text-green">вираз2</span>)
+        </code></pre>
+</div>
+<p>Якщо <span class="text-orange">вираз1</span> не дорівнює <code>NULL</code>, тоді функція поверне <span class="text-orange">вираз1</span>. Якщо ж <span class="text-orange">вираз1</span> <code>IS NULL,</code> то функція поверне <span class="text-green">вираз2</span>. Суть – встановлення стандартного значення, коли поле дорівнює <code>NULL</code>.</p>
+<p>Друга модифікація функції <code>IF</code> – це функція <code>NULLIF()</code>, вона також приймає два значення:</p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-red">NULLIF</span> (<span class="text-orange">вираз1</span>, <span class="text-green">вираз2</span>)
+        </code></pre>
+</div>
+<p>Вона працює у протилежному напрямку:</p>
+<ul>
+<li>якщо <span class="text-orange">вираз1</span> дорівнює <span class="text-green">вираз2</span>, то функція повертає <code>NULL</code>;</ li>
+<li>якщо вирази не рівні, то повертає <span class="text-orange">вираз1</span>.</li>
+</ul>

@@ -1,0 +1,86 @@
+<h2>3.1 Список рівнів подій</h2>
+<p>Логування – це процес запису будь-яких подій, які відбуваються під час роботи програми. Ваш обов'язок як програміста — <code>запротоколювати все важливе</code>тому, що потім, коли не <code>production</code>будуть дивні та/або серйозні помилки, крім цих ліг у вас більше нічого не буде.</p>
+<p>Будь-яка помилка буде усунена в рази швидше, якщо у вас буде вся інформація про неї та про всі передісторії дзвінків. Але звідси випливає простий висновок – логувати взагалі все: виклики всіх методів, значення всіх параметрів.</p>
+<p>Це теж не вихід – надто багато інформації так само погано, як і замало. Нам потрібне розумне логування. Зроблений людиною для людини. І тут ми підходимо до першого факту прологування - всі записи в лог ще під час їх створення діляться на категорії.</p><img width="800" alt="Список рівнів подій" src="https://cdn.javarush.com/images/article/92ef34aa-e120-4aa9-815a-0c7a771c2457/original.jpeg">
+<p>Програміст, коли пише якусь подію в балку, повинен сам вирішити, наскільки це важлива інформація. Рівень важливості події вибирає автор повідомлення. Існує <code>log4j</code>5 рівнів важливості логованої інформації:</p>
+<ul>
+ <li><code>DEBUG</code></li>
+ <li><code>INFO</code></li>
+ <li><code>WARN</code></li>
+ <li><code>ERROR</code></li>
+ <li><code>FATAL</code></li>
+</ul>
+<p>Нижче розповімо про них докладніше.</p>
+<h2>3.2 DEBUG</h2>
+<p>Рівень <code>DEBUG</code>вважається найменш важливим. Інформація, яка пишеться в балку з таким рівнем важливості, потрібна лише під час дебагу додатку. Для того щоб записати в лог інформацію потрібну під час дебагу використовується метод <code>debug()</code>.</p>
+<p>Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Manager</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">Logger</span> logger <span class="token operator">=</span> <span class="token class-name">LoggerFactory</span><span class="token punctuation">.</span><span class="token function">getLogger</span><span class="token punctuation">(</span><span class="token class-name">Manager</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">processTask</span><span class="token punctuation">(</span><span class="token class-name">Task</span> task<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        logger<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"processTask id = "</span> <span class="token operator">+</span> task<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            task<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            task<span class="token punctuation">.</span><span class="token function">progress</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            task<span class="token punctuation">.</span><span class="token function">complete</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            logger<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"Unknown error"</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Зверніть увагу, метод <code>debug</code>знаходиться на самому початку методу (метод ще не встиг нічого зробити) і пише в бал значення переданої в метод змінної. Це найчастіший сценарій використання методу <code>debug()</code>.</p>
+<h2>3.3 INFO та WARN</h2>
+<p>Наступні два рівні - це <code>INFO</code>і <code>WARN</code>. Їх існують два методу – <code>info()</code>і <code>warn()</code>.</p>
+<p>Рівень <code>INFO</code>використовується просто для інформаційних повідомлень: відбувається те й те. Коли починаєш розбір помилки у лозі, буває дуже корисно почитати її передісторію. Для цього відмінно підходить метод <code>info()</code>.</p>
+<p>Рівень <code>WARN</code>використовується для запису застережень (від слова <strong>warning</strong> ). Зазвичай з таким рівнем важливості пишеться інформація про те, що щось пішло не так, але програма знає, як вчинити в цій ситуації.</p>
+<p>Наприклад, у процесі запису файлу на диск з'ясувалося, що такий файл вже існує. Тут програма може записати в лог попередження (warning), але показати користувачеві діалогове вікно та запропонувати вибрати інше ім'я файлу.</p>
+<p>Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">FileManager</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">Logger</span> logger <span class="token operator">=</span> <span class="token class-name">LoggerFactory</span><span class="token punctuation">.</span><span class="token function">getLogger</span><span class="token punctuation">(</span><span class="token class-name">FileManager</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">saveFile</span><span class="token punctuation">(</span><span class="token class-name">FileData</span> file<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        logger<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span>“зберігаємо файл ” <span class="token operator">+</span> file<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">boolean</span> resultOK <span class="token operator">=</span> <span class="token class-name">SaveUtils</span><span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>file<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>resultOK<span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+
+        logger<span class="token punctuation">.</span><span class="token function">warn</span><span class="token punctuation">(</span>“проблема із записом файлу ” <span class="token operator">+</span> file<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">String</span> filename <span class="token operator">=</span> <span class="token class-name">Dialog</span><span class="token punctuation">.</span><span class="token function">selectFile</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">boolean</span> result <span class="token operator">=</span> <span class="token class-name">SaveUtils</span><span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>file<span class="token punctuation">,</span> filename<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span></code></pre>
+<h2>3.4 ERROR та FATAL</h2>
+<p>І нарешті два найважливіших рівня логування – <code>ERROR</code>і <code>FATAL</code>. Їх теж є спеціальні методи з однойменними назвами: <code>error()</code>і <code>fatal()</code>.</p>
+<p>Помилки теж вирішабо розділити на дві категорії - <span class="text-red">звичайні помилки</span> та <span class="text-red"><strong>фатальні помилки</strong></span> . Фатальна помилка найчастіше призводить до аварійного закриття програми (для десктопних програм) або падіння веб-сервісу (для веб-додатків).</p>
+<p>Ще добрий приклад – це операційна система Windows. Якщо в тебе просто впала програма, то з погляду операційної системи це <code>Error</code>. А якщо впала сама операційна система і ви бачите синій екран смерті Windows, це вже <code>Fatal error</code>.</p>
+<p>У Java-додатках найчастіше події <code>Error</code>і <code>Fatal</code>пов'язані з винятками, що виникають. Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Manager</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">Logger</span> logger <span class="token operator">=</span> <span class="token class-name">LoggerFactory</span><span class="token punctuation">.</span><span class="token function">getLogger</span><span class="token punctuation">(</span><span class="token class-name">Manager</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">processTask</span><span class="token punctuation">(</span><span class="token class-name">Task</span> task<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        logger<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"processTask id = "</span> <span class="token operator">+</span> task<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            task<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            task<span class="token punctuation">.</span><span class="token function">progress</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            task<span class="token punctuation">.</span><span class="token function">complete</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="text-red">            logger<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"Unknown error"</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+            <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h2>3.5 Що потрібно логувати</h2>
+<p>Зрозуміло, логувати все поспіль не варто. Найчастіше це різко погіршує читабельність лога, адже лог пишеться насамперед у тому, щоб його читали.</p>
+<p>Крім того, не можна писати в ліг різну особисту та фінансову інформацію. Зараз із цим суворо та легко можна нарватися на штрафи чи судові процеси. Рано чи пізно такий лог втече набік і тоді проблем не оберешся.</p>
+<p><strong>То що ж треба логувати?</strong></p>
+<p>По-перше, потрібно логувати <strong>початок роботи програми</strong> . Після того, як програма запустилася, рекомендується вивести в лог його режим роботи і різні важливі налаштування - так буде простіше в майбутньому читати лог.</p>
+<p>По-друге, потрібно логувати <strong>стан усіх третьосторонніх сервісів</strong> , з якими твоя програма працює: системи розсилок, будь-які зовнішні сервіси. Як мінімум, потрібно залогувати момент підключення до них, щоб переконатися, що вони штатно працюють.</p>
+<p>По-третє, логувати потрібно <strong>всі винятки</strong> . Якщо вони очікувані, то інформацію про них можна записати компактно. Повна інформація про винятки дає 50-80% важливої ​​інформації при пошуку помилки.</p>
+<p>Також потрібно логувати <strong>завершення роботи програми</strong> . Додаток повинен завершуватися штатно і не сипати при цьому в ліг десятки помилок. Часто в цьому місці можна знайти завдання, що підвисли, проблеми з пулом потоків або проблеми з видаленням тимчасових файлів.</p>
+<p>Обов'язково логіруй те, що пов'язане з <strong>безпекою та авторизацією користувача</strong> . Якщо користувач 10 разів поспіль намагається залогінитись або скинути пароль, ця інформація має бути відображена у логах.</p>
+<p>Логуй максимум <strong>інформації про асинхронні завдання</strong> – часто винятки в таких потоках губляться. За асинхронним завданням обов'язково логіруй її старт та завершення. Успішне завершення потрібно логувати так само, як і проблемне.</p>
+<p>Що ще? Запуск завдань, що виконуються за таймером, запуск збережених даних <code>SQL-процедур</code>, синхронізацію даних, все, що стосується розподілених транзакцій. Думаю, спершу вистачить. У майбутньому ти сам доповниш цей перелік.</p>
+<p></p>
+<p></p>

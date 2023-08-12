@@ -1,0 +1,47 @@
+<h2>5.1 document.getElementById()</h2>
+<p>Як ти знаєш, JavaScript створабо, щоб додати трохи анімації на HTML-сторінки. Поки що ми практично нічого не сказали про це. Як додати цю саму анімацію? Як, наприклад, змінити колір якогось елемента?</p>
+<p>Щоб змінити колір елемента, спочатку потрібно знайти цей елемент. Для цього є функція <code>document.getElementById();</code>Ти у твоєму HTML прописуй <code>id</code>у потрібного елемента, а потім звертаєтесь до нього із JavaScript. Приклад:</p>
+<pre class="line-numbers"><code>
+&lt;head&gt;
+<span class="text-yellow">    &lt;script&gt;</span>
+        function <span class="text-green">changeImage</span>()
+        {
+           var <span class="text-viola">image</span> = document.getElementById("image123");
+            <span class="text-viola">image</span>.src = <span class="text-green"><span class="text-red">"new-image.png"</span></span>;
+        }
+<span class="text-yellow">    &lt;/script&gt;</span>
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;img <span class="text-red">id="image123"</span> scr="big-image.png" <span class="text-user">onclick</span>="<span class="text-green">changeImage()</span>"&gt;
+&lt;/body&gt;
+</code></pre>
+<p>Після того, як користувач кликає мишкою по картинці, викликається функція <code>changeImge()</code>. У неї всередині ми отримуємо елемент <code>image</code>за його <code>ID</code>, а потім змінюємо у нього значення src атрибута на нове. Що призведе до того, що елемент <code>img</code>завантажить нову картинку.</p>
+<h2>5.2 document.createElement()</h2>
+<p>Крім отримання елемента, ми можемо створювати нові елементи і видаляти існуючі.</p>
+<p>Створювати елементи дуже легко. Для цього потрібно зробити дві дії: а) <strong>створити елемент</strong> ; б) <strong>додати його</strong> в потрібне місце документа. Виглядає це зазвичай приблизно так:</p>
+<pre class="line-numbers"><code>
+&lt;head&gt;
+<span class="text-yellow">    &lt;script&gt;</span>
+        window.<span class="text-red">onload</span> = function ()   {
+            var <span class="text-user">image</span> = document.<span class="text-red">createElement</span>(<span class="text-green">"IMG"</span>);
+            var <span class="text-user">image</span>.src = <span class="text-green">"big-image.png";</span>
+            document.body.<span class="text-red">addAfter</span>(<span class="text-user">image</span>);
+        }
+<span class="text-yellow">    &lt;/script&gt;</span>
+&lt;/head&gt;
+&lt;body&gt;
+&lt;/body&gt;
+</code></pre>
+<h2>5.3 Метод window.navigate()</h2>
+<p>Є ще один дуже корисний метод – це метод <code>window.navigate()</code>. За його допомогою ти можеш змусити браузер завантажити нову сторінку замість поточної. Просто передай її <code>URL</code>у цей метод і виклич його. Приклад:</p>
+<pre class="line-numbers"><code>
+  &lt;body&gt; 
+    &lt;img scr="big-image.png" <span class="text-red">onclick</span>="<span class="text-green">window.navigate('https://google.com');</span>"&gt; 
+  &lt;/body&gt; 
+
+</code></pre>
+<p>У прикладі вище, після того, як користувач клікне на картинці, в поточну вкладку завантажиться сторінка google.com.</p>
+<h2>5.4 Поточний URL</h2>
+<p>І ще одна корисна річ. Іноді скрипту буває дуже потрібно дізнатися про поточний URL сторінки. Наприклад, той самий скрипт може бути доданий у різні сторінки. Як це зробити?</p>
+<p>Для цього є спеціальна властивість<code>document.location.href</code></p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">var</span> currentURL <span class="token operator">=</span> document<span class="token punctuation">.</span>location<span class="token punctuation">.</span>href<span class="token punctuation">;</span></code></pre>

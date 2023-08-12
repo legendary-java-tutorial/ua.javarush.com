@@ -1,0 +1,136 @@
+<p>Швидше за все, до цього моменту ти вже стикався з патернами проектування. Наприклад, з одиночкою ( <em>singleton</em> ).</p>
+<p>Давай пригадаємо, що таке патерни, навіщо вони потрібні, що таке патерни, що породжують (до яких і належить одинак), і вивчимо новий патерн - фабричний метод.</p>
+<p><span class="text-bold">Шаблон проектування</span> або <span class="text-bold">патерн</span> ( <em>design pattern</em> ) у розробці програмного забезпечення - це повторювана архітектурна конструкція, яка є вирішенням проблеми проектування в рамках деякого часто виникаючого контексту.</p>
+<p>Зазвичай шаблон не є закінченим зразком, який може бути прямо перетворений на код, це лише приклад вирішення завдання, який можна використовувати в різних ситуаціях.</p>
+<p><span class="text-bold">Шаблони, що породжують</span> ( <em>creational patterns</em> ) - шаблони проектування, які мають справу з процесом створення об'єктів. Вони дозволяють зробити систему незалежною від способу створення, композиції та представлення об'єктів.</p>
+<p><span class="text-bold">Фабричний метод</span> ( <em>factory method</em> ) - це породжуючий патерн проектування, який визначає загальний інтерфейс для створення об'єктів у батьківському класі, надаючи можливість створення цих об'єктів своїм спадкоємцям. На момент створення спадкоємці можуть визначити, який клас створювати.</p>
+<h2>Яку проблему вирішує патерн?</h2>
+<p>Уяви, що ти вирішив створити програму доставки. Спочатку ти найматимеш кур'єрів з автомобілями і в програмі як засіб доставки використовувати об'єкт<mark class="green">Автомобіль</mark>. Кур'єри розвозять посилки з пункту А пункт Б, В і так далі. Все просто.</p>
+<p>Програма набирає популярності, твій бізнес зростає, ти хочеш розширюватися, виходячи на нові ринки. Так, наприклад, можна додатково почати доставляти їжу та займатися вантажними перевезеннями. Тоді їжу можуть доставляти і піші кур'єри, і самокатах, і велосипедах, а під вантажні потреби потрібні вантажні автомобілі.</p>
+<p>Тепер тобі важливо знати, коли, кому, що і скільки конкретно буде доставлено з огляду на те, скільки кожен кур'єр може перевозити чи переносити. У нових видів транспортних засобів різна швидкість та місткість. Тоді ти виявиш, що більшість сутностей у програмі сильно пов'язані з об'єктом<mark class="green">Автомобіль</mark>і щоб змусити твою програму працювати з іншими способами доставки, тобі доведеться переписувати наявну кодову базу і так повторювати кожного разу для кожного нового транспорту.</p>
+<p>У результаті виходить жахливий код, наповнений умовними операторами, які виконують ту чи іншу дію залежно від транспорту.</p>
+<h3>Рішення проблеми</h3>
+<p>Паттерн фабричний метод пропонує створювати об'єкти безпосередньо, використовуючи оператор <span class="text-viola">new</span> , а через виклик особливого фабричного методу. Підкласи класу, що містить фабричний метод, можуть змінювати створювані об'єкти конкретних транспортних засобів, що створюються. На перший погляд, це може здатися безглуздим: ми просто перемістабо виклик конструктора з одного кінця програми до іншого. Але тепер ти зможеш перевизначати фабричний метод у підкласі, щоб змінити тип транспорту, що створюється.</p>
+<p>Подивимося на діаграму класів такого підходу:</p><img data-max-width="800" data-id="d0d98165-ff5b-4d1f-ae18-234c06b1661c" alt="" src="https://cdn.javarush.com/images/article/d0d98165-ff5b-4d1f-ae18-234c06b1661c/800.jpeg" style="width: 800px;">
+<p>Щоб ця система запрацювала, всі об'єкти, що повертаються, повинні мати спільний інтерфейс. Підкласи зможуть робити об'єкти різних класів, наступних тому самому інтерфейсу.</p>
+<p>Наприклад, класи <span class="code"><span class="text-green">Вантажівка</span></span> та <span class="code"><span class="text-green">Автомобіль</span></span> реалізують інтерфейс <span class="text-neon"><span class="text-bold"><em>Кур'єрський Транспорт</em></span></span> із методом <span class="code text-orange">доставити</span> . Кожен із цих класів реалізує метод по-своєму: вантажівки доставляють вантажі, а автомобілі — їжу, посилки тощо. Фабричний метод у класі <span class="code"><span class="text-green">Творець вантажівок</span></span> поверне об'єкт-вантажівка, а клас <span class="code"><span class="text-green">Творець автомобілів</span></span> – об'єкт-автомобіль.</p>
+<p>Для клієнта фабричного методу немає різниці між цими об'єктами, оскільки він трактуватиме їх як абстрактний <span class="text-neon"><span class="text-bold"><em>Кур'єрський Транспорт</em></span></span> . Для нього буде важливо, щоб об'єкт мав метод доставити, а як він працює — не важливо.</p>
+<p>Реалізація на Java:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">CourierTransport</span> <span class="token punctuation">{</span>
+	<span class="token keyword">void</span> <span class="token function">deliver</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Car</span>  <span class="token keyword">implements</span> <span class="token class-name">CourierTransport</span><span class="token punctuation">{</span>
+	<span class="token annotation punctuation">@Override</span>
+	<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">deliver</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    		<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"The parcel is delivered by car "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Truck</span> <span class="token keyword">implements</span> <span class="token class-name">CourierTransport</span><span class="token punctuation">{</span>
+	<span class="token annotation punctuation">@Override</span>
+	<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">deliver</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    		<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Cargo is delivered by truck"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">CourierTransportCreator</span> <span class="token punctuation">{</span>
+	<span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token class-name">CourierTransport</span> <span class="token function">createTransport</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CarCreator</span> <span class="token keyword">extends</span> <span class="token class-name">CourierTransportCreator</span> <span class="token punctuation">{</span>
+	<span class="token annotation punctuation">@Override</span>
+	<span class="token keyword">public</span> <span class="token class-name">CourierTransport</span> <span class="token function">createTransport</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    		<span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Car</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">TruckCreator</span> <span class="token keyword">extends</span> <span class="token class-name">CourierTransportCreator</span><span class="token punctuation">{</span>
+	<span class="token annotation punctuation">@Override</span>
+	<span class="token keyword">public</span> <span class="token class-name">CourierTransport</span> <span class="token function">createTransport</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    		<span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Truck</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Deliver</span> <span class="token punctuation">{</span>
+	<span class="token keyword">private</span> <span class="token class-name">String</span> address<span class="token punctuation">;</span>
+	<span class="token keyword">private</span> <span class="token class-name">CourierTransport</span> courierTransport<span class="token punctuation">;</span>
+
+	<span class="token keyword">public</span> <span class="token class-name">Deliver</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">public</span> <span class="token class-name">Deliver</span><span class="token punctuation">(</span><span class="token class-name">String</span> address<span class="token punctuation">,</span> <span class="token class-name">CourierTransport</span> courierTransport<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    	<span class="token keyword">this</span><span class="token punctuation">.</span>address <span class="token operator">=</span> address<span class="token punctuation">;</span>
+    	<span class="token keyword">this</span><span class="token punctuation">.</span>courierTransport <span class="token operator">=</span> courierTransport<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">public</span> <span class="token class-name">CourierTransport</span> <span class="token function">getCourierTransport</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    		<span class="token keyword">return</span> courierTransport<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setCourierTransport</span><span class="token punctuation">(</span><span class="token class-name">CourierTransport</span> courierTransport<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    		<span class="token keyword">this</span><span class="token punctuation">.</span>courierTransport <span class="token operator">=</span> courierTransport<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getAddress</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    		<span class="token keyword">return</span> address<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setAddress</span><span class="token punctuation">(</span><span class="token class-name">String</span> address<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    		<span class="token keyword">this</span><span class="token punctuation">.</span>address <span class="token operator">=</span> address<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    	<span class="token comment">//принимаем новый вид заказа с базы (псевдокод)</span>
+    	<span class="token class-name">String</span> type <span class="token operator">=</span> database<span class="token punctuation">.</span><span class="token function">getTypeOfDeliver</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    	<span class="token class-name">Deliver</span> deliver <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Deliver</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    	<span class="token comment">//заполняем транспорт в доставку</span>
+        deliver<span class="token punctuation">.</span><span class="token function">setCourierTransport</span><span class="token punctuation">(</span><span class="token function">getCourierTransportByType</span><span class="token punctuation">(</span>type<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    	<span class="token comment">//доставляем</span>
+        deliver<span class="token punctuation">.</span><span class="token function">getCourierTransport</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">deliver</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">CourierTransport</span> <span class="token function">getCourierTransportByType</span><span class="token punctuation">(</span><span class="token class-name">String</span> type<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    	<span class="token keyword">switch</span> <span class="token punctuation">(</span>type<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        	<span class="token keyword">case</span> <span class="token string">"CarDeliver"</span><span class="token operator">:</span>
+            	<span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">CarCreator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">createTransport</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        	<span class="token keyword">case</span> <span class="token string">"TruckDeliver"</span><span class="token operator">:</span>
+            	<span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">TruckCreator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">createTransport</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        	<span class="token keyword">default</span><span class="token operator">:</span>
+            	<span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	    <span class="token punctuation">}</span>
+	<span class="token punctuation">}</span></code></pre>
+<p>Якщо ми захочемо створити новий об'єкт доставки, програма автоматично від її виду створить нам об'єкт транспорту.</p>
+<h2>Коли застосовувати патерн?</h2>
+<h4>1. Коли заздалегідь невідомі типи та залежності об'єктів, з якими має працювати твій код.</h4>
+<p>Фабричний метод відокремлює код виробництва транспорту від решти коду, який використовує цей транспорт. Завдяки цьому код створення об'єктів можна розширювати, не чіпаючи основного.</p>
+<p>Так щоб додати підтримку нового транспорту, тобі потрібно створити новий підклас і визначити в ньому фабричний метод, повертаючи звідти екземпляр нового транспорту.</p>
+<h4>2. Коли хочеш економити системні ресурси, повторно використовуючи вже створені об'єкти замість породження нових.</h4>
+<p>Така проблема зазвичай виникає при роботі з важкими ресурсомісткими об'єктами, такими, як підключення до бази даних, файлової системи і т.д.</p>
+<p>Уяви, скільки дій тобі потрібно зробити, щоб повторно використовувати існуючі об'єкти:</p>
+<ol>
+ <li>
+  <p>Спочатку тобі слід створити спільне сховище, щоб зберігати в ньому всі об'єкти, що створюються.</p></li>
+ <li>
+  <p>При запиті нового об'єкта потрібно буде заглянути в сховище і перевірити, чи є об'єкт, що не використовується.</p></li>
+ <li>
+  <p>Повернути об'єкт клієнтського коду.</p></li>
+ <li>
+  <p>Але якщо вільних об'єктів немає — створи новий, додавши його до сховища.</p></li>
+</ol>
+<p>Весь цей код потрібно кудись помістити, щоб не засмічувати код клієнта. Найзручнішим місцем був би конструктор об'єкта, адже всі ці перевірки потрібні лише під час створення об'єктів. Але, на жаль, конструктор завжди створює нові об'єкти, він не може повернути існуючий екземпляр.</p>
+<p>Отже, потрібен інший метод, який віддавав як існуючі, і нові об'єкти. Ним і стане фабричний метод.</p>
+<h4>3. Коли ти хочеш дати можливість користувачам розширювати частини твого фреймворку чи бібліотеки.</h4>
+<p>Користувачі можуть розширювати класи твого фреймворку через спадкування. Але як зробити так, щоб фреймворк створював об'єкти із цих нових класів, а не зі стандартних?</p>
+<p>Рішенням буде дати користувачам можливість розширювати як бажані компоненти, а й класи, які створюють ці компоненти. А для цього створюють класи повинні мати конкретні методи, які можна визначити.</p>
+<h3>Переваги</h3>
+<ul>
+ <li>Позбавляє клас від прив'язки до конкретних класів транспорту.</li>
+ <li>Виділяє код створення транспорту на одне місце, спрощуючи підтримку коду.</li>
+ <li>Спрощує додавання нових видів транспорту до програми.</li>
+ <li>Реалізує принцип відкритості/закритості.</li>
+</ul>
+<h3>Недоліки</h3>
+<p>Може призвести до створення великих паралельних ієрархій класів, оскільки кожного класу продукту треба створити свій підклас творця.</p>
+<h2>Підведемо підсумок</h2>
+<p>Ти познайомився з патерном фабричний метод та побачив його можливу реалізацію. Цей патерн досить часто використовується в різних бібліотеках, які надають об'єкти для створення об'єктів.</p>
+<p>Використовуй патерн фабричний метод у разі, коли хочеш без проблем впроваджувати у свою програму нові об'єкти-підкласи на основі вже наявних для взаємодії з основною бізнес-логікою, щоб не сильно роздмухувати код через різний контекст.</p>

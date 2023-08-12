@@ -1,0 +1,109 @@
+Table per class
+<p>----------------------------------------</p>
+Опис
+Приклади
+<p>----------------------------------------</p>
+<h2>5.1 Опис</h2>
+<p>І нарешті остання стратегія – це Table per class. Вона означає, що для кожного класу використовуватиметься окрема таблиця. В якомусь сенсі це той же MappedSuperClass, тільки в оновленому вигляді.</p>
+<p>По-перше, тобі потрібно використовувати інструкцію:</p>
+<pre><code><span class="text-brown">@Inheritance(strategy = InheritanceType</span>.<span class="text-red">TABLE_PER_CLASS</span><span class="text-brown ">)</span>
+</code></pre>
+<p>Класи з цією інструкцією будуть виглядати так:</p>
+<pre class='line-numbers'><code>
+<span class="text-red">@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)</span>
+@Entity
+class <span class="text-brown">User</span> {
+<span class="text-green">int id;
+String name;
+LocalDate birthday;</span>
+}
+
+<span class="text-brown">@Entity</span>
+class <span class="text-brown">Employee</span> extends <span class="text-brown">User</span> {
+ <span class="text-user">String occupation;
+ int salary;
+ LocalDate join;</span>
+}
+
+<span class="text-brown">@Entity</span>
+class <span class="text-brown">Client</span> extends <span class="text-brown">User</span> {
+<span class="text-viola">String address;</span>
+}
+</code></pre>
+<p>І окремі таблиці кожного класу. Наприклад, такі:</p>
+<pre class='line-numbers'><code>
+CREATE TABLE <span class="text-red">user</span> {
+<span class="text-green">id INT,
+name VARCHAR,
+birthday DATE</span>
+}
+
+CREATE TABLE <span class="text-red">employee</span> {
+<span class="text-green">id INT,
+name VARCHAR,
+birthday DATE,</span>
+<span class="user">occupation VARCHAR,
+salary INT,
+join DATE</span>
+}
+
+CREATE TABLE <span class="text-red">client</span> {
+<span class="text-green">id INT,
+name VARCHAR,
+birthday DATE,</span>
+<span class="text-viola">адреса VARCHAR</span>
+}
+</code></pre>
+<p>Основна відмінність – це те, що використовується наскрізний ID (PRIMARY KEY) для всіх таблиць. У тебе не можуть бути різні рядки з одним ID не тільки в рамках однієї таблиці, але і в рамках цієї групи таблиць. Hibernate стежитиме за цим.</p>
+<h2>5.2 Приклади</h2>
+<p>Дуже цікаво розібрати, як це все працює.</p>
+<p>Ти можеш написати простий HQL-запит, щоб отримати всіх користувачів: <strong>User, Employee, Client</strong>:</p>
+<pre><code>List&lt;User&gt; accounts = session.createQuery(<span class="text-green">"from User"</span>).list();
+</code></pre>
+<p>А ось Hibernate, у свою чергу, згенерує дуже цікавий запит. Він зробить вибірку з усіх таблиць, потім об'єднає її через UNION ALL на кшталт віртуальної таблиці, і лише потім виконуватиме по ній пошук та/або вибірку</p>
+<p>Але щоб поєднати таблиці з різними колонками, спочатку їх потрібно доповнити фейковими колонками. Наприклад, таблицю user потрібно доповнити колонками:</p>
+<ul>
+<li><code class="text-user">occupation VARCHAR</code></li>
+<li><code class="text-user">salary INT</code></li>
+<li><code class="text-user">join DATE</code></li>
+<li><code class="text-viola">адреса VARCHAR</code></li>
+</ul>
+<p>Приклад SQL-запиту до <strong>таблиці user</strong> перед виконанням <code>UNION ALL</code>:</p>
+<pre class='line-numbers'><code>
+SELECT <span class="text-green">id</span>,
+         <span class="text-green">name</span>,
+         <span class="text-green">birthday</span>,
+         <span class="text-user">CAST(NULL AS VARCHAR) AS occupation</span>,
+         <span class="text-user">CAST(NULL AS INT) AS salary</span>,
+         <span class="text-user">CAST(NULL AS DATE) AS join</span>,
+         <span class="text-viola">CAST(NULL AS VARCHAR) AS address</span>,
+         <span class="text-yellow">0 AS clazz</span>
+FROM user
+</code></pre>
+<p>Приклад SQL-запиту до <strong>таблиці employee</strong> перед виконанням <code>UNION ALL</code>:</p>
+<pre class='line-numbers'><code>
+SELECT <span class="text-green">id</span>,
+         <span class="text-green">name</span>,
+         <span class="text-green">birthday</span>,
+         <span class="text-user">occupation</span>,
+         <span class="text-user">salary</span>,
+         <span class="text-user">join</span>,
+         <span class="text-viola">CAST(NULL AS VARCHAR) AS address</span>,
+         <span class="text-yellow">1 AS clazz</span>
+FROM employee
+</code></pre>
+<p>Приклад SQL-запиту до <strong>таблиці client</strong> перед виконанням <code>UNION ALL</code>:</p>
+<pre class='line-numbers'><code>
+SELECT <span class="text-green">id</span>,
+        <span class="text-green">name</span>,
+        <span class="text-green">birthday</span>,
+        <span class="text-user">CAST(NULL AS VARCHAR) AS occupation</span>,
+        <span class="text-user">CAST(NULL AS INT) AS salary</span>,
+        <span class="text-user">CAST(NULL AS DATE) AS join</span>,
+        <span class="text-viola">address</span>,
+        <span class="text-yellow">2 AS clazz</span>
+FROM client
+</code></pre>
+<p>Хороша новина: HQL-запити працюватимуть так, як тобі хотілося б.</p>
+<p>Погана новина: вони можуть працювати повільно, якщо даних у таблицях дуже багато. Тому що спочатку дані потрібно вибрати зі всіх таблиць, потім об'єднати їх рядки за допомогою <code>UNION ALL</code>, і лише потім фільтрувати. </p>
+

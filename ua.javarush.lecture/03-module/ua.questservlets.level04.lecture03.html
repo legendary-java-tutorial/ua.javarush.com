@@ -1,0 +1,109 @@
+<h2>4.1 Параметри методів</h2>
+<p>Попередні правила, додані мок-об'єкту, стосувалися методів без параметрів. А як створювати правила для методів із параметрами? Більше того, хотілося б створювати правила, щоб за одних значень параметрів був один результат, а за інших – інший.</p>
+<p>Так також можна робити. Якщо ви хочете, щоб за певного параметра метод повертав щось певне, то правило можна записати так:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present"><code><span class="text-red">Mockito</span>.doReturn(<span class="text-user">результат</span>).when(<span class="text-green">об'єкт</span>).<span class="text-yellow">ім'яМетоду</span>(<span class="text-violet">параметр</span>);</code></pre>
+</div>
+<p>І одразу розглянемо приклад, щоб краще все зрозуміти. Нехай наш List повертає ім'я Іван за запитом 10-го елемента, і ім'я Мар'я при запиті 500-го. Сказано зроблено.</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@ExtendWith</span><span class="token punctuation">(</span><span class="token class-name">MockitoExtension</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+<span class="token keyword">class</span> <span class="token class-name">ParamsTest</span> <span class="token punctuation">{</span>
+<span class="text-green">    <span class="token annotation punctuation">@Mock</span></span><span class="token annotation punctuation"></span>
+<span class="text-red">    <span class="token class-name">List</span> mockList<span class="token punctuation">;</span></span><span class="token punctuation"></span>
+
+<span class="text-green">    <span class="token annotation punctuation">@Test</span></span><span class="token annotation punctuation"></span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">whenMockAnnotation</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">//додавання першого правила</span>
+        <span class="token class-name">Mockito</span><span class="token punctuation">.</span><span class="token function">doReturn</span><span class="token punctuation">(</span><span class="token string"><span class="text-user">"Іван"</span></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">when</span><span class="token punctuation">(</span><span class="text-red">mockList</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-yellow">get</span></span><span class="token punctuation">(</span><span class="token number"><span class="text-violet">10</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//додавання другого правила</span>
+        <span class="token class-name">Mockito</span><span class="token punctuation">.</span><span class="token function">doReturn</span><span class="token punctuation">(</span><span class="token string"><span class="text-user">"Мар'я"</span></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">when</span><span class="token punctuation">(</span><span class="text-red">mockList</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-yellow">get</span></span><span class="token punctuation">(</span><span class="token number"><span class="text-violet">500</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token string"><span class="text-user">"Іван"</span></span><span class="token punctuation">,</span> <span class="text-red">mockList</span><span class="token punctuation">.</span><span class="token function"><span class="text-yellow">get</span></span><span class="token punctuation">(</span><span class="token number"><span class="text-violet">10</span></span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token string"><span class="text-user">"Мар'я"</span></span><span class="token punctuation">,</span> <span class="text-red">mockList</span><span class="token punctuation">.</span><span class="token function"><span class="text-yellow">get</span></span><span class="token punctuation">(</span><span class="token number"><span class="text-violet">500</span></span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h2>4.2 Шаблони параметрів</h2>
+<p>І відразу хитрі колеги поставлять мені запитання: "А як бути, якщо метод вимагає аргументи, але за будь-яких значень повинен повертати один і той же результат?". Не будемо ж ми писати:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Mockito</span><span class="token punctuation">.</span><span class="token function">doReturn</span><span class="token punctuation">(</span><span class="token string"><span class="text-user">"Іван"</span></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">when</span><span class="token punctuation">(</span><span class="text-red">mockList</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-yellow">get</span></span><span class="token punctuation">(</span><span class="token number"><span class="text-violet">1</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Mockito</span><span class="token punctuation">.</span><span class="token function">doReturn</span><span class="token punctuation">(</span><span class="token string"><span class="text-user">"Іван"</span></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">when</span><span class="token punctuation">(</span><span class="text-red">mockList</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-yellow">get</span></span><span class="token punctuation">(</span><span class="token number"><span class="text-violet">2</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Mockito</span><span class="token punctuation">.</span><span class="token function">doReturn</span><span class="token punctuation">(</span><span class="token string"><span class="text-user">"Іван"</span></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">when</span><span class="token punctuation">(</span><span class="text-red">mockList</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-yellow">get</span></span><span class="token punctuation">(</span><span class="token number"><span class="text-violet">99</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Ні, ніхто тебе так писати не примушує. Якщо ти хочеш додати правило mock-об'єкту, що діє для методу з будь-якими аргументами, то для цього є спеціальний об'єкт:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token class-name"><span class="text-red">Mockito</span></span><span class="token punctuation">.</span><span class="token function">any</span><span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+</div>
+<p>Наш приклад з його допомогою буде записано так:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token class-name">Mockito</span><span class="token punctuation">.</span><span class="token function">doReturn</span><span class="token punctuation">(</span><span class="token string"><span class="text-user">"Іван"</span></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">when</span><span class="token punctuation">(</span><span class="text-red">mockList</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-yellow">get</span></span><span class="token punctuation">(</span><span class="token function"></span><span class="text-green"><span class="token function">any</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span></span><span class="token punctuation"></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</div>
+<p>Є тут кілька нюансів. Об'єкт <code>Mockito.any()</code>має тип <code>Object</code>, тому параметрів різних типів є його аналоги:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th></th>
+    <th width="300">Метод</th>
+    <th>Тип параметра</th>
+   </tr>
+   <tr>
+    <td>1</td>
+    <td><strong>any()</strong></td>
+    <td>Object, включаючи null</td>
+   </tr>
+   <tr>
+    <td>2</td>
+    <td><strong>any(ClassName.class)</strong></td>
+    <td>ClassName</td>
+   </tr>
+   <tr>
+    <td>3</td>
+    <td><strong>anyInt()</strong></td>
+    <td>int</td>
+   </tr>
+   <tr>
+    <td>4</td>
+    <td><strong>anyBoolean()</strong></td>
+    <td>boolean</td>
+   </tr>
+   <tr>
+    <td>5</td>
+    <td><strong>anyDouble()</strong></td>
+    <td>double</td>
+   </tr>
+   <tr>
+    <td>6</td>
+    <td><strong>anyList()</strong></td>
+    <td>List</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Коректніше наш приклад буде виглядати так:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token class-name">Mockito</span><span class="token punctuation">.</span><span class="token function">doReturn</span><span class="token punctuation">(</span><span class="token string"><span class="text-user">"Іван"</span></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">when</span><span class="token punctuation">(</span><span class="text-red">mockList</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-yellow">get</span></span><span class="token punctuation">(</span><span class="token function"></span><span class="text-green"><span class="token function">anyInt</span><span class="token punctuation">(</span><span class="token punctuation">)</span></span><span class="token punctuation"></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</div>
+<h2>4.3 Метод doAnswer()</h2>
+<p>Ми дісталися складної поведінки віртуальних методів. Рано чи пізно настане ситуація, коли ти захочеш, щоби цей віртуальний метод мав складну поведінку. Наприклад, він повинен повертати значення залежно від параметрів, перетворювати рядок на верхній регістр.</p>
+<p>І тому є спеціальний метод – <code>doAnswer()</code>, у якому передається функція, що робить те, що потрібно:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present"><code><span class="text-red">Mockito</span>.doAnswer(<span class="text-user">функція</span>).when(<span class="text-green">об'єкт</span>).<span class="text-yellow">ім'яМетоду</span>(<span class="text-violet">параметр</span>);</code></pre>
+</div>
+<p>Давайте змусимо метод <code>get()</code>класу <code>List</code>повертати квадрат переданого йому аргументу. І напишемо таку програму:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@ExtendWith</span><span class="token punctuation">(</span><span class="token class-name">MockitoExtension</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+<span class="token keyword">class</span> <span class="token class-name">DoAnswerTest</span> <span class="token punctuation">{</span>
+<span class="text-green">    <span class="token annotation punctuation">@Mock</span></span><span class="token annotation punctuation"></span>
+<span class="text-green">    <span class="token class-name">List</span> mockList<span class="token punctuation">;</span></span><span class="token punctuation"></span>
+
+<span class="text-green">    <span class="token annotation punctuation">@Test</span></span><span class="token annotation punctuation"></span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">whenMockAnnotation</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">Mockito</span><span class="token punctuation">.</span><span class="token function">doAnswer</span><span class="token punctuation">(</span>invocation <span class="token operator">-&gt;</span> <span class="token punctuation">{</span>
+            <span class="token keyword">int</span> parameter <span class="token operator">=</span> invocation<span class="token punctuation">.</span><span class="token function">getArgument</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> parameter <span class="token operator">*</span> parameter<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">when</span><span class="token punctuation">(</span><span class="text-red">mockList</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-yellow">get</span></span><span class="token punctuation">(</span><span class="token function"></span><span class="text-violet"><span class="token function">anyInt</span><span class="token punctuation">(</span><span class="token punctuation">)</span></span><span class="token punctuation"></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token number"><span class="text-user">100</span></span><span class="token punctuation">,</span> <span class="text-red">mockList</span><span class="token punctuation">.</span><span class="token function"><span class="text-yellow">get</span></span><span class="token punctuation">(</span><span class="token number"><span class="text-violet">10</span></span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token number"><span class="text-user">25</span></span><span class="token punctuation">,</span> <span class="text-red">mockList</span><span class="token punctuation">.</span><span class="token function"><span class="text-yellow">get</span></span><span class="token punctuation">(</span><span class="token number"><span class="text-violet">5</span></span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Функцію ми задали об'єкт класу Answer.</p>
+<p></p>
+<p></p>

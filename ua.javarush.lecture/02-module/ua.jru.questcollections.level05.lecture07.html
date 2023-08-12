@@ -1,0 +1,77 @@
+<p>- Вітання! Я продовжу лекцію Еллі про Generic'і. Готовий слухати?</p>
+<p><span class="text-user">- Ага.</span></p>
+<p>- Тоді починаємо.</p>
+<p>Факт перший. У методів класу також можуть бути свої типи-параметри.</p>
+<p><span class="text-user">- Так я знаю.</span></p>
+<p>— Ні, я маю на увазі саме&nbsp; <strong><span class="text-red">свої типи-параметри:</span></strong></p>
+<div class="code-heading">
+ приклад
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword"><strong>class</strong></span> <span class="token class-name">Calculator</span>
+<span class="token punctuation">{</span>
+  <span class="token class-name">T</span> <span class="token function"><strong>add</strong></span><span class="token punctuation">(</span><span class="token class-name">T</span> a<span class="token punctuation">,</span> <span class="token class-name">T</span> b<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//сложить</span>
+  <span class="token class-name">T</span> <span class="token function"><strong>sub</strong></span><span class="token punctuation">(</span><span class="token class-name">T</span> a<span class="token punctuation">,</span> <span class="token class-name">T</span> b<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//отнять</span>
+  <span class="token class-name">T</span> <span class="token function"><strong>mul</strong></span><span class="token punctuation">(</span><span class="token class-name">T</span> a<span class="token punctuation">,</span> <span class="token class-name">T</span> b<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//умножить</span>
+  <span class="token class-name">T</span> <span class="token function"><strong>div</strong></span><span class="token punctuation">(</span><span class="token class-name">T</span> a<span class="token punctuation">,</span> <span class="token class-name">T</span> b<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//делить</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Це типи-параметри саме методу(ів). Клас параметрів не має. Можна навіть оголосити статичними методами і викликати їх без використання об'єкта.</p>
+<p><span class="text-user">- Ясно. Сенс типів-параметрів у методах такий самий, як і в класах?</span></p>
+<p>- Ага. Але є й дещо нове.</p>
+<p>Як ти вже знаєш, в описі типу можна використовувати wildcard. Тоді уяви собі ситуацію:</p>
+<div class="code-heading">
+ Приклад 1
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">doSomething</span><span class="token punctuation">(</span><span class="token class-name"></span><span class="text-user"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span> <span class="token keyword">extends</span> <span class="token class-name">MyClass</span><span class="token punctuation">&gt;</span></span></span><span class="token generics"><span class="token punctuation"></span></span> list<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">for</span><span class="token punctuation">(</span><span class="token class-name"></span><span class="text-user"><span class="token class-name">MyClass</span> object</span> <span class="token operator">:</span> list<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="text-user">object</span><span class="token punctuation">.</span><span class="token function"><strong>getState</strong></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//тут все работает отлично.</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>А ось що станеться, якщо ми захочемо додати до колекції новий елемент:</p>
+<div class="code-heading">
+ Приклад 2
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">doSomething</span><span class="token punctuation">(</span><span class="token class-name"></span><span class="text-user"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span> <span class="token keyword">extends</span> <span class="token class-name">MyClass</span><span class="token punctuation">&gt;</span></span></span><span class="token generics"><span class="token punctuation"></span></span> list<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name"><span class="text-user">MyClass</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment"><span class="text-red">//ошибка!</span></span>
+<span class="token punctuation">}</span></code></pre>
+<p><span class="text-red">Справа в тому, що в загальному випадку в метод doSomething можна передати List з типом елементів не MyClass, а будь-який із спадкоємців MyClass. А до такого списку заносити об'єкти MyClass вже не можна!</span></p>
+<p><span class="text-user">- Ага. І що ж робити?</span></p>
+<p>- Нічого. Прямо у цій ситуації – нічого не зробиш. Але це дало розробникам Java привід для роздумів. І вони вигадали нове ключове слово –&nbsp; <strong>super</strong> .</p>
+<p>Виглядає його використання практично так само:</p>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span> <span class="token keyword"><span class="text-red">super</span></span> <span class="token class-name">MyClass</span><span class="token punctuation">&gt;</span></span> list</code></pre>
+<p>Але між extends та super є суттєва різниця.</p>
+<p>«? extends T» означає, що клас має бути спадкоємцем T.</p>
+<p>«? super T» означає, що клас має бути предком T.</p>
+<p><span class="text-user">- Ух ти. Де це використовується?</span></p>
+<p>- «? super T» використовується, коли метод збирається додавати в колекцію об'єкт типу T. Тоді це може бути колекція типу T або будь-якого предка типу T.</p>
+<p><span class="text-user">- Ага. Посилання на об'єкт типу T можна присвоїти будь-якому батьківському типу для T.</span></p>
+<p>— Чесно кажучи, цей підхід використовується не дуже часто. Тим більше, що він має і зворотний бік. Приклад:</p>
+<div class="code-heading">
+ Приклади
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">doSomething</span><span class="token punctuation">(</span><span class="token class-name"></span><span class="text-user"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span> <span class="token keyword"><span class="text-red">super</span></span> <span class="token class-name">MyClass</span><span class="token punctuation">&gt;</span></span></span><span class="token generics"><span class="token punctuation"></span></span> list<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">for</span><span class="token punctuation">(</span><span class="token class-name"></span><span class="text-user"><span class="token class-name">MyClass</span> object</span> <span class="token operator">:</span> list<span class="token punctuation">)</span> <span class="token comment"><span class="text-red">//ошибка!</span></span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="text-user">object</span><span class="token punctuation">.</span><span class="token function"><strong>getState</strong></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">doSomething</span><span class="token punctuation">(</span><span class="token class-name"></span><span class="text-user"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span> <span class="token keyword"><span class="text-red">super</span></span> <span class="token class-name">MyClass</span><span class="token punctuation">&gt;</span></span></span><span class="token generics"><span class="token punctuation"></span></span> list<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name"><span class="text-user">MyClass</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//тут все работает отлично.</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Наразі не працює перший приклад.</p>
+<p>Т.к. колекція list може бути навіть List&lt;Object&gt; (Object найвищий батько MyClass), то фактично ми пишемо такий код, а так писати не можна:</p>
+<div class="code-heading">
+ Приклад 1
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name"></span><span class="dblue_text text-user"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Object</span><span class="token punctuation">&gt;</span></span></span><span class="token generics"><span class="token punctuation"></span></span> list<span class="token punctuation">;</span> 
+
+<span class="token keyword">for</span><span class="token punctuation">(</span><span class="token class-name"></span><span class="blue_text text-user"><span class="token class-name">MyClass</span> object</span> <span class="token operator">:</span> list<span class="token punctuation">)</span> <span class="token comment"><span class="red_text text-red">//ошибка!</span></span>
+<span class="token punctuation">{</span> 
+ <span class="token class-name"></span><span class="grey_text"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span></span><span class="token function"></span><span class="token punctuation">(</span><span class="blue_text text-user">object</span><span class="token punctuation">.</span><span class="token function"><b>getState</b></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+<span class="token punctuation">}</span></code></pre>
+<p><span class="text-user">- Ясно. Дякую за цікаву лекцію.</span></p>
+<p>- Будь ласка.</p>

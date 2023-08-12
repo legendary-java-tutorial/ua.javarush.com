@@ -1,0 +1,119 @@
+<h2>6.1 assert'и</h2>
+<p>Ассерти (asserts) - це <span class="text-bold">спеціальні перевірки</span> , які можна вставити в різні місця коду. Їхнє завдання визначати, що щось пішло не так. Точніше, перевіряти, що все йде як треба. Ось це "як потрібно" вони і дозволяють задати у різний спосіб.</p>
+<p>З деякими асертами ти вже стикався у коді вище. Перший – перевірка об'єктів на рівність. Якщо об'єкти не рівні - кинеться виняток і тест буде провалено.</p>
+<p>Тут <span class="text-green">важливий порядок порівняння</span> , адже JUnit у підсумковому звіті напише щось на кшталт “отримано значення 1, а очікувалося 3”. Загальний формат такої перевірки має вигляд:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token function"></span><span class="text-red"><span class="token function">assertEquals</span><span class="token punctuation">(</span></span><span class="token punctuation"></span><span class="text-neon">еталон <span class="token punctuation">,</span></span><span class="token punctuation"></span> <span class="text-green">значення</span><span class="token punctuation"><span class="text-red">)</span></span></code></pre>
+</div>
+<p>Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@Test</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> whenAssertingEquality <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">String</span> expected <span class="token operator">=</span> <span class="token string">"3.1415"</span><span class="token punctuation">;</span>
+    <span class="token class-name">String</span> actual <span class="token operator">=</span> <span class="token string">"3"</span><span class="token punctuation">;</span>
+
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span>expected<span class="token punctuation">,</span> actual<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h2>6.2 Методи assertEquals, assertTrue, assertFalse</h2>
+<p>Нижче я наведу список найпопулярніших методів - асертів. За їхніми назвами цілком можна здогадатися, як вони працюють. Але все ж таки напишу коротке пояснення:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>assertEquals</th>
+    <td>Перевіряє, що два об'єкти рівні</td>
+   </tr>
+   <tr>
+    <th>assertArrayEquals</th>
+    <td>Перевіряє, що два масиви містять рівні значення</td>
+   </tr>
+   <tr>
+    <th>assertNotNull</th>
+    <td>Перевіряє, що аргумент не дорівнює null</td>
+   </tr>
+   <tr>
+    <th>assertNull</th>
+    <td>Перевіряє, що аргумент дорівнює null</td>
+   </tr>
+   <tr>
+    <th>assertNotSame</th>
+    <td>Перевірять, що два аргументи — це не той самий об'єкт.</td>
+   </tr>
+   <tr>
+    <th>assertSame</th>
+    <td>Перевірять, що два аргументи — це один і той самий об'єкт.</td>
+   </tr>
+   <tr>
+    <th>assertTrue</th>
+    <td>Перевіряє, що аргумент дорівнює <em><span class="text-green">true</span></em></td>
+   </tr>
+   <tr>
+    <th>assertFalse</th>
+    <td>Перевіряє, що аргумент дорівнює <em><span class="text-green">false</span></em></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Деякі з цих методів видаються зайвими. Навіщо використовувати <span class="code text-orange">assertSame(a, b)</span> , якщо можна просто написати <span class="code text-orange">assertTrue(a == b)</span> ?</p>
+<p>Вся справа в тому, що <span class="code text-orange">assert</span> – це дуже розумний метод. Він робить багато чого корисного і, в тому числі, <span class="text-green">пише в балку інформацію про помилку</span> . У першому випадку він напише, що очікувався об'єкт А, а отриманий об'єкт Б. У другий випадок просто напише, що очікувалося <em><span class="text-green">true</span></em> .</p>
+<p>Коли в тебе сотні тестів, які особливо виконуються на спеціальному тестовому сервері, то наявність детальних логів може бути суперкорисною. Думаю, ти розумієш, про що я.</p>
+<p>Приклад порівняння масивів:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@Test</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">whenAssertingArraysEquality</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">char</span><span class="token punctuation">[</span><span class="token punctuation">]</span> expected <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">'J'</span><span class="token punctuation">,</span><span class="token string">'u'</span><span class="token punctuation">,</span><span class="token string">'n'</span><span class="token punctuation">,</span><span class="token string">'i'</span><span class="token punctuation">,</span><span class="token string">'t'</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token keyword">char</span><span class="token punctuation">[</span><span class="token punctuation">]</span> actual <span class="token operator">=</span> <span class="token string">"Junit"</span><span class="token punctuation">.</span><span class="token function">toCharArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">assertArrayEquals</span><span class="token punctuation">(</span>expected<span class="token punctuation">,</span> actual<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h2>6.3 Метод assertAll</h2>
+<p>Як уже говорилося вище, метод <span class="code text-orange">assert</span> не просто виконує перевірку, але й пише в балку багато інформації про порівняні об'єкти.</p>
+<p>Допустимо виконується порівняння:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Address</span> address <span class="token operator">=</span> unitUnderTest<span class="token punctuation">.</span><span class="token function">methodUnderTest</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token string">"Вашингтон"</span><span class="token punctuation">,</span> address<span class="token punctuation">.</span><span class="token function">getCity</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token string">"Oracle Parkway"</span><span class="token punctuation">,</span> address<span class="token punctuation">.</span><span class="token function">getStreet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token string">"500"</span><span class="token punctuation">,</span> address<span class="token punctuation">.</span><span class="token function">getNumber</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Але якщо один із параметрів не збігається, то перевірки інших не відбудеться. А хотілося б, щоб вони таки відбулися і їх результати записалися в балку. Але при цьому якщо хоча б одна перевірка не пройшла, то тест все-таки був провалений.</p>
+<p>Для цього є спеціальний метод - <span class="code text-orange">assertAll()</span> . Як перший аргумент він приймає коментар, який потрібно записати в балку, а далі — будь-яку кількість функцій-асертів.</p>
+<p>Ось як буде переписано наш приклад за його допомогою:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Address</span> address <span class="token operator">=</span> unitUnderTest<span class="token punctuation">.</span><span class="token function">methodUnderTest</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">assertAll</span><span class="token punctuation">(</span><span class="token string">"Складний сценарій порівняння адресаи"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-&gt;</span> <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token string">"Вашингтон"</span><span class="token punctuation">,</span> address<span class="token punctuation">.</span><span class="token function">getCity</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-&gt;</span> <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token string">"Oracle Parkway"</span><span class="token punctuation">,</span> address<span class="token punctuation">.</span><span class="token function">getStreet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-&gt;</span> <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token string">"500"</span><span class="token punctuation">,</span> address<span class="token punctuation">.</span><span class="token function">getNumber</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Тоді якщо адресаа буде неправильна, в лог буде написано щось типу:</p>
+<pre><code>	Складний сценарій порівняння адресаа (3 failures)
+	expected: &lt;Вашингтон&gt; but was: &lt;Сіетл&gt;
+    expected: &lt;Oracle Parkway&gt; but was: &lt;Main Street&gt;
+    expected: &lt;500&gt; but was: &lt;5772&gt;
+</code></pre>
+<h2>6.4 Метод assertTimeout</h2>
+<p>Пам'ятаєш інструкцію <span class="text-yellow"><span class="text-bold">@Timeout</span></span> ? Вона дозволяла контролювати час виконання всього методу. Але іноді буває корисно задати обмеження виконання певної частини коду всередині методу. Для цього можна використовувати <span class="code text-orange">assertTimeout()</span> .</p>
+<p>Як перший параметр у нього передається час, а як другий - код (функція), який повинен виконатися за вказаний час. Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@Test</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">whenAssertingTimeout</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">assertTimeout</span><span class="token punctuation">(</span>
+  	<span class="token function">ofSeconds</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  	<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-&gt;</span> <span class="token punctuation">{</span>
+    	<span class="token comment">// пауза за одну секунду</span>
+    	<span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  	<span class="token punctuation">}</span>
+	<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Клас <span class="code"><span class="text-green">Assert</span></span> має 12 варіантів методу <span class="code text-orange">assertTimeout()</span> . Якщо хочеш ознайомитися з ними докладніше, ласкаво просимо до <a href="https://junit.org/junit5/docs/5.0.1/api/org/junit/jupiter/api/Assertions.html" target="_blank">офіційної документації</a> .</p>
+<h2>6.5 Метод assertThrows</h2>
+<p>Дуже часто бувають ситуації, коли тобі потрібно переконатися, що у певній ситуації код кидає потрібний виняток: визначив помилку та кинув потрібний виняток. Це дуже поширена ситуація.</p>
+<p>На цей випадок є ще один корисний метод <span class="code text-orange">assert</span> - <span class="code text-orange">assert Throws ()</span> . Загальний формат його виклику має вигляд:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token function"></span><span class="text-red"><span class="token function">assertThrows</span><span class="token punctuation">(</span></span><span class="token punctuation"></span><span class="text-neon">виняток <span class="token punctuation">,</span></span><span class="token punctuation"></span> <span class="text-green">код</span><span class="token punctuation"><span class="text-red">)</span></span></code></pre>
+</div>
+<p>По суті він дуже схожий на метод <span class="code text-orange">assertTimeout()</span> , тільки він перевіряє, щоб зазначений код викинув потрібний виняток. Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@Test</span>
+<span class="token keyword">void</span> <span class="token function">whenAssertingException</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">Throwable</span> exception <span class="token operator">=</span> <span class="token function">assertThrows</span><span class="token punctuation">(</span>
+  	<span class="token class-name">IllegalArgumentException</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span>
+  	<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-&gt;</span> <span class="token punctuation">{</span>
+      	<span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalArgumentException</span><span class="token punctuation">(</span><span class="token string">"Exception message"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  	<span class="token punctuation">}</span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token string">"Exception message"</span><span class="token punctuation">,</span> exception<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>

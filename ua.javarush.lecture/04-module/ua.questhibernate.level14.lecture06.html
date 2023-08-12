@@ -1,0 +1,99 @@
+Налаштування кешу запитів
+<p>----------------------------------------</p>
+Навіщо потрібний кеш запитів.
+Очищення кешу.
+Ручне очищення кешу.
+<p>----------------------------------------</p>
+<h2>Навіщо потрібний кеш запитів</h2>
+
+<p>Перепишемо наш приклад із отриманням співробітників на HQL:</p>
+
+<pre class='language-java line-numbers'><code>
+Employee director1 = session.createQuery("from Employee where id = 4").uniqueResult();
+Employee director2 = session.createQuery("from Employee where id = 4").uniqueResult();
+ 
+assertTrue(director1! = director2);
+</code></pre>
+ 
+<p>Результати такого роду запитів <span class="text-red">не зберігаються</span> кешем ні першого, ні другого рівня.</p>
+
+<p>Це саме те місце, де можна використовувати <strong>кеш запитів</strong>. Він теж за замовчуванням вимкнено. Для включення потрібно додати наступний рядок до конфігураційного файлу:</p>
+ 
+<pre><code>&lt;property name="hibernate.cache.use_query_cache" value="true"/></code></pre>
+ 
+<p>Але це лише половина рішення. Кеш запитів ми включили, але нам потрібно ще й вказати, результати яких запитів ми хочемо кешувати. Це потрібно прописати у запиті Query:</p>
+ 
+<pre class='language-java line-numbers'><code>
+Query query = session.createQuery("from Employee where id = 4");
+query.setCacheable(true);
+Employee director1 = query.uniqueResult();
+</code></pre>
+ 
+<p>Кеш запитів нагадує кеш другого рівня. Але, на відміну від нього, тут ключем до даних кешу є не ідентифікатор об'єкта, а сукупність параметрів запиту. А самі дані – це ідентифікатори об'єктів, які відповідають критеріям запиту. Таким чином, цей кеш раціонально використовувати з кешем другого рівня.</p>
+ 
+<h2>Очищення кешу</h2>
+
+<p>Одне з важливих завдань при роботі з кешем — це стежити за тим, щоб об'єкти, що кешуються, змінилися, і видаляти їх з кешу (або оновлювати). Hibernate робить це дуже успішно. Іноді навіть здається, що він керується правилом “у будь-якій незрозумілій ситуації очищай кеш”.</p>
+
+<p>Допустимо, ти хочеш оновити дані користувача через HQL:</p>
+ 
+<pre class='language-java line-numbers'><code>
+Query query = session.createQuery("update Employee set name='Alex' where id = 4")
+query. executeUpdate();
+</code></pre>
+ 
+<p>Hibernate не може точно знати, що в базі змінилося, але він знає, що ти змінюєш об'єкт типу Employee. Тому після виконання цього запиту Hibernate вилучить зі свого кеша <strong>взагалі всі об'єкти</strong> типу Employee.</p>
+
+<p>Але ще цікавіше працює NativeQuery:</p>
+ 
+<pre class='language-java line-numbers'><code>
+Query nativeQuery = session.createNativeQuery("update employee set name='Alex' where id = 4")
+nativeQuery.executeUpdate();
+</code></pre>
+ 
+<p>Виконався рідний SQL-запит до бази даних. Отже, в базі даних щось змінилося — запит викликаний у методі <span class="code text-orange">executeUpdate()</span>. Тому в цьому випадку Hibernate трохи перестрахується і видалить зі свого кеша <strong>взагалі всі об'єкти <span class="text-red">всіх</span> типів</strong>.
+
+<p>Як тобі таке? Ти викликаєш безневинний запит, а Hibernate у відповідь стирає всі дані з кешу! Це, звичайно, краще, ніж якби він зберігав у себе об'єкти, які відрізняються від бази, але таке!</p>
+
+<p>Тому творці Hibernate швидко вигадали, як допомогти Hibernate у цьому випадку. Ти можеш вказати йому, який тип сутностей потрібно видалити з кешу:</p>
+ 
+<pre class='language-java line-numbers'><code>
+Query nativeQuery = session.createNativeQuery("update employee set name='Alex' where id = 4");
+nativeQuery.unwrap(org.hibernate.SQLQuery.class).addSynchronizedEntityClass(Employee.class);
+nativeQuery.executeUpdate();
+</code></pre>
+ 
+<strong>Зауваження</strong>. Нативні <strong>select</strong>-запити <strong>не скидають кеш</strong>, тільки insert, update, delete, виклики процедур тощо.
+
+<h2>Ручне очищення кешу</h2>
+
+<p>З певних причин ти можеш захотіти видалити об'єкт із кешу самостійно. Зробити це можна у різний спосіб.</p>
+
+<p><strong>Примітка</strong>. Об'єкти в кеші зберігаються групами, які називаються <strong>регіонами</strong>. За промовчанням ім'я регіону збігається з ім'ям класу. Тому якщо у тебе є об'єкти типу <strong>com.javarush.Employee</strong>, всі вони будуть збережені в групу (регіон) з ім'ям “<strong>com.javarush.employee</strong>”.</p> >
+
+<p>Якщо ти хочеш отримати доступ до кешу і щось з ним зробити, то це можна зробити за допомогою об'єкта SessionFactory та методу <span class="code text-orange">getCache()</span>:</p >
+ 
+<pre class='language-java line-numbers'><code>
+session.getSessionFactory().getCache().evictQueryRegion("com.javarush.employee”);
+</code></pre>
+ 
+<p>Якщо ти хочеш видалити дані з усіх груп (регіонів), то потрібно виконати такий запит:</p>
+ 
+<pre class='language-java line-numbers'><code>
+session.getSessionFactory().getCache().evictAllRegions();
+</code></pre>
+ 
+<p>Щоб видалити один об'єкт із кешу, потрібно передати його ім'я (тип) та id. Зробити це можна двома способами:</p>
+ 
+<pre class='language-java line-numbers'><code>
+session.getSessionFactory().getCache().evictEntityData("Employee", 4);
+ 
+session.getSessionFactory().getCache().evictEntityData(com.javarush.Employee.class, 4);
+</code></pre>
+ 
+<p>Також ти можеш перевірити, чи міститься певний об'єкт у кеші:</p>
+ 
+<pre class='language-java line-numbers'><code>
+session.getSessionFactory().getCache().containsEntity("Employee", 4);
+session.getSessionFactory().getCache().containsEntity(com.javarush.Employee.class, 4);
+</code></pre>

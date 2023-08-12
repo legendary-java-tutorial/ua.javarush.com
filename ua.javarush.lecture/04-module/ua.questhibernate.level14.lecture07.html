@@ -1,0 +1,134 @@
+Налаштування движка кешування
+<p>----------------------------------------</p>
+Налаштування кешування.
+Приклад налаштування EHCache.
+Аналіз статистики кешування.
+<p>----------------------------------------</p>
+<h2>Налаштування кешування</h2>
+
+<p>Давай повернемося до наших параметрів кешування у файлі hibernate.cfg.xml:</p>
+ 
+<pre><code>&lt;property name="hibernate.cache.provider_class" value="net.sf.ehcache.hibernate.SingletEhCacheProvider"/>
+&lt;property name="hibernate.cache.use_second_level_cache" value="true"/>
+&lt;property name="hibernate.cache.use_query_cache" value="true"/></code></pre>
+ 
+<p>Зверни увагу на перший рядок - в ньому вказано ім'я класу движка кешування. Насправді Hibernate не реалізує кешування у себе всередині, натомість він надає набір інтерфейсів, за допомогою яких можна реалізувати свій власний кешування.</p>
+
+<p>З популярних реалізацій можна виділити такі:</p>
+
+<ul>
+<li>EHCache</li>
+<li>OSCache</li>
+<li>SwarmCache</li>
+<li>JBoss TreeCache</li>
+</ul>
+
+<h4>EHCache</h4>
+
+<p>Він може кешуватися в пам'яті або на диску, кластерному кешуванні, а також підтримує додатковий кеш результатів запиту Hibernate.</p>
+
+<h4>OSCache</h4>
+
+<p>Підтримує кешування в пам'ять та на диск в одній JVM з багатим набором політик закінчення терміну дії та підтримкою кешу запитів.</p>
+
+<h4>SwarmCache</h4>
+
+<p>Кластерний кеш на основі JGroups. Він використовує кластеризоване анулювання, але не підтримує кеш запитів Hibernate.</p>
+
+<h4>JBoss Cache</h4>
+
+<p>Повністю транзакційний кластерний кеш, що реплікується, також заснований на багатоадресній бібліотеці JGroups. Він підтримує реплікацію або анулювання, синхронний або асинхронний зв'язок, а також оптимістичне та песимістичне блокування. Кеш запитів Hibernate підтримується.</p>
+
+<p>Ці двигуни підтримують не всі стратегії паралельного доступу. Реальна ситуація описана в таблиці нижче: </p>
+
+<table>
+<tbody>
+<tr>
+<th>Strategy/Provider</th>
+<th>Read-only</th>
+<th>Nonstrict read-write</th>
+<th>Read-write</th>
+<th>Transactional</th>
+</tr>
+<tr>
+<th>EHCache</th>
+<td>X</td>
+<td>X</td>
+<td>X</td>
+<td></td>
+</tr>
+<tr>
+<th>OSCache</th>
+<td>X</td>
+<td>X</td>
+<td>X
+<td></td>
+</tr></td>
+<tr>
+<th>SwarmCache</th>
+<td>X</td>
+<td>X</td>
+ <td></td>
+ <td></td>
+</tr>
+<tr>
+<th>JBoss Cache</th>
+<td>X</td>
+<td></td>
+<td></td>
+<td>X</td>
+</tr>
+</tbody>
+</table>
+ 
+<h2>Приклад налаштування EHCache</h2>
+
+<p>Рух <strong>EHCache</strong> має власний конфігураційний файл, який називається ehcache.xml. Зразковий зміст такого файлу:</p>
+
+<pre class='language-java line-numbers'><code>
+&lt;diskStore path="java.io.tmpdir"/>
+ 
+&lt;defaultCache
+    maxElementsInMemory = "1000"
+    eternal = "false"
+    timeToIdleSeconds = "120"
+    timeToLiveSeconds = "120"
+    overflowToDisk = "true"
+/>
+ 
+&lt;cache name = "Employee"
+    maxElementsInMemory = "500"
+    eternal = "true"
+    timeToIdleSeconds = "0"
+    timeToLiveSeconds = "0"
+    overflowToDisk = "false"
+/>
+</code></pre>
+
+<p>Тут ти можеш налаштувати параметри кешування як загалом, так і для кожної сутності окремо. Докладніше читай у <a href="https://www.ehcache.org/documentation/3.10/getting-started.html" target="_blank">офіційної документації</a>.</p>
+
+<h2>Аналіз статистики кешування</h2>
+
+<p>Так само у тебе може виникнути необхідність перевірити, наскільки добре налаштований механізм кешування. Спеціально для цього Hibernate надає спеціальний об'єкт Statistics.</p>
+
+<p>Приклад:</p>
+ 
+<pre class='language-java line-numbers'><code>
+Statistics statistics = session.getSessionFactory().getStatistics();
+CacheRegionStatistics cacheStatistics = statistics.getDomainRegionStatistics("com.javarush.employee");
+ 
+long hitCount = cacheStatistics.getHitCount();
+long missCount = cacheStatistics.getMissCount();
+double hitRatio = (double) hitCount/(hitCount + missCount);
+</code></pre>
+ 
+<p>Детально ми це розбирати не будемо, тому що мине ще багато років, перш ніж тобі не вистачить стандартних рішень кешування і знадобиться покращити їх вручну. До речі, можливо, саме із схожого випадку було вилучено цей коментар:</p>
+ 
+<pre class='language-java line-numbers'><code>
+// Дорогий програміст:
+// Коли ти закінчиш оптимізувати цю підпрограму
+// і зрозумієш, наскільки великою помилкою було робити це,
+// будь ласка, збільши лічильник внизу як попередження
+// для наступного хлопця:
+// кількість_годин_витрачених_тут = 42
+</code></pre>

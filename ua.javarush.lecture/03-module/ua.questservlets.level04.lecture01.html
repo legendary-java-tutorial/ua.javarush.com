@@ -1,0 +1,65 @@
+<h2>2.1 Анотація @Mock</h2>
+<p>Є два способи роботи з мок-об'єктами в Mockito. Перший – це <strong>створити повністю віртуальний об'єкт</strong> , другий – це <strong>обернути існуючий об'єкт</strong> у якусь обгортку. Почнемо з першого.</p>
+<p>Щоб створити повністю віртуальний об'єкт, потрібно написати код:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present "><code><span class="text-user">Ім'яКласа</span> <span class="text-green">ім'яЗмінної</span> = <span class="text-red">Mockito</span>.<span class="text-orange">mock</span>(<span class="text-user">Ім'яКласа</span>.class);</code></pre>
+</div>
+<p>Давайте для прикладу створимо мок класу ArrayList:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@ExtendWith</span><span class="token punctuation">(</span><span class="token class-name">MockitoExtension</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+<span class="token keyword">class</span> <span class="token class-name">MockTest</span> <span class="token punctuation">{</span>
+<span class="text-green">    <span class="token annotation punctuation">@Test</span></span><span class="token annotation punctuation"></span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">whenNotUseMockAnnotation_thenCorrect</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="text-text">        <span class="token class-name">List</span></span><span class="token class-name"></span><span class="text-green"> mockList</span> <span class="token operator">=</span> <span class="token class-name"><span class="text-red">Mockito</span></span><span class="token punctuation">.</span><span class="token function"><span class="text-orange">mock</span></span><span class="token punctuation">(</span><span class="token class-name"><span class="text-user">ArrayList</span></span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//ці методи нічого робити – це заглушки</span>
+<span class="text-green">        mockList</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"one"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="text-green">        mockList</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"two"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>У цьому прикладі ми створюємо фейковий об'єкт типу ArrayList і зберігаємо посилання на нього змінну mockList. Методи цього об'єкта нічого не роблять.</p>
+<p>До речі, цей код можна записати ще коротше, тому що для цього є спеціальна інструкція <code>@Mock</code>.</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@ExtendWith</span><span class="token punctuation">(</span><span class="token class-name">MockitoExtension</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+<span class="token keyword">class</span> <span class="token class-name">MockTest</span> <span class="token punctuation">{</span>
+<span class="text-green">    <span class="token annotation punctuation">@Mock</span></span><span class="token annotation punctuation"></span>
+<span class="text-red">    <span class="token class-name">List</span> mockList<span class="token punctuation">;</span></span><span class="token punctuation"></span>
+
+<span class="text-green">    <span class="token annotation punctuation">@Test</span></span><span class="token annotation punctuation"></span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">whenNotUseMockAnnotation_thenCorrect</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">//ці методи нічого робити – це заглушки</span>
+<span class="text-red">        mockList</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"one"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="text-red">        mockList</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"two"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>У другому випадку <code><span class="text-yellow">MockitoExtension</span></code>сам проаналізує код класу та створить потрібні заглушки. Викликати метод <code>Mockito.mock()</code>не потрібно. Одна анотація та віртуальний об'єкт готовий. Краса.</p>
+<h2>2.2 Анотація @Spy</h2>
+<p>Другий важливий тип об'єктів у Mockito – це обгортки над наявними об'єктами. Вони дозволяють з одного боку користуватися вже існуючими класами, а з іншого – перехоплювати звернення до всіх методів та змінних таких об'єктів: підкоригувати їхню роботу, де це потрібно. Використовуються також часто, як і Mock-об'єкти.</p>
+<p>Щоб створити обгортку над об'єктом, потрібно написати код:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present "><code><span class="text-user">Ім'яКласа</span> <span class="text-green">ім'яЗмінної</span> = <span class="text-red">Mockito</span>.<span class="text-orange">spy</span>(<span class="text-user">об'єкт</span>);</code></pre>
+</div>
+<p>Приклад з обгорткою навколо класу ArrayList:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@ExtendWith</span><span class="token punctuation">(</span><span class="token class-name">MockitoExtension</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+<span class="token keyword">class</span> <span class="token class-name">SpyTest</span> <span class="token punctuation">{</span>
+<span class="text-green">    <span class="token annotation punctuation">@Test</span></span><span class="token annotation punctuation"></span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">whenMockAnnotation</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="text-text">        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> <span class="text-green">mockList</span> <span class="token operator">=</span> <span class="token class-name"><span class="text-red">Mockito</span></span><span class="token punctuation">.</span><span class="token function"><span class="text-orange">spy</span></span><span class="token punctuation">(</span><span class="token keyword"></span><span class="text-user"><span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span></span><span class="token punctuation"></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// Ці методи працюватимуть!</span>
+<span class="text-green">        mockList</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"one"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="text-green">        mockList</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"two"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</span></code></pre>
+<p>У найпростішому варіанті звернення до <span class="text-green">об'єкта-обертке просто перенаправляє виклики до оригінального об'єкта, посилання на який він зберігає у себе всередині</span> . Все працюватиме, як і з оригінальним об'єктом.</p>
+<p>Створити обгортку так само можна за допомогою інструкції – <code>@Spy</code>.</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@ExtendWith</span><span class="token punctuation">(</span><span class="token class-name">MockitoExtension</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+<span class="token keyword">class</span> <span class="token class-name">SpyTest</span> <span class="token punctuation">{</span>
+<span class="text-green">    <span class="token annotation punctuation">@Spy</span></span><span class="token annotation punctuation"></span>
+<span class="text-red">    <span class="token class-name">List</span> mockList <span class="token operator">=</span></span><span class="token operator"></span><span class="text-user"> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+
+<span class="text-green">    <span class="token annotation punctuation">@Test</span></span><span class="token annotation punctuation"></span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">whenMockAnnotation</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// Ці методи працюватимуть!</span>
+<span class="text-red">        mockList</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"one"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="text-red">        mockList</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"two"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Ці два приклади коду еквіваленти.</p>

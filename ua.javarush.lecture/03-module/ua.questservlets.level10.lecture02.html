@@ -1,0 +1,68 @@
+<h2>3.1 BodyPublishers</h2>
+<p>Я сподіваюся, ви не забули, що крім <strong>GET-запитів</strong> є ще <strong>PUT</strong> і <strong>POST-запити</strong> , коли до запиту потрібно ще додати <code>request body</code>, тобто тіло запиту.</p>
+<p>Для цього клас <code>HttpRequest</code>має спеціальний внутрішній клас <code>BodyPublisher</code>. Хоча технічно це інтерфейс, який має кілька реалізацій, про які ми поговоримо нижче</p>
+<p>І почнемо ми з найпростішою – відсутність тіла запиту. Так, буває так.</p>
+<pre class="line-numbers"><code>
+HttpRequest request = HttpRequest.newBuilder()
+   .uri(new URI(<span class="text-green">"https://codegym.cc"</span>))
+   .POST(<span class="text-red">HttpRequest.BodyPublishers.</span><span class="text-orange">noBody()</span>)
+   .build();
+</code></pre>
+<p>Просто та красиво.</p>
+<h2>3.2 ofString()</h2>
+<p>Другий найпоширеніший варіант – це передати якийсь рядок як request body. Робиться це дуже просто:</p>
+<pre class="line-numbers"><code>
+HttpRequest request = HttpRequest.newBuilder()
+   .uri(new URI(<span class="text-green">"https://codegym.cc"</span>))
+   .headers("Content-Type", <span class="text-yellow">"text/plain;charset=UTF-8"</span>)
+   .POST(<span class="text-red">HttpRequest.BodyPublishers.</span><span class="text-orange">ofString(</span><span class="text-green">"Вітання"</span><span class="text-orange">)</span>)
+   .build();
+</code></pre>
+<p>До речі, можна задати і кодування рядка, що передається. Буває дуже корисно, якщо http-сервер, до якого надсилається запит, не працює на UTF8.</p>
+<pre class="line-numbers"><code>
+HttpRequest request = HttpRequest.newBuilder()
+   .uri(new URI("https://codegym.cc"))
+   .POST(<span class="text-red">HttpRequest.BodyPublishers.</span><span class="text-orange">ofString(</span><span class="text-green">"Вітання"</span>, <span class="text-user">Charset. US-ASCII</span>)<span class="text-orange">)</span>)
+   .build();
+</code></pre>
+<h2>3.3 ofFile()</h2>
+<p>Ну і нарешті, ти можеш захотіти додати до <strong>POST-запиту</strong> файл. Саме таким чином, зазвичай, твої аватарки і заливаються на сервер. Для цього необхідно викликати спосіб <code>ofFile()</code>, куди передати <code>Path</code>локального файлу:</p>
+<pre class="line-numbers"><code>
+Path avatar = Path.of("c://avatar.jpeg");
+ 
+<span class="text-user">HttpRequest request = HttpRequest.newBuilder()</span>
+   .uri(new URI(<span class="text-green">"https://codegym.cc"</span>))
+   .headers("Content-Type", <span class="text-yellow">"image/jpeg"</span>)
+   .POST(<span class="text-red">HttpRequest.BodyPublishers.</span><span class="text-orange">ofFile(</span><span class="text-user">avatar</span><span class="text-orange">)</span>)
+   .build();
+</code></pre>
+<h2>3.4 ofByteArray()</h2>
+<p>Ще один найпоширеніший сценарій – відправити на сервер набір байт. Наприклад, ти серіалізував якийсь об'єкт у вигляді набору байт, щось зашифрував, або просто хочеш переслати буфер даних. Для цього знадобиться метод <code>.ofByteArray()</code>.</p>
+<p>Як параметр цей метод приймає масив байт. Приклад:</p>
+<pre class="line-numbers"><code>
+byte[] <span class="text-viola">data</span> = <span class="text-green">"Моє секретне повідомлення"</span>.getBytes();
+byte[] <span class="text-user">dataEncripted</span> = SuperEncriptor.encript(<span class="text-viola">data</span>);
+ 
+HttpRequest request = HttpRequest.newBuilder()
+   .uri(new URI(<span class="text-green">"https://codegym.cc"</span>))
+   .headers("Content-Type", <span class="text-yellow">"application/octet-stream"</span>)
+   .POST(<span class="text-red">HttpRequest.BodyPublishers.</span><span class="text-orange">ofByteArray(</span><span class="text-user">dataEncripted</span><span class="text-orange">)</span>)
+   .build();
+</code></pre>
+<h2>3.5 ofInputStream()</h2>
+<p>Зрештою останній, але не менш цікавий сценарій – це прикріплення <code>InputStream</code>до <strong>POST-запиту</strong> .</p>
+<p>І тому є спеціальна функція – <code>ofInputStream()</code>. І вона дуже хитра. Вона дозволяє організувати пересилання даних із потоку в потік, прикріпити до <strong>POS-запиту</strong> потік даних, який ще навіть не відкритий</p>
+<p>У функцію <code>ofInputStream()</code>потрібно передати функцію, яка як результат поверне потік <code>InputStream</code>.</p>
+<p>Приклад:</p>
+<pre class="line-numbers"><code>
+byte[] <span class="text-viola">data</span> = <span class="text-green">"Моє секретне повідомлення"</span>.getBytes();
+//загортаємо масив байт у потік.
+InputStream <span class="text-user">is</span> = new ByteArrayInputStream(<span class="text-viola">data</span>);
+ 
+HttpRequest request = HttpRequest.newBuilder()
+   .uri(new URI(<span class="text-green">"https://codegym.cc"</span>))
+   .headers("Content-Type", "<span class="text-yellow">application/octet-stream"</span>)
+   .POST(<span class="text-red">HttpRequest.BodyPublishers.</span><span class="text-orange">ofInputStream (</span><span class="text-user">() -&gt; is;</span><span class="text-orange">)</span>)
+   .build();
+</code></pre>
+<p>Я не став городити город, але думаю, принцип ти зрозумів. Для чого так зробабо? Майже завжди ти можеш скористатися методом <code>ofByteArray()</code>. Але якщо хочеш надіслати дані асинхронно або потрібно реалізувати якийсь особливо складний сценарій, то можеш скористатися цим методом.</p>

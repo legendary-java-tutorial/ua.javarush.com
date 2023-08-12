@@ -1,0 +1,332 @@
+<p>- Аміго, ти любиш китів?</p>
+<p><span class="text-user">- Кітов? Ні не чув.</span></p>
+<p>— Цей, як корова, тільки й плаває. До речі, кити походять від корів. Ну, чи мали спільного з ними предка. Не так важливо.</p><a href="https://cdn.javarush.com/images/article/2b5bd5fe-f3b4-4380-907e-4d377084ac19/original.jpeg" target="_blank"><img data-id="2b5bd5fe-f3b4-4380-907e-4d377084ac19" data-max-width="850" alt="Поліморфізм та перевизначення - 1" src="https://cdn.javarush.com/images/article/2b5bd5fe-f3b4-4380-907e-4d377084ac19/800.jpeg" style="width: 850px;"></a>
+<p>- Так ось. Хочу розповісти тобі про ще один дуже потужний інструмент ОВП – це <strong><span class="text-red">поліморфізм</span></strong> . Він має особливості.</p>
+<h3>1) Перевизначення методу.</h3>
+<p>Уяви, що ти для гри написав клас «Корова». У ньому є багато полів та методів. Об'єкти цього класу можуть робити різні речі: йти, їсти, спати. Ще корови дзвонять у дзвіночок, коли ходять. Допустимо, ти реалізував у класі все до дрібниць.</p><a href="https://cdn.javarush.com/images/article/ff910c8e-eff0-40db-af8b-e67da08b1713/original.jpeg" target="_blank"><img data-id="ff910c8e-eff0-40db-af8b-e67da08b1713" data-max-width="1024" alt="Поліморфізм та перевизначення - 2" src="https://cdn.javarush.com/images/article/ff910c8e-eff0-40db-af8b-e67da08b1713/1024.jpeg" style="width: 1024px;"></a>
+<p>А тут приходить замовник проекту та каже, що хоче випустити новий рівень гри, де всі дії відбуваються у морі, а головним героєм буде кит.</p>
+<p>Ти почав проектувати клас «Кіт» і зрозумів, що він лише трохи відрізняється від класу «Корова». Логіка роботи обох класів дуже схожа, і ти вирішив використати спадкування.</p>
+<p>Клас «Корова» ідеально підходить на роль класу-батька, там є всі необхідні змінні та методи. Достатньо лише додати киту можливість плавати. Але є проблема: у твого кита є ноги, роги та дзвіночок. Адже ця функціональність реалізована усередині класу «Корова». Що тут можна зробити?</p><a href="https://cdn.javarush.com/images/article/409e89ba-fbca-4e8b-842e-bef26b21b0a0/original.jpeg" target="_blank"><img data-id="409e89ba-fbca-4e8b-842e-bef26b21b0a0" data-max-width="850" alt="Поліморфізм та перевизначення - 3" src="https://cdn.javarush.com/images/article/409e89ba-fbca-4e8b-842e-bef26b21b0a0/800.jpeg" style="width: 850px;"></a>
+<p>До нас на допомогу приходить перевизначення (заміна) методів. Якщо ми успадкували метод, який робить не зовсім те, що нам потрібно в нашому новому класі, ми можемо замінити цей метод на інший.</p><a href="https://cdn.javarush.com/images/article/7eb5ef82-34a9-49df-bba4-7026ff207dcc/original.jpeg" target="_blank"><img data-id="7eb5ef82-34a9-49df-bba4-7026ff207dcc" data-max-width="850" alt="Поліморфізм та перевизначення - 4" src="https://cdn.javarush.com/images/article/7eb5ef82-34a9-49df-bba4-7026ff207dcc/800.jpeg" style="width: 850px;"></a>
+<p>Як це робиться? <span class="text-red">У нашому класі-нащадку ми оголошуємо <strong>такий самий метод, як і метод класу батька, який хочемо змінити. </strong></span>Пишемо в ньому новий код. <span class="text-green">І все - начебто старого методу в класі-батьку і не було.</span></p>
+<p>Ось як це працює:</p>
+<div class="table-container">
+ <table class="table_example">
+  <tbody>
+   <tr>
+    <th width="50%">Код</th>
+    <th width="50%">Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Cow</span> <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printColor</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Я - белая"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Я - корова"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">class</span> <span class="token class-name">Whale</span> <span class="token keyword">extends</span> <span class="token class-name">Cow</span> <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Я - кит"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Тут визначено два класи&nbsp; <code>Cow</code>&nbsp;та&nbsp; <code>Whale</code>.&nbsp;<code>Whale</code>успадкований від&nbsp; <code>Cow</code>.
+     <p></p><br><br><br><br><br><br><br>
+     <p>У класі&nbsp; <code>Whale</code>&nbsp;перевизначено метод&nbsp;<code>printName();</code></p></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token class-name">Cow</span> cow <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Cow</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  cow<span class="token punctuation">.</span><span class="token function">printName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Цей код виведе на екран напис « <span class="text-green">Я – корова</span> »</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token class-name">Whale</span> whale <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Whale</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  whale<span class="token punctuation">.</span><span class="token function">printName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Цей код виведе на екран « <span class="text-green">Я – кит</span> »</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Після успадкування класу <code>Cow</code>та перевизначення методу <code>printName</code>, клас <code>Whale</code>фактично містить такі дані та методи:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th width="50%">Код</th>
+    <th width="50%">Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Whale</span> <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printColor</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Я - белая"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Я - кит"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Ні про який старий метод ми й не знаємо.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">- Чесно кажучи, очікувано.</span></p>
+<h3>2) Але це ще все.</h3>
+<p>— Припустимо, у класі&nbsp; <code>Cow</code>&nbsp;є метод&nbsp; <code>printAll</code>, який викликає два інші методи, тоді код працюватиме так:</p>
+<p>На екран буде виведено напис Я – біла Я – кит</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th width="50%">Код</th>
+    <th width="50%">Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Cow</span> <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">printColor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">printName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printColor</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Я - белая"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Я - корова"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">class</span> <span class="token class-name">Whale</span> <span class="token keyword">extends</span> <span class="token class-name">Cow</span> <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Я - кит"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token class-name">Whale</span> whale <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Whale</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  whale<span class="token punctuation">.</span><span class="token function">printAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>На екран буде виведено напис <br><span class="green_text text-green">Я – біла </span><br><span class="green_text text-green">Я – кит</span></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Зверніть увагу, коли викликаються метод printAll() написаний у класі Cow,&nbsp; <span class="text-green">об'єкт типу Whale, то буде використаний метод printName класу Whale</span> , а не Cow.</p>
+<p><span class="text-red">Головне, не в якому класі написаний метод, а який тип (клас) об'єкта, який цей метод викликаний.</span></p>
+<p><span class="text-user">- Ясно.</span></p>
+<p><span class="text-red">— Наслідувати та перевизначати можна лише нестатичні методи. Статичні методи не успадковуються і, отже, не перевизначаються.</span></p>
+<p>Ось як виглядає клас Whale після застосування успадкування та перевизначення методів:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th width="50%">Код</th>
+    <th width="50%">Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Whale</span> <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">printColor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function"><span class="text-red">printName</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printColor</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Я - белая"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function"><span class="text-red">printName</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Я - кит"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Ось як виглядає клас Whale, після застосування успадкування та перевизначення методу. Ні про який старий метод&nbsp; <code>printName</code>&nbsp;ми й не знаємо.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<h3>3) Приведення типів.</h3>
+<p>Тут є ще цікавіший момент.&nbsp;<span class="text-green">Т.к. Клас при успадкування отримує всі методи та дані класу батька, то об'єкт цього класу дозволяється зберігати (привласнювати) у змінні класу батька</span> &nbsp;(і батька батька, і т.д., аж до Object). Приклад:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th width="50%">Код</th>
+    <th width="50%">Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token class-name">Whale</span> whale <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Whale</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  whale<span class="token punctuation">.</span><span class="token function"><span class="text-green">printColor</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>На екран буде виведено напис <br><span class="green_text text-green">Я – білий</span></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token class-name"></span><span class="text-red"><span class="token class-name">Cow</span> cow</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Whale</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="text-red">cow</span><span class="token punctuation">.</span><span class="token function"><span class="text-green">printColor</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>На екран буде виведено напис <br><span class="green_text text-green">Я – білий</span></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token class-name"></span><span class="text-corporate"><span class="token class-name">Object</span> o <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Whale</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>o<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>На екрані буде виведено напис <br><span class="green_text text-green">Whale@da435a</span><br>
+      Метод toString() успадкований від класу Object.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">- Дуже цікаво. А навіщо це знадобиться?</span></p>
+<p>— Це цінна властивість. Згодом ти зрозумієш, що дуже, дуже цінне.</p>
+<h3>4) Виклик методу об'єкта (динамічна диспетчеризація методів).</h3>
+<p>Ось як це виглядає:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th width="50%">Код</th>
+    <th width="50%">Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token class-name">Whale</span> whale <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Whale</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  whale<span class="token punctuation">.</span><span class="token function"><span class="text-green">printName</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>На екран буде виведено напис <br>
+      Я – кит.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token class-name"></span><span class="text-red"><span class="token class-name">Cow</span> cow</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Whale</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="text-red">cow</span><span class="token punctuation">.</span><span class="token function"><span class="text-green">printName</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>На екран буде виведено напис <br><span class="text-red">Я – кит.</span></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Зверніть увагу, що те, який саме метод printName викликається, від класу Cow чи Whale,&nbsp; <span class="text-red">впливає не тип змінної, а тип – об'єкта, який вона посилається.</span></p>
+<p><span class="text-green">У змінній типу Cow збережено посилання на об'єкт типу Whale, і буде викликано метод printName, описаний у класі Whale.</span></p>
+<p><span class="text-user">- Це не просто для розуміння.</span></p>
+<p>- Так, це не дуже очевидно. Запам'ятай головне правило:</p>
+<p><span class="text-red">Набір методів, які можна викликати у змінної визначається типом змінної. А який саме метод/яка реалізація викликається, визначається типом/класом об'єкта, посилання на який зберігає змінна.</span></p>
+<p><span class="text-user">- Спробую.</span></p>
+<p>— Ти постійно стикатимешся з цим, тож скоро зрозумієш і більше ніколи не забудеш.</p>
+<h3>5) Розширення та звуження типів.</h3>
+<p><span class="text-corporate">Для типів посилань, тобто. класів, приведення типів працює не так, як для примітивних типів. Хоча у посилальних типів теж є розширення та звуження типу. Приклад:</span></p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th width="50%">Розширення типу</th>
+    <th width="50%">Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">Cow</span> <span class="text-viola">cow</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Whale</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td><span class="text-red">Класичне розширення типу. </span>&nbsp;Тепер кита узагальнабо (розширабо) до корови, але об'єкт типу Whale може викликати лише методи, описані у класі Cow.
+     <p></p>
+     <p>Компілятор дозволить викликати&nbsp; <span class="text-viola">у змінної cow</span> тільки ті методи, які є в її типу класу Cow.</p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th width="50%">Звуження типу</th>
+    <th width="50%">Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Cow</span> <span class="text-viola">cow</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Whale</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>cow <span class="token keyword"><span class="text-corporate">instanceof</span></span> <span class="token class-name">Whale</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token class-name">Whale</span> whale <span class="token operator">=</span> <span class="token punctuation"></span><span class="text-red"><span class="token punctuation">(</span><span class="token class-name">Whale</span><span class="token punctuation">)</span></span><span class="token punctuation"></span> cow<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td><span class="text-green">Класичне звуження типу</span> &nbsp;із перевіркою. Змінна cow типу Cow зберігає посилання на об'єкт класу Whale. <br><span class="text-corporate">Ми перевіряємо, що це так і є</span> , а потім виконуємо операцію перетворення (звуження) типу. Або як її ще називають – downcast.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">Cow</span> <span class="text-viola">cow</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Cow</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Whale</span> whale <span class="token operator">=</span> <span class="token punctuation"></span><span class="text-red"><span class="token punctuation">(</span><span class="token class-name">Whale</span><span class="token punctuation">)</span></span><span class="token punctuation"></span> cow<span class="token punctuation">;</span> <span class="token comment">//exception</span></code></pre></td>
+    <td>Посилання звуження типу можна провести і без перевірки типу об'єкта. <br>
+      При цьому якщо в змінній&nbsp; <span class="text-viola">cow</span> &nbsp;зберігався об'єкт не класу Whale, буде згенеровано виняток - InvalidClassCastException.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<h3>6) А тепер ще на закуску. Виклик оригінального методу</h3>
+<p>Іноді тобі хочеться не замінити успадкований метод своїм при перевизначенні методу, а лише трохи доповнити його.</p>
+<p>У цьому випадку дуже хочеться виконати в новому методі свій код і викликати той самий метод, але базового класу. І така можливість у Java є. Робиться це так:&nbsp; <code>super.method()</code>.</p>
+<p>Приклади:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th width="50%">Код</th>
+    <th width="50%">Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name"><span class="text-corporate">Cow</span></span> <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function"><span class="text-user">printAll</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">printColor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function"><span class="text-red">printName</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printColor</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Я – белый"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function"><span class="text-red">printName</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Я – корова"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">class</span> <span class="token class-name"><span class="text-viola">Whale</span></span> <span class="token keyword">extends</span> <span class="token class-name">Cow</span> <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function"><span class="text-red">printName</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"Это неправда: "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword"></span><span class="text-red"><span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">printName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Я – кит"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span><span class="token punctuation">{</span>
+  <span class="token class-name"><span class="text-viola">Whale</span></span> whale <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-viola">Whale</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  whale<span class="token punctuation">.</span><span class="token function"><span class="text-user">printAll</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>На екран буде виведено напис <br><span class="text-green">Я – білий </span><br><span class="text-green">Це неправда: Я – корова </span><br><span class="text-green">Я – кит</span></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">- Гм. Нічого собі лекція. Мої робо-вуха мало не розплавабося.</span></p>
+<p>— Так, це не простий матеріал, він один із найскладніших. Професор обіцяв підкинути посилання на матеріали інших авторів, щоб ти, якщо все-таки щось не зрозумієш, міг усунути цю прогалину.</p>

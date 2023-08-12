@@ -1,0 +1,61 @@
+<h2>CopyOnWriteArrayList</h2>
+<p>Операції <span class="text-viola">add</span> , <span class="text-viola">set</span> , <span class="text-viola">remove</span> у цій колекції призводять до створення нової копії внутрішнього масиву. Це гарантує те, що ми не зловимо <span class="text-red"><span class="text-bold">ConcurrentModificationException</span></span> .</p>
+<p>Не забувай лише про те, що при копіюванні масиву копіюються лише посилання на об'єкти, у тому числі доступ до полів елементів не thread-safe. Такі колекції краще використовувати у випадках з мінімальною кількістю write операцій.</p><img data-max-width="512" data-id="dd30e3f5-509c-479f-acb2-47f72f63b032" alt="" src="https://cdn.javarush.com/images/article/dd30e3f5-509c-479f-acb2-47f72f63b032/512.jpeg" style="width: 512px;">
+<p><span class="code"><span class="text-green">CopyOnWriteArrayList&lt;E&gt;</span></span> - потокобезпечний аналог<span class="code"><span class="text-green"> ArrayList</span></span> , реалізований на основі CopyOnWrite алгоритмів. Додаткові методи та конструктор описані внизу:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td><span class="code text-orange">CopyOnWriteArrayList(E[] toCopyIn)</span></td>
+    <td>Конструктор, який приймає на вхід масив.</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">int indexOf(E e, int index)</span></td>
+    <td>Повертає індекс першого знайденого елемента, починаючи пошук із заданого індексу.</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">int lastIndexOf(E e, int index)</span></td>
+    <td>Повертає індекс першого знайденого елемента при зворотному пошуку, починаючи із заданого індексу.</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">boolean addIfAbsent(E e)</span></td>
+    <td>Додати елемент, якщо його немає у колекції. Для порівняння елементів використовується метод <span class="code text-orange">equals</span> .</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">int addAllAbsent(Collection&lt;? extends E&gt; c)</span></td>
+    <td>Додати елементи, якщо їх немає в колекції. Повертає кількість доданих елементів.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<h2>Інтерфейс ConcurrentMap</h2>
+<p>Покращені реалізації <span class="code"><span class="text-green">HashMap</span></span> та <span class="code"><span class="text-green">TreeMap</span></span> з підтримкою багатопоточності та масштабованості.</p><img data-max-width="1024" data-id="b93ad73c-488f-4c46-91c8-9a76c7337e1a" alt="" src="https://cdn.javarush.com/images/article/b93ad73c-488f-4c46-91c8-9a76c7337e1a/1024.jpeg" style="width: 1024px;">
+<p><span class="text-neon"><span class="text-bold"><em>ConcurrentMap&lt;K, V&gt;</em></span></span> - інтерфейс, що розширює<span class="code"><span class="text-green"> Map</span></span> додатковими атомарними операціями.</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td><span class="code text-orange">V putIfAbsent(K key, V value)</span></td>
+    <td>Додає нову пару key-value тільки в тому випадку, якщо ключа немає колекції. Повертає попереднє значення заданого ключа.</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">boolean remove(Object key, Object value)</span></td>
+    <td>Видаляє key-value пару тільки якщо заданому ключу відповідає задане значення Map. Повертає true, якщо елемент успішно видалено.</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">boolean replace(K key, V oldValue, V newValue)</span></td>
+    <td>Замінює старе значення на нове за ключом, лише якщо старе значення відповідає заданому значенню в Map. Повертає true, якщо значення замінено на нове.</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">V replace(K key, V value)</span></td>
+    <td>Замінює старе значення на нове за ключом, тільки якщо ключ асоційований з будь-яким значенням. Повертає попереднє значення заданого ключа.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-neon"><span class="text-bold"><em>ConcurrentHashMap&lt;K, V&gt;</em></span></span> - тут дані представлені у вигляді сегментів, які розбиті по hash'ам ключів. За підсумком, якщо вам потрібен доступ, то тягнеться сегмент, а не об'єкт. Ітератори не кидають<span class="text-red"><span class="text-bold"> ConcurrentModificationException</span></span> і подають дані на певний відрізок часу.</p>
+<h2>Реалізації ConcurrentHashMap</h2>
+<p><span class="text-neon"><span class="text-bold"><em>ConcurrentHashMap &lt;K, V&gt;</em></span></span> - тут дані представлені у вигляді сегментів, розбитих по hash'ам ключів. В результаті, для доступу до даних лине по сегментах, а не по одному об'єкту. На додаток ітератори представляють дані на певний час і не кидають<span class="text-red"><span class="text-bold"> ConcurrentModificationException</span></span> .</p>
+<p><span class="text-neon"><span class="text-bold"><em>ConcurrentNavigableMap&lt;K,V&gt;</em></span></span> — розширює інтерфейс<span class="text-neon"><span class="text-bold"><em> NavigableMap</em></span></span> та повертає<span class="text-neon"><span class="text-bold"><em> ConcurrentNavigableMap</em></span></span> . Всі ітератори безпечні для використання і не кидають<span class="text-red"><span class="text-bold"> ConcurrentModificationException</span></span> .</p>
+<p><span class="text-neon"><span class="text-bold"><em>ConcurrentSkipListMap &lt;K, V&gt;</em></span></span> є аналогом<span class="text-neon"><span class="text-bold"><em> TreeMap</em></span></span> для багатопоточності. Дані сортуються за ключом і гарантується усереднена продуктивність log(N) для<span class="text-viola">containsKey</span>,<span class="text-viola">get</span>,<span class="text-viola">put</span>,<span class="text-viola">remove</span>та інших схожих операцій.</p>
+<p><span class="text-neon"><span class="text-bold"><em>ConcurrentSkipListSet&lt;E&gt;</em></span></span> - імплементація інтерфейсу<span class="text-neon"><span class="text-bold"><em> Set</em></span></span> на основі<span class="text-neon"><span class="text-bold"><em> ConcurrentSkipListMap</em></span></span> .</p>

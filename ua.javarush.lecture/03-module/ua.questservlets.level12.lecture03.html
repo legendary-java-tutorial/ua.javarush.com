@@ -1,0 +1,130 @@
+<h2>4.1 Знайомство з HttpSession</h2>
+<p>Якщо кілька запитів йдуть від одного клієнта, то кажуть, що між клієнтом та сервером встановилася сесія. Для контролю цього процесу контейнер має спеціальний об'єкт HttpSession.</p>
+<p>Коли клієнт звертається до сервлета, контейнер сервлетів перевіряє, чи є в запиті параметр ID сесії. Якщо такий параметр відсутній (наприклад, клієнт вперше звертається до сервера), тоді контейнер сервлет створює новий об'єкт HttpSession, а також присвоює йому унікальний ID.</p>
+<p>Об'єкт сесії зберігається на сервері, а ID відправляється у відповіді клієнту і за замовчуванням зберігається на клієнті в куках. Потім, коли надходить новий запит від того самого клієнта, контейнер сервлетів дістає з нього ID, і тому ID знаходить правильний об'єкт HttpSession на сервері.</p>
+<p>Отримати об'єкт сесії можна із запиту (об'єкт HttpServletRequest), у якого потрібно викликати метод getSession(). Він повертає об'єкт HttpSession.</p>
+<p>Навіщо потрібна сесія? У ній можна зберігати інформацію про клієнта між дзвінками. У неї всередині є щось на зразок HashMap, в якому можна зберігати об'єкти за ключами. І кілька методів для цього:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th></th>
+    <th>Методи</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>1</td>
+    <td><code>setAttribute(String name, Object o)</code></td>
+    <td>Додає об'єкт усередину сесії</td>
+   </tr>
+   <tr>
+    <td>2</td>
+    <td><code>getAttribute(String name)</code></td>
+    <td>Отримує об'єкт із сесії</td>
+   </tr>
+   <tr>
+    <td>3</td>
+    <td><code>removeAttribute(String name)</code></td>
+    <td>Видаляє об'єкт із сесії</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Давай напишемо сервлет, який сумуватиме всі числа, що передаються йому, з різних запитів:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CalculatorServlet</span> <span class="token keyword">extends</span> <span class="token class-name">HttpServlet</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">doGet</span><span class="token punctuation">(</span><span class="token class-name">HttpServletRequest</span> request<span class="token punctuation">,</span> <span class="token class-name">HttpServletResponse</span> response<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">{</span>
+         <span class="token comment">// Отримуємо атрибут "sum" із сесії</span>
+        <span class="token class-name">HttpSession</span> session <span class="token operator">=</span> request<span class="token punctuation">.</span><span class="token function">getSession</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Integer</span> sum <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">Integer</span><span class="token punctuation">)</span> session<span class="token punctuation">.</span><span class="token function">getAttribute</span><span class="token punctuation">(</span><span class="token string">"sum"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//Обробляємо ситуацію, коли такого атрибуту сесії ще немає</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>sum <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+            sum <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+         <span class="token comment">// Отримуємо параметр “n” із запиту</span>
+        <span class="token class-name">String</span> n <span class="token operator">=</span> request<span class="token punctuation">.</span><span class="token function">getParameter</span><span class="token punctuation">(</span><span class="token string">"n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        sum <span class="token operator">+=</span> <span class="token class-name">Integer</span><span class="token punctuation">.</span><span class="token function">parseInt</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+         <span class="token comment">// Записуємо атрибут "sum" у сесію</span>
+        session<span class="token punctuation">.</span><span class="token function">setAttribute</span><span class="token punctuation">(</span><span class="token string">"sum"</span><span class="token punctuation">,</span> sum<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// Друкуємо HTML як відповідь для браузера</span>
+        <span class="token class-name">PrintWriter</span> out <span class="token operator">=</span> response<span class="token punctuation">.</span><span class="token function">getWriter</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"&lt;html&gt;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"&lt;head&gt; &lt;title&gt; CalculatorServlet &lt;/title&gt; &lt;/head&gt;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"&lt;body&gt;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"&lt;h1&gt; Sum == "</span> <span class="token operator">+</span> sum <span class="token operator">+</span> <span class="token string">"&lt;/h1&gt;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"&lt;/body&gt;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"&lt;/html&gt;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h2>4.2 Докладніше про HttpSession</h2>
+<p>Що ще важливого ми не сказали про об'єкт HttpSession?</p>
+<p>По-перше, це ім'я J <span class="text-red">SESSION</span> ID. Саме під ним у куках зберігається ID сесії. Як бачите, запам'ятати його досить просто: <code>J+SESSION+ID</code>.</p>
+<p>По-друге, сесія має ще кілька корисних методів:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th></th>
+    <th>Методи</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>1</td>
+    <td><code>getAttributeNames()</code></td>
+    <td>Повертає список усіх ключів, які зберігатимуться у сесії</td>
+   </tr>
+   <tr>
+    <td>2</td>
+    <td><code>getId()</code></td>
+    <td>Повертає ID-сесії (рядок)</td>
+   </tr>
+   <tr>
+    <td>3</td>
+    <td><code>isNew()</code></td>
+    <td>Повертає true, якщо об'єкт сесії було створено у поточному запиті</td>
+   </tr>
+   <tr>
+    <td>4</td>
+    <td><code>setMaxInactiveInterval(int seconds)</code></td>
+    <td>Встановлює інтервал неактивності сесії за секунди</td>
+   </tr>
+   <tr>
+    <td>5</td>
+    <td><code>invalidate()</code></td>
+    <td>Видаляє із сесії всі об'єкти</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Тут усі методи очевидні, а про <code>setMaxInactiveInterval()</code>ми поговоримо трохи докладніше.</p>
+<p>Якщо сервер зберігатиме десятки тисяч сесій, включаючи дані клієнтів, які заходабо до нього минулого місяця, то у нього банально закінчиться пам'ять. Тому є спосіб встановити “час життя сесії”.</p>
+<p>Якщо протягом interval часу сесією ніхто не користувався, вона самоочищається — з неї видаляються всі об'єкти, які вона зберігала. Це зроблено задля економії пам'яті.</p>
+<p>За замовчуванням цей інтервал дорівнює 1800 секунд = 30 хвабон. Якщо встановити значення -1, то сесія буде "вічною" і видаляється тільки коли користувач закриє вкладку браузера (ну або клієнт розірве з'єднання).</p>
+<p>Приклади:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token comment">// отримання всіх ключів</span>
+<span class="token class-name">Enumeration</span> keys <span class="token operator">=</span> session<span class="token punctuation">.</span><span class="token function">getAttributeNames</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">while</span><span class="token punctuation">(</span> keys<span class="token punctuation">.</span><span class="token function">hasMoreElements</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span> <span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">)</span> keys<span class="token punctuation">.</span><span class="token function">nextElement</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token comment">// встановлення інтервалу неактивності</span>
+session<span class="token punctuation">.</span><span class="token function">setMaxInactiveInterval</span><span class="token punctuation">(</span><span class="token number">60</span><span class="token operator">*</span><span class="token number">60</span><span class="token operator">*</span><span class="token number">24</span><span class="token punctuation">)</span><span class="token punctuation">;</span>   <span class="token comment">// 1 день</span>
+session<span class="token punctuation">.</span><span class="token function">setMaxInactiveInterval</span><span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// до закриття браузера</span></code></pre></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token comment">// видалення всіх даних із сесії</span>
+session<span class="token punctuation">.</span><span class="token function">invalidate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>

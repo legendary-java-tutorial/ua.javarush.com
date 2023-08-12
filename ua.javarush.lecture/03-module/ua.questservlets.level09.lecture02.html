@@ -1,0 +1,28 @@
+<h2>3.1 Загальний вигляд http-повідомлення</h2>
+<p>Кожен http-запит (запит по протоколу http) має певну структуру. А найкраще — це те, що він є текстовим файлом, цілком читабельним навіть для непідготовленої людини.</p>
+<p>Повідомлення складається із трьох частин. Першим рядком йде так звана <strong>starting line</strong> , яка і визначає тип повідомлення. Потім йдуть параметри, які ще називають заголовками, <strong>headers</strong> . Ну і в самому кінці йде <strong>тіло повідомлення</strong> .</p>
+<p>І як визначити, де закінчабося заголовки і почалося тіло повідомлення? А тут все просто: заголовки та тіло повідомлення розділені <strong>порожнім рядком</strong> . Ось як тільки побачабо порожній рядок у http-повідомленні, так відразу після нього тіло повідомлення йде.</p>
+<h2>3.2 Starting line</h2>
+<p>Вид стартового рядка стандартизований і задається шаблоном:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="text-red">Метод</span> <span class="text-user">URI</span> HTTP<span class="token operator">/</span><span class="text-viola">Версія</span></code></pre>
+</div>
+<p>Для кращого розуміння наведемо кілька прикладів. Персональна сторінка користувача CodeGym віддається за посиланням<code>https://<span class="text-green">codegym.cc</span><span class="text-user">/me</span></code></p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="text-red">GET</span><span class="token operator"></span><span class="text-user"><span class="token operator">/</span>me</span> <span class="text-viola">HTTP<span class="token operator">/</span><span class="token number">1.0</span></span><span class="token number"></span>
+<span class="token class-name">Host</span><span class="token operator">:</span> <span class="text-green">codegym<span class="token punctuation">.</span>cc</span></code></pre>
+</div>
+<p>Як відповідь сервер швидше за все надішле:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present language"><code>
+        <span class="text-viola">HTTP/1.0</span> 200 OK
+   текст сторінки…
+    </code></pre>
+</div>
+<h2>3.3 Headers</h2>
+<p>Заголовки називаються заголовками, оскільки вони йдуть на чолі http-повідомлення. Можливо, правильніше було б називати їх службовими параметрами. Вони потрібні для того, щоб http-клієнт та http-сервер краще розуміли, як їм спілкуватися і як інтерпретувати отримані дані.</p>
+<p>Приклади таких заголовків:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Content</span><span class="token operator">-</span><span class="token class-name">Type</span><span class="token operator">:</span> text<span class="token operator">/</span>html<span class="token punctuation">;</span>charset<span class="token operator">=</span>windows<span class="token operator">-</span><span class="token number">1251</span>
+<span class="token class-name">Allow</span><span class="token operator">:</span> GET<span class="token punctuation">,</span>HEAD<span class="token punctuation">,</span>OPTIONS
+<span class="token class-name">Content</span><span class="token operator">-</span><span class="token class-name">Length</span><span class="token operator">:</span> <span class="token number">1984</span></code></pre>
+<p>Кожен заголовок являє собою пару ім'я-значення, які відокремлюються двокрапкою, прямо як у JSON. Докладніше ми розберемо їх у наступних лекціях.</p>

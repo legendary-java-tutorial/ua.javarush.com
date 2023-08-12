@@ -1,0 +1,168 @@
+Псевдоніми
+<p>----------------------------------------</p>
+Змінюємо назви колонок.
+Аліаси таблиці.
+Первинний ключ.
+<p>----------------------------------------</p>
+<h2>Міняємо назви колонок </h2>
+ 
+<p>Також нам потрібно розібратися із назвами колонок. А то у нас повторюються назви name та id, адже вони містять різні дані. З іншого боку, є перша колонка id і колонка employee_id, які містять ті самі дані. </p>
+  
+<p>Давай напишемо запит, де будуть лише потрібні колонки, а також перейменуємо колонки з однаковими іменами: </p>
+ 
+<pre><code><span class="text-red"><span class="text-bold">SELECT
+    <span class="text-orange">task</span>.<span class="text-green">id</span> AS <span class="text-viola">task_id</span>,
+    <span class="text-orange">task</span>.<span class="text-green">name</span> AS <span class="text-viola">task_desc</span>,
+    <span class="text-orange">task</span>.<span class="text-green">deadline</span> AS <span class="text-viola">deadline</span>,
+    <span class="text-orange">emploee</span>.<span class="text-green">id</span> AS <span class="text-viola">emploee_id</span>,
+    <span class="text-orange">emploee</span>.<span class="text-green">name</span> AS <span class="text-viola">emp_name</span>,
+<span class="text-orange">emploee</span>.<span class="text-green">occupation</span> AS
+    <span class="text-viola">emp_occupation</span>
+FROM <span class="text-orange">employee</span>, <span class="text-orange">task</span>
+WHERE <span class="text-orange">emploee</span>.<span class="text-green">id</span> = <span class="text-orange">task</span>.< span class="text-green">emploee_id</span></span>
+</code></pre>
+ 
+<p>І результат такого запиту: </p>
+ 
+<table>
+<tbody>
+<tr>
+<th>task_id</th>
+<th>task_desc</th>
+<th>deadline</th>
+<th>emploee_id</th>
+<th>emp_name</th>
+<th>emp_occupation</th>
+</tr>
+<tr>
+<td>1 </td>
+<td>Виправити багу на фронтенді</td>
+<td>2022-06-01 </td>
+<td>1 </td>
+<td>Іванов Іван </td>
+<td>Програміст </td>
+</tr>
+<tr>
+<td>2 </td>
+<td>Виправити багу на бекенді</td>
+<td>2022-06-15 </td>
+<td>2 </td>
+<td>Петров Петро </td>
+<td>Програміст </td>
+</tr>
+<tr>
+<td>7 </td>
+<td>Насолоджуватися життям </td>
+<td>(NULL)</td>
+<td>4 </td>
+<td>Рабінович Мойша </td>
+<td>Директор </td>
+</tr>
+<tr>
+<td>3 </td>
+<td>Купити каву </td>
+<td>2022-07-01 </td>
+<td>5 </td>
+<td>Кірієнко Анастасія </td>
+<td>Офіс-менеджер</td>
+</tr>
+<tr>
+<td>4 </td>
+<td>Купити каву </td>
+<td>2022-08-01 </td>
+<td>5 </td>
+<td>Кірієнко Анастасія </td>
+<td>Офіс-менеджер</td>
+</tr>
+<tr>
+<td>5 </td>
+<td>Купити каву </td>
+<td>2022-09-01 </td>
+<td>5 </td>
+<td>Кірієнко Анастасія </td>
+<td>Офіс-менеджер</td>
+</tr>
+<tr>
+<td>8 </td>
+<td>Насолоджуватися життям </td>
+<td>(NULL)</td>
+<td>6 </td>
+<td>Васька </td>
+<td>кіт </td>
+</tr>
+</tbody>
+</table>
+ 
+<p>Відмінно, проблему з незрозумілими назвами колонок успішно вирішено. Запит став трохи довгим, зате в результуючій таблиці все зрозуміло. І жодних зайвих стовпчиків.</p>
+ 
+<h2>Аліаси таблиць </h2>
+ 
+<p>Іноді назви таблиць бувають надто довгими і займають багато місця у запиті. Тому творці SQL підвищення читабельності, як й у випадку з колонками, запропонували можливість вказувати аліаси таблиць. </p>
+
+<p>Загальний вид аліасів (псевдонімів таблиць) такий: </p>
+
+<pre><code><span class="text-bold"><span class="text-red">FROM</span> <span class="text-orange">таблиця1 псевдонім1</span>, <span class="text-orange">таблиця2 псевдонім2</span></span>
+</code></pre>
+
+<p>Давай перепишемо наш попередній запит із використанням коротких псевдонімів: </p>
+ 
+<pre><code><span class="text-bold"><span class="text-red">SELECT</span>
+    <span class="text-orange">t</span>.<span class="text-green">id</span> <span class="text-red">AS</span> <span class= "text-viola">task_id</span>,
+    <span class="text-orange">t</span>.<span class="text-green">name</span> <span class="text-red">AS</span> <span class= "text-viola">task_desc</span>,
+    <span class="text-orange">t</span>.<span class="text-green">deadline</span> <span class="text-red">AS</span> <span class= "text-viola">deadline</span>,
+    <span class="text-orange">e</span>.<span class="text-green">id</span> <span class="text-red">AS</span> <span class= "text-viola">emploee_id</span>,
+    <span class="text-orange">e</span>.<span class="text-green">name</span> <span class="text-red">AS</span> <span class= "text-viola">emp_name</span>,
+    <span class="text-orange">e</span>.<span class="text-green">occupation</span> <span class="text-red">AS</span> <span class= "text-viola">emp_occupation</span>
+    <span class="text-red">FROM</span> <span class="text-orange">employee e</span>, <span class="text-orange">task t</span>
+<span class="text-red">WHERE</span> <span class="text-orange">e</span>.<span class="text-green">id = <span class="text- orange">t</span>.<span class="text-green">emploee_id</span>
+</code></pre>
+
+<p>Читабельність трохи знизилася, але це тому, що назви таблиць спочатку були простими і зрозумілими. Може бути і так: </p>
+ 
+<pre><code><span class="text-bold"><span class="text-red">SELECT</span>
+  <span class="text-orange">task</span>.<span class="text-green">id</span> <span class="text-red">AS</span> <span class= "text-viola">task_id</span>,
+  <span class="text-orange">task</span>.<span class="text-green">name</span> <span class="text-red">AS</span> <span class= "text-viola">task_desc</span>,
+  <span class="text-orange">task</span>.<span class="text-green">deadline</span> <span class="text-red">AS</span> <span class= "text-viola">deadline</span>,
+  <span class="text-orange">emploee</span>.<span class="text-green">id</span> <span class="text-red">AS</span> <span class= "text-viola">emploee_id</span>,
+  <span class="text-orange">emploee</span>.<span class="text-green">name</span> <span class="text-red">AS</span> <span class= "text-viola">emp_name</span>,
+<span class="text-orange">emploee</span>.<span class="text-green">occupatio</span>n <span class="text-red">AS</span>
+  <span class="text-viola">emp_occupation</span>
+<span class="text-red">FROM</span>
+  <span class="text-orange">Microsoft_it_department_employee employee</span>,
+  <span class="text-orange">Year2022_priority_task task</span>
+<span class="text-red">WHERE</span> <span class="text-orange">emploee</span>.<span class="text-green">id</span> = <span class ="text-orange">task</span>.<span class="text-green">emploee_id</span> </span>
+</code></pre>
+
+<p>А в цьому випадку аліаси вже корисні, так? ;)</p>
+ 
+<h2>Первинний ключ</h2>
+ 
+<p>І ще одна важлива інформація про таблиці. Пам'ятаєте, що у нас таблиці task була колонка employee_id? За допомогою неї ми посилалися на ID співробітника з таблиці employee. </p>
+
+<p>Якщо ми хочемо посилатися з однієї таблиці на рядки іншої таблиці, то таблиця, на яку посилаються, повинна мати колонку з ID, яку ще називають первинним ключем - <span class="text-user">PRIMARY KEY</span> . </p>
+
+<p>Найчастіше це спеціально додана колонка, тип значень якої - <span class="text-orange">int</span>. При додаванні записів до таблиці SQL автоматично встановлює значення цієї колонки. </p>
+
+<p>На ці ключі потім багато чого зав'язується: </p>
+
+<ul>
+<li>зв'язування різних таблиць один з одним; </li>
+<li>швидкий пошук та фільтрація по id; </li>
+<li>цілісність даних у базі даних (немає посилань на неіснуючі id); </li>
+<li>видалення даних, на які ніхто не посилається; </li>
+<li>і багато іншого. </li>
+</ul>
+
+<p>До речі, бувають ситуації, коли таблиця має так званий <strong>натуральний ключ</strong>. Це коли є колонка, вміст якої має на увазі унікальність. Наприклад, ми вирішили до таблиці співробітників додати: </p>
+
+<ul>
+<li>Порядок їхнього приходу в компанію; </li>
+<li>Податковий номер;</li>
+<li>Номер та серію паспорта. </li>
+</ul>
+
+<p>Іноді проектувальники баз даних використовують натуральний ключ як первинний ключ, але найчастіше їх використовують окремо. Адже записи можна видаляти, змінювати тощо. </p>
+ 
+<p>Читали, мабуть, історії в інтернеті, коли на людину пристави вішають борги її повного тезки? Це пов'язано з поняттям унікального ключа. Банкам і приставам дуже зручно шукати людину за ПІБ та роком народження. І у 99% випадків цього достатньо для того, щоб ідентифікувати людину. </p>
+ 
+Але залишився <1% — це повні тезки, з однаковим роком народження. У житті кожного з нас таких, швидше за все, немає, а от у масштабах країни – є. Загалом, якщо ви пишете софт або проектуйте БД, то корисно знати, що і так теж може бути. </p>

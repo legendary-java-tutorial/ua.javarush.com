@@ -1,0 +1,227 @@
+<p>— Тепер я розповім про не менш корисні методи&nbsp; <strong>equals(Object o) &amp; hashCode()</strong> .</p>
+<p>Як ти вже, напевно, встиг запам'ятати, Java при порівнянні посилальних змінних порівнюються не самі об'єкти, а посилання на об'єкти.</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код</th>
+    <th>Пояснення</th>
+   </tr>
+   <tr>
+    <td>
+     <pre data-line="" data-start="" class="line-numbers  language-java" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Integer</span> i <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Integer</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Integer</span> j <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Integer</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>i<span class="token operator">==</span>j<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>i не одно j <br>
+      Змінні вказують на різні об'єкти. <br>
+      Хоча об'єкти містять однакові дані;</td>
+   </tr>
+   <tr>
+    <td>
+     <pre data-line="" data-start="" class="line-numbers  language-java" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Integer</span> i <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Integer</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Integer</span> j <span class="token operator">=</span> i<span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>i<span class="token operator">==</span>j<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>i так само j Змінні містять посилання на той самий об'єкт.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">— Так, я пам'ятаю.</span></p>
+<p>— Є також стандартне вирішення цієї ситуації – метод&nbsp; <strong>equals</strong> .</p>
+<p>Мета методу&nbsp; <strong>equals</strong> &nbsp;– визначити чи ідентичні об'єкти всередині, порівнявши внутрішній зміст об'єктів.</p>
+<p><span class="text-user">- І як він це робить?</span></p>
+<p>- Тут все аналогічно методу toString().</p>
+<p>У класу Object є своя реалізація методу equals, яка просто порівнює посилання:</p>
+<pre data-line="" data-start="" class="line-numbers  language-java" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">equals</span><span class="token punctuation">(</span><span class="token class-name">Object</span> obj<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token keyword">this</span> <span class="token operator">==</span> obj<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p><span class="text-user">- М-так. З чим боролися, то й напоролися.</span></p>
+<p>- Не вішай носа. Тут все також дуже хитро.</p>
+<p>Цей метод створювався, щоб розробники перевизначали їх у своїх класах. Адже тільки розробник класу знає, які дані є важливими, що враховувати при порівнянні, а що – ні.</p>
+<p><span class="text-user">— А чи можна приклад такого методу?</span></p>
+<p>- Звичайно. Припустимо, у нас є клас, що описує математичні дроби, тоді він виглядав би так (для ясності, я перекладу англійські назви російською мовою):</p>
+<div class="code-heading">
+ приклад
+</div>
+<pre data-line="" data-start="" class="line-numbers  language-java" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> Дробь
+<span class="token punctuation">{</span>
+<span class="token keyword">private</span> <span class="token keyword">int</span> числитель<span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token keyword">int</span> знаменатель<span class="token punctuation">;</span>
+Дробь<span class="token punctuation">(</span><span class="token keyword">int</span> числитель<span class="token punctuation">,</span> <span class="token keyword">int</span> знаменатель<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">this</span><span class="token punctuation">.</span>числитель <span class="token operator">=</span> числитель<span class="token punctuation">;</span>
+<span class="token keyword">this</span><span class="token punctuation">.</span>знаменатель <span class="token operator">=</span> знаменатель<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">equals</span><span class="token punctuation">(</span><span class="token class-name">Object</span> obj<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>obj<span class="token operator">==</span><span class="token keyword">null</span><span class="token punctuation">)</span>
+<span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">(</span>obj<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">)</span>
+<span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+
+Дробь other <span class="token operator">=</span> <span class="token punctuation">(</span>Дробь<span class="token punctuation">)</span> obj<span class="token punctuation">;</span>
+<span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>числитель<span class="token operator">*</span> other<span class="token punctuation">.</span>знаменатель <span class="token operator">==</span> <span class="token keyword">this</span><span class="token punctuation">.</span>знаменатель <span class="token operator">*</span> other<span class="token punctuation">.</span>числитель<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th width="100%">Приклад виклику:</th>
+   </tr>
+   <tr>
+    <td><code>Дробь&nbsp;<strong>one</strong>&nbsp;=&nbsp;<strong>new</strong>&nbsp;Дробь(2,3);</code><br><code> Дробь&nbsp;<strong>two</strong>&nbsp;=&nbsp;<strong>new</strong>&nbsp;Дробь(4,6);</code><br><strong><code> System.out.println(one.equals(two));</code></strong></td>
+   </tr>
+   <tr>
+    <td><strong>Результат дзвінка буде true. </strong><br><strong>дріб 2/3 дорівнює дробу 4/6</strong></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>— Для більшої ясності я використала російську назву. Так можна робити тільки в навчальних цілях.</p>
+<p>Тепер розберемо приклад.</p>
+<p>Ми перевизначабо метод&nbsp; <strong>equals</strong> , і тепер для об'єктів класу&nbsp; <strong>"Дроб"</strong> &nbsp;у нього буде своя реалізація.</p>
+<p>У цьому методі є кілька перевірок:</p>
+<p><strong>1)</strong> &nbsp;Якщо переданий порівняння об'єкт –&nbsp; <strong>null</strong> , то об'єкти не рівні. Об'єкт, у якого викликали метод&nbsp; <strong>equals</strong> &nbsp;адже точно не&nbsp; <strong>null</strong> .</p>
+<p><strong>2)</strong> &nbsp;Перевірка порівняння класів. Якщо об'єкти різних класів, ми пробуватимемо їх порівняти, а відразу скажемо, що це різні об'єкти –&nbsp; <strong>return false</strong> .</p>
+<p><strong>3)</strong> &nbsp;З другого класу школи всі пам'ятають, що дріб 2/3 дорівнює дробу 4/6. А як це перевірити?</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th width="100%">2/3 == 4/6</th>
+   </tr>
+   <tr>
+    <td><strong>Помножимо обидві частини на обидва дільники (6 та 3), отримаємо:</strong></td>
+   </tr>
+   <tr>
+    <td><strong>6 * 2 == 4 * 3</strong></td>
+   </tr>
+   <tr>
+    <td><strong>12 == 12</strong></td>
+   </tr>
+   <tr>
+    <td><strong>Загальне правило:</strong></td>
+   </tr>
+   <tr>
+    <td><strong>Якщо </strong><br><strong>a / b == c / d </strong><br><strong>То </strong><br><strong>a * d == c * b</strong></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>— Тому в третій частині методу&nbsp; <strong>equals</strong> &nbsp;ми перетворюємо переданий об'єкт до типу «Дроб» та порівнюємо дроби.</p>
+<p><span class="text-user">- Зрозуміло. Якби ми просто порівнювали чисельник із чисельником і знаменник із знаменником, то дріб 2/3 не був би рівним 4/6.</span></p>
+<p><span class="text-user">Тепер зрозуміло, що ти мала на увазі, коли казала, що лише розробник класу знає, як правильно його порівнювати.</span></p>
+<p>— Так, але це лише половина справи.&nbsp;<strong>Є ще другий метод – hashCode()</strong></p>
+<p><span class="text-user">— З методом equals все зрозуміло, а навіщо потрібний&nbsp; <strong>hashCode</strong> ()?</span></p>
+<p>— Метод&nbsp; <strong>hashCode</strong> &nbsp;необхідний швидкого порівняння.</p>
+<p>Метод&nbsp; <strong>equals</strong> &nbsp;має великий мінус – він занадто повільно працює. Допустимо, у тебе є безліч (Set) з мільйона елементів, і нам потрібно перевірити, чи містить воно певний об'єкт чи ні. Як це зробити?</p>
+<p><span class="text-user">— Можна в циклі пройтися всіма елементами і порівняти потрібний об'єкт з кожним об'єктом безлічі. Поки що не знайдемо потрібний.</span></p>
+<p>— А як його там немає? Ми виконаємо мільйон порівнянь, щоб дізнатися, що немає цього об'єкта? Чи не забагато?</p>
+<p><span class="text-user">— Так, навіть мені зрозуміло, що надто багато порівнянь. А що є інший спосіб?</span></p>
+<p>— Так, для цього використовується&nbsp; <strong>hashCode</strong> ().</p>
+<p>Метод&nbsp; <strong>hashCode</strong> () для кожного об'єкта повертає певну кількість. Яке саме це теж вирішує розробник класу, як і у випадку з методом equals.</p>
+<p>Давай розглянемо ситуацію на прикладі:</p>
+<p>Уяви, що маєш мільйон 10-тизначних чисел. Тоді як hashCode для кожного числа можна вибрати залишок від його поділу на 100.</p>
+<p>Приклад:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th width="50%">Число</th>
+    <th width="50%">Наш hashCode</th>
+   </tr>
+   <tr>
+    <td>1234567890</td>
+    <td>90</td>
+   </tr>
+   <tr>
+    <td>9876554321</td>
+    <td>21</td>
+   </tr>
+   <tr>
+    <td>9876554221</td>
+    <td>21</td>
+   </tr>
+   <tr>
+    <td>9886554121</td>
+    <td>21</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">- Так, з цим зрозуміло. І що нам робити з цим hashCode-числом?</span></p>
+<p>— Замість того, щоб порівнювати числа, ми порівнюватимемо їх&nbsp; <strong>hashCode</strong> . Так швидше.</p>
+<p>І тільки якщо&nbsp; <strong>hashCode</strong> -і рівні, порівнювати вже за допомогою&nbsp; <strong>equals</strong> .</p>
+<p><span class="text-user">- Так, так швидше. Але нам все одно доведеться зробити мільйон порівнянь, тільки вже коротших чисел, а для тих чисел, чиї hashCode збігаються, знову викликати equals.</span></p>
+<p>— Ні, можна обійтися набагато меншим числом.</p>
+<p>Уяви, що наша множина зберігає числа, згруповані за hashCode або відсортовані за&nbsp; <strong>hashCode&nbsp;</strong> (що рівносильне їх групуванню, тому що числа з однаковим hashCode знаходяться поруч). Тоді можна дуже швидко і легко відкинути непотрібні групи, достатньо один раз для кожної групи перевірити, чи її hashCode збігається з hashCode заданого об'єкта.</p>
+<p>Уяви, що ти студент, і шукаєш свого друга, якого знаєш в обличчя і про якого відомо, що він живе у 17 гуртожитку. Тоді ти просто проходишся всім гуртожиткам універу і в кожному гуртожитку запитуєш «це 17 спільнот?». Якщо ні, то ти відкидаєш усіх із цього гуртожитку і переходиш до наступного. Якщо так, то починаєш ходити по всіх кімнатах і шукати друга.</p>
+<p>У цьому прикладі номер гуртожитку – 17 – це і є hashCode.</p>
+<p>Розробник, який реалізує функцію hashCode, повинен знати такі речі:</p>
+<p><strong>А) </strong>&nbsp;<strong><span class="text-green">у двох різних об'єктів може бути однаковий hashCode</span></strong> &nbsp;(різні люди можуть жити в одному гуртожитку)</p>
+<p><strong>Б) </strong>&nbsp;<span class="text-green"><strong>у однакових об'єктів</strong></span> &nbsp;( <strong>з погляду equals</strong> )&nbsp; <strong><span class="text-green">має бути однаковий hashCode</span></strong> .</p>
+<p><strong>В) </strong>&nbsp;<span class="text-red"><strong>хеш-коди повинні бути вибрані таким чином, щоб не було великої кількості різних об'єктів з однаковим hashCode. </strong></span>&nbsp;Це зведе всі їхні переваги нанівець (Ти прийшов у 17 гуртожитку, а там живе підлога універа. Облом-с).</p>
+<p>І тепер найважливіше. Якщо ти перевизначаєш метод&nbsp; <strong>equals</strong> , обов'язково потрібно перевизначити метод&nbsp; <strong>hashCode</strong> (), з урахуванням трьох вищеописаних правил.</p>
+<p>Вся справа в тому, що&nbsp; <strong>колекції Java перед тим як порівняти об'єкти за допомогою equals завжди шукають/порівнюють їх за допомогою методу hashCode()</strong> . І якщо у однакових об'єктів будуть різні hashCode, то об'єкти будуть вважатися різними - до порівняння за допомогою equals просто не дійде.</p>
+<p>У нашому прикладі з Дробом, якби ми взяли hashCode рівний чисельнику, то дроби 2/3 і 4/6 мали б різні hashCode. Дроби – однакові, equals каже, що вони однакові, але hashCode каже, що вони різні. І якщо перед порівнянням за допомогою equals порівнювати по hashCode, то отримаємо, що об'єкти різні і до equals просто не дійдемо.</p>
+<p>Приклад:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th width="100%"></th>
+   </tr>
+   <tr>
+    <td><code><span class="text-green">HashSet&lt;Дробь&gt;set = new HashSet&lt;Дробь&gt;();</span></code><br><code><span class="text-green"> set.add(new Дробь(2,3));</span></code><code><span class="text-green">System.out.println( set.contains(new Дробь(4,6)) );</span></code></td>
+   </tr>
+   <tr>
+    <td>Якщо метод&nbsp; <span class="text-green"><strong>hashCode()</strong></span> &nbsp;буде повертати чисельник дробу, результат буде&nbsp; <span class="text-green"><strong>false</strong></span> . <br>
+      Об'єкт new <span class="text-green"><strong>Дробь(4,6)&nbsp;</strong></span> не буде знайдено в колекції.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">— А як правильно продати hashCode для дробу?</span></p>
+<p>— Тут треба пам'ятати, що однаковим дробам обов'язково має відповідати однаковий hashCode.</p>
+<p><strong>Варіант 1</strong> : hashCode дорівнює цілій частині від розподілу.</p>
+<p>Для дробу 7/5 та 6/5 це буде 1.</p>
+<p>Для дробу 4/5 та 3/5 це буде 0.</p>
+<p>Але цей варіант погано підходить для порівняння дробів, які явно менше 1. Ціла частина (hashCode) завжди буде 0.</p>
+<p><strong>Варіант 2</strong> : hashCode дорівнює цілій частині від поділу знаменника на чисельник.</p>
+<p>Цей варіант підійде для випадку, коли значення дробу менше 1. Якщо дріб менше 1, значить перевернутий дріб більше 1. А якщо ми перевертаємо всі дроби - це ніяк не позначиться на їх порівнянні.</p>
+<p>Підсумковий варіант поєднуватиме в собі обидва рішення:</p>
+<pre data-line="" data-start="" class="line-numbers  language-java" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">hashCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">return</span> числитель<span class="token operator">/</span>знаменатель <span class="token operator">+</span> знаменатель<span class="token operator">/</span>числитель<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Перевіряємо для дробів 2/3 та 4/6. У них повинні бути рівні hashCode:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th width="33%"></th>
+    <th width="33%">Дроб 2/3</th>
+    <th width="33%">Дроби 4/6</th>
+   </tr>
+   <tr>
+    <td><strong>чисельник знаменник</strong></td>
+    <td>2/3 == 0</td>
+    <td>4/6 == 0</td>
+   </tr>
+   <tr>
+    <td><strong>знаменник / чисельник</strong></td>
+    <td>3/2 == 1</td>
+    <td>6/4 == 1</td>
+   </tr>
+   <tr>
+    <td><strong>чисельник / знаменник </strong><br><strong>+ </strong><br><strong>знаменник / чисельник</strong></td>
+    <td>0 + 1 == 1</td>
+    <td>0 + 1 == 1</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>На цьому все.</p>
+<p><span class="text-user">- Дякую, Еллі, було справді цікаво.</span></p>

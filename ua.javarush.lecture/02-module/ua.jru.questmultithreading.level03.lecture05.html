@@ -1,0 +1,56 @@
+<a href="https://cdn.javarush.com/images/article/3656a7a4-1424-4226-8d01-7b2dfbcb2f86/original.jpeg" target="_blank"><img data-id="3656a7a4-1424-4226-8d01-7b2dfbcb2f86" data-max-width="850" alt="Внутрішні статичні класи." src="https://cdn.javarush.com/images/article/3656a7a4-1424-4226-8d01-7b2dfbcb2f86/800.jpeg" style="width: 850px;"></a>
+<p>- Отже, тема номер два - <strong>вкладені класи.</strong></p>
+<p>Перед оголошенням внутрішнього класу ми можемо встановити ключове слово – static і тоді внутрішній клас стане вкладеним.</p>
+<p>Давай розберемося, що означає слово static поруч із оголошенням вкладеного класу. Як ти думаєш?</p>
+<p><span class="text-user">— Якщо змінна оголошена статичною, то вона існує в єдиному екземплярі, а якщо вкладений клас – статичний, то чи можна створити лише один об'єкт такого класу?</span></p>
+<p>- Нехай слово <strong>static</strong> тут не вводить тебе в оману. Якщо змінна оголошена статичною – вона існують у єдиному екземплярі – це правильно. Але статичний вкладений клас більше нагадує статичний метод у плані. Слово static перед оголошенням класу вказує, що цей клас не зберігає посилань на об'єкти зовнішнього класу, всередині якого оголошено.</p>
+<p><span class="text-user">- Ага. Звичайні методи нишком зберігають посилання на об'єкт, а статичні – ні. То ж і зі статичними класами, я правий, Еллі?</span></p>
+<p>- Абсолютно. Твоя здогадливість дуже похвальна. Вкладені статичні класи немає прихованих посилань на об'єкти зовнішнього класу, у якому оголошені.</p>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Zoo</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">int</span> count <span class="token operator">=</span> <span class="token number">7</span><span class="token punctuation">;</span>
+ <span class="token keyword">private</span> <span class="token keyword">int</span> mouseCount <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+
+ <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">getAnimalCount</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> count<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getMouseCount</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> mouseCount<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token keyword"></span><span class="text-green"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Mouse</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token class-name">Mouse</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+  <span class="token punctuation">}</span>
+   <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getTotalCount</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+   <span class="token keyword">return</span> count <span class="token operator">+</span> mouseCount<span class="token punctuation">;</span> <span class="token comment">//ошибка компиляции.</span>
+  <span class="token punctuation">}</span>
+ <span class="token punctuation">}</span></span><span class="token punctuation"></span>
+<span class="token punctuation">}</span></code></pre>
+<p>Давай уважно подивимося на цей приклад.</p>
+<p><strong>До яких змінних може звертатися статичний метод getAnimalCount?</strong></p>
+<p><span class="text-user">— Лише до статичних. Це статичний метод.</span></p>
+<p><strong>До яких змінних може звернутися метод getMouseCount?</strong></p>
+<p><span class="text-user">— І до статичних, і до нестатичних. Він потай зберігає посилання (this) на об'єкт типу Zoo.</span></p>
+<p>- Правильно. Так от, статичний вкладений клас Mouse, як і статичний метод, може звертатися до статичних змінних класу Zoo, але не може звертатися до нестатичних.</p>
+<p>Ми можемо спокійно створювати об'єкти класу Mouse, навіть коли немає жодного створеного об'єкта класу Zoo. Ось як це можна зробити:</p>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Home</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name">Zoo<span class="token punctuation">.</span>Mouse</span> mouse <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Zoo<span class="token punctuation">.</span>Mouse</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Фактично клас Mouse – це звичайнісінький клас. Через те, що він оголошений усередині класу Zoo, він має дві особливості.</p>
+<p>1) При створенні об'єктів вкладеного класу (як клас Mouse) поза зовнішнім класом-батьком, треба ще вказувати через точку та ім'я зовнішнього класу.</p>
+<p>Наприклад: Zoo.Mouse.</p>
+<p>2) Клас Zoo.Mouse та його об'єкти мають доступ до private static змінним і методам класу Zoo (адже клас Mouse теж оголошений всередині класу Zoo).</p>
+<p>На цьому сьогодні все.</p>
+<p><span class="text-user">- Тобто. просто додаткове ім'я та все?</span></p>
+<p>Так.</p>
+<p><span class="text-user">— Це ще простіше, ніж здавалося на перший погляд.</span></p>

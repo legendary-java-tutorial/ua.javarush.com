@@ -1,0 +1,51 @@
+<h2>8.1 Підхід Remote API</h2>
+<p>Всі програмісти роблять ту саму помилку при побудові архітектури клієнт-сервер. <span class="text-viola">Вони починають сприймати запити до сервера як виклик методів</span> .</p>
+<p>Ти хочеш запустити процес генерації звіту на сервері, чому б не надіслати йому запит на вигляд:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java">http<span class="token operator">:</span><span class="token operator">/</span><span class="token operator">/</span>server<span class="token punctuation">.</span>com<span class="token operator">/</span><span class="text-red">startDocumentGeneration</span><span class="token operator">?</span>params</code></pre>
+</div>
+<p>Як завантажити звіт після того, як він завершиться? Для цього напишемо ще один метод:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java">http<span class="token operator">:</span><span class="token operator">/</span><span class="token operator">/</span>server<span class="token punctuation">.</span>com<span class="token operator">/</span><span class="text-red">getDocument</span></code></pre>
+</div>
+<p>Сервер <code>HttpSession</code>зберігає інформацію по нашому документу, і як тільки документ буде згенерований, сервер його віддасть.</p>
+<p>Чудовий підхід. Чи ні?</p>
+<p>Підхід насправді жахливий. Справа в тому, що сервер повинен запам'ятати номер документа. Іншими словами, щоб правильно обробляти нові дзвінки методів, сервер повинен запам'ятати результати дзвінка попередніх методів.</p>
+<p>У Інтернеті це велика проблема. Інтернет може зникнути, браузер закритися. Сторінку можна перевантажити або випадково натиснути на посилання і так далі. А сервер продовжуватиме зберігати мегабайти даних із попередніх запитів користувача.</p>
+<p>Для комфортної роботи з сервером ви не можете розраховувати, що у вас завжди будуть під рукою дані попередніх запитів до сервера.</p>
+<p>Як тоді викликати методи сервера? Правильна відповідь буде жахлива: а ніяк!</p>
+<h2>8.2 Підхід REST</h2>
+<p>Програмісти повернулися до витоків і згадали, що спочатку запит містив шлях до файлу на сервері:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java">http<span class="token operator">:</span><span class="token operator">/</span><span class="token operator">/</span>server<span class="token punctuation">.</span>com<span class="token operator">/</span><span class="text-red">path</span><span class="token operator">?</span>params</code></pre>
+</div>
+<p>І вирішабо використати цей підхід максимум.</p>
+<p>Тепер <span class="text-green">сервер розглядається як сховище даних</span> , що <span class="text-viola">видно назовні у вигляді деякого дерева</span> .</p>
+<p>Бажаєте отримати список усіх користувачів, викликайте запит:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java">http<span class="token operator">:</span><span class="token operator">/</span><span class="token operator">/</span>server<span class="token punctuation">.</span>com<span class="token operator">/</span><span class="text-red">users</span></code></pre>
+</div>
+<p>Бажаєте отримати дані щодо користувача 113, виконуєте запит:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java">http<span class="token operator">:</span><span class="token operator">/</span><span class="token operator">/</span>server<span class="token punctuation">.</span>com<span class="token operator">/</span><span class="text-red">users<span class="token operator">/</span><span class="token number">113</span></span><span class="token number"></span></code></pre>
+</div>
+<p>І так далі, все в тому ж ключі.</p>
+<p>Ще раз сервер розглядається як сховище даних, які видно назовні у вигляді деякого дерева.</p>
+<p>Дані можна отримувати – запити <strong>GET</strong> , змінювати – запит <strong>POST</strong> та видаляти – запит <strong>DELETE</strong> .</p>
+<h2>8.3 Відсутність стану</h2>
+<p>REST-протокол взаємодії між клієнтом та сервером вимагає дотримання наступної умови: у період між запитами від клієнта жодна інформація про стан клієнта на сервері не зберігається.</p>
+<p>Всі запити від клієнта мають бути складені так, щоб сервер щоразу отримав <strong>всю необхідну інформацію для виконання запиту</strong> . Стан сесії у своїй зберігається за клієнта.</p>
+<p>Під час обробки запитів клієнтів вважається, що клієнт перебуває в перехідному стані. Кожен окремий стан програми представлений зв'язками, які можуть бути задіяні під час наступного звернення клієнта.</p>
+<h2>8.4 Одноманітність інтерфейсу</h2>
+<p>Усі шляхи, якими віддаються об'єкти з сервера, стандартизуються. Це дуже зручно, особливо якщо ти отримуєш дані із чужих REST-серверів.</p>
+<p>Всі інтерфейси об'єктів повинні дотримуватися трьох умов:</p>
+<p><strong>Ідентифікація ресурсів</strong></p>
+<p>Усі ресурси ідентифікуються у запитах із використанням URI. Ресурси всередині сервера відокремлені від уявлень, які повертаються клієнтам. Наприклад, сервер може надсилати дані з бази даних у вигляді HTML, XML або JSON, жоден з яких не є типом зберігання всередині сервера.</p>
+<p><strong>Маніпуляція ресурсами через уявлення</strong></p>
+<p>Якщо клієнт зберігає подання ресурсу, включаючи метадані, то він має достатню інформацію для модифікації або видалення ресурсу на сервері.</p>
+<p><strong>"Самоописувані" повідомлення</strong></p>
+<p>Кожне повідомлення містить достатньо інформації, щоб зрозуміти, як його обробляти. Наприклад, якщо вам потрібна інформація про користувача, сервер поверне вам JSON об'єкт, де будуть поля ім'я, адресау.</p>
+<p>Не повинно бути ситуації, коли клієнт повинен знати, що перше число у відповіді – це вік, а друге – це дата народження.</p>
+<h2>8.5 Кешування</h2>
+<p>Підхід REST передбачає, що запити до даних йде за допомогою протоколу HTTP. Тому об'єкти виходять через виклик GET-запиту. Отже на них, як і на всі ресурси, отримані за допомогою GET-запиту, поширюються всі правила кешування HTTP-ресурсів.</p>
+<p>Тобто дані, отримані через API REST, кешуються так само, як і будь-які статичні ресурси на веб-серверах. Краса :)</p>

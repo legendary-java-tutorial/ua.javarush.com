@@ -1,0 +1,161 @@
+<p>Метод <span class="code text-orange">newFixedThreadPool</span> у класу <span class="code"><span class="text-green">Executors</span></span> створить нам <span class="text-green"><span class="text-bold"><em>executorService</em></span></span> з фіксованою кількістю потоків. Порівняно з методом <span class="code text-orange">NewSingleThreadExecutor</span> , ми вказуємо, скільки потоків хочемо бачити в пулі. Під капотом викликається</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">new</span> <span class="token class-name">ThreadPoolExecutor</span><span class="token punctuation">(</span> nThreads<span class="token punctuation">,</span> nThreads<span class="token punctuation">,</span>
+                                      	<span class="token number">0L</span><span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>MILLISECONDS<span class="token punctuation">,</span>
+                                      	<span class="token keyword">new</span> <span class="token class-name">LinkedBlockingQueue</span><span class="token punctuation"></span><runnable><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></runnable><span class="token punctuation"></span></code></pre>
+<p>Як параметри <span class="text-green">corePoolSize</span> (яка кількість потоків буде готова (запущена) при старті <span class="text-green"><span class="text-bold"><em>executor</em></span></span> сервісу) і <span class="text-green">maximumPoolSize</span> (максимальна кількість потоків, яке може створити <span class="text-green"><span class="text-bold"><em>executor</em></span></span> сервіс) передається одне й те саме число — кількість потоків, що передається в <span class="code text-orange">newFixedThreadPool(nThreads)</span> . Так само ми можемо передати в параметри і власну реалізацію <span class="text-neon"><span class="text-bold"><em>ThreadFactory</em></span></span> .</p>
+<p>Отже, давай розберемося, навіщо нам потрібний такий <span class="text-green"><span class="text-bold"><em>ExecutorService</em></span></span> .</p>
+<p><span class="text-green"><span class="text-bold"><em>ExecutorService</em></span></span> з фіксованою кількістю (n) потоків має таку логіку:</p>
+<ul>
+ <li>Максимум n потоків будуть активними для обробки завдань.</li>
+ <li>Якщо передано більше n завдань, вони будуть утримуватися в черзі доти, доки потоки не звільняться.</li>
+ <li>Якщо в роботі одного з потоків відбудеться збій і він завершить свою роботу, буде створено новий потік на місце зламаного.</li>
+ <li>Будь-який потік з пулу активний доти, доки пул не закритий.</li>
+</ul>
+<p>Як приклад уяви чергу в аеропорту, де всі стоять в одній черзі, а безпосередньо перед контролем розходяться на кількість пунктів. Якщо в одному з пунктів буде затримка, черга йтиме лише через другий, доки перший не звільниться, а якщо один із пунктів зовсім зламається, то відкриють інший пункт на заміну цьому і контроль триватиме через два пункти.</p>
+<p>Відразу варто відзначити, що умови хоч і ідеальні, де обіцяні n потоків стабільно працюють і завжди буде підміна для потоків, що завершабося з помилкою (чого вже добитися в реальній роботі аеропорту неможливо через обмежені ресурси), все одно система має кілька неприємних особливостей, так як потоків більше не стане за жодних умов, навіть у разі, коли черга буде збільшуватися швидше, ніж потоки будуть обробляти завдання.</p>
+<p>Пропоную розібратися на практиці, як працює <span class="text-green"><span class="text-bold"><em>ExecutorService</em></span></span> із фіксованою кількістю потоків. Давай створимо клас, що реалізує <span class="text-neon"><span class="text-bold"><em>Runnable</em></span></span> . Об'єкти цього класу і будуть нашими завданнями для <span class="text-green"><span class="text-bold"><em>ExecutorService</em></span></span> .</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Task</span> <span class="token keyword">implements</span> <span class="token class-name">Runnable</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> taskNumber<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">Task</span><span class="token punctuation">(</span><span class="token keyword">int</span> taskNumber<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>taskNumber <span class="token operator">=</span> taskNumber<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>SECONDS<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Обработан запит пользователя №"</span> <span class="token operator">+</span> taskNumber <span class="token operator">+</span> <span class="token string">" на потоке "</span> <span class="token operator">+</span> <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>У методі <span class="code text-orange">run()</span> ми блокуємо потік на 2 секунди, імітуючи навантаження, і виводимо номер поточного завдання та ім'я потоку, на якому виконуємо це завдання.</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">ExecutorService</span> executorService <span class="token operator">=</span> <span class="token class-name">Executors</span><span class="token punctuation">.</span><span class="token function">newFixedThreadPool</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">30</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            executorService<span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Task</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        executorService<span class="token punctuation">.</span><span class="token function">shutdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Для початку в <span class="code text-orange">main</span> створимо <span class="text-green"><span class="text-bold"><em>ExecutorService</em></span></span> та відправимо 30 завдань на виконання.</p>
+<div class="terminal">
+ Оброблено запит користувача №1 на потоці pool-1-thread-2 
+ <br>
+  Оброблено запит користувача №0 на потоці pool-1-thread-1 
+ <br>
+  Оброблено запит користувача №2 на потоці pool-1-thread-3 
+ <br>
+  Опрацьовано запит користувача №5 на потоці pool -1-thread-3 
+ <br>
+  Оброблено запит користувача №3 на потоці pool-1-thread-2 
+ <br>
+  Оброблено запит користувача №4 на потоці pool-1-thread-1 
+ <br>
+  Опрацьовано запит користувача №8 на потоці pool-1-thread-1 
+ <br>
+  Оброблено запит користувача №6 на потоці pool-1-thread-3 
+ <br>
+  Опрацьовано запит користувача №7 на потоці pool-1-thread-2 
+ <br>
+  Оброблено запит користувача №10 на потоці pool-1-thread-3 
+ <br>
+  Опрацьовано запит користувача №9 на потоці pool-1 -thread-1
+ <br>
+  Опрацьовано запит користувача №11 на потоці pool-1-thread-2 
+ <br>
+  Оброблено запит користувача №12 на потоці pool-1-thread-3 
+ <br>
+  Оброблено запит користувача №14 на потоці pool-1-thread-2 
+ <br>
+  Опрацьовано запит користувача №13 на потоці pool -1-thread-1 
+ <br>
+  Оброблено запит користувача №15 на потоці pool-1-thread-3 
+ <br>
+  Оброблено запит користувача №16 на потоці pool-1-thread-2 
+ <br>
+  Опрацьовано запит користувача №17 на потоці pool-1-thread-1 
+ <br>
+  Оброблено запит користувача №18 на потоці pool-1-thread-3 
+ <br>
+  Оброблено запит користувача №19 на потоці pool-1-thread-2 
+ <br>
+  Опрацьовано запит користувача №20 на потоці pool-1-thread-1 
+ <br>
+  Оброблено запит користувача №21 на потоці pool-1 -thread-3
+ <br>
+  Оброблено запит користувача №22 на потоці pool-1-thread-2 
+ <br>
+  Оброблено запит користувача №23 на потоці pool-1-thread-1 
+ <br>
+  Оброблено запит користувача №25 на потоці pool-1-thread-2 
+ <br>
+  Опрацьовано запит користувача №24 на потоці pool -1-thread-3 
+ <br>
+  Оброблено запит користувача №26 на потоці pool-1-thread-1 
+ <br>
+  Оброблено запит користувача №27 на потоці pool-1-thread-2 
+ <br>
+  Опрацьовано запит користувача №28 на потоці pool-1-thread-3 
+ <br>
+  Оброблено запит користувача №29 на потоці pool-1-thread-1
+</div>
+<p>У консолі бачимо, як завдання виконуються різних потоках у міру їх звільнення від попередньої задачи.</p>
+<p>Тепер ми збільшимо кількість завдань до 100, а після відправки на виконання 100 завдань викличемо метод <span class="code text-orange">awaitTermination(11, SECONDS)</span> . У параметри передаємо кількість та тимчасову одиницю. Цей метод заблокує основний потік на 11 секунд, після чого ми викличемо <span class="code text-orange">shutdownNow()</span> і змусимо завершити роботу <span class="text-green"><span class="text-bold"><em>ExecutorService</em></span></span> , не чекаючи виконання всіх завдань.</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">ExecutorService</span> executorService <span class="token operator">=</span> <span class="token class-name">Executors</span><span class="token punctuation">.</span><span class="token function">newFixedThreadPool</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">100</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            executorService<span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Task</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        executorService<span class="token punctuation">.</span><span class="token function">awaitTermination</span><span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">,</span> SECONDS<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        executorService<span class="token punctuation">.</span><span class="token function">shutdownNow</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>executorService<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Наприкінці виведемо дані про стан <span class="text-green"><span class="text-bold"><em>executorService</em></span></span> .</p>
+<p>У консолі бачимо таке:</p>
+<div class="terminal">
+ Оброблено запит користувача №0 на потоці pool-1-thread-1 
+ <br>
+  Оброблено запит користувача №2 на потоці pool-1-thread-3 
+ <br>
+  Оброблено запит користувача №1 на потоці pool-1-thread-2 
+ <br>
+  Опрацьовано запит користувача №4 на потоці pool -1-thread-3 Оброблено 
+ <br>
+  запит користувача №5 на потоці pool-1-thread-2 
+ <br>
+  Оброблено запит користувача №3 на потоці pool-1-thread-1 
+ <br>
+  Оброблено запит користувача №6 на потоці pool-1-thread-3 
+ <br>
+ користувача №7 на потоці pool-1-thread-2 
+ <br>
+  Оброблено запит користувача №8 на потоці pool-1-thread-1 
+ <br>
+  Оброблено запит користувача №9 на потоці pool-1-thread-3 
+ <br>
+  Опрацьовано запит користувача №11 на потоці pool-1 -thread-1
+ <br>
+  Оброблено запит користувача №10 на потоці pool-1-thread-2 
+ <br>
+  Оброблено запит користувача №13 на потоці pool-1-thread-1 
+ <br>
+  Оброблено запит користувача №14 на потоці pool-1-thread-2 
+ <br>
+  Опрацьовано запит користувача №12 на потоці pool -1-thread-3 
+ <br>
+  java.util.concurrent.ThreadPoolExecutor@452b3a41[Shutting down, pool size = 3, active threads = 3, queued tasks = 0, completed tasks = 15] Опрацьовано 
+ <br>
+  запит користувача №17 на потоці pool-1- thread-3 
+ <br>
+  Оброблено запит користувача №15 на потоці pool-1-thread-1 
+ <br>
+  Оброблено запит користувача №16 на потоці pool-1-thread-2
+</div>
+<p>Далі випливають 3 <span class="text-red"><span class="text-bold">InterruptedException</span></span> , які викидають методи <span class="code text-orange">sleep</span> з 3 активних завдань.</p>
+<p>Ми бачимо, що на момент завершення у нас виконалося 15 завдань, але ще залишається 3 активні потоки в пулі, які не закінчабо виконання свого завдання. У цих трьох потоків викликається <span class="code text-orange">interrupt()</span> , а це означає, що виконання завдання завершиться, але в нашому випадку метод <span class="code text-orange">sleep</span> викидає нам <span class="text-red"><span class="text-bold">InterruptedException</span></span> . Також ми бачимо, що після виклику методу <span class="code text-orange">shutdownNow()</span> очистилася черга із завдань.</p>
+<p>Таким чином, слід зазначити, що принцип роботи слід враховувати при використанні <span class="text-green"><span class="text-bold"><em>ExecutorService</em></span></span> з фіксованою кількістю потоків у пулі. Використовувати цей вид варто для завдань із заздалегідь відомим постійним навантаженням.</p>
+<p>Є ще одне цікаве питання: якщо потрібно використовувати екзекутор на 1 потік, який метод викликати - <span class="code text-orange">newSingleThreadExecutor()</span> або <span class="code text-orange">newFixedThreadPool(1)</span> ?</p>
+<p>У поведінці обидва екзекутори будуть еквівалентними. Різниця буде лише в тому, що метод <span class="code text-orange">NewSingleThreadExecutor()</span> поверне такий екзекутор, який надалі ніяк не можна переналаштувати на використання додаткових потоків.</p>

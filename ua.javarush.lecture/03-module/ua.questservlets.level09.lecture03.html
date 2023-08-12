@@ -1,0 +1,107 @@
+<h2>4.1 Список HTTP-методів</h2>
+<p>Найпершим словом у HTTP-запиті йде <strong>ім'я методу</strong> . Тут навіть є деяка аналогія з викликом методів Java. Метод у HTTP-запиті визначає основну операцію, яку необхідно виконати над ресурсом.</p>
+<p>Над яким ресурсом? Вся справа в тому, що на зорі всесвітньої павутини сервера просто зберігали HTML-файли, відповідно запит був до такого файлу і описував деяку дію, яку потрібно зробити з ресурсом/файлом.</p>
+<p>Стандарт HTTP визначає такі методи:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th width="60">#</th>
+    <th>Метод</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>1</td>
+    <td><strong>GET</strong></td>
+    <td>Використовується для <strong>запиту на вміст</strong> вказаного ресурсу.</td>
+   </tr>
+   <tr>
+    <td>2</td>
+    <td><strong>POST</strong></td>
+    <td>Використовується для передачі даних із клієнта на сервер. <strong>Змінює стан</strong> ресурсу на сервері.</td>
+   </tr>
+   <tr>
+    <td>3</td>
+    <td><strong>PUT</strong></td>
+    <td>Використовується для передачі даних із клієнта на сервер. <strong>Створює новий ресурс</strong> на сервері.</td>
+   </tr>
+   <tr>
+    <td>4</td>
+    <td><strong>DELETE</strong></td>
+    <td><strong>Видаляє</strong> вказаний ресурс на сервері.</td>
+   </tr>
+   <tr>
+    <td>5</td>
+    <td>HEAD</td>
+    <td>Аналогічний GET, але тіло відповіді відсутнє. Потрібен для отримання заголовків відповіді</td>
+   </tr>
+   <tr>
+    <td>6</td>
+    <td>OPTIONS</td>
+    <td>Запитує сервер список підтримуваних методів для зазначеного ресурсу.</td>
+   </tr>
+   <tr>
+    <td>7</td>
+    <td>TRACE</td>
+    <td>Службовий метод. Дозволяє дізнатися, чи не змінюють запит сервери, якими він проходить.</td>
+   </tr>
+   <tr>
+    <td>8</td>
+    <td>CONNECT</td>
+    <td>Службовий метод. Використовується для встановлення захищеного з'єднання.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<h2>4.2 Метод GET</h2>
+<p><strong>Метод GET</strong> – найпопулярніший HTTP-метод. Саме його викликає браузер, коли надсилає запит на сервер по чергову сторінку.</p>
+<p>Наприклад, ви перейшли в браузері за посиланням <span class="text-red">http://codegym.cc/path/resource?param1=value1¶m2=value2</span> — тоді браузер відправить на сервер CodeGym HTTP-запит, який буде починатися з такої <strong>starting line</strong> :</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="text-red">GET</span> <span class="token operator">/</span>path<span class="token operator">/</span>resource<span class="token operator">?</span>param1<span class="token operator">=</span>value1<span class="token operator">&amp;</span>param2<span class="token operator">=</span>value2 <span class="text-green">HTTP<span class="token operator">/</span><span class="token number">1.1</span></span><span class="token number"></span></code></pre>
+</div>
+<p>В результаті сервер повинен буде відправити браузеру HTTP-відповідь, в якому написати статус запиту, а також надіслати запитуваний ресурс.</p>
+<p>Мається на увазі, що <span class="text-green">багаторазовий виклик методу GET не змінює стан сервера, і сервер щоразу повинен повертати ту саму відповідь</span> . Тому в протоколі закладено хитре керування кешуванням об'єкта.</p>
+<p>По-перше, ресурси, отримані за допомогою запиту GET, <strong>браузер може кешувати на своїй стороні</strong> на власний розсуд (є нюанси).</p>
+<p>По-друге, при надсиланні запиту на сервер можна вказати спеціальний заголовок <code>If-Modified-Since</code>та <code>дату</code>. Якщо запитаний ресурс/документ змінився із зазначеної дати, то сервер його надішле. Якщо змінився, то тіло ресурсу не передається. Мається на увазі, що вона закешована на клієнта.</p>
+<p>Кешування сторінок (GET-запитів) використовується постійно, тому раджу розібратися в цьому питанні.</p>
+<h2>4.3 Методи POST та PUT</h2>
+<p><strong>Метод POST</strong> використовується для того, щоб змінити ресурс на сервері. Наприклад, коли ви завантажуєте картинку на сервер, ваш браузер відправляє запит POST.</p>
+<p>Розглянемо HTTP-запит, який почнеться з такої starting line:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="text-red">POST</span> <span class="token operator">/</span>path<span class="token operator">/</span>resource<span class="token operator">?</span>param1<span class="token operator">=</span>value1<span class="token operator">&amp;</span>param2<span class="token operator">=</span>value2 <span class="text-green">HTTP<span class="token operator">/</span><span class="token number">1.1</span></span><span class="token number"></span>
+<span class="text-user">headers…</span>
+
+<span class="token generics"><span class="token punctuation"></span><span class="text-orange"><span class="token punctuation">&lt;</span>request body<span class="token punctuation">&gt;</span></span><span class="token punctuation"></span></span></code></pre>
+<p>В результаті сервер повинен буде відправити браузеру HTTP-відповідь, в якій напише статус запиту, а також надіслати змінений ресурс. <span class="text-viola">Багаторазовий виклик методу POST змінює стан сервера і сервер щоразу може повертати різну відповідь</span> .</p>
+<p><strong>GET</strong> і <strong>POST</strong> - два найпоширеніші запити в Інтернеті. Щоб тобі було простіше запам'ятати, як працюють методи, розглянемо таку таблицю:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th></th>
+    <th>GET</th>
+    <th>POST</th>
+    <th>PUT</th>
+   </tr>
+   <tr>
+    <td>Запит</td>
+    <td>Тільки URL</td>
+    <td>URL та <strong>тіло</strong> запиту</td>
+    <td>URL та <strong>тіло</strong> запиту</td>
+   </tr>
+   <tr>
+    <td>Відповідь</td>
+    <td>Код та <strong>тіло</strong> відповіді</td>
+    <td>Код та <strong>тіло</strong> відповіді</td>
+    <td>Код відповіді</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Детальніше про POST-запит ти можеш почитати <a href="https://ru.wikipedia.org/wiki/POST_(HTTP)" target="_blank">за посиланням</a> .</p>
+<h2>4.4 Метод DELETE</h2>
+<p>Ну і нарешті інформація за <strong>методом DELETE</strong> . Тут узагалі все просто.</p>
+<p>Наприклад, ми хочемо видалити певний ресурс на сервері. Надсилаємо йому запит виду:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="text-red">DELETE </span> <span class="token operator">/</span>path<span class="token operator">/</span>resource<span class="token operator">?</span>param1<span class="token operator">=</span>value1<span class="token operator">&amp;</span>param2<span class="token operator">=</span>value2 <span class="text-green">HTTP<span class="token operator">/</span><span class="token number">1.1</span></span><span class="token number"></span></code></pre>
+</div>
+<p>Після отримання цього запиту сервер видаляє вказаний ресурс. Якщо, звичайно, ти маєш права на його видалення.</p>

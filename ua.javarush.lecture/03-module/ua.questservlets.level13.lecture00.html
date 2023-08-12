@@ -1,0 +1,48 @@
+<h2>1.1 Знайомство з JSP</h2>
+<p>Є два популярні способи написання сервлету: <strong>імперативний</strong> та <strong>декларативний</strong> . З першим ми вже розібралися - це, власне, Servlet. Друга називається JSP (Java Server Pages), з ним ми зараз і познайомимося.</p>
+<p>Приклад JSP сервлета:</p>
+<pre class="line-numbers"><code>
+&lt;html&gt; 
+    &lt;body&gt; 
+        <span class="text-red">&lt;%</span><span class="text-green"> out.print(2*5);</span> <span class="text-red">%&gt; </span>
+    &lt;/body&gt; 
+ &lt;/html&gt; 
+</code></pre>
+<p>Не дуже схоже на звичний нам класичний Servlet, чи не так? Так і є. <span class="text-viola">JSP – це HTML-сторінка із вставками Java-коду (виділено зеленим)</span> .</p>
+<p>Чи бачиш, <span class="text-green">якщо в сервлеті у тебе багато Java-коду і мало HTML-коду, тоді тобі зручніше застосовувати класичний сервлет</span> . А що робити, якщо тобі потрібна велика HTML-сторінка, в якій всього кілька рядків змінюється сервером?</p>
+<p>У цьому випадку найпростіше було б створити цю HTML-сторінку і якось виконати Java-код на сервері прямо в ній.</p>
+<h2>1.2 Компіляція JSP</h2>
+<p>Давай розглянемо ще один приклад:</p>
+<pre class="line-numbers"><code>
+&lt;html&gt; 
+  &lt;body&gt; 
+<span class="text-red">    &lt;%</span>
+<span class="text-user">        double num = Math.random();
+        if (num &gt; 0.95) {</span>
+<span class="text-red">     %&gt;</span>
+         &lt;h2&gt;Ти везунчик, user!&lt;/h2&gt;&lt;p&gt;(<span class="text-red">&lt;%=</span><span class="text-user"> num</span> <span class="text-red">%&gt;</span>)&lt;/p&gt;
+<span class="text-red">    &lt;%</span>
+<span class="text-user">        }</span>
+<span class="text-red">    %&gt; </span>
+  &lt;/body&gt; 
+&lt;/html&gt; 
+</code></pre>
+<p>Ми отримуємо випадкове число, і якщо воно більше 0.95, виводимо текст "Ти щасливчик, user!"</p>
+<p><span class="text-user">Синім кольором тут виділено Java-код</span> . Звичайним (не виділено) – HTML-код, <span class="text-red">а червоним – службові теги</span> , які допомагають зрозуміти, де Java-код, а де HTML.</p>
+<p>Помічаєш якусь дивність? Закриваюча фігурна дужка <code>"}"</code>знаходиться в іншому <code>"блоці коду"</code>. Як правильно писати такий код? Як це взагалі працює?</p>
+<p>Відповідь буде супер простою :)</p>
+<p>Веб-сервер після того, як знайде у себе JSP-файл, скомпілює його у класичний сервлет. На основі наведеної вище JSP-сторінки буде згенеровано такий Servlet:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HelloServlet</span> <span class="token keyword">extends</span> <span class="token class-name">HttpServlet</span> <span class="token punctuation">{</span>
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">doGet</span><span class="token punctuation">(</span><span class="token class-name">HttpServletRequest</span> request<span class="token punctuation">,</span> <span class="token class-name">HttpServletResponse</span> response<span class="token punctuation">)</span>  <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+    <span class="token class-name">PrintWriter</span> out <span class="token operator">=</span> response<span class="token punctuation">.</span><span class="token function">getWriter</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"&lt;html&gt; "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"&lt;body&gt;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">double</span> num <span class="token operator">=</span> <span class="token class-name">Math</span><span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>num <span class="token operator">&gt;</span> <span class="token number">0.95</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"&lt;h2&gt;Ти щасливчик, user! &lt;/h2&gt;&lt;p&gt;("</span> <span class="token operator">+</span> num <span class="token operator">+</span> <span class="token string">")&lt;/p&gt;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"&lt;/body&gt;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"&lt;/html&gt;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Веб-контейнер просто згенерував код сервлета, де HTML перетворився на текст, а вставки Java-коду стали звичайним Java-кодом!</p>

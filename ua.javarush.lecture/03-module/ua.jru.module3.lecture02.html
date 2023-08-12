@@ -1,0 +1,338 @@
+<h2>Завдання: Потрібно зробити UI для CRUD бекенду, використовуючи HTML, CSS, JS, jQuery. Робитимемо адмін-панель для управління акаунтами онлайн-ігри.</h2>
+<p></p>
+<ol>
+ <li>Зробити fork із репозиторію: <a href="https://github.com/vasylmalik/project-front.git" target="_blank">https://github.com/vasylmalik/project-front.git</a></li>
+ <li>Завантажити свою версію проекту на комп'ютер.</li>
+ <li>Завантажити собі Tomcat: <a href="https://tomcat.apache.org/download-90.cgi" target="_blank">https://tomcat.apache.org/download-90.cgi</a> .<mark class="red">Важливо</mark>: Tomcat потрібен саме <strong>версії 9</strong> , а не 10</li>
+ <li>Налаштувати запуск програми через Ідею: Alt + Shift + F9 -&gt; Edit Configurations… -&gt; Alt + insert -&gt; tom (у рядок пошуку) -&gt; Local.</li><img data-max-width="800" data-id="266d093e-dbf4-427b-83ea-73cd094a00cc" alt="" src="https://cdn.javarush.com/images/article/266d093e-dbf4-427b-83ea-73cd094a00cc/800.jpeg" style="width: 800px;">
+ <ul>
+  <li>Після цього потрібно натиснути <code>CONFIGURE</code>і вказати, куди завантажено і розпаковано архів з Tomcat.</li><img data-max-width="1024" data-id="e433ead9-994c-46a7-aded-72b185d8c650" alt="" src="https://cdn.javarush.com/images/article/e433ead9-994c-46a7-aded-72b185d8c650/1024.jpeg" style="width: 1024px;">
+  <li>У вкладці <code>Deployment</code>: Alt + insert -&gt; Artifact... -&gt; rpg:war exploded -&gt; OK.</li>
+  <li>У полі <code>Application context</code>: залишити тільки <code>/</code>(сліш).</li><img data-max-width="800" data-id="8a412297-fa55-4dc2-9529-008a7bf5a329" alt="" src="https://cdn.javarush.com/images/article/8a412297-fa55-4dc2-9529-008a7bf5a329/800.jpeg" style="width: 800px;">
+  <li>Натиснути <code>APPLY</code>.</li>
+  <li>Закрийте вікно налаштування.</li>
+ </ul>
+ <li>Запустити програму. Для цього: Alt+Shift+F9 -&gt; (ім'я конфігурації, я назвав 'App' у себе) -&gt; Run.</li>
+ <li>Після деплою програми відкриється нова вкладка у вибраному браузері при конфігурації. Відмінно, сервер налаштований, далі потрібно працювати з двома файлуми:</li>
+ <ul>
+  <li><code>&lt;project_dir&gt;/src/main/webapp/html/my.html</code>– тут буде розмітка та скрипти.</li>
+  <li><code>&lt;project_dir&gt;/src/main/webapp/css/my.css</code>- Тут буде стилі. Все щодо стилів – на твій розсуд, жодних вимог до них немає.</li>
+  <li></li>
+ </ul>
+ <li>У розмітку ( <strong>my.html</strong> ) додати таблицю (не забудь їй вказати id), в якій вказати назви колонок:</li>
+ <ul>
+  <li>#</li>
+  <li>Name</li>
+  <li>Title</li>
+  <li>Race</li>
+  <li>Profession</li>
+  <li>Level</li>
+  <li>Birthday</li>
+  <li>Banned</li>
+ </ul>
+ <li>Додати парний тег <code>&lt;script&gt;</code>– тут писатимемо функції.</li>
+ <li>Перша функція повинна надсилати GET запит на URL <code>"/rest/players"</code>– отримати список. Результат потрібно додати до таблиці з п.7 (ось і став у нагоді id таблиці). Якщо все зробив правильно – після перезапуску сервера у тебе на сторінці відображатиметься таблиця на 4 рядки. У першому рядку – імена колонок, у решті – дані, які прийшли з сервера.</li><img data-max-width="512" data-id="148609c9-9983-46e0-abc5-e70142150a05" alt="" src="https://cdn.javarush.com/images/article/148609c9-9983-46e0-abc5-e70142150a05/512.jpeg" style="width: 512px;">
+ <li>Тепер, бажано, додати таблиці межі осередків, бо інформація взагалі нечитана.</li><img data-max-width="512" data-id="2650ea8c-8a68-4b84-8a48-70ae355c86f3" alt="" src="https://cdn.javarush.com/images/article/2650ea8c-8a68-4b84-8a48-70ae355c86f3/512.jpeg" style="width: 512px;">
+ <li>Тепер візьмемося пейджингом. Для цього потрібно:</li>
+ <ul>
+  <li>Під таблицею додати секцію, наприклад, <code>&lt;div&gt;</code>у якій будуть кнопки пейджингу.</li>
+  <li>Додати функцію, яка надішле GET запит на сервер, який повертає загальну кількість облікових записів на сервері. URL: <code>"/rest/players/count"</code>.</li>
+  <li>Додати список, що випадає, на 3-4 числових значення, скільки показувати акаунтів за раз. Числа мають бути в діапазоні від 3 до 20 включно.</li>
+  <li>У способі відображення списку облікових записів (п.9) додамо розрахунок кількості сторінок, які потрібні при заданій кількості облікових записів на сторінку, щоб можна було переглянути всі облікові записи.</li>
+ </ul><img data-max-width="512" data-id="482bc5d3-e18b-4703-817a-f07edbf0269a" alt="" src="https://cdn.javarush.com/images/article/482bc5d3-e18b-4703-817a-f07edbf0269a/512.jpeg" style="width: 512px;">
+ <li>У функцію показу списку облікових записів додай параметр, який буде відповідати за номер сторінки, яку показуватиме. Відкоригуй URL, щоб він параметрами запиту передавав <strong>"pageNumber"</strong> та <strong>"pageSize"</strong> . Тепер при зміні кількості на сторінку в списку, що випадає, повинна показуватися запитана кількість акаунтів:</li><img data-max-width="512" data-id="58e08614-c31f-4285-9f6d-ea1d03a0519a" alt="" src="https://cdn.javarush.com/images/article/58e08614-c31f-4285-9f6d-ea1d03a0519a/512.jpeg" style="width: 512px;">
+ <li>Тепер давай підфарбуємо номер поточної сторінки, а то незручно.</li><img data-max-width="512" data-id="8a2f4a1a-a9c2-4706-b56e-b67ab9c71765" alt="" src="https://cdn.javarush.com/images/article/8a2f4a1a-a9c2-4706-b56e-b67ab9c71765/512.jpeg" style="width: 512px;">
+ <li>Додамо до таблиці ще 2 колонки: Edit та Delete. Для кожного рядка давай додамо іконки, які відповідатимуть за редагування та видалення кожного запису. Можеш використовувати або картинки, які є в <code>&lt;project_dir&gt;/src/main/webapp/img/</code>, або використовуй свої.</li><img data-max-width="512" data-id="04321419-21dd-41f3-ba35-cb31731ee8b1" alt="" src="https://cdn.javarush.com/images/article/04321419-21dd-41f3-ba35-cb31731ee8b1/512.jpeg" style="width: 512px;">
+ <li>Напиши функцію, яка відповідатиме за видалення облікового запису. Для цього потрібно надсилати DELETE запит на сервер на URL <code>"/rest/players/{id}"</code>. При натисканні на картинку кошика – викликай цю функцію. Після дзвінка – не забудь оновлювати список облікових записів на поточній сторінці.</li>
+ <ul>
+  <li>До видалення облікового запису з <strong>id=23</strong></li><img data-max-width="512" data-id="6abc6175-3c9c-48c1-9b50-1fd5cd7416bc" alt="" src="https://cdn.javarush.com/images/article/6abc6175-3c9c-48c1-9b50-1fd5cd7416bc/512.jpeg" style="width: 512px;">
+  <li>Після видалення облікового запису з <strong>id=23</strong> . Зверніть увагу, жодних кнопок, крім кошика, не натискалося.</li><img data-max-width="512" data-id="d8467d74-fdc3-4037-8c0a-e9aa551ca52b" alt="" src="https://cdn.javarush.com/images/article/d8467d74-fdc3-4037-8c0a-e9aa551ca52b/512.jpeg" style="width: 512px;">
+ </ul>
+ <li>Тепер напиши функцію, яка відповідає за редагування облікового запису. При натисканні на неї давай приховаємо кнопку "Delete", а картинку кнопки "Edit" поміняємо на "Save".</li><img data-max-width="512" data-id="df87c554-2a36-45fd-b06e-1c2e6bce1fc9" alt="" src="https://cdn.javarush.com/images/article/df87c554-2a36-45fd-b06e-1c2e6bce1fc9/512.jpeg" style="width: 512px;">
+ <li>Тепер додамо функціонал для редагування облікового запису. Натисніть кнопку “Edit”, крім зміни картинки, потрібно робити поля редагованими:</li>
+ <ul>
+  <li>Name</li>
+  <li>Title</li>
+  <li>Race</li>
+  <li>Profession</li>
+  <li>Banned</li>
+ </ul>
+ <p>Зверніть увагу, що значення в полях для редагування мають бути ті, що є в обліковому записі.</p><img data-max-width="512" data-id="ad3b0321-07ba-44ec-bddf-b4a663620053" alt="" src="https://cdn.javarush.com/images/article/ad3b0321-07ba-44ec-bddf-b4a663620053/512.jpeg" style="width: 512px;">
+ <li>Тепер зробимо відправлення змін на кліку на кнопку “Save”. Для цього потрібно надіслати POST запит на URL <code>“/rest/players/{id}”</code>і як тіло запиту передати значення всіх п'яти полів, які можна змінювати у вигляді JSON. Використовуй <strong>JSON.stringify({…}); </strong>Після зміни, не забудь перезавантажити дані на поточній сторінці.</li><img data-max-width="512" data-id="90232e40-2ee4-493b-8ff4-d4e91805f2af" alt="" src="https://cdn.javarush.com/images/article/90232e40-2ee4-493b-8ff4-d4e91805f2af/512.jpeg" style="width: 512px;"> <img data-max-width="512" data-id="5c5675c0-999a-48b2-8e5d-4e6714490d29" alt="" src="https://cdn.javarush.com/images/article/5c5675c0-999a-48b2-8e5d-4e6714490d29/512.jpeg" style="width: 512px;">
+ <li>Отже, із CRUD на даний момент має бути зроблено все, окрім “C” (Create). Після кнопок пейджингу, додай горизонтальну лінію та текст про те, що тут можна створити новий обліковий запис. Крім цього, додай блоки тексту та поля для введення для параметрів облікового запису:</li>
+ <ul>
+  <li>Name – текст, від 1 до 12 символів.</li>
+  <li>Title – текст від 1 до 30 символів.</li>
+  <li>Race – список, що випадає, допустимі значення дивися в API.</li>
+  <li>Profession – список, що випадає, допустимі значення дивися в API.</li>
+  <li>Level – число від 0 до 100.</li>
+  <li>Birthday - дата (&lt;input type = "date" ...).</li>
+  <li>Banned – булеве значення.</li>
+ </ul><img data-max-width="512" data-id="9892f0ac-07a5-4bd5-8a0d-fa5266869ae0" alt="" src="https://cdn.javarush.com/images/article/9892f0ac-07a5-4bd5-8a0d-fa5266869ae0/512.jpeg" style="width: 512px;">
+ <li>Тепер додай кнопку, на кліку на яку всі введені дані будуть відправлятися на сервер. Використовуй POST запит на URL <code>/rest/players</code>. Після відповіді сервера, не забудь очистити поля для введення даних і перезапитати список облікових записів на поточній сторінці.</li><img data-max-width="512" data-id="a106775d-0e9d-4632-91a5-2dcbb80323ed" alt="" src="https://cdn.javarush.com/images/article/a106775d-0e9d-4632-91a5-2dcbb80323ed/512.jpeg" style="width: 512px;"> <img data-max-width="512" data-id="ac63e2ad-d185-4526-97dc-fd4b9901c0ee" alt="" src="https://cdn.javarush.com/images/article/ac63e2ad-d185-4526-97dc-fd4b9901c0ee/512.jpeg" style="width: 512px;">
+ <li>Тепер можна додати "краси" через стилі - тут все на твій розсуд. У мене вийшло так:</li><img data-max-width="512" data-id="5ff75c73-c890-4130-bd4c-83e4a4426bf2" alt="" src="https://cdn.javarush.com/images/article/5ff75c73-c890-4130-bd4c-83e4a4426bf2/512.jpeg" style="width: 512px;">
+</ol>
+<br>
+<h2>Корисне: API сервера:</h2>
+<h3>
+ <center>
+  Get players list
+ </center></h3>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td><strong>URL</strong></td>
+    <td>/rest/players</td>
+   </tr>
+   <tr>
+    <td><strong>Method</strong></td>
+    <td>Optional: Integer pageNumber, Integer pageSize</td>
+   </tr>
+   <tr>
+    <td><strong>Data Params</strong></td>
+    <td>None</td>
+   </tr>
+   <tr>
+    <td><strong>Success Response</strong></td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Code</span><span class="token operator">:</span> <span class="token number">200</span> OK
+<span class="token class-name">Code</span><span class="token operator">:</span> <span class="token number">200</span> OK
+<span class="token class-name">Content</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+ <span class="token punctuation">{</span>
+  “id”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">Long</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  “name”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">String</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  “title”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">String</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  “race”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">Race</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  “profession”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">Profession</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  “birthday”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">Long</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  “banned”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">Boolean</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  “level”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">Integer</span><span class="token punctuation">]</span>
+ <span class="token punctuation">}</span><span class="token punctuation">,</span>
+ …
+<span class="token punctuation">]</span></code></pre></td>
+   </tr>
+   <tr>
+    <td><strong>Notes</strong></td>
+    <td>
+     <p><strong>pageNumber</strong> – параметр, який відповідає за номер сторінки, що відображається при використанні пейджингу. Нумерація починається із нуля.</p>
+     <p><strong>pageSize</strong> – параметр, який відповідає за кількість результатів на одній сторінці при пейджингу</p>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">enum</span> <span class="token class-name">Race</span> <span class="token punctuation">{</span>
+    HUMAN<span class="token punctuation">,</span>
+    DWARF<span class="token punctuation">,</span>
+    ELF<span class="token punctuation">,</span>
+    GIANT<span class="token punctuation">,</span>
+    ORC<span class="token punctuation">,</span>
+    TROLL<span class="token punctuation">,</span>
+    HOBBIT
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">enum</span> <span class="token class-name">Profession</span> <span class="token punctuation">{</span>
+    WARRIOR<span class="token punctuation">,</span>
+    ROGUE<span class="token punctuation">,</span>
+    SORCERER<span class="token punctuation">,</span>
+    CLERIC<span class="token punctuation">,</span>
+    PALADIN<span class="token punctuation">,</span>
+    NAZGUL<span class="token punctuation">,</span>
+    WARLOCK<span class="token punctuation">,</span>
+    DRUID
+<span class="token punctuation">}</span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p></p>
+<center>
+ <h3>Get players count</h3>
+</center>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td><strong>URL</strong></td>
+    <td>/rest/players/count</td>
+   </tr>
+   <tr>
+    <td><strong>Method</strong></td>
+    <td>GET</td>
+   </tr>
+   <tr>
+    <td><strong>URL Params</strong></td>
+    <td>None</td>
+   </tr>
+   <tr>
+    <td><strong>Data Params</strong></td>
+    <td>None</td>
+   </tr>
+   <tr>
+    <td><strong>Success Response</strong></td>
+    <td>
+     <p><strong>Code</strong> : 200 OK</p>
+     <p><strong>Content</strong> : Integer</p></td>
+   </tr>
+   <tr>
+    <td><strong>Notes</strong></td>
+    <td></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p></p>
+<center>
+ <h3>Delete player</h3>
+</center>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td><strong>URL</strong></td>
+    <td>/rest/players/{id}</td>
+   </tr>
+   <tr>
+    <td><strong>Method</strong></td>
+    <td>DELETE</td>
+   </tr>
+   <tr>
+    <td><strong>URL Params</strong></td>
+    <td>id</td>
+   </tr>
+   <tr>
+    <td><strong>Data Params</strong></td>
+    <td>None</td>
+   </tr>
+   <tr>
+    <td><strong>Success Response</strong></td>
+    <td><strong>Code</strong> : 200 OK</td>
+   </tr>
+   <tr>
+    <td><strong>Notes</strong></td>
+    <td>
+     <p>Якщо гравця не знайдено – відповідь помилкою з кодом 404.</p>
+     <p>Якщо значення id не валідне-відповідь помилкою з кодом 400.</p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p></p>
+<center>
+ <h3>Update player</h3>
+</center>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td><strong>URL</strong></td>
+    <td>/rest/players/{id}</td>
+   </tr>
+   <tr>
+    <td><strong>Method</strong></td>
+    <td>POST</td>
+   </tr>
+   <tr>
+    <td><strong>URL Params</strong></td>
+    <td>id</td>
+   </tr>
+   <tr>
+    <td><strong>Data Params</strong></td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token punctuation">{</span>
+  “name”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">String</span><span class="token punctuation">]</span><span class="token punctuation">,</span>       <span class="token operator">--</span>optional
+  “title”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">String</span><span class="token punctuation">]</span><span class="token punctuation">,</span>     <span class="token operator">--</span>optional
+  “race”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">Race</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">--</span>optional
+  “profession”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">Profession</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">--</span>optional
+  “banned”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">Boolean</span><span class="token punctuation">]</span>    <span class="token operator">--</span>optional
+<span class="token punctuation">}</span></code></pre></td>
+   </tr>
+   <tr>
+    <td><strong>Success Response</strong></td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Code</span><span class="token operator">:</span> <span class="token number">200</span> OK
+<span class="token class-name">Content</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+  “id”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">Long</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  “name”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">String</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  “title”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">String</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  “race”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">Race</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  “profession”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">Profession</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  “birthday”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">Long</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  “banned”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">Boolean</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  “level”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">Integer</span><span class="token punctuation">]</span>
+ <span class="token punctuation">}</span></code></pre></td>
+   </tr>
+   <tr>
+    <td><strong>Notes</strong></td>
+    <td>
+     <p>Оновлюються тільки поля, які не null.</p>
+     <p>Якщо гравця не знайдено в БД – відповідь помилкою з кодом 404.</p>
+     <p>Якщо значення id не є валідним - відповідь помилкою з кодом 400.</p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p></p>
+<center>
+ <h3>Create player</h3>
+</center>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td><strong>URL</strong></td>
+    <td>/rest/players</td>
+   </tr>
+   <tr>
+    <td><strong>Method</strong></td>
+    <td>POST</td>
+   </tr>
+   <tr>
+    <td><strong>URL Params</strong></td>
+    <td>None</td>
+   </tr>
+   <tr>
+    <td><strong>Data Params</strong></td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token punctuation">{</span>
+  “name”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">String</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  “title”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">String</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  “race”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">Race</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  “profession”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">Profession</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  “birthday”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">Long</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  “banned”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">Boolean</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">--</span>optional<span class="token punctuation">,</span> <span class="token keyword">default</span><span class="token operator">=</span><span class="token boolean">false</span>
+  “level”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">Integer</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span></code></pre></td>
+   </tr>
+   <tr>
+    <td><strong>Success Response</strong></td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Code</span><span class="token operator">:</span> <span class="token number">200</span> OK
+<span class="token class-name">Content</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+  “id”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">Long</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  “name”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">String</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  “title”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">String</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  “race”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">Race</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  “profession”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">Profession</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  “birthday”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">Long</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  “banned”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">Boolean</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  “level”<span class="token operator">:</span><span class="token punctuation">[</span><span class="token class-name">Integer</span><span class="token punctuation">]</span>
+ <span class="token punctuation">}</span><span class="token punctuation">,</span></code></pre></td>
+   </tr>
+   <tr>
+    <td><strong>Notes</strong></td>
+    <td>
+     <p>Ми не можемо створити гравця, якщо:</p>
+     <p></p>
+     <ul>
+      <li>вказані не всі параметри Data Params (крім banned);</li>
+      <li>довжина значення параметра “name” або “title” перевищує розмір відповідного поля (12 та 30 символів);</li>
+      <li>значення параметра “name” пустий рядок;</li>
+      <li>рівень знаходиться поза заданими межами (від 0 до 100);</li>
+      <li>"birthday": [Long] &lt; 0;</li>
+      <li>дата реєстрації знаходяться поза заданими межами.</li>
+      <li></li>
+     </ul>
+     <p>У разі всього перерахованого вище - відповідь помилкою з кодом 400.</p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<hr>
+<p><a href="https://youtu.be/BqpeyLVm2CA" target="_blank">Розбір проекту</a> . <strong>Дивитись після виконання!</strong></p>

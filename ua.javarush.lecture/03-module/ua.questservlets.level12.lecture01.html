@@ -1,0 +1,208 @@
+<h2>2.1 Клас HttpServletRequest</h2>
+<p>Більшість роботи твій сервлет повинен зробити на основі інформації, отриманої із запиту. За нього відповідає об'єкт <code>HttpServletRequest</code>, який контейнер передасть у твій сервлет (у метод <code>service</code>або методи <code>doGet()</code>, <code>doPost()</code>і т. д.)</p>
+<p>Цей об'єкт має досить багато методів, оскільки він просто зберігає дані запиту, а через нього можна взаємодіяти з контейнером.</p>
+<p>Методи можна розділити на 2 великі групи:</p>
+<ul>
+ <li>Методи, пов'язані з авторизацією користувача</li>
+ <li>Методи роботи з даними запиту</li>
+</ul>
+<p>Методи авторизації користувача я наведу у вигляді таблиці, але розбирати їх ми не будемо. Справа в тому, що їх дуже рідко використовують для авторизації користувача. Усі популярні фреймворки використовують свої, набагато просунутіші підходи до авторизації.</p>
+<p>Я повинен навести їхній список, але знову ж таки я не бачив, щоб хтось їх використав.</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th></th>
+    <th width="300">Метод</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>1</td>
+    <td><code>authenticate(HttpServletResponse)</code></td>
+    <td>Виконує аутентифікацію response</td>
+   </tr>
+   <tr>
+    <td>2</td>
+    <td><code>changeSessionId()</code></td>
+    <td>Примусово змінює ID сесії</td>
+   </tr>
+   <tr>
+    <td>3</td>
+    <td><code>getAuthType()</code></td>
+    <td>Повертає тип автентифікації, який використовується: ASIC_AUTH, FORM_AUTH, CLIENT_CERT_AUTH, DIGEST_AUTH</td>
+   </tr>
+   <tr>
+    <td>4</td>
+    <td><code>getRemoteUser()</code></td>
+    <td>Повертає login користувача</td>
+   </tr>
+   <tr>
+    <td>5</td>
+    <td><code>getRequestedSessionId()</code></td>
+    <td>Повертає SessionID клієнта</td>
+   </tr>
+   <tr>
+    <td>6</td>
+    <td><code>getSession()</code></td>
+    <td>Повертає об'єкт HttpSession</td>
+   </tr>
+   <tr>
+    <td>7</td>
+    <td><code>getUserPrincipal()</code></td>
+    <td>Повертає об'єкт java.security.Principal</td>
+   </tr>
+   <tr>
+    <td>8</td>
+    <td><code>login(username, password)</code></td>
+    <td>Виконує логін користувача</td>
+   </tr>
+   <tr>
+    <td>9</td>
+    <td><code>logout()</code></td>
+    <td>Розлогінює сесію користувача</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<h2>2.2 Дані запиту</h2>
+<p>Друга група методів набагато цікавіша. Які дані у нас є в запиті?</p>
+<ul>
+ <li>http-метод</li>
+ <li>URI</li>
+ <li>Параметри</li>
+ <li>Заголовки</li>
+</ul>
+<p>Подивимося, які методи є для роботи з ними:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th></th>
+    <th width="250">Метод</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>1</td>
+    <td><code>getMethod()</code></td>
+    <td>Повертає HTTP-метод: GET, POST, DELETE, …</td>
+   </tr>
+   <tr>
+    <td>2</td>
+    <td><code>getRequestURI()</code></td>
+    <td>Повертає URI запиту: <a href="http://codegym.cc/my/data" target="_blank">http://codegym.cc/my/data</a></td>
+   </tr>
+   <tr>
+    <td>3</td>
+    <td><code>getRequestURL()</code></td>
+    <td>Повертає URL-адресау запиту: <a href="http://codegym.cc/my/data" target="_blank">http://codegym.cc/my/data</a></td>
+   </tr>
+   <tr>
+    <td>4</td>
+    <td><code>getQueryString()</code></td>
+    <td>Повертає Query, тобто все, що йде після знаку?</td>
+   </tr>
+   <tr>
+    <td>5</td>
+    <td><code>getParameterMap()</code></td>
+    <td>Повертає список параметрів запиту</td>
+   </tr>
+   <tr>
+    <td>6</td>
+    <td><code>getParameter(String name)</code></td>
+    <td>Повертає значення параметра на ім'я</td>
+   </tr>
+   <tr>
+    <td>7</td>
+    <td><code>getContentType()</code></td>
+    <td>Повертає MimeType request body</td>
+   </tr>
+   <tr>
+    <td>8</td>
+    <td><code>getReader()</code></td>
+    <td>Reader, щоб прочитати request body як текст</td>
+   </tr>
+   <tr>
+    <td>9</td>
+    <td><code>getInputStream()</code></td>
+    <td>InputStream, щоб прочитати request body як byte[]</td>
+   </tr>
+   <tr>
+    <td>10</td>
+    <td><code>getSession()</code></td>
+    <td>Повертає об'єкт HttpSession</td>
+   </tr>
+   <tr>
+    <td>11</td>
+    <td><code>getCookies()</code></td>
+    <td>Повертає масив об'єктів Cookie[]</td>
+   </tr>
+   <tr>
+    <td>12</td>
+    <td><code>getHeaderNames()</code></td>
+    <td>Повертає список заголовків, лише імена</td>
+   </tr>
+   <tr>
+    <td>13</td>
+    <td><code>getHeader(String name)</code></td>
+    <td>Повертає значення заголовка на ім'я</td>
+   </tr>
+   <tr>
+    <td>14</td>
+    <td><code>getServletPath()</code></td>
+    <td>Повертає частину URL, яка відноситься до сервлета</td>
+   </tr>
+   <tr>
+    <td>15</td>
+    <td><code>getContextPath()</code></td>
+    <td>Повертає частину URI, яка задає контент запиту</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>І це навіть не всі методи.</p>
+<p>Хоча після того, як ми вивчабо протокол HTTP і навчабося працювати з HttpClient'ом, тут уже все більш-менш знайоме, чи не так?</p>
+<p>Давай напишемо сервлет, у який можна передати текст і колір, а він повертатиме HTML-сторінку з цим текстом, написаним вказаним кольором. Як тобі ідея?</p>
+<p>Почнемо з написання свого сервлета:</p>
+<pre class="line-numbers"><code>
+public class <span class="text-orange">ColorTextServlet</span> extends <span class="text-red">HttpServlet</span> {
+    protected void <span class="text-red">doGet</span>(<span class="text-green">HttpServletRequest request</span>, <span class="text-user">HttpServletResponse response</span>) throws Exception {
+          //напишіть тут ваш код
+    }
+}
+</code></pre>
+<p>Тепер нам потрібно отримати текст і колір, передані користувачем URI:</p>
+<pre class="line-numbers"><code>
+public class <span class="text-orange">ColorTextServlet</span> extends <span class="text-red">HttpServlet</span> {
+    protected void <span class="text-red">doGet</span>(<span class="text-green">HttpServletRequest request</span>, <span class="text-user">HttpServletResponse response</span>) throws Exception {
+
+        // Отримуємо параметр “text” и “color” із запиту
+        String text= <span class="text-green">request</span>.getParameter("text");
+        String color = <span class="text-green">request</span>.getParameter("color");
+ 
+    }
+}
+</code></pre>
+<p>І, нарешті, потрібно вивести текст у вигляді HTML. Ми розберемо це у наступній лекції, але тут я трохи підкажу:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name"><span class="text-orange">ColorTextServlet</span></span> <span class="token keyword">extends</span> <span class="token class-name"><span class="text-red">HttpServlet</span></span> <span class="token punctuation">{</span>
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function"><span class="text-red">doGet</span></span><span class="token punctuation">(</span><span class="token class-name"></span><span class="text-green"><span class="token class-name">HttpServletRequest</span> request</span><span class="token punctuation">,</span> <span class="token class-name"></span><span class="text-user"><span class="token class-name">HttpServletResponse</span> response</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+
+        <span class="token comment">// Отримуємо параметр “text” та “color” із запиту</span>
+        <span class="token class-name">String</span> <span class="text-viola">text</span> <span class="token operator">=</span> <span class="text-green">request</span><span class="token punctuation">.</span><span class="token function">getParameter</span><span class="token punctuation">(</span><span class="token string"><span class="text-green">"text"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">String</span> <span class="text-viola">color</span> <span class="token operator">=</span> <span class="text-green">request</span><span class="token punctuation">.</span><span class="token function">getParameter</span><span class="token punctuation">(</span><span class="token string"><span class="text-green">"color"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+        <span class="token comment">// Друкуємо HTML як відповідь для браузера</span>
+        <span class="text-user">response</span><span class="token punctuation">.</span><span class="token function">setContentType</span><span class="token punctuation">(</span><span class="token string"><span class="text-green">"text/html;charset=UTF-8"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">PrintWriter</span> <span class="text-yellow">out</span> <span class="token operator">=</span>  <span class="text-user">response</span><span class="token punctuation">.</span><span class="token function">getWriter</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="text-yellow">out</span><span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string"><span class="text-green">"&lt;html&gt;"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="text-yellow">out</span><span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string"><span class="text-green">"&lt;head&gt; &lt;title&gt; ColorTextServlet &lt;/title&gt; &lt;/head&gt;"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="text-yellow">out</span><span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string"><span class="text-green">"&lt;body&gt;"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="text-yellow">out</span><span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string"></span><span class="text-green"><span class="token string">"&lt;h1 style="</span>color<span class="token operator">:</span><span class="token string">"+<span class="text-viola">color</span>+"</span><span class="token operator">&gt;</span><span class="token string">"+<span class="text-viola">text</span>+"</span><span class="token operator">&lt;</span><span class="token operator">/</span>h1<span class="token operator">&gt;</span>"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="text-yellow">out</span><span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string"><span class="text-green">"&lt;/body&gt;"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="text-yellow">out</span><span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string"><span class="text-green">"&lt;/html&gt;"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+            <span class="text-yellow">out</span><span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>

@@ -1,0 +1,54 @@
+<p>- Привіт, Аміго! Я дивлюся, ти робиш великі успіхи у вивченні ниток.</p>
+<p class="amigo"><span class="text-user">— Це виявилося нескладно.</span></p>
+<p>- Це ж чудово! Сьогодні легкий урок і тема цього уроку – метод&nbsp; <b>join</b> .</p>
+<p>Уяви собі ситуацію: головна нитка створила дочірню нитку для виконання якогось завдання. Минає час, і ось головній нитці знадобабося результати роботи тієї дочірньої нитки. А дочірня нитка ще не закінчила своєї роботи. Що робити головною ниткою?</p>
+<p class="amigo"><span class="text-user">— Так що робити головній нитці?</span></p>
+<p>- Для цього є метод&nbsp; <b>join</b> . Сенс його в наступному. Одна нитка чекає, доки повністю завершиться робота другої нитки:</p>
+<div class="table-container">
+ <table class="table_example wide-table">
+  <tbody>
+   <tr>
+    <th>Код</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Printer</span> <span class="token keyword"></span><span class="text-user"><span class="token keyword">implements</span> <span class="token class-name">Runnable</span></span><span class="token class-name"></span>
+<span class="token punctuation">{</span>
+<span class="token keyword">private</span> <span class="token class-name">String</span> name<span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token class-name">Printer</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function"></span><span class="text-user"><span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span></span><span class="token punctuation"></span>
+<span class="token punctuation">{</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"I’m "</span> <span class="token operator">+</span> <span class="token keyword">this</span><span class="token punctuation">.</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Клас, який реалізує Runnable інтерфейс.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token class-name">Printer</span> <span class="text-user">printer1</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Printer</span><span class="token punctuation">(</span><span class="token string">"Коля"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Thread</span> <span class="text-green">thread1</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="text-user">printer1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="text-green">thread1</span><span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<strong><span class="text-green">thread1</span></strong><span class="token punctuation">.</span><span class="token function"></span><span class="text-red"><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Головна нитка створює дочірню нитку – об'єкт&nbsp; <span class="text-green"><strong>thread1</strong></span> .
+     <p></p>
+     <p>Потім запускає її виклик&nbsp; <strong><span class="text-green">thread1</span> .start();</strong></p>
+     <p>І чекає на її завершення –&nbsp; <strong><span class="text-red">thread1.join();</span></strong></p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="red_text text-red">Одна нитка може викликати метод&nbsp; <b>join</b> &nbsp;у об'єкта другої нитки. </span>&nbsp;У результаті перша нитка (яка викликала метод) припиняє свою роботу до закінчення роботи другої нитки (об'єкт якої був викликаний метод).</p>
+<p><b>Тут варто розрізняти дві речі: є, власне, нитка – окремий процес виконання команд, а є об'єкт цієї нитки (об'єкт Thread).</b></p>
+<p class="amigo"><span class="text-user">- І це все?</span></p>
+<p>- Так.</p>
+<p class="amigo"><span class="text-user">— А навіщо треба створювати нитку і одразу ж чекати на її завершення?</span></p>
+<p>— Одразу ж може й не треба. А ось через якийсь час це може й знадобиться. Головна нитка після запуску першої дочірньої нитки може&nbsp; <i>роздати ще багато завдань</i> &nbsp;іншим ниткам (створивши їх і викликавши метод&nbsp; <b>start</b> ), а потім все – роботи їй більше не залишилося, потрібно опрацьовувати результати роботи першої дочірньої нитки. У таких випадках, коли потрібно дочекатися завершення роботи іншої нитки і потрібно викликати метод&nbsp; <b>join</b> .</p>
+<p class="amigo"><span class="text-user">- Зрозуміло.</span></p>

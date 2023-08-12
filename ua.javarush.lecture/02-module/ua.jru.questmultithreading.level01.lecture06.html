@@ -1,0 +1,66 @@
+<p>- Привіт, Аміго!</p>
+<p><span class="text-user">- Привіт, Ріша!</span></p>
+<p>- Я познайомлю тебе з методами <strong>wait</strong> , <strong>notify</strong> , <strong>notifyAll</strong> класу Object.</p>
+<p>Сьогодні ми просто ознайомимося з ними, але потім знову повернемося і вже виділимо на це більше часу.</p>
+<p><span class="text-user">- Добре.</span></p>
+<p>— Ці методи вигадали як частину механізму синхронізації ниток.</p>
+<p>Нагадаю, що Java має вбудований механізм управління доступом до загальних ресурсів (об'єктів) з різних ниток. Нитка може оголосити якийсь об'єкт зайнятим, та інші нитки будуть змушені чекати, доки зайнятий об'єкт не звільниться.</p>
+<p><span class="text-user">— Я пам'ятаю, що це робиться за допомогою ключового слова <strong>synchronized</strong> .</span></p>
+<p>- Правильно. Зазвичай такий код виглядає приблизно так:</p>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token class-name">Object</span> monitor <span class="token operator">=</span> <span class="token function">getMonitor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token keyword">synchronized</span><span class="token punctuation">(</span>monitor<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"text"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Пам'ятаєш, як це працює?</p>
+<p><span class="text-user">- Ага. Якщо дві нитки одночасно викличуть метод print(), то одна з них увійде в блок, позначений synchronized, і заблокує monitor, тому друга нитка чекатиме, доки монітор не звільниться.</span></p>
+<p>- Правильно. Як тільки нитка входить у блок, позначений synchronized, то об'єкт-монітор позначається як зайнятий, та інші нитки будуть змушені чекати на звільнення об'єкта-монітора. Один і той же об'єкт-монітор може використовуватись у різних частинах програми.</p>
+<p><span class="text-user">— До речі, чому монітор?</span></p>
+<p>— Монітором прийнято називати об'єкт, який зберігає стан зайнятий/вільний.</p>
+<p>Ось тут і вступають у справу методи <strong>wait</strong> і <strong>notify</strong> .</p>
+<p>Власне, методів як таких лише два. Інші – це лише модифікації цих методів.</p>
+<p>Тепер розберемося, <strong>що таке метод wait і навіщо він потрібний.</strong></p>
+<p>Іноді у програмі може бути така ситуація, що нитка увійшла в блок коду synchronized, заблокувала монітор і може працювати далі, т.к. якихось даних ще не вистачає: наприклад, файл який вона повинна обробити ще не завантажився або щось таке.</p>
+<p>Ми можемо просто почекати, коли файл скачається. Можна просто в циклі перевіряти - якщо файл ще не завантажився - спати, наприклад, секунду і знову перевіряти і т.д.</p>
+<p>Приблизно так:</p>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">while</span><span class="token punctuation">(</span><span class="token operator">!</span>file<span class="token punctuation">.</span><span class="token function">isDownloaded</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token function">processFile</span><span class="token punctuation">(</span>file<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Але в нашому випадку таке очікування надто дороге. Т.к. наша нитка заблокувала монітор, інші нитки змушені теж чекати, хоча їх дані для роботи можуть бути вже готові.</p>
+<p>Для вирішення цієї проблеми і був придуманий метод <strong>wait</strong> (). Виклик цього методу призводить до того, що нитка звільняє монітор і стає на паузу.</p>
+<p>p align="justify"&gt; Метод wait можна викликати у об'єкта-монітора і тільки тоді, коли це монітор зайнятий - тобто. всередині блоку <strong>synchronized</strong> . Нитка тимчасово припиняє роботу, а монітор звільняється, щоб ним могли скористатися інші нитки.</p>
+<p>Часто зустрічаються ситуації, коли до блоку <strong>synchronized</strong> зайшла нитка, викликала там wait, звільнила монітор.</p>
+<p>Потім туди увійшла друга нитка і теж стала на паузу, потім третя і таке інше.</p>
+<p><span class="text-user">— А як же нитка зніметься з паузи?</span></p>
+<p>– Для цього є другий метод – notify.</p>
+<p>Методи <strong>notify</strong> / <strong>notifyAll</strong> можна викликати у об'єкта-монітора і лише, коли цей монітор зайнятий - тобто. всередині блоку <strong>synchronized</strong> . Метод <strong>notifyAll</strong> знімає з паузи всі нитки, що стали на паузу за допомогою даного об'єкта-монітора.</p>
+<p>Метод <strong>notify</strong> "розморожує" одну випадкову нитку, метод <strong>notifyAll</strong> - всі "заморожені" нитки даного монітора.</p>
+<p><span class="text-user">— Дуже цікаво, дякую Рішу.</span></p>
+<p>— Радий, що тобі подобається, Аміго!</p>
+<p>Є ще модифікації методу <strong>wait</strong> ():</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Метод wait()</th>
+    <th>Пояснення</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">void</span> <span class="token function">wait</span><span class="token punctuation">(</span><span class="token keyword">long</span> timeout<span class="token punctuation">)</span></code></pre></td>
+    <td>Нитка «замерзає», але через передану кількість мілісекунд автоматично «розморожується».</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">void</span> <span class="token function">wait</span><span class="token punctuation">(</span><span class="token keyword">long</span> timeout<span class="token punctuation">,</span> <span class="token keyword">int</span> nanos<span class="token punctuation">)</span></code></pre></td>
+    <td>Нитка «замерзає», але через передану кількість мілісекунд та наносекунд автоматично «розморожується».</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Це, як ще кажуть, wait з таймаутом. Метод працює як звичайний wait, але якщо вказаний час минув, а нитку ніхто не зняв із паузи – вона активується сама.</p>

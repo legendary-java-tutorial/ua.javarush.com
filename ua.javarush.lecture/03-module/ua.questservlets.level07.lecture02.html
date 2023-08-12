@@ -1,0 +1,32 @@
+<h2>3.1 Оператор if else</h2>
+<p>Найчастіший оператор JavaScript, як і Java, - це <code>if-else</code>. Працює він так само. Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">var</span> x <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token keyword"><span class="text-red">if</span></span> <span class="token punctuation">(</span>x <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"one"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token keyword"><span class="text-red">else</span></span> <span class="token punctuation">{</span>
+        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"unknown"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span></code></pre>
+<p><code>if-else</code>можуть бути вкладені, а також блок <code>else</code>може бути відсутнім. Все, як і Java.</p>
+<h2>3.2 Цикли for, while, for in</h2>
+<p>Цикл for у мові JavaScript влаштований так само, як і Java. І нічого дивного, вони обидва скопіювали його поведінку з мови C++. Загалом жодних відмінностей. Також у мові JavaScript є оператори <code>break</code>та <code>continue</code>. Жодних сюрпризів. Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">var</span> s <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">var</span> i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">&lt;</span><span class="token number">10</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+   s <span class="token operator">+=</span> i<span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Також є цикли <code>while</code>та <code>do.while</code>. Працюють так само, як у Java і С++.</p>
+<p>З цікавого: є свій аналог циклу <code>for each</code>, називається <code>for in</code>. Ось як він виглядає:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">var</span> <span class="text-user">obj</span> <span class="token operator">=</span> <span class="token punctuation">{</span>a<span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span> b<span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span> c<span class="token operator">:</span> <span class="token number">3</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="text-red">   <span class="token keyword">for</span></span><span class="token keyword"></span> <span class="token punctuation">(</span><span class="token keyword">var</span> <span class="text-green">key</span> <span class="text-red">in</span> <span class="text-user">obj</span><span class="token punctuation">)</span>
+     console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span> <span class="text-user">obj</span><span class="token punctuation">[</span><span class="text-green">key</span><span class="token punctuation">]</span> <span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>На відміну від мови Java, змінна <code class="text-green">key</code>послідовно приймає значення ключів об'єкта <code class="text-user">obj</code>. Щоб отримати значення за ключом, потрібно написати<code>obj[key];</code></p>
+<h2>3.3 Винятки</h2>
+<p>JavaScript підтримує роботу з винятками, але оскільки нормальної типізації немає, всі винятки мають рівно один тип – <code>Error</code>.</p>
+<p>Для роботи з винятками існує оператор <code>try-catch-finally</code>, який працює аналогічно оператору Java.</p>
+<p>Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="text-red">   <span class="token keyword">try</span> </span><span class="token punctuation">{</span>
+<span class="text-red">     <span class="token keyword">throw</span></span><span class="token keyword"></span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">"JavaScript support exceptions"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="text-red">   <span class="token keyword">catch</span></span><span class="token keyword"></span><span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span></code></pre>

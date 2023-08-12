@@ -1,0 +1,223 @@
+Оператор CASE
+<p>----------------------------------------</p>
+Оператор CASE
+Другий варіант оператора CASE
+Вирішуємо завдання за допомогою оператора CASE
+<p>----------------------------------------</p>
+<h2>2.1 Оператор CASE</h2>
+<p>У мові SQL є два способи запису оператора <code>CASE</code>. Перший запис робить його схожим на switch з мови Java, а другий формат більше схожий на множинний <code>if-else</code>.</p>
+<p>Почнемо з першого варіанта – аналог switch. Загальний формат має вигляд: </p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-red">CASE</span> <span class="text-viola">case_value</span>
+<span class="text-red">WHEN</span> <span class="text-user">value1</span> <span class="text-red">THEN</span> <span class=" text-green">result1</span>
+[<span class="text-red">WHEN</span> <span class="text-user">value2</span> <span class="text-red">THEN</span> <span class= "text-green">result2</span>] ...
+[<span class="text-red">ELSE</span> <span class="text-green">resultN</span>]
+<span class="text-red">END</span>
+        </code></pre>
+</div>
+<p>Справді дуже схожий на <code>switch</code>, тільки слова трохи інші:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>SQL</th>
+        <th>Java</th>
+    </tr>
+    <tr>
+        <td>case x</td>
+        <td>switch (x) {</td>
+    </tr>
+    <tr>
+        <td>when value</td>
+        <td>case value:</td>
+    </tr>
+    <tr>
+        <td>then result</td>
+        <td>return result;</td>
+    </tr>
+    <tr>
+        <td>else result</td>
+        <td>default: return result;</td>
+    </tr>
+    <tr>
+        <td>end</td>
+        <td>}</td>
+    </tr>
+
+    </tbody>
+</table>
+<p>Давай перекладемо приклад з Java на мову SQL:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Java</th>
+        <th>SQL</th>
+    </tr>
+    <tr>
+        <td><pre class='language-java line-numbers'><code>
+switch (a) {
+   case 1: return "one";
+   case 2: return "two";
+   case 3: return "three";
+   default: return "unknown";
+}
+</code></pre></td>
+        <td><pre class='language-java line-numbers'><code>
+CASE a
+   WHEN 1 THEN 'one'
+   WHEN 2 THEN 'two'
+   WHEN 3 THEN 'three'
+   ELSE 'unknown'
+END
+</code></pre></td>
+    </tr>
+
+    </tbody>
+</table>
+<h2>2.2 Другий варіант оператора CASE</h2>
+<p>Також є другий варіант оператора <code>CASE</code>, який, як говорилося вище, більше схожий на множинний <code>if-else</code>. Загальний формат має вигляд: </p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-red">CASE</span>
+<span class="text-red">WHEN</span> <span class="text-user">умова1</span> <span class="text-red">THEN</span> <span class=" text-green">result1</span>
+[<span class="text-red">WHEN</span> <span class="text-user">умова2</span> <span class="text-red">THEN</span> <span class= "text-green">result2</span>] ...
+[<span class="text-red">ELSE</span> <span class="text-green">resultN</span>]
+<span class="text-red">END</span>
+        </code></pre>
+</div>
+<p>Тут просто послідовно перевіряються умови, якщо якесь із них істинно, то повернеться зазначений результат. Якщо жодна з умов не буде істинною, тоді повернеться значення вказане в <code>ELSE</code>.</p>
+<p>Давай перекладемо приклад з Java на мову SQL:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Java</th>
+        <th>SQL</th>
+    </tr>
+    <tr>
+        <td><pre class='language-java line-numbers'><code>
+if (a == 3)
+return "three";
+</code></pre></td>
+        <td><pre class='language-java line-numbers'><code>
+CASE
+   WHEN a=3 THEN 'three'
+END
+</code></pre></td>
+    </tr>
+    <tr>
+        <td><pre class='language-java line-numbers'><code>
+if (a == 3)
+return "three";
+else
+return "zero";
+</code></pre></td>
+        <td><pre class='language-java line-numbers'><code>
+CASE
+   WHEN a=3 THEN 'three'
+   ELSE 'zero'
+END
+</code></pre></td>
+    </tr>
+    <tr>
+        <td><pre class='language-java line-numbers'><code>
+if (a == 1)
+return "three";
+else if (a == 2)
+return "two";
+else if (a == 3)
+return "three";
+else
+return "zero";
+</code></pre></td>
+        <td><pre class='language-java line-numbers'><code>
+CASE
+   WHEN a=1 THEN 'one'
+   WHEN a=2 THEN 'two'
+   WHEN a=3 THEN 'three'
+   ELSE 'zero'
+END
+</code></pre></td>
+    </tr>
+    </tbody>
+</table>
+<h2>2.3 Вирішуємо завдання за допомогою оператора CASE</h2>
+<p>Давай запишемо якийсь цікавий запит. Пам'ятаєш, у нас було завдання – додати слово <strong>"EXPIRED!"</strong> до назви завдань у таблиці <strong>task</strong>. Її можна легко зробити за допомогою оператора <code>CASE</code>.</p>
+<p>Для поля <strong>deadline</strong> він виглядатиме як другий варіант оператора <code>CASE</code>:</p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present"><code>
+<span class="text-red">CASE</span>
+<span class="text-red">WHEN</span> <span class="text-green">deadline</span> < <span class="text-user">CURDATE</span>() <span class="text-red">THEN</span> <span class="text-user">CONCAT</span>('EXPIRED!', <span class="text-green">name</span>)
+<span class="text-red">ELSE</span> <span class="text-green">name</span>
+<span class="text-red">END</span>
+        </code></pre>
+</div>
+<p>Приклад повного запиту за допомогою оператора <code>CASE</code>:</p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present"><code>
+<span class="text-brown">SELECT</span>
+    <span class="text-green">id</span>,
+    <span class="text-green">emploee_id</span>,
+    <span class="text-red">CASE WHEN</span> <span class="text-green">deadline</span> < <span class="text-user">CURDATE</span>() < span class="text-red">THEN</span> <span class="text-user">CONCAT</span>('EXPIRED!', <span class="text-green">name</span> ) <span class="text-red">ELSE</span> <span class="text-green">name</span> <span class="text-red">END</span> <span class= "text-brown">AS</span> <span class="text-viola">name</span>,
+    <span class="text-green">deadline</span>
+<span class="text-brown">FROM</span> <span class="text-yellow">task</span>
+        </code></pre>
+</div>
+<p>Результат цього запиту буде таким:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>id</th>
+        <th>emploee_id</th>
+        <th>name</th>
+        <th>deadline</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>1</td>
+        <td>EXPIRED! Виправити багу на фронтенді</td>
+        <td>2022-06-01</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>2</td>
+        <td>Виправити багу на бекенді</td>
+        <td>2022-06-15</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>5</td>
+        <td>Купити каву</td>
+        <td>2022-07-01</td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>5</td>
+        <td>Купити каву</td>
+        <td>2022-08-01</td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>5</td>
+        <td>Купити каву</td>
+        <td>2022-09-01</td>
+    </tr>
+    <tr>
+        <td>6</td>
+        <td>(NULL)</td>
+        <td>Прибрати офіс</td>
+        <td>(NULL)</td>
+    </tr>
+    <tr>
+        <td>7</td>
+        <td>4</td>
+        <td>Насолоджуватися життям</td>
+        <td>(NULL)</td>
+    </tr>
+    <tr>
+        <td>8</td>
+        <td>6</td>
+        <td>Насолоджуватися життям</td>
+        <td>(NULL)</td>
+    </tr>
+    </tbody>
+</table>

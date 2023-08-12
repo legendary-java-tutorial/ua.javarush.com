@@ -1,0 +1,86 @@
+<p>— Нова цікава тема — wildcards.</p>
+<p>За змістом, це щось подібне до шаблону «*», який збігається з чим завгодно.</p>
+<p>Але давай почнемо здалеку.</p>
+<p>Уяви, що в тебе є клас «Warrior(Воїн)» і метод, який обчислює, який із двох воїнів сильніший. Ось як, наприклад, це могло б виглядати:</p>
+<div class="code-heading">
+ Приклад 1
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">WarriorManager</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">boolean</span> <span class="token function">fight</span><span class="token punctuation">(</span><span class="token class-name"></span><span class="text-green"><span class="token class-name">Warrior</span> w1</span><span class="token punctuation">,</span> <span class="token class-name"></span><span class="text-user"><span class="token class-name">Warrior</span> w2</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="text-green">w1</span><span class="token punctuation">.</span>power <span class="token operator">&gt;</span> <span class="text-user">w2</span><span class="token punctuation">.</span>power<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<div class="code-heading">
+ Приклад виклику
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name"></span><span class="text-green"><span class="token class-name">MagicWarrior</span> mag</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-green">MagicWarrior</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name"></span><span class="text-user"><span class="token class-name">ArcherWarrior</span> archer</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-user">ArcherWarrior</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">boolean</span> isMagicCooler <span class="token operator">=</span> <span class="token class-name"><span class="text-viola">WarriorManager</span></span><span class="token punctuation">.</span><span class="token function">fight</span><span class="token punctuation">(</span><span class="text-green">mag</span><span class="token punctuation">,</span> <span class="text-user">archer</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p><span class="text-green">MagicWarrior та&nbsp; <span class="text-user">ArcherWarrior</span> &nbsp;– це класи-спадкоємці від&nbsp; <span class="text-viola">Warrior</span> .</span></p>
+<p>Трохи простовато, але для прикладу зійде.</p>
+<p><span class="text-user">- Ок.</span></p>
+<p>- І ось припустимо, ти вирішив зробити аналогічний метод, де вже б'ються воїни стіни на стіну.</p>
+<div class="code-heading">
+ Приклад 1
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">WarriorManager</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">boolean</span> <span class="token function">fight</span><span class="token punctuation">(</span><span class="token class-name"></span><span class="text-green"><span class="token class-name">Warrior</span> w1</span><span class="token punctuation">,</span> <span class="token class-name"></span><span class="text-user"><span class="token class-name">Warrior</span> w2</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="text-green">w1</span><span class="token punctuation">.</span>power <span class="token operator">&gt;</span> <span class="text-user">w2</span><span class="token punctuation">.</span>power<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">boolean</span> <span class="token function">fight</span><span class="token punctuation">(</span><span class="token class-name"></span><span class="text-green"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Warrior</span><span class="token punctuation">&gt;</span></span> w1</span><span class="token punctuation">,</span> <span class="token class-name"></span><span class="text-user"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Warrior</span><span class="token punctuation">&gt;</span></span> w2</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="text-green">…</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<div class="code-heading">
+ Приклад виклику
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="green_text text-green">MagicWarrior</span></span><span class="token punctuation">&gt;</span></span> <span class="text-green">magi</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="green_text text-green">MagicWarrior</span></span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span>i<span class="token operator">&lt;</span><span class="token number">10</span><span class="token punctuation">;</span>i<span class="token operator">++</span><span class="token punctuation">)</span>
+ <span class="text-green">magi</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name"><span class="text-green">MagicWarrior</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="dblue_text text-user">ArcherWarrior</span></span><span class="token punctuation">&gt;</span></span> <span class="text-user">archers</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="dblue_text text-user">ArcherWarrior</span></span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span>i<span class="token operator">&lt;</span><span class="token number">10</span><span class="token punctuation">;</span>i<span class="token operator">++</span><span class="token punctuation">)</span>
+<span class="text-user"> archers</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name"><span class="text-user">ArcherWarrior</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">boolean</span> isMagicCooler <span class="token operator">=</span> <span class="token class-name"><span class="text-viola">WarriorManager</span></span><span class="token punctuation">.</span><span class="token function">fight</span><span class="token punctuation">(</span><span class="text-user">magi<span class="token punctuation">,</span> archers</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment"><span class="text-red">//ошибка компиляции!</span></span></code></pre>
+<p>І ось тут ти зустрічаєш помилку компіляції і дивуєшся, а що не так?</p>
+<p>Вся річ у тому, що&nbsp; <span class="text-red">MagicWarrior – це спадкоємець Warrior</span> &nbsp;та його об'єкти можна передавати у метод fight(Warrior, Warrior)</p>
+<p>А ось&nbsp; <span class="text-red">List&lt;MagicWarrior&gt; - це не спадкоємець List&lt;Warrior&gt;</span> . І передавати його туди не можна!</p>
+<p><span class="text-user">- Як це не спадкоємець?</span></p>
+<p>- А ось так. То List і те – List. Нехай із параметрами.</p>
+<p><span class="text-user">— Так, а я якось одразу не звернув увагу. І що, вже є вирішення цієї проблеми?</span></p>
+<p>- Ага. Для цього використовується складніша конструкція. Виглядає це так:</p>
+<div class="code-heading">
+ Приклад 1
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">WarriorManager</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">boolean</span> <span class="token function">fight</span><span class="token punctuation">(</span><span class="token class-name"></span><span class="text-green"><span class="token class-name">Warrior</span> w1</span><span class="token punctuation">,</span> <span class="token class-name"></span><span class="text-user"><span class="token class-name">Warrior</span> w2</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="text-green">w1</span><span class="token punctuation">.</span>power <span class="token operator">&gt;</span> <span class="text-user">w2</span><span class="token punctuation">.</span>power<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">boolean</span> <span class="token function">fight</span><span class="token punctuation">(</span><span class="token class-name"><span class="text-green">List</span></span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span> <span class="token keyword">extends</span> <span class="token class-name"><span class="text-green">Warrior</span></span><span class="token punctuation">&gt;</span></span> <span class="text-green">w1</span><span class="token punctuation">,</span> <span class="token class-name"><span class="text-user">List</span></span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span> <span class="token keyword">extends</span> <span class="token class-name"><span class="text-user">Warrior</span></span><span class="token punctuation">&gt;</span></span> <span class="text-user">w2</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> …
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong><span class="text-red">«? extends Warrior» означає «будь-який тип, успадкований від Warrior».</span></strong></p>
+<p>Тобто. туди можна передати список List&lt;MagicWarrior&gt; та список List&lt;ArcherWarrior&gt;, і все буде працювати.</p>
+<p><span class="text-user">— Так це ж чудово. Чим менше будь-яких таких проблем, тим краще.</span></p>
+<p>— Так і я про те саме.</p>
+<p><span class="text-user">— А якщо мені не потрібний спадкоємець Warrior? Що якщо я хочу, щоб метод можна було передати будь-який List з будь-яким параметром? Так можна?</span></p>
+<p>— Так, для опису цієї ситуації є два записи:</p>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span> <span class="token keyword">extends</span> <span class="token class-name">Object</span><span class="token punctuation">&gt;</span></span></code></pre>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span></code></pre>
+<p>Вони еквівалентні за змістом, тому зазвичай використовують другу.</p>
+<p>У мене все.</p>
+<p>- Дякую, Еллі, справді дізнався сьогодні багато нового.</p>
+<div></div>

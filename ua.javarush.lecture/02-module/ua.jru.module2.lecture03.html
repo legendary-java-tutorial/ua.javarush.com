@@ -1,0 +1,144 @@
+Вітання! Поговоримо про <strong>абстрактні класи</strong> в Java. <img data-id="c8e6bd5a-3cbd-4721-9762-12c34e613233" data-max-width="850" alt="Абстрактні класи в Java на конкретних прикладах." src="https://cdn.javarush.com/images/article/c8e6bd5a-3cbd-4721-9762-12c34e613233/800.jpeg" style="width: 850px;">
+<h2>Чому класи називають «абстрактними»</h2>Ти напевно пам'ятаєш, що таке «абстракція» — ми це вже проходабо :) Якщо раптом призабув — не страшно, згадаємо: <em>це принцип ОВП</em> , згідно з яким при проектуванні класів та створенні об'єктів необхідно виділяти лише головні властивості сутності та відкидати другорядні. Наприклад, якщо проектуватимемо клас <code>SchoolTeacher</code>— шкільний вчитель — навряд чи знадобиться характеристика « <em>зростання</em> ». Справді: для викладача ця характеристика не є важливою. Але якщо ми створюватимемо в програмі клас <code>BasketballPlayer</code>— гравець у баскетбол — <em>зростання</em> стане однією з головних характеристик. Так ось, <strong>абстрактний клас</strong>— це максимально абстрактна, дуже приблизна «заготівля» для групи майбутніх класів. Цю заготівлю не можна використовувати у готовому вигляді – надто «сира». Але вона описує певний загальний стан і поведінку, які будуть мати майбутні класи — спадкоємці абстрактного класу. 
+<h2>Приклади абстрактних класів Java</h2>Розглянемо простий приклад із машинами: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">Car</span> <span class="token punctuation">{</span>
+
+   <span class="token keyword">private</span> <span class="token class-name">String</span> model<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> color<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token keyword">int</span> maxSpeed<span class="token punctuation">;</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">void</span> <span class="token function">gas</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">void</span> <span class="token function">brake</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+   <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getModel</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">return</span> model<span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setModel</span><span class="token punctuation">(</span><span class="token class-name">String</span> model<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">this</span><span class="token punctuation">.</span>model <span class="token operator">=</span> model<span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getColor</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">return</span> color<span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setColor</span><span class="token punctuation">(</span><span class="token class-name">String</span> color<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">this</span><span class="token punctuation">.</span>color <span class="token operator">=</span> color<span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getMaxSpeed</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">return</span> maxSpeed<span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setMaxSpeed</span><span class="token punctuation">(</span><span class="token keyword">int</span> maxSpeed<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">this</span><span class="token punctuation">.</span>maxSpeed <span class="token operator">=</span> maxSpeed<span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Ось так виглядає найпростіший абстрактний клас. Як бачиш, нічого особливого :) Навіщо він може нам знадобитися? Насамперед він максимально абстрактно описує потрібну нам сутність — автомобіль. Слово <strong>abstract</strong> знаходиться тут недарма. У світі немає «просто машин». Є вантажівки, гоночні автомобілі, седани, купе, позашляховики. <strong>Наш абстрактний клас — це просто «креслення», яким ми пізніше будемо створювати класи-автомобілі.</strong>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Sedan</span> <span class="token keyword">extends</span> <span class="token class-name">Car</span> <span class="token punctuation">{</span>
+
+   <span class="token annotation punctuation">@Override</span>
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">gas</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Седан газує!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token annotation punctuation">@Override</span>
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">brake</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Седан гальмує!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span></code></pre> Це схоже на те, про що ми говорабо в лекціях про успадкування. Тільки там у нас клас <code>Car</code>та його методи не були абстрактними. Але таке рішення має цілу низку мінусів, які в абстрактних класах виправлені. Перше та головне — <strong>екземпляр абстрактного класу створити не можна:</strong>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Main</span> <span class="token punctuation">{</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+       <span class="token class-name">Car</span> car <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Car</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Помилка! Клас Car є абстрактним!</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Ця "фішка" була реалізована творцями Java спеціально. Ще раз для запам'ятовування: <em>абстрактний клас — це просто креслення для майбутніх «нормальних» класів</em> . Тобі ж не потрібні екземпляри креслення, правильно? Ось і екземпляри абстрактного класу створювати не треба :) А якби клас <code>Car</code>не був абстрактним, ми легко могли б створювати його об'єкти: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Car</span> <span class="token punctuation">{</span>
+
+   <span class="token keyword">private</span> <span class="token class-name">String</span> model<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> color<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token keyword">int</span> maxSpeed<span class="token punctuation">;</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">gas</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token comment">// якась логіка</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token keyword">public</span>  <span class="token keyword">void</span> <span class="token function">brake</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token comment">// якась логіка</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Main</span> <span class="token punctuation">{</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+       <span class="token class-name">Car</span> car <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Car</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Все ок, машина створилася</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Тепер у нас у програмі з'явилася якась незрозуміла машина — не вантажівка, не гоночна, не седан, а незрозуміло що. Та сама «просто машина», яких у природі немає. Той самий приклад можна навести з тваринами. Уяви, якби у твоїй програмі з'явабося об'єкти <code>Animal</code>— « <em>просто тварина</em> ». Якого воно виду, якого сімейства належить, які в нього характеристики — незрозуміло. Було б дивно побачити його у програмі. Жодних «просто тварин» у природі не існує. Тільки собаки, кішки, лисиці, кроти та інші. Абстрактні класи позбавляють нас від « <em>просто об'єктів</em> ». Вони дають нам базовий стан та поведінку. Наприклад, у всіх машин має бути <em>модель</em> , <em>колір</em> та <em>максимальна швидкість</em>, а ще вони повинні вміти <em>газувати</em> та <em>гальмувати</em> . От і все. Це загальна абстрактна схема, далі ти вже сам проектуєш потрібні тобі класи. <em>Зверніть увагу:</em> два методи в абстрактному класі теж позначені як <strong>abstract</strong> , і вони взагалі не реалізовані. Причина та ж: абстрактні класи не створюють «за замовчуванням» для «просто машин». Вони просто кажуть, що мають уміти робити усі машини. Втім, якщо поведінка за умовчанням тобі таки потрібна, методи в абстрактному класі можна реалізувати. Java цього не забороняє: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">Car</span> <span class="token punctuation">{</span>
+
+   <span class="token keyword">private</span> <span class="token class-name">String</span> model<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> color<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token keyword">int</span> maxSpeed<span class="token punctuation">;</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">gas</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Газуємо!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">void</span> <span class="token function">brake</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+   <span class="token comment">//гетери та сетери</span>
+<span class="token punctuation">}</span>
+
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Sedan</span> <span class="token keyword">extends</span> <span class="token class-name">Car</span> <span class="token punctuation">{</span>
+
+   <span class="token annotation punctuation">@Override</span>
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">brake</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Седан гальмує!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Main</span> <span class="token punctuation">{</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+       <span class="token class-name">Sedan</span> sedan <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Sedan</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       sedan<span class="token punctuation">.</span><span class="token function">gas</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Висновок у консоль: <em>"Газуємо!" </em> Як бачиш, ми реалізували в абстрактному класі один метод, а другий не стали. У результаті поведінка нашого класу <code>Sedan</code>розділилося на дві частини: якщо викликати в нього спосіб <code>gas()</code>, він «підтягнеться» з батьківського абстрактного класу <code>Car</code>, а спосіб <code>brake()</code>ми перевизначабо в класі <code>Sedan</code>. Вийшло дуже зручно та гнучко. Але тепер <strong>наш клас не такий уже й абстрактний</strong> ? Адже він, за фактом, половину методів реалізовано. Насправді, і це дуже важлива особливість, <strong>клас є абстрактним, якщо хоча б один з його методів є абстрактним.</strong>. Хоч один із двох, хоч один із тисячі методів — не має значення. Ми можемо навіть реалізувати всі методи та не залишити жодного абстрактного. Буде абстрактний клас без абстрактних методів. В принципі, це можливо, і компілятор не видасть помилок, але краще так не робити: слово abstract втратить сенс, а твої колеги-програмісти сильно здивуються, побачивши таке: При цьому, якщо метод позначений словом abstract, кожен клас-спадкоємець повинен <strong>його реалізувати чи бути оголошеним як абстрактний. Інакше компілятор викине помилку</strong> . Зрозуміло, кожен клас може успадковуватись тільки від одного абстрактного класу, так що в плані спадкування різниці між абстрактними та звичайними класами немає. Неважливо, успадковуємося ми від абстрактного класу або від звичайного, клас-батько може бути лише один. 
+<h2>Чому в Java немає множинного успадкування класів</h2>Ми вже говорабо, що в Java немає множинного спадкування, але так толком і не розібралися чому. Давайте спробуємо зробити це зараз. Справа в тому, що якби в Java було множинне успадкування, дочірні класи не могли б визначитися, яку саме поведінку вибрати. Припустимо, у нас є два класи — <code>Toster</code>і <code>NuclearBomb</code>: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Toster</span> <span class="token punctuation">{</span>
+
+
+ <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">on</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Тостер увімкнений, тост готується!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">off</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Тостер вимкнено!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">NuclearBomb</span> <span class="token punctuation">{</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">on</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Взрыв!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Як бачиш, у обох є метод <code>on()</code>. У випадку з тостером він запускає приготування тосту, а у випадку з ядерною бомбою влаштовує вибух. Ой :/ А тепер уяви, що ти вирішив (уже не знаю, з чого раптом!) створити щось середнє між ними. І ось він твій клас - <code>MysteriousDevice</code>! Цей код, зрозуміло, неробочий, і ми наводимо його просто як приклад «а як воно могло б бути»: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MysteriousDevice</span> <span class="token keyword">extends</span> <span class="token class-name">Toster</span><span class="token punctuation">,</span> <span class="token class-name">NuclearBomb</span> <span class="token punctuation">{</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+       <span class="token class-name">MysteriousDevice</span> mysteriousDevice <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MysteriousDevice</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       mysteriousDevice<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// І що тут має статися? Ми отримаємо тост чи ядерний апокаліпсис?</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Погляньмо, що в нас вийшло. Загадковий пристрій походить одночасно і від Тостера і від Ядерної Бомби. В обох є метод <code>on()</code>, і в результаті незрозуміло, який метод <code>on()</code>повинен спрацьовувати в об'єкта <code>MysteriousDevice</code>, якщо ми його викличемо. Об'єкт ніяк не зможе цього зрозуміти. Ну і як вишенька на торті: у Ядерної Бомби немає методу <code>off()</code>, так що якщо ми не вгадали, відключити пристрій буде не можна. <img data-id="0cf44fb9-0d80-4c1f-b409-31813c1b824a" data-max-width="850" alt="Абстрактні класи в Java на конкретних прикладах." src="https://cdn.javarush.com/images/article/0cf44fb9-0d80-4c1f-b409-31813c1b824a/800.jpeg" style="width: 850px;"> Саме через таку «незрозумілість», коли об'єкту неясно, яку поведінку він має вибрати, творці Java відмовабося від множинного успадкування. Втім, ти дізнаєшся, що Java класи реалізують безліч інтерфейсів.

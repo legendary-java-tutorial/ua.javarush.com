@@ -1,0 +1,116 @@
+<p>- Привіт, Аміго! Пам'ятаєш, Еллі тобі розповідала про проблеми при одночасному доступі кількох ниток до спільного ресурсу?</p>
+<p><span class="text-user">- Так.</span></p>
+<p>— Так ось це ще не все. Є ще невелика проблема.</p>
+<p>Як ти знаєш, у комп'ютері є пам'ять, де зберігаються дані та команди (код), а також процесор, який виконує ці команди та працює з даними. Процесор зчитує дані з пам'яті, змінює та записує їх назад у пам'ять. Щоб прискорити роботу процесора, в нього вбудували свою «швидку» пам'ять – кеш.</p>
+<p>Щоб прискорити свою роботу, процесор копіює найчастіше використовувані змінні в пам'яті в свій кеш і всі зміни з ними виробляє в цій швидкій пам'яті. А після – копіює назад у «повільну» пам'ять. Повільна пам'ять весь цей час містить старі (!) (Незмінені) значення змінних.</p>
+<p>І тоді може виникнути проблема.&nbsp;<span class="text-red">Одна нитка змінює змінну</span> , таку як isCancel чи isInterrupted з прикладу нижче, а&nbsp; <span class="text-red">друга нитка «не бачить» цієї зміни</span> ,т.к. воно було здійснено у швидкій пам'яті. Це наслідок те, що нитки немає доступу до кешу одне одного. (Процесор часто містить кілька незалежних ядер та нитки фізично можуть виконуватися на різних ядрах.)</p>
+<p>Згадаймо вчорашній приклад:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Clock</span> <span class="token keyword">implements</span> <span class="token class-name">Runnable</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">private</span> <span class="token keyword">boolean</span> isCancel <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">cancel</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">this</span><span class="token punctuation">.</span>isCancel <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token operator"></span><span class="text-red"><span class="token operator">!</span><span class="token keyword">this</span><span class="token punctuation">.</span>isCancel</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Tik"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Нитка «не знає» про існування інших ниток.
+     <p></p>
+     <p>У методі run змінна isCancel при першому використанні буде поміщена в кеш дочірньої нитки. Ця операція еквівалентна коду:</p>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token keyword"></span><span class="text-red"><span class="token keyword">boolean</span> isCancelCached <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>isCancel<span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token operator">!</span>isCancelCached<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Tik"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+     <p>Виклик методу cancel з іншої нитки змінює значення змінної isCancel у звичайній (повільній) пам'яті, але не в кеші інших ниток.</p></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token class-name">Clock</span> clock <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Clock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Thread</span> clockThread <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span>clock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+clockThread<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">10000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+clock<span class="token punctuation">.</span><span class="token function">cancel</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">- Нічого собі! А для цієї проблеми теж вигадали гарне рішення, як у випадку з&nbsp; <strong>synchronized</strong> ?</span></p>
+<p>- Ти не повіриш!</p>
+<p>Спочатку думали відключити роботу з кешем, але потім виявилося, що через це програми працюють у рази повільніше. Тоді вигадали інше рішення.</p>
+<p>Було придумано спеціальне ключове слово&nbsp; <span class="text-red"><strong>volatile</strong></span> . Приміщення його перед визначенням змінної забороняло поміщати її значення кеш. Точніше не забороняло поміщати в кеш, а просто примусово завжди читало і писало її лише у звичайну (повільну) пам'ять.</p>
+<p>Ось як потрібно виправити наше рішення, щоб усе стало добре працювати:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Clock</span> <span class="token keyword">implements</span> <span class="token class-name">Runnable</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">private</span> <span class="token keyword"><span class="text-red">volatile</span></span> <span class="token keyword">boolean</span> isCancel <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">cancel</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">this</span><span class="token punctuation">.</span>isCancel <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token operator"></span><span class="text-red"><span class="token operator">!</span><span class="token keyword">this</span><span class="token punctuation">.</span>isCancel</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Tik"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Через модифікатор volatile читання та запис значення змінної завжди відбуватимуться у звичайній, загальної для всіх ниток, пам'яті.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token class-name">Clock</span> clock <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Clock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Thread</span> clockThread <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span>clock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+clockThread<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">10000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+clock<span class="token punctuation">.</span><span class="token function">cancel</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">- І все?</span></p>
+<p>- Так. Просто та красиво.</p>

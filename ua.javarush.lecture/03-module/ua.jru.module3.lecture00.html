@@ -1,0 +1,47 @@
+<h2>Завдання: Потрібно зробити JAR-файл з грою на JavaFX через графічний двигун від CodeGym.</h2>
+<p><strong>Для цього потрібно:</strong></p>
+<ol>
+ <li>Зробити fork із репозиторію <a href="https://github.com/vasylmalik/project-maven.git" target="_blank">https://github.com/vasylmalik/project-maven.git</a></li>
+ <li>Завантажити свою версію проекту на комп'ютер. Далі будемо працювати з файлом <strong>pom.xml</strong> .</li>
+ <li>Додати залежності:</li>
+ <ul>
+  <li><strong>org.apache.commons: commons-lang3: 3.12.0</strong></li>
+  <li><strong>org.openjfx: javafx-controls: 18.0.1</strong></li>
+  <li><strong>com.codegym: desktop-game-engine:1.0</strong> (про цю залежність буде окреме завдання)</li>
+  <li><strong>org.junit.jupiter: junit-jupiter-engine: 5.8.2</strong> (з scope test)</li>
+ </ul>
+ <li>Додати плагіни для:</li>
+ <ul>
+  <li>установки залежності <strong>com.codegym: desktop-game-engine:1.0</strong> з бібліотеки lib до локального репозиторію (google на допомогу);</li>
+  <li>плагін <strong>maven-compiler-plugin</strong> залишити без змін;</li>
+  <li>плагін, який збере всі залежності (з scope compile) та складе в якусь директорію при складанні;</li>
+  <li>плагін <strong>maven-jar-plugin</strong> , який зробить jar файл, що містить код гри та залежності. У цьому плагіні необхідно налаштувати файл <strong>MANIFEST.MF</strong> , щоб він містив секції: <code>Class-Path</code>, <code>Main-Class</code>і<code>Rsrc-Main-Class</code></li>
+  <li>У <code>Class-Path</code>повинні бути прописані всі наші JAR-залежності.</li>
+  <li>У <code>Main-Class</code>повинен бути прописаний клас <code>org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader</code>, який вміє використовувати classpath з JAR-файлів, а також вміє стартувати програму на JavaFX.</li>
+  <li>У <code>Rsrc-Main-Class</code>повинен бути прописаний стартовий клас гри (com.codegym.games.racer.RacerGame).</li>
+ </ul>
+ <li>У плагіні <strong>maven-surefire-plugin</strong> створити конфігурацію, щоб тест <strong>StrangeTest</strong> не запускався при складанні. Інші тести повинні виконуватися.</li>
+ <li>Додати секцію <strong>“resources”</strong> , у якій сказати, що зібрані JAR-залежності це ресурс, щоб плагін <strong>maven-jar-plugin</strong> склав їх усередину JAR-файлу в папку <strong>lib/</strong></li>
+ <li>Залити зміни у свій GitHub-репозиторій, надіслати посилання на нього викладачеві.</li>
+</ol>
+<br>
+<p><strong>Корисне:</strong></p>
+<ol>
+ <li>Білд потрібно виконувати командою <strong>mvn clean install</strong> .</li>
+ <li>Запуск гри (через Maven) з метою подивитися можна виконати командою <strong>mvn javafx: run.</strong></li>
+ <li>Деяким плагінам потрібно перевизначити <strong>phase</strong> .</li>
+ <li>У проекті використовується версія JDK 18.0.1. Вона має бути завантажена у тебе на комп'ютері.</li>
+ <li>У білді через Maven спершу будуть помилки. Читай їх уважно і ти спростиш собі життя.</li>
+ <li>У пакеті <strong>org.eclipse.jdt.internal.jarinjarloader</strong> нічого не змінюй. У ньому кастомний клас-лоадер (чесно скопійований зі StackOverflow), в якому змінено запуск методу main на запуск JavaFX програми. Використовувати лише для навчальних цілей.</li>
+ <li>Якщо виконати всі пункти, в результаті збирання ти отримаєш <strong>fat-JAR-файл</strong> . Запустити та перевірити, що все зроблено правильно можна командою: 
+  <pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token operator">&lt;</span>шлях до java <span class="token number">18</span><span class="token operator">&gt;</span> <span class="token operator">-</span>jar <span class="token operator">&lt;</span>ім'я результуючого jar файлу<span class="token operator">&gt;</span>
+
+<span class="token comment">//Приклад</span>
+<span class="token string">"C:\Users\leo12\.jdks\openjdk-18.0.1.1\bin\java.exe"</span> <span class="token operator">-</span>jar <span class="token string">"E:\temp\project-maven-1.0.jar"</span></code></pre></li>
+ <li>В результаті ти побачиш:<img data-max-width="512" data-id="c0b2cb6c-8d36-4ef0-84be-e2d4e6295ab4" alt="" src="https://cdn.javarush.com/images/article/c0b2cb6c-8d36-4ef0-84be-e2d4e6295ab4/512.jpeg" style="width: 512px;"></li>
+ <li>Білд залежить від твоєї операційної системи. Тобто якщо JAR-файл зібраний на Windows, його можна виконати на будь-якому комп'ютері з Windows і Java18. І не можна виконати на Mac та Linux.</li>
+</ol>
+<p></p>
+<hr>
+<p><a href="https://youtu.be/clQ07xRnqKg" target="_blank">Розбір проекту</a> . <strong>Дивитись після виконання!</strong></p>
+<p></p>

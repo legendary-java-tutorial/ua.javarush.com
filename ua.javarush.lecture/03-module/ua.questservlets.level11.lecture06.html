@@ -1,0 +1,151 @@
+<h2>7.1 Загальна схема web.xml</h2>
+<p><strong>Файл web.xml</strong> зберігає інформацію про конфігурацію програми. Він не є обов'язковою його частиною, проте дуже широко використовується для конфігурації веб-додатку.</p>
+<p>Цей файл повинен розміщуватись у папці <strong>WEB-INF</strong> . При запуску Tomcat зчитує його вміст та використовує записану в ньому конфігурацію. Якщо файл містить помилки, то і Tomcat відображає помилку.</p>
+<p>Приклад web.xml:</p>
+<pre class="line-numbers"><code>
+
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+<span class="text-viola">&lt;web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+  http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" version="4.0"&gt;</span>
+  
+ <span class="text-green"> &lt;servlet&gt;
+       &lt;servlet-name&gt;HelloWorld&lt;/servlet-name&gt;
+       &lt;servlet-class&gt;HelloServlet&lt;/servlet-class&gt;
+   &lt;/servlet&gt;</span>
+    
+<span class="text-user">  &lt;servlet-mapping&gt;
+      &lt;servlet-name&gt;HelloWorld&lt;/servlet-name&gt;
+      &lt;url-pattern&gt;/welcome&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;</span>
+ 
+<span class="text-red">  &lt;welcome-file-list&gt;
+      &lt;welcome-file&gt;index.html&lt;/welcome-file&gt;
+  &lt;/welcome-file-list&gt;</span>
+  
+<span class="text-viola">&lt;/web-app&gt;</span>
+
+</code></pre>
+<p><span class="text-green">Зеленим кольором тут записано мапінг ім'я сервлета <code>"HelloWorld"</code>та класу сервлета<code>"HelloServlet"</code></span> . <span class="text-user">Синім кольором записано мапінг ім'я сервлета <code>"HelloWorld"</code>та шматка URL<code>"http://localhost/welcome"</code></span> . Таким чином, тут написано, що при зверненні до шляху / welcome потрібно викликати сервлет <code>HelloServlet.class</code>.</p>
+<p><span class="text-red">Червоним кольором вказаний файл, який потрібно віддати на запит <code>http://localhost/</code>— це так звана welcome page</span> . Якщо користувач просто вб'є в браузері ім'я, що відповідає кореню нашої веб-програми, йому віддається вміст файлу <code>index.html</code>.</p>
+<h2>7.2 servlet, servlet-mapping</h2>
+<p>Один сервлет може обслуговувати запити з різних урл, тому в web-xml сервлет і його мапінг на урли записуються окремо. Спочатку описуємо сервлети, даючи кожному унікальне рядкове ім'я, а потім уже вказуємо, як кожен сервлет мапиться на який URL.</p>
+<p>Приклад web.xml:</p>
+<pre class="line-numbers"><code>
+
+<span class="text-viola">&lt;web-app&gt;</span>
+  
+  <span class="text-green">&lt;servlet&gt;
+    &lt;servlet-name&gt;remoting&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;com.codegym.RemotingServlet&lt;/servlet-class&gt;
+    &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+  &lt;/servlet&gt;
+ 
+  &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;remoting&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/remoting/*&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;</span>
+ 
+<span class="text-user">  &lt;servlet&gt;
+    &lt;servlet-name&gt;restapi&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;com.codegym.RestApiServlet&lt;/servlet-class&gt;
+    &lt;load-on-startup&gt;2&lt;/load-on-startup&gt;
+  &lt;/servlet&gt;
+ 
+  &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;restapi&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/api/*&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;</span>  
+ 
+<span class="text-viola">&lt;/web-app&gt;</span>
+
+</code></pre>
+<p>У цьому прикладі оголошено два сервлети, і кожен замаплений на свій шаблон URL. <span class="text-green">Сервлет <code>RemotingServlet</code>обслуговує всі запити, які йдуть на<code>/remoting/*</code></span> . <span class="text-user">Сервлет <code>RestApiServlet</code>обслуговує всі запити, які йдуть на<code>/api/*</code></span> . Також у сервлетів прописаний порядок із завантаження - параметр load-on-startup.</p>
+<h2>7.3 Параметри сервлету</h2>
+<p>За допомогою web.xml сервлет при його ініціалізації можна передати параметри, вони будуть доступні через інтерфейс <code>ServletConfig</code>. Також можна встановити параметри всьому веб-додатку, вони будуть доступні через інтерфейс <code>ServletContext</code>.</p>
+<p>Приклад web.xml:</p>
+<pre class="line-numbers"><code>
+
+<span class="text-viola">&lt;web-app&gt;</span>
+<span class="text-green">  &lt;context-param&gt;
+     &lt;description&gt;Server production mode&lt;/description&gt;
+     &lt;param-name&gt;productionMode&lt;/param-name&gt;
+     &lt;param-value&gt;false&lt;/param-value&gt;
+  &lt;/context-param&gt;
+ 
+  &lt;context-param&gt;
+     &lt;param-name&gt;appPropertiesConfig&lt;/param-name&gt;
+     &lt;param-value&gt;
+        classpath:local-app.properties
+        classpath:web-app.properties
+     &lt;/param-value&gt;
+  &lt;/context-param&gt;</span>
+ 
+<span class="text-user">  &lt;servlet&gt;
+     &lt;servlet-name&gt;mainservlet&lt;/servlet-name&gt;
+     &lt;servlet-class&gt;com.codegym.ApplicationServlet&lt;/servlet-class&gt;
+     &lt;init-param&gt;
+        &lt;param-name&gt;application&lt;/param-name&gt;
+        &lt;param-value&gt;com.codegym.App&lt;/param-value&gt;
+     &lt;/init-param&gt;
+     &lt;init-param&gt;
+        &lt;param-name&gt;widgetset&lt;/param-name&gt;
+        &lt;param-value&gt;com.codegym.WidgetSet&lt;/param-value&gt;
+     &lt;/init-param&gt;
+     &lt;init-param&gt;
+        &lt;param-name&gt;ui&lt;/param-name&gt;
+        &lt;param-value&gt;com.codegym.AppUI&lt;/param-value&gt;
+     &lt;/init-param&gt;
+  &lt;/servlet&gt;</span>
+<span class="text-viola">&lt;/web-app&gt;</span>
+
+</code></pre>
+<p><span class="text-green">Зеленим кольором виділено код, де ми задаємо параметри для<code>ServletContext</code></span> . Їх там два:</p>
+<ul>
+ <li><code>productionMode</code>зі значенням false</li>
+ <li><code>appPropertiesConfig</code>з масивом із двох рядків:</li>
+ <ul>
+  <li><code>classpath:local-app.properties</code></li>
+  <li><code>classpath:web-app.properties</code></li>
+ </ul>
+</ul>
+<p></p>
+<p><span class="text-user">Синім кольором вказані параметри для сервлета<code>ApplicationServlet</code></span> , вони будуть доступні йому через <code>ServletConfig</code>:</p>
+<ul>
+ <li><code>application</code>зі значенням com.codegym.App</li>
+ <li><code>widgetset</code>зі значенням com.codegym.WidgetSet</li>
+ <li><code>ui</code>зі значенням com.codegym.AppUI</li>
+</ul>
+<h2>7.4 filter, filter-mapping</h2>
+<p>Веб-додаток може також містити спеціальні <code>службові сервлети - фільтри</code>. Вони виконують різні службові завдання: перенаправляють виклики, перевіряють авторизацію тощо.</p>
+<p>Приклад web.xml:</p>
+<pre class="line-numbers"><code>
+
+<span class="text-viola">&lt;web-app&gt;</span>
+ 
+<span class="text-green">  &lt;servlet&gt;
+      &lt;servlet-name&gt;remoting&lt;/servlet-name&gt;
+      &lt;servlet-class&gt;RemotingServlet&lt;/servlet-class&gt;
+      &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+  &lt;/servlet&gt;
+ 
+  &lt;servlet-mapping&gt;
+      &lt;servlet-name&gt;remoting &lt;/servlet-name&gt;
+      &lt;url-pattern&gt;/remoting/*&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;</span>
+ 
+<span class="text-red">  &lt;filter&gt;
+      &lt;filter-name&gt;total_filter&lt;/filter-name&gt;
+      &lt;filter-class&gt;com.javrush.TotalFilter&lt;/filter-class&gt;
+  &lt;/filter&gt;
+ 
+  &lt;filter-mapping&gt;
+      &lt;filter-name&gt;total_filter&lt;/filter-name&gt;
+      &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+  &lt;/filter-mapping&gt;</span>
+ 
+<span class="text-viola">&lt;/web-app&gt;</span>
+
+</code></pre>
+<p>Перш ніж запит потрапить у сервлет <code>RemotingServlet</code>, він буде оброблений фільтром <code>TotalFiler</code>. Цей фільтр налаштований так, щоб <span class="text-red">перехоплювати всі запити</span> , які йдуть до нашого веб-додатку. Про це однозначно натякає шаблон урлів, куди він замаплен: <code>/*</code>.</p>
+<p>Більше про сервлети та фільтри ти прочитаєш у наступних лекціях.</p>

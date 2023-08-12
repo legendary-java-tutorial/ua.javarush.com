@@ -1,0 +1,59 @@
+<p>- Привіт, Аміго! Білаабо сьогодні розповість тобі про найцікавіший метод при роботі з нитками - це метод&nbsp; <span class="text-red"><strong>sleep</strong></span> .&nbsp;<span class="text-red">Метод sleep оголошено як статичний метод класу Thread</span> , тобто. він не прив'язаний до жодного об'єкта. Мета цього методу, щоб <span class="text-red">&nbsp;програма заснула</span> &nbsp;на деякий час. Ось як це працює:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token class-name"></span><span class="text-red"><span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span></span><span class="token punctuation"></span><span class="token number">2000</span><span class="token punctuation"></span><span class="text-red"><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Програма запуститься.
+     <p></p>
+     <p>Потім замре на 2 секунди (2000 мілісекунд)</p>
+     <p>Потім завершиться.</p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Єдиний параметр методу sleep – це час. Час визначається в тисячних частках секунди (мілісекундах). Як тільки нитка викликає цей метод, вона засипає на вказану кількість мілісекунд.</p>
+<p><span class="text-user">— А де це найкраще використати?</span></p>
+<p>— Цей метод часто використовується в дочірніх нитках, коли треба робити якусь дію постійно, але не надто часто. Дивись приклад:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token keyword"></span><span class="text-user"><span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span></span><span class="token punctuation"></span>
+<span class="token punctuation">{</span>
+<span class="token class-name"></span><span class="text-red"><span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span></span><span class="token function"></span><span class="token punctuation">(</span><span class="token number">500</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Tik"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td><span class="text-user">Програма працюватиме вічно</span> &nbsp;– умова продовження циклу ніколи не порушиться.
+     <p></p>
+     <p>Ось що програма робить у циклі: <br>
+       а)&nbsp; <span class="text-red">поспати півсекунди;</span><br>
+       б) вивести на екран текст «Tik»</p>
+     <p>Тобто. двічі на секунду виконуватиметься деяка дія.</p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">- Ух ти, тепер це вже цікаво.</span></p>
+<p>— Радий, що тобі сподобалося, мій друже Аміго!</p>
+<p><span class="text-user">— А якщо я хочу, щоб якась дія виконувалася 100 разів на секунду, що треба робити?</span></p>
+<p>— Якщо дія повинна виконуватися 100 разів на секунду, а в секунді 1000 мілісекунд, то дія повинна виконуватися один раз на 10 мілісекунд.</p>
+<p>Якщо твоя&nbsp; <strong>дія</strong> &nbsp;займає 2 мілісекунди, то потрібно додати до неї паузу довжиною 8 мілісекунд. Разом вони виконуватимуться якраз за 10 мілісекунд. І за секунду – якраз 100 разів.</p>
+<p>Якщо ж твоя дія виконується майже миттєво, то постав паузу (sleep) довжиною 10 мілісекунд. Тоді за секунду буде теж близько 100 разів.</p>
+<p><span class="text-user">- Дякую, Білаабо.</span></p>

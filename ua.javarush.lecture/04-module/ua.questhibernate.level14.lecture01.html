@@ -1,0 +1,73 @@
+Lazy Loading при мапінгу колекцій
+<p>----------------------------------------</p>
+Параметр fetch
+Значення за замовчуванням
+Анотація @LazyCollection
+<p>----------------------------------------</p>
+<h2>2.1 Параметр fetch</h2>
+<p>Розробники Hibernate давно знали про проблему, пов'язану із завантаженням дочірніх сутностей. Отже, перше, що вони зробили – це додали спеціальний параметр <strong>fetch</strong> в анотації <code>@OneToMany</code>, <code>@ManyToMany</code>.</p>
+<p>Цей параметр може приймати два значення:</p>
+<ul>
+<li><strong>EAGER</strong></li>
+<li><strong>LAZY</strong></li>
+</ul>
+<p>Приклад:</p>
+<pre><code>@OneToMany(<span class="text-brown">fetch</span> = <span class="text-brown">FetchType.LAZY</span>, mappedBy = "user")
+</code></pre>
+<p>Якщо <strong>параметр fetch дорівнює EAGER</strong>, то при завантаженні батьківської сутності будуть завантажені і всі її дочірні сутності. Крім того, Hibernate намагатиметься зробити це одним SQL-запитом, згенерувавши великий запит і відразу отримавши всі дані.</p>
+<p>Якщо параметр <strong>fetch приймає значення LAZY</strong>, то при завантаженні батьківської сутності дочірня сутність завантажена не буде. Замість неї буде створено proxy-об'єкт.</p>
+<p>За допомогою цього proxy-об'єкта Hibernate відстежуватиме звернення до цієї дочірньої сутності і при першому зверненні завантажить її на згадку.</p>
+<p>Якщо згадати нашу ситуацію з коментарями:</p>
+<pre class='line-numbers'><code>
+<span class="text-brown">@Entity
+@Table(name</span>="user"<span class="text-brown">)</span>
+class User {
+   <span class="text-brown">@Column(name="id")</span>
+   public Integer id;
+ 
+   <span class="text-brown">@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   @JoinColumn(name="user_id")</span>
+   public List&lt;<span class="token keyword">Comment</span>&gt; <span class="text-user">comments</span>;
+}
+</code></pre>
+<p>То маєш “шикарний вибір”:</p>
+<p>Якщо <code>fetch = FetchType.EAGER</code>, то Hibernate завантажить усі коментарі на 1-му рядку коду:</p>
+<pre class='language-java line-numbers'><code>
+User user = session.get(User.class, 1); //завантажить всі коментарі тут
+List&lt;Comment&gt; comments = user.getComments();
+</code></pre>
+<p>Якщо <code>fetch = FetchType.LAZY</code>, то Hibernate завантажить усі коментарі на 2-му рядку коду:</p>
+<pre class='language-java line-numbers'><code>
+User user = session.get(User.class, 1);
+List&lt;Comment&gt; comments = user.getComments(); //завантажить всі коментарі тут
+</code></pre>
+<p>Як ти вже здогадуєшся, варіанта, коли він не завантажить всі коментарі, у тебе немає :)</p>
+<h2>2.2 Значення за умовчанням</h2>
+<p>Якщо ти не вказав параметр fetch для анотації <code>@ManyTo</code>…, то Hibernate використовуватиме значення за промовчанням.</p>
+<p>Вони дещо відрізняються для різних типів анотацій. Для анотацій <code>@OneToOne</code> та <code>@ManyToOne</code> – це EAGER, для анотацій <code>@OneToMany</code> та <code>@ManyToMany</code> – це LAZY. Запам'ятати просто – якщо ми посилаємось на один об'єкт, то він буде завантажений повністю. Якщо посилаємось на колекцію, вона буде завантажена при першому зверненні до неї.</p>
+<h2>2.3 Анотація @LazyCollection</h2>
+<p>Як ти вже переконався, параметр fetch не дуже допомагає під час роботи з колекціями. Творці Hibernate спробували це виправити, додавши спеціальну інструкцію <code>@LazyCollection</code>. Пишеться вона зазвичай так:</p>
+<pre><code><span class="text-brown">@LazyCollection(LazyCollectionOption.TRUE)</span>
+</code></pre>
+<p>Вказувати її потрібно при мапінгу полів-колекцій:</p>
+<pre class='line-numbers'><code>
+<span class="text-brown">@Entity
+@Table(name</span>="user"<span class="text-brown">)</span>
+class User {
+   <span class="text-brown">@Column(name="id")</span>
+   public Integer id;
+ 
+   @OneToMany(cascade = CascadeType.ALL)
+   <span class="text-red">@LazyCollection(LazyCollectionOption.TRUE)</span>
+   public List&lt;<span class="token keyword">Comment</span>&gt; <span class="text-user">comments</span>;
+}
+</code></pre>
+<p>Ця анотація має параметр value, який може набувати одного з трьох значень:</p>
+<ul>
+<li>LazyCollectionOption.<strong>TRUE</strong></li>
+<li>LazyCollectionOption.<strong>FALSE</strong></li>
+<li>LazyCollectionOption.<strong>EXTRA</strong></li>
+</ul>
+<p>Перші два варіанти дуже схожі на параметр fetch.</p>
+<p>Якщо параметр встановлено в <code>LazyCollectionOption.TRUE</code>, це означає, що значення поля comments <strong>не будуть</strong> завантажені з бази в момент завантаження батьківського об'єкта User. Об'єкти типу Comment будуть завантажені під час першого звернення до поля comments. Фактично це еквівалент параметра <code>FetchType.LAZY</code></p>
+<p>Якщо параметр встановлений у <code>LazyCollectionOption.FALSE</code>, це означає, що значення поля comments <strong>будуть</strong> завантажені з бази в момент завантаження батьківського об'єкта User. Об'єкти типу Comment будуть завантажені під час першого звернення до поля comments. Фактично це еквівалент параметра <code>FetchType.EAGER</code>.</p>

@@ -1,0 +1,172 @@
+Корисні нюанси про Hibernate
+<p>----------------------------------------</p>
+Робота із двома базами одночасно.
+База у пам'яті.
+<p>----------------------------------------</p>
+<h2>Робота з двома базами одночасно</h2>
+
+<p>Досить часто виникають ситуації, коли тобі потрібно працювати з двома базами одночасно. Наприклад, ти читаєш дані з однієї бази, обробляєш їх та пишиш до іншої.</p>
+
+<p>Або ще більш частий варіант. Ваша програма має одну локальну базу даних для роботи, а також може читати дані з різних віддалених джерел, які підтримують SQL-формат запиту даних. Наприклад, Excel.</p>
+
+<p>Для цих віддалених джерел даних буває дуже корисно налаштувати свій Hibernate-мапінг, щоб бізнес-логіка програми могла бути простішою і працювати тільки з Java-об'єктами.</p>
+
+<p>Найпростіший спосіб це зробити - мати кілька файлів конфігурацій. Наприклад, так:</p>
+
+<table>
+<tbody>
+<tr>
+<th>hibernate_oracle.cfg.xml</th>
+</tr>
+<tr>
+<td>
+<pre><code>&lt;hibernate-configuration>
+   &lt;session-factory>
+      &lt;property name="hibernate.dialect">org.hibernate.dialect.OracleDialect&lt;/property>
+      &lt;property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver&lt;/property>
+      &lt;property name="hibernate.connection.url">jdbc:oracle:thin:@localhost:1521:xe&lt;/property>
+      &lt;property name="hibernate.connection.username">system&lt;/property>
+      &lt;property name="hibernate.connection.password">secret&lt;property>
+ 
+      &lt;mapping resource="com/javarush/hibernate/multipledatabase/employee.hbm.xml"/>
+   &lt;/session-factory>
+&lt;/hibernate-configuration></code></pre>
+</td>
+</tr>
+<tr>
+<th>hibernate_mysql.cfg.xml</th>
+</tr>
+<tr>
+<td>
+<pre><code>&lt;hibernate-configuration>
+   &lt;session-factory>
+      &lt;property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect&lt;/property>
+      &lt;property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver&lt;/property>
+      &lt;property name="hibernate.connection.url">jdbc:mysql://localhost:3306/employee&lt;/property>
+      &lt;property name="hibernate.connection.username">root&lt;/property>
+      &lt;property name="hibernate.connection.password">secret&lt;/property>
+ 
+      &lt;mapping resource="com/javarush/hibernate/multipledatabase/employee.hbm.xml"/>
+   &lt;/session-factory>
+&lt;/hibernate-configuration></code></pre>
+</td>
+</tr>
+</tbody>
+</table>
+ 
+<p>Ну і весь код ініціалізації Hibernate фактично просто дублюється:</p>
+
+<pre class='language-java line-numbers'><code>
+   Configuration oracleCfg = new Configuration();
+   oracleCfg.configure("/com/javarush/hibernate/multipledatabase/hibernate_oracle.cfg.xml");
+   SessionFactory oracleSessionFactory = oracleCfg.buildSessionFactory();
+   Session oracleSession = oracleSessionFactory.openSession();
+ 
+   Configuration mysqlCfg = new Configuration();
+   mysqlCfg.configure("/com/javarush/hibernate/multipledatabase/hibernate_mysql.cfg.xml");
+   SessionFactory mySqlSessionFactory = mysqlCfg.buildSessionFactory();
+   Session mysqlSession = mySqlSessionFactory.openSession();
+                                        
+   Employee emp = oracleSession.get(Employee.class, "E0087");
+   System.out.println("Employee retrived from Oracle Database");
+                          
+   Transaction tx = mysqlSession.beginTransaction();
+   mysqlSession.save(emp);
+   tx.commit();
+   System.out.println("Employee inserted in MySQL Database");
+</code></pre>
+ 
+<h2>База в пам'яті</h2>
+
+<p>Існують СУБД, які є базами даних, повністю розміщені в пам'яті. Такі СУБД часто поширюються просто у вигляді бібліотек та їх легко включити у звичайну програму. Такими СУБД, наприклад, є H2 чи Hsqldb.</p>
+
+<p>Додати їх до свого проекту можна так само, як і будь-які інші бібліотеки — за допомогою залежності в Maven:</p>
+
+<table>
+<tbody>
+<tr>
+<th>Hsqldb</th>
+</tr>
+<tr>
+<td>
+<pre><code>&lt;dependency>
+    &lt;groupId>org.hsqldb&lt;/groupId>
+    &lt;artifactId>hsqldb&lt;/artifactId>
+    &lt;version>2.6.1&lt;/version>
+&lt;scope>test&lt;/scope>
+&lt;/dependency></code></pre>
+</td>
+</tr>
+</tbody>
+</table>
+
+<p>І одразу приклад другої бази:</p>
+
+<table>
+<tbody>
+<tr>
+<th>H2 database</th>
+</tr>
+<tr>
+<td>
+<pre><code>&lt;dependency>
+    &lt;groupId>com.h2database&lt;/groupId>
+    &lt;artifactId>h2&lt;/artifactId>
+    &lt;version>2.1.214&lt;/version>
+    &lt;scope>test&lt;/scope>
+&lt;/dependency></code></pre>
+</td>
+</tbody>
+</table>
+ 
+<p>Конфігурувати роботу з ними можна так само, як із звичайними базами. Але давай для зручності наведемо кілька прикладів:</p>
+
+<table>
+<tbody>
+<tr>
+<th>Hsqldb</th>
+</tr>
+<tr>
+<td>
+<pre><code>&lt;hibernate-configuration>
+    &lt;session-factory>
+        &lt;property name="hibernate.connection.driver_class">org.hsqldb.jdbc.JDBCDriver&lt;/property>
+        &lt;property name="hibernate.connection.url">jdbc:hsqldb:mem:test&lt;/property>
+        &lt;property name="hibernate.connection.username">sa&lt;/property>
+        &lt;property name="hibernate.connection.password">&lt;/property>
+        &lt;property name="hibernate.dialect">org.hibernate.dialect.HSQLDialect&lt;/property>
+        &lt;property name="hibernate.show_sql">true&lt;/property>
+        &lt;property name="hibernate.format_sql">true&lt;/property>
+        &lt;property name="hibernate.hbm2ddl.auto">create-drop&lt;/property>
+        &lt;property name="hibernate.current_session_context_class">thread&lt;/property>
+    &lt;/session-factory>
+&lt;/hibernate-configuration></code></pre>
+</td>
+</tbody>
+</table>
+
+<p>Ключова відмінність двох конфігурацій — це connection.url:</p>
+
+<table>
+<tbody>
+<tr>
+<th>H2 database</th>
+</tr>
+<tr>
+<td>
+<pre><code>&lt;hibernate-configuration>
+    &lt;session-factory>
+        &lt;property name="hibernate.connection.driver_class">org.h2.Driver&lt;/property>
+        &lt;property name="hibernate.connection.url">jdbc:h2:mem:test&lt;/property>
+        &lt;property name="hibernate.connection.username">root&lt;/property>
+        &lt;property name="hibernate.connection.password">&lt;/property>
+        &lt;property name="hibernate.dialect">org.hibernate.dialect.H2Dialect&lt;/property>
+        &lt;property name="hibernate.show_sql">true&lt;/property>
+        &lt;property name="hibernate.format_sql">true&lt;/property>
+&lt;property name="hibernate.hbm2ddl.auto">create-drop&lt;/property>
+        &lt;property name="hibernate.current_session_context_class">thread&lt;/property>
+    &lt;/session-factory>
+&lt;/hibernate-configuration></code></pre>
+</td>
+</tbody>
+</table>

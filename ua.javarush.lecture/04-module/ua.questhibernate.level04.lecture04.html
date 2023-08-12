@@ -1,0 +1,218 @@
+Рядкові функції
+<p>----------------------------------------</p>
+Список рядкових функцій.
+Перетворимо рядок.
+Складні дії із рядками.
+<p>----------------------------------------</p>
+<h2>Список рядкових функцій</h2>
+
+<p>Більше функцій, ніж у дати і часу, лише у типу String. Який SQL задається типами CHAR(n) і VARCHAR(n). Згадаймо найпопулярніші з них:</p>
+ 
+<table>
+<tbody>
+<tr>
+<th></th>
+<th>Функція </th>
+<th>Опис </th>
+</tr>
+<tr>
+<td>1 </td>
+<td>LENGTH(str) </td>
+<td>Повертає довжину переданого рядка в байтах</td>
+</tr>
+<tr>
+<td>2 </td>
+<td>CHAR_LENGTH(str) </td>
+<td>Повертає довжину переданого рядка в char'ах</td>
+ </tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>3 </td>
+<td>LOCATE(substr,str), </td>
+<td>Шукає підрядок у рядку аналогічно методу indexOf()</td>
+</tr>
+<tr>
+<td>4 </td>
+<td>LOCATE(substr,str,pos)</td>
+<td>Шукає рядок у рядку, починаючи з символу pos</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>5 </td>
+<td>CONCAT(str1,str2,...)</td>
+<td>Склеює кілька рядків</td>
+</tr>
+<tr>
+<td>6 </td>
+<td>SUBSTR(), SUBSTRING() </td>
+<td>Повертає підрядок, заданий діапазоном символів </td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>7 </td>
+<td>LOWER(str) </td>
+<td>Перетворить рядок на нижній регістр </td>
+</tr>
+<tr>
+<td>8 </td>
+<td>UPPER(str) </td>
+<td>Перетворить рядок у верхній регістр </td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>9 </td>
+<td>REPLACE() </td>
+<td>Замінює підрядок у рядку </td>
+</tr>
+<tr>
+<td>10 </td>
+<td>MATCH() </td>
+<td>Перевіряє збіг рядка заданому шаблону</td>
+ </tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>11 </td>
+<td>TRIM(str) </td>
+<td>Обрізає порожні символи на початку та в кінці рядка </td>
+</tr>
+<tr>
+<td>12</td>
+<td>LTRIM(str) </td>
+<td>Обрізає порожні символи на початку рядка </td>
+</tr>
+<tr>
+<td>13 </td>
+<td>RTRIM(str) </td>
+<td>Обрізає порожні символи в кінці рядка </td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>14 </td>
+<td>TO_BASE64(str) </td>
+<td>Перетворить рядок у Base64 </td>
+</tr>
+<tr>
+<td>15 </td>
+<td>FROM_BASE64(str) </td>
+<td>Перетворить рядок з Base64</td>
+</tr>
+</tbody>
+</table>
+ 
+<p>Я спеціально згрупував функції у невеликі групи, щоб було легше зрозуміти, як з ними працювати. Нижче ми розглянемо одну функцію з кожної групи.
+Повний список функцій для роботи з рядками ти знайдеш у <a href="https://dev.mysql.com/doc/refman/8.0/en/string-functions.html" target="_blank">офіційної документації</a >.</p>
+ 
+<h2>Перетворимо рядок </h2>
+
+<p>Давай спочатку розберемося з найпростішими функціями, які просто перетворюють рядок до трохи іншого вигляду. Наприклад, перетворюють рядок у верхній та нижній регістр. Загалом їхня поведінка аналогічна таким же функціям у мові Java.</p>
+
+<p>Тому я просто наведу табличку з кількома прикладами. </p>
+
+<table>
+<tbody>
+<tr>
+<th>#</th>
+<th>Запит</th>
+<th>Результат</th>
+</tr>
+<tr>
+<td>1</td>
+<td><strong>SELECT <span class="text-red">LENGTH</span>('text')</strong></td>
+<td>4</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>SELECT <span class="text-red">LENGTH</span>('Привіт')</strong> </td>
+<td>12</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>SELECT <span class="text-red">LOWER</span>('Привіт')</strong> </td>
+<td>привіт</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>SELECT <span class="text-red">UPPER</span>('Привіт')</strong> </td>
+<td>ПРИВІТ </td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>SELECT <span class="text-red">SUBSTR</span>('Привіт', 2, 3)</strong> </td>
+<td>рив </td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>SELECT <span class="text-red">SUBSTR</span>('Привіт як справи?', 8)</strong> </td>
+<td>як справи? </td>
+</tr>
+</tbody>
+</table>
+ 
+<p>Функції працюють очікувано, як і аналогічні функції з JDK. </p>
+
+<p>Єдиний нюанс: у першому рядку результат 4, а не 8. Справа в тому, що для кодування латинських символів <strong>у запиті</strong> використовується 1 байт (кодування ASCII).
+Але якщо працюватимеш з даними з бази даних, то <span class="text-user">довжина рядка буде залежати від налаштувань кодування бази даних</span>. На тебе чекає багато сюрпризів при роботі з базою даних :) </p>
+
+<h2>Складні дії з рядками </h2>
+
+<p>Ну і давай розберемо складніші речі під час роботи з рядками. Що б таке вигадати… </p>
+
+<p>Давай відобразимо завдання з таблиці task, і якщо deadline завдання вже пройшов, то додамо до опису завдання слово <em><strong>EXPIRED!</strong></em> </p>
+
+<p>Звучить цікаво. Хоча складні умови ми ще не вчили, тож давай трохи спростимо завдання. Просто напишемо запит, який відобразить список завдань, що пройшли, але до назви обов'язково додасть слово <em><strong>“EXPIRED!”</strong></em>.</p>
+
+<p>Для цього нам доведеться використовувати функцію CONCAT: </p>
+
+<pre><code><strong><span class="text-red">SELECT</span> <span class="text-user">CONCAT</span>(<span class="text-viola"> 'EXPIRED!'</span>, <span class="text-green">name</span>) <span class="text-red">FROM</span> <span class="text-orange"> task</span>
+   <span class="text-red">WHERE</span> <span class="text-green">deadline</span> &lt; <span class="text-neon">CURDATE()</span> </strong>
+</code></pre>
+ 
+<p>Результат цього запиту буде таким:</p>
+
+<table>
+<tbody>
+<table>
+<tr>
+<th>concat('EXPIRED!', name)</th>
+</tr>
+<tr>
+<td>EXPIRED! Виправити багу на фронтенді </td>
+</tr>
+</tbody>
+</table>
+ 
+<p><strong>Рекомендація.</strong> Якщо тобі потрібно просто перетворити дані трохи до іншого виду, то це можна зробити і на рівні Java-коду. Але якщо ти хочеш використовувати функції роботи з рядками на боці SQL-сервера( всередині WHERE), то без них тобі точно не обійтися.</p>

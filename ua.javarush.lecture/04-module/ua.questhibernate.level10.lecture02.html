@@ -1,0 +1,122 @@
+Join у HQL
+<p>----------------------------------------</p>
+Маппінг залежних сутностей
+Використання join в HQL
+<p>----------------------------------------</p>
+<h2>3.1 Мапінг залежних сутностей</h2>
+<p>У SQL можна писати запити за допомогою JOIN. А чи можна так само робити в HQL? Коротка відповідь – так. А ось повна відповідь буде цікавішою.</p>
+<p>По-перше, коли ми пишемо JOIN у SQL, то найчастіше це означає, що одна таблиця у нас посилається на іншу таблицю. Наприклад, таблиця task містить колонку employee_id, яка посилається на колонку ID таблиці employee.</p>
+<p>Цю залежність можна описати за допомогою анотацій у Hibernate. Спершу давай просто створимо Entities для наших таблиць. Спочатку опишемо таблицю employee:</p>
+<pre class='language-java line-numbers'><code>
+<span class="text-brown">@Entity
+@Table(name</span>="employee"<span class="text-brown">)</span>
+class Employee {
+   <span class="text-brown">@Column(name="id")</span>
+   public Integer id;
+ 
+   <span class="text-brown">@Column(name="name")</span>
+   public String name;
+ 
+   <span class="text-brown">@Column(name="salary")</span>
+   public Integer salary;
+ 
+   <span class="text-brown">@Column(name="join_date")</span>
+   public Date joinDate;
+}
+
+</code></pre>
+<p>І клас <strong>EmployeeTask</strong> для таблиці <strong>task</strong>:</p>
+<pre class='language-java line-numbers'><code>
+<span class="text-brown">@Entity
+@Table(name</span>="task"<span class="text-brown">)</span>
+class EmployeeTask {
+   <span class="text-brown">@Column(name="id")</span>
+   public Integer id;
+ 
+   <span class="text-brown">@Column(name="name")</span>
+   public String name;
+ 
+   <span class="text-brown">@Column(name="employee_id")</span>
+   public Integer employeeId;
+ 
+   <span class="text-brown">@Column(name="deadline")</span>
+   public Date deadline;
+}
+</code></pre>
+<p>Все чудово, але є одна пропозиція. Давайте подивимося на поле <strong>employeeId</strong> в останньому прикладі:</p>
+<pre class='language-java line-numbers'><code>
+<span class="text-brown">@Column(name="employee_id")</span>
+public Integer employeeId;
+</code></pre>
+<p>Нічого дивного не помічаєш? Якщо ні, це означає, що в тебе вже сформувалося мислення на мові SQL.</p>
+<p>Уся справа в тому, що в мові Java ми зазвичай описуємо таку залежність трохи по-іншому:</p>
+<pre class='language-java line-numbers'><code>
+public <span class="text-green">Employee</span> employee;
+</code></pre>
+<p>Нам не потрібно вказувати <strong>id</strong>, ми зазвичай відразу вказуємо змінну, яка зберігає посилання на об'єкт <strong>Employee</strong>. Або зберігає <strong>null</strong>, якщо такого об'єкта немає.</p>
+<p>І Hibernate дозволяє нам описати таку ситуацію за допомогою анотацій:</p>
+<pre class='language-java line-numbers'><code>
+<span class="text-brown">@ManyToOne
+@JoinColumn(name="employee_id", nullable=true)</span>
+public Employee employee;
+</code></pre>
+<p>Аннотація <code>@ManyToOne</code> говорить Hibernate, що багато сутностей <strong>EmployeeTask</strong> можуть посилатися на одну сутність <strong>Employee</strong>.</p>
+<p>А інструкція <code>@JoinColumn</code> вказує ім'я колонки, з якої буде братися <strong>id</strong>. Решту необхідної інформації буде взято з анотацій класу Employee.</p>
+<p>Підсумковий результат буде виглядати так:</p>
+<pre class='language-java line-numbers'><code>
+<span class="text-brown">@Entity
+@Table(name</span>="task"<span class="text-brown">)</span>
+class EmployeeTask
+{
+   <span class="text-brown">@Column(name="id")</span>
+   public Integer id;
+ 
+   <span class="text-brown">@Column(name="name")</span>
+   public String name;
+ 
+   <span class="text-red">@ManyToOne
+   @JoinColumn(name="employee_id", nullable=true)</span>
+   public Employee employee;
+ 
+  <span class="text-brown">@Column(name="deadline")</span>
+   public Date deadline;
+}
+</code></pre>
+<h2>3.2 Використання join у HQL</h2>
+<p>А тепер розберемо, як писати запити до пов'язаних сутностей на HQL.</p>
+<h3>Перша ситуація.</h3>
+<p>У нас є співробітник (Employee), і ми хочемо отримати список його завдань. Ось як виглядатиме цей запит на SQL:</p>
+<pre class='language-java line-numbers'><code>
+<span class="text-brown">SELECT</span> <span class="text-yellow">task</span>.* <span class="text-brown">FROM</span> <span class ="text-yellow">task</span> <span class="text-brown">JOIN</span> <span class="text-yellow">employee</span> <span class="text-brown ">ON</span> <span class="text-yellow">task</span>.<span class="text-green">employee_id</span> = <span class="text-yellow">employee </span>.<span class="text-green">id</span>
+<span class="text-brown">WHERE</span> <span class="text-yellow">employee</span>.<span class="text-green">name</span> = <span class ="text-user">"Іване Івановичу"</span>;
+</code></pre>
+<p>А тепер запишемо цей же запит на HQL:</p>
+<pre class='language-java line-numbers'><code>
+<span class="text-brown">from</span> EmployeeTask <span class="text-brown">where</span> employee.name = <span class="text-user">"Іван Іванович"< /span>
+</code></pre>
+<p>У класу <strong>EmployeeTask</strong> є поле <strong>employee</strong>, а у нього є поле <strong>name</strong>, тому такий запит буде працювати.</p>
+<h3>Ситуація друга.</h3>
+<p>Повернути список працівників, які мають прострочені завдання. Ось як виглядатиме цей запит на SQL:</p>
+<pre class='language-java line-numbers'><code>
+<span class="text-brown">SELECT DISTINCT</span> <span class="text-yellow">employee</span>.*
+<span class="text-brown">FROM</span> <span class="text-yellow">task</span> <span class="text-brown">JOIN</span> <span class=" text-yellow">employee</span> <span class="text-brown">ON</span> <span class="text-yellow">task</span>.<span class="text-green" >employee_id</span> = <span class="text-yellow">employee</span>.<span class="text-green">id</span>
+<span class="text-brown">WHERE</span> <span class="text-yellow">task</span>.<span class="text-green">deadline</span> < <span class ="text-user">CURDATE()</span>;
+</code></pre>
+<p><code>DISTINCT</code> використовується, тому що може бути багато завдань, призначених на одного користувача.</p>
+<p>А тепер запишемо цей же запит на HQL:</p>
+<pre class='language-java line-numbers'><code>
+<span class="text-brown">select distinct</span> employee <span class="text-brown">from</span> EmployeeTask <span class="text-brown">where</span> deadline &lt ; CURDATE();
+</code></pre>
+<p><strong>employee</strong> у цьому запиті – це поле класу <strong>EmployeeTask</strong></p>
+<h3>Ситуація третя.</h3>
+<p>Призначимо всі непризначені завдання на директора. Запит на SQL виглядатиме так:</p>
+<pre class='language-java line-numbers'><code>
+UPDATE task SET employee_id = 4 WHERE employee_id IS NULL
+</code></pre>
+<p>А тепер запишемо цей же запит на HQL:</p>
+<pre class='language-java line-numbers'><code>
+<span class="text-brown">update</span> EmployeeTask <span class="text-brown">set</span> employee = :user <span class="text-brown">where</span> employee is null
+</code></pre>
+<p>Останній запит найскладніший. Нам потрібно передати ID, директора, але клас EmployeeTask не містить поля, куди можна записати id, натомість він містить поле Employee, куди потрібно присвоїти посилання на об'єкт типу Employee.</p>
+<p>У Hibernate цю проблему вирішується за допомогою параметрів до запиту, які передаються в об'єкт Query. А в самому HQL такі параметри записуються через двокрапку: <code>:user</code>. Але про це ми розповімо трохи згодом.</p>
+

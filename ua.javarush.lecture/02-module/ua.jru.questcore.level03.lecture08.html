@@ -1,0 +1,127 @@
+<p>- Привіт, Аміго! Зараз я тобі розповім про два інтерфейси –&nbsp; <strong>InputStream</strong> &nbsp;та&nbsp; <strong>OutputStream</strong> . Оголошено вони як абстрактні класи, але якщо почати розбиратися, можна побачити, що <strong>&nbsp;за своєю суттю – це інтерфейси. </strong>&nbsp;Майже всі їх абстрактні методи, крім кількох незначних методів. Дуже схожі на нашого «охоронця», якого ми розглядали.</p>
+<p>Це дуже цікаві інтерфейси. Поки що я спеціально називатиму їх інтерфейси, щоб ти зрозумів, навіщо вони потрібні. А потім ми поговоримо, чому їх все-таки зробабо абстрактними класами.</p>
+<p><span class="text-user">- Добре. То що це за інтерфейси?</span></p>
+<p>- Зараз розкажу.</p>
+<p>Є така цікава річ у Java як « <strong>потік</strong> ».&nbsp;<strong>Потік</strong> &nbsp;це дуже проста сутність. І його простота є запорукою дуже потужного механізму обміну даними. Потоки бувають двох видів:&nbsp; <strong>потік для читання та потік для запису.</strong></p>
+<p>У потік для запису, як ти вже, мабуть, здогадався,&nbsp; <strong>можна записувати дані</strong> . Для цього він має метод&nbsp; <strong>write</strong> (). З потоку для читання&nbsp; <strong>можна читати</strong> . Для цього він має метод&nbsp; <strong>read</strong> ().</p>
+<p><strong>InputStream</strong> &nbsp;- це інтерфейс потоку читання, що описує таку здатність: "з мене можна читати байти".</p>
+<p>А&nbsp; <strong>OutputStream</strong> - це, відповідно, інтерфейс потоку запису, що описує здатність: "у мене можна записувати байти".</p>
+<p><span class="text-user">- І це все?</span></p>
+<p>- Фактично так. Але вся справа в тому, що в Java є дуже багато класів, які вміють працювати з інтерфейсами&nbsp; <strong>InputStream</strong> &nbsp;та&nbsp; <strong>OutputStream</strong> . Наприклад, ти хочеш прочитати файл з диска та вивести його на екран. Немає нічого простішого.</p>
+<p>Для того, щоб прочитати дані з файлу на диску, є спеціальний клас&nbsp; <strong>FileInputStream</strong> , який реалізує інтерфейс&nbsp; <strong>InputStream</strong> . Хочеш записати прочитані дані до іншого файлу? Для цього є клас&nbsp; <strong>FileOutputStream</strong> , який реалізує інтерфейс&nbsp; <strong>OutputStream</strong> . Ось як виглядає код копіювання [даних одного] файлу до іншого.</p>
+<div class="code-heading">
+ Код
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span>
+<span class="token punctuation">{</span>
+ <span class="token class-name">InputStream</span> <span class="text-green">inStream</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span><span class="token string">"c:/source.txt"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token class-name">OutputStream</span> <span class="text-user">outStream</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileOutputStream</span><span class="token punctuation">(</span><span class="token string">"c:/result.txt"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="text-green">inStream</span><span class="token punctuation">.</span><span class="token function">available</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">int</span> data <span class="token operator">=</span> <span class="text-green">inStream</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">read</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//читаем один байт из потока для чтения</span>
+  <span class="text-user">outStream</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">write</span></span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//записываем прочитанный байт в другой поток.</span>
+ <span class="token punctuation">}</span>
+
+ <span class="text-green">inStream</span><span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//закрываем потоки</span>
+ <span class="text-user">outStream</span><span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Уяви, що ми написали клас і додали йому можливості&nbsp; <strong>InputStream</strong> &nbsp;і&nbsp; <strong>OutputStream</strong> .</p>
+<p>Якщо ми правильно реалізували підтримку цих інтерфейсів, то об'єкти нашого класу тепер можна зберегти у файл на диску. Просто вичитавши їх вміст через метод&nbsp; <strong>read</strong> . Або завантажити з файлу, створивши об'єкт і записавши вміст файлу через метод&nbsp; <strong>write</strong> .</p>
+<p><span class="text-user">— А чи можна приклад?</span></p>
+<p>- Можна, можливо.</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th width="50%">Код</th>
+    <th width="50%">Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">MyClass</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">private</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> list <span class="token operator">=</span>
+ <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span><span class="token number">111</span><span class="token punctuation">,</span> <span class="token number">222</span><span class="token punctuation">,</span> <span class="token number">333</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Для простоти уявімо, що наш клас містить один об'єкт – ArrayList типу Integer. Наповнимо список тестовими даними.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Тепер додамо до нього методи read та write</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th width="50%">Код</th>
+    <th width="50%">Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">MyClass</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">private</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> list <span class="token operator">=</span>
+ <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span><span class="token number">111</span><span class="token punctuation">,</span> <span class="token number">222</span><span class="token punctuation">,</span> <span class="token number">333</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">write</span><span class="token punctuation">(</span><span class="token keyword">int</span> data<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">read</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">int</span> first <span class="token operator">=</span> list<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+list<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">return</span> first<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">available</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">return</span> list<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Тепер у нас у класі реалізований метод&nbsp; <strong>read</strong> , який дозволяє послідовно віднімати весь вміст нашого списку&nbsp; <strong>list</strong> .
+     <p></p>
+     <p>І метод&nbsp; <strong>write</strong> , який дозволяє записувати в наші list значення.</p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Це, звичайно, не реалізація інтерфейсів InputStream та OutputStream, але дуже схоже.</p>
+<p><span class="text-user">- Так, це зрозуміло. А як зберегти вміст такого об'єкта у файл?</span></p>
+<p>- Давай я напишу тобі приклад:</p>
+<div class="code-heading">
+ Запис об'єкта MyClass у файл
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span>
+<span class="token punctuation">{</span>
+ <span class="token class-name">MyClass</span> <span class="text-green">myObject</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-green">MyClass</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token class-name">OutputStream</span> outStream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileOutputStream</span> <span class="token punctuation">(</span><span class="token string">"c:/my-object-data.txt"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="text-green">myObject</span><span class="token punctuation">.</span><span class="token function">available</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">int</span> data <span class="token operator">=</span> <span class="text-green">myObject</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">read</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//читаем один int из потока для чтения</span>
+  <span class="text-user">outStream</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">write</span></span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//записываем прочитанный int в другой поток.</span>
+ <span class="token punctuation">}</span>
+
+ <span class="text-user">outStream</span><span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<div class="code-heading">
+ Читання об'єкта MyClass із файлу
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span>
+<span class="token punctuation">{</span>
+ <span class="token class-name">InputStream</span> <span class="text-green">inStream</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-green">FileInputStream</span></span><span class="token punctuation">(</span><span class="token string">"c:/my-object-data.txt"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token class-name">MyClass</span> myObject <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MyClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="text-green">inStream</span><span class="token punctuation">.</span><span class="token function">available</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">int</span> data <span class="token operator">=</span> <span class="text-green">inStream</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">read</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//читаем один int из потока для чтения</span>
+  <span class="text-user">myObject</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">write</span></span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//записываем прочитанный int в другой поток.</span>
+ <span class="token punctuation">}</span>
+
+ <span class="text-green">inStream</span><span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//закрываем потоки</span>
+<span class="token punctuation">}</span></code></pre>
+<p><span class="text-user">- Ух ти! Справді, дуже схоже працювати з InputStream/OutputStream. Потоки це крута річ!</span></p>
+<p>- А то!</p>

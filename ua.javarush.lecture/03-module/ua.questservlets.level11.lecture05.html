@@ -1,0 +1,60 @@
+<h2>Структура war-файлу</h2>
+<p>Кожна веб-програма, коли вона заливається на веб-сервер, упакована в єдиний war-файл. WAR зараз розшифровується як Web Application Resources, хоча раніше це було Web ARchive. Фактично це zip-архів, який містить у собі упакований веб-додаток.</p>
+<p>Ось як виглядає типовий зміст war-файлу:</p>
+<pre><code><span class="text-neon">/index.html
+/guestbook.jsp
+/images/logo.png
+/js/jquery.js</span>
+<span class="text-green">/WEB-INF/</span><span class="text-red">web.xml</span>
+<span class="text-green">/WEB-INF/classes/com/codegym/Util.class
+/WEB-INF/classes/com/codegym/MainServlet.class
+/WEB-INF/classes/application.properties
+/WEB-INF/lib/util.jar</span>
+/META-INF/MANIFEST.MF
+</code></pre>
+<p>Усередині war-файлу лежать <span class="text-bold">статичні веб-ресурси</span> , такі як файли .html, .css, .js і таке інше. Також там можуть бути картинки, відео і взагалі будь-які файли. Вони можуть лежати в корені або в підпапках, це не має значення. Tomcat просто віддаватиме їх, якщо на них надійде запит.</p>
+<p>Допустимо, твоя веб-додаток завантажена на веб-сервер під ім'ям apple, тоді при запиті <a href="http://localhost/apple/images/logo.png" target="_blank">http://localhost/apple/images/logo.png</a> Tomcat віддасть файл <span class="text-neon">/images/logo.png</span> .</p>
+<p>Окремо варто відзначити <span class="text-bold">папку WEB-INF</span> . Вона призначена для зберігання Java-коду. <span class="text-red">Tomcat <span class="text-bold">не</span> віддаватиме назовні її вміст.</span></p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>/WEB-INF/classes/</td>
+    <td>каталог для скомпільованих Java-класів, не об'єднаних у JAR-архіви, включаючи класи сервлета та файли ресурсів, необхідні завантажувачу перед виконанням програми</td>
+   </tr>
+   <tr>
+    <td>/WEB-INF/lib/</td>
+    <td>місце для зберігання jar-бібліотек</td>
+   </tr>
+   <tr>
+    <td>/WEB-INF/web.xml</td>
+    <td>дескриптор розгортання</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<h2>Структура war-файлу та Maven-проект</h2>
+<p>Тепер перейдемо до ієрархії каталогів Maven. Повну схему каталогу можна переглянути в офіційному посібнику. Тут ми ознайомимося з нею у дещо скороченому варіанті, виключивши тестові ресурси. Отже, стандартна ієрархія каталогів Maven має вигляд:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>src/main/java</td>
+    <td>вихідники класів та бібліотек додатку відповідно до загальноприйнятої ієрархії пакетів</td>
+   </tr>
+   <tr>
+    <td>src/main/resources</td>
+    <td>файли ресурсів програми: налаштування баз даних, файли локалізації тощо.</td>
+   </tr>
+   <tr>
+    <td>src/main/webapp</td>
+    <td>ресурси веб-програми (JSP-файли, текстові файли, скрипти тощо)</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Як бачиш, вона суттєво відрізняється від відомої вам структури WAR-файлу. Але насправді при компіляції веб-програми відбувається просте переміщення та об'єднання файлів у структуру, визначену в специфікації Java EE.</p>
+<p>Каталог <span class="text-bold">src/main/webapp</span> визначає кореневий контекст веб-програми (при розгортанні на сервері кореневий контекст збігається з ім'ям WAR-файлу) і вже містить у собі каталог WEB-INF. Тобто вміст <span class="text-bold">src/main/webapp</span> повністю переноситься до веб-додатку.</p>
+<p>Всі твої Java-класи компілюються в class-файли і, зберігаючи свою структуру пакетів, переміщуються до каталогу <span class="text-bold">/WEB-INF/classes/</span> . JAR-архіви підключених бібліотек, які визначені залежно від pom.xml файлу Maven'а, як ми визначабо вище, переміщуються в каталог <span class="text-bold">/WEB-INF/lib/</span> .</p>
+<p>Ресурси програми <span class="text-bold">src/main/resources</span> переносяться в classpath програми, саме у той самий каталог <span class="text-bold">/WEB-INF/classes/</span> .</p>
+<p>Щоб було зрозуміло, подивися цю схему, яка допоможе зрозуміти, як і що куди кладеться при складанні проекту:</p><img data-max-width="512" data-id="0abbb31e-30ce-4c88-a4f7-27a282f86f91" alt="Пристрій war-файлу" src="https://cdn.javarush.com/images/article/0abbb31e-30ce-4c88-a4f7-27a282f86f91/512.jpeg" style="width: 512px;">

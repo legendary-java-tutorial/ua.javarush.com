@@ -1,0 +1,154 @@
+<p>- Привіт, Аміго! Сьогодні маєш день відкриттів.&nbsp;<span class="text-green">Нова та цікава тема – це інтерфейси.</span></p>
+<p><span class="text-user">- Ага. День настільки чудовий, що я прийду додому і прийму повну ванну води.</span></p>
+<p>-&nbsp; <strong><span class="text-red">Інтерфейс</span></strong> &nbsp;- це дитина Абстракції та Поліморфізму. Інтерфейс дуже нагадує абстрактний клас, у якого всі абстрактні методи. Він оголошується так, як і клас, тільки використовується ключове слово&nbsp; <code><strong><span class="text-red">interface</span></strong></code>. Приклади:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код</th>
+    <th>Опис та Факти</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword"><span class="text-red">interface</span></span> <span class="token class-name">Drawable</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">void</span> <span class="token function">draw</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword"><span class="text-red">interface</span></span> <span class="token class-name">HasValue</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">int</span> <span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>1) Замість слова&nbsp; <code>class</code>&nbsp;пишемо&nbsp; <code>interface</code>.
+     <p></p>
+     <p><span class="text-corporate">2) Містить лише абстрактні методи (слово abstract писати не потрібно).</span></p>
+     <p><span class="text-green">3) Насправді в інтерфейсів усі методи – public.</span></p></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">interface</span> <span class="token class-name">Element</span> <span class="token keyword"></span><span class="text-red"><span class="token keyword">extends</span> <span class="token class-name">Drawable</span><span class="token punctuation">,</span> <span class="token class-name">HasValue</span></span><span class="token class-name"></span>
+<span class="token punctuation">{</span>
+<span class="token keyword">int</span> <span class="token function">getX</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> <span class="token function">getY</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td><span class="text-red">Інтерфейс може успадковуватись тільки від інтерфейсів.</span>
+     <p></p>
+     <p><span class="text-red">Інтерфейсів-батьків може бути багато.</span></p></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">ChessItem</span> <span class="token keyword"></span><span class="text-red"><span class="token keyword">implements</span> <span class="token class-name">Drawable</span><span class="token punctuation">,</span> <span class="token class-name">HasValue</span></span><span class="token class-name"></span>
+<span class="token punctuation">{</span>
+<span class="token keyword">private</span> <span class="token keyword">int</span> x<span class="token punctuation">,</span> y<span class="token punctuation">,</span> value<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">return</span> value<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getX</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">return</span> x<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getY</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">return</span> y<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Клас може успадковуватись від кількох інтерфейсів (і тільки від одного класу). При цьому використовується ключове слово&nbsp; <code><span class="text-red">implements</span></code>.
+     <p></p>
+     <p><span class="text-green">Клас </span>&nbsp;<code><span class="text-green">ChessItem&nbsp;</span></code><span class="text-green">оголошений абстрактним: він реалізував усі успадковані методи, крім draw.</span></p>
+     <p>Тобто. Клас&nbsp; <code>ChessItem</code>&nbsp;містить один абстрактний спосіб:&nbsp; <code>draw()</code>.</p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">- Цікаво. А навіщо потрібні інтерфейси? Коли їх використовують?</span></p>
+<p>— Інтерфейси мають дві сильні переваги в порівнянні з класами:</p>
+<h3>1) Відділення «опису методів» від реалізації.</h3>
+<p>Раніше я тобі розповідав, що&nbsp; <span class="text-green">якщо ти хочеш дозволити викликати методи свого класу з інших класів, їх потрібно позначити ключовим словом</span>&nbsp;<code><span class="text-green">public</span></code> . Якщо ж хочеш, щоб якісь методи можна було викликати тільки з твого класу, їх потрібно позначати ключовим словом&nbsp; <code>private</code>. Тобто ми ділимо способи класу на дві категорії: «для всіх» і «тільки для своїх».</p>
+<p>За допомогою інтерфейсів цей поділ можна посаботи ще більше. Ми зробимо спеціальний «клас для всіх» і другий «клас для своїх», який успадкуємо від першого. Ось як це приблизно буде:</p>
+<div class="row compare">
+ <div class="col-xs-12 col-sm-6 col-md-6">
+  <div class="code-heading">
+   Було
+  </div>
+  <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name"><span class="text-green">Student</span></span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">private</span> <span class="token class-name">String</span> name<span class="token punctuation">;</span>
+
+ <span class="token keyword">public</span> <span class="token class-name">Student</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>name<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">setName</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span></code></pre>
+ </div>
+ <div class="col-xs-12 col-sm-6 col-md-6">
+  <div class="code-heading">
+   Стало
+  </div>
+  <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">interface</span> <span class="token class-name"><span class="text-red">Student</span></span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">class</span> <span class="token class-name"><span class="text-user">StudentImpl</span></span> <span class="token keyword">implements</span> <span class="token class-name"><span class="text-red">Student</span></span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">private</span> <span class="token class-name">String</span> name<span class="token punctuation">;</span>
+ <span class="token keyword">public</span> <span class="token class-name">StudentImpl</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+ <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>name<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+ <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">setName</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+ </div>
+</div>
+<div class="row compare">
+ <div class="col-xs-12 col-sm-6 col-md-6">
+  <div class="code-heading">
+   Було
+  </div>
+  <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token class-name"><span class="text-green">Student</span></span> student <span class="token operator">=</span>
+               <span class="token keyword">new</span> <span class="token class-name"><span class="text-green">Student</span></span><span class="token punctuation">(</span><span class="token string">"Alibaba"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>student<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+ </div>
+ <div class="col-xs-12 col-sm-6 col-md-6">
+  <div class="code-heading">
+   Стало
+  </div>
+  <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token class-name"><span class="text-red">Student</span></span> student <span class="token operator">=</span>
+               <span class="token keyword">new</span> <span class="token class-name"><span class="text-user">StudentImpl</span></span><span class="token punctuation">(</span><span class="token string">"Ali"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>student<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+ </div>
+</div>
+<p>Ми розбабо наш клас на два:&nbsp; <span class="text-red">інтерфейс</span> &nbsp;та&nbsp; <span class="text-user">клас, успадкований від інтерфейсу.</span></p>
+<p><span class="text-user">— І в чому тут перевага?</span></p>
+<p>— Один і той самий інтерфейс можуть реалізовувати (успадковувати) різні класи. І кожен може мати свою власну поведінку. Так само як&nbsp; <span class="text-corporate"><strong>ArrayList</strong> та <strong>LinkedList</strong> – це дві різні реалізації інтерфейсу List.</span></p>
+<p>Таким чином,&nbsp; <span class="text-green">ми приховуємо не лише різні реалізації, а й навіть сам клас, який її містить (скрізь у коді може фігурувати лише інтерфейс). </span>&nbsp;Це дозволяє дуже гнучко, прямо в процесі виконання програми, підміняти одні об'єкти на інші, змінюючи поведінку об'єкта потай від усіх класів, які його використовують.</p>
+<p>Це дуже потужна технологія у поєднанні з поліморфізмом. Нині далеко не очевидно, навіщо так треба робити. Ти повинен спочатку зіткнутися з програмами, що складаються з десятків або сотень класів, щоб зрозуміти, що інтерфейси здатні спростити тобі життя.</p>
+<h3>2) Множинне успадкування.</h3>
+<p>У Java всі класи можуть мати лише одного класу-батька. В інших мовах програмування, класи часто можуть мати кілька класів-батьків. Це дуже зручно, але приносить багато проблем.</p>
+<p>У Java дійшли компромісу –&nbsp; <span class="text-viola">заборонабо множинне успадкування класів, але дозволабо множинне успадкування інтерфейсів. </span>&nbsp;<span class="text-green">Інтерфейс може мати кілька інтерфейсів-батьків. </span>&nbsp;<span class="text-corporate">Клас може мати кілька інтерфейсів-батьків і лише один клас-батько.</span></p>

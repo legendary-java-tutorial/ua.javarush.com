@@ -1,0 +1,155 @@
+<h2>6.1 Види заголовків</h2>
+<p><strong>Заголовки http-запиту</strong> – це фактично службова інформація для http-клієнта та http-сервера. Але вона дуже важлива, і, якщо ти в них зовсім не розумієшся, це частенько виходитиме тобі боком. Тож доведеться про них хоча б почитати.</p>
+<p>Всі http-заголовки можна розділити на 4 основні групи:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>#</th>
+    <th>Тип заголовка</th>
+    <th>Опис</th>
+    <th>Примітка</th>
+   </tr>
+   <tr>
+    <td>1</td>
+    <td><strong>General Headers</strong></td>
+    <td>Загальні заголовки</td>
+    <td>Використовуються у запитах та відповідях</td>
+   </tr>
+   <tr>
+    <td>2</td>
+    <td><strong>Request Headers</strong></td>
+    <td>Заголовки запиту</td>
+    <td>Використовуються лише у запитах</td>
+   </tr>
+   <tr>
+    <td>3</td>
+    <td><strong>Response Headers</strong></td>
+    <td>Заголовки відповіді</td>
+    <td>Використовуються лише у відповідях</td>
+   </tr>
+   <tr>
+    <td>4</td>
+    <td><strong>Entity Headers</strong></td>
+    <td>Заголовки сутності</td>
+    <td>Супроводжують кожну суть повідомлення</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<h2>6.2 User-Agent</h2>
+<p>Найважливіший і найпопулярніший заголовок – це <strong>User-Agent</strong> . Це спеціальний рядок, який визначає, який клієнт виконує запит на сервер. Таке ім'я клієнта.</p>
+<p>Часто сервер трохи підлаштовує свою відповідь під запитувача. Наприклад, якщо з запиту зрозуміло, що запит надійшов із браузера мобільного телефону, йому можна віддати мобільну версію HTML-сторінки.</p>
+<p>Спам-боти, менеджери завантажень і деякі браузери нерідко шлють фальшиві <strong>User-Agent-рядки</strong> , щоб видати себе за порядних клієнтів. Ця ситуація відома, як підміна або підробка користувача агента (user agent spoofing).</p>
+<p>Наприклад, мій User-Agent виглядає зараз так:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token class-name"></span><span class="text-red"><span class="token class-name">Mozilla</span><span class="token operator">/</span><span class="token number">5.0</span></span><span class="token number"></span> <span class="token punctuation"></span><span class="text-user"><span class="token punctuation">(</span><span class="token class-name">Windows</span> NT <span class="token number">6.1</span><span class="token punctuation">;</span> <span class="token class-name">Win64</span><span class="token punctuation">;</span> x64<span class="token punctuation">;</span> rv<span class="token operator">:</span><span class="token number">99.0</span><span class="token punctuation">)</span></span><span class="token punctuation"></span> <span class="token class-name">Gecko</span><span class="token operator">/</span><span class="token number">20100101</span> <span class="token class-name"></span><span class="text-green"><span class="token class-name">Firefox</span><span class="token operator">/</span><span class="token number">99.0</span></span><span class="token number"></span></code></pre>
+</div>
+<p>У ньому міститься інформація про браузер, операційну систему та web-движок браузера.</p>
+<h2>6.3 Content-Type</h2>
+<p>Другий за популярністю заголовок - це <strong>Content-Type</strong> . Він використовується для того, щоб визначити тип ресурсу MIME, який віддає сервер.</p>
+<p>Ще на зорі інтернету для зручності були стандартизовані типи медіа контенту, що передається. Їх називають <strong>Internet Media Types</strong> або скорочено <strong>MimeTypes</strong> . Вони діляться на 9 категорій:</p>
+<ul>
+ <li><strong>application</strong></li>
+ <li><strong>audio</strong></li>
+ <li><strong>example</strong></li>
+ <li><strong>image</strong></li>
+ <li><strong>message</strong></li>
+ <li><strong>model</strong></li>
+ <li><strong>multipart</strong></li>
+ <li><strong>text</strong></li>
+ <li><strong>video</strong></li>
+</ul>
+<p>Приклади:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Категорія</th>
+    <th>Тип</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td><strong>audio</strong></td>
+    <td>audio/mp4</td>
+    <td>Аудіо файл у форматі mp4</td>
+   </tr>
+   <tr>
+    <td><strong></strong></td>
+    <td>audio/aac</td>
+    <td>Аудіо файл у форматі AAC</td>
+   </tr>
+   <tr>
+    <td><strong>image</strong></td>
+    <td>image/gif</td>
+    <td>Зображення gif</td>
+   </tr>
+   <tr>
+    <td><strong></strong></td>
+    <td>image/jpeg</td>
+    <td>Зображення jpeg</td>
+   </tr>
+   <tr>
+    <td><strong></strong></td>
+    <td>image/png</td>
+    <td>Зображення png</td>
+   </tr>
+   <tr>
+    <td><strong>text</strong></td>
+    <td>text/css</td>
+    <td>CSS-файл</td>
+   </tr>
+   <tr>
+    <td><strong></strong></td>
+    <td>text/html</td>
+    <td>HTML-файл</td>
+   </tr>
+   <tr>
+    <td><strong>video</strong></td>
+    <td>video/mpeg</td>
+    <td>Video-файл у форматі mpeg</td>
+   </tr>
+   <tr>
+    <td><strong></strong></td>
+    <td>video/webm</td>
+    <td>Video-файл у форматі webm</td>
+   </tr>
+   <tr>
+    <td><strong></strong></td>
+    <td>video/3gpp</td>
+    <td>Video-файл у форматі 3gpp</td>
+   </tr>
+   <tr>
+    <td><strong>aplication</strong></td>
+    <td>application/x-www-form-urlencoded</td>
+    <td>Закодовані дані</td>
+   </tr>
+   <tr>
+    <td><strong></strong></td>
+    <td>application/zip</td>
+    <td>Архів zip</td>
+   </tr>
+   <tr>
+    <td><strong></strong></td>
+    <td>application/javascript</td>
+    <td>JavaScript</td>
+   </tr>
+   <tr>
+    <td><strong></strong></td>
+    <td>application/xml</td>
+    <td>XML</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Зазвичай сервер знає, які дані він надає. Але якщо ти самостійно генеруєш відповідь сервера своїм кодом, то потрібно вказати тип відповіді (Content-Type) твого сервера.</p>
+<h2>6.4 Content-Length</h2>
+<p>Цей заголовок задає <strong>довжину відповіді сервера</strong> . Якщо по-простому, то розмір файлу, що віддається. Вручну цей параметр не потрібно встановлювати. Хоча буває корисно подивитися на те, що віддав сервер, якщо з якихось причин відповідь надійшла не всю.</p>
+<h2>6.5 Accept-Encoding</h2>
+<p>За допомогою цього заголовка клієнт може вказати серверу, що він підтримує різні <strong>алгоритми контенту стиснення</strong> . Таким чином, сервер може спочатку заархівувати контент, наприклад, zip-архівом, потім переслати його клієнту і клієнт зможе правильно відновити оригінальний контент.</p>
+<p>Перевага архівації полягає в тому, що менше файл, тим швидше передається. Мінуси архівації - додаткове навантаження на клієнт і на сервер. Архівація має сенс під час передачі великих файлів і найчастіше немає сенсу під час передачі маленьких.</p>
+<p>Приклад такого заголовка:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token class-name">Accept</span><span class="token operator">-</span><span class="token class-name">Encoding</span><span class="token operator">:</span> <span class="text-green">deflate</span><span class="token punctuation">,</span> <span class="text-user">gzip</span><span class="token punctuation">;</span><span class="text-red">q</span><span class="token operator">=</span><span class="token number">1.0</span><span class="token punctuation">,</span> <span class="token operator">*</span><span class="token punctuation">;</span><span class="text-red">q</span><span class="token operator">=</span><span class="token number">0.5</span></code></pre>
+</div>
+<p>Де <code class="text-green">deflate</code>і <code class="text-user">gzip</code>– це алгоритми стиснення даних, що підтримуються, а <code class="text-red">q</code>позначає ступінь стиснення.</p>

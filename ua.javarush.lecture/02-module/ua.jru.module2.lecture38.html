@@ -1,0 +1,77 @@
+<p>2005 року з приходом версії Java 5 нам стали відомі нові сутності під назвою анотації.</p>
+<p>Анотації – це особлива форма синтаксичних метаданих, які можна оголосити у коді. Вони використовуються для аналізу коду під час компіляції або під час виконання програми. Анотацію можна порівняти з міткою, маркером або вказівкою компілятора.</p>
+<p>Ти, напевно, вже стикався з анотаціями. Наприклад, при перевизначенні методу батьківського класу перед самим методом пишемо <span class="text-yellow"><span class="text-bold">@Override</span></span> . Це і є анотація, яка вказує на те, що батьківський метод буде перевизначений у класі-спадкоємці.</p>
+<p>Синтаксис:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@Override</span>
+<span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">hashCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">hashCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Відразу хочу зазначити, що анотації застосовні не лише до методів, адже вони використовуються у поєднанні з пакетами, класами, методами, полями та параметрами.</p>
+<p>Для розуміння роботи інструкцій спочатку познайомимося з поняттям маркерного інтерфейсу. Необхідність позначати певним чином клас для виконання над ним тих чи інших дій існувала у Java-розробників з моменту появи мови.</p>
+<p>До Java 5 для цього використовували інтерфейс, який не схожий навіть сам на себе і не відповідає своєму призначенню. Він був без методів, не ніс у себе жодного контракту, просто позначав клас для відокремлення.</p>
+<p>Такий інтерфейс називався маркерним. З назви випливає, що його завдання - це маркувати класи для JVM, компілятора або бібліотеки. До цих пір залишабося деякі маркерні інтерфейси, наприклад <span class="text-neon"><span class="text-bold"><em>Serializable</em></span></span> . Цей маркер дозволяє нам помітити клас, повідомляючи, що його екземпляри можна серіалізувати.</p>
+<p>Ми переконалися, що використання маркерних інтерфейсів продовжує жити після появи анотацій.</p>
+<p>Еквівалентне використання анотації та маркерного інтерфейсу:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@MyAnnotation</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyClass</span> <span class="token punctuation">{</span><span class="token punctuation">}</span></code></pre>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyClass</span> <span class="token keyword">implements</span> <span class="token class-name">MarkerInterface</span> <span class="token punctuation">{</span><span class="token punctuation">}</span></code></pre>
+<p>Незважаючи на те, що завдання обох підходів одне й те саме, є явна різниця в їх реалізації. Наприклад розглянемо інтерфейс і інструкцію визначення належності класу до певного виду.</p>
+<p>У випадку з інтерфейсом ми помічаємо клас: навіть при неправильному використанні та появі помилки вона виявиться на етапі компіляції та програма не буде запущена.</p>
+<p>З анотаціями не все так просто: помилка виявиться вже в рантаймі, а це означає, що програма розпочне виконання, але, мабуть, не закінчить.</p>
+<p>Слід зазначити, що якщо нам потрібно помітити клас для можливості використання надалі, його екземпляри треба передавати у певний метод:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyInteger</span> <span class="token keyword">implements</span> <span class="token class-name">Sum</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token keyword">interface</span> <span class="token class-name">Sum</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">{</span>
+        <span class="token function">increase</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">MyInteger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">increase</span><span class="token punctuation">(</span><span class="token class-name">Sum</span> count<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// TODO</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Найкраще тут підійде маркерний інтерфейс.</p>
+<p>Анотації краще використовувати, коли є потреба у чомусь більшому, наприклад, у параметрах, які анотація дозволяє передати.</p>
+<p>Давай розглянемо стандартні інструкції в JDK:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Анотація</th>
+    <th>Опис</th>
+    <th>приклад</th>
+   </tr>
+   <tr>
+    <td><span class="text-yellow"><span class="text-bold">@Override</span></span></td>
+    <td>Вказує, що метод перевизначає метод суперкласу чи реалізує метод абстрактного класу чи інтерфейсу.</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@Override</span>
+<span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">hashCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">hashCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+   </tr>
+   <tr>
+    <td><span class="text-yellow"><span class="text-bold">@Deprecated</span></span></td>
+    <td>Позначає код як застарілий.</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@Deprecated</span>
+<span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">void</span> <span class="token function">method</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+   </tr>
+   <tr>
+    <td><span class="text-yellow"><span class="text-bold">@SuppressWarnings</span></span></td>
+    <td>Вимикає для анотованого елемента попередження компілятора. Зверніть увагу: якщо необхідно вимкнути кілька категорій попереджень, їх слід додати до фігурних дужок, наприклад <span class="code">@SuppressWarnings ({"unchecked", "cast"})</span> .</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DocumentsFolder</span> <span class="token punctuation">{</span>
+   <span class="token keyword">private</span> <span class="token class-name">List</span> documents<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@SuppressWarnings</span><span class="token punctuation">(</span><span class="token string">"unchecked"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">addDocument</span><span class="token punctuation">(</span><span class="token class-name">String</span> document<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            documents<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>document<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+     <p>У цьому прикладі ми намагаємося в методі додати до списку, який не визначений тип (дженерик). Компілятор попередить нас про це. Хоча це і дуже корисно, іноді "ворнінгів" буває занадто багато, і вони дуже галасливі. У цьому випадку можна використовувати дану інструкцію до методу із зазначенням параметра-маркера попередження компілятора. Маркерів існує дуже багато, тому необов'язково пам'ятати все, зазвичай IDEA сама підкаже, який поставити.</p>
+     <p>Ще приклад використання з кількома параметрами, що передаються:</p>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token annotation punctuation">@SuppressWarnings</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">"unchecked"</span><span class="token punctuation">,</span> <span class="token string">"deprecated"</span><span class="token punctuation">}</span><span class="token punctuation">)</span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>

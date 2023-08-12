@@ -1,0 +1,85 @@
+<h2>2.1 host</h2>
+<p>Після того, як Тім Бернерс-Лі придумав всесвітнє павутиння, HTML, HTTP та веб-сервери, він вирішив ускладнити життя майбутнім веб-програмістам і вигадав посилання або URL. URL розшифровується як Universal Resource Locator.</p>
+<p>Типове посилання задається шаблоном:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="text-orange">protocol</span><span class="token operator">:</span><span class="token operator">/</span><span class="token operator">/</span><span class="text-red">host</span><span class="token operator">/</span><span class="text-viola">path</span><span class="token operator">?</span><span class="text-user">query</span>#<span class="text-green">anchor</span></code></pre>
+</div>
+<p>Деякі з частин можуть бути відсутніми, але <code>protocol</code>і <code>host</code>завжди повинні бути вказані.</p>
+<p><code class="text-orange">Protocol</code>задає ім'я протоколу, яким взаємодіятимуть клієнт і сервер. Типові назви протоколів: HTTP, HTTPS, FTP, SSH, …</p>
+<p><code class="text-red">Host</code>— це ім'я сервера мережі, до якого потрібно надіслати запит. Спочатку це була IP-адресаа, але люди швидко придумали імена (domain names), щоб нічого не запам'ятовувати. Як запам'ятати пару цифр так складно)</p>
+<p>Спочатку ніякого <code class="text-user">query</code>не замислювалося. <code class="text-viola">Path</code>задавав розташування HTML-файлу, який сервер повинен був віддати клієнту. Однак після того, як веб захопабо аматори, вони швидко зрозуміли, що файли HTML можна динамічно створювати на стороні сервера. Тому в URL додали розділ <code class="text-user">query</code>, в якому можна передати серверу купу корисної інформації.</p>
+<p>Ну і нарешті <code class="text-green">anchor</code>- це просто спеціальна мітка на HTML-сторінці, яка підказує браузеру, що сторінку потрібно не просто відобразити, а ще й проскролити її до певного місця, тобто мітки.</p>
+<h2>2.2 query &amp; params</h2>
+<p>Розкажу ще трохи про <code>query</code>.</p>
+<p><strong>Частина посилання під назвою<code>query</code></strong> починається відразу після знака питання і закінчується знаком # (або кінцем посилання). Інформація в query являє собою набір параметрів у такому вигляді:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="text-red">name<span class="token operator">=</span>value</span><span class="token operator">&amp;</span><span class="text-green">name2<span class="token operator">=</span>value2</span><span class="token operator">&amp;</span><span class="text-user">nameN<span class="token operator">=</span>valueN</span></code></pre>
+</div>
+<p><span class="text-red">URL не може містити пробілів</span> та ще купу різних символів, тому всі підозрілі символи екрануються. Швидше за все, ти часто з таким стикався, коли копіював посилання і кидав його другу:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th width="60">width="300"</th>
+    <th>Символ</th>
+    <th>Кодування</th>
+   </tr>
+   <tr>
+    <td>1</td>
+    <td>пробіл</td>
+    <td>%20</td>
+   </tr>
+   <tr>
+    <td>2</td>
+    <td>!</td>
+    <td>%21</td>
+   </tr>
+   <tr>
+    <td>3</td>
+    <td>#</td>
+    <td>%22</td>
+   </tr>
+   <tr>
+    <td>4</td>
+    <td>$</td>
+    <td>%24</td>
+   </tr>
+   <tr>
+    <td>5</td>
+    <td>%</td>
+    <td>%25</td>
+   </tr>
+   <tr>
+    <td>6</td>
+    <td>&amp;</td>
+    <td>%26</td>
+   </tr>
+   <tr>
+    <td>7</td>
+    <td>'</td>
+    <td>%27</td>
+   </tr>
+   <tr>
+    <td>8</td>
+    <td>*</td>
+    <td>%2A</td>
+   </tr>
+   <tr>
+    <td>9</td>
+    <td>+</td>
+    <td>%2B</td>
+   </tr>
+   <tr>
+    <td>10</td>
+    <td>,</td>
+    <td>%2C</td>
+   </tr>
+   <tr>
+    <td>11</td>
+    <td>/</td>
+    <td>%2F</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Докладніше почитати на цю тему можна <a href="https://en.wikipedia.org/wiki/Percent-encoding" target="_blank">за посиланням</a> .</p>

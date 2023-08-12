@@ -1,0 +1,107 @@
+Просунуте угруповання
+<p>----------------------------------------</p>
+Оператор HAVING
+Приклад використання HAVING
+Порядок виконання операторів
+<p>----------------------------------------</p>
+<h2>5.1 Оператор HAVING</h2>
+<p>У SQL є ще один корисний оператор, який застосовується разом з <code>GROUP BY</code>, називається він <code>HAVING</code>.</p>
+<p>За своїм змістом він повністю аналогічний оператору <code>WHERE</code>. Тільки <code>WHERE</code> дозволяє задати фільтр рядків до угруповання, а за допомогою <code>HAVING</code> можна задати фільтр, який застосовується до записів вже після угруповання.</p>
+<p>Загальний вигляд запиту при використанні групування та фільтрації результатів групування має вигляд:</p>
+<div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-brown">SELECT</span> <span class="text-green">колонки</span>
+<span class="text-brown">FROM</span> <span class="text-yellow">таблиця</span>
+<span class="text-brown">WHERE</span> <span class="text-user">умова</span>
+<span class="text-brown">GROUP BY</span> <span class="text-green">колонки</span>
+<span class="text-red">HAVING</span> <span class="text-user">умова</span>
+        </code></pre>
+</div>
+<p><code>HAVING</code> можна використовувати лише якщо у запиті є <code>GROUP BY</code>.</p>
+<p>Давай напишемо запит, де відобразимо кількість найнятих співробітників за роками.</p>
+<div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-brown">SELECT</span>
+<span class="text-user">YEAR</span>(<span class="text-green">join_date</span>) <span class="text-red">AS</span> <span class ="text-viola">hire_year</span>,
+<span class="text-user">COUNT</span>(*) <span class="text-red">AS</span> <span class="text-viola">total</span>
+<span class="text-brown">FROM</span> <span class="text-yellow">employee</span>
+<span class="text-brown">GROUP BY</span> <span class="text-viola">hire_year</span>
+
+        </code></pre>
+</div>
+<p>І результат такого запиту:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>hire_year</th>
+        <th>total</th>
+    </tr>
+    <tr>
+        <td>2012</td>
+        <td>1</td>
+    </tr>
+    <tr>
+        <td>2013</td>
+        <td>1</td>
+    </tr>
+    <tr>
+        <td>2014</td>
+        <td>1</td>
+    </tr>
+    <tr>
+        <td>2015</td>
+        <td>2</td>
+    </tr>
+    <tr>
+        <td>2018</td>
+        <td>1</td>
+    </tr>
+    </tbody>
+</table>
+<p>А тепер виключимо з нього роки, коли найняли одного чи менше співробітників. Приклад:</p>
+<div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-brown">SELECT</span>
+<span class="text-user">YEAR</span>(<span class="text-green">join_date</span>) <span class="text-red">AS</span> <span class ="text-viola">hire_year</span>,
+<span class="text-user">COUNT</span>(*) <span class="text-red">AS</span> <span class="text-viola">total</span>
+<span class="text-brown">FROM</span> <span class="text-yellow">employee</span>
+<span class="text-brown">GROUP BY</span> <span class="text-viola">hire_year</span>
+<span class="text-red">HAVING</span> <span class="text-viola">total</span> &gt; 1
+        </code></pre>
+</div>
+<p>І результат такого запиту:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>hire_year</th>
+        <th>total</th>
+    </tr>
+    <tr>
+        <td>2015</td>
+        <td>2</td>
+    </tr>
+    </tbody>
+</table>
+<h2>5.3 Порядок виконання операторів</h2>
+<p>Щоб писати правильні та ефективні SQL-запити, потрібно розуміти, як вони виконуються SQL-сервером.</p>
+<p>Порядок виконання дій є строго регламентованим і не залежить від твого бажання. Ти не можеш переставити оператори місцями та отримати інший порядок.</p>
+<p>SQL-запит виконується в кілька етапів у такому порядку.</p>
+<ol>
+<li> Етап 1 – вибірка рядків</li>
+<ul>
+<li>Спочатку вибираються всі рядки із зазначеної таблиці.</li>
+<li>Потім до них додаються поля, що обчислюються.</li>
+<li>А потім з усіх рядків залишаються лише ті, які задовольняють умові <code>WHERE</code></li>
+</ul>
+<li>Етап 2 – угруповання</li>
+<ul>
+<li>Після цього до отриманих результатів застосовується угруповання.</li>
+<li>Під час угруповання обчислюються такі поля як <code>COUNT(*)</code>.</li>
+<li>І нарешті до результату угруповання застосовується фільтр <code>HAVING</code>.</li>
+</ul>
+<li>Етап 3 – сортування</li>
+<ul>
+<li>Рядки, отримані на попередніх етапах, сортуються за допомогою <code>ORDER BY</code>.</li>
+</ul>
+</ol>
+<p>І нарешті результат можна обрізати за допомогою <code>LIMIT</code> та <code>OFFSET</code>.</p>

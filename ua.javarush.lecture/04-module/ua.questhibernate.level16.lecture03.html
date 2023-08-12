@@ -1,0 +1,163 @@
+Транзакції
+<p>----------------------------------------</p>
+Знайомство з транзакціями до Hibernate
+Hibernate Transactions Interface
+Transaction Manager
+<p>----------------------------------------</p>
+<h2>4.1 Знайомство з транзакціями в Hibernate</h2>
+<p>До всього сказаного вище хотілося б ще додати інформацію про транзакції. Як ти вже знаєш, транзакція – це <span class="text-green">група дій, які мають бути виконані лише всі разом</span>. Якщо будь-яка дія не виконалася або виконалася з помилкою, всі інші дії повинні бути скасовані.</p>
+<img data-max-width="1024" data-id="f5ab4cb5-18c2-42e5-83a4-9a4d93f30414" src="https://cdn.javarush.com/images/article/f5ab4cb5-18c2-42e -9a4d93f30414/1024.jpeg" alt="">
+<p>Hibernate вміє працювати з двома видами транзакцій:</p>
+<ul>
+<li>JDBC</li>
+<li>JTA</li>
+</ul>
+<p>JDBC-транзакція – це фактично транзакція бази даних. Вона прив'язана до роботи з базою даних, JDBC-з'єднання. І слідкує за тим, щоб дії при роботі з базою даних виконувались як слід: або всі чи нічого.</p>
+<p>JTA – транзакція – це транзакція рівня програми. Вона не прив'язана до жодної бази даних. Її завдання слідкувати, щоб деякі дії виконувались: чи всі, чи нічого.</p>
+<p>Наприклад, ти можеш записувати дані до кількох різних баз даних у рамках однієї JTA-транзакції. Тоді, якщо відбудеться помилка, то JTA-транзакція повинна буде відкотити зміни у всіх базах даних. Навіть ті, які були успішно виконані з точки зору конкретної бази даних.</p>
+<h2>4.2 Hibernate Transactions Interface</h2>
+<p>У бібліотеці Hibernate транзакція представлена інтерфейсом Transaction, який може мати різні реалізації. Наприклад, під час роботи зі Spring, Spring надає свій власний механізм JTA-транзакцій.</p>
+<p>Методи цього інтерфейсу такі:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>#</th>
+        <th>Метод</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td><strong>begin()</strong></td>
+        <td>Стартує нову транзакцію</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td><strong>commit()</strong></td>
+        <td>Закінчує транзакцію, пушить/комітує всі зміни</td>
+    </tr>
+<tr>
+        <td>3</td>
+        <td><strong>rollback()</strong></td>
+        <td>Відточує поточну транзакцію</td>
+    </tr>
+<tr>
+        <td>4</td>
+        <td><strong>setTimeout(int seconds)</strong></td>
+        <td>Встановлює максимальний час виконання транзакції</td>
+    </tr>
+<tr>
+        <td>5</td>
+        <td><strong>isActive()</strong></td>
+        <td>Перевіряє активна транзакція чи ні</td>
+    </tr>
+<tr>
+        <td>6</td>
+        <td><strong>wasRolledBack()</strong></td>
+        <td>Перевіряє, чи нормально відкотилася транзакція </td>
+    </tr>
+<tr>
+        <td>7</td>
+        <td><strong>wasCommitted()</strong></td>
+        <td>Перевіряє, чи транзакція нормально закомітувалась</td>
+    </tr>
+<tr>
+        <td>8</td>
+        <td>registerSynchronization()</td>
+        <td>Реєструє callback для контролю транзакції</td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Важливо!</strong> Створення об'єкта транзакції та запуск транзакції – це різні речі. Тут можна провести аналогію із класом Thread. Коли ти створюєш об'єкт Thread(), новий потік JVM ще не запускає. Щоб його запустити, потрібно викликати метод start() об'єкта Thread. Те саме і з транзакцією – їй потрібно викликати метод begin().</p>
+<p>Приклад того, як зазвичай працюють з транзакціями до Hibernate:</p>
+<pre class='line-numbers'><code>
+Session <span class="text-user">session</span> = sessionFactory.openSession();
+Transaction <span class="text-brown">transaction</span> = <span class="text-user">session</span>.getTransaction();
+try {
+    <span class="text-brown">transaction</span>.<span class="text-red">begin</span>();
+    Long count = <span class="text-user">session</span>.createQuery(<span class="text-green">"select count(*) from Employee"</span>, Long.class). uniqueResult();
+    <span class="text-brown">transaction</span>.<span class="text-red">commit</span>();
+}
+catch (Exception e) {
+if (<span class="text-brown">transaction</span>.getStatus() == <span class="text-yellow">ACTIVE</span> || <span class="text-brown"> transaction</span>.getStatus() == <span class="text-yellow">MARKED_ROLLBACK</span>) {
+    <span class="text-brown">transaction</span>.<span class="text-red">rollback</span>();
+    }
+}
+finally {
+<span class="text-user">session</span>.close();
+<span class="text-user">sessionFactory</span>.close();
+}
+</code></pre>
+<p>Ми бачимо тут три речі:</p>
+<p>По-перше, вся робота з базою обертається в транзакцію за допомогою виклику методів <code>begin()</code> та <code>commit()</code> Усі дії між викликами цих двох методів мають бути виконані: або всі разом, або нічого.</p>
+<p>По-друге, якщо сталася будь-яка помилка, ми намагаємося відкотити транзакцію – викликати метод <code>rollback()</code>. Це означає, що TransactionManger повинен спочатку записувати всі дії, які були між <code>begin()</code> і <code>commit()</code>, а потім повернути все, як було, якщо ми викликали <code>rollback ()</code>.</p>
+<p>І, до речі, не факт, що при викликі методу rollback не відбудеться помилки. Помилки завжди відбуваються. Тобі потрібно просто прийняти цей факт і бути готовим до нього.</p>
+<h2>4.3 Transaction Manager</h2>
+<p>З точки зору менеджменту транзакцій, Hibernate – це просто полегшена оболонка об'єктів для JDBC. Сам Hibernate немає функцій обробки транзакцій. Hibernate Transaction є оболонкою для базової транзакції JDBC (або оболонки транзакцій JTA). JDBCTransaction використовується за замовчуванням. Приклад із файлу налаштувань HIberante:</p>
+<pre class='line-numbers'><code>
+hibernate.transaction.factory_class org.hibernate.transaction.JTATransactionFactory
+<span class="text-brown">hibernate.transaction.factory_class org.hibernate.transaction.JDBCTransactionFactory</span>
+</code></pre>
+<p>Давай ще раз подивимося на наш код із використанням транзакцій:</p>
+<pre class='line-numbers'><code>
+Session <span class="text-user">session</span> = sessionFactory.openSession();
+Transaction <span class="text-brown">transaction</span> = <span class="text-user">session</span>.getTransaction();
+<span class="text-brown">transaction</span>.<span class="text-red">begin</span>();
+<span class="token comment">//здесь ваш код роботи з базою</span>
+<span class="text-user">session</span>.flush();
+<span class="text-brown">transaction</span>.<span class="text-red">commit</span>();
+<span class="text-user">session</span>.close();
+</code></pre>
+<p>А тепер давай подивимося на код класу JDBCTransaction:</p>
+<pre class='line-numbers'><code>
+public class <span class="text-brown">JDBCTransaction</span> implements <span class="text-brown">Transaction</span> {
+ 
+    public void <span class="text-red">begin</span>() throws HibernateException {
+    ...
+    if (toggleAutoCommit) <span class="text-user">jdbcContext</span>.<span class="text-green">connection</span>().<span class="text-red">setAutoCommit< /span>(false);
+    ...
+    }
+}
+</code></pre>
+<p>Це метод для запуску транзакції. Потім подивитися на метод відправлення:</p>
+<pre class='line-numbers'><code>
+public void <span class="text-red">commit</span>() throws HibernateException {
+    ...
+    <span class="text-user">jdbcContext</span>.<span class="text-green">connection</span>().<span class="text-red">commit</span>( );
+    ...
+    <span class="text-user">jdbcContext</span>.<span class="text-green">connection</span>().<span class="text-red">setAutoCommit</span>( true);
+    ...
+}
+</code></pre>
+<p>Тепер давай підставимо цей код у код прикладу з Hibernate:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Hibernate</th>
+        <th>Простий JDBC-код</th>
+    </tr>
+    <tr>
+        <td><pre><code>
+Session <span class="text-user">session</span> = sessionFactory.openSession();
+Transaction <span class="text-brown">transaction</span> = session.getTransaction();
+<span class="text-brown">transaction</span>.<span class="text-red">begin</span>();
+<span class="token comment">//тут твій код для роботи з базою</span>
+<span class="text-user">session</span>.flush();
+<span class="text-brown">transaction</span>.<span class="text-red">commit</span>();
+<span class="text-user">session</span>.close();
+</code></pre></td>
+        <td><pre><code>
+Connection <span class="text-brown">conn</span> = <span class="text-user">jdbcContext</span>.<span class="text-green">connection</span>() ;
+<span class="text-brown">conn</span>.<span class="text-red">setAutoCommit</span>(false);
+ 
+//Тут твій код по роботі з базою
+<span class="text-brown">conn</span>.<span class="text-red">commit</span> ()
+<span class="text-brown">conn</span>.<span class="text-red">setAutoCommit</span>(true);
+<span class="text-brown">conn</span>.<span class="text-red">close</span>();
+
+</code></pre>
+</td>
+    </tr>
+
+    </tbody>
+</table>
+<p>Отже рідні транзакції Hibernate – це просто рідні JDBC-дзвінки до бази даних. Не більше і не менше. А ось JTA транзакції – це вже цікавіше. Але про це іншим разом.</p>

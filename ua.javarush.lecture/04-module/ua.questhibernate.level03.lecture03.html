@@ -1,0 +1,353 @@
+Оператор OUTER JOIN
+<p>----------------------------------------</p>
+Причини появи OUTER JOIN
+Типи JOIN-ів.
+Питання із співбесіди.
+<p>----------------------------------------</p>
+<h2>Причини появи OUTER JOIN</h2>
+ 
+<p>До речі, пам'ятаєш, ми об'єднували наші таблиці і в нас зникли завдання з прибирання офісу, оскільки самої прибиральниці ще не було? </p>
+ 
+<p>Якщо виконати такий запит: </p>
+
+    <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-red">SELECT</span> * <span class="text-red">FROM</span> <span class="text-orange">task</span>
+</code></pre>
+    </div>
+
+<p>То ми отримаємо такий результат:</p>
+  
+<table>
+<tbody>
+<tr>
+<th>id </th>
+<th>emploee_id</th>
+<th>name </th>
+<th>deadline</th>
+</tr>
+<tr>
+<td>1 </td>
+<td>1 </td>
+<td>Виправити багу на фронтенді</td>
+<td>2022-06-01 </td>
+</tr>
+<tr>
+<td>2 </td>
+<td>2 </td>
+<td>Виправити багу на бекенді</td>
+<td>2022-06-15 </td>
+</tr>
+<tr>
+<td>3 </td>
+<td>5 </td>
+<td>Купити каву </td>
+<td>2022-07-01 </td>
+</tr>
+<tr>
+<td>4 </td>
+<td>5 </td>
+<td>Купити каву </td>
+<td>2022-08-01 </td>
+</tr>
+<tr>
+<td>5 </td>
+<td>5 </td>
+<td>Купить каву </td>
+<td>2022-09-01</td>
+</tr>
+<tr>
+<td>6 </td>
+<td>(NULL)</td>
+<td>Прибрати офіс </td>
+<td>(NULL)</td>
+</tr>
+<tr>
+<td>7 </td>
+<td>4 </td>
+<td>Насолоджуватися життям </td>
+<td>(NULL)</td>
+</tr>
+<tr>
+<td>8 </td>
+<td>6 </td>
+<td>Насолоджуватися життям </td>
+<td>(NULL)</td>
+</tr>
+</tbody>
+</table>
+ 
+<p>Завдання "Прибрати офіс" зникає, якщо ми спробуємо об'єднати таблицю task з таблицею employee по employee_id. </p>
+ 
+<p>Щоб вирішити цю проблему, оператор JOIN додали різні модифікатори, які дозволяють зберегти такі втрачені рядки без пари в іншій таблиці. </p>
+ 
+<p>Нагадаю класичний вигляд оператора JOIN: </p>
+ 
+    <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<center><strong><span class="text-orange">таблиця1</span> <span class="text-red">JOIN</span> <span class="text-orange">таблиця2</span > <span class="text-red">ON</span>
+<span class="text-user">умова</span></strong></center>
+</code></pre>
+    </div>
+
+<p>Ми можемо сказати SQL-серверу, щоб усі дані з лівої таблиці (таблиця1) обов'язково були присутні у об'єднаній таблиці. <span class="text-red">Навіть якщо для них немає пари в правій таблиці.</span> Для цього лише потрібно написати: </p>
+ 
+    <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-orange">таблиця1</span> <span class="text-red">LEFT JOIN</span> <span class="text-orange">таблиця2</span> <span class= "text-red">ON <span class="text-user">умова</span></code></pre>
+    </div>
+ 
+<p>Якщо ти хочеш, щоб в об'єднаній таблиці <span class="text-green">обов'язково були всі рядки з правої таблиці</span>, то потрібно написати: </p>
+ 
+    <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-orange">таблиця1</span> <span class="text-red">RIGHT JOIN</span> <span class="text-orange">таблиця2</span> <span class= "text-red">ON</span>
+ <span class="text-user">умова</span></code></pre>
+    </div>
+
+<p>Давай напишемо запит, який поєднає всі завдання та співробітників, щоб при цьому завдання без виконавця не губилися. Для цього потрібно написати запит: </p>
+
+<pre><code><strong><span class="text-red">SELECT</span> * <span class="text-red">FROM</span> <span class="text-orange"> employee e</span> <span class="text-red">RIGHT JOIN</span> <span class="text-orange">task t</span> <span class="text-red">ON< /span> <span class="text-orange">e</span>.<span class="text-green">id</span> = <span class="text-orange">t</span> .<span class="text-green">emploee_id</span></strong>
+</code></pre>
+
+<p>І результат такого запиту: </p>
+
+<table>
+<tbody>
+<tr>
+<th>id </th>
+<th>name </th>
+<th>occupation </th>
+<th>salary </th>
+<th>age </th>
+<th>join_date</th>
+<th>id </th>
+<th>emploee_id</th>
+<th>name </th>
+</tr>
+<tr>
+<td>1 </td>
+<td>Іванов Іван </td>
+<td>Програміст </td>
+<td>100000</td>
+<td>25 </td>
+<td>2012-06-30 </td>
+<td>1 </td>
+<td>1 </td>
+<td>Виправити багу на фронтенді</td>
+</tr>
+<tr>
+<td>2 </td>
+<td>Петров Петро </td>
+<td>Програміст </td>
+<td>80000</td>
+<td>23 </td>
+<td>2013-08-12 </td>
+<td>2 </td>
+<td>2 </td>
+<td>Виправити багу на бекенді</td>
+</tr>
+<tr>
+<td>4 </td>
+<td>Рабінович Мойша </td>
+<td>Директор </td>
+<td>200000</td>
+<td>35 </td>
+<td>2015-05-12 </td>
+<td>7 </td>
+<td>4 </td>
+<td>Насолоджуватися життям </td>
+</tr>
+<tr>
+<td>5 </td>
+<td>Кірієнко Анастасія </td>
+<td>Офіс-менеджер</td>
+<td>40000</td>
+<td>25 </td>
+<td>2015-10-10 </td>
+<td>3 </td>
+<td>5 </td>
+<td>Купити каву </td>
+</tr>
+<tr>
+<td>5 </td>
+<td>Кірієнко Анастасія </td>
+<td>Офіс-менеджер</td>
+<td>40000</td>
+<td>25 </td>
+<td>2015-10-10 </td>
+<td>4 </td>
+<td>5 </td>
+<td>Купити каву </td>
+</tr>
+<tr>
+<td>5 </td>
+<td>Кірієнко Анастасія </td>
+<td>Офіс-менеджер</td>
+<td>40000</td>
+<td>25 </td>
+<td>2015-10-10 </td>
+<td>5 </td>
+<td>5 </td>
+<td>Купити каву </td>
+</tr>
+<tr>
+<td>6 </td>
+<td>Васька </td>
+<td>кіт </td>
+<td>1000 </td>
+<td>3 </td>
+<td>2018-11-11 </td>
+<td>8 </td>
+<td>6 </td>
+<td>Насолоджуватися життям </td>
+</tr>
+<tr>
+<td>(NULL)</td>
+<td>(NULL)</td>
+<td>(NULL)</td>
+<td>(NULL)</td>
+<td>(NULL)</td>
+<td>(NULL)</td>
+<td>6 </td>
+<td>(NULL)</td>
+<td>Прибрати офіс </td>
+</tr>
+<tr>
+</tbody>
+</table>
+ 
+<p>У нашу таблицю додався ще один рядок, що цікаво в ній дуже багато значень NULL. Усі дані, які бралися з таблиці employee, відображаються у вигляді NULL, тому що для завдання “Прибрати офіс” не знайшлося виконавця з таблиці employee. </p>
+ 
+<h2>Типи JOIN-ів </h2>
+
+<p>Усього існує 4 типи JOIN-ів. Вони представлені в таблиці нижче: </p>
+ 
+<table>
+<tbody>
+<tr>
+<th></th>
+<th>Короткий запис </th>
+<th>Довгий запис </th>
+<th>Пояснення </th>
+</tr>
+<tr>
+<td>1 </td>
+<td>JOIN </td>
+<td>INNER JOIN </td>
+<td>Тільки записи, які є в таблицях А та Б</td>
+</tr>
+<tr>
+<td>2 </td>
+<td>LEFT JOIN </td>
+<td>LEFT OUTER JOIN </td>
+<td>Всі рядки без пари з таблиці А мають бути</td>
+</tr>
+<tr>
+<td>3 </td>
+<td>RIGHT JOIN </td>
+<td>RIGHT OUTER JOIN </td>
+<td>Всі рядки без пари з таблиці Б мають бути</td>
+</tr>
+<tr>
+<td>4 </td>
+<td>OUTER JOIN </td>
+<td>FULL OUTER JOIN </td>
+<td>Всі рядки баз пар з таблиць А та Б повинні бути </td>
+</tr>
+</tbody>
+</table>
+ 
+<p>Для простоти, якщо ми представимо таблиці у вигляді множин, то JOIN можна буде відображати у вигляді картинки: </p>
+ 
+<img data-max-width="512" data-id="66aba568-a02a-45e0-9939-6beebbb190ed" src="https://cdn.javarush.com/images/article/66aba568-a02a-45e0-9939 -6beebbb190ed/original.png" alt="">
+ 
+<p>Під перетином множин мається на увазі, що для однієї таблиці є відповідний запис з іншої таблиці, на яку вона посилається. </p>
+ 
+<h2>Питання з співбесіди </h2>
+
+<p>Іноді програмістів-новачків на співбесіді валять дуже простим питанням. З урахуванням таблиць його можна сформулювати так: </p>
+
+“Напишіть запит, який відображає <strong>список усіх працівників, для яких немає завдань</strong>”.
+
+Спочатку спробуємо трохи перефразувати це питання:
+
+“Напишіть запит, який відображає <strong>список усіх співробітників з таблиці employee, для яких немає завдань у таблиці task</strong>”.
+
+Нам потрібно отримати ось це безліч:
+ 
+<img data-max-width="512" data-id="d3cc4f4a-b340-4b3a-9ae0-3e38eca36bb2" src="https://cdn.javarush.com/images/article/d3cc4f4a-b340-4b3a-9 -3e38eca36bb2/original.png" alt="">
+ 
+<p>Можна вирішити це завдання багатьма способами, але я почну з найпростіших:
+По-перше, ти можеш об'єднати наші таблиці за допомогою LEFT JOIN, а потім за допомогою WHERE виключити всі рядки, для яких відсутні дані були доповнені NULL-ами. </p>
+ 
+<pre><code><strong><span class="text-red">SELECT</span> * <span class="text-red">FROM</span> <span class="text-orange"> employee e</span> <span class="text-red">LEFT JOIN</span> <span class="text-orange">task t</span> <span class="text-red">ON< /span> <span class="text-orange">e</span>.<span class="text-green">id</span> = <span class="text-orange">t</span> .<span class="text-green">emploee_id</span>
+<span class="text-red">WHERE</span> <span class="text-orange">t</span>.<span class="text-green">id</span> <span class= "text-red">IS NULL</span></strong>
+</code></pre>
+
+<p>І результат такого запиту: </p>
+
+<table>
+<tbody>
+<tr>
+<th>id </th>
+<th>name </th>
+<th>occupation</th>
+<th>salary </th>
+<th>age </th>
+<th>join_date</th>
+<th>id </th>
+<th>emploee_id</th>
+<th>name </th>
+</tr>
+<tr>
+<td>3 </td>
+<td>Іванов Сергій </td>
+<td>Тестувальник </td>
+<td>40000</td>
+<td>30</td>
+<td>2014-01-01 </td>
+<td>(NULL)</td>
+<td>(NULL)</td>
+<td>(NULL)</td>
+</tr>
+</tbody>
+</table>
+ 
+<p>Єдиний мінус такого рішення, що в таблиці рядка містять NULL, а нам за умовою потрібно відобразити список співробітників.</p>
+ 
+<p>Для цього потрібно або перерахувати в SELECT необхідні колонки таблиці employee, або якщо потрібно відобразити їх усі, можна написати таку конструкцію: </p>
+ 
+<pre><code><strong><span class="text-red">SELECT</span> <span class="text-orange">e</span>.* <span class="text-red" >FROM</span> <span class="text-orange">employee e</span>, <span class="text-orange">task t</span> </strong>
+</code></pre>
+ 
+<p>Повний запит буде виглядати так:</p>
+ 
+<pre><code><strong><span class="text-red">SELECT</span> <span class="text-orange">e</span>.*
+<span class="text-red">FROM</span> <span class="text-orange">employee e</span> <span class="text-red">RIGHT JOIN</span> <span class ="text-orange">task t</span> <span class="text-red">ON</span> <span class="text-orange">e</span>.<span class="text -green">id</span> = <span class="text-orange">t</span>.<span class="text-green">emploee_id</span>
+<span class="text-red">WHERE</span> <span class="text-orange">t</span>.<span class="text-green">id</span> <span class= "text-red">IS NULL</span></strong>
+</code></pre>
+
+<p>результат такого запиту: </p>
+ 
+<table>
+<tbody>
+<tr>
+<th>id </th>
+<th>name </th>
+<th>occupation </th>
+<th>salary </th>
+<th>age </th>
+<th>join_date</th>
+</tr>
+<tr>
+<td>3 </td>
+<td>Іванов Сергій </td>
+<td>Тестувальник </td>
+<td>40000</td>
+<td>30</td>
+<td>2014-01-01 </td>
+</tbody>
+</table>
+ 
+<p>Інші способи залишаються вам для домашнього завдання. Не хочу позбавляти вас задоволення знайти їх самостійно.</p>

@@ -1,0 +1,98 @@
+<h2>4.1 Метод send(), BodyHandlers</h2>
+<p>Ти перестав вивчати, як формувати <strong>http-запит</strong> , значить можна переходити до найголовнішого – відправлення цього запиту. У найпростішому випадку це зробити легко:</p>
+<pre class="line-numbers"><code>
+HttpRequest <span class="text-green">request</span> = HttpRequest.newBuilder(new URI(<span class="text-green">"https://codegym.cc"</span>)).build();
+ 
+   HttpClient <span class="text-red">client</span> = HttpClient.newBuilder()
+        .version(Version.HTTP_1_1)
+        .build();
+ 
+   HttpResponse&lt;String&gt; <span class="text-user">response</span> = <span class="text-red">client</span>.<span class="text-orange">send</span>(<span class="text-green">request</span>, <span class="text-yellow">BodyHandlers.ofString()</span>);
+   System.out.println(<span class="text-user">response</span>.statusCode() );
+   System.out.println(<span class="text-user">response</span>.body() ); 
+</code></pre>
+<p>А що ж це за <code class="text-yellow">BodyHandlers</code>такі? А як ти вважаєш? Ти надіслав запит, а значить вам має прийти відповідь – <code>http response</code>. І ця відповідь може бути <code>response body</code>: рядок, файл, масив байт, InputStream.</p>
+<p>Так, так, все правильно. Так само, як і при формуванні запиту, тобі потрібно вказати тип <code>response body</code>відповіді. Усього їх може бути 8 штук:</p>
+<ul>
+ <li><code> BodyHandlers.<strong>ofByteArray</strong></code></li>
+ <li><code> BodyHandlers.<strong>ofString</strong></code></li>
+ <li><code> BodyHandlers.<strong>ofFile</strong></code></li>
+ <li><code> BodyHandlers.<strong>discarding</strong></code></li>
+ <li><code> BodyHandlers.<strong>replacing</strong></code></li>
+ <li><code> BodyHandlers.<strong>ofLines</strong></code></li>
+ <li><code> BodyHandlers.<strong>fromLineSubscriber</strong></code></li>
+</ul>
+<p>Залежно від цього, який тип <code>BodyHandlers</code>ти передав у метод <code>send()</code>, такий тип результату і поверне. Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token comment">// response body <span class="text-red">ігнорується</span></span>
+<span class="token class-name">HttpResponse</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-red">Void</span></span><span class="token punctuation">&gt;</span></span> response <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span>request<span class="token punctuation">,</span> <span class="token class-name">BodyHandlers</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">discarding</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token comment">// response body це <span class="text-red">рядок</span></span>
+ <span class="token class-name">HttpResponse</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-red">String</span></span><span class="token punctuation">&gt;</span></span>response <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span>request<span class="token punctuation">,</span> <span class="token class-name">BodyHandlers</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">ofString</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token comment">// response body це <span class="text-red">файл</span></span>
+<span class="token class-name">HttpResponse</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-red">Path</span></span><span class="token punctuation">&gt;</span></span> response <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span>request<span class="token punctuation">,</span> <span class="token class-name">BodyHandlers</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">ofFile</span></span><span class="token punctuation">(</span><span class="token class-name"></span><span class="text-user"><span class="token class-name">Paths</span><span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"readme.txt"</span><span class="token punctuation">)</span></span><span class="token punctuation"></span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token comment">// response body це <span class="text-red">InputStream</span></span>
+<span class="token class-name">HttpResponse</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-red">InputStream</span></span><span class="token punctuation">&gt;</span></span> response <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span>request<span class="token punctuation">,</span> <span class="token class-name">BodyHandlers</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">ofInputStream</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Якщо як відповідь тобі повинні надіслати файл, то метод <code>BodyHandlers.ofFile()</code>тобі потрібно передати ім'я локального файлу, куди він буде збережений об'єктом HttpClient.</p>
+<h2>4.2 Метод followRedirects()</h2>
+<p>Також при відправці запиту ти можеш вказати, що робити HttpClient'у, якщо сервер у відповідь надішле <code>301</code>або <code>302</code>(тимчасовий або постійний редирект). Уяви, що сервер надіслав код <code>302</code>, і тобі потрібно: відстежити цю ситуацію, отримати нову URL-адресау з відповіді і відправити запит на нову адресау.</p>
+<p>Не дуже хотілося б таким займатися, особливо враховуючи, що ця ситуація зустрічається часто і вже давно автоматизована у всіх http-клієнтах. Також і в цьому HttpClient'і тобі потрібно просто вказати який режим редиректу вибираєш при відправці запиту.</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">HttpResponse</span><string> response <span class="token operator">=</span> <span class="token class-name">HttpClient</span><span class="token punctuation">.</span><span class="token function">newBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="text-red">  <span class="token punctuation">.</span><span class="token function">followRedirects</span><span class="token punctuation">(</span> <span class="token class-name">HttpClient<span class="token punctuation">.</span>Redirect</span><span class="token punctuation">.</span>ALWAYS <span class="token punctuation">)</span></span><span class="token punctuation"></span>
+  <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span>request<span class="token punctuation">,</span> <span class="token class-name">BodyHandlers</span><span class="token punctuation">.</span><span class="token function">ofString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+</string></code></pre>
+<p>Є лише 3 варіанти для редиректу:</p>
+<ul>
+ <li><strong>ALWAYS</strong> – завжди;</li>
+ <li><strong>NEVER</strong> – ніколи;</li>
+ <li><strong>NORMAL</strong> – завжди, окрім HTTPS -&gt; HTTP.</li>
+</ul>
+<p>Як бачиш, варіантів тут небагато, але завжди краще мати можливість налаштування, ніж не мати її.</p>
+<h2>4.4 Метод proxy()</h2>
+<p>Є ще пара корисних, але не часто використовуваних опцій. Вони тобі не потрібні рівно доти, доки не стануть потрібні :)</p>
+<p>Перший – це proxy. У звичайному житті ти не часто стикаєшся з ними, але багато великих корпорацій мають у собі всередині складну систему безпеки інтернет-трафіку, а значить і різні налаштування proxy.</p>
+<p>Ну, і звичайно, твій софт, який працюватиме десь у надрах такої корпорації, колись зіткнеться з тим, що йому потрібно буде задіяти proxy. Тому добре, що така опція тут також є.</p>
+<p>Налаштувати проксі дуже просто – приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">HttpResponse</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> response <span class="token operator">=</span> <span class="token class-name">HttpClient</span><span class="token punctuation">.</span><span class="token function">newBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="text-red">  <span class="token punctuation">.</span><span class="token function">proxy</span><span class="token punctuation">(</span> <span class="token class-name">ProxySelector</span><span class="token punctuation">.</span><span class="token function">getDefault</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span></span><span class="token punctuation"></span>
+  <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span>request<span class="token punctuation">,</span> <span class="token class-name">BodyHandlers</span><span class="token punctuation">.</span><span class="token function">ofString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Тут був обраний proxy за замовчуванням, але ти можеш захотіти налаштувати свій:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">HttpResponse</span><string> response <span class="token operator">=</span> <span class="token class-name">HttpClient</span><span class="token punctuation">.</span><span class="token function">newBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="text-red">  <span class="token punctuation">.</span><span class="token function">proxy</span><span class="token punctuation">(</span><span class="token class-name">ProxySelector</span><span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span></span><span class="token punctuation"></span><span class="token keyword"></span><span class="text-viola"><span class="token keyword">new</span> <span class="token class-name">InetSocketAddress</span><span class="token punctuation">(</span><span class="token string">"proxy.microsoft.com"</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">)</span></span><span class="token punctuation"></span><span class="token punctuation"></span><span class="text-red"><span class="token punctuation">)</span><span class="token punctuation">)</span></span><span class="token punctuation"></span>
+  <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span>request<span class="token punctuation">,</span> <span class="token class-name">BodyHandlers</span><span class="token punctuation">.</span><span class="token function">ofString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</string></code></pre>
+<p>Як саме працювати з proxy ми розглядати не будемо, оскільки це не входить у рамки цього курсу.</p>
+<h2>4.5 authenticator()</h2>
+<p>І ще один важливий момент. HTTP-протокол підтримує автентифікацію. Прямо лише на рівні протоколу.</p>
+<p>Наразі таким підходом майже не користуються, але років 20 тому він був поширений. Виглядав такий Http-запит так:</p>
+<div class="lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java">http<span class="token operator">:</span><span class="token operator">/</span><span class="token operator">/</span><span class="text-green">username</span><span class="token annotation punctuation">@example.com</span><span class="token operator">/</span></code></pre>
+</div>
+<p>Або навіть так:</p>
+<div class="lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java">http<span class="token operator">:</span><span class="token operator">/</span><span class="token operator">/</span><span class="text-green">username</span><span class="token operator">:</span><span class="text-user">password</span><span class="token annotation punctuation">@example.com</span><span class="token operator">/</span></code></pre>
+</div>
+<p>Це не пошта. Це саме заслання. І так, тобі не здалося. Логін і навіть пароль можна було зазначити прямо в http-запиті. Та й зараз можна. Тому я й пишу, що зараз так зазвичай ніхто не робить. Але така нагода є.</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Authenticator</span> <span class="text-red">auth</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Authenticator</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">protected</span> <span class="token class-name">PasswordAuthentication</span> <span class="token function">getPasswordAuthentication</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">PasswordAuthentication</span><span class="token punctuation">(</span>
+     <span class="token string">"username"</span><span class="token punctuation">,</span>
+        <span class="token string">"password"</span><span class="token punctuation">.</span><span class="token function">toCharArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token class-name">HttpResponse</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> response <span class="token operator">=</span> <span class="token class-name">HttpClient</span><span class="token punctuation">.</span><span class="token function">newBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">authenticator</span><span class="token punctuation">(</span><span class="text-red">auth</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span>request<span class="token punctuation">,</span> <span class="token class-name">BodyHandlers</span><span class="token punctuation">.</span><span class="token function">ofString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p><span class="text-green">Це цікаво! </span>Знаєте чому замість <code>“password"</code>коду написано <code>"password".toCharArray()</code>?</p>
+<p>Тому що другий параметр конструктора <code>PasswordAuthentication </code>- не <code>String</code>, а <code>CharArray</code>.</p>
+<p>А чому другий параметр не <code>String</code>, а <code>CharArray</code>?</p>
+<p>Тому що <span class="text-red">всі паролі з метою безпеки забороняється зберігати у вигляді цілого рядка навіть у своєму власному додатку</span> . Тобто ваша програма у своїй пам'яті не повинна зберігати пароль у вигляді рядка. Щоб якщо хтось зробив damp-пам'яті, з нього не можна було витягнути пароль.</p>
+<p>Але при цьому пароль можна передати за незахищеним HTTP-протоколом через півсвіту :) :) :)</p>
+<p>Що ж. Світ не є ідеальним.</p>
+<p>Більш детально ти можеш ознайомитись із цією темою за посиланнями:</p>
+<p><a href="https://developer.mozilla.org/ru/docs/Web/HTTP/Authentication" target="_blank">HTTP автентифікація</a></p>
+<p><a href="https://docs.microsoft.com/en-us/dotnet/framework/wcf/feature-details/understanding-http-authentication" target="_blank">Understanding HTTP Authentication</a></p>

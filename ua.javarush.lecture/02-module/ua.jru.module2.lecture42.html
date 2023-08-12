@@ -1,0 +1,158 @@
+<p>Говорячи про мережну взаємодію, ми не можемо не згадати модель OSI.</p><img data-max-width="512" data-id="3d8963af-b097-4c25-b809-749cb30988a0" alt="" src="https://cdn.javarush.com/images/article/3d8963af-b097-4c25-b809-749cb30988a0/512.jpeg" style="width: 512px;">
+<p>Сьогодні у цій моделі нас найбільше цікавить транспортний рівень (4).</p>
+<p>На цьому рівні ми працюємо з даними, які йдуть "з точки А до точки Б". Основне завдання транспортного рівня – гарантувати доставку повідомлення до адресаата, зберігаючи правильну послідовність. Є 2 найпоширеніші протоколи транспортного рівня: TCP і UDP. Вони працюють концептуально по-різному, але кожен має свої переваги, що дозволяє використовувати їх профільно для вирішення певних завдань.</p><img data-max-width="800" data-id="67b068ac-fd31-4872-91d9-59ba3bf48850" alt="" src="https://cdn.javarush.com/images/article/67b068ac-fd31-4872-91d9-59ba3bf48850/800.jpeg" style="width: 800px;">
+<p>Спершу давай розглянемо схему роботи TCP.</p>
+<p>TCP (Transmission Control Protocol) — це мережевий протокол, який перед обміном даними переконується, що з'єднання між хостами встановлено.</p><img data-max-width="512" data-id="74839620-cd21-4d53-96e6-c2dc279ed242" alt="" src="https://cdn.javarush.com/images/article/74839620-cd21-4d53-96e6-c2dc279ed242/512.jpeg" style="width: 512px;">
+<p>Це дуже надійний протокол, адже щоразу, надсилаючи черговий пакет даних, він має перевірити, що попередній пакет дійшов.</p>
+<p>Пакети, що передаються, упорядковані, а у разі проблем з певним пакетом (коли приймаюча сторона не підтверджує, що пакет прийшов) пакет відправляється заново. Через це швидкість передачі відносно низька, адже впорядкування та жорсткий контроль передачі даних займає більше часу.</p>
+<p>Саме тут і приходить його брат-антагоніст - протокол UDP. Йому, на відміну від TCP, не так важливий порядок і статус кожного пакета, він просто надсилає дані без підтвердження доставки. Більше того, він не займається встановленням з'єднання і ніяк не залежить від його статусу.</p><img data-max-width="512" data-id="ee86fbc6-8e3e-41bf-9937-e787466adc98" alt="" src="https://cdn.javarush.com/images/article/ee86fbc6-8e3e-41bf-9937-e787466adc98/512.jpeg" style="width: 512px;">
+<p>Його завдання – просто надсилати дані за адресаою. З цього випливає і головний мінус протоколу — низька надійність, адже він може втратити шматки даних. До того ж одержувач має бути готовим до того, що дані можуть надходити невпорядковано. У протоколу є й перевага — вища швидкість передачі, зумовлена ​​тим, що коло завдань даного протоколу обмежується надсиланням даних.</p>
+<p>Є розбіжності й у методі даних, що передаються. TCP дані передаються потоком, що означає, що дані не мають позначення кордонів. У випадку з UDP дані передаються у вигляді датаграм і мають позначення меж, а перевірка даних на цілісність робить сторона, що приймає, але тільки у разі успішного отримання повідомлення.</p>
+<p>Підбиваємо підсумок:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>TCP – надійний і точний протокол, який не дає шансів на втрату даних. Повідомлення завжди буде доставлене з максимальною точністю або не доставлене взагалі. Приймаюча сторона може не мати логіки щодо впорядкування даних, оскільки дані, що надходять, вже будуть упорядковані.</td>
+    <td>UDP – не такий надійний, але швидший протокол передачі даних. Логіка сторони, що відправляє та приймає, повинна доповнюватися деякими махінаціями для того, щоб працювати з цим протоколом. Але давай поглянемо на його роботу на прикладі комп'ютерної або мобільної гри по мережі. Нам вже може бути не важливо, що мало прийти 5 секунд тому, і ми можемо пропустити пару пакетів, якщо вони не встигають — гра підлагоджує, але грати можна!</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>У Java для роботи датаграмами для передачі через UDP використовуються об'єкти класів <span class="code"><span class="text-green">DatagramSocket</span></span> та <span class="code"><span class="text-green">DatagramPacket</span></span> .</p>
+<p>Для обміну даними відправник та одержувач створюють сокети датаграмного типу - об'єкти класу <span class="code"><span class="text-green">DatagramSocket</span></span> . Клас має кілька конструкторів, різниця яких у тому, куди приєднається сокет, що створюється:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td><span class="code text-orange"><span class="text-bold">DatagramSocket()</span></span></td>
+    <td>До будь-якого вільного порту на локальній машині</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange"><span class="text-bold">DatagramSocket (int port)</span></span></td>
+    <td>До зазначеного порту на локальній машині</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange"><span class="text-bold">DatagramSocket(int port, InetAddress addr)</span></span></td>
+    <td>До зазначеного порту за однією з адреса локальної машини (addr)</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Клас містить безліч методів для доступу до параметрів сокету та керування ним (трохи нижче ми їх розглянемо), а також методи для прийому та надсилання датаграм:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td><span class="code text-orange">send(DatagramPacket pack)</span></td>
+    <td>Надсилає датаграми, упаковані в пакети</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">receive (DatagramPacket pack)</span></td>
+    <td>Приймає датаграми, упаковані у пакети</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="code"><span class="text-green">DatagramPacket</span></span> — клас, який є пакетом датаграм. Пакети датаграм використовують для реалізації служби доставки пакетів без підключення. Кожне повідомлення надсилається з однієї машини на іншу виключно на основі інформації, що міститься в цьому пакеті. Декілька пакетів, відправлених з однієї машини на іншу, можуть бути маршрутовані по-різному і можуть надходити в будь-якому порядку. Доставка пакетів не гарантується.</p>
+<p>Конструктори:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td><span class="code text-orange"><span class="text-bold">DatagramPacket(byte[] buf, int length)</span></span></td>
+    <td>Створює <span class="code"><span class="text-green">DatagramPacket</span></span> прийому пакетів довжини <span class="text-green">length</span> .</td>
+   </tr>
+   <tr>
+   </tr>
+   <tr>
+    <td><span class="code text-orange"><span class="text-bold">DatagramPacket(byte[] buf, int length, InetAddress address, int port)</span></span></td>
+    <td>Створює пакет датаграми для надсилання пакетів довжини <span class="text-green">length</span> на вказаний номер порту на вказаному вузлі.</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange"><span class="text-bold">DatagramPacket(byte[] buf, int offset, int length)</span></span></td>
+    <td>Створює <span class="code"><span class="text-green">DatagramPacket</span></span> прийому пакетів довжини <span class="text-green">length</span> , вказуючи зміщення в буфері.</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange"><span class="text-bold">DatagramPacket(byte[] buf, int offset, int length, InetAddress address, int port)</span></span></td>
+    <td>Створює пакет датаграми для надсилання пакетів довжини <span class="text-green">length</span> зі зміщенням <span class="text-green">offset</span> до вказаного номера порту на вказаному вузлі.</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange"><span class="text-bold">DatagramPacket(byte[] buf, int offset, int length, SocketAddress address)</span></span></td>
+    <td>Створює пакет датаграми для надсилання пакетів довжини <span class="text-green">length</span> зі зміщенням <span class="text-green">offset</span> до вказаного номера порту на вказаному вузлі.</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange"><span class="text-bold">DatagramPacket(byte[] buf, int length, SocketAddress address)</span></span></td>
+    <td>Створює пакет датаграми для надсилання пакетів довжини <span class="text-green">length</span> на вказаний номер порту на вказаному вузлі.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Зі схеми роботи UDP ми пам'ятаємо, що з'єднання не встановлюється і пакети посилаються на успіх з розрахунку на те, що одержувач на них чекає. Але за допомогою методу класу <span class="code"><span class="text-green">DatagramSocket</span></span> <span class="code text-orange"> connect(InetAddress addr, int port)</span> можна встановити з'єднання.</p>
+<p>Встановлюється одностороннє з'єднання з хостом за адресаою та портом: або на відправлення, або прийом датаграм. Таке з'єднання можна розірвати методом <span class="code text-orange">disconnect()</span> .</p>
+<p>Давай спробуємо написати код сервера (приймає сторони) на основі <span class="code"><span class="text-green">DatagramSocket</span></span> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">IOException</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>net<span class="token punctuation">.</span></span><span class="token class-name">DatagramPacket</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>net<span class="token punctuation">.</span></span><span class="token class-name">DatagramSocket</span><span class="token punctuation">;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">Recipient</span> <span class="token punctuation">{</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">try</span> <span class="token punctuation">{</span>
+           <span class="token class-name">DatagramSocket</span> ds <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DatagramSocket</span><span class="token punctuation">(</span><span class="token number">1050</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+           <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+               <span class="token class-name">DatagramPacket</span> pack <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DatagramPacket</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+               ds<span class="token punctuation">.</span><span class="token function">receive</span><span class="token punctuation">(</span>pack<span class="token punctuation">)</span><span class="token punctuation">;</span>
+               <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>pack<span class="token punctuation">.</span><span class="token function">getData</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token punctuation">}</span>
+       <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">IOException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+           e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Ми створюємо об'єкт <span class="code"><span class="text-green">DatagramSocket</span></span> , призначений для прослуховування порту 1050. Отримавши повідомлення, він виводить його в консоль. Передаватимемо слово “Hello”, тому обмежуємо розмір буфера п'ятьма байтами.</p>
+<p>Тепер створюємо клас відправника:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">IOException</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>net<span class="token punctuation">.</span></span><span class="token class-name">DatagramPacket</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>net<span class="token punctuation">.</span></span><span class="token class-name">DatagramSocket</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>net<span class="token punctuation">.</span></span><span class="token class-name">InetAddress</span><span class="token punctuation">;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">Sender</span> <span class="token punctuation">{</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> host<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token keyword">int</span> port<span class="token punctuation">;</span>
+
+   <span class="token class-name">Sender</span><span class="token punctuation">(</span><span class="token class-name">String</span> host<span class="token punctuation">,</span> <span class="token keyword">int</span> port<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">this</span><span class="token punctuation">.</span>host <span class="token operator">=</span> host<span class="token punctuation">;</span>
+       <span class="token keyword">this</span><span class="token punctuation">.</span>port <span class="token operator">=</span> port<span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">sendMessage</span><span class="token punctuation">(</span><span class="token class-name">String</span> mes<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">try</span> <span class="token punctuation">{</span>
+           <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> data <span class="token operator">=</span> mes<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token class-name">InetAddress</span> address <span class="token operator">=</span> <span class="token class-name">InetAddress</span><span class="token punctuation">.</span><span class="token function">getByName</span><span class="token punctuation">(</span>host<span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token class-name">DatagramPacket</span> pack <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DatagramPacket</span><span class="token punctuation">(</span>data<span class="token punctuation">,</span> data<span class="token punctuation">.</span>length<span class="token punctuation">,</span> address<span class="token punctuation">,</span> port<span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token class-name">DatagramSocket</span> ds <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DatagramSocket</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+           ds<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span>pack<span class="token punctuation">)</span><span class="token punctuation">;</span>
+           ds<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">IOException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+           <span class="token class-name">System</span><span class="token punctuation">.</span>err<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token class-name">Sender</span> sender <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Sender</span><span class="token punctuation">(</span><span class="token string">"localhost"</span><span class="token punctuation">,</span> <span class="token number">1050</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token class-name">String</span> message <span class="token operator">=</span> <span class="token string">"Hello"</span><span class="token punctuation">;</span>
+
+   <span class="token class-name">Timer</span> timer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Timer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   timer<span class="token punctuation">.</span><span class="token function">scheduleAtFixedRate</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">TimerTask</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token annotation punctuation">@Override</span>
+       <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+           sender<span class="token punctuation">.</span><span class="token function">sendMessage</span><span class="token punctuation">(</span>message<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+   <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token number">1000</span><span class="token punctuation">,</span> <span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span></code></pre>
+<p>У методі <span class="code text-orange">sendMessage</span> ми створюємо <span class="code"><span class="text-green">DatagramPacket</span></span> , <span class="code"><span class="text-green">DatagramSocket</span></span> і відправляємо наше повідомлення. Зверніть увагу, що після надсилання <span class="code"><span class="text-green">DatagramSocket</span></span> закривається методом <span class="code text-orange">close()</span> .</p>
+<p>У консолі одержувача ми бачимо кожну секунду повідомлення “Hello”, відправлене відправником. Значить, взаємодія налагоджена і все працює правильно.</p>

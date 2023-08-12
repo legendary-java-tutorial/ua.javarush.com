@@ -1,0 +1,33 @@
+<h2>5.1 Метод sendAsync()</h2>
+<p>Також за допомогою HttpClient'а можна надсилати асинхронні запити. Зазвичай це роблять у трьох випадках.</p>
+<p>Перший випадок – це <strong>запит буде виконуватися дуже довго</strong> , наприклад, відправлення/отримання файлу. Тоді цю операцію запускають та виконують асинхронно.</p>
+<p>Другий випадок – тобі <strong>потрібно надсилати запити дуже часто</strong> , і ти не хочеш чекати відповіді від попереднього запиту перед надсиланням наступного.</p>
+<p>І, нарешті, третій випадок – тобі <strong>не важливий результат твого запиту</strong> . Наприклад, ти раз на хвабону робиш скріншот свого екрана та відправляєш його на сервер. Тобто логіка твого додатку передбачає, що запитів багато й доходять не всі. Тоді зручно працювати за принципом – відправив та забув.</p>
+<p>Щоб відправити асинхронний запит, потрібно викликати метод <code>sendAsync()</code>у об'єкта класу HttpClient. Цей метод миттєво завершує роботу та повертає об'єкт <code>CompletableFuture&lt;HttpResponse&gt;</code>. З його допомогою можна відстежити, коли запит реально виконається, і навіть виконати певний код після завершення запиту. Приклад:</p>
+<pre class="line-numbers"><code>
+HttpClient <span class="text-viola">client</span> = HttpClient.newBuilder().build();
+ 
+<span class="text-red">CompletableFuture</span><span class="text-user">&lt;</span><span class="text-user">HttpResponse<span class="text-user">&lt;</span></span><span class="text-green">String</span><span class="text-user">&gt;&gt;</span> response = <span class="text-viola">client</span>.<span class="text-red">sendAsync(</span>
+        request,
+        <span class="text-user">HttpResponse</span>.BodyHandlers.<span class="text-green">ofString</span>()
+<span class="text-red">)</span>;
+</code></pre>
+<p>Метод <code>sendAsync()</code>повертає об'єкт <code>CompletableFuture</code>, який містить HttpResponse, який містить в собі рядок, який поверне сервер.</p>
+<h2>5.2 Метод executor(), ExecutorService</h2>
+<p>Також HttpClient дозволяє передати в нього <code>ExecutorService</code>(пул потоків), які будуть використовуватись для виконання асинхронних запитів. Власне, в серверних Java-додатках так і роблять.</p>
+<p>Адже якщо на кожен запит до твого API, ти будеш запускати кілька асинхронних запитів ще кудись, вам ніяких потоків не вистачить. Приклад:</p>
+<pre class="line-numbers"><code>
+<span class="text-red">ExecutorService executorService = Executors</span>.<span class="text-orange">newFixedThreadPool</span><span class="text-red">(2);</span>
+ 
+CompletableFuture&lt;HttpResponse&lt;String&gt;&gt; response1 = HttpClient.newBuilder()
+  .<span class="text-orange">executor</span>(<span class="text-red">executorService</span>)
+  .build()
+  .sendAsync(request, HttpResponse.BodyHandlers.ofString());
+ 
+CompletableFuture&lt;HttpResponse&lt;String&gt;&gt; response2 = HttpClient.newBuilder()
+  .<span class="text-orange">executor</span>(<span class="text-red">executorService</span>)
+  .build()
+  .sendAsync(request, HttpResponse.BodyHandlers.ofString());
+
+</code></pre>
+<p>Якщо пул потоків не заданий, то використовується .<code>java.util.concurrent.<span class="text-red">Executors</span>.<span class="text-orange">newCachedThreadPool</span>()</code></p>

@@ -1,0 +1,97 @@
+<h2>Передумови появи атомарних операцій</h2>
+<p>Давай розберемо цей приклад, який допоможе зрозуміти роботу атомарних операцій:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Counter</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> count<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">increment</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        count<span class="token operator">++</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Коли у нас один потік, все працює класно, але якщо ми додаємо багатопоточку, то отримуємо неправильні результати, а через те, що операція інкременту складає не одну операцію, а три: запит на отримання поточного значення<mark class="user">count</mark>, потім збільшення її на 1 і запис знову в<mark class="user">count</mark>.</p>
+<p>І коли два потоки захочуть збільшити змінну, швидше за все, ти втратиш дані. Тобто обидва потоки одержують 100, в результаті обидва запишуть 101 замість очікуваного значення 102.</p>
+<p>І як це вирішити? Потрібно використати блокування. Ключове слово <span class="text-user"><span class="text-bold">synchronized</span></span> допомагає вирішити цю проблему, використання цього слова дає вам гарантію, що один потік буде звертатися до методу одночасно.</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SynchronizedCounterWithLock</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">volatile</span> <span class="token keyword">int</span> count<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">synchronized</span> <span class="token keyword">void</span> <span class="token function">increment</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        count<span class="token operator">++</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Плюс треба додавати ключове слово <span class="text-user"><span class="text-bold">volatile</span></span> , яке забезпечує коректну видимість посилань серед потоків. Ми розбирали його роботу вище.</p>
+<p>Але все ж таки є мінуси. Найбільший - це продуктивність, в той момент часу, коли багато потоків намагаються отримати блокування і один отримує можливість для запису, решта потоків буде або заблокована, або призупинена до моменту звільнення потоку.</p>
+<p>Всі ці процеси, блокування, перехід в інший статус дуже дорогі для продуктивності системи.</p>
+<h2>Атомарні операції</h2>
+<p>Алгоритм використовує низькорівневі машинні інструкції, такі як порівняння та заміна (CAS, compare-and-swap, що забезпечує цілісність даних і вже існує велика кількість досліджень).</p>
+<p>Типова операція CAS працює з трьома операндами:</p>
+<ul>
+ <li>Місце в пам'яті для роботи (M)</li>
+ <li>Існуюче очікуване значення (A) змінної</li>
+ <li>Нове значення (B), яке необхідно встановити</li>
+</ul>
+<p>CAS атомарно оновлює M до B, але тільки якщо значення M збігається з A, інакше ніяких дій робитися не буде.</p>
+<p>У першому та другому випадку повернуть значення М. Це дозволяє об'єднати три кроки, а саме – отримання значення, порівняння значення та його оновлення. І це все перетворюється на одну операцію на машинному рівні.</p>
+<p>У той час, коли багатопотоковий додаток звертається до змінної і намагається оновити його і застосовується CAS, то один із потоків отримає його і зможе оновити його. Але на відміну від блокувань інші потоки просто отримають помилки про те, що їм не вдалося оновити значення. Потім вони перейдуть до подальшої роботи, а перемикання повністю виключено за такого типу роботи.</p>
+<p>При цьому логіка стає важчою через те, що ми маємо обробити ситуацію, коли операція CAS не успішно відпрацювала. Ми просто змоделюємо код таким чином, щоб він не рухався далі, доки операція не відбудеться успішно.</p>
+<h2>Знайомство з атомарними типами</h2>
+<p>Ти зіткнувся із ситуацією, коли тобі потрібно налаштувати синхронізацію для найпростішої змінної типу <span class="text-orange">int</span> ?</p>
+<p>Перший спосіб, який ми вже розібрали, – це використання <span class="text-user"><span class="text-bold">volatile</span></span> + <span class="text-user"><span class="text-bold">synchronized</span></span> . Але ще є спеціальні класи Atomic*.</p><img data-max-width="1024" data-id="bd36155b-5ec3-43e3-b496-5a6161332457" alt="" src="https://cdn.javarush.com/images/article/bd36155b-5ec3-43e3-b496-5a6161332457/1024.jpeg" style="width: 1024px;">
+<p>Якщо у нас використовується CAS, операції працюють швидше в порівнянні з першим способом. І на додаток у нас є спеціальні та дуже зручні методи для додавання значення та операції інкременту та декременту.</p>
+<p><span class="code"><span class="text-green">AtomicBoolean</span></span> ,<span class="code"><span class="text-green"> AtomicInteger</span></span> ,<span class="code"><span class="text-green"> AtomicLong</span></span> ,<span class="code"><span class="text-green"> AtomicIntegerArray</span></span> ,<span class="code"><span class="text-green"> AtomicLongArray</span></span> -класи в яких операції атомарні. Нижче ми розберемо роботу з ними.</p>
+<h2>AtomicInteger</h2>
+<p>Клас <span class="code"><span class="text-green">AtomicInteger</span></span> надає операції зі значенням <span class="text-orange">int</span> , які можуть бути прочитані та записані атомарно, на додаток містить розширені атомарні операції.</p>
+<p>Він має методи <span class="code text-orange">get</span> і <span class="code text-orange">set</span> , які працюють, як читання і запис по змінним.</p>
+<p>Тобто "відбувається до (happens-before)" з будь-яким подальшим отриманням тієї ж змінної, про яку ми говорабо раніше. У атомарного методу <span class="code text-orange">compareandset</span> також є ці особливості узгодженості пам'яті.</p>
+<p>Усі операції, які повертають нове значення, виконуються атомарно:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>int addAndGet (int delta)</td>
+    <td>Додає певного значення до поточного значення.</td>
+   </tr>
+   <tr>
+    <td>boolean compareAndSet (очікуване int, оновлення int)</td>
+    <td>Встановлює значення для оновленого значення, якщо поточне значення збігається з очікуваним значенням.</td>
+   </tr>
+   <tr>
+    <td>int decrementAndGet()</td>
+    <td>Зменшує поточне значення на одиницю.</td>
+   </tr>
+   <tr>
+    <td>int getAndAdd (int delta)</td>
+    <td>Додає це значення до поточного значення.</td>
+   </tr>
+   <tr>
+    <td>int getAndDecrement()</td>
+    <td>Зменшує поточне значення на одиницю.</td>
+   </tr>
+   <tr>
+    <td>int getAndIncrement()</td>
+    <td>Збільшує поточне значення на одиницю.</td>
+   </tr>
+   <tr>
+    <td>int getAndSet (int newValue)</td>
+    <td>Встановлює задане значення та повертає старе значення.</td>
+   </tr>
+   <tr>
+    <td>int incrementAndGet ()</td>
+    <td>Збільшує поточне значення на одиницю.</td>
+   </tr>
+   <tr>
+    <td>lazySet (int newValue)</td>
+    <td>Зрештою встановлюється на задане значення.</td>
+   </tr>
+   <tr>
+    <td>boolean weakCompareAndSet (очікуване, оновлення int)</td>
+    <td>Встановлює значення для оновленого значення, якщо поточне значення збігається з очікуваним значенням.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">ExecutorService</span> executor <span class="token operator">=</span> <span class="token class-name">Executors</span><span class="token punctuation">.</span><span class="token function">newFixedThreadPool</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">IntStream</span><span class="token punctuation">.</span><span class="token function">range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span>i <span class="token operator">-&gt;</span> executor<span class="token punctuation">.</span><span class="token function">submit</span><span class="token punctuation">(</span>atomicInteger<span class="token operator">::</span><span class="token function">incrementAndGet</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+executor<span class="token punctuation">.</span><span class="token function">shutdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+executor<span class="token punctuation">.</span><span class="token function">awaitTermination</span><span class="token punctuation">(</span><span class="token class-name">Long</span><span class="token punctuation">.</span>MAX_VALUE<span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>HOURS<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>atomicInteger<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// виведе 50</span></code></pre>

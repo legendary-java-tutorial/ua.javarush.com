@@ -1,0 +1,158 @@
+<p>- Привіт, Аміго! Еллі розповіла тобі про нитки, а я розповім тобі про те, як із ними працювати. Щоб породити нову нитку потрібно:</p>
+<p><b>1)</b> &nbsp;Створити об'єкт класу Thread (нитка)</p>
+<p><b>2)</b> &nbsp;Передати до нього об'єкт, метод якого потрібно виконати</p>
+<p><b>3)</b> &nbsp;Викликати у створеного об'єкта Thread метод start.</p>
+<p>Приклад:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Printer</span> <span class="token keyword"></span><span class="text-red"><span class="token keyword">implements</span> <span class="token class-name">Runnable</span></span><span class="token class-name"></span>
+<span class="token punctuation">{</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function"></span><span class="text-red"><span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span></span><span class="token punctuation"></span>
+<span class="token punctuation">{</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"I’m printer"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Клас, який реалізує інтерфейс&nbsp; <strong>Runnable</strong> .</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token class-name">Printer</span> printer <span class="token operator">=</span> <span class="token keyword"><span class="text-red">new</span></span> <span class="token class-name">Printer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Thread</span> childThread <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="text-red">printer</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+childThread<span class="token punctuation">.</span><span class="token function"></span><span class="text-red"><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>1 Створабо об'єкт класу Printer, який містить метод run. <br>
+      2 Створабо новий об'єкт класу Thread, передали йому в конструкторі об'єкт printer, чий метод run() потрібно буде виконати. <br>
+      3 Запустабо нову нитку в роботу, виклик методу&nbsp; <strong>start().</strong></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Маленькі програми на Java зазвичай складаються з однієї нитки, яка називається «головною ниткою» (main thread). Але програми частіше запускають додаткові нитки, їх ще називають «дочірніми нитками». Головна нитка виконує метод main та завершується.&nbsp;<span class="text-red">Аналогом такого методу main для дочірніх ниток служить метод run інтерфейсу&nbsp; <strong>Runnable</strong> .</span></p>
+<p><span class="text-user">- Ага, багато ниток, багато методів main.</span></p><a href="https://cdn.javarush.com/images/article/8e544491-c43f-4c11-9cf8-d33a9a153c3d/original.jpeg" target="_blank"><img data-id="8e544491-c43f-4c11-9cf8-d33a9a153c3d" data-max-width="850" alt="Створення та запуск нових ниток (тредів) - 1" src="https://cdn.javarush.com/images/article/8e544491-c43f-4c11-9cf8-d33a9a153c3d/800.jpeg" style="width: 850px;"></a>
+<p>— Щоб вказати, з якого саме методу потрібно розпочати виконання об'єкта Thread, потрібно якось передати метод цьому об'єкту. У Java це реалізовано за допомогою інтерфейсу <strong>Runnable</strong> . Цей інтерфейс містить єдиний абстрактний метод - <strong>void run ()</strong> . Клас Thread має конструктор <strong>Thread (Runnable runnable)</strong> , який можна передати будь-який об'єкт, який реалізує інтерфейс <strong>Runnable</strong> .</p>
+<p>Ти повинен успадкувати свій клас від інтерфейсу <strong>Runnable</strong> , а потім перевизначити метод run у своєму класі. Саме з виклику цього почнеться робота нової нитки. У методі run ти можеш написати все, що хочеш.</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Printer</span> <span class="token keyword"></span><span class="text-red"><span class="token keyword">implements</span> <span class="token class-name">Runnable</span></span><span class="token class-name"></span>
+<span class="token punctuation">{</span>
+<span class="token keyword">private</span> <span class="token class-name">String</span> name<span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token class-name">Printer</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"I’m "</span> <span class="token operator">+</span> <span class="token keyword">this</span><span class="token punctuation">.</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Клас, який реалізує Runnable інтерфейс.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token class-name">Printer</span> printer1 <span class="token operator">=</span> <span class="token keyword"><span class="text-red">new</span></span> <span class="token class-name">Printer</span><span class="token punctuation">(</span><span class="token string">"Коля"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Thread</span> thread1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="text-red">printer1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+thread1<span class="token punctuation">.</span><span class="token function"></span><span class="text-red"><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+
+<span class="token class-name">Printer</span> printer2 <span class="token operator">=</span> <span class="token keyword"><span class="text-red">new</span></span> <span class="token class-name">Printer</span><span class="token punctuation">(</span><span class="token string">"Вася"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Thread</span> thread2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="text-red">printer2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+thread2<span class="token punctuation">.</span><span class="token function"></span><span class="text-red"><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Створюємо дві нитки, кожна з урахуванням свого об'єкта типу Printer.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token class-name">Printer</span> printer <span class="token operator">=</span> <span class="token keyword"><span class="text-red">new</span></span> <span class="token class-name">Printer</span><span class="token punctuation">(</span><span class="token string">"Наташа"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token class-name">Thread</span> thread1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="text-red">printer</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+thread1<span class="token punctuation">.</span><span class="token function"></span><span class="text-red"><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+
+<span class="token class-name">Thread</span> thread2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="text-red">printer</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+thread2<span class="token punctuation">.</span><span class="token function"></span><span class="text-red"><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+
+<span class="token class-name">Thread</span> thread3 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="text-red">printer</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+thread3<span class="token punctuation">.</span><span class="token function"></span><span class="text-red"><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Створюємо три нитки, на основі одного об'єкта Printer.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Більше того, можна поєднати це все в одному класі.&nbsp;<strong><span class="text-red">Клас Thread успадкований від інтерфейсу Runnable</span></strong> і <strong>досить просто&nbsp; <span class="text-red">перевизначити</span> &nbsp;його&nbsp; <span class="text-red">метод run:</span></strong></p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Другий спосіб створення нової нитки</th>
+    <th></th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Printer</span> <span class="token keyword"></span><span class="text-red"><span class="token keyword">extends</span> <span class="token class-name">Thread</span></span><span class="token class-name"></span>
+<span class="token punctuation">{</span>
+<span class="token keyword">private</span> <span class="token class-name">String</span> name<span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token class-name">Printer</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword"></span><span class="text-red"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span></span><span class="token punctuation"></span>
+<span class="token punctuation">{</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"I’m "</span> <span class="token operator">+</span> <span class="token keyword">this</span><span class="token punctuation">.</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Успадкували від класу&nbsp; <strong>Thread</strong> , який реалізує інтерфейс&nbsp; <strong>Runnable</strong> , і перевизначабо метод run.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token class-name">Printer</span> printer <span class="token operator">=</span> <span class="token keyword"><span class="text-red">new</span></span> <span class="token class-name">Printer</span><span class="token punctuation">(</span><span class="token string">"Вася"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+printer<span class="token punctuation">.</span><span class="token function"></span><span class="text-red"><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+
+<span class="token class-name">Printer</span> printer2 <span class="token operator">=</span> <span class="token keyword"><span class="text-red">new</span></span> <span class="token class-name">Printer</span><span class="token punctuation">(</span><span class="token string">"Коля"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+printer2<span class="token punctuation">.</span><span class="token function"></span><span class="text-red"><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Створюємо дві нитки, кожна з урахуванням свого об'єкта типу&nbsp; <strong>Printer</strong> .</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">— Це рішення красивіше.</span></p>
+<p>— Так, але має мінуси:</p>
+<p><strong>1)</strong> &nbsp;Вам може знадобитися запустити кілька ниток на основі єдиного об'єкта, як це зроблено в «прикладі з Наталкою».</p>
+<p><strong>2)</strong> &nbsp;Якщо ви успадкувалися від класу Thread, ви не можете додати ще один клас-батька до свого класу.</p>
+<p><strong>3)</strong> &nbsp;Якщо у вашого класу є клас-батько, ви не можете додати другого – Thread.</p>
+<p><span class="text-user">- Тобто. кожна з ниток після виклику методу start почне виконувати метод run того об'єкта, який передали йому в конструкторі?</span></p>
+<p>- Так. А якщо в конструкторі нічого не передали, Thread просто виконує свій внутрішній метод run.</p>
+<p><span class="text-user">— А чому не можна просто викликати цей метод, наприклад:</span></p>
+<div class="code-heading">
+ Код
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token class-name">Printer</span> printer1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Printer</span><span class="token punctuation">(</span><span class="token string">"Коля"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ printer1<span class="token punctuation">.</span><span class="token function"></span><span class="text-red"><span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token punctuation">}</span></code></pre>
+<p>— Коли головна нитка дійде до методу run, наш «маленький робот», просто зайде всередину і почне виконувати всі команди, які там є всередині, і тільки після їх виконання, повернеться до методу main, і продовжить роботу далі. Створення другого «маленького робота» не відбудеться, і вся робота буде робитися послідовно, а не паралельно (одночасно).</p>
+<p><span class="text-user">- Ясно. А чи можна викликати якийсь інший метод, а не run?</span></p>
+<p>- Ні. Все прив'язане до інтерфейсу Runnable, а він «знає» лише один свій метод – run.</p>

@@ -1,0 +1,84 @@
+<h2>3.1 Метод doReturn()</h2>
+<p>А тепер буде магія.</p>
+<p>Припустимо, ти створив фейковий мок-об'єкт, але ж треба, щоб він якось працював. При виклик певних методів робилося щось важливе або методи повертали певний результат. Що робити?</p>
+<p><span class="text-green">Бібліотека Mockito дозволяє додати мок-об'єкту потрібну поведінку.</span></p>
+<p>Якщо ти хочеш, щоб при викликі певного методу, мок-об'єкт повернув певний результат, то це правило можна додати об'єкту за допомогою коду:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present"><code><span class="text-red">Mockito</span>.doReturn(<span class="text-user">результат</span>).when(<span class="text-green">об'єкт</span>).<span class="text-yellow">ім'яМетоду</span>();</code></pre>
+</div>
+<p>Бачиш, наприкінці виклику методу <code>ім'яМетоду?</code>Насправді жодного виклику тут немає. Метод <code>doReturn()</code>повертає спеціальний proxy-об'єкт, за допомогою якого слідкує за викликами методів об'єкта і, таким чином, йде запис правила.</p>
+<p>Ще раз. <span class="text-red">Це просто такий хитрий спосіб записати правило, яке потрібно додати до мок-об'єкту</span> . Потрібна певна вправність, щоб правильно інтерпретувати такий код у своїй голові, коли його бачиш. Із досвідом приходить.</p>
+<p>Думаю, потрібний конкретний приклад. Давайте створимо мок-об'єкт класу <code>ArrayList</code>і попросимо його метод <code>size()</code>повернути число 10. Повний варіант коду виглядатиме так:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@ExtendWith</span><span class="token punctuation">(</span><span class="token class-name">MockitoExtension</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+<span class="token keyword">class</span> <span class="token class-name">DoReturnTest</span> <span class="token punctuation">{</span>
+<span class="text-green">    <span class="token annotation punctuation">@Mock</span></span><span class="token annotation punctuation"></span>
+<span class="text-red">    <span class="token class-name">List</span> mockList<span class="token punctuation">;</span></span><span class="token punctuation"></span>
+
+<span class="text-green">    <span class="token annotation punctuation">@Test</span></span><span class="token annotation punctuation"></span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> whenMockAnnotation <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+         <span class="token comment">//створюємо правило: повернути 10 під час виклику методу size</span>
+        <span class="token class-name">Mockito</span><span class="token punctuation">.</span><span class="token function">doReturn</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">when</span><span class="token punctuation">(</span><span class="text-red">mockList</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">//Тут викликається метод і поверне 10!!</span>
+        <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="text-red">mockList</span><span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Так, цей код працюватиме, тест не впаде.</p>
+<h2>3.2 Метод when()</h2>
+<p>Є ще один спосіб додати правило поведінки до мок-об'єкта – через виклик методу <code>Mockito.when()</code>. Виглядає так:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present "><code><span class="text-red">Mockito</span>.when(<span class="text-green">об'єкт</span>.<span class="text-yellow">ім'яМетоду</span>()).thenReturn(<span class="text-user">результат</span>);</code></pre>
+</div>
+<p>Це такий спосіб запису правила поведінки мок-об'єкта, як і попередній. Порівняйте:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present "><code><span class="text-red">Mockito</span>.doReturn(<span class="text-user">результат</span>).when(<span class="text-green">об'єкт</span>).<span class="text-yellow">ім'яМетоду</span>();</code></pre>
+</div>
+<p>Тут відбувається абсолютно те саме – конструювання нового правила.</p>
+<p>Щоправда, перший приклад має два мінуси:</p>
+<ul>
+ <li>виклик сильно збиває з пантелику.<code><span class="text-green">об'єкт</span>.<span class="text-yellow">ім'яМетоду</span>()</code></li>
+ <li>не працюватиме, якщо метод <code><span class="text-yellow">ім'яМетоду()</span></code>повертає <code>void</code>.</li>
+</ul>
+<p>Ну і давайте запишемо вподобаний нам приклад за допомогою<code>Mockito.when()</code></p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@ExtendWith</span><span class="token punctuation">(</span><span class="token class-name">MockitoExtension</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+<span class="token keyword">class</span> <span class="token class-name">WhenTest</span> <span class="token punctuation">{</span>
+<span class="text-green">    <span class="token annotation punctuation">@Mock</span></span><span class="token annotation punctuation"></span>
+<span class="text-red">    <span class="token class-name">List</span> mockList<span class="token punctuation">;</span></span><span class="token punctuation"></span>
+
+<span class="text-green">    <span class="token annotation punctuation">@Test</span></span><span class="token annotation punctuation"></span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">whenMockAnnotation</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">//створюємо правило: повернути 10 під час виклику методу size</span>
+        <span class="token class-name">Mockito</span><span class="token punctuation">.</span><span class="token function">when</span><span class="token punctuation">(</span><span class="text-red">mockList</span><span class="token punctuation">.</span><span class="token function"><span class="text-yellow">size</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenReturn</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">//Тут викликається метод і поверне 10!!</span>
+        <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="text-red">mockList</span><span class="token punctuation">.</span><span class="token function"><span class="text-yellow">size</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h2>3.3 Метод doThrow()</h2>
+<p>Ми розібралися, як зробити, щоб метод мок-об'єкта повернув певний результат. А як зробити так, щоб він кинув певний виняток? Передати його в <code>doReturn()</code>?</p>
+<p>Щоб метод не повернув, а саме викинув (throw) виняток, потрібно встановити правило за допомогою методу <code>doThrow()</code>.</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present "><code><span class="text-red">Mockito</span>.doThrow(<span class="text-user">виняток.</span>).when(<span class="text-green">об'єкт</span>).<span class="text-yellow">ім'яМетоду</span>();</code></pre>
+</div>
+<p>І відразу другий варіант:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present "><code><span class="text-red">Mockito</span>.when(<span class="text-green">об'єкт</span>.<span class="text-yellow">ім'яМетоду</span>()).thenThrow(<span class="text-user">виняток.</span>);</code></pre>
+</div>
+<p>Небагато очікувано, так?</p>
+<p>Ну ось бачиш, ти вже починаєш розумітися. Закріпимо прикладом:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@ExtendWith</span><span class="token punctuation">(</span><span class="token class-name">MockitoExtension</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+<span class="token keyword">class</span> <span class="token class-name">DoThrowTest</span> <span class="token punctuation">{</span>
+<span class="text-green">    <span class="token annotation punctuation">@Mock</span></span><span class="token annotation punctuation"></span>
+<span class="text-red">    <span class="token class-name">List</span> mockList<span class="token punctuation">;</span></span><span class="token punctuation"></span>
+
+<span class="text-green">    <span class="token annotation punctuation">@Test</span></span><span class="token annotation punctuation"></span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">whenMockAnnotation</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">Mockito</span><span class="token punctuation">.</span><span class="token function">when</span><span class="token punctuation">(</span><span class="text-red">mockList</span><span class="token punctuation">.</span><span class="token function"><span class="text-yellow">size</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenThrow</span><span class="token punctuation">(</span><span class="token class-name"></span><span class="text-user"><span class="token class-name">IllegalStateException</span><span class="token punctuation">.</span><span class="token keyword">class</span></span><span class="token keyword"></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="text-red">mockList</span><span class="token punctuation">.</span><span class="token function"><span class="text-yellow">size</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//тут кинеться виняток</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Якщо потрібно викинути певний об'єкт-виключення, то скористайся конструкцією виду:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present "><code><span class="text-red">Mockito</span>.doThrow(<span class="text-user">new Виняток()</span>).when(<span class="text-green">об'єкт</span>).<span class="text-yellow">ім'яМетоду</span>();</code></pre>
+</div>
+<p>Просто передай у метод <code>doThrow()</code>об'єкт виключення і його буде викинуто під час виклику методу.</p>

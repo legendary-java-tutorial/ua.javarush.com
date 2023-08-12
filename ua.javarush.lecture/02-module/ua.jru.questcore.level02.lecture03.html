@@ -1,0 +1,53 @@
+<p>- Привіт, Аміго! А я розповім тобі про&nbsp; <span class="text-red">навантаження методів.</span></p>
+<p><span class="text-user">- Їх ще й перевантажувати можна? Та що за день сьогодні такий!</span></p>
+<p>— З ними багато чого можна робити, але не про це будемо.</p>
+<p><span class="text-user">- Згоден.</span></p>
+<p><span class="text-green">- Перевантаження - це дуже проста операція. </span>&nbsp;Насправді це навіть не операція над методами, хоча іноді її називають страшним словом -&nbsp; <strong>параметричний поліморфізм.</strong></p>
+<p>Справа в тому, що всі методи всередині класу повинні мати унікальні імена.</p>
+<p><span class="text-user">- Так, я знаю про це.</span></p>
+<p>— Так ось це не зовсім так. Точніше зовсім не так. Метод повинен мати унікальне ім'я. Унікальним має бути&nbsp; <span class="text-green">об'єднання з імені та типів параметрів&nbsp;</span> цього методу. Їх ще називають сигнатурами методів.</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th width="50%">Код</th>
+    <th width="50%">Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">print2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>Так можна. Два методи мають унікальні імена.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token keyword">int</span> n<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>І так можна. Два методи мають унікальні імена (сигнатури).</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token keyword">int</span> n<span class="token punctuation">,</span> <span class="token keyword">int</span> n2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token keyword">int</span> n<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>Досі унікальні методи.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token keyword">int</span> a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token keyword">int</span> n<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>А так не можна. Методи не унікальні, хоч і повертають різні типи.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token keyword">int</span> a<span class="token punctuation">,</span> <span class="token keyword">long</span> b<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">long</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token keyword">long</span> b<span class="token punctuation">,</span> <span class="token keyword">int</span> a<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>А так – можна. Параметри методів є унікальними.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">— Десь я вже таке бачив.</span></p>
+<p>- Ага. Коли ти пишеш System.out.println, Intellij IDEA підказує тобі і видає у підказці кілька десятків методів print із різними параметрами. Компілятор просто визначить потрібний метод за типами змінних, які ти туди передаєш, і пропише виклик саме його.</p>
+<p><span class="text-user">— Це начебто не складно. Не поліморфізм, однак.</span></p>
+<p>- Точніше - не перевизначення методів</p>
+<p>До речі, звертаю твою увагу, що&nbsp; <span class="text-corporate">імена параметрів ролі не відіграють</span> &nbsp;– вони губляться під час компіляції. Після компіляції про метод відомо&nbsp; <span class="text-green">тільки його ім'я та типи параметрів.</span></p>

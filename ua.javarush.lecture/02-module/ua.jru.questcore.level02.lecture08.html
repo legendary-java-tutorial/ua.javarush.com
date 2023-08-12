@@ -1,0 +1,133 @@
+<p>- Привіт, Аміго! А ось і знову я. Хочу розповісти тобі ще один погляд на інтерфейси. Розумієш, клас – це найчастіше модель якогось конкретного об'єкта. Інтерфейс більше відповідає не об'єктам, які здібностям чи ролям.</p><a href="https://cdn.javarush.com/images/article/da234191-c274-4136-99da-eb0c438d0683/original.jpeg" target="_blank"><img data-id="da234191-c274-4136-99da-eb0c438d0683" data-max-width="850" alt="Інтерфейси - це більше, ніж інтерфейси - це поведінка - 1" src="https://cdn.javarush.com/images/article/da234191-c274-4136-99da-eb0c438d0683/800.jpeg" style="width: 850px;"></a>
+<p>Наприклад, такі речі, як машина, велосипед, мотоцикл і колесо найкраще уявити у вигляді класів та об'єктів. А такі здібності як «можу їздити», «можу перевозити людей», «можу стояти» — краще уявити як інтерфейсів. Дивись приклад:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код на Java</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword"><strong>interface</strong></span> <span class="token class-name">Moveable</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">void</span> <span class="token function">move</span><span class="token punctuation">(</span><span class="token class-name">String</span> newAddress<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>- Відповідає здатності пересуватися.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword"><strong>interface</strong></span> <span class="token class-name">Driveable</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">void</span> <span class="token function">drive</span><span class="token punctuation">(</span><span class="token class-name">Driver</span> driver<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>- Відповідає здатності керуватися водієм.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword"><strong>interface</strong></span> <span class="token class-name">Transport</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">void</span> <span class="token function">addStuff</span><span class="token punctuation">(</span><span class="token class-name">Object</span> stuff<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Object</span> <span class="token function">removeStuff</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>- Відповідає можливості перевозити вантажі.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Wheel</span> <span class="token keyword"></span><span class="text-red"><span class="token keyword"><strong>implements</strong></span> <span class="token class-name">Moveable</span></span><span class="token class-name"></span>
+<span class="token punctuation">{</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>- Клас «колесо». Має здатність пересуватися.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Car</span> <span class="token keyword"></span><span class="text-red"><span class="token keyword"><strong>implements</strong></span> <span class="token class-name">Moveable</span><span class="token punctuation">,</span> <span class="token class-name">Drivable</span><span class="token punctuation">,</span> <span class="token class-name">Transport</span></span><span class="token class-name"></span>
+<span class="token punctuation">{</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>- Клас «машина». Має здатність пересуватися, керуватися людиною і перевозити вантажі.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Skateboard</span> <span class="token keyword"></span><span class="text-red"><span class="token keyword"><strong>implements</strong></span> <span class="token class-name">Moveable</span><span class="token punctuation">,</span> <span class="token class-name">Driveable</span></span><span class="token class-name"></span>
+<span class="token punctuation">{</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>- Клас «скейтборд». Має здатність пересуватися і керуватися людиною.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-viola">Інтерфейси дуже спрощують життя програміста. </span>Дуже часто у програмі тисячі об'єктів, сотні класів та всього кілька десятків інтерфейсів – ролей. Ролей мало, які комбінацій – класів – дуже багато.</p>
+<p>Весь сенс у тому, що тобі <span class="text-green">не потрібно писати код для взаємодії з усіма класами. Тобі достатньо взаємодіяти зі своїми ролями (інтерфейсами).</span></p>
+<p>Уяви, що ти – робот-будівельник і в тебе є десятки роботів, кожен з яких може мати кілька професій. Тобі потрібно терміново добудувати стіну. Ти просто береш усіх роботів, які мають здатність «будівельник» і кажеш їм будувати стіну. Тобі байдуже, що це за роботи. Хоч робот-поливалка. Якщо він уміє будувати – нехай іде будувати.</p>
+<p>Ось як це виглядало б у коді:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код на Java</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword"></span><strong><span class="token keyword">static</span> <span class="token keyword">interface</span> <span class="token class-name">WallBuilder</span></strong><span class="token class-name"></span>
+<span class="token punctuation">{</span>
+<span class="token keyword">void</span> <span class="token function">buildWall</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>- Здібність «будівельник стін». Розуміє команду «будувати стіну» — має відповідний метод.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword"></span><strong><span class="token keyword">static</span> <span class="token keyword">class</span></strong><span class="token keyword"></span> <span class="text-user">РабочийРобот</span> <span class="token keyword"></span><span class="text-red"><span class="token keyword">implements</span> <span class="token class-name">WallBuilder</span></span><span class="token class-name"></span>
+<span class="token punctuation">{</span>
+<span class="token keyword">void</span> <span class="token function">buildWall</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+…
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token keyword"></span><strong><span class="token keyword">static</span> <span class="token keyword">class</span></strong><span class="token keyword"></span> <span class="text-user">РоботСторож</span> <span class="token keyword"></span><span class="text-red"><span class="token keyword">implements</span> <span class="token class-name">WallBuilder</span></span><span class="token class-name"></span>
+<span class="token punctuation">{</span>
+<span class="token keyword">void</span> <span class="token function">buildWall</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+…
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token keyword"></span><strong><span class="token keyword">static</span> <span class="token keyword">class</span></strong><span class="token keyword"></span> <span class="text-user">Поливалка</span>
+<span class="token punctuation">{</span>
+…
+<span class="token punctuation">}</span></code></pre></td>
+    <td>- Роботи у яких є ця професія / особливість.
+     <p></p>
+     <p>- Для зручності я зробив класам імена російською. Таке допускається в Java, але вкрай небажано.</p>
+     <p>- поливалка не має здатності будувати стіни (не реалізує інтерфейс WallBuilder).</p></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword"></span><strong><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span></strong><span class="token keyword"></span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token comment">//добавляем всех роботов в список</span>
+ <span class="token class-name">ArrayList</span> <span class="text-green">robots</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="text-green">robots</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="text-user">РабочийРобот</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="text-green">robots</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="text-user">РоботСторож</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="text-green">robots</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="text-user">Поливалка</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ <span class="token comment">//строить стену, если есть такая способность</span>
+ <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">Object</span> robot<span class="token operator">:</span> <span class="text-green">robots</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="text-red">robot <span class="token keyword">instanceof</span> <span class="token class-name">WallBuilder</span></span><span class="token class-name"></span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+   <span class="token class-name"><span class="text-red">WallBuilder</span></span> builder <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name"><span class="text-red">WallBuilder</span></span><span class="token punctuation">)</span> robot<span class="token punctuation">;</span>
+   builder<span class="token punctuation">.</span><span class="token function">buildWall</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>- Як дати їм команду - побудувати стіну?</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">— Страшенно цікаво. Навіть не думав, що інтерфейси – така цікава тема.</span></p>
+<p>- А то! Спільно з поліморфізмом – це взагалі бомба.</p>

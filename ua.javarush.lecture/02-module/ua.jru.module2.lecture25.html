@@ -1,0 +1,86 @@
+<p>Ще один тип пулу потоків - пул запланованих завдань. Судячи з назви, можна припустити, що ми використовуємо цей тип планування запуску тієї чи іншої завдання, розподіленого у часі.</p>
+<p>Цей вид сервісу корисний, коли ми маємо завдання запуску тієї чи іншої активності з умовою закінчення певного часу або періодичності виконання завдання.</p>
+<p>Для використання ми викликаємо <span class="code text-orange">Executors.newScheduledThreadPool(1)</span> .</p>
+<p>Про параметри поговоримо трохи пізніше, зараз нам важливо розуміти, що при виклику цього методу нам повертається об'єкт типу <span class="text-neon"><span class="text-bold"><em>ScheduledExecutorService</em></span></span> .</p>
+<p><span class="text-neon"><span class="text-bold"><em>ScheduledExecutorService</em></span></span> - це інтерфейс, успадкований від<span class="text-green"><span class="text-bold"><em> ExecutorService</em></span></span> .</p>
+<p>У цьому вся інтерфейсі з'являються такі методы:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Метод</th>
+    <th>Пояснення</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">ScheduledFuture</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span>
+<span class="token function">schedule</span><span class="token punctuation">(</span><span class="token class-name">Runnable</span> command<span class="token punctuation">,</span>
+                                  <span class="token keyword">long</span> delay<span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span> unit<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>Створює та виконує одноразову дію, яка виконується після заданої затримки.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">V</span><span class="token punctuation">&gt;</span></span> <span class="token class-name">ScheduledFuture</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">V</span><span class="token punctuation">&gt;</span></span>
+<span class="token function">schedule</span><span class="token punctuation">(</span><span class="token class-name">Callable</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">V</span><span class="token punctuation">&gt;</span></span> callable<span class="token punctuation">,</span>
+                                      <span class="token keyword">long</span> delay<span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span> unit<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>Створює та виконує об'єкт<mark class="green">ScheduledFuture</mark>, що виконується після заданої затримки.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">ScheduledFuture</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span>
+<span class="token function">scheduleAtFixedRate</span><span class="token punctuation">(</span><span class="token class-name">Runnable</span> command<span class="token punctuation">,</span>
+                                             <span class="token keyword">long</span> initialDelay<span class="token punctuation">,</span>
+                                             <span class="token keyword">long</span> period<span class="token punctuation">,</span>
+                                             <span class="token class-name">TimeUnit</span> unit<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>Створює та виконує періодичну дію, яка виконується спочатку після заданої початкової затримки, а потім із заданим періодом; тобто виконання почнеться після <span class="text-green">initialDelay</span> , потім <span class="text-green">initialDelay+period</span> , <span class="text-green">theninitialDelay + 2 * period</span> і так далі.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">ScheduledFuture</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> <span class="token function">scheduleWithFixedDelay</span><span class="token punctuation">(</span><span class="token class-name">Runnable</span> command<span class="token punctuation">,</span>
+                                                <span class="token keyword">long</span> initialDelay<span class="token punctuation">,</span>
+                                                <span class="token keyword">long</span> delay<span class="token punctuation">,</span>
+                                                <span class="token class-name">TimeUnit</span> unit<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>Створює та виконує періодичну дію, яка виконується спочатку після цієї початкової затримки, а потім із заданою затримкою між завершенням одного виконання та початком наступного.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Як бачимо, інтерфейс нам надає можливість запуску завдань із періодичністю чи згодом.</p>
+<p>Далі про метод NewScheduledThreadPool.</p>
+<p>Викликати ми його можемо кількома способами:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token function">newScheduledThreadPool</span><span class="token punctuation">(</span><span class="token keyword">int</span> corePoolSize<span class="token punctuation">)</span></code></pre></td>
+    <td><span class="text-green">corePoolSize</span> - кількість потоків, які потрібно зберігати в пулі, навіть якщо вони простоюють.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token function">newScheduledThreadPool</span><span class="token punctuation">(</span><span class="token keyword">int</span> corePoolSize<span class="token punctuation">,</span> <span class="token class-name">ThreadFactory</span> threadFactory<span class="token punctuation">)</span></code></pre></td>
+    <td>
+     <p><span class="text-green">corePoolSize</span> кількість потоків, які потрібно зберігати в пулі, навіть якщо вони простоюють.</p>
+     <p><span class="text-green">threadFactory</span> - фабрика, що використовується при створенні нових потоків.</p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Обидва методи створять пул потоків, який може планувати виконання команд після заданої затримки або періодичного виконання.</p>
+<p>Давайте розглянемо роботу <span class="text-green"><span class="text-bold"><em>ScheduledThreadPool</em></span></span> на прикладі.</p>
+<p>Наприклад, ми маємо завдання перевіряти пошту кожні 5 секунд, при цьому ця перевірка не повинна позначатися на роботі основної програми та несе за собою можливе додаткове споживання ресурсів.</p>
+<p>Ми маємо клас завдання, який моделює перевірку пошти.</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Task</span> <span class="token keyword">implements</span> <span class="token class-name">Runnable</span> <span class="token punctuation">{</span>
+   <span class="token annotation punctuation">@Override</span>
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Проверяем почту..."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Далі ми створюємо пул потоків і задаємо розклад виконання перевірки.</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">ScheduledExecutorService</span> executorService <span class="token operator">=</span> <span class="token class-name">Executors</span><span class="token punctuation">.</span><span class="token function">newScheduledThreadPool</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+executorService<span class="token punctuation">.</span><span class="token function">scheduleAtFixedRate</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Task</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>SECONDS<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>У висновку бачимо кожні 5 секунд:</p>
+<div class="terminal">
+ Перевіряємо пошту...
+</div>
+<p>Загалом такий пул, як і в прикладі, ми можемо використовувати для виконання “сервісних” періодичних завдань. Сервісними ми називаємо завдання, які мають бути виконані незалежно від роботи основного функціоналу програми.</p>

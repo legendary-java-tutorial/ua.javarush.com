@@ -1,0 +1,134 @@
+<h2>Свій maven-репозиторій на GitHub</h2>
+<p>Розробники можуть завантажувати свою бібліотеку в GitHub, для цього він має спеціальний плагін <span class="text-bold">site-maven-plugin</span> . Давай розглянемо приклад його використання:</p>
+<pre><code>&lt;project&gt;
+    &lt;properties&gt;
+        <span class="text-orange">&lt;github.global.server&gt;github&lt;/github.global.server&gt;
+        &lt;github.maven-plugin&gt;0.9&lt;/github.maven-plugin&gt;</span>
+    &lt;/properties&gt;
+ 
+    &lt;distributionManagement&gt;
+    	<span class="text-neon">&lt;repository&gt;
+            &lt;id&gt;internal.repo&lt;/id&gt;
+        	&lt;name&gt;Temporary Staging Repository&lt;/name&gt;
+            &lt;url&gt;file://${project.build.directory}/mvn-repo&lt;/url&gt;
+    	&lt;/repository&gt;</span>
+    &lt;/distributionManagement&gt;
+ 
+    &lt;build&gt;
+    	&lt;plugins&gt;
+        	<span class="text-red">&lt;plugin&gt;
+                &lt;artifactId&gt;maven-deploy-plugin&lt;/artifactId&gt;
+    	        &lt;version&gt;2.8.1&lt;/version&gt;
+            	&lt;configuration&gt;
+                    <span class="text-bold">&lt;altDeploymentRepository&gt;
+                        internal.repo::default::file://${project.build.directory}/mvn-repo
+                    &lt;/altDeploymentRepository&gt;</span>
+            	&lt;/configuration&gt;
+        	&lt;/plugin&gt;</span>
+        	<span class="text-green">&lt;plugin&gt;
+                &lt;groupId&gt;com.github.github&lt;/groupId&gt;
+                &lt;artifactId&gt;site-maven-plugin&lt;/artifactId&gt;
+                &lt;version&gt;${github.maven-plugin}&lt;/version&gt;
+            	&lt;configuration&gt;
+                	&lt;message&gt;Maven artifacts for ${project.version}&lt;/message&gt;
+                    &lt;noJekyll&gt;true&lt;/noJekyll&gt;
+                    &lt;outputDirectory&gt;${project.build.directory}/mvn-repo&lt;/outputDirectory&gt;
+                	&lt;branch&gt;refs/heads/mvn-repo&lt;/branch&gt;
+                    &lt;includes&gt;**/*&lt;/includes&gt;
+                	&lt;repositoryName&gt;SuperLibrary&lt;/repositoryName&gt;
+                	&lt;repositoryOwner&gt;codegymu-student&lt;/repositoryOwner&gt;
+            	&lt;/configuration&gt;
+            	&lt;executions&gt;
+                	&lt;execution&gt;
+                    	&lt;goals&gt;
+                            &lt;goal&gt;site&lt;/goal&gt;
+                    	&lt;/goals&gt;
+                        &lt;phase&gt;deploy&lt;/phase&gt;
+                	&lt;/execution&gt;
+            	&lt;/executions&gt;
+        	&lt;/plugin&gt;</span>
+    	&lt;/plugins&gt;
+    &lt;/build&gt;
+ 
+&lt;/project&gt;
+</code></pre>
+<p>Розберемося, що тут написано.</p>
+<p><span class="text-neon">Синім кольором виділено створення тимчасового локального репозиторію. </span>Технічно це просто папка, але нам потрібно, щоб Maven розглядав її як окремий репозиторій.</p>
+<p><span class="text-bold">Червоним кольором ми виділабо запуск плагіна maven-deploy-plugin</span> , де вказали, що зібрану бібліотеку потрібно класти саме у цей тимчасовий репозиторій.</p>
+<p><span class="text-green">І, нарешті, зеленим кольором виділено плагін site-maven-plugin</span> , який має взяти всі файли з репозиторію та закомітувати їх на GitHub. Тут знадобляться деякі пояснення. Усі параметри поділяються на дві групи: що заливаємо та куди заливаємо.</p><span class="text-bold">Що заливаємо:</span>
+<ul>
+ <li><span class="text-bold">outputDirectory</span> - директорія, де брати файли для комміту</li>
+ <li><span class="text-bold">includes</span> - задає маску файлів для комміту</li>
+</ul><span class="text-bold">Куди заливаємо:</span>
+<ul>
+ <li><span class="text-bold">repositoryOwner</span> - ім'я власника репозиторію на GitHub</li>
+ <li><span class="text-bold">repositoryName</span> - ім'я репозиторію</li>
+ <li><span class="text-bold">branch</span> - задає гілку репозиторію на GitHub, в яку комітити</li>
+ <li><span class="text-bold">message</span> - повідомлення, яке буде додано при коміті</li>
+</ul>
+<p>Також потрібно вказати логін та пароль до свого репозиторію в Maven <span class="text-bold">setting.xml</span> :</p>
+<pre><code>&lt;settings&gt;
+  &lt;servers&gt;
+    &lt;server&gt;
+  	&lt;id&gt;github&lt;/id&gt;
+      &lt;username&gt;[username]&lt;/username&gt;
+      &lt;password&gt;[password]&lt;/password&gt;
+    &lt;/server&gt;
+  &lt;/servers&gt;
+&lt;/settings&gt;
+</code></pre>
+<p>Щоб підключити (використовувати) бібліотеку з GitHub-репозиторію до іншого проекту, потрібно вказати цей репозиторій у своєму <span class="text-bold">pom.xml</span> :</p>
+<pre><code>&lt;repositories&gt;
+    &lt;repository&gt;
+        &lt;id&gt;[name-project]-mvn-repo&lt;/id&gt;
+        &lt;url&gt;https://raw.github.com/[username]/[name-project]/mvn-repo/&lt;/url&gt;
+    	&lt;snapshots&gt;
+            &lt;enabled&gt;true&lt;/enabled&gt;
+            &lt;updatePolicy&gt;always&lt;/updatePolicy&gt;
+    	&lt;/snapshots&gt;
+	&lt;/repository&gt;
+&lt;/repositories&gt;
+</code></pre>
+<p>Після цього Maven розумітиме, звідки брати бібліотеку.</p>
+<ul>
+ <li><span class="text-bold">[name-project]</span> – це ім'я проекту, у нашому випадку SuperLibrary</li>
+ <li><span class="text-bold">[username]</span> – це логін на GitHub, у прикладі це codegym-user</li>
+</ul>
+<h2>Запаковуємо збирання в Docker образ</h2>
+<p>Ми живемо в новий час, коли проекти в результаті збирання можу кластися в Maven-репозиторій, а можуть і в docker storage.</p>
+<p>Щоб подружити Maven та Docker, нам знадобиться плагін <span class="text-bold">docker-maven-plugin</span> . Нічого складного:</p>
+<pre><code>  &lt;build&gt;
+    &lt;plugins&gt;
+  	  &lt;plugin&gt;
+        <span class="text-green">&lt;groupId&gt;com.spotify&lt;/groupId&gt;
+        &lt;artifactId&gt;docker-maven-plugin&lt;/artifactId&gt;
+    	&lt;version&gt;0.4.10&lt;/version&gt;</span>
+    	&lt;configuration&gt;
+          <span class="text-red">&lt;dockerDirectory&gt;${project.basedir}&lt;/dockerDirectory&gt;
+      	  &lt;imageName&gt;codegym/${project.artifactId}&lt;/imageName&gt;</span>
+    	&lt;/configuration&gt;
+    	&lt;executions&gt;
+      	  <span class="text-neon">&lt;execution&gt;
+            &lt;phase&gt;package&lt;/phase&gt;
+        	&lt;goals&gt;
+          	&lt;goal&gt;build&lt;/goal&gt;
+        	&lt;/goals&gt;
+      	  &lt;/execution&gt;</span>
+    	&lt;/executions&gt;
+  	  &lt;/plugin&gt;
+    &lt;/plugins&gt;
+  &lt;/build&gt;
+</code></pre>
+<p><span class="text-neon">Синім виділено момент, де ми додали goal bulid у package-фазу збірки. </span>Його можна викликати за допомогою команди <span class="text-bold">mvn docker:build</span> .</p>
+<p>Тег <span class="text-bold">dockerDirectory</span> визначає папку, де знаходиться Dockerfile. А ім'я образу задається за допомогою тега <span class="text-bold">imageName</span> .</p>
+<p>Якщо проект упакований у jar-файл, то docker-файл виглядатиме приблизно так:</p>
+<pre><code>FROM java:11
+EXPOSE 8080
+ADD /target/demo.jar demo.jar
+ENTRYPOINT ["java","-jar","demo.jar"]
+</code></pre>
+<p>Якщо ж ти пакуєш web-додаток, то може знадобитися додати Tomcat:</p>
+<pre><code>FROM tomcat8
+ADD sample.war ${CATALINA_HOME}/webapps/ROOT.war
+CMD ${CATALINA_HOME}/bin/catalina.sh run
+</code></pre>

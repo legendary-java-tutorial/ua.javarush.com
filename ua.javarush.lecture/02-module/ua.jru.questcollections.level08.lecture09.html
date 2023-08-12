@@ -1,0 +1,112 @@
+<p>— Так ось, давай зараз створимо парочку анотацій і використовуємо їх.</p>
+<p>Наприклад, ми пишемо двигун для гри. При цьому у нас у грі дуже багато персонажів, які поділяються на три категорії: ельфи, охорона палацу та лиходій.</p>
+<p>У процесі розробки гри можуть додаватися нові персонажі, і при цьому змінюватиметься баланс гри. Тому було дуже зручно приписати кожному «класу персонажа» свою інструкцію з описом його фізичних характеристик.</p>
+<p>Тоді можна було б дуже просто симулювати бої між різними персонажами та/або швидко прорахувати баланс гри.</p>
+<p><span class="text-user">— Згодний – це гарна ідея.</span></p>
+<p>— Давай створимо анотацію <span class="text-red">&nbsp;@Person</span> , де зберігатимемо: життя, силу, магію, а також параметри атаки та захисту. Ось як би виглядала така інструкція:</p>
+<div class="code-heading">
+ приклад
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@<strong>interface</strong></span> <span class="token class-name">Person</span>
+<span class="token punctuation">{</span>
+ <span class="token class-name">String</span> <span class="token function">name</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword"><strong>default</strong></span> <span class="token string">""</span><span class="token punctuation">;</span>
+ <span class="token keyword">int</span> <span class="token function">live</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token keyword">int</span> <span class="token function">strength</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token keyword">int</span> <span class="token function">magic</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword"><strong>default</strong></span> <span class="token number">0</span><span class="token punctuation">;</span>
+ <span class="token keyword">int</span> <span class="token function">attack</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword"><strong>default</strong></span> <span class="token number">0</span><span class="token punctuation">;</span>
+ <span class="token keyword">int</span> <span class="token function">defense</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>А ось так виглядав би опис, наприклад, лісового ельфа-чарівника:</p>
+<div class="code-heading">
+ приклад
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation"></span><span class="text-red"><span class="token annotation punctuation">@Person</span><span class="token punctuation">(</span>live<span class="token operator">=</span><span class="token number">100</span><span class="token punctuation">,</span> strength<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">,</span> magic<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">,</span> attack<span class="token operator">=</span><span class="token number">20</span><span class="token punctuation">,</span> defense<span class="token operator">=</span><span class="token number">20</span><span class="token punctuation">)</span></span><span class="token punctuation"></span>
+<span class="token keyword">class</span> <span class="token class-name">Elf</span>
+<span class="token punctuation">{</span>
+ …
+<span class="token punctuation">}</span></code></pre>
+<p>А ось так виглядав би опис головного лиходія:</p>
+<div class="code-heading">
+ приклад
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation"></span><span class="text-red"><span class="token annotation punctuation">@Person</span><span class="token punctuation">(</span>live<span class="token operator">=</span><span class="token number">1000</span><span class="token punctuation">,</span> strength<span class="token operator">=</span><span class="token number">150</span><span class="token punctuation">,</span> magic<span class="token operator">=</span><span class="token number">250</span><span class="token punctuation">,</span> attack<span class="token operator">=</span><span class="token number">99</span><span class="token punctuation">,</span> defense<span class="token operator">=</span><span class="token number">99</span><span class="token punctuation">)</span></span><span class="token punctuation"></span>
+<span class="token keyword">class</span> <span class="token class-name">EvilMaster</span>
+<span class="token punctuation">{</span>
+ …
+<span class="token punctuation">}</span></code></pre>
+<p><span class="text-user">- Ясно. Чимось нагадує інтерфейси-маркери.</span></p>
+<p>— Так, тільки, по-перше, нічого не успадковувати, по-друге, в анотаціях можна зберігати додаткову інформацію.</p>
+<p>Є ще&nbsp; <span class="text-corporate text-red">кілька інструкцій, якими позначаються інструкції. Ось вони:</span></p>
+<p><span class="text-corporate">Анотація @Retention вказує, де буде видно нашу анотацію: тільки у вихідному коді, ще й після компіляції, буде доступна навіть під час виконання програми.</span></p>
+<p><span class="text-green">Анотація @Target показує, що можна помітити цією інструкцією: клас, поле, метод, параметр методу тощо.</span></p>
+<p><span class="text-viola">Якщо хочемо, щоб наша інструкція діяла як на зазначений їй клас, а й у його спадкоємців, треба помітити її @Inherited.</span></p>
+<p>Ось як виглядатиме наша інструкція <span class="text-red">&nbsp;@Person.</span></p>
+<div class="code-heading">
+ приклад
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation"></span><span class="text-red"><span class="token annotation punctuation">@Target</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token class-name">ElementType</span><span class="token punctuation">.</span>TYPE<span class="token punctuation">)</span>
+<span class="token annotation punctuation">@Retention</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token class-name">RetentionPolicy</span><span class="token punctuation">.</span>RUNTIME<span class="token punctuation">)</span></span><span class="token punctuation"></span>
+<span class="token annotation punctuation">@interface</span> <span class="token class-name">Person</span>
+<span class="token punctuation">{</span>
+ <span class="token class-name">String</span> <span class="token function">name</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">default</span> <span class="token string">""</span><span class="token punctuation">;</span>
+ <span class="token keyword">int</span> <span class="token function">live</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token keyword">int</span> <span class="token function">strength</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token keyword">int</span> <span class="token function">magic</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">default</span> <span class="token number">0</span><span class="token punctuation">;</span>
+ <span class="token keyword">int</span> <span class="token function">attack</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">default</span> <span class="token number">0</span><span class="token punctuation">;</span>
+ <span class="token keyword">int</span> <span class="token function">defense</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p><span class="text-user">— Це було дуже цікаво, дякую, Ріша.</span></p>
+<p><span class="text-user">А як працювати з цими інструкціями у програмі? Як їх використати? Як прочитати їх значення?</span></p>
+<p>- Для цього прийнято використовувати&nbsp; <strong>Reflection</strong> .</p>
+<p>Ось як виглядало б визначення того, який із персонажів сильніший:</p>
+<div class="code-heading">
+ приклад
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">fight</span><span class="token punctuation">(</span><span class="token class-name">Class</span> <span class="text-user">first</span><span class="token punctuation">,</span> <span class="token class-name">Class</span> <span class="text-green">second</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="text-user">first</span><span class="token punctuation">.</span><span class="token function">isAnnotationPresent</span><span class="token punctuation">(</span><span class="token class-name">Person</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"first param is not game person"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="text-green">second</span><span class="token punctuation">.</span><span class="token function">isAnnotationPresent</span><span class="token punctuation">(</span><span class="token class-name">Person</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"second param is not game person"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ <span class="token class-name"><span class="text-red">Person</span></span> <span class="text-user">firstPerson</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name"><span class="text-red">Person</span></span><span class="token punctuation">)</span> <span class="text-user">first</span><span class="token punctuation">.</span><span class="token function"></span><span class="text-red"><span class="token function">getAnnotation</span><span class="token punctuation">(</span><span class="token class-name">Person</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+ <span class="token class-name"><span class="text-red">Person</span></span> <span class="text-green">secondPerson</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name"><span class="text-red">Person</span></span><span class="token punctuation">)</span> <span class="text-green">second</span><span class="token punctuation">.</span><span class="token function"></span><span class="text-red"><span class="token function">getAnnotation</span><span class="token punctuation">(</span><span class="token class-name">Person</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+
+ <span class="token keyword">int</span> <span class="text-user">firstAttack</span> <span class="token operator">=</span> <span class="text-user">firstPerson</span><span class="token punctuation">.</span><span class="token function">attack</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> firstPerson<span class="token punctuation">.</span><span class="token function">strength</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="text-user">firstPerson</span><span class="token punctuation">.</span><span class="token function">magic</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token keyword">int</span> <span class="text-user">firstPower</span> <span class="token operator">=</span> <span class="text-user">firstPerson</span><span class="token punctuation">.</span><span class="token function">live</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="text-user">firstPerson</span><span class="token punctuation">.</span><span class="token function">defense</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="text-user">firstAttack</span><span class="token punctuation">;</span>
+
+ <span class="token keyword">int</span> <span class="text-green">secondAttack</span> <span class="token operator">=</span><span class="text-green"> secondPerso</span>n<span class="token punctuation">.</span><span class="token function">attack</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="text-green">secondPerson</span><span class="token punctuation">.</span><span class="token function">strength</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="text-green">secondPerso</span>n<span class="token punctuation">.</span><span class="token function">magic</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token keyword">int</span> <span class="text-green">secondPower</span> <span class="token operator">=</span><span class="text-green"> secondPerson</span><span class="token punctuation">.</span><span class="token function">live</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="text-green">secondPerson</span><span class="token punctuation">.</span><span class="token function">defense</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="text-green">secondAttack</span><span class="token punctuation">;</span>
+
+ <span class="token keyword">return</span> <span class="text-user">firstPower</span> <span class="token operator">&gt;</span> <span class="text-green">secondPower</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Ось методи класу, які нам потрібні:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Методи</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token function"><strong>isAnnotationPresent</strong></span><span class="token punctuation">(</span><span class="token class-name">Annotation</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span></code></pre></td>
+    <td>Перевіряє, якщо клас має потрібну інструкцію</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token function"><strong>getAnnotation</strong></span><span class="token punctuation">(</span><span class="token class-name">Annotation</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span></code></pre></td>
+    <td>Повертає об'єкт-анотацію, якщо така клас має.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">Annotation</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token function"><strong>getAnnotations</strong></span><span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre></td>
+    <td>Повертає масив усіх анотацій класу</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">- Чудово. А я і не думав, що отримати інструкцію так просто.</span></p>
+<p>- Ага. Просто викликав метод getAnnotation у об'єкта класу і передав туди потрібний тобі тип анотації.</p>
+<p>На цьому сьогодні все.</p>
+<p><span class="text-user">— Дякую, Ріша, це була дуже цікава лекція. І тепер я вже не боюся анотацій, як води.</span></p>

@@ -1,0 +1,109 @@
+<h2>Знайомство з фільтрами</h2>
+<p>Але це ще не все. Щоправда, ти ж не думаєш, що сервлети влаштовані так просто?</p>
+<p>Крім сервлетів, які ми вже розібрали, є ще так звані службові сервлети - <strong>фільтри</strong> . Вони дуже схожі на сервлети, але їхнє основне завдання — допомагати сервлетам обробляти запити.</p>
+<p>Фільтр це як секретар, а сервлет – директор. Перед тим, як документ потрапить на стіл директорові, він пройде через руки секретаря. І після того, як директор його підпише, він знову потрапить до секретаря, вже як вихідна кореспонденція, наприклад.</p>
+<p>Такий секретар може відбраковувати частину запитів до директора (наприклад, спам). Або давати стандартні відповіді на відомі йому питання (директора немає на місці). І так далі. Більше того, таких секретарів може бути кілька: один може фільтрувати спам одразу для всіх директорів, інший перекидати запити між різними директорами тощо.</p>
+<p>Також працюють і фільтри:</p><img data-max-width="512" data-id="84aec919-de31-458b-9b17-987c943f92a3" alt="службові сервлети”" src="https://cdn.javarush.com/images/article/84aec919-de31-458b-9b17-987c943f92a3/512.jpeg" style="width: 512px;">
+<h2>Класи Filter, FilterChain, FilterConfig</h2>
+<p>Фільтри дуже схожі на сервлет, але з парою невеликих відмінностей. Щоб написати свій фільтр, потрібно успадковуватись від інтерфейсу <code>javax.servlet.Filter</code>.</p>
+<p>Фільтр також має методи <code>init()</code>і <code>destroy()</code>. Замість методу <code>service()</code>у фільтра є метод <code>doFilter()</code>. І навіть є свій клас FilterConfig. Фільтр також додається в сервлет у файлі web.xml або за допомогою анотації @WebFilter.</p>
+<p>Список методів:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th></th>
+    <th>Методи</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>1</td>
+    <td><code>init(FilterConfig config)</code></td>
+    <td>ініціалізація фільтра</td>
+   </tr>
+   <tr>
+    <td>2</td>
+    <td><code>destroy()</code></td>
+    <td>вивантаження фільтра</td>
+   </tr>
+   <tr>
+    <td>3</td>
+    <td><code>doFilter(ServletRequest , ServletResponse, FilterChain)</code></td>
+    <td>обробка (фільтрація) запиту</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>У чому ж відмінність сервлета та фільтра?</p>
+<p>Фільтрів може бути кілька і вони послідовно обробляють запит (і відповідь). Вони об'єднані в так званий ланцюжок — і для них є навіть спеціальний клас <code>FilterChain</code>.</p>
+<p>Після обробки запиту методі <code>doFilter()</code>потрібно викликати метод <code>doFilter()</code>наступного фільтра в ланцюжку. Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyFilter</span> <span class="token keyword">implements</span> <span class="token class-name">Filter</span> <span class="token punctuation">{</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token class-name">FilterConfig</span> arg0<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">ServletException</span> <span class="token punctuation">{</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">doFilter</span><span class="token punctuation">(</span><span class="token class-name">ServletRequest</span> req<span class="token punctuation">,</span> <span class="token class-name">ServletResponse</span> resp<span class="token punctuation">,</span> <span class="token class-name">FilterChain</span> chain<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+
+      <span class="token class-name">PrintWriter</span> out <span class="token operator">=</span> resp<span class="token punctuation">.</span><span class="token function">getWriter</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"Дописуємо щось перед тілом відповіді"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      chain<span class="token punctuation">.</span><span class="token function">doFilter</span><span class="token punctuation">(</span>req<span class="token punctuation">,</span> resp<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//викликаємо наступний фільтр у ланцюжку</span>
+
+      out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"Дописуємо щось після тіла відповіді"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">destroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Взагалі так дописувати тіло відповіді <span class="text-red">не можна</span> . Формально фільтри та сервлети незалежні один від одного і можуть змінюватись незалежно. Їх можуть писати різні розробники у різний час. Функція фільтрів саме службова, наприклад:</p>
+<ul>
+ <li>Логування всіх вхідних запитів (і відповідей)</li>
+ <li>Стиснення даних</li>
+ <li>Шифрування (і розшифрування) даних</li>
+ <li>Валідація даних запиту</li>
+ <li>Додавання/видалення потрібних заголовків</li>
+ <li>Перенаправлення запитів</li>
+ <li>Контроль доступу (перевірка, чи залогінений користувач)</li>
+</ul>
+<h2>Клас RequestDispatcher</h2>
+<p>Іноді в процесі роботи фільтра всередині методу <code>doFilter()</code> <span class="text-red">може виникнути необхідність викликати інший сервлет</span> . Для цього контейнер має спеціальний об'єкт <code>RequestDispatcher</code>.</p>
+<p>Отримати його можна двома способами:</p>
+<ul>
+ <li>У об'єкту<code>HttpServletRequest</code></li>
+ <li>У об'єкту<code>ServletContext</code></li>
+</ul>
+<p>Цей об'єкт можна використовувати для <span class="text-green">перенаправлення існуючого запиту на інший сервлет</span> . Наприклад, з'ясувалося, що користувач не авторизований і хочемо показати йому сторінку з авторизацією. Ну чи сталася помилка на сервері і ми хочемо відобразити користувачу error-сторінку :)</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HelloServlet</span> <span class="token keyword">extends</span> <span class="token class-name">HttpServlet</span> <span class="token punctuation">{</span>
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">doGet</span><span class="token punctuation">(</span><span class="token class-name">HttpServletRequest</span> request<span class="token punctuation">,</span> <span class="token class-name">HttpServletResponse</span> response<span class="token punctuation">)</span>  <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+           <span class="token class-name">String</span> path <span class="token operator">=</span> <span class="token string">"/error.html"</span><span class="token punctuation">;</span>
+           <span class="token class-name">ServletContext</span> servletContext <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getServletContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token class-name">RequestDispatcher</span> requestDispatcher <span class="token operator">=</span> servletContext<span class="token punctuation">.</span><span class="token function">getRequestDispatcher</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">;</span>
+           requestDispatcher<span class="token punctuation">.</span><span class="token function">forward</span><span class="token punctuation">(</span>request<span class="token punctuation">,</span> response<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Також ти можеш викликати <code>RequestDispatcher</code>із фільтра.</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyFilter</span> <span class="token keyword">implements</span> <span class="token class-name">Filter</span> <span class="token punctuation">{</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token class-name">FilterConfig</span> arg0<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">ServletException</span> <span class="token punctuation">{</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">doFilter</span><span class="token punctuation">(</span><span class="token class-name">ServletRequest</span> req<span class="token punctuation">,</span> <span class="token class-name">ServletResponse</span> resp<span class="token punctuation">,</span> <span class="token class-name">FilterChain</span> chain<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+           <span class="token class-name">String</span> path <span class="token operator">=</span> <span class="token string">"/error.html"</span><span class="token punctuation">;</span>
+           <span class="token class-name">ServletContext</span> servletContext <span class="token operator">=</span> req<span class="token punctuation">.</span><span class="token function">getServletContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token class-name">RequestDispatcher</span> requestDispatcher <span class="token operator">=</span> servletContext<span class="token punctuation">.</span><span class="token function">getRequestDispatcher</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <s></s>requestDispatcher<span class="token punctuation">.</span><span class="token function">forward</span><span class="token punctuation">(</span>req<span class="token punctuation">,</span> resp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">destroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Зверніть увагу, що запит буде оброблений у методі <code>forward()</code>і викликати <code>doFilter()</code>після використання <code>RequestDispatcher</code>не потрібно.</p>
+<h2>Порівняння редиректу та форварда</h2>
+<p>І ще один важливий момент. Якщо ти хочеш у своєму сервлеті перенаправити користувача на інший URI, зробити це можна двома способами:</p>
+<ul>
+ <li><code>redirect</code></li>
+ <li><code>forward</code></li>
+</ul>
+<p>Ми вже їх розбирали, але для зручності проговорю це ще раз.</p>
+<p>Коли ти виконуєш <strong>redirect</strong> через виклик <code>response.sendRedirect("посилання")</code>, то сервер відсилає браузеру (клієнту) відповідь <code>302</code>та вказане посилання. А браузер, проаналізувавши відповідь сервера, завантажує передане тобою посилання. Тобто, посилання в браузері змінюється на нову.</p>
+<p>Якщо ти виконуєш <strong>forward</strong> через виклик <code>requestDispatcher.forward()</code>, то новий запит виконується всередині контейнера, і його відповідь твій сервлет відсилає браузеру (клієнту) як відповідь сервлета. При цьому браузер отримує відповідь від нового сервлета, але посилання у браузері не змінюється.</p>

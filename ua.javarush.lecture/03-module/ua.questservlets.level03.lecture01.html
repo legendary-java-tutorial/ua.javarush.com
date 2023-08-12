@@ -1,0 +1,94 @@
+<h2>Підключаємо фреймворк JUnit</h2>
+<p>Для тестування Java-коду ми маємо шикарний фреймворк під назвою <span class="text-bold">JUnit</span> . Він відмінно працює, постійно оновлюється, дуже популярний і, звісно, ​​з ним дуже щільно інтегрована Intellij IDEA.</p>
+<p>Зараз усі користуються п'ятою версією цього фреймворку <span class="text-bold">JUnit 5</span> , хоча в багатьох проектах ти ще можеш зустріти його четверту версію. Вони не сильно відрізняються, але ми все одно розглянемо останню. Думаю, на той час, коли ти почнеш активно писати тести, ти схвалиш мій вибір.</p>
+<p>Отже, як додати до проекту JUnit? Після вивчення Maven це буде просто: просто додай цей код до свого pom.xml:</p>
+<pre><code><span class="text-viola">&lt;dependency&gt;
+    &lt;groupId&gt;org.junit.jupiter&lt;/groupId&gt;
+    &lt;artifactId&gt;junit-jupiter-engine&lt;/artifactId&gt;
+	&lt;version&gt;5.8.1&lt;/version&gt;
+	&lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;</span>
+</code></pre>
+<p>До речі, якщо ти хочеш, щоб Maven на етапі складання ( <span class="text-bold">test stage</span> ) запустив твої тести, то в pom.xml потрібно додати ще один фрагмент:</p>
+<pre><code><span class="text-viola">&lt;plugin&gt;
+    &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
+	&lt;version&gt;2.19.1&lt;/version&gt;
+	&lt;dependencies&gt;
+    	&lt;dependency&gt;
+            &lt;groupId&gt;org.junit.platform&lt;/groupId&gt;
+            &lt;artifactId&gt;junit-platform-surefire-provider&lt;/artifactId&gt;
+            &lt;version&gt;1.3.2&lt;/version&gt;
+    	&lt;/dependency&gt;
+	&lt;/dependencies&gt;
+&lt;/plugin&gt;</span>
+</code></pre>
+<h2>Анотація @Test</h2>
+<p>Допустимо, у тебе є клас, який ти хочеш протестувати. Як це найкраще зробити? Давай почнемо з якогось прикладу, бо складно тестувати абстрактний клас :)</p>
+<p>Припустимо, у нас є клас <span class="code"><span class="text-green">Calculator</span></span> , який вміє виконувати 4 базові операції: додавання, віднімання, множення та поділ. Напишемо його:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Calculator</span> <span class="token punctuation">{</span>
+    	<span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">int</span> a<span class="token punctuation">,</span> <span class="token keyword">int</span> b<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        	<span class="token keyword">return</span> a<span class="token operator">+</span>b<span class="token punctuation">;</span>
+    	<span class="token punctuation">}</span>
+
+    	<span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">sub</span><span class="token punctuation">(</span><span class="token keyword">int</span> a<span class="token punctuation">,</span> <span class="token keyword">int</span> b<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        	<span class="token keyword">return</span> a<span class="token operator">-</span>b<span class="token punctuation">;</span>
+    	<span class="token punctuation">}</span>
+
+    	<span class="token keyword">public</span> <span class="token keyword">int</span> mul <span class="token punctuation">(</span><span class="token keyword">int</span> a<span class="token punctuation">,</span> <span class="token keyword">int</span> b<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        	<span class="token keyword">return</span> a<span class="token operator">*</span>b<span class="token punctuation">;</span>
+    	<span class="token punctuation">}</span>
+
+    	<span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">div</span><span class="token punctuation">(</span><span class="token keyword">int</span> a<span class="token punctuation">,</span> <span class="token keyword">int</span> b<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        	<span class="token keyword">return</span> a<span class="token operator">/</span>b<span class="token punctuation">;</span>
+    	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Ми хочемо протестувати методи цього класу. Мало, у майбутньому наміняють чогось і все перестане працювати. Як нам написати для нього випробування?</p>
+<p>Нам потрібно створити ще один клас. <span class="text-neon">Для цього зазвичай беруть те саме ім'я і додають суфікс Test</span> . До кожного методу потрібно додати хоча б один тестовий метод. Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">CalculatorTest</span> <span class="token punctuation">{</span>
+   	<span class="token annotation punctuation">@Test</span>
+    	<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">add</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    	<span class="token punctuation">}</span>
+   	<span class="token annotation punctuation">@Test</span>
+    	<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">sub</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token punctuation">}</span>
+   	<span class="token annotation punctuation">@Test</span>
+    	<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">mul</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    	<span class="token punctuation">}</span>
+   	<span class="token annotation punctuation">@Test</span>
+    	<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">div</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Раніше існувала вимога, щоб ім'я методу починалося зі слова <span class="text-bold">test</span> , але тепер це не потрібно.</p>
+<h2>Приклади тестів JUnit</h2>
+<p>Давай напишемо кілька прикладів, у яких протестуємо методи нашого класу <span class="code"><span class="text-green">CalculatorTest</span></span> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">CalculatorTest</span> <span class="token punctuation">{</span>
+   	<span class="token annotation punctuation">@Test</span>
+    	<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">add</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        	<span class="token class-name">Calculator</span> calc <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Calculator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        	<span class="token keyword">int</span> result <span class="token operator">=</span> calc<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        	<span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    	<span class="token punctuation">}</span>
+
+   	<span class="token annotation punctuation">@Test</span>
+    	<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">sub</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        	<span class="token class-name">Calculator</span> calc <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Calculator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        	<span class="token keyword">int</span> result <span class="token operator">=</span> calc<span class="token punctuation">.</span><span class="token function">sub</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        	<span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+   	<span class="token annotation punctuation">@Test</span>
+    	<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">mul</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        	<span class="token class-name">Calculator</span> calc <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Calculator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        	<span class="token keyword">int</span> result <span class="token operator">=</span> calc<span class="token punctuation">.</span><span class="token function">mul</span><span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        	<span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token number">15</span><span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    	<span class="token punctuation">}</span>
+
+   	<span class="token annotation punctuation">@Test</span>
+    	<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">div</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        	<span class="token class-name">Calculator</span> calc <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Calculator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        	<span class="token keyword">int</span> result <span class="token operator">=</span> calc<span class="token punctuation">.</span><span class="token function">div</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        	<span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Ось так виглядає типовий тест із використанням JUnit. З цікавого: тут використовується спеціальний метод <span class="code text-orange">assertEquals()</span> : він порівнює передані йому параметри, про що говорить слово equals у його назві.</p>
+<p>Якщо параметри, передані <span class="code text-orange">assertEquals()</span> , нерівні, то метод кине виняток і тест буде вважатися проваленим. Цей виняток не завадить виконанню інших тестів.</p>

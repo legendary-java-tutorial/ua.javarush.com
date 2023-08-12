@@ -1,0 +1,353 @@
+<h2>Приклад створення об'єкта через Class.newInstance()</h2>
+<p>Уяви: перед тобою постало завдання: потрібно створити об'єкт, використовуючи рефлексію. Приступаємо?</p>
+<p>Почнемо з початкового класу, який ми хочемо отримати:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Employee</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> name<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> surname<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">int</span> age<span class="token punctuation">;</span>
+
+    <span class="token punctuation">{</span>
+        age <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+        name <span class="token operator">=</span> <span class="token string">"Ivan"</span><span class="token punctuation">;</span>
+        surname <span class="token operator">=</span> <span class="token string">"Ivanov"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">Employee</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">,</span> <span class="token class-name">String</span> surname<span class="token punctuation">,</span> <span class="token keyword">int</span> age<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>surname <span class="token operator">=</span> surname<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> name<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setName</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getSurname</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> surname<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setSurname</span><span class="token punctuation">(</span><span class="token class-name">String</span> surname<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>surname <span class="token operator">=</span> surname<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getAge</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> age<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setAge</span><span class="token punctuation">(</span><span class="token keyword">int</span> age<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token string">"Employee{"</span> <span class="token operator">+</span>
+                <span class="token string">"name='"</span> <span class="token operator">+</span> name <span class="token operator">+</span> <span class="token string">'\''</span> <span class="token operator">+</span>
+                <span class="token string">", surname='"</span> <span class="token operator">+</span> surname <span class="token operator">+</span> <span class="token string">'\''</span> <span class="token operator">+</span>
+                <span class="token string">", age="</span> <span class="token operator">+</span> age <span class="token operator">+</span>
+                <span class="token string">'}'</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Це буде наш клас, де є кілька полів, конструктор з параметрами, гетери та сеттери, метод <span class="code text-orange">toString()</span> та блок ініціалізації. Тепер приступимо до другої частини - створення об'єкта за допомогою рефлексії. Перший спосіб, який ми розберемо, буде реалізовано через <span class="code text-orange">Class.newInstance()</span> .</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Main</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InstantiationException</span><span class="token punctuation">,</span> <span class="token class-name">IllegalAccessException</span> <span class="token punctuation">{</span>
+        <span class="token class-name">Employee</span> employee <span class="token operator">=</span> <span class="token class-name">Employee</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">newInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"age is - "</span> <span class="token operator">+</span>  employee<span class="token punctuation">.</span><span class="token function">getAge</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Відмінно, запускаємо наш код і чекаємо на виведення віку з ініціалізатора. Але отримуємо помилку про відсутність конструктора за умовчанням. Виходить, за допомогою цього методу ми можемо отримати лише об'єкт, створений за допомогою стандартного конструктора. Давайте додамо конструктор за промовчанням для нашого класу і протестуємо код ще раз.</p>
+<p>Повідомлення про помилку:</p><img data-max-width="1080" data-id="861bfa0c-3dfe-4f92-85e2-bb89f3b5160c" alt="" src="https://cdn.javarush.com/images/article/861bfa0c-3dfe-4f92-85e2-bb89f3b5160c/1080.jpeg" style="width: 1080px;">
+<p>Код нового конструктора:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token class-name">Employee</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token punctuation">}</span></code></pre>
+<p>Результат програми після додавання конструктора:</p>
+<div class="terminal">
+ age is - -1
+</div>
+<p>Дуже добре, ми розібралися, як працює цей метод. Тепер давай зазирнемо до нього під капот. Відкриваємо документацію і бачимо, що наш метод вже deprecated ( <em>англ. - застарілий</em> ):</p><img data-max-width="1080" data-id="b325ad00-c1a5-4573-bd8b-294789989ed3" alt="" src="https://cdn.javarush.com/images/article/b325ad00-c1a5-4573-bd8b-294789989ed3/1080.jpeg" style="width: 1080px;">
+<p>А ще може викинути винятки <span class="text-red"><span class="text-bold">InstantiationException</span></span> , <span class="text-red"><span class="text-bold">IllegalAccessException</span></span> . Тому в документації пропонують використовувати другий спосіб створення об'єкта, а саме <span class="code text-orange">Constructor.newInstance()</span> . Давай розберемо роботу класу <span class="code"><span class="text-green">Constructor</span></span> та поговоримо про нього докладніше.</p>
+<h2>Методи getConstructors та getDeclaredConstructors</h2>
+<p>Щоб працювати з класом <span class="code"><span class="text-green">Constructor</span></span> , нам потрібно спочатку отримати його. Для цього ми маємо два методи: <span class="code text-orange">getConstructors</span> і <span class="code text-orange">getDeclaredConstructors</span> .</p>
+<p>Перший повертає список публічних конструкторів як масиву, а другий повертає список всіх конструкторів класу як масиву.</p>
+<p>Давай додамо трохи приватності нашому класу, а саме зробимо кілька приватних конструкторів для відображення наших методів.</p>
+<p>Додаємо трохи приватних конструкторів:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">private</span> <span class="token class-name">Employee</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">,</span> <span class="token class-name">String</span> surname<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>surname <span class="token operator">=</span> surname<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>У структурі нашого класу добре видно, що з конструкторів приватний:</p><img data-max-width="512" data-id="47d3f047-fd52-4300-a6e6-6127c165a84b" alt="" src="https://cdn.javarush.com/images/article/47d3f047-fd52-4300-a6e6-6127c165a84b/512.jpeg" style="width: 512px;">
+<p>Тестуємо роботу наших методів:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Main</span> <span class="token punctuation">{</span>
+	  <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	      <span class="token class-name">Class</span> employeeClass <span class="token operator">=</span> <span class="token class-name">Employee</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">;</span>
+
+	      <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"getConstructors:"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	      <span class="token function">printAllConstructors</span><span class="token punctuation">(</span>employeeClass<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+	      <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"\n"</span> <span class="token operator">+</span><span class="token string">"getDeclaredConstructors:"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	      <span class="token function">printDeclaredConstructors</span><span class="token punctuation">(</span>employeeClass<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	  <span class="token punctuation">}</span>
+
+	  <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">printDeclaredConstructors</span><span class="token punctuation">(</span><span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> c<span class="token punctuation">)</span><span class="token punctuation">{</span>
+	      <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">Constructor</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> constructor <span class="token operator">:</span> c<span class="token punctuation">.</span><span class="token function">getDeclaredConstructors</span><span class="token punctuation">(</span><span class="token punctuation">)</span>   <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	          <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>constructor<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	      <span class="token punctuation">}</span>
+	  <span class="token punctuation">}</span>
+
+	  <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">printAllConstructors</span><span class="token punctuation">(</span><span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> c<span class="token punctuation">)</span><span class="token punctuation">{</span>
+	      <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">Constructor</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> constructor <span class="token operator">:</span> c<span class="token punctuation">.</span><span class="token function">getConstructors</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	          <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>constructor<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	      <span class="token punctuation">}</span>
+	  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>І отримуємо такий результат:</p>
+<div class="terminal">
+ getConstructors: 
+ <br>
+  public com.codegym.Employee(java.lang.String,java.lang.String,int) 
+ <br>
+  public.com.codegym.Employee() 
+ <br>
+ <br>
+  getDeclaredConstructors: 
+ <br>
+  private com.codegym.Employee(java.lang.String,java.lang .String) 
+ <br>
+  public com.codegym.Employee(java.lang.String,java.lang.String,int) 
+ <br>
+  public com.codegym.Employee()
+</div>
+<p>Добре, таким чином ми отримуємо доступ до класу <span class="code"><span class="text-green">Constructor</span></span> . Тепер можемо поговорити про його можливості.</p>
+<h2>Клас java.lang.reflect.Constructor, його основні методи</h2>
+<p>Погляньмо на основні методи і як вони працюють:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Метод</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">getName()</span></td>
+    <td>Повертає ім'я цього конструктора у вигляді рядка.</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">getModifiers()</span></td>
+    <td>Повертає модифікатори мови Java як числа.</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">getExceptionTypes()</span></td>
+    <td>Повертає масив об'єктів класу, які є типами винятків, оголошених конструктором.</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">getParameters()</span></td>
+    <td>Повертає масив об'єктів <span class="text-neon">Parameter</span> , які представляють усі параметри. Повертає масив довжини 0 якщо конструктор не має параметрів.</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">getParameterTypes()</span></td>
+    <td>Повертає масив об'єктів класу, які представляють формальні типи параметрів як оголошення.</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">getGenericParameterTypes()</span></td>
+    <td>Повертає масив об'єктів типу, які представляють формальні типи параметрів як оголошення.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<h3>getName() &amp; getModifiers()</h3>
+<p>Давай обернемо наш масив у <span class="text-neon"><span class="text-bold"><em>List</em></span></span> , щоб нам було зручно працювати, і напишемо метод <span class="code text-orange">getName</span> і <span class="code text-orange">getModifiers</span> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">static</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Constructor</span><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span><span class="token punctuation">&gt;</span></span> <span class="token function">getAllConstructors</span><span class="token punctuation">(</span><span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> c<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span>c<span class="token punctuation">.</span><span class="token function">getDeclaredConstructors</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">static</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> <span class="token function">getConstructorNames</span><span class="token punctuation">(</span><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Constructor</span><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span><span class="token punctuation">&gt;</span></span> constructors<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">Constructor</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> constructor <span class="token operator">:</span> constructors<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        result<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>constructor<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">static</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> <span class="token function">getConstructorModifiers</span><span class="token punctuation">(</span><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Constructor</span><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span><span class="token punctuation">&gt;</span></span> constructors<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">Constructor</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> constructor <span class="token operator">:</span> constructors<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        result<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token class-name">Modifier</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span>constructor<span class="token punctuation">.</span><span class="token function">getModifiers</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>І наш метод <span class="code text-orange">main</span> , де ми все викликатимемо:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">Class</span> employeeClass <span class="token operator">=</span> <span class="token class-name">Employee</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">;</span>
+    <span class="token keyword">var</span> constructors <span class="token operator">=</span> <span class="token function">getAllConstructors</span><span class="token punctuation">(</span>employeeClass<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">var</span> constructorNames <span class="token operator">=</span> <span class="token function">getConstructorNames</span><span class="token punctuation">(</span>constructors<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">var</span> constructorModifiers <span class="token operator">=</span> <span class="token function">getConstructorModifiers</span><span class="token punctuation">(</span>constructors<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Класс Employee:"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Конструкторы :"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>constructorNames<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Модификаторы :"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>constructorModifiers<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>У результаті побачимо всю потрібну нам інформацію:</p>
+<div class="terminal">
+ Клас Employee: 
+ <br>
+  Конструктори : 
+ <br>
+  [private uk.codegym.Employee(java.lang.String) 
+ <br>
+ , public uk. ] 
+ <br>
+  Модифікатори: 
+ <br>
+  [private, public, public]
+</div>
+<h3>getExceptionTypes()</h3>
+<p>Цей метод дозволяє отримати масив винятків, які може викинути наш конструктор. Давай модифікуємо один із наших конструкторів і напишемо новий метод.</p>
+<p>Тут ми трохи змінабо наш поточний приватний конструктор:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">private</span> <span class="token class-name">Employee</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">,</span> <span class="token class-name">String</span> surname<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>surname <span class="token operator">=</span> surname<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>А тут у нас метод для отримання типів винятків та додавання його до <span class="code text-orange">main</span> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">static</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Class</span><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span><span class="token punctuation">&gt;</span></span> <span class="token function">getConstructorExceptionTypes</span><span class="token punctuation">(</span><span class="token class-name">Constructor</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> c<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span>c<span class="token punctuation">.</span><span class="token function">getExceptionTypes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+
+<span class="token keyword">var</span> constructorExceptionTypes <span class="token operator">=</span> <span class="token function">getConstructorExceptionTypes</span><span class="token punctuation">(</span>constructors<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Типы исключений :"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>constructorExceptionTypes<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Вище ми звернулися до першого конструктора з нашого списку. Як отримати певний конструктор, ми обговоримо трохи згодом.</p>
+<p>І подивимося на висновок після додавання <span class="text-user"><span class="text-bold">throws Exception</span></span> :</p>
+<div class="terminal">
+ Типи винятків: 
+ <br>
+  [class java.lang.Exception]
+</div>
+<p>І до додавання винятку:</p>
+<div class="terminal">
+ Типи винятків: 
+ <br>
+  []
+</div>
+<p>Все чудово, але як подивитись, які параметри потрібні для наших конструкторів? Давай розберемо й цю частину.</p>
+<h3>getParameters() &amp; getParameterTypes() &amp; getGenericParameterTypes()</h3>
+<p>Почнемо ми знову з доопрацювання нашого приватного конструктора. Тепер він виглядатиме ось так:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">private</span> <span class="token class-name">Employee</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">,</span> <span class="token class-name">String</span> surname<span class="token punctuation">,</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> list<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>surname <span class="token operator">=</span> surname<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>І у нас з'являються три додаткові методи: <span class="code text-orange">getParameters</span> для отримання черговості параметрів та їх типів, <span class="code text-orange">getParameterTypes</span> для отримання типів параметрів та <span class="code text-orange">getGenericParameterTypes</span> для отримання типів, обернених у <span class="text-neon"><span class="text-bold"><em>generics</em></span></span> .</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">static</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Parameter</span><span class="token punctuation">&gt;</span></span> <span class="token function">getConstructorParameters</span><span class="token punctuation">(</span><span class="token class-name">Constructor</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> c<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span>c<span class="token punctuation">.</span><span class="token function">getParameters</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">static</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Class</span><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span><span class="token punctuation">&gt;</span></span> <span class="token function">getConstructorParameterTypes</span><span class="token punctuation">(</span><span class="token class-name">Constructor</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> c<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span>c<span class="token punctuation">.</span><span class="token function">getParameterTypes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">static</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Type</span><span class="token punctuation">&gt;</span></span> <span class="token function">getConstructorParametersGenerics</span><span class="token punctuation">(</span><span class="token class-name">Constructor</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> c<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span>c<span class="token punctuation">.</span><span class="token function">getGenericParameterTypes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>І в наш уже і не так маленький <span class="code text-orange">main</span> додаємо ще трохи інформації:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">var</span> constructorParameterTypes <span class="token operator">=</span> <span class="token function">getConstructorParameterTypes</span><span class="token punctuation">(</span>constructors<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">var</span> constructorParameters <span class="token operator">=</span> <span class="token function">getConstructorParameters</span><span class="token punctuation">(</span>constructors<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">var</span> constructorParametersGenerics <span class="token operator">=</span> <span class="token function">getConstructorParametersGenerics</span><span class="token punctuation">(</span>constructors<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Параметры конструкторов :"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>constructorParameters<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Типы параметров :"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>constructorParameterTypes<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Типы параметров конструкторов :"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>constructorParametersGenerics<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Якщо ми поглянемо на наш результат, то отримаємо дуже докладні дані щодо параметрів наших конструкторів:</p>
+<div class="terminal">
+ Параметри конструкторів: 
+ <br>
+  [java.lang.String arg0, java.lang.String arg1, java.util.List&lt;java.lang.String&gt; arg2] 
+ <br>
+  Типи параметрів: 
+ <br>
+  [class java.lang.String, class java.lang.String, interface java.util.List] 
+ <br>
+  Типи параметрів конструкторів: 
+ <br>
+  [class java.lang.String, class java.lang.String, java.util.List&lt;java.lang.String&gt;]
+</div>
+<p>Тут добре видно різницю кожного з способів. Ми бачимо, що можна окремо отримати дані про типи параметрів, дані про класи обгортки і все загалом. Супер! Ми закінчабо знайомство із класом <span class="code"><span class="text-green">Constructor</span></span> і тепер можемо повернутися до основної теми нашої статті – створення об'єктів.</p>
+<h2>Створення об'єкту через Constructor.newInstance()</h2>
+<p>Другий спосіб створення об'єктів - виклик методу <span class="code text-orange">новогоінсталяції</span> у конструктора. Погляньмо на приклад роботи і подивимося, як нам отримати певний конструктор.</p>
+<p>Якщо перед тобою стоїть завдання отримати один конструктор, тобі необхідно використати метод <span class="code text-orange">getConstructor</span> (не плутай із <span class="code text-orange">getConstructors</span> , який повертає масив усіх конструкторів). Метод <span class="code text-orange">getConstructor</span> повертає конструктор за замовчуванням.</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">NoSuchMethodException</span> <span class="token punctuation">{</span>
+    <span class="token class-name">Class</span> employeeClass <span class="token operator">=</span> <span class="token class-name">Employee</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">;</span>
+    <span class="token class-name">Constructor</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> employeeConstructor <span class="token operator">=</span> employeeClass<span class="token punctuation">.</span><span class="token function">getConstructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>employeeConstructor<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<div class="terminal">
+ public com.codegym.Employee()
+</div>
+<p>А якщо ми хочемо отримати певний конструктор, нам потрібно передавати у цей метод типи параметрів, які будуть у конструкторі.</p>
+<p>Не забувай, що наш приватний конструктор ми можемо отримати тільки за допомогою методу <span class="code text-orange">getDeclaredConstructor</span> .</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">Constructor</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> employeeConstructor2 <span class="token operator">=</span> employeeClass<span class="token punctuation">.</span><span class="token function">getDeclaredConstructor</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> <span class="token class-name">List</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>employeeConstructor2<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Таким чином, ми можемо отримати певний конструктор. Тепер давай спробуємо створити об'єкт із приватного та публічного конструктора.</p>
+<p>Публічний конструктор:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Class</span> employeeClass <span class="token operator">=</span> <span class="token class-name">Employee</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">;</span>
+<span class="token class-name">Constructor</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> employeeConstructor <span class="token operator">=</span> employeeClass<span class="token punctuation">.</span><span class="token function">getConstructor</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> <span class="token keyword">int</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>employeeConstructor<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token class-name">Employee</span> newInstance <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">Employee</span><span class="token punctuation">)</span> employeeConstructor<span class="token punctuation">.</span><span class="token function">newInstance</span><span class="token punctuation">(</span><span class="token string">"NeIvan"</span><span class="token punctuation">,</span> <span class="token string">"NeIvanov"</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>newInstance<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>І в результаті ми маємо об'єкт, з яким ми можемо далі працювати:</p>
+<div class="terminal">
+ public com.codegym.Employee(java.lang.String,java.lang.String,int) 
+ <br>
+  Employee{name='NeIvan' surname='NeIvanov', age=10}
+</div>
+<p>Все чудово працює! Тепер пробуємо з приватним конструктором:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Constructor</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> declaredConstructor <span class="token operator">=</span> employeeClass<span class="token punctuation">.</span><span class="token function">getDeclaredConstructor</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> <span class="token class-name">List</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>declaredConstructor<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token class-name">Employee</span> newInstance2 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">Employee</span><span class="token punctuation">)</span> declaredConstructor<span class="token punctuation">.</span><span class="token function">newInstance</span><span class="token punctuation">(</span><span class="token string">"NeIvan"</span><span class="token punctuation">,</span> <span class="token string">"NeIvanov"</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span>newInstance2<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>І в результаті ми отримаємо помилку щодо приватності нашого конструктора:</p><img data-max-width="1080" data-id="f61f26f0-38c5-4009-af83-95839943cba2" alt="" src="https://cdn.javarush.com/images/article/f61f26f0-38c5-4009-af83-95839943cba2/1080.jpeg" style="width: 1080px;">
+<p>Java не змогла створити об'єкт через цей конструктор, але насправді є маленька чарівна штука, яку ми вкажемо у методі <span class="code text-orange">main</span> . Вона встановить доступність до нашого конструктора та дозволить створювати об'єкти нашого класу:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java">declaredConstructor<span class="token punctuation">.</span><span class="token function">setAccessible</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Результат створення об'єкта:</p>
+<div class="terminal">
+ private com.codegym.Employee(java.lang.String,java.lang.String,java.util.List) 
+ <br>
+  Employee{name='NeIvan', surname='NeIvanov', age=-1}
+</div>
+<p>Ми не встановлюємо вік у нашому конструкторі, і він залишається таким самим, як і при ініціалізації.</p>
+<p>Чудово, настав час підбивати підсумки!</p>
+<h2>Переваги створення через Constructor.newInstance()</h2>
+<p>За назвою обидва методи виглядають однаково, але між ними є відмінності:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th><span class="code text-orange">Class.newInstance()</span></th>
+    <th><span class="code text-orange">Constructor.newInstance()</span></th>
+   </tr>
+   <tr>
+    <td>Може викликати лише конструктор <span class="code text-orange"><span class="text-bold">no-arg</span></span> .</td>
+    <td>Може викликати будь-який конструктор, незалежно від кількості параметрів.</td>
+   </tr>
+   <tr>
+    <td>Потребує, щоб конструктор було видно.</td>
+    <td>Також може викликати приватні конструктори за певних обставин.</td>
+   </tr>
+   <tr>
+    <td>Видає будь-який виняток (перевірений чи ні), який задекларовано конструктором.</td>
+    <td>Завжди обгортає виданий виняток за допомогою <span class="text-red"><span class="text-bold">InvocationTargetException</span></span> .</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>З цих причин <span class="code text-orange">Constructor.newInstance()</span> краще <span class="code text-orange">Class.newInstance()</span> , і саме він використовується різними фреймворками і API, такими як Spring, Guava, Zookeeper, Jackson, Servlet і т.д.</p>

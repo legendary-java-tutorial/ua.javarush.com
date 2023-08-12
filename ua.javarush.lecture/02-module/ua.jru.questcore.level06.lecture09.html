@@ -1,0 +1,63 @@
+<p>- Привіт, Аміго! Погодься, Еллі добре придумала з цим Cancel?</p>
+<p><span class="text-user">- Ага.</span></p>
+<p>— Насправді, щось подібне існує в класі Thread. Лише змінна називається не такою, як Cancel, а interrupted, і метод зупинки, відповідно, не cancel(), а interrupt().</p>
+<p><span class="text-user">- Так?</span></p>
+<p>- Ага. Ось дивись:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Clock</span> <span class="token keyword"></span><span class="text-user"><span class="token keyword">implements</span> <span class="token class-name">Runnable</span></span><span class="token class-name"></span> <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name"></span><span class="text-user"><span class="token class-name">Thread</span> current <span class="token operator">=</span> <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+
+    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token operator"></span><span class="text-red"><span class="token operator">!</span>current<span class="token punctuation">.</span><span class="token function">isInterrupted</span><span class="token punctuation">(</span><span class="token punctuation">)</span></span><span class="token punctuation"></span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">try</span> <span class="token punctuation">{</span>
+        <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="text-red">current<span class="token punctuation">.</span><span class="token function">interrupt</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+      <span class="token punctuation">}</span>
+      <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Tik"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Т.к. багато ниток можуть викликати метод run одного об'єкта, то&nbsp; <span class="text-user">об'єкт Clock у своєму методі run отримує об'єкт нитки, що викликала</span> &nbsp;(«поточної нитки»).
+     <p></p>
+     <p>Клас Clock (годинник) буде писати в консоль раз на секунду слово "Tik", поки змінна&nbsp; <strong>isinterrupted</strong> поточної нитки дорівнює false.</p>
+     <p>Коли змінна&nbsp; <strong>isInterrupted</strong> &nbsp;стане рівною&nbsp; <strong>true</strong> , метод&nbsp; <strong>run</strong> &nbsp;завершиться.</p></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+  <span class="token class-name"></span><span class="text-user"><span class="token class-name">Clock</span> clock <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Clock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token class-name">Thread</span> clockThread <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span>clock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  clockThread<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+
+  <span class="token class-name"></span><span class="text-green"><span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">10000</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+  <span class="text-red">clockThread<span class="token punctuation">.</span><span class="token function">interrupt</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Головна нитка, запускає дочірню нитку – годинник, який має працювати вічно.
+     <p></p>
+     <p><span class="text-green">Чекає 10 секунд і </span>&nbsp;<span class="text-red">скасовує завдання, виклик методу interrupt.</span></p>
+     <p>Головна нитка завершує свою роботу.</p>
+     <p>Нитка годинника завершує свою роботу.</p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Більше того, у методі&nbsp; <strong>звільнення</strong> , який так люблять використовувати для організації вічного циклу в методі керування, є автоматична перевірка змінної&nbsp; <strong>isinterrupted</strong> . Якщо нитка викличе метод&nbsp; <strong>sleep</strong> , то цей метод спочатку перевірить, а чи не встановлена ​​для поточної (що викликала його нитки) змінна&nbsp; <strong>isinterrupted</strong> &nbsp;в true. І якщо встановлено, то метод не спатиме, а викине виняток&nbsp; <span class="text-red"><strong>InterruptedException</strong></span> .</p>
+<p><span class="text-user">— А навіщо викидати виняток? Чи не краще теж просто в циклі замість isCancel підставити isInterrupted()?</span></p>
+<p>—&nbsp; <strong>По-перше</strong> , не завжди у методі run є цикл. Метод може складатися з двох десятків викликів інших методів. Тоді перед викликом кожному доведеться додавати перевірку звідмовленням.</p>
+<p><strong>По-друге</strong> , раптом якийсь метод дуже довго виконується, т.к. робить багато різних дій.</p>
+<p><strong>По-третє</strong> , викидання виключення – це не заміна перевірки перевіреного, а скоріше зручне доповнення. Викинутий виняток дозволяє швидко розкрутити стек дзвінків до самого run.</p>
+<p><strong>По-четверте</strong> , метод sleep часто використовують, і, виходить, до такого корисного методу неявно додали не менш корисну перевірку.&nbsp;<strong>Начебто ніхто спеціально перевірку не додавав, а вона є.&nbsp;</strong>Це дуже цінно, коли ти використовуєш багато чужого коду і не можеш сам додати до нього перевірку.</p>
+<p><strong>По-п'яте</strong> , додаткова перевірка не призводить до зниження продуктивності. Виклик методу sleep означає, що нитка має нічого робити (спати), тому додаткова робота нікому не заважає.</p>
+<p><span class="text-user">- Серйозні аргументи.</span></p>
+<p>— І, нарешті, останнє: ти можеш у своєму методі run викликати чужий код, до якого ти не маєш доступу (вихідників та/або прав їх змінювати). Він може не мати перевірок на isInterrupted, а також перехоплювати за допомогою try…catch(Exception e) всі винятки, що виникли.</p>
+<p><span class="text-red"><strong>Ніхто не гарантує, що нитку можна зупинити. Вона може зупинитися лише сама.</strong></span></p>

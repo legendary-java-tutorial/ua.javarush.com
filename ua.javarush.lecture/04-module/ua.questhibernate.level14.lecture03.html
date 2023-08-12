@@ -1,0 +1,91 @@
+JOIN FETCH
+<p>----------------------------------------</p>
+Опис проблеми.
+Обмеження JOIN FETCH.
+<p>----------------------------------------</p>
+<h2>Опис проблеми</h2>
+
+<p>Як ми вже сказали вище, анотація <span class="text-yellow"><span class="text-bold">LazyCollectionOption.EXTRA</span></span> має проблему — вона виконує за окремим запитом до бази кожного об'єкта. Потрібно якось пояснити Hibernate, що ми хочемо, щоб він одразу завантажив усі дочірні об'єкти для батьківських об'єктів.</p>
+
+<p>Розробники Hibernate запропонували вирішення цієї проблеми — оператор <span class="text-viola"><strong>join fetch</strong></span> у HQL.</p>
+
+<p>Приклад HQL-запиту:</p>
+ 
+<pre><code><strong><span class="text-red">select distinct</span> task <span class="text-red">from</span> Task t <span class="text- red">Left Join Fetch</span> t.employee <span class="text-red">Order by</span> t.deadline</strong></code></pre>
+ 
+<p>У цьому запиті все просто і складно одночасно. Давай спробуємо сконструювати його частинами.</p>
+
+<h4>Варіант 1</h4>
+
+<p>Ми хочемо завантажити всі об'єкти <mark class="green">Task</mark>, відсортовані за deadline. Ось як виглядатиме цей запит:</p>
+ 
+<pre><code><strong><span class="text-red">select</span> task <span class="text-red">from</span> Task t <span class="text-red ">order by</span> t.deadline</strong></code></pre>
+ 
+<p>Поки що все зрозуміло. Але поле <mark>employee</mark> класу <span class="code"><span class="text-green">Task</span></span> міститиме колекцію співробітників Employee, яка позначена інструкцією <span class ="text-yellow"><span class="text-bold">EXTRA</span></span>. І об'єкти цієї колекції не будуть завантажені.</p>
+
+<h4>Варіант 2</h4>
+
+<p>Примусово змушуємо Hibernate завантажити дочірні об'єкти для об'єкта <mark class="green">Task</mark>.
+ 
+<pre><code><strong><span class="text-red">select</span> task <span class="text-red">from</span> Task t <span class="text-red ">join fetch</span> t.employee <span class="text-red">Order by</span> t.deadline</strong></code></pre>
+ 
+<p>За допомогою ми явно пов'язуємо сутності Task та Employee у нашому запиті. Hibernate про це і так знає, тому що ми використовуємо інструкції <span class="text-yellow"><span class="text-bold">@ManyToMany</span></span> для цих полів.</p>
+
+<p>Але нам потрібно <strong>оператор <span class="text-viola">join</span></strong>, щоб доповнити його <strong>оператором <span class="text-viola">fetch</ span></strong> та отримати <strong><span class="text-viola">join fetch</span></strong>. Саме в такий спосіб ми вказуємо Hibernate, що об'єкти в колекціях Task.employee потрібно завантажити з бази під час виконання нашого запиту.</p>
+
+<h4>Варіант 3</h4>
+
+<p>У попереднього рішення є кілька пробочок. По-перше, після використання join SQL не поверне нам об'єкти <mark class="green">Task</mark>, які не мають пов'язаних з ними об'єктів у таблиці Employee. Саме так працює <span class="text-viola">inner join</span>.</p>
+
+<p>Тому нам потрібно доповнити наш <span class="text-viola">join</span> оператором <span class="text-viola">left</span> і перетворити його на <span class="text- viola">left join</span>. Приклад:</p>
+ 
+<pre><code><strong><span class="text-red">select</span> task <span class="text-red">from</span> Task t <span class="text-red ">left join fetch</span> t.employee <span class="text-red">Order by</span> t.deadline</strong></code></pre>
+ 
+<h4>Варіант 4</h4>
+
+<p>Але це ще не все. Якщо у твоєму коді відношення між сутностями many-to-may, то виникнуть дублікати у результатах запиту. Один і той самий об'єкт <mark class="green">task</mark> може бути знайдений у різних співробітників (об'єктів Employee).</p>
+
+<p>Тому тобі потрібно додати ключове слово distinct після слова select, щоб позбавитися дублікатів об'єкта Task.</p>
+ 
+<pre><code><em><span class="text-red">select distinct</span> task <span class="text-red">from</span> Task t <span class="text- red">Left Join Fetch</span> t.employee <span class="text-red">Order by</span> t.deadline</em></code></pre>
+  
+<p>Саме так у 4 кроки ми дійшли того запиту, з якого почали. Ну а Java-код виглядатиме цілком очікувано:</p>
+ 
+<pre class='language-java line-numbers'><code>
+           String hql = "select distinct task from Task t left join fetch t.employee order by t.deadline";
+           Query&lt;Task> query = session.createQuery( hql, Task.class);
+           return query.list();
+</code></pre>
+ 
+<h2>Обмеження JOIN FETCH</h2>
+
+<p>Ніхто не ідеальний. Оператор JOIN FETCH також. Він має чимало обмежень. І перше з них - це використання методів <span class="code text-orange">setMaxResults()</span> і <span class="code text-orange">setFirstResult()</span>.</p>
+
+<p>Для оператора JOIN FETCH наш Hibernate згенерує дуже складний запит, у якому поєднати в одну три таблиці: employee, task та employee_task. Фактично це запит не співробітників чи завдань, а всіх відомих пар співробітник-завдання.</p>
+
+<p>І SQL може застосувати свої оператори LIMIT та OFFSET саме до цього запиту пар співробітник-завдання. У той же час з HQL запиту явно випливає, що ми хочемо отримати саме завдання (Task), і якщо ми переділимо свої параметри FirstResult та MaxResult, то вони мають належати саме до об'єктів Task.</p>
+
+<p>Якщо ти напишеш такий код:</p>
+ 
+<pre class='language-java line-numbers'><code>
+           String hql = "select distinct task from Task t left join fetch t.employee order by t.deadline";
+           Query&lt;Task> query = session.createQuery( hql, Task.class);
+       query.setFirstResult(0);
+        query.setMaxResults(1);
+           return query.list();
+</code></pre>
+ 
+<p>Те Hibernate не зможе правильно перетворити FirstResult і MaxResult на параметри OFFSET і LIMIT у SQL-запиту.</p>
+
+<p>Замість цього він зробить три речі:</p>
+
+<ul>
+<li>SQL-запит вибере взагалі всі дані з таблиці та поверне їх Hibernate</li>
+<li>Hibernate сам у себе в пам'яті відбере потрібні записи та поверне їх тобі</li>
+<li>Hibernate видасть попередження</li>
+</ul>
+
+<p>Попередження буде таким типом:</p>
+ 
+<pre><code>WARN [org.hibernate.hql.internal.ast.QueryTranslatorImpl] HHH000104:
+<span class="text-red">firstResult/maxResults specified with collection fetch; applying in memory!</span></code></pre>

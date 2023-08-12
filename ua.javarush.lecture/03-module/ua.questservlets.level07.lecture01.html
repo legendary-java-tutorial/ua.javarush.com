@@ -1,0 +1,141 @@
+<h2>2.1 Змінні та біль</h2>
+<p>Почнемо із найцікавішого. JavaScript має змінні, але у цих змінних немає типу. Будь-якій змінній можна надати абсолютно будь-яке значення. Виглядає нешкідливо або навіть зручно, поки вам не знадобляться типи.</p>
+<p>Для оголошення змінної використовується ключове слово <code>var</code>:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token keyword">var</span> <span class="text-green">name</span><span class="token punctuation">;</span>
+<span class="token keyword">var</span> <span class="text-green">name</span> <span class="token operator">=</span> <span class="text-user">value</span><span class="token punctuation">;</span></code></pre>
+</div>
+<p>Приклади роботи зі змінними JavaScript:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">var</span> a <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">,</span> b <span class="token operator">=</span> <span class="token number">20</span><span class="token punctuation">;</span>
+<span class="token keyword">var</span> c <span class="token operator">=</span> a<span class="token operator">*</span>a <span class="token operator">+</span> b<span class="token operator">*</span>b<span class="token punctuation">;</span>
+
+<span class="token keyword">var</span> s <span class="token operator">=</span> <span class="token string">"Діагональ дорівнює:"</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span> s <span class="token operator">+</span> <span class="token class-name">Math</span><span class="token punctuation">.</span><span class="token function">sqrt</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Відмінний і зрозумілий код, чи не так? Можливо, це останній раз у твоєму житті, коли ви бачите гарний та зрозумілий JavaScript код. Запам'ятай цей момент :)</p>
+<h2>2.2 Типізація у JavaScript</h2>
+<p>Як уже говорилося вище, у змінних у мові JavaScript типу немає. Але у значень змінних типи є. Ось 5 найпоширеніших типів JavaScript:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th width="40">#</th>
+    <th width="160">Тип</th>
+    <th>приклад</th>
+    <th width="250">Опис</th>
+   </tr>
+   <tr>
+    <td>1</td>
+    <td><strong>Номер</strong></td>
+    <td>
+     <pre><code>var pi = 3.14;</code></pre></td>
+    <td>Містить будь-яке число</td>
+   </tr>
+   <tr>
+    <td>2</td>
+    <td><strong>String</strong></td>
+    <td>
+     <pre><code>var s = "Вітання!";</code></pre></td>
+    <td>Містить рядок</td>
+   </tr>
+   <tr>
+    <td>3</td>
+    <td><strong>Boolean</strong></td>
+    <td>
+     <pre><code>var result = true;</code></pre></td>
+    <td>Містить true або false</td>
+   </tr>
+   <tr>
+    <td>4</td>
+    <td><strong>Array</strong></td>
+    <td>
+     <pre><code>var arr = [1, 2, 3, 4, 5];</code></pre></td>
+    <td>Містить масив елементів</td>
+   </tr>
+   <tr>
+    <td>5</td>
+    <td><strong>Date</strong></td>
+    <td>
+     <pre><code>var current = new Date();</code></pre></td>
+    <td>Містить дату</td>
+   </tr>
+   <tr>
+    <td>6</td>
+    <td><strong>Object</strong></td>
+    <td>
+     <pre><code>var o = {
+   width: 100,
+   height: 200
+}
+</code></pre></td>
+    <td>Містить об'єкт, який складається із пар key, value. Чимось схожий на HashMap в Java</td>
+   </tr>
+   <tr>
+    <td>7</td>
+    <td><strong>Function</strong></td>
+    <td>
+     <pre><code>function sqr(var x) {
+   return x*x;
+}</code></pre></td>
+    <td>Функція</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Для визначення типу об'єкта використовується ключове слово typeof, приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token keyword">var</span> s <span class="token operator">=</span> <span class="token string">"134"</span><span class="token punctuation">;</span>
+<span class="token keyword">var</span> x <span class="token operator">=</span> <span class="token punctuation">(</span><span class="text-red">typeof</span> s <span class="token operator">==</span> <span class="token string">"String"</span><span class="token punctuation">)</span> <span class="token operator">?</span> s<span class="token operator">*</span><span class="token number">1</span> <span class="token operator">:</span> s<span class="token punctuation">;</span></code></pre>
+<h2>2.3 Функції та return</h2>
+<p>Ну і звичайно ж JavaScript має функції. Класів там немає, тому оголошувати функції можна в будь-якому місці коду. Навіть у інших функціях. Загальний формат має вигляд:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java">function <span class="token function"><span class="text-green">name</span></span><span class="token punctuation">(</span><span class="text-yellow">a</span><span class="token punctuation">,</span> <span class="text-user">b</span><span class="token punctuation">,</span> <span class="text-viola">c</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment">// код функції</span>
+   <span class="token keyword">return</span> <span class="text-red">result</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Типу функції немає. А навіщо, якщо в мові немає контролю сумісності типів? Параметри функції також можуть бути відсутніми. Як і команда return, яка повертає значення.</p>
+<p><span class="text-green">При виклику функції можна передавати будь-яку кількість параметрів будь-якого типу</span> . Зайві відкинеться, відсутні будуть рівні <code>null</code>.</p>
+<p>Приклади функцій:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java">function <span class="token function">getValue</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">[</span>name<span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java">function <span class="token function">setValue</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> value<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">[</span>name<span class="token punctuation">]</span> <span class="token operator">=</span> value<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h2>2.4 Масиви у JavaScript</h2>
+<p>Масиви JavaScript дуже схожі на масиви Java. Приклади:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">var</span> array <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+array<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span> <span class="token operator">=</span> array<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span>log <span class="token punctuation">(</span>array<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Вони можуть мати значення будь-якого типу, навіть інші масиви:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">var</span> array <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">"Вітання"</span><span class="token punctuation">,</span> <span class="token number">3.14</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">]</span> <span class="token punctuation">]</span><span class="token punctuation">;</span>
+array<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span> <span class="token operator">=</span> array<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span>log <span class="token punctuation">(</span>array<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Крім того, масиви також поводяться як колекції – у них можна динамічно додавати елементи:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">var</span> array <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+array<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+array<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token number">101</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+array<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token number">102</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+array<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> array<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span>log <span class="token punctuation">(</span>array<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h2>2.5 Об'єкти в JavaScript</h2>
+<p>Об'єкти в JavaScript дуже схожі на HashMap з Java: вони містять пари ключ-значення. Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">var</span> obj <span class="token operator">=</span> <span class="token punctuation">{</span>
+ name<span class="token operator">:</span> <span class="token string">"Bill Gates"</span><span class="token punctuation">,</span>
+ age<span class="token operator">:</span> <span class="token number">67</span><span class="token punctuation">,</span>
+ company<span class="token operator">:</span> <span class="token string">"Microsoft"</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+console<span class="token punctuation">.</span>log <span class="token punctuation">(</span>obj<span class="token punctuation">.</span>age<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>До полів об'єкта можна звертатися двома різними способами:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token keyword">var</span> <span class="text-user">x</span> <span class="token operator">=</span> obj<span class="token punctuation">.</span><span class="text-green">age</span><span class="token punctuation">;</span>
+<span class="token keyword">var</span> <span class="text-user">x</span> <span class="token operator">=</span> obj<span class="token punctuation">[</span><span class="token string">"<span class="text-green">age</span>"</span><span class="token punctuation">]</span><span class="token punctuation">;</span></code></pre>
+</div>
+<p>Як і у випадку з HashMap, поля можна створювати та видаляти. Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">var</span> obj <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+obj<span class="token punctuation">.</span>name <span class="token operator">=</span> <span class="token string">"Bill Gates"</span><span class="token punctuation">;</span>
+obj<span class="token punctuation">.</span>age <span class="token operator">=</span> <span class="token number">67</span><span class="token punctuation">;</span>
+obj<span class="token punctuation">.</span>company <span class="token operator">=</span> <span class="token string">"Microsoft"</span><span class="token punctuation">;</span>
+
+delete obj<span class="token punctuation">.</span>age<span class="token punctuation">;</span>  <span class="token comment">//видалення поля</span></code></pre>

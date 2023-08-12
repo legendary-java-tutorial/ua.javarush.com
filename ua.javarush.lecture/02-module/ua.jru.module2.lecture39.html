@@ -1,0 +1,115 @@
+<p>Головна користь від механізму анотацій – не у використанні вже готових стандартних анотацій у JDK. Але й потреба у створенні власної інструкції з'являється нечасто. Наприклад, якщо ми розробляємо велику систему або виділяємо окрему бібліотеку, то на архітектурному рівні реалізація власної інструкції точно дасть плоди.</p>
+<p>Давай спробуємо створити інструкцію.</p>
+<p>Для цього створюємо файл і замість <span class="code">class</span> або <span class="code">interface</span> пишемо <span class="code">@interface</span> . Це і буде файл нашої інструкції. По внутрішній структурі інструкція схожа з інтерфейсом.</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token annotation punctuation">@interface</span> <span class="token class-name">Sum</span> <span class="token punctuation">{</span>
+   <span class="token keyword">int</span> <span class="token function">sum</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">default</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p><span class="code">@interface</span> вказує на те, що це анотація, <br><span class="code">default</span> повідомляє, що параметр за промовчанням повертатиме певне значення.</p>
+<p>Ми створабо інструкцію і теоретично вже можемо її використовувати, але спочатку краще зайнятися її конфігуруванням.</p>
+<p>Справа в тому, що без конфігурування наша інструкція може бути застосована до будь-чого (до класів, способів, атрибутів і т. д.), а тому використовувати її особливо сенсу немає. Як би це дивно не виглядало, нашу інструкцію потрібно анотувати іншими інструкціями!</p>
+<p>Почнемо з <span class="text-yellow"><span class="text-bold">@Target</span></span> .</p>
+<p>Анотація <span class="text-yellow"><span class="text-bold">@Target</span></span> (актуальна з Java 1.5) обмежує можливість застосування інструкції, що конфігурується. Для обмеження до певного рівня в інструкцію <span class="text-yellow"><span class="text-bold">@Target</span></span> ми повинні передати параметр, який вказує, для яких видів вона може бути застосована. Ось деякі з видів, що часто використовуються:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td><span class="text-yellow"><span class="text-bold">@Target(ElementType.PACKAGE)</span></span></td>
+    <td>для пакетів</td>
+   </tr>
+   <tr>
+    <td><span class="text-yellow"><span class="text-bold">@Target(ElementType.TYPE)</span></span></td>
+    <td>для класів</td>
+   </tr>
+   <tr>
+    <td><span class="text-yellow"><span class="text-bold">@Target(ElementType.CONSTRUCTOR)</span></span></td>
+    <td>для конструкторів</td>
+   </tr>
+   <tr>
+    <td><span class="text-yellow"><span class="text-bold">@Target(ElementType.METHOD)</span></span></td>
+    <td>для методів</td>
+   </tr>
+   <tr>
+    <td><span class="text-yellow"><span class="text-bold">@Target(ElementType.FIELD)</span></span></td>
+    <td>для атрибутів (змінних) класу</td>
+   </tr>
+   <tr>
+    <td><span class="text-yellow"><span class="text-bold">@Target(ElementType.PARAMATER)</span></span></td>
+    <td>для параметрів методу</td>
+   </tr>
+   <tr>
+    <td><span class="text-yellow"><span class="text-bold">@Target(ElementType.LOCAL_VARIABLE)</span></span></td>
+    <td>для локальних змінних</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Якщо потрібна інструкція з кількома типами, можна передати кілька параметрів як масиву:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token annotation punctuation">@Target</span><span class="token punctuation">(</span><span class="token punctuation">{</span> <span class="token class-name">ElementType</span><span class="token punctuation">.</span>PARAMETER<span class="token punctuation">,</span> <span class="token class-name">ElementType</span><span class="token punctuation">.</span>LOCAL_VARIABLE <span class="token punctuation">}</span><span class="token punctuation">)</span></code></pre>
+<p>Наступний важливий елемент конфігурації – інструкція <span class="text-yellow"><span class="text-bold">@Retention</span></span> .</p>
+<p>Ця інструкція вкаже, в якому життєвому циклі коду наша інструкція буде доступна:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td><span class="code">RetentionPolicy.SOURCE</span></td>
+    <td>Анотації, анотовані за допомогою політики зберігання <span class="text-bold">SOURCE</span> відкидаються під час виконання.</td>
+   </tr>
+   <tr>
+    <td><span class="code">RetentionPolicy.CLASS</span></td>
+    <td>Анотації, анотовані за допомогою політики зберігання <span class="text-bold">CLASS</span> записуються у файл <span class="code">.class</span> , але видаляються під час виконання.</td>
+   </tr>
+   <tr>
+    <td><span class="code">RetentionPolicy.RUNTIME</span></td>
+    <td>Анотації, анотовані за допомогою політики <span class="text-bold">RUNTIME</span> , зберігаються під час виконання і можуть бути доступні в нашій програмі під час виконання.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Також для конфігурації можна використовувати ще кілька анотацій:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Анотація</th>
+    <th>Значення</th>
+   </tr>
+   <tr>
+    <td><span class="text-yellow"><span class="text-bold">@Inherited</span></span></td>
+    <td>Дозволяє класу-спадкоємцю реалізувати спадкування анотацій батьківського класу.</td>
+   </tr>
+   <tr>
+    <td><span class="text-yellow"><span class="text-bold">@Documented</span></span></td>
+    <td>Анотація буде поміщена до згенерованої документації javadoc.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Ось тепер давай спробуємо створити власну інструкцію.</p>
+<p>Створимо анотацію, яка буде анотувати класи та методи та містити інформацію про автора та версію написаного коду:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@Target</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token class-name">ElementType</span><span class="token punctuation">.</span>TYPE<span class="token punctuation">,</span> <span class="token class-name">ElementType</span><span class="token punctuation">.</span>METHOD<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token annotation punctuation">@Retention</span><span class="token punctuation">(</span><span class="token class-name">RetentionPolicy</span><span class="token punctuation">.</span>RUNTIME<span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token annotation punctuation">@interface</span> <span class="token class-name">Info</span> <span class="token punctuation">{</span>
+   <span class="token class-name">String</span> <span class="token function">author</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">default</span> <span class="token string">"Author"</span><span class="token punctuation">;</span>
+   <span class="token class-name">String</span> <span class="token function">version</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">default</span> <span class="token string">"0.0"</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Нашу інструкцію ми можемо застосовувати до методів та класів. Метадані нашої інструкції будуть доступні на етапі виконання програми. Зверніть увагу на параметри нашої анотації. Ми можемо вкласти два параметри: ім'я та версію, але можемо не класти, і тоді за замовчуванням будуть значення, які ми вказали ( <span class="code">default "Author"</span> та <span class="code">default "0.0"</span> ).</p>
+<p>Варто зазначити, що ми можемо не вказувати дефолтне значення для параметрів. У такому разі вказівка ​​цього параметра стає обов'язковою.</p>
+<p>При передачі параметрів також обов'язково вказати параметр, який передаємо через <span class="code">value = "value"</span> . Явна вказівка ​​обов'язково завжди, навіть якщо параметр у інструкції єдиний.</p>
+<p>Застосовуємо нашу інструкцію до кількох класів:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@Info</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyClass1</span> <span class="token punctuation">{</span>
+   <span class="token annotation punctuation">@Info</span>
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">myClassMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token annotation punctuation">@Info</span><span class="token punctuation">(</span>version <span class="token operator">=</span> <span class="token string">"2.0"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyClass2</span> <span class="token punctuation">{</span>
+   <span class="token annotation punctuation">@Info</span><span class="token punctuation">(</span>author <span class="token operator">=</span> <span class="token string">"Anonymous"</span><span class="token punctuation">)</span>
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">myClassMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token annotation punctuation">@Info</span><span class="token punctuation">(</span>author <span class="token operator">=</span> <span class="token string">"Anonymous"</span><span class="token punctuation">,</span> version <span class="token operator">=</span> <span class="token string">"2.0"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyClass3</span> <span class="token punctuation">{</span>
+   <span class="token annotation punctuation">@Info</span><span class="token punctuation">(</span>author <span class="token operator">=</span> <span class="token string">"Anonymous"</span><span class="token punctuation">,</span> version <span class="token operator">=</span> <span class="token string">"4.0"</span><span class="token punctuation">)</span>
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">myClassMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>

@@ -1,0 +1,233 @@
+<h2>Знайомство з класом ObjectUtils</h2>
+<p>Методи:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td width="600"><span class="code text-orange">allNotNull(Object... values)</span></td>
+    <td>Перевіряє, що всі об'єкти не null</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">allNull(Object... values)</span></td>
+    <td>Перевіряє, що всі об'єкти дорівнюють null</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">anyNotNull(Object... values)</span></td>
+    <td>Перевіряє, що хоча б один об'єкт не null</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">anyNull(Object... values)</span></td>
+    <td>Перевіряє, що хоча б один об'єкт null</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td></td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">clone(T obj)</span></td>
+    <td>Клонує об'єкт</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">cloneIfPossible(T obj)</span></td>
+    <td>Клонує об'єкт або повертає оригінал</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td></td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">compare(T c1, T c2)</span></td>
+    <td>Порівнює об'єкти</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">defaultIfNull(T object, T defaultValue)</span></td>
+    <td>Повертає default-об'єкт, якщо object дорівнює null</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">equals(Object object1, Object object2)</span></td>
+    <td>Порівнює два об'єкти</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">notEqual(Object object1, Object object2)</span></td>
+    <td>Перевірять, що два об'єкти не рівні</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td></td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">firstNonNull(T... values)</span></td>
+    <td>Повертає перший об'єкт, який не null</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">getFirstNonNull(Supplier<t>
+       ... suppliers)
+      </t></span></td>
+    <td>Повертає перший об'єкт, який не null</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">getIfNull(T object, Supplier<t>
+       defaultSupplier)
+      </t></span></td>
+    <td>Повертає цей об'єкт, якщо він не дорівнює null, інакше повертає значення Supplier.get() переданого Supplier</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td></td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">hashCode(Object obj)</span></td>
+    <td>Обчислює hashCode для об'єкта</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">hashCodeMulti(Object... objects)</span></td>
+    <td>Обчислює hashCode для групи об'єктів</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td></td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">isEmpty(Object object)</span></td>
+    <td>Перевіряє, що об'єкт empty або null</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">isNotEmpty(Object object)</span></td>
+    <td>Перевіряє, що об'єкт не є empty або null</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td></td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">requireNonEmpty(T obj)</span></td>
+    <td>Перевіряє, що об'єкт не null, інакше кидає виняток</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">requireNonEmpty(T obj, String message)</span></td>
+    <td>Перевіряє, що об'єкт не null, інакше кидає виняток</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td></td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">identityToString(Object object)</span></td>
+    <td>Повертає рядок для об'єкту</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">toString(Object obj)</span></td>
+    <td>Повертає рядок для об'єкту</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">toString(Object obj, String nullStr)</span></td>
+    <td>Повертає рядок для об'єкту</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">toString(Object obj, Supplier<string>
+       supplier)
+      </string></span></td>
+    <td>Повертає рядок для об'єкту</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Давай розглянемо одним методом з кожної групи. Я сподіваюся, ти часто ними користуватимешся, адже вони дуже зручні і дозволяють уникати зайвого коду.</p>
+<h2>ObjectUtils.compare()</h2>
+<p>Метод порівнює об'єкти за таким же принципом, як і comparator: більше, менше чи одно. Його можна використовувати для сортування об'єктів.</p>
+<p>Сигнатура методу має вигляд:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span> <span class="token keyword">extends</span> <span class="token class-name">Comparable</span><span class="token punctuation">&lt;</span><span class="token operator">?</span> <span class="token keyword">super</span> <span class="token class-name">T</span><span class="token punctuation">&gt;</span><span class="token punctuation">&gt;</span></span> <span class="token keyword">int</span> <span class="token function">compare</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">T</span> c1<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token class-name">T</span> c2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span> <span class="token keyword">extends</span> <span class="token class-name">Comparable</span><span class="token punctuation">&lt;</span><span class="token operator">?</span> <span class="token keyword">super</span> <span class="token class-name">T</span><span class="token punctuation">&gt;</span><span class="token punctuation">&gt;</span></span> <span class="token keyword">int</span> <span class="token function">compare</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">T</span> c1<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token class-name">T</span> c2<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token keyword">boolean</span> nullGreater<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Якщо третій параметр ( <span class="text-green">nullGreater</span> ) дорівнює <span class="text-green"><em>true</em></span> , то <em><strong>null</strong></em> завжди вважатиметься більше, ніж <em><strong>null</strong></em> . Метод повертає позитивне значення, якщо c1&gt; c2, негативне, якщо c1 &lt;c2 і 0, якщо c1 == c2.</p>
+<p>Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">String</span> firstValue <span class="token operator">=</span> <span class="token string">"codeGym"</span><span class="token punctuation">;</span>
+<span class="token class-name">String</span> secondValue <span class="token operator">=</span> <span class="token string">"codeGym"</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token class-name">ObjectUtils</span><span class="token punctuation">.</span><span class="token function">compare</span><span class="token punctuation">(</span>firstValue<span class="token punctuation">,</span> secondValue<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+firstValue <span class="token operator">=</span> <span class="token string">"codeGym"</span><span class="token punctuation">;</span>
+secondValue <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token class-name">ObjectUtils</span><span class="token punctuation">.</span><span class="token function">compare</span><span class="token punctuation">(</span>firstValue<span class="token punctuation">,</span> secondValue<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+firstValue <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
+secondValue <span class="token operator">=</span> <span class="token string">"codeGym"</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token class-name">ObjectUtils</span><span class="token punctuation">.</span><span class="token function">compare</span><span class="token punctuation">(</span>firstValue<span class="token punctuation">,</span> secondValue<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Програма виведе на екран результат:</p>
+<pre><code>0
+1
+-8
+</code></pre>
+<h2>ObjectUtils.isNotEmpty()</h2>
+<p>Метод <span class="code text-orange">isNotEmpty()</span> перевіряє, що переданий об'єкт не порожній і не <em><strong>null</strong></em> .</p>
+<p>Сигнатура методу:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">boolean</span> <span class="token function">isNotEmpty</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">Object</span> object<span class="token punctuation">)</span></code></pre>
+<p>Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> values <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">ObjectUtils</span><span class="token punctuation">.</span><span class="token function">isNotEmpty</span><span class="token punctuation">(</span>values<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+values<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"codeGym"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">ObjectUtils</span><span class="token punctuation">.</span><span class="token function">isNotEmpty</span><span class="token punctuation">(</span>values<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+values <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">ObjectUtils</span><span class="token punctuation">.</span><span class="token function">isNotEmpty</span><span class="token punctuation">(</span>values<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>На екран буде виведено результат:</p>
+<pre><code>false
+true
+false
+</code></pre>
+<h2>java.util.Objects</h2>
+<p>Розробникам Java дуже сподобалася ідея з <span class="code"><span class="text-green">ObjectUtils</span></span> , так що в JDK 7 вони додали свій варіант:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td><span class="code text-orange">isNull(Object obj)</span></td>
+    <td>Перевіряє, що об'єкт дорівнює null</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">nonNull(Object obj)</span></td>
+    <td>Перевіряє, що об'єкт не дорівнює null</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">toString(Object o)</span></td>
+    <td>Перетворює об'єкт у рядок</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">toString(Object o, String nullDefault)</span></td>
+    <td>Перетворює об'єкт у рядок</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">boolean equals(Object a,Object b)</span></td>
+    <td>Порівнює об'єкти</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">boolean deepEquals(Object a,Object b)</span></td>
+    <td>Порівнює об'єкти</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">T requireNonNull(T obj)</span></td>
+    <td>Перевіряє, що переданий параметр не null</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">T requireNonNull(T obj,String message)</span></td>
+    <td>Перевіряє, що переданий параметр не null</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">int hashCode(Object o)</span></td>
+    <td>Обчислює hashCode для об'єкта</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">int hash(Object… values)</span></td>
+    <td>Обчислює hashCode для групи об'єктів</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">int compare(T a,T b,Comparator c)</span></td>
+    <td>Порівнює об'єкти</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Оскільки клас <span class="code"><span class="text-green">java.util.Objects</span></span> входить до складу JDK, рекомендується використовувати його в коді.</p>
+<p>Важливо помітити, що коли ти читатимеш чужий код, то швидше за все зустрінеш варіанти з <span class="code"><span class="text-green">ObjectUtils</span></span> , таке часто буває в open-source. <a href="https://www.geeksforgeeks.org/java-util-objects-class-java/" target="_blank">Тут ти можеш подивитися</a> , чим вони відрізняються.</p>

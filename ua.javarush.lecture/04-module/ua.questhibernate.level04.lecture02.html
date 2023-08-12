@@ -1,0 +1,383 @@
+Функції роботи з датою
+<p>----------------------------------------</p>
+Список функцій для роботи з датою та часом
+Виклик функцій
+Групуємо дані за роком та місяцем
+<p>----------------------------------------</p>
+<h2>3.1 Список функцій для роботи з датою та часом</h2>
+<p>Дата та час – це одні з найпоширеніших типів даних, які зберігаються в базах даних. Саме тому перелік функцій для роботи з ними дуже великий. Ось найпопулярніші з них: </p>
+
+<table>
+    <tbody>
+    <tr>
+        <th>#</th>
+        <th>Функція</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>CURDATE()</td>
+        <td>Повертає поточну дату</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>CURTIME()</td>
+        <td>Повертає поточний час</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>NOW(), LOCALTIME()</td>
+        <td>Повертає поточну дату та поточний час</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>YEAR()</td>
+        <td>Повертає рік від дати</td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>MONTH()</td>
+        <td>Повертає місяць із дати</td>
+    </tr>
+    <tr>
+        <td>6</td>
+        <td>DAY(), DAYOFMONTH()</td>
+        <td>Повертає день із дати</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>7</td>
+        <td>HOUR()</td>
+        <td>Повертає годинник з часу</td>
+    </tr>
+    <tr>
+        <td>8</td>
+        <td>MINUTE()</td>
+        <td>Оповідає хвилини від часу</td>
+    </tr>
+    <tr>
+        <td>9</td>
+        <td>SECOND()</td>
+        <td>Повертає секунди від часу</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>10</td>
+        <td>DAYNAME()</td>
+        <td>Повертає назву дня тижня: Monday, ...</td>
+    </tr>
+    <tr>
+        <td>11</td>
+        <td>MONTHNAME()</td>
+        <td>Повертає назву місяця: Січень, …</td>
+    </tr>
+    <tr>
+        <td>12</td>
+        <td>WEEK()</td>
+        <td>Повертає тиждень із дати</td>
+    </tr>
+    <tr>
+        <td>13</td>
+        <td>WEEKDAY()</td>
+        <td>Повертає номер дня тижня: Понеділок – 0, Вівторок – 1</td>
+    </tr>
+    <tr>
+        <td>14</td>
+        <td>WEEKOFYEAR()</td>
+        <td>Повертає номер тижня на рік</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>15</td>
+        <td>DAYOFWEEK()</td>
+        <td>Повертає номер дня тижня: Неділя - 1, Понеділок - 2</td>
+    </tr>
+    <tr>
+        <td>16</td>
+        <td>DAYOFYEAR()</td>
+        <td>Повертає день року: 1-366</td>
+    </tr>
+    <tr>
+        <td>17</td>
+        <td>DATE()</td>
+        <td>Повертає лише дату від об'єкта «дата та час»</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>18</td>
+        <td>ADDDATE()</td>
+        <td>Додає дні до дати</td>
+    </tr>
+    <tr>
+        <td>19</td>
+        <td>SUBDATE()</td>
+        <td>Віднімає дні з дати</td>
+    </tr>
+    <tr>
+        <td>20</td>
+        <td>ADDTIME()</td>
+        <td>Додає час до часу</td>
+    </tr>
+    <tr>
+        <td>21</td>
+        <td>SUBTIME()</td>
+        <td>Віднімає час від часу</td>
+    </tr>
+    </tbody>
+</table>
+
+<p>Я спеціально згрупував функції у невеликі групи, щоб було легше зрозуміти, як з ними працювати. Нижче ми розглянемо одну функцію з кожної групи. </p>
+<p>Повний список функцій для роботи з датою та часом ти можеш знайти за посиланням: <a href="https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html " target="_blank">https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html</a> </p>
+<h2>3.2 Виклик функцій</h2>
+<p>До речі, якщо ми вивчаємо таку велику кількість функцій, думаю корисно буде згадати, що оператор <code>SELECT</code> не обов'язково використовувати разом з <code>FROM</code>. Він може повернути значення будь-якого виразу. Загальний вигляд якого задається шаблоном: </p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-brown">SELECT</span> <span class="text-green">вираз</span>
+        </code></pre>
+</div>
+<p>А якщо ви хочете викликати якусь функцію, потрібно написати код типу:</p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-brown">SELECT</span> <span class="text-green">функція</span>(<span class="text-user">параметри</span>)
+        </code></pre>
+</div>
+<p> Нижче наведено кілька прикладів роботи оператора <code>SELECT</code> без звернення до таблиць: </p>
+<table>
+    <tbody>
+    <tr>
+        <th>#</th>
+        <th>Запит</th>
+        <th>Результат</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>SELECT 1+1</td>
+        <td>2</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>SELECT 13 MOD 5</td>
+        <td>3</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>SELECT RAND()</td>
+        <td>0.20771444235715497</td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>SELECT CURDATE()</td>
+        <td>2022-06-04</td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>SELECT CURTIME()</td>
+        <td>00:06:02</td>
+    </tr>
+    <tr>
+        <td>6</td>
+        <td>SELECT NOW()</td>
+        <td>2022-06-04 00:06:43</td>
+    </tr>
+    </tbody>
+</table>
+<p>І, як ти можеш бачити, у таблиці вище, щоб отримати поточну дату і час, тобі достатньо скористатися однією з функцій: </p>
+<ul>
+<li><code>CURDATE()</code> – поточна дата;</li>
+<li><code>CURTIME()</code> – поточний час;</li>
+<li><code>NOW()</code> – поточна дата та час.</li>
+</ul>
+<p>3.3 Групуємо дані за роком та місяцем</p>
+<p>Давай згадаємо нашу таблицю task із завданнями для співробітників. Спробуємо згрупувати завдання з цієї таблиці за роками. Для цього скористаємося функцією <code>YEAR()</code>, яка повертає рік від переданої до неї дати.</p>
+<p>Перша версія нашого запиту буде виглядати так:</p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-brown">SELECT</span>
+    <span class="text-green">id</span>,
+    <span class="text-green">employee_id</span>,
+    <span class="text-green">name</span>,
+    <span class="text-red">YEAR</span>(<span class="text-green">deadline</span>) <span class="text-brown">AS</span> <span class ="text-viola">year</span>,
+    <span class="text-green">deadline</span>
+<span class="text-brown">FROM</span> <span class="text-yellow">task</span>
+        </code></pre>
+</div>
+<p>Результат цього запиту буде таким:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>id</th>
+        <th>employee_id</th>
+        <th>name</th>
+        <th>year</th>
+        <th>deadline</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>1</td>
+        <td>Виправити багу на фронтенді</td>
+        <td>2022</td>
+        <td>2022-06-01</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>2</td>
+        <td>Виправити багу на бекенді</td>
+        <td>2022</td>
+        <td>2022-06-15</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>5</td>
+        <td>Купити каву</td>
+        <td>2022 </td>
+        <td>2022-07-01</td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>5</td>
+        <td>Купити каву</td>
+        <td>2022 </td>
+        <td>2022-08-01</td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>5</td>
+        <td>Купити каву</td>
+        <td>2022 </td>
+        <td>2022-09-01</td>
+    </tr>
+    <tr>
+        <td>6</td>
+        <td>(NULL)</td>
+        <td>Прибрати офіс</td>
+        <td>(NULL)</td>
+        <td>(NULL)</td>
+    </tr>
+    <tr>
+        <td>7</td>
+        <td>4</td>
+        <td>Насолоджуватися життям</td>
+        <td>(NULL)</td>
+        <td>(NULL)</td>
+    </tr>
+    <tr>
+        <td>8</td>
+        <td>6</td>
+        <td>Насолоджуватися життям</td>
+        <td>(NULL)</td>
+        <td>(NULL)</td>
+    </tr>
+    </tbody>
+</table>
+<p>Ми бачимо, що у всіх рядків один і той же рік, тож давай краще використовуємо два поля - рік і місяць. Друга версія нашого запиту виглядатиме так:</p>
+<div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-brown">SELECT</span>
+    <span class="text-green">id</span>,
+    <span class="text-green">employee_id</span>,
+    <span class="text-green">name</span>,
+    <span class="text-red">YEAR</span>(<span class="text-green">deadline</span>) <span class="text-brown">AS</span> <span class ="text-viola">year</span>,
+    <span class="text-red">MONTH</span>(<span class="text-green">deadline</span>) <span class="text-brown">AS</span> <span class ="text-viola">month</span>,
+    <span class="text-green">deadline</span>
+<span class="text-brown">FROM</span> <span class="text-yellow">task</span>
+        </code></pre>
+</div>
+<p>Результат цього запиту буде таким: </p>
+<table>
+    <tbody>
+    <tr>
+        <th>id</th>
+        <th>employee_id</th>
+        <th>name</th>
+        <th>year</th>
+        <th>month </th>
+        <th>deadline</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>1</td>
+        <td>Виправити багу на фронтенді</td>
+        <td>2022</td>
+        <td>6</td>
+        <td>2022-06-01</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>2</td>
+        <td>Виправити багу на бекенді</td>
+        <td>2022</td>
+        <td>6</td>
+        <td>2022-06-15</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>5</td>
+        <td>Купити каву</td>
+        <td>2022 </td>
+        <td>7 </td>
+        <td>2022-07-01</td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>5</td>
+        <td>Купити каву</td>
+        <td>2022 </td>
+        <td>8 </td>
+        <td>2022-08-01</td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>5</td>
+        <td>Купити каву</td>
+        <td>2022 </td>
+        <td>9 </td>
+        <td>2022-09-01</td>
+    </tr>
+    <tr>
+        <td>6</td>
+        <td>(NULL)</td>
+        <td>Прибрати офіс</td>
+        <td>(NULL)</td>
+        <td>(NULL)</td>
+        <td>(NULL)</td>
+    </tr>
+    <tr>
+        <td>7</td>
+        <td>4</td>
+        <td>Насолоджуватися життям</td>
+        <td>(NULL)</td>
+        <td>(NULL)</td>
+        <td>(NULL)</td>
+    </tr>
+    <tr>
+        <td>8</td>
+        <td>6</td>
+        <td>Насолоджуватися життям</td>
+        <td>(NULL)</td>
+        <td>(NULL)</td>
+        <td>(NULL)</td>
+    </tr>
+    </tbody>
+</table>
+<p>Як групувати завдання за роком та місяцем я підказувати не буду – ти це вже вивчав: скористайся оператором <code>GROUP BY</code>. </p>

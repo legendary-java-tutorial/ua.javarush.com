@@ -1,0 +1,49 @@
+<h2>7.1 Заголовок Keep-Alive</h2>
+<p>І ще кілька корисних заголовків. Заголовок <strong>Keep-Alive</strong> вказує серверу, що з'єднання потрібно залишити відкритим: сервер не закриватиме з'єднання відразу після надсилання відповіді. Це призведе до того, що наступний запит від цього клієнта до сервера буде виконаний швидше.</p>
+<p>Приклад такого заголовка:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token class-name">Connection</span><span class="token operator">:</span> <span class="token class-name">Keep</span><span class="token operator">-</span><span class="token class-name">Alive</span></code></pre>
+</div>
+<p>Але якщо всі клієнти вимагатимуть постійного з'єднання, тоді проблеми розпочнуться вже на сервері. Сервер буде або недоступний, або почне закривати з'єднання на свій вибір.</p>
+<h2>7.2 Заголовок Cache-Control</h2>
+<p>За допомогою заголовка <strong>Cache-Control</strong> можна керувати кешуванням контенту. Грамотно налаштоване кешування прискорює роботу з контентом, криво налаштоване створює проблеми на рівному місці.</p>
+<p>Щоб <strong>вимкнути кешування,</strong> потрібно написати такий заголовок:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token class-name">Cache</span><span class="token operator">-</span><span class="token class-name">Control</span><span class="token operator">:</span> no<span class="token operator">-</span>cache<span class="token punctuation">,</span> no<span class="token operator">-</span>store<span class="token punctuation">,</span> must<span class="token operator">-</span>revalidate</code></pre>
+</div>
+<p>У кеші не повинно зберігатися нічого – ні за запитами клієнта, ні за відповідями сервера. Запит завжди надсилається на сервер, відповідь завжди завантажується повністю.</p>
+<p>Також можна включити <strong>найпримітивніший і найнадійніший тип кешування</strong> :</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token class-name">Cache</span><span class="token operator">-</span><span class="token class-name">Control</span><span class="token operator">:</span> no<span class="token operator">-</span>cache</code></pre>
+</div>
+<p>Перед тим, як видати копію, кеш запитує вихідний сервер щодо актуальності ресурсу.</p>
+<p>Можна вказати <strong>час кешування ресурсу в секундах</strong> . Виглядати такий заголовок буде так:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token class-name">Cache</span><span class="token operator">-</span><span class="token class-name">Control</span><span class="token operator">:</span> max<span class="token operator">-</span>age<span class="token operator">=</span><span class="token number">31536000</span></code></pre>
+</div>
+<p>Цей заголовок визначає максимальний час зберігання контенту в кеші.</p>
+<p>Детальніше про кешування ти можеш <a href="https://developer.mozilla.org/ru/docs/Web/HTTP/Caching" target="_blank">почитати тут</a></p>
+<h2>7.3 Cookie</h2>
+<p><span class="text-green">Сервер може зберігати дані на стороні клієнта</span> . Такі дані називаються <strong>cookie</strong> . Втім, cookie може зберегти клієнт. Вони дуже корисні обом сторонам.</p>
+<p>Наприклад, ти заходиш на сайт, а ти вже авторизований. Тобто коли ти залогінився в нього минулого разу, сервер наказав браузеру зберегти у себе інформацію про успішну логіну певного користувача.</p>
+<p>Ось як виглядає Cookie у запиті:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token class-name"></span><span class="text-red"><span class="token class-name">Cookie</span><span class="token operator">:</span></span><span class="token operator"></span> <span class="text-green">name<span class="token operator">=</span>value<span class="token punctuation">;</span>name2<span class="token operator">=</span>value2<span class="token punctuation">;</span>nameN<span class="token operator">=</span>valueN00</span></code></pre>
+</div>
+<p>Cookie зазвичай зберігає браузер і <span class="text-viola">вони прив'язані до певного домену</span> . Коли ти знову заходиш на той самий домен, cookie автоматично додаються до http-запиту та http-відповіді. Сервер/домен не може отримати cookie, які зберігає у браузері інший сервер/домен.</p>
+<p>У кожного cookie є 4 основні параметри:</p>
+<ul>
+ <li><strong>ім'я;</strong></li>
+ <li><strong>значення;</strong></li>
+ <li><strong>час дії (скільки часу їх зберігати);</strong></li>
+ <li><strong>домен, до якого прив'язані cookie.</strong></li>
+</ul>
+<p>Cookie зберігаються та передаються у текстовому вигляді, так що і ім'я, і ​​значення – це рядки. Якщо час дії cookie не вказано, вони знищуються після закриття браузера.</p>
+<h2>7.4 Session</h2>
+<p>Після того, як користувач залогінився на сайті, кажуть, що між сайтом та сервером встановилася сесія.</p>
+<p>Сервер у себе створює спеціальний об'єкт – <code>HttpSession,</code>де зберігає всю інформацію для роботи з авторизованим клієнтом. А унікальний номер цього об'єкта зберігає у браузері у вигляді Cookie.</p>
+<p>Веб-сервера Java зазвичай використовують ім'я <code>JSESSIONID</code>для зберігання ідентифікатора сесії. Виглядає це приблизно так:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token class-name"></span><span class="text-red"><span class="token class-name">Cookie</span><span class="token operator">:</span> JSESSIONID</span> <span class="token operator"></span><span class="text-green"><span class="token operator">=</span>ABAD1D</span></code></pre>
+</div>
+<p>На стороні сервера можна встановити час існування сесії, а також те, чи буде вона автоматично закриватися при закритті браузера.</p>

@@ -1,0 +1,77 @@
+<h2>Знайомство з Java Memory Model</h2>
+<p><strong>Модель пам'яті Java (Java Memory Model, JMM)</strong> описує поведінку потоків у виконання Java. Модель пам'яті — частина семантики мови Java, і визначає, що може і що ні розраховувати програміст, розробляє ПО задля конкретної Java-машини, а Java в цілому.</p>
+<p>Вихідна модель пам'яті Java (до якої, зокрема, відноситься “потоколокальна пам'ять”), розроблена в 1995 році, вважається невдалою: багато оптимізації неможливо провести, не втративши гарантію безпеки коду. Зокрема, є кілька варіантів написати багатопотокову “одиначку”:</p>
+<ul>
+ <li>або кожен акт доступу до одиночки (навіть коли об'єкт давно створений, і нічого вже не може змінитися) викликатиме міжпоточне блокування;</li>
+ <li>або за певного збігу обставин система видасть недобудованого поодинці;</li>
+ <li>або за певного збігу обставин система створить два одиночки;</li>
+ <li>або конструкція залежатиме від особливостей поведінки тієї чи іншої машини.</li>
+</ul>
+<p>Тому механізм роботи пам'яті було перероблено. У 2005 році з виходом Java 5 було презентовано новий підхід, який був ще покращений з виходом Java 14.</p>
+<p>В основі нової моделі лежать три правила:</p>
+<p><strong>Правило № 1</strong> : однопотокові програми виконуються псевдопослідовно. Це означає: насправді процесор може виконувати кілька операцій за такт, заодно змінивши їхній порядок, проте всі залежності за даними залишаються, так що поведінка не відрізняється від послідовної.</p>
+<p><strong>Правило № 2</strong> : немає значень, що казна-звідки взялися. Читання будь-якої змінної (крім не-volatile long та double, для яких це правило може не виконуватися) видасть або значення за умовчанням (нуль), або щось, записане туди іншою командою.</p>
+<p>І <strong>правило № 3</strong> : інші події виконуються по порядку, якщо пов'язані ставленням суворого часткового порядку "виконується раніше" ( <strong>happens before</strong> ).</p>
+<h2>Happens before</h2>
+<p>Леслі Лемпорт придумав поняття <strong>Happens before</strong> . Це відношення суворого часткового порядку, введене між атомарними командами (++ і - не атомарні) і не означає "фізично раніше".</p>
+<p>Воно говорить про те, що друга команда буде "в курсі" змін, проведених першою.</p><img data-max-width="512" data-id="6dbea5dc-27df-45d8-a1e2-c11fc1a91369" alt="Happens before" src="https://cdn.javarush.com/images/article/6dbea5dc-27df-45d8-a1e2-c11fc1a91369/512.jpeg" style="width: 512px;">
+<p>Наприклад, одне виконується насамперед для таких операцій:</p>
+<p><strong>Синхронізація та монітори:</strong></p>
+<ul>
+ <li>Захоплення монітора (метод <span class="code text-orange">lock</span> , початок synchronized) і все, що відбувається в тому ж потоці після нього.</li>
+ <li>Повернення монітора (метод <span class="code text-orange">unlock</span> , кінець synchronized) і все, що відбувається в тому ж потоці перед ним.</li>
+ <li>Повернення монітора та подальше захоплення іншим потоком.</li>
+</ul>
+<p><strong>Запис та читання:</strong></p>
+<ul>
+ <li>Запис у будь-яку змінну та подальше читання її ж в одному потоці.</li>
+ <li>Все, що в тому ж потоці перед записом в volatile-змінну, і сам запис. volatile-читання і все, що в тому ж потоці після нього.</li>
+ <li>Запис на volatile-змінну і подальше зчитування її ж. Volatile-запис взаємодіє з пам'яттю так само, як і повернення монітора, а читання як захоплення. Виходить, що якщо один потік записав у volatile-змінну, а другий виявив це, все, що передує запису, виконується насамперед, що йде після читання; дивись малюнок.</li>
+</ul>
+<p><strong>Обслуговування об'єкту:</strong></p>
+<ul>
+ <li>Статична ініціалізація та будь-які дії з будь-якими екземплярами об'єктів.</li>
+ <li>Запис у final-поля у конструкторі і все, що після конструктора. Як виняток – співвідношення happens-before не поєднується транзитивно з іншими правилами і тому може викликати міжпотокову гонку.</li>
+ <li>Будь-яка робота з об'єктом та <span class="code text-orange">finalize()</span> .</li>
+</ul>
+<p><strong>Обслуговування потоку:</strong></p>
+<ul>
+ <li>Запуск потоку та будь-який код у потоці.</li>
+ <li>Занулення змінних, що відносяться до потоку, та будь-який код у потоці.</li>
+ <li>Код у потоці та <span class="code text-orange">join()</span> ; код у потоці і <span class="code">isAlive() == false</span> .</li>
+ <li><span class="code text-orange">interrupt()</span> потоку та виявлення факту зупинки.</li>
+</ul>
+<h2>Нюанси роботи Happens before</h2>
+<p>Звільнення (releasing) монітора happens-before відбувається перш, ніж отримання (acquiring) того ж монітора. Варто звернути увагу, що саме звільнення, а не вихід, тобто за безпеку при використанні wait, можна не турбуватися.</p>
+<p>Розглянемо, як це знання допоможе нам виправити наш приклад. В даному випадку все дуже просто: достатньо прибрати зовнішню перевірку та залишити синхронізацію як є. Тепер другий потік гарантовано побачить усі зміни, тому що він отримає монітор лише після того, як інший його потік відпустить. А оскільки він його не відпустить, доки все не проініціалізує, ми побачимо всі зміни відразу, а не окремо:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Keeper</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token class-name">Data</span> data <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">Data</span> <span class="token function">getData</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">synchronized</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span><span class="token punctuation">(</span>data <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                data <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Data</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">return</span> data<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Запис у volatile мінливу happens-before читання з тієї ж змінної. Та зміна, яку ми внесли, звичайно, виправляє некоректність, але повертає того, хто написав початковий код, туди, звідки він прийшов — до блокування щоразу. Врятувати може ключове слово volatile. Фактично, розглянуте твердження означає, що з читанні всього, що оголошено volatile, ми завжди отримуватимемо актуальне значення.</p>
+<p>Крім того, як я говорив раніше, для volatile полів запис завжди (в тому числі long та double) є атомарною операцією. Ще один важливий момент: якщо у вас є volatile сутність, що має посилання на інші сутності (наприклад, масив, List або якийсь ще клас), то завжди "свіжою" буде тільки посилання на саму сутність, але не на все, в неї вхідне.</p>
+<p>Отже, назад до наших Double-locking баранів. З використанням volatile виправити ситуацію можна так:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Keeper</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">volatile</span> <span class="token class-name">Data</span> data <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">Data</span> <span class="token function">getData</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>data <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">synchronized</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">if</span><span class="token punctuation">(</span>data <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    data <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Data</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> data<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Тут у нас, як і раніше, є блокування, але тільки у випадку, якщо data == null. Інші випадки ми відсіюємо, використовуючи volatile read. Коректність забезпечується тим, що volatile store happens-before volatile read і всі операції, які відбуваються в конструкторі, видно тому, хто читає значення поля.</p>

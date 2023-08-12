@@ -1,0 +1,391 @@
+<p>— Я розповім тобі про « <span class="text-red">модифікатори доступу</span> ». Колись я вже розповідав про них, але повторення – мати вчення.</p>
+<p>Ти можеш керувати доступом (видимістю) методів та змінних твого класу з інших класів. Модифікатор доступу відповідає на запитання «Хто може звертатися до цього методу/змінної?». Кожному методу чи змінній можна вказувати лише один модифікатор.</p>
+<p><strong>1)</strong> &nbsp;Модифікатор " <strong><span class="text-red">public</span></strong> ".</p>
+<p>До змінної, методу або класу, позначеному модифікатором&nbsp; <strong><span class="text-red">public</span></strong> , можна звертатися з будь-якого місця програми. Це найвищий ступінь відкритості – жодних обмежень немає.</p>
+<p><strong>2)</strong> &nbsp;Модифікатор « <strong><span class="text-red">private</span></strong> ».</p>
+<p>До змінної, методу або класу, позначеному модифікатором&nbsp; <span class="text-red"><strong>private</strong></span> , можна звертатися тільки з того ж класу, де він оголошений. Для решти класів позначений метод чи змінна – невидимі. Це найвищий ступінь закритості – лише свій клас. Такі методи не успадковуються та не перевизначаються. Доступ до них із класу-спадкоємця також неможливий.</p>
+<p><strong>3) «Модифікатор </strong>&nbsp;<strong>« <span class="text-red">за умовчанням</span> ».</strong></p>
+<p>Якщо змінна або метод не позначені ніяким модифікатором, то вважається, що вони позначені «за замовчуванням» модифікатором. Змінні методи з таким модифікатором видно всім класам пакета, в якому вони оголошені, і тільки їм. Цей модифікатор ще називають " <span class="text-red"><strong>package</strong></span> " або " <span class="text-red"><strong>package private</strong></span> ", натякаючи, що доступ до змінних і методів відкритий для всього пакету, в якому знаходиться їх клас</p>
+<p><strong>4)</strong> &nbsp;Модифікатор « <span class="text-red"><strong>protected</strong></span> ».</p>
+<p>Цей рівень доступу трохи ширший, ніж&nbsp; <span class="text-red"><strong>package</strong></span> . До змінної, методу чи класу, позначеному модифікатором&nbsp; <span class="text-red"><strong>protected</strong></span> , можна звертатися з його пакета (як package), але з усіх класів, успадкованих від поточного.</p>
+<p>Таблиця з поясненням:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th style="text-align:" center;="" rowspan="2">Тип видимості</th>
+    <th style="text-align: center;" rowspan="2">Ключове слово</th>
+    <th style="text-align: center;" colspan="4">Доступ</th>
+   </tr>
+   <tr>
+    <th style="text-align: center;">Свій клас</th>
+    <th style="text-align: center;">Свій пакет</th>
+    <th style="text-align: center;">Клас - спадкоємець</th>
+    <th style="text-align: center;">Усі класи</th>
+   </tr>
+   <tr>
+    <td><b>Закритий</b></td>
+    <td><b>private</b></td>
+    <td style="text-align: center;"><span class="text-green">Є</span></td>
+    <td style="text-align: center;"><span class="text-red">Ні</span></td>
+    <td style="text-align: center;"><span class="text-red">Ні</span></td>
+    <td style="text-align: center;"><span class="text-red">Ні</span></td>
+   </tr>
+   <tr>
+    <td><b>Пакет</b></td>
+    <td>(Немає модифікатора)</td>
+    <td style="text-align: center;"><span class="text-green">Є</span></td>
+    <td style="text-align: center;"><span class="text-green">Є</span></td>
+    <td style="text-align: center;"><span class="text-red">Ні</span></td>
+    <td style="text-align: center;"><span class="text-red">Ні</span></td>
+   </tr>
+   <tr>
+    <td><b>Захищений</b></td>
+    <td><b>protected</b></td>
+    <td style="text-align: center;"><span class="text-green">Є</span></td>
+    <td style="text-align: center;"><span class="text-green">Є</span></td>
+    <td style="text-align: center;"><span class="text-green">Є</span></td>
+    <td style="text-align: center;"><span class="text-red">Ні</span></td>
+   </tr>
+   <tr>
+    <td><b>Відкритий</b></td>
+    <td><b>public</b></td>
+    <td style="text-align: center;"><span class="text-green">Є</span></td>
+    <td style="text-align: center;"><span class="text-green">Є</span></td>
+    <td style="text-align: center;"><span class="text-green">Є</span></td>
+    <td style="text-align: center;"><span class="text-green">Є</span></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Є спосіб легко запам'ятати цю таблицю. Уяви собі, що ти складаєш заповіт і ділиш усі речі на чотири категорії. Хто може скористатися твоїми речами?</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Хто має доступ</th>
+    <th>Модифікатор</th>
+    <th>приклад</th>
+   </tr>
+   <tr>
+    <td>Тільки&nbsp; <span class="red_text text-red"><b>я сам</b></span></td>
+    <td><b>private</b></td>
+    <td>Особистий щоденник</td>
+   </tr>
+   <tr>
+    <td><span class="text-red">родина</span></td>
+    <td>(Немає модифікатора)</td>
+    <td>Сімейні фотографії</td>
+   </tr>
+   <tr>
+    <td><span class="text-red">Сім'я та спадкоємці</span></td>
+    <td><b>protected</b></td>
+    <td>Фамільний маєток</td>
+   </tr>
+   <tr>
+    <td><span class="text-red">Усе</span></td>
+    <td><b>public</b></td>
+    <td>Мемуари</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p class="amigo"><span class="text-user">— Якщо уявити, що класи, що лежать в одному пакеті, – це одна сім'я, то дуже схоже.</span></p>
+<p>— Хочу також розповісти тобі кілька цікавих нюансів щодо перевизначення методів.</p>
+<p><b>1) Неявна реалізація абстрактного способу.</b></p>
+<p>Допустимо, у тебе є код:</p>
+<div class="code-heading">
+ Код
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function"><span class="text-red">getName</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token string">"Васька"</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>І ти вирішив успадкувати від нього клас тигр і додати новому класу інтерфейс</p>
+<div class="code-heading">
+ Код
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function"><span class="text-user">getName</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+   <span class="token keyword">return</span> <span class="token string">"Васька"</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">interface</span> <span class="token class-name"><span class="text-red">HasName</span></span>
+<span class="token punctuation">{</span>
+ <span class="token class-name">String</span> <span class="token function"><span class="text-red">getName</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token keyword">int</span> <span class="token function"><span class="text-red">getWeight</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Tiger</span> <span class="token keyword"></span><span class="text-user"><span class="token keyword">extends</span> <span class="token class-name">Cat</span></span><span class="token class-name"></span> <span class="token keyword"></span><span class="text-red"><span class="token keyword">implements</span> <span class="token class-name">HasName</span></span><span class="token class-name"></span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function"><span class="text-red">getWeight</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token number">115</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span></code></pre>
+<p>Якщо ти просто реалізуєш всі методи, які тобі підкаже Intellij IDEA, то можеш потім довго шукати помилку.</p>
+<p>Виявляється, що в класі Tiger є успадкований від Cat метод getName, який і вважатиметься реалізацією методу getName для інтерфейсу HasName.</p>
+<p><span class="text-user">- Не бачу в цьому нічого страшного.</span></p>
+<p>— Це не дуже погано, це скоріше потенційне місце для помилок.</p>
+<p>Але може бути ще гірше:</p>
+<div class="code-heading">
+ Код
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">interface</span> <span class="token class-name"><span class="text-red">HasWeight</span></span>
+<span class="token punctuation">{</span>
+ <span class="token keyword"></span><span class="text-red"><span class="token keyword">int</span> <span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token punctuation">}</span></code></pre>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">interface</span> <span class="token class-name"><span class="text-user">HasSize</span></span>
+<span class="token punctuation">{</span>
+ <span class="token keyword"></span><span class="text-user"><span class="token keyword">int</span> <span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token punctuation">}</span></code></pre>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Tiger</span> <span class="token keyword">extends</span> <span class="token class-name">Cat</span> <span class="token keyword">implements</span> <span class="token class-name"><span class="text-red">HasWeight</span></span><span class="token punctuation">,</span> <span class="token class-name"><span class="text-user">HasSize</span></span>
+<span class="token punctuation">{</span>
+ <span class="token keyword"></span><span class="text-user"><span class="token keyword">public</span> <span class="token keyword">int</span></span><span class="token keyword"></span> <span class="token function"><span class="text-red">getValue</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token number">115</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Виявляється, ти не завжди можеш успадковуватись від кількох інтерфейсів. Точніше успадкуватися можеш, а ось коректно їх реалізувати – ні. Подивися на приклад, обидва інтерфейси вимагають, щоб ти реалізував метод getValue(), і не зрозуміло, що він повинен повертати: вага(weight) чи розмір(size). Це досить неприємна річ, якщо тобі доведеться з нею зіткнутися.</p>
+<p><span class="text-user">- Так згоден. Хочеш реалізувати метод, а не можеш. Раптом ти вже успадкував метод із таким самим ім'ям від базового класу. Обломись.</span></p>
+<p>— Але ж є й приємні новини.</p>
+<p><strong>2) <span class="text-red">Розширення видимості. </span></strong>При перевизначенні типу дозволяється розширити видимість способу. Ось як це виглядає:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код на Java</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword"><span class="text-red">protected</span></span> <span class="token class-name">String</span> <span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token string">"Васька"</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Tiger</span> <span class="token keyword">extends</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword"><span class="text-red">public</span></span> <span class="token class-name">String</span> <span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token string">"Васабой Тигранович"</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Ми розширабо видимість методу <code><span class="text-red">protected</span></code>до <code><span class="text-red">public</span></code>.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Використання</th>
+    <th>Чому це «законно»</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token class-name">Cat</span> cat <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Cat</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ cat<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Все відмінно. Тут ми навіть не знаємо, що в класі-спадкоємці видимість способу була розширена.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token class-name">Tiger</span> tiger <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Tiger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ tiger<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Тут викликається спосіб, у якого розширабо область видимості.
+     <p></p>
+     <p>Якби цього зробити було не можна, завжди можна було б оголосити метод Tiger: <br><strong>public</strong> String getPublicName() <br>
+       { <br>
+       super.getName(); //виклик protected методу <br>
+       }</p>
+     <p>Тобто. ні про яке порушення безпеки та мови немає.</p></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token class-name">Cat</span> catTiger <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Tiger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ catTiger<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Якщо всі умови підходять для виклику методу базового типу ( <strong>Cat</strong> ), то вони точно підійдуть для виклику типу спадкоємця ( <strong>Tiger</strong> ). Т.к. обмеження виклику методу були ослаблені, а чи не посилені.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">— Не впевнений, що зрозумів повністю, але те, що можна так робити, запам'ятаю.</span></p>
+<p><strong>3) </strong> <span class="text-red"><strong>Звуження типу результату.</strong></span></p>
+<p>У перевизначеному способі ми можемо <span class="text-red"><strong>змінити тип результату</strong></span> , <strong>звузивши</strong> його.</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код на Java</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name"><span class="text-red">Cat</span></span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token class-name">Cat</span> parent<span class="token punctuation">;</span>
+ <span class="token keyword">public</span> <span class="token class-name"><span class="text-red">Cat</span></span> <span class="token function"><span class="text-user">getMyParent</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>parent<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+ <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function"><span class="text-user">setMyParent</span></span><span class="token punctuation">(</span><span class="token class-name">Cat</span> cat<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>parent <span class="token operator">=</span> cat<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name"><span class="text-red">Tiger</span></span> <span class="token keyword">extends</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token class-name"><span class="text-red">Tiger</span></span> <span class="token function"><span class="text-user">getMyParent</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token class-name"><span class="text-red">Tiger</span></span><span class="token punctuation">)</span> <span class="token keyword">this</span><span class="token punctuation">.</span>parent<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Ми перевизначабо метод <code><span class="text-red">getMyParent</span></code>, тепер він повертає об'єкт типу <code><span class="text-red">Tiger</span></code>.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Використання</th>
+    <th>Чому це «законно»</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token class-name">Cat</span> parent <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Cat</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ <span class="token class-name">Cat</span> me <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Cat</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ me<span class="token punctuation">.</span><span class="token function">setMyParent</span><span class="token punctuation">(</span>parent<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token class-name">Cat</span> myParent <span class="token operator">=</span> me<span class="token punctuation">.</span><span class="token function">getMyParent</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Все відмінно. Тут ми навіть не знаємо, що в класі спадкоємця тип результату методу getMyParent був звужений.
+     <p></p>
+     <p>Старий код як працював так і працює.</p></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token class-name">Tiger</span> parent <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Tiger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ <span class="token class-name">Tiger</span> me <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Tiger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ me<span class="token punctuation">.</span><span class="token function">setMyParent</span><span class="token punctuation">(</span>parent<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token class-name">Tiger</span> myParent <span class="token operator">=</span> me<span class="token punctuation">.</span><span class="token function">getMyParent</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Тут викликається спосіб, у якого звузабо тип результату.
+     <p></p>
+     <p>Якби цього зробити було не можна, завжди можна було б оголосити метод Tiger: <br><strong>public Tiger</strong> getMyTigerParent() <br>
+       { <br>
+       return (Tiger) this.parent; <br>
+       }</p>
+     <p>Тобто. ні про яке порушення безпеки та/або контролю приведення типів не йдеться.</p></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token class-name">Tiger</span> parent <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Tiger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="text-red"> <span class="token class-name">Cat</span> me <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Tiger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+ me<span class="token punctuation">.</span><span class="token function">setMyParent</span><span class="token punctuation">(</span>parent<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="text-red"> <span class="token class-name">Cat</span> myParent <span class="token operator">=</span> me<span class="token punctuation">.</span><span class="token function">getMyParent</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>І тут все добре працює, хоча ми розширабо тип змінних до базового класу (Cat).
+     <p></p>
+     <p>Немає нічого страшного <span class="text-red">при виклику методу getMyParent</span> , т.к. <span class="text-red">Його результат</span> , хоч і класу Tiger, все одно <span class="text-red">зможе</span> чудово <span class="text-red">привласнити в змінну</span> myParent <span class="text-red">базового класу (Cat).</span></p>
+     <p>Об'єкти Tiger можна сміливо зберігати як у змінних класу Tiger, так і змінних класу Cat.</p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">- Ага. Я зрозумів. Потрібно <strong>при перевизначенні методів турбуватися про те, як усе це працюватиме, якщо ми передамо наші об'єкти в код, який вміє поводитися тільки з базовим класом, і нічого про наш клас не знає.</strong></span></p>
+<p>- Саме! Тоді питання засипання, чому не можна розширити тип результату при перевизначенні методу?</p>
+<p><span class="text-user">— Це очевидно, тоді перестане працювати код у базовому класі:</span></p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код на Java</th>
+    <th>Пояснення проблеми</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token class-name">Cat</span> parent<span class="token punctuation">;</span>
+ <span class="token keyword">public</span> <span class="token class-name">Cat</span> <span class="token function"><span class="text-user">getMyParent</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>parent<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+ <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function"><span class="text-user">setMyParent</span></span><span class="token punctuation">(</span><span class="token class-name">Cat</span> cat<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>parent <span class="token operator">=</span> cat<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Tiger</span> <span class="token keyword">extends</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token class-name"><span class="text-red">Object</span></span> <span class="token function"><span class="text-user">getMyParent</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>parent <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+   <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>parent<span class="token punctuation">;</span>
+  <span class="token keyword">else</span>
+   <span class="token keyword"></span><span class="text-red"><span class="token keyword">return</span> <span class="token string">"я - сирота"</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Ми перевизначабо метод getMyParent та розширабо тип його результату.
+     <p></p>
+     <p>Тут все добре.</p></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token class-name">Tiger</span> parent <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Tiger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ <span class="token class-name">Cat</span> me <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Tiger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token class-name"></span><span class="text-red"><span class="token class-name">Cat</span> myParent <span class="token operator">=</span> me<span class="token punctuation">.</span><span class="token function">getMyParent</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Тоді у нас <span class="text-red">перестане працювати цей код.</span>
+     <p></p>
+     <p>Метод <span class="text-red">getMyParent може відновити будь-який об'єкт типу Object, т.к. насправді він викликається об'єкта типу Tiger.</span></p>
+     <p>А ми <span class="text-red">не маємо перевірки перед присвоєнням. </span>Тоді цілком можливо, що <span class="text-red">змінна myParent типу Cat зберігатиме посилання на рядок.</span></p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>— Чудовий приклад, Аміго!</p>
+<p>Java <strong>перед викликом методу не перевіряється, чи є такий метод у об'єкта чи ні. Усі перевірки відбуваються під час виконання. </strong>І [гіпотетичний] виклик відсутнього методу, швидше за все, призведе до того, що програма почне виконувати байт код там, де його немає. Це приведе до фатальної помилки, і операційна система примусово закриє програму.</p>
+<p><span class="text-user">- Нічого собі. Буду знати.</span></p>

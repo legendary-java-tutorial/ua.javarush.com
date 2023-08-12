@@ -1,0 +1,81 @@
+<h2>1. Функціональні методи</h2>
+<p>Якщо <strong>інтерфейс має лише один метод</strong> , змінній цього типу-інтерфейсу можна присвоїти значення, задане <span class="term">лямбда-виразом</span> (лямбда-функцією). Такі інтерфейси стали називати <span class="term">функціональними інтерфейсами</span> (після додавання Java підтримки лямбда-функцій).</p>
+<p>Наприклад, Java має інтерфейс <code>Consumer&lt;Тип&gt;</code>(Consumer == Споживач), який містить метод <code>accept(Тип&nbsp;obj)</code>. Навіщо потрібен цей інтерфейс?</p>
+<p>У Java 8 у колекцій з'явився метод <code class="text-viola">forEach()</code>, який дозволяє <span class="term text-viola">для кожного </span> <span class="term text-red">елемента </span> <span class="term text-user">колекції </span> <span class="term text-yellow">виконати якусь дію</span> . І ось для передачі дії в метод <code class="text-viola">forEach()</code>якраз і використовується функціональний інтерфейс <code>Consumer&lt;T&gt;</code>.</p>
+<p>Ось як можна <span class="term text-yellow">вивести</span> всі <span class="term text-red">елементи </span> <span class="term text-user">колекції</span> на екран:</p>
+<div class="lesson-example">
+ <pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> <span class="text-user">list</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Collections</span><span class="token punctuation">.</span><span class="token function">addAll</span><span class="token punctuation">(</span><span class="text-user">list</span><span class="token punctuation">,</span> <span class="token string">"Вітання"</span><span class="token punctuation">,</span> <span class="token string">"як"</span><span class="token punctuation">,</span> <span class="token string">"дела?"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="code text-user">list</span><span class="token punctuation">.</span><span class="token function"><span class="code text-viola">forEach</span></span><span class="token punctuation">(</span> <span class="token punctuation">(</span><span class="code text-red">s</span><span class="token punctuation">)</span> <span class="token operator">-&gt;</span> <span class="token class-name"></span><span class="code text-yellow"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span></span><span class="token punctuation"></span> <span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+ <div class="lesson-example-caption">
+  Виведення всіх елементів колекції (з використанням лямбда-виразу)
+ </div>
+</div>
+<p>Компілятор перетворює цей код на код:</p>
+<div class="lesson-example">
+ <pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> <span class="text-user">list</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Collections</span><span class="token punctuation">.</span><span class="token function">addAll</span><span class="token punctuation">(</span><span class="text-user">list</span><span class="token punctuation">,</span> <span class="token string">"Вітання"</span><span class="token punctuation">,</span> <span class="token string">"як"</span><span class="token punctuation">,</span> <span class="token string">"дела?"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="code text-user">list</span><span class="token punctuation">.</span><span class="token function"><span class="code text-viola">forEach</span></span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Consumer</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">accept</span><span class="token punctuation">(</span><span class="token class-name">String</span> <span class="code text-red">s</span><span class="token punctuation">)</span>
+   <span class="token punctuation">{</span>
+      <span class="token class-name"></span><span class="code text-yellow"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span></span><span class="token punctuation"></span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+ <div class="lesson-example-caption">
+  Виведення всіх елементів колекції (запис із використанням анонімного класу)
+ </div>
+</div>
+<p>Перший запис однозначно коротший, ніж другий. І хоча читати код із лямбда-виразами непросто, читати код із анонімними внутрішніми класами часом ще складніше.</p>
+<hr>
+<hr>
+<h2>2. Посилання на метод</h2>
+<p>Проте наш код із <span class="term">лямбда-виразом</span> можна записати ще коротше.</p>
+<p>По-перше, можна опустити <span class="text-green">дужки</span> навколо параметра&nbsp; <code class="text-red">s</code>:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java">list<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span> <span class="token punctuation"><span class="text-green">(</span></span><span class="code text-red">s</span><span class="token punctuation"><span class="text-green">)</span></span> <span class="token operator">-&gt;</span> <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+ <div class="lesson-example-caption">
+  Було
+ </div>
+</div>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java">list<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span> <span class="code text-red">s</span> <span class="token operator">-&gt;</span> <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+ <div class="lesson-example-caption">
+  Стало
+ </div>
+</div>
+<p>Так можна робити лише якщо <span class="term text-red">параметр</span> один. Якщо параметрів <span class="text-green">декілька</span> , потрібно використовувати <span class="text-green">дужки</span> .</p>
+<p>Ну а по-друге, можна записати так:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java">list<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span> <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token operator">::</span><span class="token function"><span class="text-viola">println</span></span> <span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+ <div class="lesson-example-caption">
+  Найкомпактніший запис
+ </div>
+</div>
+<p>Це все той самий запис. Зверніть увагу, що після <code><span class="text-viola">println</span></code>дужок немає.</p>
+<p>Тут записано той самий код — виклик методу:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="text-green">об'єкт</span><span class="token operator"><span class="text-red">::</span></span><span class="text-viola">метод</span></code></pre>
+</div>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java">x <span class="token operator">-&gt;</span> <span class="text-green">об'єкт</span><span class="token punctuation">.</span><span class="text-viola">метод</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span></code></pre>
+</div>
+<p>Подумайте самі: ми хотіли для кожного елемента колекції <code>list</code>виконувати якусь дію. Якщо ця дія - виклик однієї функції (такі як <code>println()</code>), було б розумно просто передати функцію в метод як параметр.</p>
+<p>А як пояснити компілятору, що функцію потрібно передати, а не викликати? Для цього перед ім'ям методу ставимо не крапку, а <span class="text-red">дві двокрапки</span> : одна двокрапка вже зайнята в тернарному операторі.</p>
+<p>Це і є найпростіший і компактніший запис.</p>
+<hr>
+<hr>
+<h2>3. Конструктор</h2>
+<p>Посилання на методи за допомогою подвійної двокрапки дуже зручно використовувати, коли ми будемо працювати з потоками вводу-виводу. Ви в цьому переконаєтесь трохи пізніше</p>
+<p>А поки давайте поговоримо про 3 популярні способи передачі посилання на метод:</p>
+<p><strong>Посилання на метод об'єкту</strong></p>
+<p>Щоб передати посилання метод об'єкта, потрібно записати код виду . Цей код еквівалентний коду .<code><span class="text-green">об'єкт</span>::<span class="text-viola">метод</span></code><br><code>x -&gt; <span class="text-green">об'єкт</span>.<span class="text-viola">метод</span>(x)</code></p>
+<p>Як об'єкт можуть фігурувати такі спеціальні змінні як <code>this</code>і <code>super</code>.</p>
+<p><strong>Посилання на метод класу</strong></p>
+<p>Щоб надіслати посилання на статичний метод, потрібно записати код виду . Цей код буде перетворено на код виду<code><span class="text-green">класс</span>::<span class="text-viola">метод</span></code><code>x -&gt; <span class="text-green">класс</span>.<span class="text-viola">метод</span>(x);</code></p>
+<p><strong>Посилання на конструктор</strong></p>
+<p>Конструктор за своєю поведінкою чимось схожий на статичний метод класу, тому на нього також можна передати посилання. Виглядає так: .<code><span class="text-green">класс</span>::<span class="text-viola">new</span></code></p>
+<p>Наприклад, можна обійти стирання типів у колекцій і передати метод <code>toArray()</code>посилання на конструктор, який створить потрібний масив:<code>toArray( <span class="text-green">int</span>[]::<span class="text-viola">new</span> );</code></p>
+<hr>

@@ -1,0 +1,190 @@
+<p>- Привіт, Аміго! Зараз буде одна тема, якою, я думаю, ти частенько користуватимешся. Це – <span class="text-red">успадкування</span> .</p>
+<p><span class="text-green">Програмування, для необізнаних, не відрізняється від магії. </span>Тому почну з такої цікавої аналогії.</p>
+<p>Припустимо, що ти чарівник і хочеш створити літаючого коня. З одного боку, ти міг би спробувати начарувати пегаса. Але т.к. пегасів у природі немає, це буде дуже непросто. Доведеться багато робити самому. <span class="text-corporate">Куди простіше взяти коня і причарувати йому крила.</span></p><a href="https://cdn.javarush.com/images/article/9cdc9e25-4643-4d6a-bd3b-616ff3840aac/original.jpeg" target="_blank"><img data-id="9cdc9e25-4643-4d6a-bd3b-616ff3840aac" data-max-width="850" alt="Спадкування.  Перевага спадкування - 1" src="https://cdn.javarush.com/images/article/9cdc9e25-4643-4d6a-bd3b-616ff3840aac/800.jpeg" style="width: 850px;"></a>
+<p><span class="text-green">У програмуванні такий процес називається «успадкування»</span> . Припустимо, тобі треба написати дуже складний клас. Писати з нуля довго, потім ще довго все тестувати та шукати помилки. Навіщо йти найскладнішим шляхом? Краще пошукати – а чи немає такого класу?</p>
+<p>Припустимо, ти виявив клас, який своїми методами реалізує 80% потрібної тобі функціональності. Ти можеш просто скопіювати код у свій клас. Але таке рішення має кілька мінусів:</p>
+<p><span class="text-corporate">1) Знайдений клас вже може бути скомпільований у байт-код, а доступу до його вихідного коду в тебе немає.</span></p>
+<p><span class="text-red">2) Вихідний код класу є, але ти працюєш у компанії, яку можуть засудити на пару мільярдів за використання навіть 6 рядків чужого коду. А потім вона засудить</span> тебе.</p>
+<p><span class="text-user">3) Непотрібне дублювання великого обсягу коду. Крім того, якщо автор чужого класу знайде у ньому помилку та виправить її, у тебе ця помилка залишиться.</span></p>
+<p>Є рішення тонше і без необхідності отримувати легальний доступ до коду оригінального класу. <span class="text-green">У Java ти можеш просто оголосити той клас батьком твого класу. </span>Це буде еквівалентно тому, що ти додав код того класу до свого коду. У твоєму класі з'являться всі дані та всі методи класу-батька. Наприклад, можна робити так: успадковуємося від «коня», додаємо «крила» — отримуємо «пегаса»</p><a href="https://cdn.javarush.com/images/article/57aaa0cc-a622-447f-8070-3fe93ce1d839/original.jpeg" target="_blank"><img data-id="57aaa0cc-a622-447f-8070-3fe93ce1d839" data-max-width="384" alt="Спадкування.  Перевага спадкування - 2" src="https://cdn.javarush.com/images/article/57aaa0cc-a622-447f-8070-3fe93ce1d839/256.jpeg" style="width: 384px;"></a>
+<p><span class="text-user">— Дуже цікаво, продовжуй.</span></p>
+<p>— Спадкування можна використовувати і для інших цілей. Допустимо, у тебе є десять класів, які дуже схожі, мають збігаються дані та методи. Ти можеш створити спеціальний <span class="text-green">базовий клас</span> , винести ці дані (і методи, що працюють з ними) в цей базовий клас і оголосити ті десять класів його спадкоємцями. Тобто. вказати у кожному класі, що він є клас-батько – даний базовий клас.</p>
+<p>Також як <span class="text-red">переваги абстракції розкриваються лише поряд з інкапсуляцією, так і переваги успадкування набагато сильніші за використання поліморфізму. </span>Але про нього розповім завтра. Сьогодні ми розглянемо кілька прикладів використання успадкування.</p>
+<p>Припустимо, ми пишемо програму, яка грає у шахи з користувачем, тоді нам знадобляться класи для фігур. Які б ти запропонував класи, Аміго?</p>
+<p><span class="text-user">— Король, Ферзь, Слон, Кінь, Човна та Пішак.</span></p>
+<p>- Чудово. Нічого не прогаяв.</p>
+<p>— А які б дані ти запропонував зберігати у цих класах?</p>
+<p><span class="text-user">— Координати x та y, а також її цінність (worth). Адже деякі фігури цінніші за інші.</span></p>
+<p>— А в чому відмінність цих класів?</p>
+<p><span class="text-user">— Відмінність у тому, як вони ходять, фігури. У поведінці.</span></p>
+<p>- Так. Ось як можна було б описати їх у вигляді класів</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">King</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">int</span> x<span class="token punctuation">;</span>
+<span class="token keyword">int</span> y<span class="token punctuation">;</span>
+<span class="token keyword">int</span> worth<span class="token punctuation">;</span>
+<span class="token keyword">void</span> <span class="token function">kingMove</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token comment">//код, решающий,</span>
+<span class="token comment">//як пойдет король</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Queen</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">int</span> x<span class="token punctuation">;</span>
+<span class="token keyword">int</span> y<span class="token punctuation">;</span>
+<span class="token keyword">int</span> worth<span class="token punctuation">;</span>
+<span class="token keyword">void</span> <span class="token function">queenMove</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token comment">//код, решающий,</span>
+<span class="token comment">//як пойдет ферзь</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Rook</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">int</span> x<span class="token punctuation">;</span>
+<span class="token keyword">int</span> y<span class="token punctuation">;</span>
+<span class="token keyword">int</span> worth<span class="token punctuation">;</span>
+<span class="token keyword">void</span> <span class="token function">rookMove</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token comment">//код, решающий,</span>
+<span class="token comment">//як пойдет ладья</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Knight</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">int</span> x<span class="token punctuation">;</span>
+<span class="token keyword">int</span> y<span class="token punctuation">;</span>
+<span class="token keyword">int</span> worth<span class="token punctuation">;</span>
+<span class="token keyword">void</span> <span class="token function">knightMove</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token comment">//код, решающий,</span>
+<span class="token comment">//як пойдет конь</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Bishop</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">int</span> x<span class="token punctuation">;</span>
+<span class="token keyword">int</span> y<span class="token punctuation">;</span>
+<span class="token keyword">int</span> worth<span class="token punctuation">;</span>
+<span class="token keyword">void</span> <span class="token function">bishopMove</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token comment">//код, решающий,</span>
+<span class="token comment">//як пойдет слон</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Pawn</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">int</span> x<span class="token punctuation">;</span>
+<span class="token keyword">int</span> y<span class="token punctuation">;</span>
+<span class="token keyword">int</span> worth<span class="token punctuation">;</span>
+<span class="token keyword">void</span> <span class="token function">pawnMove</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token comment">//код, решающий,</span>
+<span class="token comment">//як пойдет пешка</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<div class="task-widget-container" showcover="true" taskkey="com.codegym.task.task11.task1124"></div>
+<p><span class="text-user">— Так, саме так я написав би.</span></p>
+<p>— А от як можна було б скоротити код за допомогою успадкування. Ми могли б винести однакові методи та дані до загального класу. Назвемо його ChessItem. <span class="text-corporate">Об'єкти класу ChessItem не має сенсу створювати, тому що йому не відповідає жодна шахова фігура,</span> але від нього було б багато користі:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">King</span> <span class="token keyword">extends</span> <span class="token class-name">ChessItem</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">void</span> <span class="token function">kingMove</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token comment">//код, решающий,</span>
+<span class="token comment">//як пойдет король</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Queen</span> <span class="token keyword">extends</span> <span class="token class-name">ChessItem</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">void</span> <span class="token function">queenMove</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token comment">//код, решающий,</span>
+<span class="token comment">//як пойдет ферзь</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Rook</span> <span class="token keyword">extends</span> <span class="token class-name">ChessItem</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">void</span> <span class="token function">rookMove</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token comment">//код, решающий,</span>
+<span class="token comment">//як пойдет ладья</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+   </tr>
+   <tr>
+    <td></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">ChessItem</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">int</span> x<span class="token punctuation">;</span>
+<span class="token keyword">int</span> y<span class="token punctuation">;</span>
+<span class="token keyword">int</span> worth<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Knight</span> <span class="token keyword">extends</span> <span class="token class-name">ChessItem</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">void</span> <span class="token function">knightMove</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token comment">//код, решающий,</span>
+<span class="token comment">//як пойдет конь</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Bishop</span> <span class="token keyword">extends</span> <span class="token class-name">ChessItem</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">void</span> <span class="token function">bishopMove</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token comment">//код, решающий,</span>
+<span class="token comment">//як пойдет слон</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Pawn</span> <span class="token keyword">extends</span> <span class="token class-name">ChessItem</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">void</span> <span class="token function">pawnMove</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token comment">//код, решающий,</span>
+<span class="token comment">//як пойдет пешка</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<div class="task-widget-container" showcover="true" taskkey="com.codegym.task.task11.task1125"></div>
+<p><span class="text-user">- Як цікаво.</span></p>
+<p>- Саме! Особливо багато переваг ми отримуємо, коли у проекті тисячі різних об'єктів та сотні класів. Тоді правильно підібраними класами можна не лише суттєво спростити логіку, а й скоротити код у десятки разів.</p>
+<p><span class="text-user">— А що потрібно, щоб успадкувати якийсь клас?</span></p>
+<p>— Для цього після оголошення нашого класу потрібно вказати ключове слово extends та написати ім'я батьківського класу. <span class="text-red">Успадкуватися можна лише від одного класу.</span></p><a href="https://cdn.javarush.com/images/article/6fdefd74-6078-4fc1-bf1a-10298e89506c/original.jpeg" target="_blank"><img data-id="6fdefd74-6078-4fc1-bf1a-10298e89506c" data-max-width="850" alt="Спадкування.  Перевага спадкування - 3" src="https://cdn.javarush.com/images/article/6fdefd74-6078-4fc1-bf1a-10298e89506c/800.jpeg" style="width: 850px;"></a>
+<p>На картинці ми бачимо корову, успадковану від свині. "Свиня" успадкована від "курки", "курка" від "яйця". <span class="text-red">Лише один батько! </span>Таке успадкування не завжди є логічним. Але якщо є тільки свиня, а дуже потрібна корова, програміст часто не може встояти перед бажанням зробити корову з свині.</p>
+<p><span class="text-user">— А якщо мені хочеться успадкуватись від двох класів. Можна ж щось зробити?</span></p>
+<p>- Майже нічого. Множинного успадкування класів у Java немає: клас може мати лише одного класу-батька. Але є множинне наслідування інтерфейсів. Це трохи знижує гостроту проблеми.</p>
+<p><span class="text-user">- Ясно. А що таке інтерфейс?</span></p>
+<p>— Про інтерфейси я розповім тобі завтра, а поки що давай продовжимо розбиратися з успадкуванням.</p>

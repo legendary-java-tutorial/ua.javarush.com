@@ -1,0 +1,317 @@
+<h2>Для чого використовується YAML</h2>
+<p>Ще один текстовий формат даних - YAML ( <em>Yet Another Markup Language</em> , пізніше - <em>YAML Ain't Markup Language</em> ). Використовується для серіалізації об'єктів для їх передачі через мережу (так само, як використовується xml та json). За рахунок зручної читання його також використовують для написання конфігураційних файлів, наприклад, для Docker, Kubernetes, Ansible, etc. Якщо YAML потрібно зберегти у файл (наприклад, конфігураційний), використовують два розширення: .yaml і .yml.</p>
+<h2>Синтаксис мови</h2>
+<p>Для позначення тегів xml використовують кутові дужки ( <span class="code">&lt;&gt;</span> ), для JSON - фігурні ( <span class="code">{}</span> ). Для YAML застосовують роздільники рядки (Enter) і відступи (пробіли чи табы).</p>
+<p>Дані зберігаються у вигляді key-value пар, де ключем виступає рядок, а значення можуть бути різні типи даних: рядок, число, true/false, масив... Ключі пишуться без лапок.</p>
+<p>Давай послідовно подивимося, як у YAML зберігається інформація:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Тип</th>
+    <th>Java</th>
+    <th>YAML</th>
+   </tr>
+   <tr>
+    <td>Ціле число</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">int</span> number <span class="token operator">=</span> <span class="token number">5</span></code></pre></td>
+    <td>
+     <div class="terminal">
+      number: 5
+     </div></td>
+   </tr>
+   <tr>
+    <td>Дробове число</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">double</span> number <span class="token operator">=</span> <span class="token number">4.3</span></code></pre></td>
+    <td>
+     <div class="terminal">
+      number: 4.3
+     </div></td>
+   </tr>
+   <tr>
+    <td>Бульова змінна</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">boolean</span> valid <span class="token operator">=</span> <span class="token boolean">false</span></code></pre></td>
+    <td>
+     <div class="terminal">
+      valid: false 
+      <br>
+       valid: no 
+      <br>
+       valid: off
+     </div>
+     <p>* Допустимі булеві значення: true/false, yes/no, on/off.</p></td>
+   </tr>
+   <tr>
+    <td>Рядок</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">String</span> city <span class="token operator">=</span> “<span class="token class-name">Kyiv</span>”</code></pre></td>
+    <td>
+     <div class="terminal">
+      city: Kyiv 
+      <br>
+       city: 'Kyiv' 
+      <br>
+       city: "Kyiv"
+     </div>
+     <p>* Усі три варіанти рівнозначні.</p></td>
+   </tr>
+   <tr>
+    <td>Рядок зі спецсимволами</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">String</span> line <span class="token operator">=</span> “aaa\nbbb”</code></pre></td>
+    <td>
+     <div class="terminal">
+      line: "aaa\nbbb"
+     </div></td>
+   </tr>
+   <tr>
+    <td>Коментар у коді</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token comment">// comment</span></code></pre></td>
+    <td>
+     <div class="terminal">
+      # comment
+     </div></td>
+   </tr>
+   <tr>
+    <td>Об'єкт</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Person</span> <span class="token punctuation">{</span>
+  <span class="token class-name">String</span> name <span class="token operator">=</span> “<span class="token class-name">Vasyl</span>”<span class="token punctuation">;</span>
+  <span class="token keyword">int</span> age <span class="token operator">=</span> <span class="token number">32</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+     <p>* Наведено клас об'єкта, щоб було видно структура об'єкта.</p></td>
+    <td>
+     <div class="terminal">
+      людина: 
+      <br>
+       &nbsp;&nbsp;назва: "Vasyl" 
+      <br>
+       &nbsp;&nbsp;age: 32
+     </div>
+     <p>* Зверніть увагу на відступ перед атрибутами. Він має бути однаковим для всіх атрибутів.</p></td>
+   </tr>
+   <tr>
+    <td>Список простих значень</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token keyword">var</span> ages <span class="token operator">=</span>
+    <span class="token class-name">List</span><span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">9</span><span class="token punctuation">,</span> <span class="token number">78</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>
+     <div class="terminal">
+      ages: [1, 3,5,9,78, -5] 
+      <br>
+       ages: 
+      <br>
+       &nbsp;&nbsp;- 1 
+      <br>
+       &nbsp;&nbsp;- 3 
+      <br>
+       &nbsp;&nbsp;- 5 
+      <br>
+       &nbsp;&nbsp;- 9 
+      <br>
+       &nbsp;&nbsp;- 78 
+      <br>
+       &nbsp;&nbsp;- -5
+     </div>
+     <p>* Обидва варіанти рівнозначні. <br>
+       ** Кожен наступний елемент списку відзначається дефісом.</p></td>
+   </tr>
+   <tr>
+    <td>Список об'єктів</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Person</span> <span class="token punctuation">{</span>
+    <span class="token class-name">String</span> name<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> age<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">,</span> <span class="token keyword">int</span> age<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+…<span class="token punctuation">.</span>
+<span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Person</span><span class="token punctuation">&gt;</span></span> people <span class="token operator">=</span> <span class="token class-name">List</span><span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span>
+        <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token string">"Ivan"</span><span class="token punctuation">,</span> <span class="token number">21</span><span class="token punctuation">)</span> <span class="token punctuation">,</span>
+        <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token string">"Marina"</span><span class="token punctuation">,</span> <span class="token number">25</span><span class="token punctuation">)</span> <span class="token punctuation">,</span>
+        <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token string">"Oleh"</span><span class="token punctuation">,</span> <span class="token number">73</span><span class="token punctuation">)</span>      <span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>
+     <div class="terminal">
+      люди: 
+      <br>
+       &nbsp;&nbsp;- name: "Ivan" 
+      <br>
+       &nbsp;&nbsp;&nbsp;&nbsp;age: 21 
+      <br>
+       &nbsp;&nbsp;- name: "Marina" 
+      <br>
+       &nbsp;&nbsp;&nbsp;&nbsp;age: 25 
+      <br>
+       &nbsp;&nbsp;- name: "Oleh" 
+      <br>
+       &nbsp;&nbsp;&nbsp;&nbsp;age: 73
+     </div></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Як і Java, елементом списку може бути список, тобто об'єкти можна вкладати один в інший. Дефіс, який визначає черговий елемент списку, може бути зміщений по горизонталі щодо батьківського ключа або знаходиться безпосередньо під ним. Головне – щоб усі елементи мали однаковий формат. Це допоможе уникнути плутанини та неоднозначності з ієрархією вкладеності.</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>
+     <div class="terminal">
+      ages: 
+      <br>
+       &nbsp;&nbsp;- 1 
+      <br>
+       &nbsp;&nbsp;- 3 
+      <br>
+       &nbsp;&nbsp;- 5 
+      <br>
+       &nbsp;&nbsp;- 9 
+      <br>
+       &nbsp;&nbsp;- 78 
+      <br>
+       &nbsp;&nbsp;- -5
+     </div></td>
+    <td>
+     <div class="terminal">
+      ages: 
+      <br>
+       - 1 
+      <br>
+       - 3 
+      <br>
+       - 5 
+      <br>
+       - 9 
+      <br>
+       - 78 
+      <br>
+       - -5
+     </div></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Є ще два нюанси під час роботи з текстовими значеннями:</p>
+<ol>
+ <li>
+  <p><span class="text-bold">Багаторядковий текст. </span>Ми можемо зберегти текст так:</p>
+  <div class="terminal">
+   multilineText: "line 1\nline 2\n....line n"
+  </div>
+  <p>Але читати його буде дуже незручно. Тому є символ <span class="code">| </span>(pipe), за допомогою якого можна записати текст інакше:</p>
+  <div class="terminal">
+   multilineText: | 
+   <br>
+    &nbsp;line 1 
+   <br>
+    &nbsp;line 2 
+   <br>
+    &nbsp;.... 
+   <br>
+    &nbsp;line n
+  </div>
+  <p>Погодься, другий варіант зручніше, вірно?</p></li>
+ <li>
+  <p><span class="text-bold">Довгі рядки. </span>Якщо текст потрібно зберегти в один рядок, але при цьому хочеться, щоб він містився у видимій робочій області IDE, можна використовувати символ <span class="code">&gt;</span> (greater).</p>
+  <div class="terminal">
+   singlelineText: &gt; 
+   <br>
+    &nbsp;begin 
+   <br>
+    &nbsp;... 
+   <br>
+    &nbsp;continue same line 
+   <br>
+    &nbsp;... 
+   <br>
+    &nbsp;end
+  </div>
+  <p>Весь текст буде сприйнятий як один рядок.</p></li>
+</ol>
+<p>Якщо є необхідність кілька YAML-структур даних записати в один файл, тоді між ними потрібно використовувати роздільник <span class="code">(</span> три дефісу). Насправді потреба зустрічається рідко, але краще знати про такому варіанті.</p>
+<h2>Приклад YAML-документа</h2>
+<p>Давай створимо в Java якусь структуру даних (клас) та об'єкт цього типу – і спробуємо уявити дані цього об'єкта у серіалізованому вигляді у форматі YAML.</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Family</span> <span class="token punctuation">{</span>
+   <span class="token keyword">private</span> <span class="token class-name">Date</span> weddingDate<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">Person</span> wife<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">Person</span> husband<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Person</span><span class="token punctuation">&gt;</span></span> children<span class="token punctuation">;</span>
+
+   <span class="token comment">// getters and setters are omitted</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">class</span> <span class="token class-name">Person</span> <span class="token punctuation">{</span>
+   <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">String</span> name<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">boolean</span> isWoman<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token keyword">int</span> age<span class="token punctuation">;</span>
+
+   <span class="token keyword">public</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">,</span> <span class="token keyword">int</span> age<span class="token punctuation">,</span> <span class="token keyword">boolean</span> isWoman<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+       <span class="token keyword">this</span><span class="token punctuation">.</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span>
+       <span class="token keyword">this</span><span class="token punctuation">.</span>isWoman <span class="token operator">=</span> isWoman<span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+<span class="token comment">// getters and setters are omitted</span>
+
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token class-name">Person</span> wife <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token string">"Anya"</span><span class="token punctuation">,</span> <span class="token number">37</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token class-name">Person</span> husband <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token string">"Alex"</span><span class="token punctuation">,</span> <span class="token number">40</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token keyword">var</span> children <span class="token operator">=</span> <span class="token class-name">List</span><span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span>
+           <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token string">"Inna"</span><span class="token punctuation">,</span> <span class="token number">12</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+           <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token string">"Olya"</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
+   <span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token class-name">Date</span> weddingDate <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token comment">/*some long*/</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+   <span class="token class-name">Family</span> family <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Family</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   family<span class="token punctuation">.</span><span class="token function">setWeddingDate</span><span class="token punctuation">(</span>weddingDate<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   family<span class="token punctuation">.</span><span class="token function">setWife</span><span class="token punctuation">(</span>wife<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   family<span class="token punctuation">.</span><span class="token function">setHusband</span><span class="token punctuation">(</span>husband<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   family<span class="token punctuation">.</span><span class="token function">setChildren</span><span class="token punctuation">(</span>children<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Валідна вистава в YAML:</p>
+<div class="terminal">
+ --- 
+ <br>
+  weddingDate: 2000-12-03 
+ <br>
+  wife: 
+ <br>
+  &nbsp;name: Anya 
+ <br>
+  &nbsp;age: 37 
+ <br>
+  &nbsp;isWoman: yes 
+ <br>
+  husband: 
+ <br>
+  &nbsp;name: Alex 
+ <br>
+  &nbsp;age: 40 
+ <br>
+  &nbsp;isWoman: no 
+ <br>
+  children: 
+ <br>
+  &nbsp;- name: Inna 
+ <br>
+  &nbsp;&nbsp;&nbsp;age: 12 
+ <br>
+  &nbsp;&nbsp;&nbsp;isWoman: true 
+ <br>
+  &nbsp;- name: Olya 
+ <br>
+  &nbsp;&nbsp;&nbsp;age 5 
+ <br>
+  &nbsp;&nbsp;&nbsp;isWoman: true 
+ <br>
+  ---
+</div>

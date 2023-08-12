@@ -1,0 +1,196 @@
+<p>- Привіт, Аміго! Ми маємо панацею – ліки від усіх хвороб. Як ми вже встигли переконатись – неконтрольоване перемикання ниток – це проблема.</p>
+<p><span class="text-user">— А чому б ниткам самим не вирішувати, коли перейти на наступну? Зробила всі важливі справи та «маякує», я – все!</span></p>
+<p>— Дозволяти ниткам самим керувати своїм перемиканням – ще більша проблема. Раптом якийсь код не дуже красиво написаний, і нитка ніколи сама не віддасть свого «процесорного часу». Давним-давно так і було – і це був тихий жах.</p>
+<p><span class="text-user">- Гаразд. І яке ж рішення є?</span></p>
+<p>- <span class="text-red"><strong>&nbsp;Блокування ниток. </strong></span>&nbsp;І як це працює.</p>
+<p>Було з'ясовано, що&nbsp; <span class="text-red">нитки заважають одна одній, коли намагаються спільно працювати із спільними об'єктами та/або ресурсами</span> . Як у прикладі з виведенням на консоль: консоль одна, а виводять на неї всі нитки. Непорядок.</p>
+<p>Тому було придумано спеціальний об'єкт –&nbsp; <span class="text-red">мютекс</span> . Це як табличка на дверях туалету&nbsp; <span class="text-green">«вільно» </span>&nbsp;<span class="text-red">«зайнято»</span> . Він має два стани –&nbsp; <span class="text-green">об'єкт вільний</span> &nbsp;і&nbsp; <span class="text-red">об'єкт зайнятий</span> , або їх ще називають заблокованим та розблокованим.</p>
+<p>Коли якийсь нитки потрібен загальний всім ниток об'єкт, вона перевіряє мютекс, що з цим об'єктом. Якщо мютекс вільний, то нитка блокує його (позначає як зайнятий) і розпочинає використання загального ресурсу. Після того, як вона зробила свої справи, мютекс розблокується (позначається як вільний).</p>
+<p>Якщо нитка хоче використовувати об'єкт, а мютекс заблокований, то нитка засинає в очікуванні. Коли мютекс нарешті звільниться зайнятою ниткою, наша нитка відразу заблокує його і приступить до роботи. Аналогія з табличками для туалету один на один.</p>
+<p><span class="text-user">— А як працювати із цим мютексом. Потрібно створювати спеціальні об'єкти?</span></p>
+<p>- Все набагато простіше.&nbsp;<span class="text-red">Розробники Java вбудували цей мютекс у клас Object. Тобі навіть створювати його не доведеться. Він має кожен об'єкт. </span>&nbsp;Ось як це все працює:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">MyClass</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">private</span> <span class="token class-name">String</span> name1 <span class="token operator">=</span> <span class="token string">"Оля"</span><span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token class-name">String</span> name2 <span class="token operator">=</span> <span class="token string">"Ліна"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">swap</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token keyword"></span><span class="text-red"><span class="token keyword">synchronized</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span></span><span class="token punctuation"></span>
+<span class="token punctuation">{</span>
+<span class="token class-name">String</span> s <span class="token operator">=</span> name1<span class="token punctuation">;</span>
+name1 <span class="token operator">=</span> name2<span class="token punctuation">;</span>
+name2 <span class="token operator">=</span> s<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Метод swap змінює місцями значення змінних name1&amp;name2.
+     <p></p>
+     <p>Що ж буде, якщо його викликати з двох ниток одночасно?</p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Підсумковий порядок</th>
+    <th>Код першої нитки</th>
+    <th>Код другої нитки</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name"></span><span class="text-green"><span class="token class-name">String</span> s1 <span class="token operator">=</span> name1<span class="token punctuation">;</span></span><span class="token punctuation"></span> <span class="token comment">//Оля</span>
+<span class="text-green">name1 <span class="token operator">=</span> name2<span class="token punctuation">;</span></span><span class="token punctuation"></span> <span class="token comment">//Лена</span>
+<span class="text-green">name2 <span class="token operator">=</span> s1<span class="token punctuation">;</span></span><span class="token punctuation"></span> <span class="token comment">//Оля</span>
+
+<span class="token class-name"></span><span class="text-user"><span class="token class-name">String</span> s2 <span class="token operator">=</span> name1<span class="token punctuation">;</span></span><span class="token punctuation"></span> <span class="token comment">//Лена</span>
+<span class="text-user">name1 <span class="token operator">=</span> name2<span class="token punctuation">;</span></span><span class="token punctuation"></span> <span class="token comment">//Оля</span>
+<span class="text-user">name2 <span class="token operator">=</span> s2<span class="token punctuation">;</span></span><span class="token punctuation"></span> <span class="token comment">//Лена</span></code></pre></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name"></span><span class="text-green"><span class="token class-name">String</span> s1 <span class="token operator">=</span> name1<span class="token punctuation">;</span>
+name1 <span class="token operator">=</span> name2<span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="text-green">name2 <span class="token operator">=</span> s1<span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token comment">//исполняется другая нить</span>
+<span class="token comment">//исполняется другая нить</span>
+<span class="token comment">//исполняется другая нить</span></code></pre></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token comment">//нить ждет, пока освободится мютекс</span>
+<span class="token comment">//нить ждет, пока освободится мютекс</span>
+<span class="token comment">//нить ждет, пока освободится мютекс</span>
+<span class="token class-name"></span><span class="text-user"><span class="token class-name">String</span> s2 <span class="token operator">=</span> name1<span class="token punctuation">;</span>
+name1 <span class="token operator">=</span> name2<span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="text-user">name2 <span class="token operator">=</span> s2<span class="token punctuation">;</span></span><span class="token punctuation"></span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Підсумок</th>
+   </tr>
+   <tr>
+    <td>Значення змінних двічі обмінялися місцями і повернулися на початкове місце.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Зверніть увагу на ключове слово&nbsp; <span class="text-red"><strong>synchronized</strong></span> .</p>
+<p><span class="text-user">— Так, а що воно означає?</span></p>
+<p><strong>— Коли одна нитка заходить всередину блоку коду, позначеного словом synchronized, Java-машина відразу блокує мютекс у об'єкта, який вказаний у круглих дужках після слова synchronized.&nbsp;<span class="text-red">Більше жодна нитка не зможе зайти до цього блоку, поки наша нитка його не покине. </span>&nbsp;Як тільки наша нитка вийде з блоку, позначеного synchronized, то мютекс відразу автоматично розблокується і буде вільний для захоплення іншою ниткою.</strong></p>
+<p>Якщо ж мютекс був зайнятий, то наша нитка стоятиме на місці і чекатиме коли він звільниться.</p>
+<p><span class="text-user">- Так просто і так елегантно. Гарне рішення.</span></p>
+<p>- Ага. А як ти вважаєш, що буде в цьому випадку?</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">MyClass</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">private</span> <span class="token class-name">String</span> name1 <span class="token operator">=</span> <span class="token string">"Оля"</span><span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token class-name">String</span> name2 <span class="token operator">=</span> <span class="token string">"Ліна"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">swap</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token keyword"></span><span class="text-red"><span class="token keyword">synchronized</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span></span><span class="token punctuation"></span>
+<span class="token punctuation">{</span>
+<span class="token class-name">String</span> s <span class="token operator">=</span> name1<span class="token punctuation">;</span>
+name1 <span class="token operator">=</span> name2<span class="token punctuation">;</span>
+name2 <span class="token operator">=</span> s<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">swap2</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token keyword"></span><span class="text-red"><span class="token keyword">synchronized</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span></span><span class="token punctuation"></span>
+<span class="token punctuation">{</span>
+<span class="token class-name">String</span> s <span class="token operator">=</span> name1<span class="token punctuation">;</span>
+name1 <span class="token operator">=</span> name2<span class="token punctuation">;</span>
+name2 <span class="token operator">=</span> s<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td><span class="text-red">Методи swap і swap2 мають той самий&nbsp; <strong>мютекс</strong> &nbsp;– об'єкт&nbsp; <strong>this</strong> .</span></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Що буде, якщо одна нитка викликає метод swap, а інша – метод swap2?</p>
+<p><span class="text-user">- Т.к. мютекс у них один, то другий нитки доведеться чекати, поки перша нитка вийде з блоку synchronized, тому проблем із одночасним доступом тут не буде.</span></p>
+<p>- Молодець, Аміго! Вірне рішення!</p>
+<p>Хотілося б звернути твою увагу на те, що словом&nbsp; <span class="text-red">synchronized</span> &nbsp;може бути позначений як шмат коду, так і метод. Ось що це означає:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код</th>
+    <th>Що відбувається насправді</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">MyClass</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">private</span> <span class="token keyword"><span class="text-user">static</span></span> <span class="token class-name">String</span> name1 <span class="token operator">=</span> <span class="token string">"Оля"</span><span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token keyword"><span class="text-user">static</span></span> <span class="token class-name">String</span> name2 <span class="token operator">=</span> <span class="token string">"Ліна"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword"><span class="text-red">synchronized</span></span> <span class="token keyword">void</span> <span class="token function">swap</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token class-name">String</span> s <span class="token operator">=</span> name1<span class="token punctuation">;</span>
+name1 <span class="token operator">=</span> name2<span class="token punctuation">;</span>
+name2 <span class="token operator">=</span> s<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword"><span class="text-user">static</span></span> <span class="token keyword"><span class="text-red">synchronized</span></span> <span class="token keyword">void</span> <span class="token function">swap2</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token class-name">String</span> s <span class="token operator">=</span> name1<span class="token punctuation">;</span>
+name1 <span class="token operator">=</span> name2<span class="token punctuation">;</span>
+name2 <span class="token operator">=</span> s<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">MyClass</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">private</span> <span class="token keyword"><span class="text-user">static</span></span> <span class="token class-name">String</span> name1 <span class="token operator">=</span> <span class="token string">"Оля"</span><span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token keyword"><span class="text-user">static</span></span> <span class="token class-name">String</span> name2 <span class="token operator">=</span> <span class="token string">"Ліна"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">swap</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token keyword"><span class="text-red">synchronized</span></span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token class-name">String</span> s <span class="token operator">=</span> name1<span class="token punctuation">;</span>
+name1 <span class="token operator">=</span> name2<span class="token punctuation">;</span>
+name2 <span class="token operator">=</span> s<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword"><span class="text-user">static</span></span> <span class="token keyword">void</span> <span class="token function">swap2</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token keyword"><span class="text-red">synchronized</span></span> <span class="token punctuation">(</span><span class="token class-name"></span><span class="text-user"><span class="token class-name">MyClass</span><span class="token punctuation">.</span><span class="token keyword">class</span></span><span class="token keyword"></span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token class-name">String</span> s <span class="token operator">=</span> name1<span class="token punctuation">;</span>
+name1 <span class="token operator">=</span> name2<span class="token punctuation">;</span>
+name2 <span class="token operator">=</span> s<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>

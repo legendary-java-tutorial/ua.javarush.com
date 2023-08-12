@@ -1,0 +1,57 @@
+<h2>1.1 Великі програми</h2>
+<p>Ми вже навчабося писати маленькі програми, тому тепер навчатимемося писати великі. Як відомо, чим більше та складніше програма, тим більше за її розробку платять грошей:) І почнемо з невеликої передісторії…</p>
+<p>Зі зростанням обсягу програм розробники зіштовхнулися із двома новими собі обставинами:</p>
+<ul>
+ <li><span class="text-red">Над однією програмою працює велика кількість людей.</span></li>
+ <li><span class="text-red">Немає такої людини, яка б знала весь код програми.</span></li>
+</ul>
+<p>Часто почали виникати ситуації, коли програміст фіксував баг в одному місці програми і при цьому ламав щось в іншому. У release documentation навіть з'явився такий жарт:</p>
+<p>Список змін:</p>
+<ul>
+ <li><span class="text-green">Виправабо старі баги:)</span></li>
+ <li><span class="text-green">Додали нові: (</span></li>
+</ul>
+<p>Тоді ж вигадали два підходи до вирішення цієї проблеми: технічний та менеджерський.</p>
+<p>Технічний підхід полягав у тому, що програми розбивали на частини: <strong>бібліотеки та модулі</strong> . Кожен такий модуль був невеликою цеглиною, з якої потім вибудовувалися великі проекти. Бібліотеки – це такі універсальні компоненти, які можуть використовуватися в різних програмах.</p>
+<p>Менеджерський підхід був ще цікавішим – вони обмежували кількість людей, які можуть працювати над одним проектом/бібліотекою. Емпірично навіть вивели правило: <span class="text-green">команда має бути настільки великою, щоб "її можна було нагодувати двома піцами"</span> . Зазвичай це означає, що якщо над проектом працює понад <strong>8 осіб</strong> , його потрібно розділити на два проекти.</p>
+<p>У спільноті Java-розробників популярним стало написання бібліотек на всі випадки життя та викладання їх у спільний доступ. Таким чином, Java-програмісти могли не писати знову той самий код (який часто був сируватий і містив баги), а користуватися готовими і <strong>перевіреними рішеннями</strong> .</p>
+<p>Додатковим стимулом стало те, що мова Java набула великої популярності при написанні серверних рішень (працювала на бекенді). По-перше, у серверного ПЗ вищі вимоги до надійності, <span class="text-green">і використання перевірених часом бібліотек завжди краще, ніж написання свого коду.</span></p>
+<p>По-друге, сервери практично не мають обмежень на розмір коду. Розробник мобільного додатка намагається впхнути його в 10 мегабайт, десктопного додатка - в 100 мегабайт. А бекенд-розробник на Java може напхати в проект кілька десятків гігабайт бібліотек і йому слова ніхто не скаже:)</p>
+<p>Це, до речі, не жарт. Легко можна зустріти бекенд-проект із кількох десятків модулів та з парою сотень бібліотек. Ось тільки описувати (і змінювати!) сценарії збирання таких проектів стало надзвичайно важко.</p>
+<p>І тут виник Maven.</p>
+<h2>1.2 Знайомство з Maven</h2><strong>Maven</strong> - це спеціальний "фреймворк" для управління складання проектів. Він стандартизує 3 речі: 
+<ul>
+ <li>Опис проекту;</li>
+ <li>Сценарії складання проектів;</li>
+ <li>Залежність між бібліотеками.</li>
+</ul>
+<p>Попередником Maven'а був <strong>Ant</strong> , а спадкоємцем є <strong>Gradle</strong> . Але саме Maven розвинув і довів до досконалості три перелічені стандарти, а також регламентував їхню взаємодію. Саме він вивів роботу Java-спільнот на новий рівень. Давай подивимося на нього докладніше.</p><img data-max-width="1024" data-id="e90f5737-4078-4468-9225-c4c4487c931d" alt="Maven'а" src="https://cdn.javarush.com/images/article/e90f5737-4078-4468-9225-c4c4487c931d/1024.jpeg" style="width: 1024px;">
+<p>Технічно Maven – це спеціальна програма/сервіс, основна мета якої – <strong>керувати процесом складання</strong> проектів. Її можна просто завантажити у вигляді архіву та розпакувати у будь-яку директорію. Спеціальний установник для цього не потрібний.</p>
+<p>Графічного інтерфейсу в неї немає - <strong>всі команди віддаються їй за допомогою консолі</strong> . Щоб ще комфортніше з нею працювати, рекомендується прописати у своїй ОС спеціальні змінні оточення (environment variables).</p>
+<p>Також у Maven є спеціальний <strong>репозиторій</strong> (директорія/папка), де він зберігає бібліотеки, які використовуються ним при складанні проектів. Тобі потрібно буде вибрати якусь папку на диску і призначити її як репозиторій.</p>
+<p>Ще з цікавого можна відзначити наявність глобального Maven-репозиторію для всіх бібліотек, але про це розповімо трохи згодом.</p>
+<h2>1.3 Завантаження та встановлення Maven</h2>
+<p>У Maven є офіційний сайт <a href="https://maven.apache.org/" target="_blank">maven.apache.org</a> . Там дуже багато документації щодо проекту, тож, якщо виникнуть складності чи додаткові питання – заходь, не соромся.</p>
+<p>Також на сторінці downloads ( <a href="https://maven.apache.org/download.cgi" target="_blank">https://maven.apache.org/download.cgi</a> ) можна завантажити архів з maven (apache-maven-3.8.5-bin.zip). Розпакований архів займе десь 10 Мб, хоча для локального maven репозиторію з часом буде потрібно кілька сотень мегабайт пам'яті.</p>
+<p>Maven написаний на Java та вимагає JRE не нижче 7 версії, а також прописані змінні оточення типу JAVA_HOME.</p>
+<p>Просто створи на комп'ютері папку Maven, наприклад, <span class="text-orange">d:\devtools</span> , і розпакуй у неї архів з Maven. У результаті у тебе має вийти папка типу <span class="text-orange">d:\devtools\maven\bin</span> , де будуть знаходитися основні бінарні файли проекту.</p>
+<h2>1.4 Змінні оточення</h2>
+<p>Після цього потрібно додати шлях до папки bin з розпакованого архіву до змінного середовища PATH.</p>
+<p>Щоб встановити змінне середовище (environment variable) у Windows 10, потрібно перейти в Панель керування — Система — Додаткові параметри системи. Потім натиснути "Змінні середовища", знайти PATH і вибрати "Змінити", після чого додати шлях <span class="text-orange">d:\devtools\maven\bin</span> в кінець рядка. Зверніть увагу, шлях повинен вести саме до папки bin.</p>
+<p>У ОС на основі Unix змінне середовище можна додати консольної командної:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java">export PATH<span class="token operator">=</span><span class="token operator">/</span>opt<span class="token operator">/</span>apache<span class="token operator">-</span>maven<span class="token operator">-</span><span class="token number">3.8</span><span class="token number">.5</span><span class="token operator">/</span>bin<span class="token operator">:</span>$PATH</code></pre>
+<p>Якщо ти все зробив правильно, то консолі потрібно набрати команду: «mvn -v». У відповідь ти побачиш щось на кшталт:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">C</span><span class="token operator">:</span>\<span class="token class-name">Users</span>\<span class="token class-name">Zapp</span><span class="token operator">&gt;</span>mvn <span class="token operator">-</span>v
+<span class="token class-name">Apache</span> <span class="token class-name">Maven</span> <span class="token number">3.0</span><span class="token number">.5</span> <span class="token punctuation">(</span>r01de14724cdef164cd33c7c8c2fe155faf9602da<span class="token punctuation">;</span> <span class="token number">2013</span><span class="token operator">-</span><span class="token number">02</span><span class="token operator">-</span><span class="token number">19</span> <span class="token number">15</span><span class="token operator">:</span><span class="token number">51</span><span class="token operator">:</span><span class="token number">28</span><span class="token operator">+</span><span class="token number">0200</span><span class="token punctuation">)</span>
+<span class="token class-name">Maven</span> home<span class="token operator">:</span> <span class="token class-name">T</span><span class="token operator">:</span>\apache<span class="token operator">-</span>maven<span class="token operator">-</span><span class="token number">3.0</span><span class="token number">.5</span>\bin\<span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token class-name">Java</span> version<span class="token operator">:</span> <span class="token number">1.8</span><span class="token number">.0_65</span><span class="token punctuation">,</span> vendor<span class="token operator">:</span> <span class="token class-name">Oracle</span> <span class="token class-name">Corporation</span>
+<span class="token class-name">Java</span> home<span class="token operator">:</span> <span class="token class-name">C</span><span class="token operator">:</span>\<span class="token class-name">Program</span> <span class="token class-name">Files</span>\<span class="token class-name">Java</span>\jdk1<span class="token punctuation">.</span><span class="token number">8.0_65</span>\jre
+<span class="token class-name">Default</span> locale<span class="token operator">:</span> en_US<span class="token punctuation">,</span> platform encoding<span class="token operator">:</span> <span class="token class-name">Cp1251</span>
+OS name<span class="token operator">:</span> <span class="token string">"windows 7"</span><span class="token punctuation">,</span> version<span class="token operator">:</span> <span class="token string">"6.1"</span><span class="token punctuation">,</span> arch<span class="token operator">:</span> <span class="token string">"amd64"</span><span class="token punctuation">,</span> family<span class="token operator">:</span> <span class="token string">"dos"</span></code></pre>
+<h2>1.5 Локальний репозиторій Maven</h2>
+<p>Також ти можеш задати спеціальну папку, де Maven зберігатиме jar-бібліотеки, які використовуватиме при складанні проектів. Таку папку називають – <strong>локальний maven репозиторій</strong> .</p>
+<p>Якщо така папка не задана, Maven створить її в домашній директорії поточного користувача. У мене це директорія: <span class="text-orange">C:UsersZapp.m2</span></p>
+<p>Тека має досить специфічне ім'я “.m2”. Хоча користувачів Linux воно не лякає – там це досить поширений підхід до найменування різних ”репозиторіїв” та/або будь-якого іншого сховища службової інформації.</p>
+<p><strong>Важливо! </strong>Не розташовуйте Maven у системних папках, тому що при роботі йому знадобляться права на запис в ці папки, що може викликати нездоровий інтерес антивірусу або операційної системи.</p>
+<p>Maven до версії 3.5 вимагав зазначити змінну оточення з ім'ям M2_HOME, але тепер це не потрібно.</p>
+<p>Докладніше про конфігурування Maven можна прочитати за посиланням: <a href="https://maven.apache.org/configure.html" target="_blank">https://maven.apache.org/configure.html</a></p>

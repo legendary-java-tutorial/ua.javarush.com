@@ -1,0 +1,347 @@
+Мова SQL
+<p>----------------------------------------</p>
+Знайомство з мовою SQL
+Розширений вигляд SQL-запиту
+Коментарі в SQL запитах
+Вимова SQL
+<p>----------------------------------------</p>
+<h2>2.1 Знайомство з мовою SQL</h2>
+<p>Якщо в тебе є база даних (БД), а в ній – таблиця з якимись даними, то найбільш часто виникає завдання – це знайти певні дані в цій таблиці. Саме для цього 40 років тому була придумана мова SQL. </p>
+<p>SQL розшифровується як <strong>Structured Query Language</strong>.</p>
+<p>Найпростіший SQL-запит має вигляд:</p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+        <span class="text-red">SELECT</span> колонка1, колонка2, … колонкаN <span class="text-red">FROM</span> таблиця
+        </code></pre>
+</div>
+<p>Допустимо, у тебе є <strong>таблиця employee</strong> зі списком співробітників вашого стартапу:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>id</th>
+        <th>name</th>
+        <th>occupation</th>
+        <th>salary</th>
+        <th>age</th>
+        <th>join_date</th>
+    </tr>
+    <tr>
+    <td>1</td>
+        <td>Іванов Іван</td>
+        <td>Програміст</td>
+        <td>100,000</td>
+        <td>25</td>
+        <td>2012-06-30</td>
+        
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>Петров Петро</td>
+        <td>Програміст</td>
+        <td>80,000</td>
+        <td>23</td>
+        <td>2013-08-12</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>Іванов Сергій</td>
+        <td>Тестувальник</td>
+        <td>40,000</td>
+        <td>30</td>
+        <td>2014-01-01</td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>Рабінович Мойша</td>
+        <td>Директор</td>
+        <td>200,000</td>
+        <td>35</td>
+        <td>2015-05-12</td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>Кірієнко Анастасія</td>
+        <td>Офіс-менеджер</td>
+        <td>40,000</td>
+        <td>25</td>
+        <td>2015-10-10</td>
+    </tr>
+    <tr>
+        <td>6</td>
+        <td>Васька</td>
+        <td>кіт</td>
+        <td>1,000</td>
+        <td>3</td>
+        <td>2018-01-01</td>
+    </tr>
+
+    </tbody>
+</table>
+<p>Ти хочеш написати запит, який відобразить <code class="text-green">імена співробітників</code> та їх <code class="text-user">зарплати</code>, тоді тобі потрібно написати запит: </p>
+<div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+        <span class="text-red">SELECT</span> <span class="text-green">name</span>, <span class="text-user">salary</span> <span class= "text-red">FROM</span> <span class="text-yellow">employee</span>
+        </code></pre>
+    </div>
+<p>Ти отримаєш результат запиту:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>name</th>
+        <th>salary</th>
+    </tr>
+    <tr>
+        <td>Іванов Іван</td>
+        <td>100,000</td>
+    </tr>
+    <tr>
+        <td>Петров Петро</td>
+        <td>80,000</td>
+    </tr>
+    <tr>
+        <td>Іванов Сергій</td>
+        <td>40,000</td>
+    </tr>
+    <tr>
+        <td>Рабінович Мойша</td>
+        <td>200,000</td>
+    </tr>
+    <tr>
+        <td>Кірієнко Анастасія</td>
+        <td>40,000</td>
+    </tr>
+    <tr>
+        <td>Васька</td>
+        <td>1,000</td>
+    </tr>
+
+    </tbody>
+</table>
+<p>Якщо хочеш відобразити <strong>всі колонки своєї таблиці</strong>, замість перерахування імен всіх колонок можна просто написати зірочку. Приклад: </p>
+<div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+        <span class="text-red">SELECT</span> * <span class="text-red">FROM</span> <span class="text-yellow">employee</span>
+        </code></pre>
+    </div>
+<p>Ти отримаєш результат запиту:</p>
+
+<table>
+    <tbody>
+    <tr>
+        <th>id</th>
+        <th>name</th>
+        <th>occupation</th>
+        <th>salary</th>
+        <th>age</th>
+        <th>join_date</th>
+    </tr>
+    <tr>
+    <td>1</td>
+        <td>Іванов Іван</td>
+        <td>Програміст</td>
+        <td>100,000</td>
+        <td>25</td>
+        <td>2012-06-30</td>
+        
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>Петров Петро</td>
+        <td>Програміст</td>
+        <td>80,000</td>
+        <td>23</td>
+        <td>2013-08-12</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>Іванов Сергій</td>
+        <td>Тестувальник</td>
+        <td>40,000</td>
+        <td>30</td>
+        <td>2014-01-01</td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>Рабінович Мойша</td>
+        <td>Директор</td>
+        <td>200,000</td>
+        <td>35</td>
+        <td>2015-05-12</td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>Кірієнко Анастасія</td>
+        <td>Офіс-менеджер</td>
+        <td>40,000</td>
+        <td>25</td>
+        <td>2015-10-10</td>
+    </tr>
+    <tr>
+        <td>6</td>
+        <td>Васька</td>
+        <td>кіт</td>
+        <td>1,000</td>
+        <td>3</td>
+        <td>2018-01-01</td>
+    </tr>
+
+    </tbody>
+</table>
+
+<h2>2.2 Розширений вигляд SQL-запиту</h2>
+<p>Мова SQL спроектувала максимально user-friendly.</p>
+<p>По-перше, <strong>реєстр тексту запиту не має значення</strong>. Ти можеш написати SELECT, Select або select і все буде працювати. По-друге, <strong>перенесення рядків не враховується</strong>. СУБД все одно перетворить запит на один довгий рядок, так що можеш писати його як тобі завгодно.</p>
+<p>Як ти вже, напевно, здогадуєшся, ключовими словами SELECT та FROM справа не обмежується. Інакше не було б стільки розмов навколо SQL. Розширений вигляд запиту SQL має вигляд:</p>
+<div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+  <span class="text-red">SELECT</span> колонки
+  <span class="text-red">FROM</span> таблиця
+  <span class="text-orange">WHERE</span> умова
+  <span class="text-orange">GROUP BY</span> колонки
+  <span class="text-orange">HAVING</span> колонки
+  <span class="text-orange">ORDER BY</span> сортування
+        </code></pre>
+    </div>
+<p>За допомогою ключового слова <code>WHERE</code> ти можеш задати умову / фільтр для обраних рядків.</p>
+<p><strong>Приклад 1</strong>. Давай напишемо запит, який відбере співробітників із професією «Програміст»:</p>
+<div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+        <span class="text-red">SELECT</span> * <span class="text-red">FROM</span> <span class="text-yellow">employee</span> <span class= "text-red">WHERE</span> <span class="text-user">occupation</span> = <span class="text-green">'Програміст'</span>
+        </code></pre>
+    </div>
+<p>І отримаємо такий результат запиту:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>id</th>
+        <th>name</th>
+        <th>occupation</th>
+        <th>salary</th>
+        <th>age</th>
+        <th>join_date</th>
+    </tr>
+    <tr>
+    <td>1</td>
+        <td>Іванов Іван</td>
+        <td>Програміст</td>
+        <td>100,000</td>
+        <td>25</td>
+        <td>2012-06-30</td>
+        
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>Петров Петро</td>
+        <td>Програміст</td>
+        <td>80,000</td>
+        <td>23</td>
+        <td>2013-08-12</td>
+    </tr>
+    </tbody>
+</table>
+<p>Як бачиш, у результаті виконання запиту відображаються лише рядки, де професія співробітника називається «Програміст».</p>
+<p>Ключові слова <code>GROUP BY</code>, <code>ORDER BY</code> та <code>HAVING</code> ми розглянемо в наступних лекціях. А в цій розберемо ще кілька прикладів зі словом WHERE. </p>
+<p><strong>Приклад 2</strong>. Тепер давай напишемо запит, який покаже нам усіх співробітників із зарплатою більшою за 100К. Ось як він виглядатиме:</p>
+<div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+        <span class="text-red">SELECT</span> * <span class="text-red">FROM</span> <span class="text-yellow">employee</span> <span class= "text-red">WHERE</span> <span class="text-user">salary</span> &gt; 100000
+
+        </code></pre>
+    </div>
+<p>Отримаємо такий результат запиту:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>id</th>
+        <th>name</th>
+        <th>occupation</th>
+        <th>salary</th>
+        <th>age</th>
+        <th>join_date</th>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>Рабінович Мойша</td>
+        <td>Директор</td>
+        <td>200,000</td>
+        <td>35</td>
+        <td>2015-05-12</td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Приклад 3</strong>. А тепер спробуємо щось складніше. Як відобразити всіх співробітників, які були найняті у 2015 році? А ось так:</p>
+<div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+        <span class="text-red">SELECT</span> * <span class="text-red">FROM</span> <span class="text-yellow">employee</span> <span class= "text-red">WHERE</span> <span class="text-user">YEAR(join_date)</span> = 2015
+        </code></pre>
+    </div>
+<p>Отримаємо такий результат запиту:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>id</th>
+        <th>name</th>
+        <th>occupation</th>
+        <th>salary</th>
+        <th>age</th>
+        <th>join_date</th>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>Рабінович Мойша</td>
+        <td>Директор</td>
+        <td>200,000</td>
+        <td>35</td>
+        <td>2015-05-12</td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>Кірієнко Анастасія</td>
+        <td>Офіс-менеджер</td>
+        <td>40,000</td>
+        <td>25</td>
+        <td>2015-10-10</td>
+    </tr>
+    </tbody>
+</table>
+<p>У цьому запиті ми використовуємо спеціальну функцію <code>YEAR()</code>, яка дозволяє отримати рік з дати, а потім порівнюємо рік дати з числом 2015 року.</p>
+<h2>2.3 Коментарі в SQL запитах</h2>
+<p>І ще один важливий момент – це коментарі у SQL-запитах. Коментарі – це дуже корисна річ. По-перше, у них можна писати пояснення та/або свої ідеї. По-друге, за допомогою коментарів можна вимкнути непрацюючий код. Або закоментувати старий варіант коду.</p>
+<p>У SQL, як і в Java, є однорядкові та багаторядкові коментарі. Більше того, багаторядковий коментар виглядає зовсім як Java. Його вигляд:</p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present"><code>
+/*
+ текст коментаря
+ текст коментаря
+ текст коментаря
+*/
+        </code></pre>
+</div>
+<p>Звичайно, його можна використовувати і в один рядок також. Приклад:</p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present"><code>
+/*текст коментаря*/
+        </code></pre>
+</div>
+<p>Також є вигляд коментаря «від початку до кінця рядка», аналогічний джавовому «//». Тільки SQL потрібно написати <strong>два символи мінус і пробіл</strong>. Загальний вигляд такого коментаря:</p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+-- текст коментаря
+        </code></pre>
+</div>
+<p>Приклад:</p>
+<div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present"><code>
+        <span class="text-red">SELECT</span> * <span class="text-red">FROM</span> <span class="text-yellow">employee</span> <span class= "token comment">-- WHERE YEAR(join_date) = 2015 </span>
+        </code></pre>
+    </div>
+<p>У прикладі вище ми закоментували умову запиту, тому MySQL виконає лише запит:</p>
+<div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+        <span class="text-red">SELECT</span> * <span class="text-red">FROM</span> <span class="text-yellow">employee</span>
+        </code></pre>
+    </div>
+<h2>2.4 Вимова SQL</h2>
+<p>Якщо ти спілкуватимешся з іноземними замовниками або проходитиме онлайн співбесіду в американську компанію, то тебе можуть запитати про досвід роботи з <strong>мовою сіквел</strong>. Ти чесно скажеш, що з ним не працював і відразу завалиш співбесіду.</p>
+<p>А вся справа в тому, що мова SQL спочатку називалася SEQUEL, що вимовляється як <strong>сіквел</strong> (ˈsēkwəl), тому дуже часто в США та інших англомовних джерелах ви чутимете не «ескюель», а « сіквел». Пишеться SQL, а читається сіквел. Ось такий історичний парадокс.</p>
+

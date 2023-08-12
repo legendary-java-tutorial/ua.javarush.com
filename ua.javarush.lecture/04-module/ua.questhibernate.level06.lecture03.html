@@ -1,0 +1,98 @@
+Зміна даних у таблиці
+<p>----------------------------------------</p>
+Оператор UPDATE SET
+Складні сценарії зміни даних
+<p>----------------------------------------</p>
+<h2>4.1 Оператор UPDATE SET</h2>
+<p>Якщо потрібно змінити існуючі записи в таблиці, то для цього використовуємо оператор <code>UPDATE</code>.</p>
+<p>З одного боку, оператор <code>UPDATE</code> схожий на оператор <code>INSERT</code>, адже нам потрібно вказувати нові значення для колонок. А з іншого – на оператор <code>SELECT</code>, адже він дозволяє працювати одразу з групами даних.</p>
+<p><strong>Важливо!</strong> Мета оператора <code>UPDATE</code> — змінити дані не в одному рядку таблиці, а в усіх рядках, які відповідають певній умові. І якщо зробити маленьку помилку, то легко можна втратити всі дані у таблиці.</p>
+<p>Загальний запит:</p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-brown">UPDATE</span> <span class="text-yellow">таблиця</span> <span class="text-brown">SET</span>
+  <span class="text-green">колонка1</span> = <span class="text-user">вираз1</span>,
+  <span class="text-green">колонка2</span> = <span class="text-user">вираз2</span>,
+  <span class="text-green">колонка3</span> = <span class="text-user">вираз3</span>
+<span class="text-viola">WHERE умова</span>;
+        </code></pre>
+</div>
+<p>Давай напишемо запит, який збільшить зарплату <strong>всіх</strong> наших співробітників на 100. Виглядати наш запит буде так:</p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-brown">UPDATE</span> <span class="text-yellow">employee</span> <span class="text-brown">SET</span>
+  <span class="text-green">salary</span> = <span class="text-user">salary+100</span>;
+        </code></pre>
+</div>
+<p>А тепер <strong>усім</strong>, у кого зарплата менша за 50К, ще й збільшимо її на 20%. Приклад запиту:</p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-brown">UPDATE</span> <span class="text-yellow">employee</span> <span class="text-brown">SET</span>
+  <span class="text-green">salary</span> = <span class="text-user">salary*1.2</span>
+<span class="text-viola">WHERE salary<50000</span>;
+        </code></pre>
+</div>
+<p>Ну і звичайно ж збільшимо зарплату директору в 2 рази, як без нього:</p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-brown">UPDATE</span> <span class="text-yellow">employee</span> <span class="text-brown">SET</span>
+  <span class="text-green">salary</span> = <span class="text-user">salary*2</span>
+<span class="text-viola">WHERE id=4</span>;
+        </code></pre>
+</div>
+<h2>4.2 Складні сценарії змінення даних</h2>
+<p>Якщо ти вирішиш змінити дані в декількох таблицях одночасно, або при зміні даних в одній таблиці потрібно заповнити її даними з іншої, або просто якимось чином задіяти дані з іншої таблиці в процесі зміни першої, то тут на нас чекають сюрпризи.<p> /p>
+<p>Давай спробуємо змінити рівень всіх користувачів у таблиці user, які існують у таблиці employee. Збіг користувачів для простоти перевірятимемо на ім'я.</p>
+<p>Як би ми хотіли написати цей запит:</p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-brown">UPDATE</span> <span class="text-yellow">user</span> <span class="text-brown">SET</span>
+  <span class="text-green">level</span> = <span class="text-user">80</span>,
+<span class="text-viola">WHERE user.name IN (список імен з таблиці employee)</span>;
+        </code></pre>
+</div>
+<p>Ну і додамо до цього запиту список імен із таблиці employee:</p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-brown">UPDATE</span> <span class="text-yellow">user</span> <span class="text-brown">SET</span>
+  <span class="text-green">level</span> = <span class="text-user">80</span>,
+<span class="text-viola">WHERE user.name IN</span> (<span class="text-green">select name from employee</span>);
+        </code></pre>
+</div>
+<p><strong>Цікаво!</strong> Сам SQL-запит на отримання імен вийшов навіть коротшим, ніж опис завдання. Творці SQL свій хліб даремно не їли.</p>
+<p>Змушений тебе засмутити - <mark class="red">такий підхід не працюватиме</mark>. Спочатку потрібно заджойнити ці таблиці, виглядатиме це приблизно так:</p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-brown">UPDATE</span> <span class="text-yellow">таблиця1</span>, <span class="text-yellow">таблиця2</span> <span class= "text-brown">SET</span>
+  <span class="text-green">колонка1</span> = <span class="text-user">вираз1</span>,
+  <span class="text-green">колонка2</span> = <span class="text-user">вираз2</span>,
+  <span class="text-green">колонка3</span> = <span class="text-user">вираз3</span>
+<span class="text-viola">WHERE</span> <span class="text-yellow">таблиця1</span>.<span class="text-viola">id</span> = <span class ="text-yellow">таблиця2</span>.<span class="text-viola">ref_id</span>;
+        </code></pre>
+</div>
+<p>Давай ще трохи ускладнимо завдання. Потрібно встановити рівень у 80 тільки для хороших співробітників, чия зарплата буде більшою за 50к. Повне рішення виглядатиме так:</p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-brown">UPDATE</span> <span class="text-yellow">user</span>, <span class="text-yellow">хороші_працівники</span> <span class= "text-brown">SET</span>
+  <span class="text-yellow">user</span>.<span class="text-green">level</span> = <span class="text-user">80</span>
+<span class="text-viola">WHERE</span> <span class="text-yellow">user</span>.<span class="text-green">name</span> = <span class ="text-yellow">хороші_працівники</span>.<span class="text-green">name</span>;
+        </code></pre>
+</div>
+<p>Таке об'єднання таблиць – це фактично <code>INNER JOIN</code>, так що в результаті залишаться лише користувачі, яким знайшлося відповідність на ім'я у другій таблиці.</p>
+<p>Але нам потрібно ще якось відібрати хороших співробітників, тому допишемо ще трохи коду:</p>
+<div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-brown">SELECT</span> * <span class="text-brown">FROM</span> <span class="text-yellow">employee</span> <span class= "text-brown">WHERE</span> <span class="text-green">salary</span> &gt;= 50000
+        </code></pre>
+</div>
+<p>І тепер підставимо цю таблицю до нашого фінального запиту:</p>
+<div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-brown">UPDATE</span> <span class="text-yellow">user</span>,
+    (<span class="text-brown">SELECT</span> * <span class="text-brown">FROM</span> <span class="text-yellow">employee</span> <span class ="text-brown">WHERE</span> <span class="text-green">salary</span> &gt;= 50000) <span class="text-yellow">good_emps</span>
+<span class="text-brown">SET</span>
+    <span class="text-yellow">user</span>.<span class="text-green">level</span> = <span class="text-user">80</span>
+<span class="text-brown">WHERE</span> <span class="text-yellow">user</span>.<span class="text-green">name</span> = <span class ="text-yellow">good_emps</span>.<span class="text-green">name</span>;
+        </code></pre>
+</div>
+<p>Живи тепер із цим. </p>

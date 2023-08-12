@@ -1,0 +1,86 @@
+<h2>4.1 Список рівнів логування</h2>
+<p>Ви написали свою програму, залабо її на сервер і тут у вас відразу починають виникати запитання:</p>
+<ul>
+ <li>Як зробити так, щоб <code>debug()</code>метод не відпрацьовував під час роботи у <code>production</code>?</li>
+ <li>У логах занадто багато інформації, чи хотілося б залишити тільки повідомлення про помилки?</li>
+ <li>Як побачити детальний лог по одній частині програми?</li>
+</ul>
+<p>Зрозуміло, творці ліг зіткнулися з тим самим ще десятки років тому. Не розповідатиму, як цю проблему вирішабо в мові C, але в мові Java її вирішабо дуже красиво.</p>
+<p><strong>Лог фільтрує дані перед тим, як записувати інформацію у файл</strong> . Можна швидко зменшити/збільшити деталізацію лога за допомогою налаштування рівня логування. Ці рівні описані в таблиці нижче:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th></th>
+    <th width="200">Рівень</th>
+    <th>Примітка</th>
+   </tr>
+   <tr>
+    <td>1</td>
+    <td><strong>ALL</strong></td>
+    <td>Писати в лог всі повідомлення</td>
+   </tr>
+   <tr>
+    <td>2</td>
+    <td><strong>TRACE</strong></td>
+    <td>Дрібне повідомлення під час налагодження</td>
+   </tr>
+   <tr>
+    <td>3</td>
+    <td><strong>DEBUG</strong></td>
+    <td><strong>Повідомлення важливі при налагодженні</strong></td>
+   </tr>
+   <tr>
+    <td>4</td>
+    <td><strong>INFO</strong></td>
+    <td><strong>Прості повідомлення</strong></td>
+   </tr>
+   <tr>
+    <td>5</td>
+    <td><strong>WARN</strong></td>
+    <td><strong>Писати тільки fatal, error та warning</strong></td>
+   </tr>
+   <tr>
+    <td>6</td>
+    <td><strong>ERROR</strong></td>
+    <td><strong>Писати лише помилки та фатальні помилки</strong></td>
+   </tr>
+   <tr>
+    <td>7</td>
+    <td><strong>FATAL</strong></td>
+    <td><strong>Писати лише фатальні помилки</strong></td>
+   </tr>
+   <tr>
+    <td>8</td>
+    <td><strong>OFF</strong></td>
+    <td>Не писати в лог повідомлення</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Ці рівні використовуються для фільтрації повідомлень. Якщо виставити рівень логування в <code>WARN</code>, всі повідомлення, менш важливі, ніж <code>WARN</code>будуть відкинуті: <code>TRACE</code>, <code>DEBUG</code>, <code>INFO</code>. Якщо виставити рівень фільтрації <code>FATAL</code>, то будуть відкинуті навіть <code>ERROR’ы</code>.</p>
+<p>Є ще два рівні важливості, які використовуються при фільтрації – це <code>OFF</code>(відкинути всі повідомлення) та <code>ALL</code>– писати всі повідомлення (не відкидати нічого).</p>
+<h2>4.2 Приклад налаштування лога</h2>
+<p>Розгляньмо простий приклад налаштування лога. Для цього нам знадобиться файл log4j.properties, який можна розмістити у папці resources. Додамо до нього такий зміст:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"># <span class="token class-name">Root</span> logger option
+log4j<span class="token punctuation">.</span>rootLogger<span class="token operator">=</span><span class="text-yellow">WARN</span><span class="token punctuation">,</span> <span class="text-red">stdout</span>
+
+# <span class="token class-name">Direct</span> log messages <span class="token keyword">to</span> <span class="token namespace">stdout</span>
+log4j<span class="token punctuation">.</span>appender<span class="token punctuation">.</span><span class="text-red">stdout</span><span class="token operator">=</span><span class="token class-name"><span class="token namespace">org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>log4j<span class="token punctuation">.</span></span><span class="text-green">ConsoleAppender</span></span>
+<span class="token class-name"><span class="token namespace">log4j<span class="token punctuation">.</span>appender<span class="token punctuation">.</span><span class="text-red">stdout</span><span class="token punctuation">.</span></span>Target</span><span class="token operator">=</span><span class="token class-name"></span><span class="text-green"><span class="token class-name">System</span><span class="token punctuation">.</span>out</span>
+log4j<span class="token punctuation">.</span>appender<span class="token punctuation">.</span><span class="text-red">stdout</span><span class="token punctuation">.</span>layout<span class="token operator">=</span><span class="token class-name"><span class="token namespace"></span><span class="text-user"><span class="token namespace">org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>log4j<span class="token punctuation">.</span></span>PatternLayout</span></span>
+<span class="token class-name"><span class="token namespace">log4j<span class="token punctuation">.</span>appender<span class="token punctuation">.</span><span class="text-red">stdout</span><span class="token punctuation">.</span>layout<span class="token punctuation">.</span></span>ConversionPattern</span><span class="token operator">=</span><span class="token operator"></span><span class="text-user"><span class="token operator">%</span>d<span class="token punctuation">{</span>yyyy<span class="token operator">-</span>MM<span class="token operator">-</span>dd HH<span class="token operator">:</span>mm<span class="token operator">:</span>ss<span class="token punctuation">}</span></span><span class="token punctuation"></span></code></pre>
+<p>Ось тут у першому рядку ми і задаємо рівень логування - <code><span class="text-yellow">WARN</span></code>. А це означає, що повідомлення, які пишуться в логер зі статусом <code>DEBUG</code>і <code>INFO</code>будуть проігноровані.</p>
+<ul>
+ <li>Вказуємо який тип апендера будемо використовувати –<code>ConsoleAppender</code></li>
+ <li>Вказуємо, куди писатимемо логотип –<code>System.out</code></li>
+ <li>Задаємо клас, який керуватиме форматом запису –<code>PatternLayout</code></li>
+ <li>Задаємо формат запису для всіх повідомлень – дата та час</li>
+</ul>
+<h2>4.3 Популярні помилки у логуванні</h2>
+<p>І ще один важливий момент – популярні помилки у логуванні. Варіантом щось зробити не так багато, але можна виділити кілька частих помилок:</p>
+<ol>
+ <li><strong>Надлишок логування</strong> . Не варто логувати кожен крок, який суто теоретично може бути важливим. Є правило: <strong>логи можуть навантажувати працездатність трохи більше, ніж 10%</strong> . Інакше будуть проблеми із продуктивністю.</li>
+ <li><strong>Логування всіх даних в один файл</strong> . Це призведе до того, що в певний момент читання/запис у нього буде дуже складним, не кажучи про те, що є обмеження за розміром файлів у певних системах.</li>
+ <li><strong>Використання неправильних рівнів логування</strong> . Кожен рівень логування має чіткі межі, і їх варто дотримуватися. Якщо межа розпливчаста, можна домовитися який із рівнів використовувати.</li>
+</ol>

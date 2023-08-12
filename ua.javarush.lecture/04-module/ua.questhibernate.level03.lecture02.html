@@ -1,0 +1,74 @@
+Оператор JOIN
+<p>----------------------------------------</p>
+Передумови появи оператора JOIN.
+Ознайомлення з оператором JOIN.
+<p>----------------------------------------</p>
+<h2>Передумови появи оператора JOIN</h2>
+  
+<p>Зі зростанням кількості даних у таблицях у них часто виникають дублікати значень. Наприклад, у таблиці product є імена брендів. Які іноді повторюються.
+Було б корисно завести для них окрему таблицю brand, у якій були б, наприклад, такі дані: </p>
+
+<ul>
+<li>id – id-бренду; </li>
+<li>name – назва бренду; </li>
+<li>company_owner – ім'я компанії власника бренду; </li>
+<li>company_contacts – контакти компанії власника бренду. </li>
+</ul>
+
+<p>Потім ми б захотіли створити таблицю адрес, у яку можна було б винести всі адреси:</p>
+
+<ul>
+<li>id – id-адреси;</li>
+<li>country;</li>
+<li>region;</li>
+<li>city;</li>
+<li>street; </li>
+<li>house;</li>
+<li>zip. </li>
+</ul>
+
+<p>Більш того, у цій таблиці можна було б зберігати адреси не лише компаній-власників-брендів, а й адреси клієнтів та адреси співробітників. І такий підхід – це просто наслідок зростання кількості даних (кількості рядків у таблицях). Так легше оперувати даними в таблицях і підтримувати їхню цілісність.</p>
+ 
+<p>Коли у тебе 5 співробітників, ти можеш просто вказати їхню професію в колонці <strong>occupation</strong>. Якщо в тебе в компанії 5 тисяч співробітників, то потрібна таблиця зі списком професій, їх обов'язками.</p>
+ 
+<p>У мові Java, до речі, є щось схоже. Якщо в тебе в методі багато коду, виникає бажання розбити його на кілька методів. Якщо у класі багато методів, то хочеться розбити його на кілька класів.</p>
+ 
+Саме тому у великих базах даних кількість таблиць обчислюється тисячами. І практично всі запити виконуються відразу за кількома таблицями. І декартовий добуток рядків трьох таблиць у кожній із яких тисяча записів – це вже мільярд рядків.</p>
+ 
+<p>Але тільки фільтрація мільярда рядків за допомогою WHERE може зайняти годинник. Тому творці мови SQL запропонували своє рішення оператор JOIN. </p>
+ 
+<h2>Знайомство з оператором JOIN </h2>
+
+<p><strong>Оператор JOIN</strong> використовується для того, щоб явно сказати SQL-серверу, що нам потрібний не декартовий добуток всіх рядків таблиць на всіх, а розумне склеювання рядків різних таблиць, які посилаються один на одного за допомогою ID (або в інший спосіб).
+Сервер має окремий алгоритм обробки об'єднання таблиць за допомогою оператора JOIN, що дозволяє виконувати такі операції значно швидше. Загальний вигляд оператора JOIN такий:</p>
+
+    <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-orange">таблиця1</span> <span class="text-red">JOIN</span> <span class="text-orange">таблиця2</span> <span class=" text-red">ON</span> <span class="text-user">умова</span> </code></pre>
+    </div>
+
+<p>Тут написано, що потрібно об'єднати в одну таблицю таблиці <span class="text-orange"><strong>таблиця1</strong></span> та <span class="text-orange"><strong>таблиця2 </strong></span>, а як критерій об'єднання використовувати <strong>умову</strong>. </p>
+
+<p>Давай візьмемо наш старий приклад: </p>
+ 
+    <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-red">SELECT</span> * <span class="text-red">FROM</span> <span class="text-orange">employee</span>, <span class ="text-orange">task</span> <span class="text-red">WHERE</span> <span class="text-orange">emploee</span>.<span class="text- green">id</span> = <span class="text-orange">task</span>.<span class="text-green">emploee_id</span> </code></pre>
+    </div>
+
+ 
+<p>І перепишемо його із застосуванням оператора JOIN: </p>
+ 
+    <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-red">SELECT</span> * <span class="text-red">FROM</span> <span class="text-orange">employee</span> <span class= "text-red">JOIN</span> <span class="text-orange">task</span> <span class="text-red">ON</span> <span class="text-orange" >emploee</span>.<span class="text-green">id</span> = <span class="text-orange">task</span>.<span class="text-green">emploee_id </span> </code></pre>
+    </div>
+
+
+<p>Обидва запити дадуть той самий результат у нашому випадку, але це тільки тому, що запити дуже прості. Надалі WHERE дозволяє нарощувати саме фільтр рядків, а вказане після ON – писати складні сценарії зв'язування таблиць.
+Ви також можете використовувати аліаси (псевдоніми таблиць) при використанні оператора JOIN. Приклад: </p>
+ 
+    <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-red">SELECT</span> * <span class="text-red">FROM</span> <span class="text-orange">employee e</span> <span class ="text-red">JOIN</span> <span class="text-orange">task t</span> <span class="text-red">ON e</span>.<span class=" text-green">id</span> = <span class="text-orange">t</span>.<span class="text-green">emploee_id</span></code></pre>
+    </div>

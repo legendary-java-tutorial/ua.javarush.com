@@ -1,0 +1,112 @@
+<p>Зазвичай, розробляючи багатопотокове додаток, ми стикаємося з організацією роботи потоків. Чим більше наш додаток і чим більше потоків нам потрібно для організації виконання багатопотокових завдань, тим більше об'єктів<mark class="green">Runnable</mark>ми творимо.</p>
+<p>Тут слід зазначити, що створення потоку в Java - досить дорога операція. Якщо ми створюватимемо новий екземпляр потоку щоразу для виконання операції, ми отримаємо великі проблеми з продуктивністю і в результаті – з працездатністю програми.</p>
+<p>Тут нам на допомогу приходить <span class="text-green"><span class="text-bold"><em>Thread pool</em></span></span> (пул потоків) та <span class="code"><span class="text-green">ThreadPoolExecutor</span></span> .</p>
+<p><span class="text-green"><span class="text-bold"><em>Thread pool</em></span></span> - це набір попередньо ініціалізованих потоків, розмір якого може бути як фіксованим, так і змінним.</p><img data-max-width="512" data-id="4735a1e8-c36e-4750-b674-9186c714db68" alt="" src="https://cdn.javarush.com/images/article/4735a1e8-c36e-4750-b674-9186c714db68/512.jpeg" style="width: 512px;">
+<p>Якщо завдань більше, ніж потоків, завдання чекають у черзі (Task Queue). З черги завдання потрапляє виконання до N-ному потоку з пулу, а після виконання завдання потік забирає нове завдання з черги. Після виконання всіх завдань із черги потоки залишаються активними і чекають на нові завдання. Коли завдання з'являються, потоки починають виконувати їх.</p>
+<h2>ThreadPoolExecutor</h2>
+<p>Починаючи з Java 5 у вирішенні багатопоточності з'являється <span class="text-bold">Executor framework</span> . Загалом він має безліч компонентів і прийшов до нас, щоб вирішити проблему ефективного управління чергою та пулом потоків.</p>
+<p>Головні інтерфейси - <span class="text-neon"><span class="text-bold"><em>Executor</em></span></span> і <span class="text-neon"><span class="text-bold"><em>ExecutorService</em></span></span> .</p>
+<p><span class="text-neon"><span class="text-bold"><em>Executor</em></span></span> - інтерфейс з єдиним способом void execute (Runnable runnable).</p>
+<p>Передаючи у реалізацію цього завдання, знай: вона буде виконана асинхронно у майбутньому.</p>
+<p><span class="text-neon"><span class="text-bold"><em>ExecutorService</em></span></span> — інтерфейс, який успадковується від інтерфейсу<span class="text-neon"><span class="text-bold"><em> Executor</em></span></span> і надає можливості виконання завдань. У нього також є методи для переривання виконуваного завдання та завершення роботи пулу потоків.</p>
+<p></p>
+<p><span class="code"><span class="text-green">ThreadPoolExecutor</span></span> реалізує інтерфейси<span class="text-neon"><span class="text-bold"><em> Executor</em></span></span> та<span class="text-neon"><span class="text-bold"><em> ExecutorService</em></span></span> та поділяє створення задачі та її виконання. Нам необхідно реалізувати об'єкти<span class="text-neon"><span class="text-bold"><em> Runnable</em></span></span> та відправити їх виконавцю, а<span class="code"><span class="text-green"> ThreadPoolExecutor</span></span> відповідає за їх виконання, створення екземплярів та роботу з потоками.</p><img data-max-width="800" data-id="dfc5d0d3-d97a-4881-88a8-8b0d8ea881a5" alt="" src="https://cdn.javarush.com/images/article/dfc5d0d3-d97a-4881-88a8-8b0d8ea881a5/800.jpeg" style="width: 800px;">
+<p>Після того, як завдання вирушає на виконання, використовується вже створений потік із пулу. Тим самим вирішується питання витрати ресурсів на створення та ініціалізацію нового потоку, а після використання – на його очищення GC-ом ​​– і підвищується продуктивність.</p>
+<p><span class="code"><span class="text-green">ThreadPoolExecutor</span></span> має 4 конструктори:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">ThreadPoolExecutor</span><span class="token punctuation">(</span>
+<span class="token keyword">int</span> corePoolSize<span class="token punctuation">,</span>
+<span class="token keyword">int</span> maximumPoolSize<span class="token punctuation">,</span>
+<span class="token keyword">long</span> keepAliveTime<span class="token punctuation">,</span>
+<span class="token class-name">TimeUnit</span> unit<span class="token punctuation">,</span>
+<span class="token class-name">BlockingQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Runnable</span><span class="token punctuation">&gt;</span></span> workQueue<span class="token punctuation">)</span></code></pre>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">ThreadPoolExecutor</span><span class="token punctuation">(</span>
+<span class="token keyword">int</span> corePoolSize<span class="token punctuation">,</span>
+<span class="token keyword">int</span> maximumPoolSize<span class="token punctuation">,</span>
+<span class="token keyword">long</span> keepAliveTime<span class="token punctuation">,</span>
+<span class="token class-name">TimeUnit</span> unit<span class="token punctuation">,</span>
+<span class="token class-name">BlockingQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Runnable</span><span class="token punctuation">&gt;</span></span> workQueue<span class="token punctuation">,</span>
+<span class="token class-name">RejectedExecutionHandler</span> handler<span class="token punctuation">)</span></code></pre>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">ThreadPoolExecutor</span><span class="token punctuation">(</span>
+<span class="token keyword">int</span> corePoolSize<span class="token punctuation">,</span>
+<span class="token keyword">int</span> maximumPoolSize<span class="token punctuation">,</span>
+<span class="token keyword">long</span> keepAliveTime<span class="token punctuation">,</span>
+<span class="token class-name">TimeUnit</span> unit<span class="token punctuation">,</span>
+<span class="token class-name">BlockingQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Runnable</span><span class="token punctuation">&gt;</span></span> workQueue<span class="token punctuation">,</span>
+<span class="token class-name">ThreadFactory</span> threadFactory<span class="token punctuation">)</span></code></pre>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">ThreadPoolExecutor</span><span class="token punctuation">(</span>
+<span class="token keyword">int</span> corePoolSize<span class="token punctuation">,</span>
+<span class="token keyword">int</span> maximumPoolSize<span class="token punctuation">,</span>
+<span class="token keyword">long</span> keepAliveTime<span class="token punctuation">,</span>
+<span class="token class-name">TimeUnit</span> unit<span class="token punctuation">,</span>
+<span class="token class-name">BlockingQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Runnable</span><span class="token punctuation">&gt;</span></span> workQueue<span class="token punctuation">,</span>
+<span class="token class-name">ThreadFactory</span> threadFactory<span class="token punctuation">,</span>
+<span class="token class-name">RejectedExecutionHandler</span> handler<span class="token punctuation">)</span></code></pre>
+<p>У конструктор передаються параметри <span class="code"><span class="text-green">ThreadPoolExecutor</span></span> :</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td><span class="text-green">corePoolSize</span></td>
+    <td>Параметр, який показує, скільки потоків буде готово (запущено) при старті executor сервісу.</td>
+   </tr>
+   <tr>
+    <td><span class="text-green">maximumPoolSize</span></td>
+    <td>Максимальна кількість потоків може створити executor сервіс.</td>
+   </tr>
+   <tr>
+    <td><span class="text-green">keepAliveTime</span></td>
+    <td>Час, протягом якого потік, що звільнився, житиме і згодом буде знищений, якщо кількість потоків більша<mark class="user">corePoolSize</mark>. Тимчасові одиниці вказуються у наступному параметрі.</td>
+   </tr>
+   <tr>
+    <td><span class="text-green">unit</span></td>
+    <td>Часові одиниці (годинник, хвабона, секунда, мілісекунди і так далі).</td>
+   </tr>
+   <tr>
+    <td><span class="text-green">workQueue</span></td>
+    <td>Реалізація черги для завдань.</td>
+   </tr>
+   <tr>
+    <td><span class="text-green">handler</span></td>
+    <td>Оброблювач завдань, які не можуть бути виконані.</td>
+   </tr>
+   <tr>
+    <td><span class="text-green">threadFactory</span></td>
+    <td>Об'єкт, який створює нові потоки на вимогу. Використання фабрик потоків усуває апаратну прив'язку викликів до нового потоку, дозволяючи програмам використовувати спеціальні підкласи потоків, пріоритети і т.д.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<h2>Створення ThreadPoolExecutor</h2>
+<p>Створення <span class="code"><span class="text-green">ThreadPoolExecutor</span></span> може нам спростити утилітарний клас <span class="code"><span class="text-green">Executors</span></span> . У цьому утилітарному класі є методи, які нам допоможуть підготувати об'єкт<mark class="green">ThreadPoolExecutor</mark>.</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td><span class="code text-orange">newFixedThreadPool</span> - створює пул потоків, який повторно використовує фіксовану кількість потоків для виконання будь-якої кількості завдань.</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">ExecutorService</span> executor <span class="token operator">=</span> <span class="token class-name">Executors</span><span class="token punctuation">.</span><span class="token function">newFixedThreadPool</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">newWorkStealingPool</span> – створює пул потоків, де кількість потоків = кількість ядер процесора, доступних для JVM. Дефолтний рівень паралелізму – один. Це означає, що в пулі буде створено стільки потоків, скільки ядер ЦП доступне JVM. Якщо паралелізм дорівнює 4 тоді замість кількості ядер використовується передане значення.</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">ExecutorService</span> executor <span class="token operator">=</span> <span class="token class-name">Executors</span><span class="token punctuation">.</span><span class="token function">newWorkStealingPool</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">NewSingleThreadExecutor</span> – створює пул з єдиним потоком для виконання всіх завдань.</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">ExecutorService</span> executor <span class="token operator">=</span> <span class="token class-name">Executors</span><span class="token punctuation">.</span><span class="token function">newSingleThreadExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">newCachedThreadPool</span> – створює пул потоків, який створює нові потоки в міру необхідності, але повторно використовуватиме раніше створені потоки, коли вони будуть доступні.</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">ExecutorService</span> executor <span class="token operator">=</span> <span class="token class-name">Executors</span><span class="token punctuation">.</span><span class="token function">newCachedThreadPool</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">newScheduledThreadPool</span> – створює пул потоків, який може планувати виконання команд після заданої затримки або періодичного виконання.</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">ScheduledExecutorService</span> executor <span class="token operator">=</span> <span class="token class-name">Executors</span><span class="token punctuation">.</span><span class="token function">newScheduledThreadPool</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Кожен із видів пулів ми розглянемо у наступних лекціях.</p>

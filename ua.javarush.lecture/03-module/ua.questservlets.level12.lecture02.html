@@ -1,0 +1,184 @@
+<h2>3.1 Клас HttpServletResponse</h2>
+<p>Після виклику <code>service()</code>твого сервлету веб-контейнер сформує відповідь клієнту на основі об'єкта <code>HttpServletResponse</code>. Отже, якщо хочеш якось вплинути на відповідь клієнту, то варто модифікувати цей об'єкт.</p>
+<p>Відповідь сервера складається з трьох частин:</p>
+<ul>
+ <li>Рядок статусу (наприклад: 200 OK)</li>
+ <li>Заголовки (headers)</li>
+ <li>Тіло відповіді (response body)</li>
+</ul>
+<p>І методи класу <code>HttpServletResponse</code>також поділяються на 3 групи? Ну майже:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th></th>
+    <th width="400">Методи</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>1</td>
+    <td><code>void setStatus(int sc)</code></td>
+    <td>Встановлює код статусу відповіді.</td>
+   </tr>
+   <tr>
+    <td>2</td>
+    <td><code>void sendError(int sc)</code></td>
+    <td>Надсилає клієнту помилку із зазначеним кодом.</td>
+   </tr>
+   <tr>
+    <td>3</td>
+    <td><code>void sendError(int sc, String msg)</code></td>
+    <td>Надсилає клієнту помилку із зазначеним кодом та повідомлення.</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+   </tr>
+   <tr>
+    <td>4</td>
+    <td><code>void addHeader(String name, String value)</code></td>
+    <td>Додає заголовок до списку заголовків відповіді.</td>
+   </tr>
+   <tr>
+    <td>5</td>
+    <td><code>void setHeader(String name, String value)</code></td>
+    <td>Змінює заголовок у списку заголовків відповіді.</td>
+   </tr>
+   <tr>
+    <td>6</td>
+    <td><code>boolean containsHeader(String name)</code></td>
+    <td>Перевіряє, чи є такий заголовок.</td>
+   </tr>
+   <tr>
+    <td>7</td>
+    <td><code>void addCookie(Cookie cookie)</code></td>
+    <td>Додає Cookie до відповіді.</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+   </tr>
+   <tr>
+    <td>8</td>
+    <td><code>void sendRedirect(String location)</code></td>
+    <td>Перенаправляє клієнта на іншу URL-адресау.</td>
+   </tr>
+   <tr>
+    <td>9</td>
+    <td><code>String encodeRedirectURL(String url)</code></td>
+    <td>Кодує вказану URL для його використання в методі sendRedirect.</td>
+   </tr>
+   <tr>
+    <td>10</td>
+    <td><code>String encodeURL(String url)</code></td>
+    <td>Кодує вказаний URL, включаючи ідентифікатор сесії.</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+   </tr>
+   <tr>
+    <td>11</td>
+    <td><code>void setContentType(String type)</code></td>
+    <td>Встановлює результат MimeType.</td>
+   </tr>
+   <tr>
+    <td>12</td>
+    <td><code>void setContentLength(int len)</code></td>
+    <td>Встановлює довжину тіла відповіді.</td>
+   </tr>
+   <tr>
+    <td>13</td>
+    <td><code>void setCharacterEncoding(String charset)</code></td>
+    <td>Встановлює набір відповідей.</td>
+   </tr>
+   <tr>
+    <td>14</td>
+    <td><code>void setBufferSize(int size)</code></td>
+    <td>Встановлює розмір буфера для відповіді.</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+   </tr>
+   <tr>
+    <td>15</td>
+    <td><code>boolean isCommitted()</code></td>
+    <td>Перевіряє, чи вже записаний буфер у відповідь.</td>
+   </tr>
+   <tr>
+    <td>16</td>
+    <td><code>void flushBuffer()</code></td>
+    <td>Записує вміст буфера у відповідь.</td>
+   </tr>
+   <tr>
+    <td>17</td>
+    <td><code>void reset()</code></td>
+    <td>Скидає всі дані, які зберігаються у буфері, заголовки та коди відповіді.</td>
+   </tr>
+   <tr>
+    <td>18</td>
+    <td><code>void resetBuffer()</code></td>
+    <td>Очищує буфер відповіді.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Методи тут досить очевидні. Але розповім нижче кілька нюансів.</p>
+<p><strong>Буфер</strong> . Відповідь твого сервлета пишеться в буфер, а не одразу відправляється користувачеві. Тому на якомусь етапі (якщо, наприклад, сталася помилка), ти можеш скинути (стерти) все, що записано в буфер. Можна навіть викликати метод reset() і стерти як вміст буфера, а й заголовки з кодом відповіді.</p>
+<h2>3.2 redirect()</h2>
+<p>Другий важливий момент – це редирект. Якщо твій сервлет вирішить перенаправити клієнта на іншу URL, то тобі потрібно якось цей URL відправити клієнту. Це можна зробити за допомогою методу <code>sendRedirect</code>.</p>
+<p>Але є важливий аспект. URI може містити ширший діапазон символів, ніж дозволено response body. Тому URL-адресау перед викликом методу <code>sendRedirect()</code>потрібно спочатку перекодувати в допустимий набір символів. Для цього і є спеціальний метод <code>encodeRedirectURL(String url)</code>. Скористайся ним.</p>
+<p>Приклад редиректу:</p>
+<pre class="line-numbers"><code>
+public class <span class="text-orange">RedirectServlet</span> extends <span class="text-red">HttpServlet</span> {
+    protected void doGet(<span class="text-green">HttpServletRequest request</span>, <span class="text-user">HttpServletResponse response</span>) throws Exception {
+        String <span class="text-yellow">newUrl</span> = <span class="text-green">"http://google.com?q=Вчися гуглити!"</span>;
+        String <span class="text-viola">redirectUrl</span> = <span class="text-user">response</span>.<span class="text-red">encodeRedirectURL</span>(<span class="text-yellow">newUrl</span>);
+        <span class="text-user">response</span>.<span class="text-red">sendRedirect</span>(<span class="text-viola">redirectUrl</span>);
+    }
+}
+</code></pre>
+<h2>3.3 Метод getWriter()</h2>
+<p>А тепер ми навчимося писати свій текст як response body. Для цього клас <code>HttpServletResponse</code>має спеціальний метод <code>getWriter()</code>, який повертає об'єкт <code>PrintStream</code>. Якщо хтось забув, саме такий тип має поле з ім'ям <code>System.out</code>.</p>
+<p>Для того, щоб написати якийсь текст як відповідь сервлета, потрібно:</p>
+<ul>
+ <li>Отримати об'єкт PrintStream, викликавши метод <code>response.getWriter()</code>.</li>
+ <li>Записати в об'єкт PrintStream все, що вважаєш за потрібне (всі дані запишуться в буфер).</li>
+ <li>Надіслати буфер користувачу, викликавши метод <code>close()</code>PrintStream.</li>
+</ul>
+<p>Давай напишемо сервлет, який складає два числа <code>a</code>і <code>b</code>повертає користувачеві результат:</p>
+<pre class="line-numbers"><code>
+
+public class <span class="text-orange">CalculatorServlet</span> extends <span class="text-red">HttpServlet</span> {
+    protected void <span class="text-red">doGet</span>(<span class="text-green">HttpServletRequest request</span>, <span class="text-user">HttpServletResponse response</span>) throws Exception {
+         // Отримуємо параметр “a” и “b” із запиту
+        String a = <span class="text-green">request</span>.getParameter(<span class="text-green">"a"</span>);
+        String b = <span class="text-green">request</span>.getParameter(<span class="text-green">"b"</span>);
+ 
+        try {
+            // Перетворюємо рядки на числа і рахуємо суму
+            int <span class="text-viola">sum</span> = Integer.parseInt(<span class="text-viola">a</span>) + Integer.parseInt(<span class="text-viola">b</span>);
+ 
+            // Печатаем HTML в качестве ответа для браузера
+            <span class="text-user">response</span>.setContentType(<span class="text-green">"text/html;charset=UTF-8"</span>);
+            PrintWriter <span class="text-yellow">out</span> = <span class="text-user">response</span>.getWriter();
+ 
+            <span class="text-yellow">out</span>.println(<span class="text-green">"&lt;html&gt;"</span>);
+            <span class="text-yellow">out</span>.println(<span class="text-green">"&lt;head&gt; &lt;title&gt; CalculatorServlet &lt;/title&gt; &lt;/head&gt;"</span>);
+            <span class="text-yellow">out</span>.println(<span class="text-green">"&lt;body&gt;"</span>);
+            <span class="text-yellow">out</span>.println(<span class="text-green">"&lt;h1&gt; Sum == " + <span class="text-viola">sum</span> + "&lt;/h1&gt;"</span>);
+            <span class="text-yellow">out</span>.println(<span class="text-green">"&lt;/body&gt;"</span>);
+            <span class="text-yellow">out</span>.println(<span class="text-green">"&lt;/html&gt;"</span>);
+        } finally {
+            <span class="text-yellow">out</span>.close();
+        }
+    }
+}
+<span class="text-green">
+
+</span></code></pre>

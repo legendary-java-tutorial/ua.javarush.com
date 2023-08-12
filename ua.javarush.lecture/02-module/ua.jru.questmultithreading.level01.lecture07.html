@@ -1,0 +1,46 @@
+<a href="https://cdn.javarush.com/images/article/6e110da5-fb61-4a99-9331-c9cacd9a1d50/original.jpeg" target="_blank"><img data-id="6e110da5-fb61-4a99-9331-c9cacd9a1d50" data-max-width="850" alt="Метод clone, інтерфейс Cloneable - 1" src="https://cdn.javarush.com/images/article/6e110da5-fb61-4a99-9331-c9cacd9a1d50/800.jpeg" style="width: 850px;"></a>
+<p>- Привіт, Аміго!</p>
+<p><span class="text-user">- Привіт, Кім.</span></p>
+<p>— Я розповім тобі про метод clone().</p>
+<p>Мета цього – клонувати об'єкт – тобто. створити його клон/копію/дублікат.</p>
+<p>Якщо його викликати, Java-машина створить і поверне дублікат об'єкта, у якого викликали цей метод.</p>
+<p>Клонування об'єкта в класі Object реалізовано дуже примітивно – при клонуванні створюється лише один новий об'єкт: просто створюється ще один об'єкт і його полям надаються значення полів об'єкта-зразка.</p>
+<p>Якщо об'єкт, що копіюється, містить посилання на інші об'єкти, то посилання будуть скопійовані, дублікати тих об'єктів не створюються.</p>
+<p><span class="text-user">- Гм. Не густо.</span></p>
+<p>— Справа в тому, що Java машина не знає, які об'єкти можна клонувати, а які ні. Файли, наприклад, не можна клонувати. Як і потік System.in.</p>
+<p>Тому питання про повноцінне клонування було віддано на відкуп розробникам класів. Тут все було зроблено за аналогією з методом equals. Навіть є свій аналог hashCode – це Cloneable інтерфейс.</p>
+<p>Інтерфейс <strong>Cloneable</strong> – це так званий інтерфейс маркер, який не містить жодних методів. Він використовується, щоб маркувати (помічати) деякі класи.</p>
+<p>Якщо розробник класу вважає, що об'єкти класу можна клонувати, він позначає клас цим інтерфейсом (успадковує клас від Cloneable).</p>
+<p>Якщо розробника не влаштовує стандартна реалізація методу clone, він повинен написати свою, яка створюватиме дублікат об'єкта правильним чином.</p>
+<p>При викликі методу <strong>clone</strong> (), Java перевіряє, чи об'єкт мав інтерфейс Cloneable. Якщо так – клонує об'єкт методом <strong>clone</strong> (), якщо ні – викидає виняток CloneNotSupportedException.</p>
+<p><span class="text-user">- Тобто. ми повинні або перевизначити метод clone та написати його нову реалізацію чи успадкувати клас від Cloneable?</span></p>
+<p>— Так, але перевизначати метод все ж таки доведеться. Метод clone() оголошений як protected, тому він доступний для виклику тільки класам з його пакета (java.lang.*) або класам-спадкоємцям.</p>
+<p><span class="text-user">— Я трохи заплутався, то що ж треба зробити, щоб клонувати об'єкт?</span></p>
+<p>— Дивись, якщо ти хочеш скористатися «за замовчуванням клонування», яке реалізовано в класі Object, тобі потрібно:</p>
+<p><strong>а)</strong> Додати інтерфейс Cloneable своєму класу</p>
+<p><strong>б)</strong> Перевизначити метод clone та викликати в ньому базову реалізацію:</p>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Point</span> <span class="token keyword">implements</span> <span class="token class-name">Cloneable</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">int</span> x<span class="token punctuation">;</span>
+ <span class="token keyword">int</span> y<span class="token punctuation">;</span>
+
+ <span class="token keyword">public</span> <span class="token class-name">Object</span> <span class="token function">clone</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">clone</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Або ти можеш написати реалізацію методу clone повністю сам:</p>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Point</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">int</span> x<span class="token punctuation">;</span>
+ <span class="token keyword">int</span> y<span class="token punctuation">;</span>
+
+ <span class="token keyword">public</span> <span class="token class-name">Object</span> <span class="token function">clone</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name">Point</span> point <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Point</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  point<span class="token punctuation">.</span>x <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>x<span class="token punctuation">;</span>
+  point<span class="token punctuation">.</span>y <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>y<span class="token punctuation">;</span>
+  <span class="token keyword">return</span> point<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><span class="text-user">— Цікавий метод, користуватимуся. Іноді…</span></p>

@@ -1,0 +1,121 @@
+<h2>5.1 Метод verify()</h2>
+<p>Крім створення віртуальних об'єктів, часто виникає ще одне цікаве завдання – переконатися, що клас, що тестується, викликав потрібні методи потрібних об'єктів. Більше того, викликав необхідну кількість разів, з правильними параметрами тощо.</p>
+<p>Для цього в Mockito теж є трохи магії – сімейство методів <code>Mockito.verify(…)</code>. <span class="text-red">Загальне правило, яким задається перевірка виклику методу</span> , має вигляд:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present"><code><span class="text-red">Mockito</span>.verify(<span class="text-green">об'єкт</span>).<span class="text-yellow">ім'яМетоду</span>(<span class="text-violet">параметр</span>);</code></pre>
+</div>
+<p>Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@ExtendWith</span><span class="token punctuation">(</span><span class="token class-name">MockitoExtension</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+<span class="token keyword">class</span> <span class="token class-name">VerifyTest</span> <span class="token punctuation">{</span>
+<span class="text-green">    <span class="token annotation punctuation">@Mock</span></span><span class="token annotation punctuation"></span>
+<span class="text-red">    <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> mockList<span class="token punctuation">;</span></span><span class="token punctuation"></span>
+
+<span class="text-green">    <span class="token annotation punctuation">@Test</span></span><span class="token annotation punctuation"></span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">whenMockAnnotation</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">//Виклик методу</span>
+        <span class="token class-name">String</span> name <span class="token operator">=</span> <span class="text-red">mockList</span><span class="token punctuation">.</span><span class="token function"><span class="text-yellow">get</span></span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">//перевіряємо чи викликався метод</span>
+        <span class="token class-name">Mockito</span><span class="token punctuation">.</span><span class="token function">verify</span><span class="token punctuation">(</span><span class="text-red">mockList</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-yellow">get</span></span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Під час виклику методу <code>verify()</code>ми задали правило, що об'єкт <code>mockitoList</code>має викликати метод <code>get()</code>з параметром 10.</p>
+<h2>5.2 Метод verify() з перевіркою кількості дзвінків</h2>
+<p>Іноді бувають складніші сценарії перевірки. Наприклад, тобі потрібно перевірити не просто факт, що метод викликався, а, наприклад, що він викликався 3 рази. Або він у тебе викликався в циклі і отже мав викликатися N разів.</p>
+<p>Ми не питатимемо, чи можна це зробити, ми відразу запитаємо: як записати таке правило? І знову Mockito нас не підводить. Правило можна поставити у вигляді:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present"><code><span class="text-red">Mockito</span>.verify(<span class="text-green">об'єкт</span>,<span class="text-user">кількість</span>).<span class="text-yellow">ім'яМетоду</span>(<span class="text-violet">параметр</span>);</code></pre>
+</div>
+<p><strong>Важливо! </strong>Кількість – це тип <code>int</code>, а спеціальний об'єкт, які може ставити різні шаблони. Пам'ятаєш різні варіанти методу <code>any()</code>? Тут теж саме є спеціальні методи, за допомогою яких можна задавати різні сценарії:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th></th>
+    <th width="200">Метод</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>1</td>
+    <td>never()</td>
+    <td>Метод ніколи не повинен викликати</td>
+   </tr>
+   <tr>
+    <td>2</td>
+    <td>times(n)</td>
+    <td>n раз</td>
+   </tr>
+   <tr>
+    <td>3</td>
+    <td>atLeast(n)</td>
+    <td>n або більше разів</td>
+   </tr>
+   <tr>
+    <td>4</td>
+    <td>atLeastOnce()</td>
+    <td>1 або більше разів</td>
+   </tr>
+   <tr>
+    <td>5</td>
+    <td>atMost(n)</td>
+    <td>n або менше разів</td>
+   </tr>
+   <tr>
+    <td>6</td>
+    <td>only()</td>
+    <td>Має бути лише один виклик і лише до цього методу</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">String</span> name1 <span class="token operator">=</span> <span class="text-red">mockList</span><span class="token punctuation">.</span><span class="token function"><span class="text-yellow">get</span></span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">//Виклик методу</span>
+<span class="token class-name">String</span> name2 <span class="token operator">=</span> <span class="text-red">mockList</span><span class="token punctuation">.</span><span class="token function"><span class="text-yellow">get</span></span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">//Виклик методу</span>
+<span class="token class-name">String</span> name3 <span class="token operator">=</span> <span class="text-red">mockList</span><span class="token punctuation">.</span><span class="token function"><span class="text-yellow">get</span></span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">//Виклик методу</span>
+
+<span class="token comment">//перевіряємо, що метод get() викликався 3 рази</span>
+<span class="token class-name"><span class="text-red">Mockito</span></span><span class="token punctuation">.</span><span class="token function">verify</span><span class="token punctuation">(</span><span class="text-red">mockList</span><span class="token punctuation">,</span> <span class="token function"></span><span class="text-user"><span class="token function">times</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span></span><span class="token punctuation"></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token function"></span><span class="text-violet"><span class="token function">anyInt</span><span class="token punctuation">(</span><span class="token punctuation">)</span></span><span class="token punctuation"></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Ти також можеш вимагати, щоб, крім вказаних викликів методу, <strong>жодних інших звернень до об'єкта не було</strong> . Для цього є правило:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present"><code><span class="text-red">Mockito</span>.verifyNoMoreInteractions(<span class="text-green">об'єкт</span>);</code></pre>
+</div>
+<h2>5.3 Порядок виклику методів</h2>
+<p>Попередні правила не регламентували порядок виклику методів. Правило просто має виконатись і все. Але бувають ситуації, коли порядок викликів методів важливий і для цього Mockito теж є рішення.</p>
+<p>Жорсткий порядок виклику методів можна встановити за допомогою спеціального об'єкта <code>InOrder</code>. Спочатку його потрібно створити:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present"><code>InOrder <span class="text-user">inOrder</span> = <span class="text-red">Mockito</span>.<span class="text-orange">inOrder</span>(<span class="text-green">об'єкт</span>);</code></pre>
+</div>
+<p>А потім уже йому додавати правила за допомогою виклику методів <code>verify()</code>.</p>
+<p>Приклад:</p>
+<pre class="line-numbers"><code>
+    List&lt;String&gt; <span class="text-green">mockedList</span> = mock(MyList.class);
+    <span class="text-green">mockedList</span>.size();
+    <span class="text-green">mockedList</span>.add("a parameter");
+    <span class="text-green">mockedList</span>.clear();
+ 
+    InOrder <span class="text-user">inOrder</span> = <span class="text-red">Mockito</span>.<span class="text-orange">inOrder</span>(mockedList);
+    <span class="text-user">inOrder</span>.verify(mockedList).size();
+    <span class="text-user">inOrder</span>.verify(mockedList).add("a parameter");
+    <span class="text-user">inOrder</span>.verify(mockedList).clear();
+</code></pre>
+<h2>5.4 Перевірка виключень у Mockito</h2>
+<p>Факт того, що винятки виникли, перевіряється трохи інакше. Для цього потрібно використовувати метод <code>assertThrows()</code>. Загальний формат такої перевірки має вигляд:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present"><code><span class="text-red">Assertions</span>.assertThrows(<span class="text-user">виняток.</span>, () -&gt; <span class="text-green">об'єкт</span>.<span class="text-yellow">ім'яМетоду()</span>);</code></pre>
+</div>
+<p>Нічого складного.</p>
+<p>Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@ExtendWith</span><span class="token punctuation">(</span><span class="token class-name">MockitoExtension</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+<span class="token keyword">class</span> <span class="token class-name">ThenThrowTest</span> <span class="token punctuation">{</span>
+<span class="text-green">    <span class="token annotation punctuation">@Mock</span></span><span class="token annotation punctuation"></span>
+<span class="text-red">    <span class="token class-name">List</span> mockList<span class="token punctuation">;</span></span><span class="token punctuation"></span>
+
+<span class="text-green">    <span class="token annotation punctuation">@Test</span></span><span class="token annotation punctuation"></span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">whenMockAnnotation</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">//Задаємо поведінку методу (потрібно тільки для демонстрації)</span>
+        <span class="token class-name">Mockito</span><span class="token punctuation">.</span><span class="token function">when</span><span class="token punctuation">(</span><span class="text-red">mockList</span><span class="token punctuation">.</span><span class="token function"><span class="text-yellow">size</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenThrow</span><span class="token punctuation">(</span><span class="token class-name"></span><span class="text-user"><span class="token class-name">IllegalStateException</span><span class="token punctuation">.</span><span class="token keyword">class</span></span><span class="token keyword"></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">//перевіряємо чи кинеться IllegalStateException при виклику методу size</span>
+        <span class="token function">assertThrows</span><span class="token punctuation">(</span><span class="token class-name"></span><span class="text-user"><span class="token class-name">IllegalStateException</span><span class="token punctuation">.</span><span class="token keyword">class</span></span><span class="token keyword"></span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-&gt;</span> <span class="text-red">mockList</span><span class="token punctuation">.</span><span class="token function"><span class="text-yellow">size</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>

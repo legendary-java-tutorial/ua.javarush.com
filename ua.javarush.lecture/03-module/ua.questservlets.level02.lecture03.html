@@ -1,0 +1,54 @@
+<h2>Тестування в Maven</h2>
+<p>Ще один важливий момент роботи Maven – це фаза тестування. Вона виконається, якщо ти запустиш фазу <span class="text-bold">test</span> , <span class="text-bold">package</span> , <span class="text-bold">verify</span> або будь-яку іншу, яка йде після них.</p>
+<p>За промовчанням Maven запустить усі тести, які знаходяться у папці <span class="text-bold">src/test/java/</span> . Щоб відрізнити тести, які потрібно запустити, від інших java-файлів було ухвалено угоду імен. Тестами вважаються java-класи, чиї імена починаються з Test і закінчується на <span class="text-bold">Test</span> або <span class="text-bold">TestCase</span> .</p>
+<p>Загальний шаблон імен тестів:</p>
+<ul>
+ <li>**/Test*.java</li>
+ <li>**/*Test.java</li>
+ <li>**/*TestCase.java</li>
+</ul>
+<p>Ці тести повинні бути написані на основі тестового фреймворку <span class="text-bold">Junit</span> або TestNG. Це дуже круті фреймворки, про них ми обов'язково поговоримо трохи згодом.</p>
+<p>Результати тестування у вигляді звітів у форматах .txt та .xml зберігаються в директорії ${basedir}/target/surefire-reports.</p>
+<h2>Налаштування тестування</h2>
+<p>Варіантів запуску тестів зазвичай буває дуже багато, тому розробники Maven зробабо спеціальний плагін, у параметрах якого можна задати всю детальну інформацію з тестування. Плагін називається <span class="text-bold">Maven Surefire Plugin</span> і доступний <a href="https://maven.apache.org/surefire/maven-surefire-plugin/" target="_blank">за посиланням</a> .</p>
+<pre><code>&lt;plugins&gt;
+    &lt;plugin&gt;
+        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+        &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
+    	&lt;version&gt;2.12.4&lt;/version&gt;
+    	&lt;configuration&gt;
+        	&lt;includes&gt;
+                <span class="text-red">&lt;include&gt;Sample.java&lt;/include&gt;</span>
+        	&lt;/includes&gt;
+    	&lt;/configuration&gt;
+	&lt;/plugin&gt;
+&lt;/plugins&gt;
+</code></pre>
+<p>У прикладі ми вказали плагіну, що потрібно запустити єдиний тестовий клас – Sample.java.</p>
+<h2>Як швидко виключити поламані тести</h2>
+<p>Щоб запустити проект на тестування, необхідно виконати команду mvn test. Але частіше виникає потреба виключити із тестування деякі тести. Наприклад, вони можуть бути поламані, виконуватися занадто довго, або з будь-яких інших причин.</p>
+<p>По-перше, можна сказати Maven пропустити тести під час виконання фази складання. Приклад:</p>
+<pre><code>mvn clean package <span class="text-red">-Dmaven.test.skip=true</span>
+</code></pre>
+<p>По-друге, у конфігурації плагіна можна відключити виконання тестів:</p>
+<pre><code>
+&lt;configuration&gt;
+    &lt;skipTests&gt;true&lt;/skipTests&gt;
+&lt;/configuration&gt;
+</code></pre>
+<p>Ну і, по-третє, тести можна виключити за допомогою тега <span class="text-bold">&lt;exclude&gt;</span> . Приклад:</p>
+<pre><code>
+&lt;plugins&gt;
+    &lt;plugin&gt;
+        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+        &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
+    	&lt;version&gt;2.12.4&lt;/version&gt;
+    	&lt;configuration&gt;
+        	<span class="text-red">&lt;excludes&gt;
+           	&lt;exclude&gt;**/TestFirst.java&lt;/exclude&gt;
+	           &lt;exclude&gt;**/TestSecond.java&lt;/exclude&gt;
+    	&lt;/excludes&gt;</span>
+    	&lt;/configuration&gt;
+    &lt;/plugin&gt;
+&lt;/plugins&gt;
+</code></pre>

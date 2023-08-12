@@ -1,0 +1,382 @@
+Вибірка даних із кількох таблиць
+<p>----------------------------------------</p>
+Залежна таблиця.
+Запит до кількох таблиць.
+Забираємо безглузді рядки.
+<p>----------------------------------------</p>
+<h2>Залежна таблиця </h2>
+
+<p>Тепер трохи ускладнимо наші запити. Додамо до нашої бази даних нову таблицю <strong>task</strong> із завданнями для наших співробітників. І подивимося, які в ній записи:</p>
+ 
+    <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-red">SELECT</span> * <span class="text-red">FROM</span> <span class="text-orange">task</span> </code> </pre>
+    </div>
+
+<p>Результат такого запиту: </p>
+ 
+<table>
+<tbody>
+<tr>
+<th>id </th>
+<th>emploee_id</th>
+<th>name </th>
+<th>deadline</th>
+</tr>
+<tr>
+<td>1 </td>
+<td>1 </td>
+<td>Виправити багу на фронтенді</td>
+<td>2022-06-01 </td>
+</tr>
+<tr>
+<td>2 </td>
+<td>2 </td>
+<td>Виправити багу на бекенді</td>
+<td>2022-06-15 </td>
+</tr>
+<tr>
+<td>3 </td>
+<td>5 </td>
+<td>Купити каву </td>
+<td>2022-07-01 </td>
+</tr>
+<tr>
+<td>4 </td>
+<td>5 </td>
+<td>Купити каву </td>
+<td>2022-08-01 </td>
+</tr>
+<tr>
+<td>5 </td>
+<td>5 </td>
+<td>Купить каву </td>
+<td>2022-09-01 </td>
+</tr>
+<tr>
+<td>6 </td>
+<td>(NULL)</td>
+<td>Прибрати офіс </td>
+<td>(NULL)</td>
+</tr>
+<tr>
+<td>7 </td>
+<td>4 </td>
+<td>Насолоджуватися життям </td>
+<td>(NULL)</td>
+</tr>
+<tr>
+<td>8 </td>
+<td>6 </td>
+<td>Насолоджуватися життям </td>
+<td>(NULL)</td>
+</tr>
+</tbody>
+</table>
+ 
+<p>У цій таблиці є всього 4 колонки: </p>
+
+<ul>
+<li><strong>id</strong> — унікальний номер завдання (та рядки у таблиці); </li>
+<li><strong>employee_id</strong> — ID співробітника з таблиці employee, на якого призначено завдання; </li>
+<li><strong>name</strong> — назва та опис завдання; </li>
+<li><strong>deadline</strong> — час, до якого потрібно виконати завдання.</li>
+</ul>
+
+<p>Зверніть увагу на кілька нюансів. Завдання N6 не має employee_id, ми не маємо прибиральниці. Завдання є, а виконавця немає. Таке буває.</p>
+ 
+<p>Також завдання 6-9 не мають встановленого дедлайну. Таке буває, коли завдання має виконуватися регулярно і безперервно. Наприклад, офіс потрібно прибирати щодня, та й насолоджуватися життям теж потрібно щодня :) </p>
+ 
+<p>Якщо в одній таблиці використовуються ID з іншої таблиці, то така таблиця називається <strong>залежною</strong>. </p>
+ 
+<h2>Запит до кількох таблиць </h2>
+ 
+<p>Ось ми бачимо в таблиці task, що є два завдання "Насолоджується життям". Як нам дізнатися, хто саме ці щасливчики? </p>
+
+<p>Для цього SQL можна виконати запит відразу до двох таблиць. Взагалі SQL можна виконувати запит до будь-якої кількості таблиць одночасно. Загальний формат такого запиту: </p>
+ 
+<pre><code><span class="text-bold"><span class="text-red">SELECT</span> <span class="text-green">колонки </span>
+<span class="text-red">FROM</span> <span class="text-orange">таблиця1</span>, <span class="text-orange">таблиця2</span>, <span class ="text-orange">таблицяN</span></span>
+</code></pre>
+
+<p>Важливо! Якщо ти напишеш запит до кількох таблиць одночасно, то в результаті отримаєш так званий <strong>декартовий твір</strong> рядків таблиць. До кожного рядка з першої таблиці буде приклеєно кожен рядок з другої таблиці і так далі.</p>
+ 
+<p>Тобто, якщо в першій таблиці у вас 5 рядків, а в другій 10, то всього у вас буде 50 рядків. На мові Java цей запит виглядав би приблизно так: </p>
+ 
+<pre class='language-java line-numbers'><code>
+for (String <span class="text-green">row1</span> : <span class="text-orange">table1</span>)
+{
+for (String <span class="text-green">row2</span> : <span class="text-orange">table2</span>)
+   {
+  System.out.println(<span class="text-green">row1</span> + <span class="text-green">row2</span>);
+   }
+}
+</code></pre>
+
+<p>Давай напишемо наш запит відразу до двох таблиць і загостримо, що вийде: </p>
+ 
+    <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-red">SELECT</span> * <span class="text-red">FROM</span> <span class="text-orange">employee</span>, <span class ="text-orange">task</span></code></pre>
+    </div>
+ 
+<p>І результат такого запиту: </p>
+
+<table>
+<tbody>
+<tr>
+<th>id </th>
+<th>name </th>
+<th>occupation </th>
+<th>salary </th>
+<th>age </th>
+<th>id </th>
+<th>emploee </th>
+<th>_id</th>
+<th>name </th>
+<th>deadline</th>
+</tr>
+<tr>
+<td>1 </td>
+<td>Іванов Іван </td>
+<td>Програміст </td>
+<td>100000</td>
+<td>25 </td>
+<td>1 </td>
+<td>1 </td>
+<td>Виправити багу на фронтенді</td>
+<td>2022-06-01 </td>
+</tr>
+<tr>
+<td>2 </td>
+<td>Петров Петро </td>
+<td>Програміст </td>
+<td>80000</td>
+<td>23 </td>
+<td>1 </td>
+<td>1 </td>
+<td>Виправити багу на фронтенді</td>
+<td>2022-06-01 </td>
+</tr>
+<tr>
+<td>3 </td>
+<td>Іванов Сергій </td>
+<td>Тестувальник </td>
+<td>40000</td>
+<td>30</td>
+<td>1 </td>
+<td>1 </td>
+<td>Виправити багу на фронтенді</td>
+<td>2022-06-01 </td>
+</tr>
+<tr>
+<td>4</td>
+<td>Рабінович Мойша</td>
+<td>Директор </td>
+<td>200000</td>
+<td>35 </td>
+<td>1 </td>
+<td>1 </td>
+<td>Виправити багу на фронтенді</td>
+<td>2022-06-01 </td>
+</tr>
+<tr>
+<td>5 </td>
+<td>Кірієнко Анастасія </td>
+<td>Офіс-менеджер</td>
+<td>40000</td>
+<td>25 </td>
+<td>1 </td>
+<td>1 </td>
+<td>Виправити багу на фронтенді</td>
+<td>2022-06-01 </td>
+</tr>
+<tr>
+<td>6 </td>
+<td>Васька </td>
+<td>кіт </td>
+<td>1000 </td>
+<td>3 </td>
+<td>1 </td>
+<td>1 </td>
+<td>Виправити багу на фронтенді</td>
+<td>2022-06-01 </td>
+</tr>
+<tr>
+<td>1 </td>
+<td>Іванов Іван </td>
+<td>Програміст </td>
+<td>100000</td>
+<td>25 </td>
+<td>2 </td>
+<td>2 </td>
+<td>Виправити багу на бекенді</td>
+<td>2022-06-15 </td>
+</tr>
+<tr>
+<td>2 </td>
+<td>Петров Петро </td>
+<td>Програміст </td>
+<td>80000</td>
+<td>23 </td>
+<td>2 </td>
+<td>2 </td>
+<td>Виправити багу на бекенді</td>
+<td>2022-06-15 </td>
+</tr>
+<tr>
+<td>3 </td>
+<td>Іванов Сергій </td>
+<td>Тестувальник </td>
+<td>40000</td>
+<td>30</td>
+<td>2 </td>
+<td>2 </td>
+<td>Виправити багу на бекенді</td>
+<td>2022-06-15 </td>
+</tr>
+<tr>
+<td>4 </td>
+<td>Рабінович Мойша </td>
+<td>Директор </td>
+<td>200000</td>
+<td>35 </td>
+<td>2 </td>
+<td>2 </td>
+<td>Виправити багу на бекенді</td>
+<td>2022-06-15 </td>
+</tr>
+<tr>
+<td>5 </td>
+<td>Кірієнко Анастасія </td>
+<td>Офіс-менеджер</td>
+<td>40000</td>
+<td>25 </td>
+<td>2 </td>
+<td>2 </td>
+<td>Виправити багу на бекенді</td>
+<td>2022-06-15 </td>
+</tr>
+</tbody>
+</table>
+ 
+<p>Усього рядків результату у нас 48, але тут я навів лише 11. Інакше просто місця не вистачить. </p>
+
+<p>Зверни увагу на три речі: </p>
+
+<ul>
+<li>Колонки з однаковими іменами: <strong>id</strong>. Це id із таблиці <strong>employee</strong> та id із таблиці <strong>task</strong>. </li>
+<li>Рядки кожної таблиці повторюються. У лівій колонці після ID 6 знову йде ID = 1. </li>
+<li>У нас є безглузді рядки, коли, наприклад, id (з таблиці employee) дорівнює 6 і в тому ж рядку employee_id дорівнює 1. </li>
+</ul>
+ 
+<h2>Забираємо безглузді рядки </h2>
+ 
+<p>У нашій результуючій таблиці, яка є декартовим твором всіх рядків двох таблиць <strong>employee</strong> та <strong>task</strong> дуже багато рядків. </p>
+
+<p>Логічно, що якщо у рядку employee_id дорівнює 3, то вона повинна приклеюватися лише до рядка з таблиці employee, де id дорівнює 3. Давай спробуємо виправити це непорозуміння за допомогою WHERE. </p>
+
+<p>Напишемо такий запит: </p>
+ 
+<pre><code><span class="text-bold"><span class="text-red">SELECT</span> * <span class="text-red">FROM</span> <span class ="text-orange">employee</span>, <span class="text-orange">task</span>
+<span class="text-red">WHERE</span> <span class="text-orange">emploee</span>.<span class="text-green">id</span> = <span class ="text-orange">task</span>.<span class="text-green">emploee_id</span> </span></span>
+</code></pre>
+
+<p>І результат такого запиту: </p>
+
+<table>
+<tbody>
+<tr>
+<th>id </th>
+<th>name </th>
+<th>occupation </th>
+<th>salary </th>
+<th>age </th>
+<th>id </th>
+<th>emploee_id</th>
+<th>name </th>
+<th>deadline</th>
+</tr>
+<tr>
+<td>1 </td>
+<td>Іванов Іван </td>
+<td>Програміст </td>
+<td>100000</td>
+<td>25 </td>
+<td>1 </td>
+<td>1 </td>
+<td>Виправити багу на фронтенді</td>
+<td>2022-06-01 </td>
+</tr>
+<tr>
+<td>2 </td>
+<td>Петров Петро </td>
+<td>Програміст </td>
+<td>80000</td>
+<td>23 </td>
+<td>2 </td>
+<td>2 </td>
+<td>Виправити багу на бекенді</td>
+<td>2022-06-15 </td>
+</tr>
+<tr>
+<td>4 </td>
+<td>Рабінович Мойша </td>
+<td>Директор </td>
+<td>200000</td>
+<td>35 </td>
+<td>7 </td>
+<td>4 </td>
+<td>Насолоджуватися життям </td>
+<td>(NULL)</td>
+</tr>
+<tr>
+<td>5 </td>
+<td>Кірієнко Анастасія </td>
+<td>Офіс-менеджер</td>
+<td>40000</td>
+<td>25 </td>
+<td>3 </td>
+<td>5 </td>
+<td>Купити каву </td>
+<td>2022-07-01 </td>
+</tr>
+<tr>
+<td>5 </td>
+<td>Кірієнко Анастасія </td>
+<td>Офіс-менеджер</td>
+<td>40000</td>
+<td>25 </td>
+<td>4 </td>
+<td>5 </td>
+<td>Купити каву </td>
+<td>2022-08-01 </td>
+</tr>
+<tr>
+<td>5 </td>
+<td>Кірієнко Анастасія </td>
+<td>Офіс-менеджер</td>
+<td>40000</td>
+<td>25 </td>
+<td>5 </td>
+<td>5 </td>
+<td>Купить каву </td>
+<td>2022-09-01 </td>
+</tr>
+<tr>
+<td>6 </td>
+<td>Васька </td>
+<td>кіт </td>
+<td>1000 </td>
+<td>3 </td>
+<td>8 </td>
+<td>6 </td>
+<td>Насолоджуватися життям </td>
+<td>(NULL)</td>
+</tr>
+</tbody>
+</table>
+ 
+<p><strong>Хороша новина</strong> — у нас зникли безглузді рядки: id з першої колонки завжди employee_id. </p>
+
+<p><strong>Погана новина</strong> — зникли завдання, які ні на кого не призначені, такі як прибирання офісу. Їх employee_id дорівнював NULL, тому вони були відкинуті після виконання WHERE. </p>

@@ -1,0 +1,123 @@
+<p>- Привіт, Аміго! Ти вже раніше знайомився з оператором&nbsp; <strong><span class="text-red">instanceof</span></strong> . Сьогодні я розповім тобі, як і де його можна використати.&nbsp;<strong>instanceof</strong> &nbsp;– це дуже простий та ефективний у використанні оператор.</p>
+<p><span class="text-user">— Звучить як реклама!</span></p>
+<p>— Він і справді дуже простий. Він використовується у вигляді:&nbsp; <strong><span class="text-red">"об'єкт" instanceof "клас".</span></strong></p>
+<p>Він перевіряє, чи є об'єктом певного класу. Все ще простіше, ніж я говорю. Дивись приклад:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">Object</span> o <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Integer</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">boolean</span> isInt <span class="token operator">=</span> o <span class="token keyword"><span class="text-red">instanceof</span></span> <span class="token class-name">Integer</span><span class="token punctuation">;</span></code></pre></td>
+    <td><strong>isInt</strong> &nbsp;дорівнюватиме&nbsp; <strong>true</strong> . Об'єкт, який посилається змінна o, є об'єктом класу&nbsp; <strong>Integer</strong> .</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">Object</span> o <span class="token operator">=</span> <span class="token string">"Mama"</span><span class="token punctuation">;</span>
+<span class="token keyword">boolean</span> isInt <span class="token operator">=</span> o <span class="token keyword"><span class="text-red">instanceof</span></span> <span class="token class-name">Integer</span><span class="token punctuation">;</span></code></pre></td>
+    <td><strong>isInt</strong> &nbsp;дорівнюватиме&nbsp; <strong>false</strong> . Об'єкт, який посилається змінна o, перестав бути об'єктом класу&nbsp; <strong>Integer</strong> , є об'єктом класу&nbsp; <strong>String</strong> .</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">InputStream</span> is <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">boolean</span> isFIS <span class="token operator">=</span> is <span class="token keyword"><span class="text-red">instanceof</span></span>
+<span class="token class-name">FileInputStream</span><span class="token punctuation">;</span></code></pre></td>
+    <td><strong>isFIS</strong> &nbsp;дорівнюватиме&nbsp; <strong>true</strong> . Об'єкт, який посилається змінна is, є об'єктом класу&nbsp; <strong>FileInputStream</strong> .</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<div class="task-widget-container" showcover="true" taskkey="com.codegym.task.task14.task1423"></div>
+<p><span class="text-user">- Так, дуже просто.</span></p>
+<p>— Цей оператор враховує і спадкування. Ось дивись.</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Animal</span>
+<span class="token punctuation">{</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">class</span> <span class="token class-name">Cat</span> <span class="token keyword">extends</span> <span class="token class-name">Animal</span>
+<span class="token punctuation">{</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">class</span> <span class="token class-name">Tiger</span> <span class="token keyword">extends</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Тут бачимо три оголошених класу: тварина, кіт і тигр. Кіт успадковується від Тварини. А Тигр від Кота.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Object</span> o <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Tiger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">boolean</span> isCat <span class="token operator">=</span> o <span class="token keyword">instanceof</span> <span class="token class-name">Cat</span><span class="token punctuation">;</span>
+<span class="token keyword">boolean</span> isTiger <span class="token operator">=</span> o <span class="token keyword">instanceof</span> <span class="token class-name">Tiger</span><span class="token punctuation">;</span>
+<span class="token keyword">boolean</span> isAnimal <span class="token operator">=</span> o <span class="token keyword">instanceof</span> <span class="token class-name">Animal</span><span class="token punctuation">;</span></code></pre></td>
+    <td><strong>isCat</strong> &nbsp;дорівнюватиме&nbsp; <strong>true</strong> . <br><strong>isTiger</strong> &nbsp;дорівнюватиме&nbsp; <strong>true</strong> . <br><strong>isAnimal</strong> &nbsp;дорівнюватиме&nbsp; <strong>true</strong> .</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Object</span> o <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Animal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">boolean</span> isCat <span class="token operator">=</span> o <span class="token keyword">instanceof</span> <span class="token class-name">Cat</span><span class="token punctuation">;</span>
+<span class="token keyword">boolean</span> isTiger <span class="token operator">=</span> o <span class="token keyword">instanceof</span> <span class="token class-name">Tiger</span><span class="token punctuation">;</span>
+<span class="token keyword">boolean</span> isAnimal <span class="token operator">=</span> o <span class="token keyword">instanceof</span> <span class="token class-name">Animal</span><span class="token punctuation">;</span></code></pre></td>
+    <td><strong>isCat</strong> &nbsp;дорівнюватиме&nbsp; <strong>false</strong> . <br><strong>isTiger</strong> &nbsp;дорівнюватиме&nbsp; <strong>false</strong> . <br><strong>isAnimal</strong> &nbsp;дорівнюватиме&nbsp; <strong>true</strong> .</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>І навіть інтерфейси:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">interface</span> <span class="token class-name">Moveable</span>
+<span class="token punctuation">{</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">class</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">class</span> <span class="token class-name">TomCat</span> <span class="token keyword">extends</span> <span class="token class-name">Cat</span> <span class="token keyword">implements</span> <span class="token class-name">Moveable</span>
+<span class="token punctuation">{</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Створимо два класи: Cat, TomCat та інтерфейс Moveable</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Cat</span> o <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TomCat</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">boolean</span> isCat <span class="token operator">=</span> o <span class="token keyword">instanceof</span> <span class="token class-name">Cat</span><span class="token punctuation">;</span>
+<span class="token keyword">boolean</span> isMoveable <span class="token operator">=</span> o <span class="token keyword">instanceof</span> <span class="token class-name">Moveable</span><span class="token punctuation">;</span>
+<span class="token keyword">boolean</span> isTom <span class="token operator">=</span> o <span class="token keyword">instanceof</span> <span class="token class-name">TomCat</span><span class="token punctuation">;</span></code></pre></td>
+    <td><strong>isCat</strong> &nbsp;дорівнюватиме&nbsp; <strong>true</strong> . <br><strong>isMoveable</strong> &nbsp;дорівнюватиме&nbsp; <strong>true</strong> . <br><strong>isTom</strong> &nbsp;дорівнюватиме&nbsp; <strong>true</strong> .</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Cat</span> o <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Cat</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">boolean</span> isCat <span class="token operator">=</span> o <span class="token keyword">instanceof</span> <span class="token class-name">Cat</span><span class="token punctuation">;</span>
+<span class="token keyword">boolean</span> isMoveable <span class="token operator">=</span> o <span class="token keyword">instanceof</span> <span class="token class-name">Moveable</span><span class="token punctuation">;</span>
+<span class="token keyword">boolean</span> isTom <span class="token operator">=</span> o <span class="token keyword">instanceof</span> <span class="token class-name">TomCat</span><span class="token punctuation">;</span></code></pre></td>
+    <td><strong>isCat</strong> &nbsp;дорівнюватиме&nbsp; <strong>true</strong> . <br><strong>isMoveable</strong> &nbsp;буде дорівнює&nbsp; <strong>false</strong> . <br><strong>isTom</strong> &nbsp;буде дорівнює&nbsp; <strong>false</strong> .</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Оператор instanceof має вигляд:&nbsp; <strong><span class="text-red">a</span></strong>&nbsp;<strong> instanceof </strong>&nbsp;<strong><span class="text-user">B</span></strong> .</p>
+<p>Іншими словами, оператор&nbsp; <strong>instanceof</strong> &nbsp;поверне значення&nbsp; <strong>true</strong> , якщо:</p>
+<p><strong>1)</strong> &nbsp;змінна&nbsp; <strong><span class="text-red">а</span></strong> &nbsp;зберігає посилання об'єкт типу&nbsp; <strong><span class="text-user">B</span></strong></p>
+<p><strong>2)</strong> &nbsp;змінна <strong><span class="text-red">a</span></strong> &nbsp;зберігає посилання об'єкт, клас якого успадкований від&nbsp; <strong><span class="text-user">B</span></strong></p>
+<p><strong>3)</strong> &nbsp;змінна&nbsp; <strong><span class="text-red">а</span></strong> &nbsp;зберігає посилання об'єкт реалізує інтерфейс&nbsp; <span class="text-user"><strong>B</strong></span></p>
+<p>Інакше оператор&nbsp; <strong>instanceof</strong> &nbsp;поверне значення&nbsp; <strong>false</strong> .</p>
+<p><span class="text-user">- Зрозуміло. А навіщо це потрібно, дядьку Рішу?</span></p>
+<p>- Про це сьогодні тобі розповість Еллі. Це дуже добрий оператор. Сьогодні ти в цьому переконаєшся.</p>

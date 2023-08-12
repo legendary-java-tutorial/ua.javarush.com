@@ -1,0 +1,68 @@
+<a href="https://cdn.javarush.com/images/article/f8c9fd25-5de2-4f0e-8017-4de56297961f/original.jpeg" target="_blank"><img data-id="f8c9fd25-5de2-4f0e-8017-4de56297961f" data-max-width="850" alt="ThreadGroup - групи потоків - 1" src="https://cdn.javarush.com/images/article/f8c9fd25-5de2-4f0e-8017-4de56297961f/800.jpeg" style="width: 850px;"></a>
+<p>- Привіт, Аміго!</p>
+<p>Почнемо розбиратися з нитками ґрунтовніше.</p>
+<p>Щоб будь-яка нитка не могла зупиняти і переривати всі нитки поспіль, було запроваджено поняття «групи ниток». Нитка може впливати тільки інші нитки, які у тій самій групі, як і вона. ThreadGroup – це клас, який керує групами ниток. Такий підхід дозволяє захистити нитки від небажаної зміни.</p>
+<p>Іноді доводиться виконувати код, якому не можна довіряти 100%. Тому зручно помістити всі нитки в окрему групу і заборонити їм втручатися в роботу основної групи ниток.</p>
+<p>Група ниток може містити інші групи. Це дозволяє організувати всі нитки та групи у ієрархічне дерево. У такому дереві кожна група ниток, крім початкової, має свою групу-батька.</p>
+<p>Клас ThreadGroup має методи, які дозволяють отримати список усіх його ниток, а також впливати/змінювати їх. Коли ми створюємо нову нитку і явно не вказуємо групу, вона приєднується до тієї ж групи, що й нитка-творець.</p>
+<p>Ось тобі кілька методів класу ThreadGroup:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Метод</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">String</span> <span class="token function"><strong>getName</strong></span><span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre></td>
+    <td>Повертає ім'я групи</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">ThreadGroup</span> <span class="token function"><strong>getParent</strong></span><span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre></td>
+    <td>Повертає групу-батька</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">void</span> <span class="token function"><strong>interrupt</strong></span><span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre></td>
+    <td>Перериває всі нитки у групі.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">boolean</span> <span class="token function"><strong>isDaemon</strong></span><span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre></td>
+    <td>Перевіряє, чи є група демоном</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">void</span> <span class="token function"><strong>setDaemon</strong></span><span class="token punctuation">(</span><span class="token keyword">boolean</span> daemon<span class="token punctuation">)</span></code></pre></td>
+    <td>Встановлює групі властивість daemon</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">int</span> <span class="token function"><strong>activeCount</strong></span><span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre></td>
+    <td>Повертає кількість живих ниток у групі та її підгрупах</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">int</span> <span class="token function"><strong>activeGroupCount</strong></span><span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre></td>
+    <td>Повертає кількість живих груп у групі та її підгрупах</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">int</span> <span class="token function"><strong>enumerate</strong></span><span class="token punctuation">(</span><span class="token class-name">Thread</span><span class="token punctuation">[</span><span class="token punctuation">]</span> list<span class="token punctuation">)</span></code></pre></td>
+    <td>Поміщає в масив усі живі нитки та повертає їх кількість.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">int</span> <span class="token function"><strong>getMaxPriority</strong></span><span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre></td>
+    <td>Повертає максимальний пріоритет для ниток у групі.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">void</span> <span class="token function"><strong>setMaxPriority</strong></span><span class="token punctuation">(</span><span class="token keyword">int</span> priority<span class="token punctuation">)</span></code></pre></td>
+    <td>Дозволяє задати максимальний пріоритет ниток у групі та підгрупах.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>

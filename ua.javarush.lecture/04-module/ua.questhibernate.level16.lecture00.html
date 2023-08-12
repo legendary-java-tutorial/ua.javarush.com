@@ -1,0 +1,214 @@
+Criteria API
+<p>----------------------------------------</p>
+Ознайомлення з Criteria API.
+Приклади роботи з Criteria API.
+Розширена робота з Criteria API.
+<p>----------------------------------------</p>
+<h2>Знайомство з Criteria API</h2>
+
+<p>У Hibernate є два способи написання запитів до бази:</p>
+
+<ul>
+<li><strong>Hibernate Query Language</strong></li>
+<li><strong>Criteria API</strong></li>
+</ul>
+
+<p>З першим ти вже давно познайомився, настав час познайомитись із Criteria API. Це дуже потужний інструмент, в якийсь момент він був навіть популярнішим за HQL. Зараз він уже не такий популярний, але для деяких завдань він безумовно буде кращим рішенням, ніж HQL.</p>
+
+<p>У жодному разі, не можна вивчати Hibernate і не познайомитися з Criteria API. Давай напишемо невеликий приклад, а потім його розберемо. Наприклад, запитаємо всіх співробітників (Employee) із бази. Ось що в нас вийде:</p>
+ 
+<pre class='language-java line-numbers'><code>
+CriteriaBuilder builder = session.getCriteriaBuilder();
+CriteriaQuery&lt;Employee> critQuery = builder.createQuery(Employee.class);
+ 
+Root&Employee> root = critQuery.from(Employee.class);
+critQuery.select(root);
+ 
+Query&lt;Employee> query = session.createQuery(critQuery);
+List&lt;Employee> results = query.getResultList();
+</code></pre>
+ 
+<p>Виглядає важкувато. Давай для порівняння запишемо той самий запит на HQL:</p>
+ 
+<pre class='language-java line-numbers'><code>
+String hqlQuery = "від Employee";
+ 
+Query&lt;Employee> query = session.createQuery(hqlQuery);
+List&lt;Employee> results = query.getResultList();
+</code></pre>
+ 
+<p>Зверніть увагу, що два останні рядки в обох прикладів практично ідентичні: ми створюємо об'єкт Query і за його допомогою отримуємо List. Це натякає на те, що інші рядки роблять щось ідентичне.</p>
+
+<p>Подивися на рядки 3 та 4 першого прикладу:</p>
+ 
+<pre class='language-java line-numbers'><code>
+Root&Employee> root = critQuery.from(Employee.class);
+critQuery.select(root);
+</code></pre>
+ 
+<p>Давай запишемо їх в один рядок:</p>
+ 
+<pre class='language-java line-numbers'><code>
+<span class="text-red">critQuery</span>.select(<span class="text-red">critQuery</span>.from(Employee.class));
+</code></pre>
+ 
+<p>Нічого не нагадує? А якщо розфарбувати трохи інакше:</p>
+ 
+<pre class='language-java line-numbers'><code>
+critQuery.<span class="text-red">select</span>(critQuery.<span class="text-red">from</span>(Employee.class));
+</code></pre>
+ 
+<p>Так, це таке хитре конструювання запиту SELECT FROM.</p>
+ 
+<h2>Приклади роботи з Criteria API</h2>
+
+<p>Для кращого розуміння я просто наведу кілька прикладів.</p>
+
+<p><strong>Запит 1</strong>. Отримати всіх співробітників із зарплатою понад 10 тисяч:</p>
+ 
+<pre class='language-java line-numbers'><code>
+critQuery.select(critQuery.from(Employee.class)).where(builder.gt(root.get("salary"), 10000));
+</code></pre>
+ 
+<p><strong>Запит 2</strong>. Отримати всіх співробітників із зарплатою менше 50 тисяч:</p>
+ 
+<pre class='language-java line-numbers'><code>
+critQuery.select(critQuery.from(Employee.class)).where(builder.lt(root.get("salary"), 50000));
+</code></pre>
+ 
+<p><strong>Запит 3</strong>. Отримати всіх працівників, посада яких містить слово "тест":</p>
+ 
+<pre class='language-java line-numbers'><code>
+critQuery.select(critQuery.from(Employee.class)).where(builder.like(root.get("occupation"), "%тест%"));
+</code></pre>
+ 
+<p><strong>Запит 4</strong>. Отримати всіх співробітників із зарплатою від 10 до 50 тисяч:</p>
+ 
+<pre class='language-java line-numbers'><code>
+critQuery.select(critQuery.from(Employee.class)).where(builder.between(root.get("salary"), 10000, 50000));
+</code></pre>
+ 
+<p><strong>Запит 5</strong>. Отримати всіх співробітників, у яких ім'я дорівнює null:</p>
+ 
+<pre class='language-java line-numbers'><code>
+critQuery.select(critQuery.from(Employee.class)).where(builder.isNull(root.get("name"))));
+</code></pre>
+ 
+<p><strong>Запит 6</strong>. Отримати всіх співробітників, у яких ім'я не дорівнює null:</p>
+ 
+<pre class='language-java line-numbers'><code>
+critQuery.select(critQuery.from(Employee.class)).where(builder.isNotNull(root.get("name"))));
+</code></pre>
+ 
+<p>Це просто такий хитрий спосіб конструювати запит:</p>
+
+<ul>
+<li>Спочатку ти отримуєш об'єкт <mark class="green">CriteriaBuilder</mark>.</li>
+<li>Потім за його допомогою створюєш об'єкт <mark class="green">CriteriaQuery</mark>.</li>
+<li>Потім починаєш додавати до нього частини за допомогою <mark class="green">CriteriaQuery</mark> та <mark class="green">CriteriaBuilder</mark>.</li>
+</ul>
+
+<p>Саме таким чином ти можеш встановити параметри для:</p>
+
+<ul>
+<li>SELECT</li>
+<li>FROM</li>
+<li>WHERE</li>
+</ul>
+
+<p>Також за допомогою <mark class="green">CriteriaBuilder</mark> ти можеш конструювати різні умови для WHERE.</p>
+
+<h2>Просунута робота з Criteria API</h2>
+
+<p>За допомогою Criteria API можна сформулювати запит будь-якої складності. І це чудова новина. Наприклад, ти хочеш складну умову для WHERE. Ось як це можна зробити:</p>
+ 
+<pre class='language-java line-numbers'><code>
+Predicate greaterThan = builder.gt(root.get("salary"), 1000);
+Predicate testers = builder.like(root.get("occupation"), "тест%");
+ 
+critQuery.select(critQuery.from(Employee.class)).where(builder.or(greaterThan, testers));
+</code></pre>
+ 
+<p>Якщо ти хочеш написати AND замість OR, то тобі потрібно поміняти лише останній рядок:</p>
+ 
+<pre class='language-java line-numbers'><code>
+critQuery.select(critQuery.from(Employee.class)).where(builder.and(greaterThan, testers));
+</code></pre>
+ 
+<p>Все насправді дуже просто. Давай я наведу таблицю з кількома порівняннями:</p>
+
+<table>
+<tbody>
+<tr>
+<th>SQL</th>
+<th>Метод</th>
+<th>Повний запис</th>
+</tr>
+<tr>
+<td>a &lt; b</td>
+<td>lt(a, b)</td>
+<td>builder.lt(a, b)</td>
+</tr>
+<tr>
+<td>a > b</td>
+<td>gt(a, b)</td>
+<td>builder.gt(a, b)</td>
+</tr>
+<tr>
+<td>a OR b</td>
+<td>or(a, b)</td>
+<td>builder.or(a, b)</td>
+</tr>
+<tr>
+<td>a AND b</td>
+<td>and(a, b)</td>
+<td>builder.and(a, b)</td>
+</tr>
+<tr>
+<td>a LIKE b</td>
+<td>like(a, b)</td>
+<td>builder.like(a, b)</td>
+</tr>
+<tr>
+<td>a BETWEEN (c, d)</td>
+<td>between(a, c, d)</td>
+<td>builder.between(a, c, d)</td>
+</tr>
+<tr>
+<td>a IS NULL</td>
+<td>isNull(a)</td>
+<td>builder.isNull(a)</td>
+</tr>
+<tr>
+<td>a IS NOT NULL</td>
+<td>isNotNull(a)</td>
+<td>builder.isNotNull(a)</td>
+</tr>
+</tbody>
+</table>
+
+<p>Все просто, чи не так?</p>
+
+<p>А як нам додати сортування на запит? Дуже просто:</p>
+ 
+<pre class='language-java line-numbers'><code>
+critQuery.select( critQuery.from(Employee.class) );
+critQuery.where( builder.and(greaterThan, testers) );
+critQuery.orderBy( builder.asc(root.get("salary"), builder.desc(root.get("joinDate") )
+</code></pre>
+ 
+<p>Ти просто викликаєш у об'єкта <mark class="green">CrteriaQuery</mark> метод <span class="code text-orange">orderBy()</span> і передаєш у нього потрібні параметри.</p> >
+
+<p>Ось як цей же запит буде виглядати на HQL. Порівняй:</p>
+ 
+<pre><code><strong><span class="text-red">select</span> * <span class="text-red">from</span> <span class="text-orange"> Employee</span>
+<span class="text-red">where</span> (…) <span class="text-red">and</span> (…)
+<span class="text-red">Order by</span> <span class="text-green">'salary'</span> <span class="text-red">asc</span>, < span class="text-green">'joinDate'</span> <span class="text-red">desc</span></strong></code></pre>
+ 
+<p>Тільки потрібно запам'ятати 3 речі:</p>
+
+<ul>
+<li>Ключові оператори типу SELECT, FROM, WHERE викликаються у об'єкта <mark class="green">CriteriaQuery</mark>.</li>
+<li>Допоміжні оператори типу AND, OR, DESC викликаються у об'єкта <mark class="green">CriteriaBuilder</mark>.</li>
+<li>Імена полів беруться через <span class="code text-orange">get()</span> у об'єкта <mark class="green">Root</mark>.</li>
+</ul>

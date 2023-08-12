@@ -1,0 +1,21 @@
+<h2>4.1 Дивимося список веб-застосунків</h2>
+<p>Тепер давай подивимося, які веб-застосунки встановлені в Tomcat за замовчуванням. Зазвичай їх кілька, і найважливішим з них є Manager додатків. Щоб його відкрити, натисніть кнопку Manager App або перейди <a href="http://localhost:8080/manager" target="_blank">за посиланням</a> .</p>
+<p>Далі потрібно буде залогиньться під користувачем, якого ми бачабо на кроці налаштувань:</p><img data-max-width="800" data-id="2f5c00c9-f7d9-4371-b5b6-5fde2f7515e0" alt="Tomcat Manager App" src="https://cdn.javarush.com/images/article/2f5c00c9-f7d9-4371-b5b6-5fde2f7515e0/800.jpeg" style="width: 800px;">
+<p>Якщо все пройшло добре, ти побачиш список встановлених веб-застосунків:</p><img data-max-width="800" data-id="8e3fbc2b-c68c-4ff4-bdfb-395dc41ac2ba" alt="Tomcat Manager App 1" src="https://cdn.javarush.com/images/article/8e3fbc2b-c68c-4ff4-bdfb-395dc41ac2ba/800.jpeg" style="width: 800px;">
+<p>Ліва колонка задає шлях, яким додаток відкривається. У правій колонці ти побачиш команди для управління веб-додатком: Start, Stop, Reload, Undeploy.</p>
+<h2>4.2 Деплой тестового веб-додатку</h2>
+<p>Давай заллємо свій власний веб-додаток до веб-сервера Tomcat.</p>
+<p>Добре, що на GitHub якраз є спеціальний demo-додаток на цей випадок. Скачай його <a href="https://tomcat.apache.org/tomcat-9.0-doc/appdev/sample/sample.war" target="_blank">за посиланням</a> .</p>
+<p>Потім відкрий сторінку Manager App у Tomcat <a href="http://localhost:8080/manager" target="_blank">http://localhost:8080/manager</a> та проскроль її до секції Deploy.</p><img data-max-width="800" data-id="e694abda-4968-4e03-a9f8-a27e6f8cbba5" alt="Tomcat Manager App 2" src="https://cdn.javarush.com/images/article/e694abda-4968-4e03-a9f8-a27e6f8cbba5/800.jpeg" style="width: 800px;">
+<p>У ній потрібно вказати шлях до твого веб-додатку (у всіх програм унікальні шляхи), а також war-файл твого веб-додатку. Потім натискай кнопку Deploy.</p>
+<p>Якщо все пройшло добре, ти побачиш новий додаток у списку веб-додатків:</p><img data-max-width="800" data-id="af0964fd-c146-46b2-8f11-67d5c09c655b" alt="Tomcat Manager App 3" src="https://cdn.javarush.com/images/article/af0964fd-c146-46b2-8f11-67d5c09c655b/800.jpeg" style="width: 800px;">
+<p>Ти можеш переконатися, що воно працює, перейшовши за посиланням: <a href="http://localhost:8080/demo" target="_blank">http://localhost:8080/demo</a></p><img data-max-width="800" data-id="49d76115-3e96-4635-814a-d3122a62d38d" alt="Tomcat Manager App 4" src="https://cdn.javarush.com/images/article/49d76115-3e96-4635-814a-d3122a62d38d/800.jpeg" style="width: 800px;">
+<h2>4.3 Зміна порту</h2>
+<p>Якщо тобі не подобається, що твій веб-сервер відповідає по урлу <code>localhost:8080/</code>, і ти хочеш, щоб він відкривався просто по урлу <code>localhost/</code>, то тобі потрібно поміняти порт Tomcat'а на дефолтний: на <code>80</code>замість <code>8080</code>.</p>
+<p>Для цього відкрий файл <strong>server.xml</strong> у папці <strong>conf</strong> .</p>
+<p>Знайти тег «Connector» де port дорівнює <code>8080</code>і поміняй його на порт <code>80</code>:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token operator">&lt;</span><span class="token class-name">Connector</span> port<span class="token operator">=</span><span class="token string">"80"</span> protocol<span class="token operator">=</span><span class="token string">"HTTP/1.1"</span>
+           connectionTimeout<span class="token operator">=</span><span class="token string">"20000"</span>
+           redirectPort<span class="token operator">=</span><span class="token string">"8443"</span> <span class="token operator">/</span><span class="token operator">&gt;</span></code></pre>
+<p>Можеш так само змінити HTTPS порт з <code>8443</code>просто <code>443</code>.</p>
+<p></p>Якщо змінюєш налаштування під час роботи Tomcat-а, не забудь його перезапустити.

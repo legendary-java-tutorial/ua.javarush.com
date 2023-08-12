@@ -1,0 +1,83 @@
+Різні способи отримання об'єкта
+<p>----------------------------------------</p>
+Метод get().
+Метод load().
+Метод find().
+Метод refresh().
+<p>----------------------------------------</p>
+<h2>Метод get()</h2>
+
+<p>Якщо ти хочеш отримати об'єкт за його ID (або Primary Key), то для цього Hibernate має аж цілих три методи:</p>
+
+<ul>
+<li><span class="code text-orange">load()</span></li>
+<li><span class="code text-orange">get()</span></li>
+<li><span class="code text-orange">find()</span></li>
+</ul>
+
+<p>Роблять вони одне й те саме, проте є нюанси. Загальний формат методу <span class="code text-orange">get()</span> має вигляд:</p>
+ 
+<pre class='language-java line-numbers'><code>
+EntityClass ім'я = session.get(EntityClass.class, Object primaryKey);
+</code></pre>
+ 
+<p>Метод <span class="code text-orange">get()</span> як другий параметр приймає ID (Primary Key) об'єкта, який йому потрібно повернути. Потім завантажує цей об'єкт із бази та повертає його. Приклад:</p>
+ 
+<pre class='language-java line-numbers'><code>
+User user = session.get(User.class, 2);
+</code></pre>
+ 
+<p>Якщо запис з таким ID не буде знайдений у базі, то метод поверне null.</p>
+
+<h2>Метод load()</h2>
+
+<p>Другий метод для завантаження об'єкта – це метод <span class="code text-orange">load()</span>. Загальний формат <span class="code text-orange">load()</span> має такий же:</p>
+ 
+<pre class='language-java line-numbers'><code>
+EntityClass ім'я = session.load(EntityClass.class, Object primaryKey);
+</code></pre>
+ 
+<p>Проте його поведінка відрізняється від методу <span class="code text-orange">get()</span>.</p>
+
+<p>По-перше, цей метод повертає не реальний об'єкт, а proxy: віртуальну заглушку.</p>
+
+<p>По-друге, під час використання методу <span class="code text-orange">load()</span> не відбувається перевірка, чи є такий запис у базі. Натомість Hibernate відразу створює proxy-об'єкт з переданим ID і повертає його.</p>
+
+<p>По-третє, вся робота з базою даних відбуватиметься під час виклику методів proxy-об'єкта. Якщо ти спробуєш викликати, наприклад, метод <span class="code text-orange">getName()</span>, тоді й відбудеться перше звернення до бази. Приклад:</p>
+ 
+<pre class='language-java line-numbers'><code>
+User user = session.load(User.class, new Integer(123));
+String name = user.getName(); //Ось тут відбудеться перше звернення до бази
+</code></pre>
+ 
+<p>Метод <span class="code text-orange">load()</span> не варто використовувати для перевірки наявності об'єктів у базі – він цього просто не покаже. Крім того, якщо в нього передати невалідний ID, наприклад, null, він просто поверне null.</p>
+
+<h2>Метод find()</h2>
+
+<p>Метод <span class="code text-orange">find()</span> дістався інтерфейсу <span class="text-neon"><span class="text-bold"><em>Session</ em></span></span> від стандарту JPA. А ти знаєш, цей стандарт описує не просто сигнатуру методів, а й регламентує поведінку. </p>
+
+<p>Цей метод працює так само, як і метод <span class="code text-orange">get()</span>. Якщо об'єкт за переданим ключем не був знайдений, метод просто поверне null.</p>
+ 
+<pre class='language-java line-numbers'><code>
+User user = session.find(User.class, -2); //метод поверне null
+</code></pre>
+ 
+<h2>Метод refresh()</h2>
+
+<p>Ще один корисний метод, який стосується завантаження об'єкта з бази – це метод <span class="code text-orange">refresh()</span>.</p>
+
+<p>Пам'ятаєш метод <span class="code text-orange">persist()</span>, який оновлював дані в базі на основі переданого об'єкта? Так ось, метод <span class="code text-orange">refresh()</span> працює з точністю та навпаки: він оновлює існуючий об'єкт на основі даних з бази.</p>
+
+<p>Така поведінка буває потрібна, якщо, наприклад, при записі об'єкта в базу там викликаються різні процедури, що зберігаються, які коригують записані дані.</p>
+
+<p>У таких випадках корисно перечитати об'єкт з бази, якщо є ймовірність, що він змінився. Приклад:</p>
+
+<pre class='language-java line-numbers'><code>
+User user = new User();
+user.setName("Колян");
+session.persist(user);
+session.flush(); //Примусово викликали SQL INSERT та виклик тригерів
+ 
+session.refresh(user);
+//Тут далі працюємо з оновленим об'єктом
+</code></pre>

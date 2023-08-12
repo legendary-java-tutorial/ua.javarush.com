@@ -1,0 +1,329 @@
+<p>У цій лекції ми поговоримо про роботу з класом <span class="code"><span class="text-green">java.lang.ThreadLocal</span></span> в цілому і про те, як з ним працювати в багатопотоковому середовищі.</p>
+<p>Клас <span class="code"><span class="text-green">ThreadLocal</span></span> використовується для зберігання змінних. Особливість цього класу в тому, що він зберігає окрему незалежну копію значення для кожного потоку, що використовує її.</p><img data-max-width="512" data-id="f1aa1a7c-92e2-405f-bbed-48cdce539b80" alt="" src="https://cdn.javarush.com/images/article/f1aa1a7c-92e2-405f-bbed-48cdce539b80/512.jpeg" style="width: 512px;">
+<p>Якщо розібрати роботу класу докладніше, можемо уявити <span class="text-neon"><span class="text-bold"><em>Map</em></span></span> виду потік→значення, який при використанні звертається до значення для поточного потоку.</p>
+<h2>Конструктор класу ThreadLocal</h2>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Конструктор</th>
+    <th>Дія</th>
+   </tr>
+   <tr>
+    <td><span class="code"><span class="text-green">ThreadLocal()</span></span></td>
+    <td>Створює порожню змінну Java</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<h2>Методи</h2>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Метод</th>
+    <th>Дія</th>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">get()</span></td>
+    <td>Повертає значення локальної змінної поточного потоку</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">set()</span></td>
+    <td>Встановлює значення локальної змінної для поточного потоку</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">remove()</span></td>
+    <td>Видалення значення локальної змінної поточного потоку</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">ThreadLocal.withInitial()</span></td>
+    <td>Додатковий фабричний метод, який встановлює початкове значення</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<h3>get() &amp; set()</h3>
+<p>Давайте напишемо приклад, де створимо два лічильники. Перша, звичайна змінна буде для підрахунку кількості потоків, а другу ми обернемо до <span class="code"><span class="text-green">ThreadLocal</span></span> і подивимося, як вони працюватимуть спільно. Для початку напишемо клас <span class="code"><span class="text-green">ThreadDemo</span></span> , успадкований від <span class="text-neon"><span class="text-bold"><em>Runnable</em></span></span> , де зберігаються наші дані та основний метод <span class="code text-orange">run()</span> , а також додамо метод для виведення лічильників на екран:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">ThreadDemo</span> <span class="token keyword">implements</span> <span class="token class-name">Runnable</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">int</span> counter<span class="token punctuation">;</span>
+    <span class="token class-name">ThreadLocal</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> threadLocalCounter <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ThreadLocal</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        counter<span class="token operator">++</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span><span class="token punctuation">(</span>threadLocalCounter<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            threadLocalCounter<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>threadLocalCounter<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            threadLocalCounter<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token function">printCounters</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printCounters</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Counter: "</span> <span class="token operator">+</span> counter<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"threadLocalCounter: "</span> <span class="token operator">+</span> threadLocalCounter<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>З кожним запуском нашого класу ми збільшуватимемо змінну<mark class="user">counter</mark>, і додатково викликатимемо метод <span class="code text-orange">get()</span> для отримання даних з <span class="code"><span class="text-green">ThreadLocal</span></span> -змінної. Якщо в новому потоці не буде даних, то встановлюватимемо 0, а якщо дані будуть - збільшимо їх на одиницю. І давайте напишемо наш клас <span class="code"><span class="text-green">main</span></span> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">ThreadDemo</span> threadDemo <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ThreadDemo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token class-name">Thread</span> t1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span>threadDemo<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">Thread</span> t2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span>threadDemo<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">Thread</span> t3 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span>threadDemo<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    t1<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    t2<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    t3<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span></code></pre>
+<p>В результаті роботи нашого класу бачимо, що <span class="code"><span class="text-green">ThreadLocal</span></span> -змінна залишається такою ж незалежно від потоку, який звертається до неї, а ось кількість потоків зростає.</p>
+<div class="terminal">
+ Counter: 1 
+ <br>
+  Counter: 2 
+ <br>
+  Counter: 3 
+ <br>
+  threadLocalCounter: 0 
+ <br>
+  threadLocalCounter: 0 
+ <br>
+  threadLocalCounter: 0 
+ <br>
+ <br><span class="text-user">Process finished with exit code 0</span>
+</div>
+<h3>remove()</h3>
+<p>Щоб зрозуміти роботу методу <span class="code text-orange">remove</span> , ми просто трохи змінимо код класу <span class="code"><span class="text-green">ThreadDemo</span></span> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">if</span><span class="token punctuation">(</span>threadLocalCounter<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      threadLocalCounter<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>threadLocalCounter<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>counter <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          threadLocalCounter<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+          threadLocalCounter<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span></code></pre>
+<p>У цьому коді ми визначимо, якщо це лічильник потоку — парне число, ми викликаємо метод <span class="code text-orange">remove()</span> в нашої <span class="code"><span class="text-green">ThreadLocal</span></span> -змінної. Результат коду:</p>
+<div class="terminal">
+ Counter: 3 
+ <br>
+  threadLocalCounter: 0 
+ <br>
+  Counter: 2 
+ <br>
+  threadLocalCounter: null 
+ <br>
+  Counter: 1 
+ <br>
+  threadLocalCounter: 0 
+ <br>
+ <br><span class="text-user">Process finished with exit code 0</span>
+</div>
+<p>І тут ми легко можемо побачити, що <span class="code"><span class="text-green">ThreadLocal</span></span> -змінна у другому потоці дорівнює <strong>null</strong> .</p>
+<h3>ThreadLocal.withInitial()</h3>
+<p>Цей метод створює локальну змінну потоку.</p>
+<p>Реалізація класу <span class="code"><span class="text-green">ThreadDemo</span></span> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">ThreadDemo</span> <span class="token keyword">implements</span> <span class="token class-name">Runnable</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">int</span> counter<span class="token punctuation">;</span>
+    <span class="token class-name">ThreadLocal</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> threadLocalCounter <span class="token operator">=</span> <span class="token class-name">ThreadLocal</span><span class="token punctuation">.</span><span class="token function">withInitial</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-&gt;</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        counter<span class="token operator">++</span><span class="token punctuation">;</span>
+        <span class="token function">printCounters</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printCounters</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Counter: "</span> <span class="token operator">+</span> counter<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"threadLocalCounter: "</span> <span class="token operator">+</span> threadLocalCounter<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>І ми можемо подивитися на результат нашого коду:</p>
+<div class="terminal">
+ Counter: 1 
+ <br>
+  Counter: 2 
+ <br>
+  Counter: 3 
+ <br>
+  threadLocalCounter: 1 
+ <br>
+  threadLocalCounter: 1 
+ <br>
+  threadLocalCounter: 1 
+ <br>
+ <br><span class="text-user">Process finished with exit code 0</span>
+</div>
+<p>Навіщо використовувати такі змінні?</p>
+<p><span class="code"><span class="text-green">ThreadLocal</span></span> надає абстракцію над локальними змінними по відношенню до потоку виконання<span class="code"><span class="text-green"> java.lang.Thread</span></span> .</p>
+<p><span class="code"><span class="text-green">ThreadLocal</span></span> змінні відрізняються від звичайних тим, що у кожного потоку свій власний, індивідуально ініціалізований екземпляр змінної, доступ до якої він отримує через методи<span class="code text-orange"> get()</span> або<span class="code text-orange"> set()</span> .</p>
+<p>У кожного потоку, тобто екземпляра класу <span class="code"><span class="text-green">Thread</span></span> , є асоційована з ним таблиця <span class="code"><span class="text-green">ThreadLocal</span></span> -змінних. Ключами таблиці є посилання на об'єкти класу <span class="code"><span class="text-green">ThreadLocal</span></span> , а значеннями - посилання на об'єкти, "захоплені" <span class="code"><span class="text-green">ThreadLocal</span></span> -змінними.</p>
+<h2>Чому генерація випадкових чисел через Random не підходить для багатопотокових програм?</h2>
+<p>Ми використовуємо <span class="code"><span class="text-green">Random</span></span> клас для отримання випадкового числа. Але чи буде так само добре працювати в багатопотоковому середовищі? Насправді ні. <span class="code"><span class="text-green">Random</span></span> не підходить для роботи в багатопотоковому середовищі, тому що коли кілька потоків одночасно звертаються до класу, він стає менш продуктивним.</p>
+<p>Для цього JDK 7 представабо клас <span class="code"><span class="text-green">java.util.concurrent.ThreadLocalRandom</span></span> для генерації випадкових чисел в багатопоточному середовищі. Він складається з двох класів: <span class="code"><span class="text-green">ThreadLocal</span></span> і <span class="code"><span class="text-green">Random</span></span> .</p>
+<p>Випадкове число, отримане одним потоком, залежить від іншого потоку, тоді як <span class="code"><span class="text-green">java.util.Random</span></span> надає випадкові числа глобально. Крім того, на відміну від Random <span class="code"><span class="text-green">ThreadLocalRandom </span></span><span class="code"><span class="text-green">не</span></span> підтримує явне завдання початкового значення. Натомість він перевизначає метод <span class="code text-orange">setSeed()</span> , успадкований від <span class="code"><span class="text-green">Random</span></span> , щоб завжди викликати <span class="text-red"><span class="text-bold">UnsupportedOperationException</span></span> під час виклику.</p>
+<p>Давайте розглянемо методи <span class="code"><span class="text-green">ThreadLocalRandom</span></span> :</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Метод</th>
+    <th>Дійстивіє</th>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">ThreadLocalRandom current()</span></td>
+    <td>Повертає ThreadLocalRandom поточного потоку.</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">int next(int bits)</span></td>
+    <td>Генерує таке псевдовипадкове число.</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">double nextDouble(double least, double bound)</span></td>
+    <td>Повертає псевдовипадкове, рівномірно розподілене значення між заданим найменшим ( <span class="code">least</span> ) значенням (включно) та граничним ( <span class="code">bound</span> ) (виключно).</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">int nextInt(int least, int bound)</span></td>
+    <td>Повертає псевдовипадкове, рівномірно розподілене значення між заданим найменшим значенням (включно) та пов'язаним (виключно).</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">long nextLong(long n)</span></td>
+    <td>Повертає псевдовипадкове, рівномірно розподілене значення між 0 (включно) та заданим значенням (виключно).</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">long nextLong(long least, long bound)</span></td>
+    <td>Повертає псевдовипадкове, рівномірно розподілене значення між заданим найменшим значенням (включно) та пов'язаним (виключно).</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">void setSeed(long seed)</span></td>
+    <td>Видає виняток <span class="text-red"><span class="text-bold">UnsupportedOperationException</span></span> . Установка початкового числа цього генератора не підтримується.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<h3>Отримання випадкових даних за допомогою ThreadLocalRandom.current()</h3>
+<p><span class="code"><span class="text-green">ThreadLocalRandom</span></span> є комбінацією класів<span class="code"><span class="text-green"> ThreadLocal</span></span> і<span class="code"><span class="text-green"> Random</span></span> . Таким чином він досягає кращої продуктивності в багатопотоковому середовищі, просто уникаючи будь-якого паралельного доступу до екземплярів<span class="code"><span class="text-green"> Random</span></span> .</p>
+<p>Давайте реалізуємо приклад для кількох потоків і подивимося, який буде результат нашої програми з класом <span class="code"><span class="text-green">ThreadLocalRandom</span></span> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>concurrent<span class="token punctuation">.</span></span><span class="token class-name">ThreadLocalRandom</span><span class="token punctuation">;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">RandomNumbers</span> <span class="token keyword">extends</span> <span class="token class-name">Thread</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token keyword">int</span> bound <span class="token operator">=</span> <span class="token number">100</span><span class="token punctuation">;</span>
+            <span class="token keyword">int</span> result <span class="token operator">=</span> <span class="token class-name">ThreadLocalRandom</span><span class="token punctuation">.</span><span class="token function">current</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">nextInt</span><span class="token punctuation">(</span>bound<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Thread "</span> <span class="token operator">+</span> <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">" generated "</span> <span class="token operator">+</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Exception"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">long</span> startTime <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+				<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token class-name">RandomNumbers</span> randomNumbers <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">RandomNumbers</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            randomNumbers<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">long</span> endTime <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Time taken: "</span> <span class="token operator">+</span> <span class="token punctuation">(</span>endTime <span class="token operator">-</span> startTime<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Результат нашої програми:</p>
+<div class="terminal">
+ Time taken: 1 
+ <br>
+  Thread 17 generated 13 
+ <br>
+  Thread 18 generated 41 
+ <br>
+  Thread 16 generated 99 
+ <br>
+  Thread 19 generated 25 
+ <br>
+  Thread 23 generated 33 Thread 24 generated 
+ <br>
+  21 
+ <br>
+  Thread 15 generated 15 
+ <br>
+  Thread 21 
+ <br>
+  generated 28 
+ <br>
+  Thread 22 generated 97
+</div>
+<p>А тепер змінимо наш клас <span class="code"><span class="text-green">RandomNumbers</span></span> і будемо використовувати в ньому <span class="code"><span class="text-green">Random</span></span> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">int</span> result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Random</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">nextInt</span><span class="token punctuation">(</span>bound<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<div class="terminal">
+ Time taken: 5 
+ <br>
+  Thread 20 generated 48 
+ <br>
+  Thread 19 generated 57 
+ <br>
+  Thread 18 generated 90 
+ <br>
+  Thread 22 generated 43 
+ <br>
+  Thread 24 generated 7 
+ <br>
+  Thread 23 generated 63 
+ <br>
+  Thread 15 generated 2 
+ <br>
+  Thread 16 generated 40 
+ <br>
+  Thread 17 generated 29 
+ <br>
+  Thread 2
+</div>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>
+     <p>Важливо відмітити! У поточних тестах результати іноді збігалися та були різними за значенням. Але якщо ми говоритимемо про більшу кількість потоків (наприклад, 100), результат буде виглядати так:</p>
+     <div class="terminal">
+      Random - 19-25 mls 
+      <br>
+       ThreadLocalRandom - 17-19 mls
+     </div>
+     <p>Відповідно, чим більше потоків у нашому додатку, тим більше використання класу <span class="code"><span class="text-green">Random</span></span> для багатопоточності буде зменшувати продуктивність.</p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Підіб'ємо підсумок і повторимо ще раз відмінності між класом <span class="code"><span class="text-green">Random</span> і <span class="code"><span class="text-green">ThreadLocalRandom</span> :</span></span></p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th><span class="code"><span class="text-green">Random</span></span></th>
+    <th><span class="code"><span class="text-green">ThreadLocalRandom</span></span></th>
+   </tr>
+   <tr>
+    <td>Якщо різні потоки використовують один і той самий екземпляр <span class="code"><span class="text-green">Random</span></span> , це призводить до конфліктів та негативно впливає на продуктивність.</td>
+    <td>Спорів та проблем немає, тому що згенеровані випадкові числа є локальними для поточного потоку.</td>
+   </tr>
+   <tr>
+    <td>Використовує лінійну конгруентну формулу зміни початкового значення.</td>
+    <td>Генератор випадкових чисел ініціалізується з використанням внутрішньо згенерованого початкового числа.</td>
+   </tr>
+   <tr>
+    <td>Корисно у додатках, де кожен потік має власний набір екземплярів <span class="code"><span class="text-green">Random</span></span> для використання.</td>
+    <td>Корисно в додатках, де кілька потоків використовують випадкові числа паралельно пулах потоків.</td>
+   </tr>
+   <tr>
+    <td>Це батьківський клас.</td>
+    <td>Це дочірній клас.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>

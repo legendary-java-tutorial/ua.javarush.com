@@ -1,0 +1,119 @@
+Робота з ієрархіями сутностей
+<p>----------------------------------------</p>
+Проблеми збереження.
+Види розв'язків.
+@MappedSuperClass.
+<p>----------------------------------------</p>
+<h2>Проблеми збереження</h2>
+
+<p>Сьогодні ми матимемо нову та суперцікаву схему — використання можливостей Hibernate для збереження в базу ієрархії класів.</p>
+
+<p><span class="text-green">Ієрархія класів — це кілька класів, пов'язаних один з одним відношенням успадкування.</span></p>
+
+<p>Уяви, що ти маєш три класи, які ти хочеш зберігати в базі:</p>
+ 
+<pre class='language-java line-numbers'><code>
+class User {
+  int id;
+  String name;
+  LocalDate birthday;
+}
+</code></pre>
+ 
+<pre class='language-java line-numbers'><code>
+class Employee extends User {
+ String occupation;
+ int salary;
+ LocalDate join;
+}
+</code></pre>
+ 
+<pre class='language-java line-numbers'><code>
+class Client extends User {
+   String address;
+}
+</code></pre>
+ 
+<p>Класи успадковані один від одного. А найцікавіше те, що ти хочеш використовувати Hibernate для того, щоб зберігати об'єкти цих класів у базі даних.</p>
+
+<h2>Види рішень</h2>
+
+<p>У Hibernate існує 4 можливі способи, якими він може пов'язати ієрархію класів з таблицями в базі даних:</p>
+
+<ul>
+<li><strong>MappedSuperclass</strong></li>
+<li><strong>Single Table</strong></li>
+<li><strong>Joined Table</strong></li>
+<li><strong>Table per class</strong></li>
+</ul>
+
+<p>Кожна стратегія передбачає власну структуру таблиць у базі даних. Іноді вони досить складні. Проте запити на HQL до них дуже прості. Це саме той випадок, де яскраво виявляються переваги Hibernate.</p>
+
+<p>Ніколи не чув, щоб ці терміни перекладали російською, так що теж рекомендую вимовляти їх англійською.</p>
+
+<p>Нижче ми розберемо, що означає кожен з них.</p>
+
+<h2>@MappedSuperClass</h2>
+
+<p>Почнемо з найпростішого рішення - <span class="text-green">в базі даних у тебе окремі таблиці для кожного класу</span>. Наприклад, такі:</p>
+
+<pre class='language-java line-numbers'><code>
+CREATE TABLE user {
+  id INT,
+  name VARCHAR,
+  birthday DATE
+}
+</code></pre>
+
+<pre class='language-java line-numbers'><code>
+CREATE TABLE employee {
+  id INT,
+  name VARCHAR,
+  birthday DATE,
+  occupation VARCHAR,
+  salary INT,
+  join DATE
+}
+</code></pre>
+
+<pre class='language-java line-numbers'><code>
+CREATE TABLE client {
+  id INT,
+  name VARCHAR,
+  birthday DATE,
+  address VARCHAR
+}
+</code></pre>
+
+<p>Про те, що класи цих таблиць пов'язані в ієрархію, <span class="text-red">знаєш тільки ти</span>. Якщо ти хочеш, щоб ще й Hibernate про це знав, тобі потрібно додати батьківському класу анотацію <span class="text-yellow"><span class="text-bold">@MappedSuperclass</span>. Без неї Hibernate просто проігнорує поля та анотації батьківського класу.</p>
+
+<p>Класи з цією інструкцією будуть виглядати так:</p>
+
+<pre class='language-java line-numbers'><code>
+@MappedSuperclass
+class User {
+  int id;
+  String name;
+  LocalDate birthday;
+}
+</code></pre>
+
+<pre class='language-java line-numbers'><code>
+@Entity
+class Employee extends User {
+ String occupation;
+ int salary;
+ LocalDate join;
+}
+</code></pre>
+
+<pre class='language-java line-numbers'><code>
+@Entity
+class Client extends User {
+   String address;
+}
+</code></pre>
+
+<p>Це найпримітивніший спосіб зв'язування ієрархії класів та бази даних. Такий підхід фактично дозволяє тобі лише уникнути дублікату полів у класах.</p>
+
+<p>Запити до бази даних HQL повертатимуть лише ту сутність, тип якої вказано явно. Ти не можеш написати запит до бази на HQL та отримати список усіх користувачів: User, Employee, Client.</p>

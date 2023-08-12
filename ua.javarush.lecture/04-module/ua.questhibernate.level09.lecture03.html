@@ -1,0 +1,80 @@
+Робота з Entity-об'єктами
+<p>----------------------------------------</p>
+Транзакції та цілісність бази даних
+Отримання об'єктів
+Збереження (додавання) об'єктів
+Видалення об'єктів
+<p>----------------------------------------</p>
+<h2>4.1 Транзакції та цілісність бази даних</h2>
+<p>Звичайний режим роботи бази даних - це коли до неї щохвилини приходять тисячі запитів від сотень різних клієнтів. При цьому часто виникають ситуації, коли до тих самих даних йде звернення з різних запитів.</p>
+<p>Рідше, але, знов-таки, час від часу виникають ситуації, коли один запит читає деякий рядок, а інший запит у цей час змінює його. Уяви, що буде, якщо хтось прочитає рядок, який змінено лише наполовину? Нічого хорошого.</p>
+<p>Цю проблему вирішують декількома способами. По-перше, можна просто лочити рядок, який змінюється. І для читання, і запису. Цей спосіб працює, але швидкість бази сильно страждає.</p>
+<p>Другий спосіб – це лочити рядок лише на запис. При цьому все одно буде проблема, коли хтось спробує прочитати частково змінений рядок. Висновок — не повинно бути ситуації, коли рядок частково змінено.</p>
+<p>Тому вигадали третій спосіб — транзакції. Транзакція — це група дій, які виконуються або разом, або жодного. Не може бути ситуації, коли частина дій виконалася, а друга — ні. Якщо не вдається внести всі зміни, то всі вже внесені відкочуються назад.</p>
+<p>Будь-який сучасний SQL-сервер дозволяє змінювати дані лише у транзакціях. Ти відкриваєш транзакцію, вносиш будь-які зміни до будь-якої кількості таблиць, і котиш транзакцію. Потім SQL-сервер намагається внести зміни. Якщо все просто добре, то вони додадуться до загальної бази даних. Якщо були проблеми, всі зміни скасовуються.</p>
+<p>Hibernate також використовує цю парадигму. Саме тому у попередній лекції ми побачили, що при спробі зберегти об'єкт Employee в базу спочатку відкривалася транзакція, а після збереження – комітілася.</p>
+<p>Ми ще розберемо цю тему детальніше, а поки що просто знай, навіщо транзакції потрібні і де вони зазвичай використовуються.</p>
+<h2>4.2 Отримання об'єктів</h2>
+<p>Якщо Hibernate виконує запит на отримання даних, то явно транзакцію відкривати не потрібно. Hibernate сам це зробить, якщо вважатиме за потрібне: у нього є його налаштування, а також налаштування SQL-сервера.</p>
+<p>Ми з тобою розберемо способи роботи з базою даних. І найпростіший з них – це отримання об'єкта за його <strong>ID</strong>. Для цього потрібно використовувати метод <code>get()</code> в об'єкті <strong>session</strong>. Загальний вигляд такого запиту:</p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-brown">Клас</span> ім'я = <span class="text-user">session</span>.<span class="text-red">get</span>(< span class="text-brown">Клас</span>.class, <span class="text-green">ID</span>);
+        </code></pre>
+</div>
+<p>Приклад:</p>
+<pre class='language-java line-numbers'><code>
+<span class="text-brown">public User getUserById(Integer id)</span> {
+    try (Session <span class="text-user">session</span> = sessionFactory.openSession()) {
+        User user = <span class="text-user">session</span>.<span class="text-red">get</span>(<span class="text-brown">User.class</ span>, <span class="text-green">id</span>);
+        return <span class="text-viola">user</span>;
+    }
+}
+</code></pre>
+<h2>4.3 Збереження (додавання) об'єктів</h2>
+<p>Якщо ти хочеш зберегти свій об'єкт у базі даних, то на рівні SQL буде виконано запит <mark class="green">INSERT</mark>. Тому твої дії слід виконувати у вигляді окремої транзакції. Крім того, для збереження краще використовувати метод <code>persist()</code> об'єкта <strong>session</strong>.</p>
+<p>Загальний вигляд такого запиту:</p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-user">session</span>.<span class="text-red">persist</span>(<span class="text-brown">Об'єкт</span>);
+        </code></pre>
+</div>
+<p>Метод <code>persist()</code> змінює не лише базу, а й сам об'єкт. Вся справа в тому, що коли ми додаємо об'єкт до бази, то до додавання цього об'єкта ще немає свого <strong>ID</strong>. Ну, зазвичай так, хоч бувають нюанси. А після додавання в об'єкт <strong>ID</strong> вже є.</p>
+<pre class='language-java line-numbers'><code>
+<span class="text-brown">public boolean saveUser(User user)</span> {
+    try (Session <span class="text-user">session</span> = sessionFactory.openSession()) {
+            Transaction transaction = <span class="text-user">session</span>.beginTransaction();
+            <span class="text-user">session</span>.<span class="text-red">persist</span>(<span class="text-brown">user</span>);
+            <span class="text-viola">transaction</span>.commit();
+            return true;
+    }
+    catch() {
+    return false;
+   }
+}
+</code></pre>
+<p>Також об'єкт <strong>Session</strong> має метод <code>save()</code>, який виконує аналогічну функцію. Просто метод <code>save()</code> — це старий стандарт Hibernate, а метод <code>persist()</code> — це стандарт JPA.</p>
+<h2>4.4 Видалення об'єктів</h2>
+<p>Якщо ви хочете видалити існуючий об'єкт, зробити це дуже просто. Для цього об'єкт session має спеціальний метод — <code>remove()</code>.</p>
+<p>Загальний вигляд такого запиту:</p>
+ <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+<span class="text-user">session</span>.<span class="text-red">remove</span>(<span class="text-brown">Об'єкт</span>);
+        </code></pre>
+</div>
+<p>І, звичайно, напишемо код з прикладом:</p>
+<pre class='language-java line-numbers'><code>
+<span class="text-brown">public boolean removeUser(User user)</span> {
+    try (Session <span class="text-user">session</span> = <span class="text-yellow">sessionFactory</span>.openSession()) {
+            Transaction transaction = <span class="text-user">session</span>.beginTransaction();
+            <span class="text-user">session</span>.<span class="text-red">remove</span>(<span class="text-brown">user</span>);
+            <span class="text-viola">transaction</span>.commit();
+            return true;
+    }
+    catch() {
+    return false;
+   }
+}
+</code></pre>
+<p>Навіщо так складно, запитаєш ти?</p>
+<p>Ну, по-перше, будь-які зміни бази даних завжди несуть за собою різні та не завжди очевидні наслідки. А по-друге, у даного об'єкта могли бути пов'язані з ним дочірні об'єкти тощо. Тому сценарії видалення часто бувають нетривіальними.</p>

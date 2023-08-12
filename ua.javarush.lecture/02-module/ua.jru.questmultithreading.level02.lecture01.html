@@ -1,0 +1,50 @@
+<a href="https://cdn.javarush.com/images/article/0810c22d-67f1-4900-9009-7bf12430be69/original.jpeg" target="_blank"><img data-id="0810c22d-67f1-4900-9009-7bf12430be69" data-max-width="850" alt="Що таке mutable/immutable об'єкти і навіщо вони - 1" src="https://cdn.javarush.com/images/article/0810c22d-67f1-4900-9009-7bf12430be69/800.jpeg" style="width: 850px;"></a>
+<p>- Привіт, Аміго!</p>
+<p><span class="text-user">- Привіт, Білаабо!</span></p>
+<p>— Сьогодні Білаабо розповість тобі про <strong>mutable</strong> та <strong>immutable</strong> об'єкти.</p>
+<p>Об'єкти, які можна змінити після створення, називаються змінними або <strong>mutable</strong> .</p>
+<p>Об'єкти, які після їх створення не можна змінити, називаються незмінними або <strong>immutable</strong> .</p>
+<p><span class="text-user">— А від чого залежить, чи можна об'єкт міняти чи ні?</span></p>
+<p>— Людина, яка пише новий клас, може зробити об'єкти цього класу незмінними. Наприклад, можна приховати всі setter'и - об'єкт буде тільки конструктор і getter'а, а, значить, після створення об'єкта поміняти його вже буде не можна.</p>
+<p><span class="text-user">— І яка з цього користь?</span></p>
+<p>— У незмінних об'єктів багато корисних властивостей. Але можна виділити два, які характерні практично для всіх immutable-об'єктів:</p>
+<p><strong>1) Незмінні об'єкти можна реалізувати значно простіше, ніж змінювані.</strong></p>
+<p><strong>2) Незмінні об'єкти можна вільно використовувати одночасно з різних ниток.</strong></p>
+<p>Найчастіше коли розробник вирішує написати immutable клас, він робить дві версії цього класу — mutable і immutable.</p>
+<p><span class="text-user">— А в чому сенс писати два класи замість одного?</span></p>
+<p>— Іноді так вигідніше, коли незмінна версія об'єкта буде набагато простіше/швидше, ніж змінна. Тоді й роблять дві версії. Це майже як ArrayList і LinkedList: обидва списки, але один оптимізований для одних цілей, другий для інших.</p>
+<p><span class="text-user">— Вже зрозуміліше.</span></p>
+<p>— Бувають також чисто immutable класи, без їхньої mutable версії.</p>
+<p><span class="text-user">— А якщо мені треба щось змінити у такому об'єкті? Що взагалі можна зробити з незмінним об'єктом?</span></p>
+<p>— Зазвичай immutable класи містять різні методи, які «як би» змінюють об'єкт, але замість зміни об'єкта ці методи просто створюють новий об'єкт і повертають його.</p>
+<p>Ось тобі кілька прикладів:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код на Java</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">String</span> s <span class="token operator">=</span> <span class="token string">"moscow"</span><span class="token punctuation">;</span>
+<span class="token class-name">String</span> s2 <span class="token operator">=</span> s<span class="token punctuation">.</span><span class="token function">toUpperCase</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>В результаті s містить рядок "moscow", а s2 - "MOSCOW"</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Integer</span> i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token class-name">Integer</span> j <span class="token operator">=</span> i<span class="token punctuation">;</span>
+j<span class="token operator">++</span><span class="token punctuation">;</span></code></pre></td>
+    <td>Ось що відбувається насправді: <br>
+      Integer i = new Integer(1); <br>
+      Integer j = i; <br>
+      j = новий Integer(i.getInt()+1);</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Клас String – це immutable клас. Всі об'єкти типу String - незмінні, що, однак, не заважає нам з ними працювати. Наприклад, метод <strong>toUpperCase</strong> () класу <strong>String</strong> перетворює рядок у верхній регістр (замінює всі маленькі літери великими). Але <strong>цей метод не змінює сам рядок, а повертає новий рядок,</strong> який ідентичний першим, тільки всі символи у верхньому регістрі (великі).</p>
+<p>Клас Integer - це теж неймовірний клас. Всі об'єкти типу Integer - незмінні. Щоразу, коли ми змінюємо об'єкт Integer, створюється новий об'єкт.</p>
+<p><span class="text-user">- Як цікаво. Ура, Білаабо.</span></p>
+<p>- Ура мені, ура Білаабо!</p>

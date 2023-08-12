@@ -1,0 +1,98 @@
+<p>- Привіт, Аміго! Кілька днів тому я тобі розповідав про навантаження методів. Ти все зрозумів?</p>
+<p><span class="text-user">- Так. Я пам'ятаю. Кожен метод класу має бути унікальним. Метод класу є унікальним, якщо в цьому класі немає методу з таким же ім'ям і типом параметрів, де порядок параметрів має значення.&nbsp;</span></p>
+<p>- Чудово! Я бачу, що ти добре вивчив урок. Сьогодні я хочу лише трохи розширити твої знання у цій справі. Як ти вважаєш, який метод буде викликаний у кожному випадку?</p>
+<div class="code-heading">
+ Код
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token keyword">int</span> n<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+ <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token keyword">short</span> n<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+ <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> n<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+ <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token class-name">String</span> s<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token class-name">Cat</span><span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token class-name">Cat</span><span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">byte</span><span class="token punctuation">)</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token class-name">Cat</span><span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token class-name">Cat</span><span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><span class="text-user">- Важко відповісти.</span></p>
+<p>— У першому випадку 1 має тип int, ми маємо 100% збіг методу, який приймає int. Буде викликано перший <strong>void print(int n).</strong></p>
+<p>У другому випадку, ми не маємо методу, який приймає byte. Але є два методи, які приймають short та int. За стандартом розширення типів, byte спочатку буде розширено до short, а потім розширений до int. Вердикт – буде викликано метод <strong>void print(short n).</strong></p>
+<p>У третьому випадку ми маємо 100% збіг методу, який приймає String. Буде викликаний метод <strong>void print(String s).</strong></p>
+<p>У четвертому випадку ми маємо невизначеність. <span class="text-red">null немає певного типу, компілятор відмовиться компілювати цей код</span> . У такому разі потрібно написати <strong>Cat.print((Integer)null)</strong> , щоб викликати третій метод та <strong>Cat.print((String)null)</strong> , щоб викликати четвертий.</p>
+<p><span class="text-user">— Дуже пізнавально, дякую.</span></p>
+<p>— Звертаю твою увагу, що в процесі визначення методу, який потрібно викликати, типи можуть лише розширюватись, але не звужуватись. Приклад:</p>
+<div class="code-heading">
+ Код
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token keyword"><span class="text-red">short</span></span> n<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+ <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token class-name"><span class="text-red">Integer</span></span> n<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name">Cat</span><span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation"></span><span class="text-red"><span class="token punctuation">(</span><span class="token keyword">byte</span><span class="token punctuation">)</span><span class="token number">1</span></span><span class="token number"></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token class-name">Cat</span><span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token number"><span class="text-red">1</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>У першому випадку тип byte буде розширений до short і відбудеться виклик першого методу: <strong>void print(short n).</strong></p>
+<p>У другий випадок неявно буде виконано дозволене перетворення від int до Integer, і станеться виклик другого методу <strong>void print(Integer n).</strong></p>
+<p><span class="text-user">- Несподівано.</span></p>
+<p>- Ні, несподівано - це тут:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код на Java</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token class-name"><span class="text-red">Object</span></span> o<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>o<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+ <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token class-name"><span class="text-red">String</span></span> s<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name">Cat</span><span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token number"><span class="text-red">1</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token class-name">Cat</span><span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token keyword"><span class="text-red">null</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>У першому випадку int буде розширено до Integer, оскільки немає методу для Integer, то викликається найбільш підходящий метод, тобто. метод <strong>void print(Object o)</strong>
+     <p></p>
+     <p>У другому випадку, помилки компіляції не буде і викличеться метод <strong>void print (String s)</strong> , що дещо не очевидно.</p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>— Сподіваюся, Аміго ти зрозумів, що найкраще в таких випадках вказати оператор перетворення типу, як у випадку (byte), щоб точно знати, який метод викличеться.</p>
+<p><span class="text-user">— Від чого, від чого, а від перевантаження методів я ніяких проблем не очікував. І тут – на тобі. Дякую, Ріша, триматиму вухо гостро і не розслаблятися.</span></p>

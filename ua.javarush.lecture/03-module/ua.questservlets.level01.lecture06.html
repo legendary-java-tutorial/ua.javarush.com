@@ -1,0 +1,98 @@
+<h2>7.1 Змінні в Maven – properties</h2>
+<p>Параметри Maven, що часто зустрічаються, дозволяє винести в змінні. Це дуже корисно, коли потрібно, щоб у різних частинах pom-файлу параметри збігалися. Наприклад, у змінну можна винести версію Java, версії бібліотеки, шляхи до певних ресурсів.</p>
+<p>Для цього є спеціальна секція в <code>pom.xml – &lt;properties&gt;</code>, в ній і оголошуються змінні. Загальний вид змінної такий:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token operator"></span><span class="text-red"><span class="token operator">&lt;</span> ім'я <span class="token operator">-</span> змінної <span class="token operator">&gt;</span></span><span class="token operator"></span><span class="text-green">значення</span><span class="token operator"></span><span class="text-red"><span class="token operator">&lt; </span><span class="token operator">/</span> ім'я <span class="token operator">-</span> змінної <span class="token operator">&gt;</span></span><span class="token operator"></span></code></pre>
+</div>
+<p>Приклад:</p>
+<pre class=""><code>&lt;properties&gt;
+    &lt;junit.version&gt;5.2&lt;/junit.version&gt;
+    &lt;project.artifactId&gt;new-app&lt;/project.artifactId&gt;
+    &lt;maven.compiler.source&gt;1.13&lt;/maven.compiler.source&gt;
+    &lt;maven.compiler.target&gt;1.15&lt;/maven.compiler.target&gt;
+&lt;/properties&gt;
+</code></pre>
+<p>Для звернення до змінних використовується інший синтаксис:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="text-red">$ <span class="token punctuation">{</span> ім'я <span class="token operator">-</span> змінної <span class="token punctuation">}</span></span><span class="token punctuation"></span></code></pre>
+</div>
+<p>Там, де написаний такий код, Maven підставить значення змінної.</p>
+<p>Приклад:</p>
+<pre class=""><code>&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;junit&lt;/groupId&gt;
+        &lt;artifactId&gt;junit&lt;/artifactId&gt;
+        &lt;version&gt;${junit.version}&lt;/version&gt;
+        &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+ 
+&lt;build&gt;
+    &lt;finalName&gt;${project.artifactId}&lt;/finalName&gt;
+    &lt;plugin&gt;
+        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+        &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+        &lt;version&gt;2.3.2&lt;/version&gt;
+        &lt;configuration&gt;
+            &lt;source&gt;${maven.compiler.source}&lt;/source&gt;
+            &lt;target&gt;${maven.compiler.target}&lt;/target&gt;
+        &lt;/configuration&gt;
+    &lt;/plugin&gt;
+&lt;/build&gt;
+</code></pre>
+<h2>7.2 Зумовлені змінні в Maven</h2>
+<p>При описі проекту в pom-файлі можна використовувати певні змінні. Їх можна умовно поділити на кілька груп:</p>
+<ul>
+ <li>Вбудовані характеристики проекту;</li>
+ <li>Властивості проекту;</li>
+ <li>Налаштування.</li>
+</ul>
+<p>Вбудованих властивостей проекту всього два:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Властивість</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>${basedir}</td>
+    <td>кореневий каталог проекту, де розташовується<code>pom.xml</code></td>
+   </tr>
+   <tr>
+    <td>${version}</td>
+    <td>версія артефакту; можна використовувати <code>${project.version}</code>або<code>${pom.version}</code></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>На властивості проекту можна посилатися за допомогою префіксів <code>«project»</code>або <code>«pom»</code>. Їх у нас чотири:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Властивість</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>${project.build.directory}</td>
+    <td><code>«target»</code>директорія проекту</td>
+   </tr>
+   <tr>
+    <td>${project.build.outputDirectory}</td>
+    <td><code>«target»</code>директорія компілятора За замовчуванням<code>«target/classes»</code></td>
+   </tr>
+   <tr>
+    <td>${project.name}</td>
+    <td>найменування проекту</td>
+   </tr>
+   <tr>
+    <td>${project.version}</td>
+    <td>версія проекту</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Доступ до властивостей <code>settings.xml</code>можна отримати за допомогою префікса <code>settings</code>. Імена можуть бути будь-якими – беруться із <code>settings.xml</code>. Приклад:</p>
+<pre class=""><code>${settings.localRepository} ставить шлях до локального репозиторію.
+</code></pre>

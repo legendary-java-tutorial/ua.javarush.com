@@ -1,0 +1,464 @@
+<h2>Навіщо потрібен Reflection API?</h2>
+<p>Рефлексія в Java — це механізм, який дозволяє розробнику вносити зміни та отримувати інформацію про класи, інтерфейси, поля та методи під час виконання, не знаючи їх імен при цьому.</p>
+<p>Reflection API також допомагає створювати нові екземпляри класів, викликати методи та отримувати чи встановлювати значення полів.</p>
+<p>Давай зберемо всі можливості використання рефлексії в один список:</p>
+<ul>
+ <li>Дізнатися/визначити клас об'єкту</li>
+ <li>Отримати інформацію про модифікаторів класу, поля, методи, константи, конструктори та суперкласи</li>
+ <li>З'ясувати, які методи належать реалізованому інтерфейсу/інтерфейсам</li>
+ <li>Створити екземпляр класу, коли ім'я класу невідоме до виконання програми</li>
+ <li>Отримати та встановити значення поля об'єкта на ім'я</li>
+ <li>Викликати метод об'єкта на ім'я</li>
+</ul>
+<p>Рефлексія використовується практично у всіх сучасних технологіях Java і лежить в основі більшості сучасних Java/Java EE фреймворків і бібліотек, наприклад:</p>
+<ul>
+ <li><span class="text-bold">Spring</span> - фреймворків для створення веб-додатків</li>
+ <li><span class="text-bold">JUnit</span> - фреймворк для тестування</li>
+</ul>
+<p>Якщо розробник ніколи не стикався з такими механізмами, то у нього, швидше за все, виникне закономірне питання — а навіщо все це треба? Відповідь у цьому випадку досить проста, але в той же час дуже невизначена: завдяки рефлексії ми кардинально підвищуємо гнучкість і можливість налаштовувати програму під себе та під свій код.</p>
+<p>Але завжди є свої плюси та мінуси. Тому трохи про мінуси:</p>
+<ul>
+ <li><span class="text-bold">Порушення безпеки програми. </span>За допомогою рефлексії ми можемо отримати доступ до частини коду, до якої не повинні були (порушення інкапсуляції).</li>
+ <li><span class="text-bold">Обмеження системи безпеки. </span>Рефлексія вимагає дозволу часу виконання, недоступні для систем під управлінням менеджера безпеки.</li>
+ <li><span class="text-bold">Низька продуктивність. </span>Рефлексія Java визначає типи динамічно, скануючи <span class="text-green">classpath</span> , щоб знайти клас для завантаження. Це знижує продуктивність програми.</li>
+ <li><span class="text-bold">Складність у підтримці. </span>Код, написаний за допомогою рефлексії, важко читати та налагоджувати. Він стає менш гнучким та його складніше підтримувати.</li>
+</ul>
+<h2>Робота з класами за допомогою Reflection API</h2>
+<p>Усі операції рефлексії починаються з об'єкта <span class="code"><span class="text-green">java.lang.Class</span></span> . Для кожного типу об'єкта створюється незмінний екземпляр <span class="code"><span class="text-green">java.lang.Class</span></span> , який надає методи отримання властивостей об'єкта, створення нових об'єктів, виклику методів.</p>
+<p>Давай подивимося на список основних методів роботи з <span class="code"><span class="text-green">java.lang.Class</span></span> :</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Метод</th>
+    <th>справді</th>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">String getName();</span></td>
+    <td>Повертає назву класу</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">int getModifiers();</span></td>
+    <td>Повертає модифікатори доступу</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">Package getPackage();</span></td>
+    <td>Повертає інформацію про пакет</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">Class getSuperclass();</span></td>
+    <td>Повертає інформацію про клас-батька</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">Class[] getInterfaces();</span></td>
+    <td>Повертає масив інтерфейсів</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">Constructor[] getConstructors();</span></td>
+    <td>Повертає інформацію про конструкторів класу</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">Fields[] getFields();</span></td>
+    <td>Повертає поля класу</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">Files getFiled(String fieldName);</span></td>
+    <td>Повертає певне поле класу на ім'я</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">Method[] getMethods();</span></td>
+    <td>Повертає масив методів</td>
+   </tr>
+   <tr>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Це основні методи для отримання даних про клас та інтерфейси, поля та методи. Також є методи, які дозволяють отримувати або встановлювати значення полів, що дають доступ до <span class="code">private</span> полів класу. Розглянемо їх трохи згодом.</p>
+<p>Зараз ми поговоримо про отримання самого <span class="code"><span class="text-green">java.lang.Class</span> . Для цього ми маємо три способи.</span></p>
+<h4>1. За допомогою Class.forName</h4>
+<p>У програмі, що працює, для отримання класу необхідно використовувати метод <span class="code text-orange">forName (String className)</span> .</p>
+<p>Цей код демонструє можливість створювати класи за допомогою Reflection. Створимо клас <span class="code"><span class="text-green">Person</span></span> , з яким працюватимемо:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>company</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Person</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">int</span> age<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> name<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getAge</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> age<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setAge</span><span class="token punctuation">(</span><span class="token keyword">int</span> age<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> name<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setName</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>І друга частина нашого прикладу — це код із рефлексією:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">TestReflection</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> aClass <span class="token operator">=</span> <span class="token class-name">Class</span><span class="token punctuation">.</span><span class="token function">forName</span><span class="token punctuation">(</span><span class="token string">"com.company.Person"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">ClassNotFoundException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Такий підхід можливий у разі, якщо відоме повне ім'я класу. Тоді можна отримати відповідний клас за допомогою статичного методу <span class="code text-orange">Class.forName()</span> . Цей спосіб не можна використовувати для типових типів.</p>
+<h4>2. За допомогою .class</h4>
+<p>Якщо тип доступний, але немає екземпляра, можна отримати клас, додавши <span class="code">.class</span> до імені типу. Це найпростіший спосіб отримати клас для примітивного типу.</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">Class</span> aClass <span class="token operator">=</span> <span class="token class-name">Person</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">;</span></code></pre>
+<h4>3. За допомогою .getClass()</h4>
+<p>Якщо екземпляр об'єкта доступний, то найпростіший спосіб отримати його клас - викликати <span class="code text-orange">object.getClass()</span> .</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">Person</span> person <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Class</span> aClass <span class="token operator">=</span> person<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>У чому ж різниця між двома останніми підходами?</p>
+<p>Використовуй <span class="code">A.class</span> якщо заздалегідь, при написанні коду знаєш, який об'єкт класу тебе цікавить. Якщо екземпляра немає, тоді потрібно використовувати <span class="code">.class</span> .</p>
+<h2>Отримання методів класу</h2>
+<p>Розглянемо методи, які повертають методи нашого класу: <span class="code text-orange">getDeclaredMethods()</span> та <span class="code text-orange">getMethods()</span> .</p>
+<p><span class="code text-orange">getDeclaredMethods()</span> повертає масив, який містить об'єкти типу <span class="text-orange">Method</span> , що відображають усі оголошені методи класу або інтерфейсу, представленого цим об'єктом класу, включаючи публічні, приватні, за умовчанням та protected методи, але виключаючи успадковані методи.</p>
+<p><span class="code text-orange">getMethods()</span> повертає масив, що містить об'єкти типу <span class="text-orange">Method</span> , що відображають усі публічні методи класу або інтерфейсу, представленого цим об'єктом класу, включаючи ті, що оголошені класом або інтерфейсом, і ті, які успадковані від суперкласів та суперінтерфейсів.</p>
+<p>Давайте розглянемо роботу кожного з них.</p>
+<p>Почнемо з <span class="code text-orange">getDeclaredMethods()</span> . Нижче ми будемо працювати з абстрактним класом <span class="code"><span class="text-green">Numbers</span></span> , який допоможе нам ще раз зрозуміти різницю між двома методами. Напишемо статичний метод, який перетворюватиме наш масив <span class="text-neon">Method</span> в <span class="text-neon">List&lt;String&gt;</span> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>reflect<span class="token punctuation">.</span></span><span class="token class-name">Method</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Arrays</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">List</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>stream<span class="token punctuation">.</span></span><span class="token class-name">Collectors</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">TestReflection</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">final</span> <span class="token class-name">Method</span><span class="token punctuation">[</span><span class="token punctuation">]</span> declaredMethods <span class="token operator">=</span> <span class="token class-name">Number</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">getDeclaredMethods</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> actualMethodNames <span class="token operator">=</span> <span class="token function">getMethodNames</span><span class="token punctuation">(</span>declaredMethods<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        actualMethodNames<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token operator">::</span><span class="token function">println</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> <span class="token function">getMethodNames</span><span class="token punctuation">(</span><span class="token class-name">Method</span><span class="token punctuation">[</span><span class="token punctuation">]</span> methods<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span>methods<span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token class-name">Method</span><span class="token operator">::</span><span class="token function">getName</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">collect</span><span class="token punctuation">(</span><span class="token class-name">Collectors</span><span class="token punctuation">.</span><span class="token function">toList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Результат роботи коду виглядає так:</p>
+<div class="terminal">
+ byteValue 
+ <br>
+  shortValue 
+ <br>
+  intValue 
+ <br>
+  longValue 
+ <br>
+  floatValue 
+ <br>
+  doubleValue
+</div>
+<p>Це і є методи, які оголошені всередині класу <span class="code"><span class="text-green">Number</span></span> . А що поверне нам <span class="code text-orange">getMethods()</span> ? Змінимо два рядки у прикладі:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token keyword">final</span> <span class="token class-name">Method</span><span class="token punctuation">[</span><span class="token punctuation">]</span> methods <span class="token operator">=</span> <span class="token class-name">Number</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">getMethods</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> actualMethodNames <span class="token operator">=</span> <span class="token function">getMethodNames</span><span class="token punctuation">(</span>methods<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>І в результаті ми побачимо такий набір методів:</p>
+<div class="terminal">
+ byteValue 
+ <br>
+  shortValue 
+ <br>
+  intValue 
+ <br>
+  longValue 
+ <br>
+  floatValue 
+ <br>
+  doubleValue 
+ <br>
+  wait 
+ <br>
+  wait 
+ <br>
+  wait 
+ <br>
+  equals 
+ <br>
+  toString 
+ <br>
+  hashCode 
+ <br>
+  getClass 
+ <br>
+  notify 
+ <br>
+  notifyAll
+</div>
+<p>Оскільки всі класи успадковуються від <span class="code"><span class="text-green">Object</span></span> , наш метод повернув нам ще й громадські методи класу <span class="code"><span class="text-green">Object</span> .</span></p>
+<h2>Отримання полів класу</h2>
+<p>Методи <span class="code text-orange">getFields</span> та <span class="code text-orange">getDeclaredFields</span> використовуються для отримання полів класу. Подивимося на прикладі класу <span class="code"><span class="text-green">LocalDateTime</span></span> . Перепишемо наш код:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>reflect<span class="token punctuation">.</span></span><span class="token class-name">Field</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>time<span class="token punctuation">.</span></span><span class="token class-name">LocalDateTime</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Arrays</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">List</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>stream<span class="token punctuation">.</span></span><span class="token class-name">Collectors</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">TestReflection</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">final</span> <span class="token class-name">Field</span><span class="token punctuation">[</span><span class="token punctuation">]</span> declaredFields <span class="token operator">=</span> <span class="token class-name">LocalDateTime</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">getDeclaredFields</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> actualFieldNames <span class="token operator">=</span> <span class="token function">getFieldNames</span><span class="token punctuation">(</span>declaredFields<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        actualFieldNames<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token operator">::</span><span class="token function">println</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> <span class="token function">getFieldNames</span><span class="token punctuation">(</span><span class="token class-name">Field</span><span class="token punctuation">[</span><span class="token punctuation">]</span> fields<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span>fields<span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token class-name">Field</span><span class="token operator">::</span><span class="token function">getName</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">collect</span><span class="token punctuation">(</span><span class="token class-name">Collectors</span><span class="token punctuation">.</span><span class="token function">toList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>В результаті виконання цього коду ми отримаємо набір полів, які містять клас LocalDateTime.</p>
+<div class="terminal">
+ MIN 
+ <br>
+  MAX 
+ <br>
+  serialVersionUID 
+ <br>
+  date 
+ <br>
+  time
+</div>
+<p>За аналогією з методами подивимося, що буде, якщо трохи змінити код:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token keyword">final</span> <span class="token class-name">Field</span><span class="token punctuation">[</span><span class="token punctuation">]</span> fields <span class="token operator">=</span> <span class="token class-name">LocalDateTime</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">getFields</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> actualFieldNames <span class="token operator">=</span> <span class="token function">getFieldNames</span><span class="token punctuation">(</span>fields<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Висновок програми:</p>
+<div class="terminal">
+ MIN 
+ <br>
+  MAX
+</div>
+<p>Тепер давай розберемо, у чому різниця між нашими методами.</p>
+<p>Метод <span class="code text-orange">getDeclaredFields</span> повертає масив об'єктів <span class="text-neon">Field</span> , що відображають усі поля, оголошені класом або інтерфейсом, представленим цим об'єктом<mark class="green">Class</mark>.</p>
+<p>Метод <span class="code text-orange">getFields</span> повертає масив об'єктів <span class="text-neon">Field</span> , що відображають усі загальнодоступні ( <span class="code">public</span> ) поля класу або інтерфейсу, представленого цим об'єктом<mark class="green">Class</mark>.</p>
+<p>А тепер заглянемо всередину нашого <span class="code"><span class="text-green">LocalDateTime</span> .</span></p><img data-max-width="800" data-id="340526ab-a2e1-4693-a5ef-fb698d3b2032" alt="" src="https://cdn.javarush.com/images/article/340526ab-a2e1-4693-a5ef-fb698d3b2032/800.jpeg" style="width: 800px;">
+<p>Поля класу<mark>MIN</mark>і<mark>MAX</mark>є загальнодоступними, отже, їх буде видно через метод <span class="code text-orange">getFields</span> . У свою чергу поля<mark>date</mark>,<mark>time</mark>,<mark>serialVersionUID</mark>мають модифікатор <span class="code">private</span> , а значить не будуть видно через метод <span class="code text-orange">getFields</span> , і отримати їх ми можемо за допомогою <span class="code text-orange">getDeclaredFields</span> . Таким чином ми можемо отримати доступ до полів (Field) для <span class="code">приватних</span> полів.</p>
+<h2>Інші методи та їх опис</h2>
+<p>Настав час поговорити про деякі методи нашого класу <span class="code"><span class="text-green">Class</span> , а саме:</span></p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Метод</th>
+    <th>Дія</th>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">getModifiers</span></td>
+    <td>Отримання модифікаторів нашого класу</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">getPackage</span></td>
+    <td>Отримання пакета, у якому лежить наш клас</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">getSuperclass</span></td>
+    <td>Отримання суперкласу</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">getInterfaces</span></td>
+    <td>Отримання масиву інтерфейсів, що імплементують клас</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">getName</span></td>
+    <td>Отримання повного імені класу</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">getSimpleName</span></td>
+    <td>Отримання назви класу</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<h4>getModifiers()</h4>
+<p>Доступ до модифікаторів можна отримати за допомогою<mark class="green">Class</mark>об'єкт.</p>
+<p>Модифікатори є ключовими словами <span class="text-user"><span class="text-bold">public</span></span> , <span class="text-user"><span class="text-bold">static</span></span> , <span class="text-user"><span class="text-bold">interface</span></span> і т. д. Отримуємо модифікатори за допомогою методу <span class="code text-orange">getModifiers()</span> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Person</span><span class="token punctuation">&gt;</span></span> personClass <span class="token operator">=</span> <span class="token class-name">Person</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> classModifiers <span class="token operator">=</span> personClass<span class="token punctuation">.</span><span class="token function">getModifiers</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Результат виконання перебуває у змінній<mark class="user">int</mark>, де кожен модифікатор є бітовий прапор, який може бути встановлений або скинутий. Ми можемо перевірити модифікатори, використовуючи методи в класі <span class="code"><span class="text-green">java.lang.reflect.Modifier</span></span> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>company<span class="token punctuation">.</span></span><span class="token class-name">Person</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>reflect<span class="token punctuation">.</span></span><span class="token class-name">Modifier</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">TestReflection</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Person</span><span class="token punctuation">&gt;</span></span> personClass <span class="token operator">=</span> <span class="token class-name">Person</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> classModifiers <span class="token operator">=</span> personClass<span class="token punctuation">.</span><span class="token function">getModifiers</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">boolean</span> isPublic <span class="token operator">=</span> <span class="token class-name">Modifier</span><span class="token punctuation">.</span><span class="token function">isPublic</span><span class="token punctuation">(</span>classModifiers<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">boolean</span> isStatic <span class="token operator">=</span> <span class="token class-name">Modifier</span><span class="token punctuation">.</span><span class="token function">isStatic</span><span class="token punctuation">(</span>classModifiers<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">boolean</span> isFinal <span class="token operator">=</span> <span class="token class-name">Modifier</span><span class="token punctuation">.</span><span class="token function">isFinal</span><span class="token punctuation">(</span>classModifiers<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">boolean</span> isAbstract <span class="token operator">=</span> <span class="token class-name">Modifier</span><span class="token punctuation">.</span><span class="token function">isAbstract</span><span class="token punctuation">(</span>classModifiers<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">boolean</span> isInterface <span class="token operator">=</span> <span class="token class-name">Modifier</span><span class="token punctuation">.</span><span class="token function">isInterface</span><span class="token punctuation">(</span>classModifiers<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Class modifiers: %d%n"</span><span class="token punctuation">,</span> classModifiers<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Is public: %b%n"</span><span class="token punctuation">,</span> isPublic<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Is static: %b%n"</span><span class="token punctuation">,</span> isStatic<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Is final: %b%n"</span><span class="token punctuation">,</span> isFinal<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Is abstract: %b%n"</span><span class="token punctuation">,</span> isAbstract<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Is interface: %b%n"</span><span class="token punctuation">,</span> isInterface<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Згадай, як виглядає оголошення нашого класу <span class="code"><span class="text-green">Person</span></span> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Person</span> <span class="token punctuation">{</span>
+   …
+<span class="token punctuation">}</span></code></pre>
+<p>В результаті отримуємо такий висновок на екран:</p>
+<div class="terminal">
+ Class modifiers: 1 
+ <br>
+  Is public: true 
+ <br>
+  Is static: false 
+ <br>
+  Is final: false 
+ <br>
+  Is abstract: false 
+ <br>
+  Is interface: false
+</div>
+<p>Якщо ми зробимо наш клас абстрактним, то отримаємо такий результат:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">Person</span> <span class="token punctuation">{</span> … <span class="token punctuation">}</span></code></pre>
+<p>і такий висновок:</p>
+<div class="terminal">
+ Class modifiers: 1025 
+ <br>
+  Is public: true 
+ <br>
+  Is static: false 
+ <br>
+  Is final: false 
+ <br>
+  Is abstract: true 
+ <br>
+  Is interface: false
+</div>
+<p>У нас змінився модифікатор доступу, а значить і дані, які повертатимуться через наші статичні методи класу <span class="code"><span class="text-green">Modifier</span> .</span></p>
+<h4>getPackage()</h4>
+<p>Знаючи тільки клас, ми можемо отримати інформацію про пакет:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Person</span><span class="token punctuation">&gt;</span></span> personClass <span class="token operator">=</span> <span class="token class-name">Person</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">;</span>
+<span class="token keyword">final</span> <span class="token class-name">Package</span> aPackage <span class="token operator">=</span> personClass<span class="token punctuation">.</span><span class="token function">getPackage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>aPackage<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h4>getSuperclass()</h4>
+<p>Маючи доступ до об'єкта класу, можемо отримати доступ до його суперкласу:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Person</span><span class="token punctuation">&gt;</span></span> personClass <span class="token operator">=</span> <span class="token class-name">Person</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">;</span>
+    <span class="token keyword">final</span> <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span> <span class="token keyword">super</span> <span class="token class-name">Person</span><span class="token punctuation">&gt;</span></span> superclass <span class="token operator">=</span> personClass<span class="token punctuation">.</span><span class="token function">getSuperclass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>superclass<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>В результаті отримаємо всім відомий клас <span class="code"><span class="text-green">Object</span> :</span></p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name"><span class="token namespace">java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span></span>Object</span></code></pre>
+<p>А от якщо у нашого класу буде клас-батько, то ми побачимо саме його:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>company</span><span class="token punctuation">;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">Human</span> <span class="token punctuation">{</span>
+    <span class="token comment">// some info</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Person</span> <span class="token keyword">extends</span> <span class="token class-name">Human</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">int</span> age<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> name<span class="token punctuation">;</span>
+
+    <span class="token comment">// some info</span>
+<span class="token punctuation">}</span></code></pre>
+<p>І тоді в результаті ми отримаємо вже наш суперклас:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span>company<span class="token punctuation">.</span></span>Human</span></code></pre>
+<h4>getInterfaces()</h4>
+<p>Список інтерфейсів, що реалізуються цим класом, можна отримати так:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Person</span><span class="token punctuation">&gt;</span></span> personClass <span class="token operator">=</span> <span class="token class-name">Person</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">;</span>
+    <span class="token keyword">final</span> <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">[</span><span class="token punctuation">]</span> interfaces <span class="token operator">=</span> personClass<span class="token punctuation">.</span><span class="token function">getInterfaces</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span>interfaces<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>І не забудемо модифікувати наш клас <span class="code"><span class="text-green">Person</span> :</span></p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Person</span> <span class="token keyword">implements</span> <span class="token class-name">Serializable</span> <span class="token punctuation">{</span> … <span class="token punctuation">}</span></code></pre>
+<p>Висновок:</p>
+<div class="terminal">
+ [interface java.io.Serializable]
+</div>
+<p>Клас може реалізувати багато інтерфейсів. Тому повертається масив об'єктів<mark class="green">Class</mark>. У Java Reflection API інтерфейси також представлені об'єктами типу<mark class="green">Class</mark>.</p>
+<p><span class="text-bold">Увага:</span> Метод повернув лише інтерфейси, які реалізує цей клас, а не його суперклас. Для того, щоб отримати повний список інтерфейсів, реалізованих у цьому класі, потрібно звернутися як до поточного класу, так і до всіх суперкласів по ланцюжку успадкування.</p>
+<h4>getName() &amp; getSimpleName() &amp; getCanonicalName()</h4>
+<p>Напишемо приклад для примітиву, вкладеного класу, аннонімного класу та класу <span class="code"><span class="text-green">String</span> :</span></p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">TestReflection</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">printNamesForClass</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> <span class="token string">"int class (primitive)"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">printNamesForClass</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> <span class="token string">"String.class (ordinary class)"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">printNamesForClass</span><span class="token punctuation">(</span><span class="token class-name"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span>HashMap<span class="token punctuation">.</span>SimpleEntry</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span>
+                <span class="token string">"java.util.HashMap.SimpleEntry.class (nested class)"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">printNamesForClass</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span>Serializable</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token punctuation">}</span><span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                <span class="token string">"new java.io.Serializable(){}.getClass() (anonymous inner class)"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">printNamesForClass</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> clazz<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token class-name">String</span> label<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%s:%n"</span><span class="token punctuation">,</span> label<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"\tgetName()):\t%s%n"</span><span class="token punctuation">,</span> clazz<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"\tgetCanonicalName()):\t%s%n"</span><span class="token punctuation">,</span> clazz<span class="token punctuation">.</span><span class="token function">getCanonicalName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"\tgetSimpleName()):\t%s%n"</span><span class="token punctuation">,</span> clazz<span class="token punctuation">.</span><span class="token function">getSimpleName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"\tgetTypeName():\t%s%n%n"</span><span class="token punctuation">,</span> clazz<span class="token punctuation">.</span><span class="token function">getTypeName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Результат нашої програми:</p>
+<div class="terminal">
+ int class (primitive): 
+ <br>
+  getName()): int 
+ <br>
+  getCanonicalName()): int 
+ <br>
+  getSimpleName()): int 
+ <br>
+  getTypeName(): int 
+ <br>
+ <br>
+  String.class (ordinary class): 
+ <br>
+  getName()): java.lang.String 
+ <br>
+  getCanonicalName() ): java.lang.String 
+ <br>
+  getSimpleName()): String 
+ <br>
+  getTypeName(): java.lang.String 
+ <br>
+ <br>
+  java.util.HashMap.SimpleEntry.class (nested class): 
+ <br>
+  getName()): java.util.AbstractMap$SimpleEntry 
+ <br>
+  getCanonicalName( )): java.util.AbstractMap.SimpleEntry 
+ <br>
+  getSimpleName()): SimpleEntry 
+ <br>
+  getTypeName(): java.util.AbstractMap$SimpleEntry 
+ <br>
+ <br>
+  java.io.Serializable(){}.getClass() (anonymous inner class): 
+ <br>
+  getName() ): TestReflection$1 
+ <br>
+  getCanonicalName()): null
+ <br>
+  getSimpleName()): 
+ <br>
+  getTypeName(): TestReflection$1
+</div>
+<p>Тепер давай розберемо результати нашої програми:</p>
+<ul>
+ <li>
+  <p><span class="code text-orange">getName()</span> повертає ім'я сутності.</p></li>
+ <li>
+  <p><span class="code text-orange">getCanonicalName()</span> повертає канонічне ім'я базового класу, як це визначено специфікацією мови Java. Повертає null, якщо базовий клас немає канонічного імені (тобто якщо це локальний чи анонімний клас чи масив, тип компонента якого немає канонічного імені).</p></li>
+ <li>
+  <p><span class="code text-orange">getSimpleName()</span> повертає просте ім'я базового класу, як зазначено у вихідному коді. Повертає порожній рядок, якщо базовий клас є анонімним.</p></li>
+ <li>
+  <p><span class="code text-orange">getTypeName()</span> повертає інформативний рядок для цього типу.</p></li>
+</ul>

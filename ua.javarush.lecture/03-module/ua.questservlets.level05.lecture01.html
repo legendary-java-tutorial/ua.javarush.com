@@ -1,0 +1,134 @@
+<h2>2.1 Перший логер – log4j</h2>
+<p>Як ти вже знаєш, історія логів почалася з <code>System.err.println()</code>- виведення запису в консоль. Його і зараз активно використовують при дебазі, наприклад Intellij IDEA за допомогою нього виводить повідомлення про помилки в консоль. Але ніяких налаштувань цей варіант не має, тож підемо далі.</p>
+<p>Перший і найпопулярніший логер називався <code>Log4j</code>. Це було гарне і гнучко настроюване рішення. Через різні обставини це рішення так і не потрапило в JDK, чим дуже засмутило все ком'юніті.</p>
+<p>Цей логер не просто вмів логувати, він був створений програмістами для програмістів і дозволяв вирішувати проблеми, які постійно виникали у зв'язку з логуванням.</p>
+<p>Як ви вже знаєте, логи пишуться зрештою для того, щоб якась людина їх читала і намагалася зрозуміти, що ж сталося під час роботи програми – що і коли пішло не так, як очікувалося.</p>
+<p>Для <code>log4j</code>цього були три речі:</p>
+<ul>
+ <li><strong>логування підпакетів;</strong></li>
+ <li><strong>безліч appender'ів (результатів);</strong></li>
+ <li><strong>гаряче перезавантаження налаштувань.</strong></li>
+</ul>
+<p>По-перше, налаштування <code>log4j</code>можна було прописати таким чином, щоб увімкнути логування в одному пакеті та вимкнути в іншому. Наприклад, можна було включити логування в пакеті <code>com.codegym.server</code>, але при цьому вимкнути його в <code>com.codegym.server.payment</code>. Це дозволяло швидко прибрати з ліг непотрібну інформацію.</p>
+<p>По-друге, <code>log4j</code>дозволяв писати результати логування відразу кілька лог-файлов. І висновок у кожен можна було налаштувати індивідуально. Наприклад, в один файл можна було писати тільки інформацію про серйозні помилки, в інший - логи з певного модуля, а в третій - логи за певний час.</p>
+<p>Кожен лог-файл, таким чином, був налаштований на певний тип очікуваних проблем. Це дуже спрощувало життя програмістам, яким не приносило задоволення переглядати вручну гігабайтні файли логів.</p>
+<p>І нарешті, по-третє, <code>log4j</code>дозволяв змінити налаштування лога безпосередньо під час роботи програми, не перезапускаючи її. Це було дуже зручно, коли потрібно було підправити роботу логів, щоб знайти додаткову інформацію щодо певної помилки.</p>
+<p>Важливо! Є дві версії лога <code>log4j</code>: <strong>1.2.x</strong> і <strong>2.xx</strong> , які <span class="text-red">несумісні одна з одною</span> .</p>
+<p>Підключити логер до проекту можна за допомогою коду:</p>
+<pre class="line-numbers"><code>&lt;dependencies&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
+    &lt;artifactId&gt;log4j-api&lt;/artifactId&gt;
+    &lt;version&gt;2.17.2&lt;/version&gt;
+  &lt;/dependency&gt;
+ 
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
+    &lt;artifactId&gt;log4j-core&lt;/artifactId&gt;
+    &lt;version&gt;2.17.2&lt;/version&gt;
+  &lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre>
+<h2>2.2 Перший офіційний логер – JUL: java.util.logging</h2>
+<p>Після того, як у Java-спільноті з'явився зоопарк логерів, розробники <code>JDK</code>вирішабо зробити один стандартний логер, яким би користувалися всі. Так з'явився логер <code>JUL</code>: пакет <code>java.util.logging</code>.</p>
+<p>Однак, при його створенні автори логера взяли за основу не <code>log4j</code>, а варіант логера від IBM, що вплинуло на його розвиток. Хороша новина – логер <code>JUL</code>входить до складу <code>JDK</code>, погана – ним мало хто користується.</p><img data-max-width="800" data-id="3b660d0c-a0bf-4afb-a496-e0ccb7e659fb" alt="JUL" src="https://cdn.javarush.com/images/article/3b660d0c-a0bf-4afb-a496-e0ccb7e659fb/800.jpeg" style="width: 800px;">
+<p>Мало того, що розробники <code>JUL</code>зробабо <strong>«ще один універсальний стандарт»</strong> , так вони зробабо для нього свої рівні логування, які відрізнялися від прийнятих на той час у популярних логерів.</p>
+<p>І це була велика проблема. Адже продукти <code>Java</code>часто зібрані з великої кількості бібліотек і в кожній такій бібліотеці був свій власний логер. Значить потрібно було конфігурувати всі логери, які є в додатку.</p>
+<p>Хоча сам собою логер досить непоганий. Створення логера більш-менш схоже. Для цього потрібно зробити імпорт:</p>
+<pre><code>
+<span class="text-red">java.util.logging.Logger</span> <span class="text-green">log</span> = <span class="text-red">java.util.logging.Logger</span>.<span class="text-orange">getLogger</span>(<span class="text-user">LoggingJul.class.getName()</span>);
+</code></pre>
+<p><span class="text-user">Ім'я класу</span> спеціально передається для того, щоб знати, звідки йде логування.</p>
+<p>Тільки з виходом розробники вирішабо важливі проблеми, після чого <code>JUL</code>по-справжньому зручно використати. До цього це був якийсь другорядний логер.</p>
+<p>Також цей логер підтримує лямбда-вирази та ліниві обчислення. Починаючи з <code>Java 8</code>нього можна передавати <code>Supplier&lt;String&gt;</code>. Це допомагає рахувати і створювати рядок тільки в той момент, коли це дійсно потрібно, а не щоразу, як це було раніше.</p>
+<p>Методи з аргументом <code>Supplier&lt;String&gt; msgSupplier</code>виглядають як показано нижче:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">info</span><span class="token punctuation">(</span><span class="token class-name">Supplier</span><string> msgSupplier<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token function">log</span><span class="token punctuation">(</span><span class="token class-name">Level</span><span class="token punctuation">.</span>INFO<span class="token punctuation">,</span> msgSupplier<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</string></code></pre>
+<h2>2.3 Перший логер-обгортка – JCL: jakarta commons logging</h2>
+<p>Довгий час не було єдиного стандарту серед логерів, <code>JUL</code>мав стати таким, але він був гіршим <code>log4j</code>, тому єдиного стандарту так і не з'явилося. Натомість з'явився цілий зоопарк логерів, кожен із яких хотів стати тим самим.</p><img data-max-width="800" data-id="134a78f3-d92d-425d-a70d-6eaf950ecc6b" alt="JCL" src="https://cdn.javarush.com/images/article/134a78f3-d92d-425d-a70d-6eaf950ecc6b/800.jpeg" style="width: 800px;">
+<p>Однак звичайним Java-розробникам не подобалося, що майже кожна бібліотека має свій власний логер і його потрібно якось по-особливому конфігурувати. Тому спільнота вирішила створити спеціальну обгортку над іншими логерами - так з'явився<code>JCL: jakarta commons logging</code></p>
+<p>І знову ж таки проект, який створювався, щоб бути лідером, не став ним. Не можна створити переможця, переможцем можна лише стати. Функціональність <code>JCL</code>була дуже бідною і ніхто не хотів користуватися ним. Логгер, створений, щоб стати заміною всіх логерів, спіткала така сама доля, як і – <code>JUL</code>не користувалися.</p>
+<p>Хоча він був доданий до багатьох бібліотек, що випускаються спільнотою Apache, але зоопарк логерів тільки розростався.</p>
+<h2>2.4 Перший останній логер – Logback</h2>
+<p>Але це ще не все. Розробник <code>log4j</code>вирішив, що він найрозумніший (адже його логером користувалося найбільше людей) і вирішив написати новий покращений логер, який поєднуватиме в собі плюси <code>log4j</code>та інших логерів.</p>
+<p>Новий логер носив назву <code>Logback</code>. Саме цей логер мав стати майбутнім єдиним логером, яким би користувалися всі. В основі була та сама ідея, що і в <code>log4j</code>.</p>
+<p>Підключити до проекту цей логер можна за допомогою коду:</p>
+<pre class="line-numbers"><code>
+&lt;dependency&gt;
+    &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
+    &lt;artifactId&gt;logback-classic&lt;/artifactId&gt;
+    &lt;version&gt;1.2.6&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>Відмінності були в тому, що в <code>Logback</code>:</p>
+<ul>
+ <li>покращено продуктивність;</li>
+ <li>додано нативну підтримку <code>slf4j</code>;</li>
+ <li>розширено опцію фільтрації.</li>
+</ul>
+<p>Ще однією перевагою цього логера було те, що він мав дуже хороші налаштування за умовчанням. І конфігурувати логер потрібно було тільки якщо ви хотіли щось в них змінити. Також файл налаштувань був краще адаптований під корпоративний софт - всі його конфігурації задавалися як <code>xml/</code>.</p>
+<p>За замовчуванням <code>Logback</code>не вимагає жодних налаштувань і записує всі логи від рівня <code>DEBUG</code>та вище. Якщо вам потрібна інша поведінка, її можна налаштувати через <code>xml</code>конфігурацію:</p>
+<pre class="line-numbers"><code>&lt;configuration&gt;
+    &lt;appender name="FILE" class="ch.qos.logback.core.FileAppender"&gt;
+        &lt;file&gt;app.log&lt;/file&gt;
+        &lt;encoder&gt;
+            &lt;pattern&gt;%d{HH:mm:ss,SSS} %-5p [%c] - %m%n&lt;/pattern&gt;
+        &lt;/encoder&gt;
+    &lt;/appender&gt;
+    &lt;logger name="org.hibernate.SQL" level="DEBUG" /&gt;
+    &lt;logger name="org.hibernate.type.descriptor.sql" level="TRACE" /&gt;
+    &lt;root level="info"&gt;
+        &lt;appender-ref ref="FILE" /&gt;
+    &lt;/root&gt;
+&lt;/configuration&gt;
+</code></pre>
+<h2>2.5 Останній універсальний логер - SLF4J: Simple Logging Facade for Java</h2>
+<p>Як же буває довгий шлях пошуку золотої середини.</p>
+<p>У 2006 році один із творців <code>log4j</code>вийшов із проекту і вирішив ще раз спробувати створити універсальний логер. Але цього разу це був не новий логер, а новий універсальний стандарт (обгортка), який дозволяв взаємодіяти різним логерам разом.</p>
+<p>Цей логер назвали , <code>slf4j — Simple Logging Facade for Java</code>він був обгорткою навколо <code>log4j</code>,, <code>JUL</code>. <code>common-loggins и logback</code>Цей логер вирішував реальну проблему - управління зоопарком логерів, тому всі почали одразу ним користуватися.</p>
+<p>Ми героїчно вирішуємо проблеми, які самі собі створюємо. Як бачимо, прогрес дійшов до того, що створабо обгортку над обгорткою.</p>
+<p>Сама обгортка складається із двох частин:</p>
+<ul>
+ <li><code>API</code>, який використовується у додатках;</li>
+ <li>Реалізації, які додаються як окремих залежностей кожного логгера.</li>
+</ul>
+<p>Підключити логер до проекту можна за допомогою коду:</p>
+<pre class="line-numbers"><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
+    &lt;artifactId&gt;log4j-api&lt;/artifactId&gt;
+    &lt;version&gt;2.17.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
+    &lt;artifactId&gt;log4j-core&lt;/artifactId&gt;
+    &lt;version&gt;2.17.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
+    &lt;artifactId&gt;log4j-slf4j-impl&lt;/artifactId&gt;
+    &lt;version&gt;2.17.2&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>Достатньо підключити правильну реалізацію і все: весь проект працюватиме з нею.</p>
+<h2>2.6 Оптимізація у slf4j</h2>
+<p><code>Slf4j</code>підтримує нові функції, такі як <span class="text-green">форматування рядків для логування</span> . До цього була така проблема. Допустимо, ти хочеш вивести в лог повідомлення:</p>
+<pre class=" language-java" tabindex="0"><code class=" language-java">log<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"User "</span> <span class="token operator">+</span> user <span class="token operator">+</span> <span class="token string">" connected from "</span> <span class="token operator">+</span> request<span class="token punctuation">.</span><span class="token function">getRemoteAddr</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Із цим кодом є проблема. Припустимо, ваш додаток працює на <code>production</code>і не пише в лог ніякі <code>DEBUG-повідомлення</code>, проте метод <code>log.debug()</code>все одно буде викликаний, а при його виклику будуть викликані такі методи:</p>
+<ul>
+ <li><code>user.toString();</code></li>
+ <li><code>request.getRemoteAddr();</code></li>
+</ul>
+<p>Виклик цих методів уповільнює програму. Їхній виклик потрібен лише під час дебагу, але вони все одно викликаються.</p>
+<p>З погляду логіки, цю проблему потрібно було вирішувати у самій бібліотеці логування. І в першій версії log4j рішення було вигадано:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">if</span> <span class="token punctuation">(</span>log<span class="token punctuation">.</span><span class="token function">isDebugEnabled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    log<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"User "</span> <span class="token operator">+</span> user <span class="token operator">+</span> <span class="token string">" connected from "</span> <span class="token operator">+</span> request<span class="token punctuation">.</span><span class="token function">getRemoteAddr</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Замість одного рядка для ліг тепер потрібно було писати три. Що різко погіршило читабельність коду і знизило популярність <code>log4j</code>.</p>
+<p>Логгер <code>slf4j</code>зміг трохи покращити ситуацію, запропонувавши розумне логування. Виглядало воно так:</p>
+<pre class=" language-java" tabindex="0"><code class=" language-java">log<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"User {} connected from {}"</span><span class="token punctuation">,</span> user<span class="token punctuation">,</span> request<span class="token punctuation">.</span><span class="token function">getRemoteAddr</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>де <code>{}</code>позначають вставки аргументів, які передаються методом. Тобто перша <code>{}</code>відповідає user, друга <code>{}</code>- <code>request.getRemoteAddr()</code>.</p>
+<p>Ці параметри будуть конкатенувати в єдине повідомлення лише тоді, коли рівень логування дозволяє записувати в лог. Не ідеально, але краще, ніж решта варіантів.</p>
+<p>Після цього <code>SLF4J</code>став швидко зростати в популярності, на даний момент це найкраще рішення.</p>
+<p>Тому розглядатимемо логування на прикладі зв'язки <code>slf4j-log4j12</code>.</p>

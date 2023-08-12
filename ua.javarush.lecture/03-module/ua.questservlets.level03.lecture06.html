@@ -1,0 +1,83 @@
+<h2>7.1 Анотація @Suite</h2>
+<p>І ще кілька анотацій, що часто використовуються. Навіть якщо ти не використовуватимеш їх, то точно побачиш тести з ними. Тому треба хоча б загалом розуміти, що там написано.</p>
+<p>Тести можна поєднувати в групи. Для цього є спеціальна інструкція <code>@Suite</code>. Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation"></span><span class="text-green"><span class="token annotation punctuation">@Suite</span>
+<span class="token annotation punctuation">@SuiteDisplayName</span><span class="token punctuation">(</span><span class="token string">"JUnit Platform Suite Demo"</span><span class="token punctuation">)</span>
+<span class="token annotation punctuation">@SelectPackages</span><span class="token punctuation">(</span><span class="token string">"com.codegym.test"</span><span class="token punctuation">)</span>
+<span class="token annotation punctuation">@IncludeClassNamePatterns</span><span class="token punctuation">(</span><span class="token string">".*Tests"</span><span class="token punctuation">)</span></span><span class="token punctuation"></span>
+<span class="token keyword">class</span> <span class="token class-name">SuiteDemo</span> <span class="token punctuation">{</span>
+<span class="token punctuation">}</span></code></pre>
+<p>У цьому випадку інструкція @Suite працює в парі з іншими інструкціями.</p>
+<ul>
+ <li><code>SuiteDisplayName</code>- Задає ім'я групи тестів у лозі;</li>
+ <li><code>SelectPackages</code>- Задає список пакетів, де шукати класи-тести;</li>
+ <li><code>IncludeClassNamePatterns</code>- Задає шаблон імен класів-тестів.</li>
+</ul>
+<p>Навіщо такі складнощі? Уяви, що всі тести проекту виконуються, скажімо, 50 годин. І виконувати їх після кожного комміту дуже невигідно. У такому разі корисно створити деякі окремі сценарії тестування та налаштувати тестування набагато гнучкіше.</p>
+<h2>7.2 Анотація @Order</h2>
+<p>Ще одна анотація, що часто зустрічається – <code>@TestMethodOrder</code>. Вона дозволяє встановити порядок виклику тестових методів у тестовому класі. Буває дуже корисна, коли ви знаєте, що виклики методів впливають один на одного, але за певного порядку все має працювати як треба. Використовується досить часто.</p>
+<p>По-перше, можна задати <strong>виклик методів в алфавітному порядку</strong> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation"><span class="text-green">@TestMethodOrder</span></span><span class="token punctuation">(</span><span class="token class-name"><span class="text-red">MethodOrderer<span class="token punctuation">.</span>MethodName</span></span><span class="token punctuation">.</span><span class="token keyword"><span class="text-green">class</span></span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AlphanumericOrderUnitTest</span> <span class="token punctuation">{</span>
+
+<span class="token punctuation">}</span></code></pre>
+<p>По-друге, у кожного методу можна розставити спеціальну інструкцію з його порядковим номером.</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation"></span><span class="text-green"><span class="token annotation punctuation">@TestMethodOrder</span><span class="token punctuation">(</span></span><span class="token punctuation"></span><span class="token class-name"><span class="text-red">OrderAnnotation</span></span><span class="token punctuation">.</span><span class="token keyword"></span><span class="text-green"><span class="token keyword">class</span><span class="token punctuation">)</span></span><span class="token punctuation"></span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">OrderAnnotationUnitTest</span> <span class="token punctuation">{</span>
+
+<span class="text-green">    <span class="token annotation punctuation">@Test</span>
+    <span class="token annotation punctuation">@Order</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span></span><span class="token punctuation"></span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">firstTest</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+
+<span class="text-green">    <span class="token annotation punctuation">@Test</span>
+    <span class="token annotation punctuation">@Order</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span></span><span class="token punctuation"></span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">secondTest</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Або навіть створити окремий клас, який вказуватиме порядок виклику тестів:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation"></span><span class="text-green"><span class="token annotation punctuation">@TestMethodOrder</span><span class="token punctuation">(</span></span><span class="token punctuation"></span><span class="token class-name"><span class="text-red">CustomOrder</span></span><span class="token punctuation">.</span><span class="token keyword"></span><span class="text-green"><span class="token keyword">class</span><span class="token punctuation">)</span></span><span class="token punctuation"></span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CustomOrderUnitTest</span> <span class="token punctuation">{</span>
+
+<span class="token punctuation">}</span>
+
+<span class="token comment">//сортуємо імена методів за алфавітним порядком, але ігноруючи регістр</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name"><span class="text-red">CustomOrder</span></span> <span class="token keyword">implements</span> <span class="token class-name">MethodOrderer</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">orderMethods</span><span class="token punctuation">(</span><span class="token class-name">MethodOrdererContext</span> context<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        context<span class="token punctuation">.</span><span class="token function">getMethodDescriptors</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-user">sort</span></span><span class="token punctuation">(</span>
+        <span class="token punctuation">(</span><span class="token class-name">MethodDescriptor</span> m1<span class="token punctuation">,</span> <span class="token class-name">MethodDescriptor</span> m2<span class="token punctuation">)</span><span class="token operator">-&gt;</span>
+           m1<span class="token punctuation">.</span><span class="token function">getMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-user">compareToIgnoreCase</span></span><span class="token punctuation">(</span>m2<span class="token punctuation">.</span><span class="token function">getMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h2>7.3 Анотація @DisplayName</h2>
+<p>І нарешті, кожному тесту можна ставити його ім'я. Буває зручно, якщо тестів дуже багато і ви створюєте спеціальні сценарії (підмножини) тестів. Для цього є спеціальна інструкція <code>@DisplayName</code>.</p>
+<p>Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation"></span><span class="text-green"><span class="token annotation punctuation">@DisplayName</span><span class="token punctuation">(</span><span class="token string">"Зрозуміле ім'я для тесту"</span><span class="token punctuation">)</span></span><span class="token punctuation"></span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DisplayNameCustomTest</span> <span class="token punctuation">{</span>
+
+<span class="text-green">    <span class="token annotation punctuation">@Test</span>
+    <span class="token annotation punctuation">@DisplayName</span><span class="token punctuation">(</span><span class="token string">"Перевірка вхідних даних"</span><span class="token punctuation">)</span></span><span class="token punctuation"></span>
+    <span class="token keyword">void</span> <span class="token function">inputData</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+
+<span class="text-green">    <span class="token annotation punctuation">@DisplayName</span><span class="token punctuation">(</span><span class="token string">"Перевірка критичних ситуацій"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@Test</span></span><span class="token annotation punctuation"></span>
+    <span class="token keyword">void</span> <span class="token function">criticalCases</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Як і у випадку із завданням порядку тестів, тут можна створити спеціальний метод, який генеруватиме імена тестів та тестових методів. Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation"></span><span class="text-green"><span class="token annotation punctuation">@DisplayNameGeneration</span><span class="token punctuation">(</span></span><span class="token punctuation"></span><span class="token class-name"><span class="text-user">DisplayNameGeneratorUnitTest<span class="token punctuation">.</span>ReplaceCamelCase</span></span><span class="token punctuation">.</span><span class="token keyword"></span><span class="text-green"><span class="token keyword">class</span><span class="token punctuation">)</span></span><span class="token punctuation"></span>
+<span class="token keyword">class</span> <span class="token class-name">DisplayNameGeneratorUnitTest</span> <span class="token punctuation">{</span>
+
+<span class="text-green">    <span class="token annotation punctuation">@Test</span></span><span class="token annotation punctuation"></span>
+    <span class="token keyword">void</span> <span class="token function">camelCaseName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+
+<span class="text-user">    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">ReplaceCamelCase</span> <span class="token keyword">extends</span> <span class="token class-name">DisplayNameGenerator<span class="token punctuation">.</span>Standard</span> <span class="token punctuation">{</span></span><span class="token punctuation"></span>
+        <span class="token annotation punctuation">@Override</span>
+<span class="text-user">        <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">generateDisplayNameForClass</span><span class="token punctuation">(</span><span class="token class-name">Class</span> testClass<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">generateDisplayNameForClass</span><span class="token punctuation">(</span>testClass<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toUpperCase</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+ <span class="token punctuation">}</span></span><span class="token punctuation"></span>
+<span class="token punctuation">}</span></code></pre>
+<p>Бачите, як все просто :)</p>

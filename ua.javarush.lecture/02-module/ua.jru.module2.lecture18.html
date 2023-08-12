@@ -1,0 +1,200 @@
+<h2>Для чого потрібний інтерфейс Executor</h2>
+<p>До Java 5 керувати потоками потрібно було писати весь код самому у додатку. Крім цього, створення об'єкту<mark class="green">New Thread</mark>- Це ресурсомістка операція, і створювати для "легковагових" завдань щоразу новий потік було нераціонально. А оскільки з цією проблемою стикалися всі розробники багатопоточних додатків, цей функціонал вирішабо винести як фреймворк <span class="text-bold">Executor</span> в Java.</p>
+<p>Яка головна ідея? Все просто: замість того, щоб створювати новий потік під кожну нову задачу, потоки зберігаються в певному "сховищі", і коли надходить нове завдання, береться вже існуючий потік, а не створюється новий.</p>
+<p>Основними інтерфейсами цього фреймворку є <span class="text-neon"><span class="text-bold"><em>Executor</em></span></span> , <span class="text-neon"><span class="text-bold"><em>ExecutorService</em></span></span> і <span class="text-neon"><span class="text-bold"><em>ScheduledExecutorService</em></span></span> , кожен з яких розширює функціональність попереднього.</p><img data-max-width="512" data-id="86753672-7f86-472f-8aa6-7b2e9bab23fa" alt="" src="https://cdn.javarush.com/images/article/86753672-7f86-472f-8aa6-7b2e9bab23fa/512.jpeg" style="width: 512px;">
+<p>Інтерфейс Executor – базовий інтерфейс, який оголошує один метод <span class="code text-orange">void execute (Runnable command)</span> – запуск завдання, описаного в об'єкті типу <span class="text-orange">Runnable</span> .</p>
+<p>Інтерфейс <span class="text-neon"><span class="text-bold"><em>ExecutorService</em></span></span> вже цікавіший. Він містить методи для керування завершенням роботи, а також методи, які можуть повертати якийсь результат. Подивимося докладніше з його методи:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Метод</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">void shutdown();</span></td>
+    <td>Виклик методу ініціює зупинку <span class="text-neon"><span class="text-bold"><em>ExecutorService</em></span></span> . Усі завдання, які вже були відправлені на обробку, будуть завершені, нові завдання не прийматимуться.</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">List&lt;Runnable&gt; shutdownNow();</span></td>
+    <td>
+     <p>Виклик методу ініціює зупинку <span class="text-neon"><span class="text-bold"><em>ExecutorService</em></span></span> . Усі завдання, які вже були відправлені на обробку, отримають команду <span class="text-user">Thread.interrupt</span> . Завдання, що перебувають у черзі, повертаються у вигляді списку як результат виклику методу.</p>
+     <p>Метод не очікує завершення всіх завдань, які перебувають у роботі на момент виклику методу.</p>
+     <p><span class="text-red"><em>Увага: виклик методу може спричинити витік ресурсів.</em></span></p></td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">boolean isShutdown();</span></td>
+    <td><span class="text-neon"><span class="text-bold"><em>Перевіряє, чи ExecutorService</em></span></span> зупинено .</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">boolean isTerminated();</span></td>
+    <td>Повертає true, якщо всі завдання були завершені після припинення <span class="text-neon"><span class="text-bold"><em>ExecutorService</em></span></span> . Поки не буде викликаний метод <span class="code text-orange">shutdown()</span> або <span class="code text-orange">shutdownNow()</span> , завжди буде повернуто <span class="text-red"><em>false</em></span> .</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException;</span></td>
+    <td>
+     <p>Блокує потік, з якого запущено, після виклику методу <span class="code text-orange">shutdown()</span> , поки не станеться одна з умов:</p>
+     <ul>
+      <li>закінчиться виконання всіх запланованих завдань;</li>
+      <li>пройде часовий інтервал, зазначений як параметри методу;</li>
+      <li>поточний потік припинить свою роботу.</li>
+     </ul>
+     <p>Повертає <span class="text-green"><em>true</em></span> , якщо всі завдання завершабося, і <span class="text-red"><em>false</em></span> , якщо раніше настав тайм.</p></td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">&lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task);</span></td>
+    <td>
+     <p>Додає <span class="text-neon"><span class="text-bold"><em>ExecutorService</em></span></span> завдання ( <span class="text-neon"><span class="text-bold"><em>Callable</em></span></span> ) і повертає об'єкт, що імплементує інтерфейс <span class="text-neon"><span class="text-bold"><em>Future</em></span></span> .</p>
+     <p><span class="text-orange">&lt;T&gt;</span> - тип результату переданої задачі.</p></td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">&lt;T&gt; Future&lt;T&gt; submit(Runnable task, T result);</span></td>
+    <td>
+     <p>Додає <span class="text-neon"><span class="text-bold"><em>ExecutorService</em></span></span> завдання ( <span class="text-neon"><span class="text-bold"><em>Runnable</em></span></span> ) і повертає об'єкт, що імплементує інтерфейс <span class="text-neon"><span class="text-bold"><em>Future</em></span></span> .</p>
+     <p>Параметр <span class="text-green">T result</span> — те, що поверне виклик методу <span class="code text-orange">get()</span> у отриманого об'єкта<mark class="green">Future.</mark></p></td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">Future&lt;?&gt; submit(Runnable task);</span></td>
+    <td>
+     <p>Додає <span class="text-neon"><span class="text-bold"><em>ExecutorService</em></span></span> завдання ( <span class="text-neon"><span class="text-bold"><em>Runnable</em></span></span> ) і повертає об'єкт, що імплементує інтерфейс <span class="text-neon"><span class="text-bold"><em>Future</em></span></span> .</p>
+     <p>Якщо викликати метод <span class="code text-orange">get()</span> у отриманого об'єкта <span class="text-neon"><span class="text-bold"><em>Future</em></span></span> , то отримаємо null.</p></td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">&lt;T&gt; List&lt;Future&lt;T&gt;&gt; invokeAll(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks) throws InterruptedException;</span></td>
+    <td>
+     <p>Передає <span class="text-neon"><span class="text-bold"><em>ExecutorService</em></span></span> список завдань, що викликаються ( <span class="text-neon"><span class="text-bold"><em>Callable</em></span></span> ). Повертає список Future, з яких можна отримати результат роботи. Цей список повертається після завершення виконання всіх переданих завдань.</p>
+     <p>Якщо під час роботи методу модифікувати колекцію <span class="text-neon"><span class="text-bold">tasks</span></span> , результат методу невизначений.</p></td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">&lt;T&gt; List&lt;Future&lt;T&gt;&gt; invokeAll(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks, long timeout, TimeUnit unit) throws InterruptedException;</span></td>
+    <td>
+     <p>Передає <span class="text-neon"><span class="text-bold"><em>ExecutorService</em></span></span> список завдань, що викликаються ( <span class="text-neon"><span class="text-bold"><em>Callable</em></span></span> ). Повертає список Future, з яких можна отримати результат роботи. Цей список повертається після завершення виконання всіх переданих завдань або після того, як мине час, переданий у параметрах методу (що настане раніше).</p>
+     <p>Якщо тайм настане раніше, невиконані завдання скасовують своє виконання.</p>
+     <p><span class="text-red"><em>Примітка: завдання може не зупинити свою роботу, а продовжити виконуватися (побачимо цей сайд-ефект у прикладі).</em></span></p>
+     <p>Якщо під час роботи методу модифікувати колекцію <span class="text-neon"><span class="text-bold">tasks</span></span> , результат методу невизначений.</p></td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">&lt;T&gt; T invokeAny(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks) throws InterruptedException, ExecutionException;</span></td>
+    <td>
+     <p>Передає <span class="text-neon"><span class="text-bold"><em>ExecutorService</em></span></span> список завдань, що викликаються ( <span class="text-neon"><span class="text-bold"><em>Callable</em></span></span> ). Повертає результат роботи одного із завдань, яке завершило виконання без викидання винятку (якщо таке знайшлося).</p>
+     <p>Якщо під час роботи методу модифікувати колекцію <span class="text-neon"><span class="text-bold">tasks</span></span> , результат методу невизначений.</p></td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">&lt;T&gt; T invokeAny(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks, long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException;</span></td>
+    <td>
+     <p>Передає <span class="text-neon"><span class="text-bold"><em>ExecutorService</em></span></span> список завдань, що викликаються ( <span class="text-neon"><span class="text-bold"><em>Callable</em></span></span> ). Повертає результат роботи однієї із завдань, яка завершила виконання без викидання виключення (якщо така знайшлася) до закінчення часу, заданого в параметрах методу.</p>
+     <p>Якщо під час роботи методу модифікувати колекцію <span class="text-neon"><span class="text-bold">tasks</span></span> , результат методу невизначений.</p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Давай розглянемо невеликий приклад роботи з <span class="text-neon"><span class="text-bold"><em>ExecutorService</em></span></span> .</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">List</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>concurrent<span class="token punctuation">.</span></span><span class="token operator">*</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ExecutorServiceTest</span> <span class="token punctuation">{</span>
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span><span class="token punctuation">,</span> <span class="token class-name">ExecutionException</span><span class="token punctuation">,</span> <span class="token class-name">TimeoutException</span> <span class="token punctuation">{</span>
+<span class="token comment">//Создаем ExecutorService на 2 потока</span>
+       <span class="token class-name"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>concurrent<span class="token punctuation">.</span></span>ExecutorService</span> executorService <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ThreadPoolExecutor</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">60</span><span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>SECONDS<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">ArrayBlockingQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">//Создаем 5 задач</span>
+       <span class="token class-name">MyRunnable</span> task1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MyRunnable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token class-name">MyRunnable</span> task2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MyRunnable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token class-name">MyRunnable</span> task3 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MyRunnable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token class-name">MyRunnable</span> task4 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MyRunnable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token class-name">MyRunnable</span> task5 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MyRunnable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+       <span class="token keyword">final</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">MyRunnable</span><span class="token punctuation">&gt;</span></span> tasks <span class="token operator">=</span> <span class="token class-name">List</span><span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span>task1<span class="token punctuation">,</span> task2<span class="token punctuation">,</span> task3<span class="token punctuation">,</span> task4<span class="token punctuation">,</span> task5<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">//Отправляем на обработку список, который содержит 5 ранее созданных задач</span>
+       <span class="token keyword">final</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Future</span><span class="token punctuation">&lt;</span><span class="token class-name">Void</span><span class="token punctuation">&gt;</span><span class="token punctuation">&gt;</span></span> futures <span class="token operator">=</span> executorService<span class="token punctuation">.</span><span class="token function">invokeAll</span><span class="token punctuation">(</span>tasks<span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>SECONDS<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"got futures"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">//Останавливаем ExecutorService</span>
+       executorService<span class="token punctuation">.</span><span class="token function">shutdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+       <span class="token keyword">try</span> <span class="token punctuation">{</span>
+           <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>SECONDS<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+           e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+
+       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>executorService<span class="token punctuation">.</span><span class="token function">isShutdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>executorService<span class="token punctuation">.</span><span class="token function">isTerminated</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">MyRunnable</span> <span class="token keyword">implements</span> <span class="token class-name">Callable</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Void</span><span class="token punctuation">&gt;</span></span> <span class="token punctuation">{</span>
+
+       <span class="token annotation punctuation">@Override</span>
+       <span class="token keyword">public</span> <span class="token class-name">Void</span> <span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token comment">// Добавляем 2 задержки времени. При остановке ExecutorService увидим якая из них отрабатывает при попытке остановить выполнение задачи</span>
+           <span class="token keyword">try</span> <span class="token punctuation">{</span>
+               <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>SECONDS<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+               <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"sleep 1: "</span> <span class="token operator">+</span> e<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token punctuation">}</span>
+           <span class="token keyword">try</span> <span class="token punctuation">{</span>
+               <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>SECONDS<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+               <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"sleep 2: "</span> <span class="token operator">+</span> e<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token punctuation">}</span>
+           <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"done"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Висновок програми:</p>
+<div class="terminal">
+ done 
+ <br>
+  done 
+ <br>
+  got futures 
+ <br>
+  sleep 1: sleep interrupted 
+ <br>
+  sleep 1: sleep interrupted 
+ <br>
+  done 
+ <br>
+  done 
+ <br>
+  true 
+ <br>
+  true
+</div>
+<p>Кожна задача виконується по 5 секунд. Так як ми створабо пул на два потоки, перші два рядки у висновку логічні та зрозумілі.</p>
+<p>Через 6 секунд після початку роботи програми спрацьовує таймаут методу <span class="code text-orange">invokeAll</span> і повертається результат у вигляді списку <span class="text-red">Future</span> . Це видно з рядка виведення <em><strong>“got futures”</strong></em> .</p>
+<p>Після завершення роботи перших двох завдань почали працювати ще два. Але оскільки час, заданий у методі <span class="code text-orange">введеннявсіх</span> , вийшло, що ці дві задачі не встигли завершитися, і їм була відправлена ​​команда <em><strong>"очистити"</strong></em> . Саме тому у висновку видно два рядки <em><strong>"sleep 1: sleep interrupted"</strong></em> .</p>
+<p>А далі можна спостерігати ще два написи <em><strong>"done"</strong></em> . Це і є демонстрація сайд-ефекту, про який я писав при описі методу <span class="code text-orange">invokeAll</span> .</p>
+<p>Остання, п'ята задача навіть не запускалася, тому ми у висновку програми нічого про неї не бачимо.</p>
+<p>Останні два рядки - це висновок результату виклику методів <span class="code text-orange">isShutdown</span> і <span class="code text-orange">isTerminated</span> .</p>
+<p>Ще в цьому прикладі цікаво в дебазі подивитися стан завдань після завершення таймууту (брейкпоінт на рядку <em><strong>"executorService.shutdown();"</strong></em> ):</p><img data-max-width="512" data-id="fb0cb6d2-6816-4270-bc75-6fcb7d157984" alt="" src="https://cdn.javarush.com/images/article/fb0cb6d2-6816-4270-bc75-6fcb7d157984/512.jpeg" style="width: 512px;">
+<p>Бачимо, що дві задачі завершабося: <em><strong>“Completed normally”</strong></em> і три завдання <em><strong>“Cancelled”</strong></em> .</p>
+<h2>ScheduledExecutorService</h2>
+<p>Для завершення розповіді про екзекутори, розглянемо ще <span class="text-neon"><span class="text-bold"><em>ScheduledExecutorService</em></span></span> .</p>
+<p>У нього є 4 методи:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Метод</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">public ScheduledFuture&lt;?&gt; schedule(Runnable command,long delay, TimeUnit unit);</span></td>
+    <td>Планує одноразове виконання переданої виконуваної ( <span class="text-neon"><span class="text-bold"><em>Runnable</em></span></span> ) завдання через час, заданий як параметр.</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">public ScheduledFuture schedule(Callable callable, long delay, TimeUnit unit);</span></td>
+    <td>Планує одноразове виконання переданої викликаної ( <span class="text-neon"><span class="text-bold"><em>Callable</em></span></span> ) завдання через час, заданий як параметр.</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">public ScheduledFuture&lt;?&gt; scheduleAtFixedRate(Runnable command, long initialDelay, long period, TimeUnit unit);</span></td>
+    <td>Планує періодичне виконання переданої задачі, яка вперше виконається через час <span class="text-green">initialDelay</span> , і кожен наступний запуск розпочинатиметься через період.</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">public ScheduledFuture&lt;?&gt; scheduleWithFixedDelay(Runnable command, long initialDelay, long delay, TimeUnit unit);</span></td>
+    <td>Планує періодичне виконання переданої задачі, яка вперше виконається через час <span class="text-green">initialDelay</span> , і кожен наступний запуск буде починатися через <span class="text-green">delay</span> (між завершенням попереднього виконання та стартом поточного).</td>
+   </tr>
+  </tbody>
+ </table>
+</div>

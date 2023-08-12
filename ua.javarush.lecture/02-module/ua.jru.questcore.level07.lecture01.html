@@ -1,0 +1,185 @@
+<p>- Привіт, Аміго! Вчора ми обговорабо переваги та зручності, які несе з собою багатонитність (multithreading). Тепер настав час поглянути і на мінуси. А вони, на жаль, не малі.</p>
+<p><strong>Раніше ми дивабося на програму як на набір об'єктів, які викликають методи один одного.&nbsp;</strong>Тепер усе стало трохи важче. Програма – це скоріше набір об'єктів, якими лазить кілька «маленьких роботиків» – ниток – і виконують команди, які у методах.</p>
+<p>Формально – друге не скасовує перше. Це все ще об'єкти і вони все ще викликають методи один у одного. <span class="text-red">&nbsp;Але треба пам'ятати, що ниток – кілька, і кожна нитка виконує свою роботу – своє завдання.</span></p>
+<p>Програма стає складнішою.&nbsp;<span class="text-red">Різні нитки змінюють стан різних об'єктів відповідно до завдання, яке кожна з них виконує. І можуть заважати одне одному.</span></p>
+<p>Але найстрашніше відбувається глибоко всередині Java-машини. Як я вже розповідала, видима одночасність роботи ниток досягається за рахунок того, що процесор постійно перемикається з однієї нитки на іншу. Переключився на нитку, попрацював 10 мілісекунд, переключився на наступну нитку, там попрацював 10 мілісекунд і таке інше. І тут виникає проблема: перемикання може відбутися в самий невідповідний момент. Приклад:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код першої нитки</th>
+    <th>Код другої нитки</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name"></span><span class="text-green"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">"Коле"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">"15"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">"лет"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token class-name"></span><span class="text-green"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>println <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span></code></pre></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name"></span><span class="text-user"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">"Лене"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">"21"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">"год"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token class-name"></span><span class="text-user"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>println <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Очікуваний виведення на консоль</th>
+   </tr>
+   <tr>
+    <td><span class="text-green">Колі 15 років </span><br><span class="text-user">Олені 21 рік</span></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Підсумковий порядок</th>
+    <th>Код першої нитки</th>
+    <th>Код другої нитки</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name"></span><span class="text-green"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">"Коле"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token class-name"></span><span class="text-user"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">"Лене"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">)</span></span><span class="token punctuation"></span><span class="token punctuation">;</span>
+<span class="token class-name"></span><span class="text-green"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">"15"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token class-name"></span><span class="text-user"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">"21"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token class-name"></span><span class="text-green"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">"лет"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>println <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token class-name"></span><span class="text-user"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">"год"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>println <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span></code></pre></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name"></span><span class="text-green"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">"Коле"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token comment">//исполняется другая нить</span>
+<span class="token comment">//исполняется другая нить</span>
+<span class="token class-name"></span><span class="text-green"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">"15"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</span><span class="token comment">//исполняется другая нить</span>
+<span class="token comment">//исполняется другая нить</span>
+<span class="token class-name"></span><span class="text-green"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">"лет"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>println <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token comment">//исполняется другая нить</span>
+<span class="token comment">//исполняется другая нить</span></code></pre></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token comment">//исполняется другая нить</span>
+<span class="token class-name"></span><span class="text-user"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">"Лене"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token comment">//исполняется другая нить</span>
+<span class="token comment">//исполняется другая нить</span>
+<span class="token class-name"></span><span class="text-user"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">"21"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token comment">//исполняется другая нить</span>
+<span class="token comment">//исполняется другая нить</span>
+<span class="token comment">//исполняется другая нить</span>
+<span class="token class-name"></span><span class="text-user"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>print <span class="token punctuation">(</span><span class="token string">"год"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span>println <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Реальний висновок на консоль</th>
+   </tr>
+   <tr>
+    <td><span class="text-green">Коле </span>&nbsp;<span class="text-user">Лене </span>&nbsp; <span class="text-green">15 </span>&nbsp;<span class="text-user">21 </span>&nbsp;<span class="text-green">років </span><br><span class="text-user">рік</span></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Або ще приклад:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">MyClass</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">private</span> <span class="token class-name">String</span> <span class="text-green">name1</span> <span class="token operator">=</span> <span class="token string">"Оля"</span><span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token class-name">String</span> <span class="text-user">name2</span> <span class="token operator">=</span> <span class="token string">"Ліна"</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function"></span><span class="text-red"><span class="token function">swap</span><span class="token punctuation">(</span><span class="token punctuation">)</span></span><span class="token punctuation"></span>
+<span class="token punctuation">{</span>
+<span class="token class-name">String</span> s <span class="token operator">=</span> name1<span class="token punctuation">;</span>
+name1 <span class="token operator">=</span> name2<span class="token punctuation">;</span>
+name2 <span class="token operator">=</span> s<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Метод&nbsp; <code><span class="text-red">swap</span></code>&nbsp;змінює місцями значення змінних&nbsp; <code><span class="text-green">name1</span></code>&nbsp;&amp;&nbsp; <code><span class="text-user">name2</span></code>.
+     <p></p>
+     <p></p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Що ж буде, якщо його викликати з двох ниток одночасно?</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Підсумковий порядок</th>
+    <th>Код першої нитки</th>
+    <th>Код другої нитки</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name"></span><span class="text-green"><span class="token class-name">String</span> s1 <span class="token operator">=</span> name1<span class="token punctuation">;</span></span><span class="token punctuation"></span> <span class="token comment">//Оля</span>
+<span class="text-green">name1 <span class="token operator">=</span> name2<span class="token punctuation">;</span></span><span class="token punctuation"></span> <span class="token comment">//Лена</span>
+<span class="token class-name"></span><span class="text-user"><span class="token class-name">String</span> s2 <span class="token operator">=</span> name1<span class="token punctuation">;</span></span><span class="token punctuation"></span> <span class="token comment">//Лена(!)</span>
+<span class="text-user">name1 <span class="token operator">=</span> name2<span class="token punctuation">;</span></span><span class="token punctuation"></span> <span class="token comment">//Лена</span>
+<span class="text-green">name2 <span class="token operator">=</span> s1<span class="token punctuation">;</span></span><span class="token punctuation"></span> <span class="token comment">//Оля</span>
+<span class="text-user">name2 <span class="token operator">=</span> s2<span class="token punctuation">;</span></span><span class="token punctuation"></span> <span class="token comment">//Лена</span></code></pre></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name"></span><span class="text-green"><span class="token class-name">String</span> s1 <span class="token operator">=</span> name1<span class="token punctuation">;</span>
+name1 <span class="token operator">=</span> name2<span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token comment">//исполняется другая нить</span>
+<span class="token comment">//исполняется другая нить</span>
+<span class="text-green">name2 <span class="token operator">=</span> s1<span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token comment">//исполняется другая нить</span></code></pre></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token comment">//исполняется другая нить</span>
+<span class="token comment">//исполняется другая нить</span>
+<span class="token class-name"></span><span class="text-user"><span class="token class-name">String</span> s2 <span class="token operator">=</span> name1<span class="token punctuation">;</span>
+name1 <span class="token operator">=</span> name2<span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token comment">//исполняется другая нить</span>
+<span class="text-user">name2 <span class="token operator">=</span> s2<span class="token punctuation">;</span></span><span class="token punctuation"></span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Підсумок</th>
+   </tr>
+   <tr>
+    <td><span class="text-red">Обидві змінні мають значення "Ліна". </span><br>
+      Об'єкт «Оля» був перезатертий та втрачений.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">— Хто міг би подумати, що при елементарному привласненні можливі такі помилки?</span></p>
+<p>— Так, але для цієї проблеми є рішення. Але про це трохи пізніше – у мене горло пересохло.</p>

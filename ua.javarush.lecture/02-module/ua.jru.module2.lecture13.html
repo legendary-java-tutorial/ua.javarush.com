@@ -1,0 +1,349 @@
+<h2>Приклад коду на рекурсію без виходу</h2>
+<p>Давайте ще раз подивимось на рекурсивне завдання. Як приклад можна розглянути пошук чисел Фібоначчі. Хто не пам'ятає, послідовність Фібоначчі – елементи числової послідовності, в якій перші два числа дорівнюють 0 і 1, а кожне наступне число дорівнює сумі двох попередніх чисел.</p>
+<p>Напишемо код для пошуку та виведення таких чисел:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Fibonacci</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">printFibonacci</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">printFibonacci</span><span class="token punctuation">(</span><span class="token keyword">long</span> penultimate<span class="token punctuation">,</span> <span class="token keyword">long</span> previous<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">long</span> current <span class="token operator">=</span> penultimate <span class="token operator">+</span> previous<span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>current<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">printFibonacci</span><span class="token punctuation">(</span>previous<span class="token punctuation">,</span> current<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Перед першим викликом рекурсивного методу <span class="code text-orange">printFibonacci</span> , виведемо перші два числа послідовності – нуль та одиницю. Це потрібно, тому що в рекурсивному методі ми виводимо лише суму отриманих параметрів, а не параметри.</p>
+<p>Виглядає ОК: отримуємо два числа, рахуємо їх суму, виводимо її в консоль, і знову викликаємо рекурсивний метод <span class="code text-orange">printFibonacci</span> . Як параметри передаємо попереднє (previous) і поточне число (current).</p>
+<p><em><span class="text-bold">Насправді в цьому коді є дві помилки. </span></em>Їх можна побачити, якщо запустити код.</p>
+<p>Перша помилка полягає у переповненні типу <span class="text-orange">long</span> . Вже 104 число в нашій послідовності вивелося негативним, а це означає, що відбулося переповнення типу <span class="text-orange">long</span> .</p>
+<p>Друга помилка має інший характер. Після знайденого 12 тисяч із копійками числа, на екран виводиться:</p>
+<div class="terminal">
+ Exception в thread "main" java.lang.StackOverflowError
+</div>
+<p>Тут доречно згадати, що таке стек виклику методів Java. Java-машина веде запис усіх функцій викликів. Вона має для цього спеціальну колекцію – стек (Stack). Коли одна функція викликає іншу, Java машина поміщає в цей стек новий елемент StackTraceElement. Коли функція завершується, цей елемент видаляється зі стека. Таким чином, у цьому стеку завжди зберігається актуальна інформація про поточний стан "стека викликів функцій". Дослівний переклад помилки <span class="text-red"><span class="text-bold">StackOverflowError</span></span>- "Стек переповнений". У Javadoc-е написано: "Кинається, коли стек виклику надто глибокий". У запущеній JVM є спеціальна область пам'яті для зберігання стека методів виклику. Розмір цієї області пам'яті залежить від ОС та налаштувань JVM. Крім самого стека викликів методів у цій області пам'яті зберігаються примітивні змінні (конкретні значення параметрів виклику методу) та адресаи змінних посилань (в області HEAP пам'яті). Модель доступу до стеку – LIFO.</p>
+<h2>Виправлений приклад із умовою виходу</h2>
+<p>Виправлення нашого коду розпочнемо з другої проблеми.</p>
+<p>Спробуємо проблему вирішити в лоб: якщо невеликий розмір стека, то давайте його збільшимо. Для цього потрібно запустити JVM зі спеціальним прапором "-Xss" і вказати, скільки виділити пам'яті під стек. Давай спробуємо виділити 5 мегабайт. Виглядати це в IDEA буде так:</p><img data-max-width="512" data-id="51fc3375-6b68-43be-a901-507170cf37b1" alt="" src="https://cdn.javarush.com/images/article/51fc3375-6b68-43be-a901-507170cf37b1/512.jpeg" style="width: 512px;">
+<p>Так, довжина виведення збільшилася і зараз становить не 12 тисяч знайдених чисел послідовності, а 49 тисяч. Але після якогось числа все одно отримуємо <span class="text-red"><span class="text-bold">StackOverflowError</span></span> .</p>
+<p>Можна пробувати ще збільшувати стек-область пам'яті, але нічого не зміниться. Отже, шукатимемо проблему в логіці. У рекурсії має бути точка зупинки. Тобто має бути якась умова, після якої рекурсивний метод не викликається, і стек виклику повертатиметься. Для того, щоб визначити таку умову, давайте конкретизуємо завдання - виводити числовий ряд Фібоначчі до тих пір, поки вони менші, ніж <span class="text-yellow"><span class="text-bold">Integer.MAX_VALUE</span></span> .</p>
+<p>Напишемо новий метод <span class="code text-orange">printFibonacciWithCondition</span> , в якому врахуємо цю умову. І в методі main викличемо саме новий виправлений метод.</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Fibonacci</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">//        printFibonacci(0, 1);</span>
+        <span class="token function">printFibonacciWithCondition</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">printFibonacci</span><span class="token punctuation">(</span><span class="token keyword">long</span> penultimate<span class="token punctuation">,</span> <span class="token keyword">long</span> previous<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">long</span> current <span class="token operator">=</span> penultimate <span class="token operator">+</span> previous<span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>current<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">printFibonacci</span><span class="token punctuation">(</span>previous<span class="token punctuation">,</span> current<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">printFibonacciWithCondition</span><span class="token punctuation">(</span><span class="token keyword">long</span> penultimate<span class="token punctuation">,</span> <span class="token keyword">long</span> previous<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">long</span> current <span class="token operator">=</span> penultimate <span class="token operator">+</span> previous<span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>current <span class="token operator">&gt;</span> <span class="token class-name">Integer</span><span class="token punctuation">.</span>MAX_VALUE<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>current<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">printFibonacciWithCondition</span><span class="token punctuation">(</span>previous<span class="token punctuation">,</span> current<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Після запуску коду дійсно бачимо, що висновок завершився числом 1836311903. Перед цим числом було 1134903170. Їхня сума 2_971_215_073, що дійсно більше <span class="text-yellow"><span class="text-bold">Integer.MAX_VALUE (2_147_483_647)</span></span> .</p>
+<p>Разом із цим виправленням у нас автоматично виправилася помилка з переповненням типу <span class="text-orange">long</span> . Якщо потрібний більший числовий ряд, потрібно використовувати інші типи даних, наприклад <span class="text-orange">BigInteger</span> .</p>
+<h2>Метод рекурсивного спуску та повернення</h2>
+<p>Давайте спробуємо поетапно проаналізувати, як виконується наш код. Для цього додамо метод <span class="code text-orange">echo</span> і будемо його викликати перед і після рекурсивного виклику методу <span class="code text-orange">printFibonacciWithCondition</span> .</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Fibonacci</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">printFibonacciWithCondition</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">printFibonacciWithCondition</span><span class="token punctuation">(</span><span class="token keyword">long</span> penultimate<span class="token punctuation">,</span> <span class="token keyword">long</span> previous<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">long</span> current <span class="token operator">=</span> penultimate <span class="token operator">+</span> previous<span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>current <span class="token operator">&gt;</span> <span class="token class-name">Integer</span><span class="token punctuation">.</span>MAX_VALUE<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token function">echo</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">,</span> penultimate<span class="token punctuation">,</span> previous<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>current<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">printFibonacciWithCondition</span><span class="token punctuation">(</span>previous<span class="token punctuation">,</span> current<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">echo</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">,</span> penultimate<span class="token punctuation">,</span> previous<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">echo</span><span class="token punctuation">(</span><span class="token keyword">boolean</span> isBeforeRecursiveCall<span class="token punctuation">,</span> <span class="token keyword">long</span> penultimate<span class="token punctuation">,</span> <span class="token keyword">long</span> previous<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>isBeforeRecursiveCall<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Before method call with args: %d, %d. Current number = "</span><span class="token punctuation">,</span> penultimate<span class="token punctuation">,</span> previous<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"After  method call with args: %d, %d\n"</span><span class="token punctuation">,</span> penultimate<span class="token punctuation">,</span> previous<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>В результаті роботи програми отримаємо висновок:</p>
+<div class="terminal">
+ 0 
+ <br>
+  1 
+ <br>
+  За допомогою методу call with args: 0, 1. Поточний номер = 1 
+ <br>
+  За допомогою методу call with args: 1, 1. Попередній номер = 2 
+ <br>
+  За допомогою методу call з args: 1, 2. Current number = 3 
+ <br>
+  Before 2, 
+ <br>
+  3. Вихідний номер = 5 
+ <br>
+  За допомогою методу call with args 
+ <br>
+  : 3,5. 
+ <br>
+  До методу call with args: 13, 21. Сьогоднішній номер = 34 
+ <br>
+  До методу call with args: 
+ <br>
+  21, 
+ <br>
+  34. 89. Current number = 144
+ <br>
+  До методу call with args: 89, 144. Сьогоднішній номер = 233 
+ <br>
+  До 
+ <br>
+  методу call with args: 144, 233. 
+ <br>
+  377, 610. Сьогоднішній номер = 987 
+ <br>
+  Після методу call with args: 610, 987. Current number = 1597 Перед методом call with 
+ <br>
+  args: 987, 1597. Current number = 2584 
+ <br>
+  Before 5 number = 4181 
+ <br>
+  Before method call with args: 2584, 4181. Current number = 6765 
+ <br>
+  До методу call with 
+ <br>
+  args: 4181, 6765. 
+ <br>
+  with args: 10946, 17711. Current number = 28657
+ <br>
+  Після методу call with args: 17711, 28657. Призначений номер = 46368 
+ <br>
+  Перед методом call with args: 28657 
+ <br>
+  , 46368. 21393 
+ <br>
+  Before method call with args: 75025, 121393. Сьогоднішній номер = 196418 
+ <br>
+  Під час метод call with args: 121393, 196418. args 
+ <br>
+  : 317811 
+ <br>
+  , 514229. Current number = 832040 
+ <br>
+  Before method call with args: 514229, 832040. Вихідний номер = 
+ <br>
+  1346269 Після методу call with args: 832040 
+ <br>
+  , 1346269. number = 3524578
+ <br>
+  До методу call with args: 2178309, 3524578. Призначений номер = 5702887 
+ <br>
+  До методу call with args: 3524578, 5702887. 27465. Current number = 14930352 
+ <br>
+  За 
+ <br>
+  методом call with args: 9227465, 14930352. Сьогоднішній номер = 24157817 
+ <br>
+  Під час метод call with args: 14930352, 24157817. 3245986 
+ <br>
+  Before method call with args: 39088169 
+ <br>
+  , 63245986. Current number = 102334155 
+ <br>
+  Before method call with args: 63245986, 102334155. Current number = 165580141 
+ <br>
+  Попередній метод call with args: 102334155, 165580141. Current number = 26794
+ <br>
+  Перед методом call with args: 165580141, 267914296. Призначений номер = 433494437 
+ <br>
+  Перед методом call with args: 267914296, 433494437. Current number 433494437, 701408733. Current number = 1134903170 
+ <br>
+  До 
+ <br>
+  методу call with args: 701408733, 1134903170. Поточний номер = 1836311903 
+ <br>
+  Після методу call with args: 701408733, 113490317 
+ <br>
+  After method call with args: 433494437, 70140 296, 433494437 
+ <br>
+  Після 
+ <br>
+  методу call with args: 165580141, 267914296 
+ <br>
+  After method call with args: 102334155, 165580141 
+ <br>
+  After method call with args: 63245986, 102334155 
+ <br>
+  After method call with args: 39088169, 63245986
+ <br>
+  Після метод call with args: 24157817, 39088169 
+ <br>
+  After method call with args: 14930352, 24157817 
+ <br>
+  After method call with args: 9227465, 1493032 9227465 
+ <br>
+  After 
+ <br>
+  method call with args: 3524578, 5702887 
+ <br>
+  After method call with args : 2178309, 3524578 
+ <br>
+  Після методу call with args: 1346269, 
+ <br>
+  2178309 Після метод call with args: 832040, 1346269 
+ <br>
+  Після метод call with arg2:41 : 317811 
+ <br>
+  , 514229 Опис методу 
+ <br>
+  call with args: 196418, 317811 
+ <br>
+ method call with args: 121393, 196418 
+ <br>
+  After method call with args: 75025, 121393 
+ <br>
+  After method call with args: 46368, 75025
+ <br>
+  Після метод call with args: 28657, 46368 
+ <br>
+  After method 
+ <br>
+  call with args: 17711, 28657 After method call with args: 10946, 
+ <br>
+  17711 
+ <br>
+  After method call with args: 6 4181, 6765 
+ <br>
+  Після методу call with args : 2584, 4181 
+ <br>
+  Після методу call with args: 1597 
+ <br>
+  , 2584 
+ <br>
+  Після метод call with args: 987, 1597 
+ <br>
+  After method call with args: 610, 987 
+ <br>
+  After method call with args 233, 377 
+ <br>
+  After метод call with args: 144, 233 
+ <br>
+  After method call with args: 89, 144 
+ <br>
+  After method call with args: 55, 89 
+ <br>
+  After method call with args: 34, 55 
+ <br>
+  After method call with args:
+ <br>
+  After method call with args: 13, 21 
+ <br>
+  After method call with args: 8, 13 
+ <br>
+  After method call with args: 5, 8 
+ <br>
+  After method call with args: 3, 5 
+ <br>
+  After method call with args: 2, 
+ <br>
+  3 : 1, 2 
+ <br>
+  After method call with args: 1, 1 
+ <br>
+  After method call with args: 0, 1
+</div>
+<p>Давайте графічно проілюструємо, як це відбувається.</p><img data-max-width="1024" data-id="72906458-3cda-4b3c-a651-4b0395f08dc9" alt="" src="https://cdn.javarush.com/images/article/72906458-3cda-4b3c-a651-4b0395f08dc9/1024.jpeg" style="width: 1024px;">
+<p>Проговоримо ще раз: викликається метод <span class="code text-orange">printFibonacciWithCondition</span> . У ньому обчислюється поточне число. Якщо воно підходить нам, то виводимо його і знову викликаємо метод <span class="code text-orange">printFibonacciWithCondition</span> з новими параметрами.</p>
+<p>Поки що йде виклик рекурсивного методу – це називається "Рекурсивний спуск". Коли йде повернення стеком виклику - "Рекурсивне повернення".</p>
+<p>Рекурсія – цікава тема у програмуванні. Для кращого засвоєння матеріалу трохи змінимо наше завдання. Потрібно вивести ряд чисел Фібоначчі, які не перевищують <span class="text-yellow"><span class="text-bold">Integer.MAX_VALUE</span></span> у спадному порядку. Для того, щоб вирішити це завдання, у нас вже написано весь код. Все що залишається - це міняти місцями висновок поточного числа і виклик рекурсивного способу. Тобто в першому прикладі висновок знайденого числа відбувався "на етапі спуску", а зараз нам потрібно "спуститися в низ" і виводити числа на етапі "повернення". Ну і звичайно, у методі <span class="code text-orange">main</span> виведення двох початкових чисел послідовності (нуль і одиниця) поміняти місцями і вивести після виклику рекурсивного методу. Для читання видалимо метод <span class="code text-orange">echo</span> .</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Fibonacci</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">printFibonacciWithCondition</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">printFibonacciWithCondition</span><span class="token punctuation">(</span><span class="token keyword">long</span> penultimate<span class="token punctuation">,</span> <span class="token keyword">long</span> previous<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">long</span> current <span class="token operator">=</span> penultimate <span class="token operator">+</span> previous<span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>current <span class="token operator">&gt;</span> <span class="token class-name">Integer</span><span class="token punctuation">.</span>MAX_VALUE<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token function">printFibonacciWithCondition</span><span class="token punctuation">(</span>previous<span class="token punctuation">,</span> current<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>current<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Висновок буде:</p>
+<div class="terminal">
+ 1836311903 
+ <br>
+  1134903170 
+ <br>
+  701408733 
+ <br>
+  433494437 267914296 165580141 
+ <br>
+  102334155 63245986 39088169 241572 87 3524578 2178309 1346269 
+ <br>
+  832040 514229 
+ <br>
+  317811 196418 121393 75025 46368 28657 17711 10946 6765 233 144 89 55 34 21 13 8 5 3 2 _ _ _ _ _ _ _ _
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+  1 
+ <br>
+  1 
+ <br>
+  0
+</div>

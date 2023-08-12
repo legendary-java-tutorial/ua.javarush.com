@@ -1,0 +1,241 @@
+<p>- Привіт, Аміго! Зараз я розповім тобі про створення об'єкта.</p>
+<p><span class="text-user">— А що там складного, дядьку Рішу? Написав new назва класу, вказав правильний конструктор та готовий!</span></p>
+<p>- Це так. Але що при цьому відбувається усередині об'єкта?</p>
+<p><span class="text-user">- А що там відбувається?</span></p>
+<p>- А ось що! Об'єкт створюється кілька етапів.</p>
+<p><b><i>1)</i></b><i> &nbsp;Спочатку виділяється пам'ять під усі змінні – поля класу.</i></p>
+<p><b><i>2)</i></b><i> &nbsp;Потім ініціалізація базового класу.</i></p>
+<p><b><i>3)</i></b><i> &nbsp;Потім всім змінним надаються значення, якщо вони вказані.</i></p>
+<p><b><i>4)</i></b><i> &nbsp;І, нарешті, викликається конструктор.</i></p>
+<p><span class="text-user">— Виглядає не надто складно: спочатку змінні, потім конструктор.</span></p>
+<p>— Давай подивимося, як це працюватиме на прикладі двох класів:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th width="54%">Код</th>
+    <th width="45%">Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="3,4,8,9,14,18,19" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Pet</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">int</span> x <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">,</span> y <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span> <span class="text-red">←<span class="token operator">-</span></span><span class="token operator"></span>
+ <span class="token keyword">int</span> weight <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span> <span class="text-red">←<span class="token operator">-</span></span><span class="token operator"></span>
+
+ <span class="token class-name">Pet</span><span class="token punctuation">(</span><span class="token keyword">int</span> x<span class="token punctuation">,</span> <span class="token keyword">int</span> y<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>x <span class="token operator">=</span> x<span class="token punctuation">;</span> <span class="text-user">←<span class="token operator">-</span></span><span class="token operator"></span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>y <span class="token operator">=</span> y<span class="token punctuation">;</span> <span class="text-user">←<span class="token operator">-</span></span><span class="token operator"></span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">class</span> <span class="token class-name">Cat</span> <span class="token keyword">extends</span> <span class="token class-name">Pet</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">int</span> tailLength <span class="token operator">=</span> <span class="token number">8</span><span class="token punctuation">;</span> <span class="text-green">←<span class="token operator">-</span></span><span class="token operator"></span>
+ <span class="token keyword">int</span> age<span class="token punctuation">;</span>
+ <span class="token class-name">Cat</span><span class="token punctuation">(</span><span class="token keyword">int</span> x<span class="token punctuation">,</span> <span class="token keyword">int</span> y<span class="token punctuation">,</span> <span class="token keyword">int</span> age<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">super</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="text-viola">←<span class="token operator">-</span></span><span class="token operator"></span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span> <span class="text-yellow">←<span class="token operator">-</span></span><span class="token operator"></span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code><div aria-hidden="true" data-range="3" class=" line-highlight" data-start="3" style="top: 72px; width: 555px;"> 
+</div><div aria-hidden="true" data-range="4" class=" line-highlight" data-start="4" style="top: 102.6px; width: 556px;"> 
+</div><div aria-hidden="true" data-range="8" class=" line-highlight" data-start="8" style="top: 225px; width: 557px;"> 
+</div><div aria-hidden="true" data-range="9" class=" line-highlight" data-start="9" style="top: 255.6px; width: 558px;"> 
+</div><div aria-hidden="true" data-range="14" class=" line-highlight" data-start="14" style="top: 408.6px; width: 559px;"> 
+</div><div aria-hidden="true" data-range="18" class=" line-highlight" data-start="18" style="top: 531px; width: 560px;"> 
+</div><div aria-hidden="true" data-range="19" class=" line-highlight" data-start="19" style="top: 561.6px; width: 561px;"> 
+</div></pre></td>
+    <td>Ми створабо два класи: Pet (тварина) та Cat (кіт).
+     <p></p>
+     <p>У класі Cat бачимо явний виклик конструктора базового класу. <br><strong><span class="text-red">Він завжди має бути в першому рядку конструктора.</span></strong></p>
+     <p>Ось що відбудеться після виділення пам'яті: <br><span class="text-viola">18</span> &nbsp;– виклик конструктора базового класу <br><span class="text-red">3, 4</span> &nbsp;– ініціалізація змінних у Pet <br><span class="text-user">8, 9</span> &nbsp;– відпрацює код конструктора Pet</p>
+     <p>далі почнеться процес ініціалізації класу Cat <br><span class="text-green">14</span> &nbsp;– ініціалізація змінних у Cat <br><span class="text-yellow">19</span> &nbsp;– відпрацює код конструктора Cat</p></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token class-name">Cat</span> cat <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Cat</span> <span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">— Щось трохи заплутано. Чому так складно?</span></p>
+<p>— Насправді не складно, якщо знати, що насправді відбувається: <br><strong>Якщо клас не має жодного конструктора, він буде створений автоматично.</strong></p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Конструктор за замовчуванням</th>
+    <th></th>
+   </tr>
+   <tr>
+    <td style="vertical-align: top;">
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">int</span> x <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+ <span class="token keyword">int</span> y <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td style="vertical-align: top;">
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">int</span> x <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+ <span class="token keyword">int</span> y <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+ <span class="token keyword"></span><span class="text-red"><span class="token keyword">public</span> <span class="token class-name">Cat</span><span class="token punctuation">(</span><span class="token punctuation">)</span> </span>
+<span class="text-red"> <span class="token punctuation">{</span></span><span class="token punctuation"></span>
+<span class="text-red"> <span class="token punctuation">}</span></span><span class="token punctuation"></span>
+<span class="token punctuation">}</span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><strong>Якщо не викликаєш конструктор базового класу, його виклик буде додано автоматично.</strong></p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Виклик конструктора базового класу</th>
+    <th></th>
+   </tr>
+   <tr>
+    <td style="vertical-align: top;">
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Pet</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token class-name">String</span> name<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td style="vertical-align: top;">
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Pet</span> <span class="token keyword"></span><span class="text-red"><span class="token keyword">extends</span> <span class="token class-name">Object</span></span><span class="token class-name"></span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token class-name">String</span> name<span class="token punctuation">;</span>
+ <span class="token keyword">public</span> <span class="token class-name">Pet</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword"></span><span class="text-red"><span class="token keyword">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+   </tr>
+   <tr>
+    <td style="vertical-align: top;">
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Cat</span> <span class="token keyword">extends</span> <span class="token class-name">Pet</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">int</span> x <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+ <span class="token keyword">int</span> y <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td style="vertical-align: top;">
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Cat</span> <span class="token keyword">extends</span> <span class="token class-name">Pet</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">int</span> x <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+ <span class="token keyword">int</span> y <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+ <span class="token keyword"></span><span class="text-red"><span class="token keyword">public</span> <span class="token class-name">Cat</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span></span><span class="token punctuation"></span>
+<span class="token punctuation">}</span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p style="text-align: center;"><span class="text-red">Ініціалізація змінних класу відбувається у конструкторі.</span></p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Ініціалізація змінних класу</th>
+    <th></th>
+   </tr>
+   <tr>
+    <td style="vertical-align: top;">
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword"></span><span class="text-green"><span class="token keyword">int</span> x <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+ <span class="token keyword">int</span> y <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td style="vertical-align: top;">
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">int</span> x<span class="token punctuation">;</span>
+ <span class="token keyword">int</span> y<span class="token punctuation">;</span>
+ <span class="token keyword"></span><span class="text-red"><span class="token keyword">public</span> <span class="token class-name">Cat</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>x <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>y <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span></span><span class="token punctuation"></span>
+<span class="token punctuation">}</span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Як все це відбувається насправді</th>
+    <th></th>
+   </tr>
+   <tr>
+    <td style="vertical-align: top;">
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Pet</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">int</span> x <span class="token operator"></span><span class="text-red"><span class="token operator">=</span> <span class="token number">5</span></span><span class="token number"></span><span class="token punctuation">,</span> y <span class="token operator"></span><span class="text-red"><span class="token operator">=</span> <span class="token number">5</span></span><span class="token number"></span><span class="token punctuation">;</span>
+ <span class="token keyword">int</span> weight <span class="token operator"></span><span class="text-red"><span class="token operator">=</span> <span class="token number">10</span></span><span class="token number"></span><span class="token punctuation">;</span>
+ <span class="token class-name">Pet</span><span class="token punctuation">(</span><span class="token keyword">int</span> x<span class="token punctuation">,</span> <span class="token keyword">int</span> y<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword"></span><span class="text-green"><span class="token keyword">this</span><span class="token punctuation">.</span>x <span class="token operator">=</span> x<span class="token punctuation">;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>y <span class="token operator">=</span> y<span class="token punctuation">;</span></span><span class="token punctuation"></span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">class</span> <span class="token class-name">Cat</span> <span class="token keyword">extends</span> <span class="token class-name">Pet</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">int</span> tailLength <span class="token operator">=</span> <span class="token number">8</span><span class="token punctuation">;</span>
+ <span class="token keyword">int</span> age<span class="token punctuation">;</span>
+ <span class="token class-name">Cat</span><span class="token punctuation">(</span><span class="token keyword">int</span> x<span class="token punctuation">,</span> <span class="token keyword">int</span> y<span class="token punctuation">,</span> <span class="token keyword">int</span> age<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword"></span><span class="text-user"><span class="token keyword">super</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+  <span class="token keyword"></span><span class="text-green"><span class="token keyword">this</span><span class="token punctuation">.</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span></span><span class="token punctuation"></span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Pet</span> <span class="token keyword"></span><span class="text-red"><span class="token keyword">extends</span> <span class="token class-name">Object</span></span><span class="token class-name"></span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">int</span> x<span class="token punctuation">;</span>
+ <span class="token keyword">int</span> y<span class="token punctuation">;</span>
+ <span class="token keyword">int</span> weight<span class="token punctuation">;</span>
+
+ <span class="token class-name">Pet</span><span class="token punctuation">(</span><span class="token keyword">int</span> x<span class="token punctuation">,</span> <span class="token keyword">int</span> y<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token comment">//вызов конструктора базового класса</span>
+  <span class="token keyword">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">//инициализация переменных</span>
+  <span class="token keyword"></span><span class="text-red"><span class="token keyword">this</span><span class="token punctuation">.</span>x <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>y <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>weight <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+  <span class="token comment">//вызов кода конструктора</span>
+  <span class="token keyword"></span><span class="text-green"><span class="token keyword">this</span><span class="token punctuation">.</span>x <span class="token operator">=</span> x<span class="token punctuation">;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>y <span class="token operator">=</span> y<span class="token punctuation">;</span></span><span class="token punctuation"></span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">class</span> <span class="token class-name">Cat</span> <span class="token keyword">extends</span> <span class="token class-name">Pet</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">int</span> tailLength<span class="token punctuation">;</span>
+ <span class="token keyword">int</span> age<span class="token punctuation">;</span>
+ <span class="token class-name">Cat</span><span class="token punctuation">(</span><span class="token keyword">int</span> x<span class="token punctuation">,</span> <span class="token keyword">int</span> y<span class="token punctuation">,</span> <span class="token keyword">int</span> age<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token comment">//вызов конструктора базового класса</span>
+  <span class="token keyword">super</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">//инициализация переменных</span>
+  <span class="token keyword"></span><span class="text-red"><span class="token keyword">this</span><span class="token punctuation">.</span>tailLength <span class="token operator">=</span> <span class="token number">8</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+  <span class="token comment">//вызов кода конструктора</span>
+  <span class="token keyword"></span><span class="text-green"><span class="token keyword">this</span><span class="token punctuation">.</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span></span><span class="token punctuation"></span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<div class="task-widget-container" showcover="true" taskkey="com.codegym.task.task15.task1532"></div>
+<p><span class="text-user">— Тепер набагато зрозуміліше: спочатку базовий клас, потім змінні поза конструктором, потім виклик коду конструктора.</span></p>
+<p>- Молодець, Аміго, саме так!</p>

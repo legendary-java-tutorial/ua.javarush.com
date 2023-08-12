@@ -1,0 +1,76 @@
+<p>- Привіт, Аміго! Чула, Ріша розповів тобі нову та дуже цікаву тему?!</p>
+<p><span class="text-user">- Так, Кім.</span></p>
+<p>— Моя тема буде не менш цікавою. Я хочу розповісти тобі про завантаження на згадку про класи.</p>
+<p>Класи Java - це файли на диску, що містять байт-код - скомпільований Java-код.</p>
+<p><span class="text-user">- Так я пам'ятаю.</span></p>
+<p><span class="text-red">- Java-машина не завантажує їх без необхідності. </span>&nbsp;Як тільки десь у коді відбувається звернення до класу, Java-машина перевіряє – чи він завантажений. І якщо ні, то&nbsp; <span class="text-red">завантажує та ініціалізує його.</span></p>
+<p>Ініціалізація класу – це привласнення значень всіх його статичних змінних та виклик всіх статичних блоків.</p>
+<p><span class="text-user">— Схоже виклик конструктора біля об'єкта. А що таке статичний блок?</span></p>
+<p>— Якщо для ініціалізації змінних об'єкта потрібно виконати складний код (наприклад, щось завантажити з файлу), ми можемо це зробити в конструкторі. Статичні змінні такої можливості не мають. Але т.к. потреба в цьому залишилася, до класів можна додати статичний блок або блоки, які по суті своїй еквівалентні виклику статичних конструкторів.</p>
+<p>Ось як це виглядає:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th width="50%">Код</th>
+    <th width="50%">Що відбувається насправді</th>
+   </tr>
+   <tr>
+    <td>
+     <pre data-line="" data-start="" class="line-numbers  language-java" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">int</span> catCount <span class="token operator">=</span> <span class="token number">0</span> <span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">String</span> namePrefix<span class="token punctuation">;</span>
+
+<span class="token keyword">static</span>
+<span class="token punctuation">{</span>
+<span class="token class-name">Properties</span> p <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Properties</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+p<span class="token punctuation">.</span><span class="token function">loadFromFile</span><span class="token punctuation">(</span><span class="token string">"cat.properties"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+namePrefix <span class="token operator">=</span> p<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"name-prefix"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">int</span> maxCatCount <span class="token operator">=</span> <span class="token number">50</span><span class="token punctuation">;</span>
+
+<span class="token keyword">static</span>
+<span class="token punctuation">{</span>
+<span class="token class-name">Properties</span> p <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Properties</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+p<span class="token punctuation">.</span><span class="token function">loadFromFile</span><span class="token punctuation">(</span><span class="token string">"max.properties"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>p<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"cat-max"</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+maxCatCount <span class="token operator">=</span> p<span class="token punctuation">.</span><span class="token function">getInt</span><span class="token punctuation">(</span><span class="token string">"cat-max"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span></code></pre></td>
+    <td>
+     <pre data-line="" data-start="" class="line-numbers  language-java" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">int</span> catCount<span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">String</span> namePrefix<span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">int</span> maxCatCount<span class="token punctuation">;</span>
+
+<span class="token comment">//статические конструкторы в Java</span>
+<span class="token comment">//запрещены, но если бы они были, то все</span>
+<span class="token comment">//выглядело бы так</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">Cat</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+catCount <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+<span class="token class-name">Properties</span> p <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Properties</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+p<span class="token punctuation">.</span><span class="token function">loadFromFile</span><span class="token punctuation">(</span><span class="token string">"cat.properties"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+namePrefix <span class="token operator">=</span> p<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"name-prefix"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+maxCatCount <span class="token operator">=</span> <span class="token number">50</span><span class="token punctuation">;</span>
+
+<span class="token class-name">Properties</span> p2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Properties</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+p2<span class="token punctuation">.</span><span class="token function">loadFromFile</span><span class="token punctuation">(</span><span class="token string">"max.properties"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>p2<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"cat-max"</span><span class="token punctuation">)</span><span class="token operator">!=</span><span class="token keyword">null</span><span class="token punctuation">)</span>
+maxCatCount <span class="token operator">=</span> p2<span class="token punctuation">.</span><span class="token function">getInt</span><span class="token punctuation">(</span><span class="token string">"cat-max"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<div class="task-widget-container" showcover="true" taskkey="com.codegym.task.task15.task1533"></div>
+<p>Це дуже схоже на те, що відбувається під час виклику конструктора. Я навіть&nbsp; <span class="text-red">записала це у вигляді неіснуючого статичного конструктора.</span></p>
+<p><span class="text-user">- Так, я все зрозумів.</span></p>
+<p>- Чудово.</p>

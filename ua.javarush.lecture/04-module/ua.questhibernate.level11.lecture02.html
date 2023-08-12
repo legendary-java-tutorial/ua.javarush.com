@@ -1,0 +1,88 @@
+Як змінити об'єкт у Hibernate
+<p>----------------------------------------</p>
+Нюанси роботи методу merge().
+Нюанси роботи методу update().
+Метод saveOrUpdate().
+<p>----------------------------------------</p>
+<h2>Нюанси роботи методу merge()</h2>
+
+<p>Якщо ти хочеш за допомогою Hibernate змінити об'єкт, який вже був збережений у базі, то для цього також є кілька методів.</p>
+
+<p>По-перше, це метод <span class="code text-orange">merge()</span>, <span class="text-green">який оновлює інформацію в базі на основі переданого об'єкта</span >. При цьому буде викликано SQL-запит UPDATE. Приклад:</p>
+ 
+<pre class='language-java line-numbers'><code>
+User user = new User();
+user.setName("Колян");
+session.save(user);
+ 
+session.evict(user); // від'єднуємо об'єкт від сесії
+user.setName("Маша");
+ 
+User user2 = (User) session.merge(user);
+</code></pre>
+ 
+<p>Тут є кілька важливих нюансів.</p>
+
+<p>По-перше, метод <span class="code text-orange">merge()</span> повертає результат – оновлений об'єкт. Цей об'єкт має стан Persist та приєднаний до об'єкта session. Об'єкт, що передається в метод <span class="code text-orange">merge()</span> при цьому не змінюється.</p>
+
+<p>Може здатися, що між user та user2 немає різниці, але це не так. У метод <span class="code text-orange">merge()</span> можна передати POJO об'єкт, а як результат метод може повернути proxy (залежить від налаштувань Hibernate). Тому просто запам'ятай, що <span class="text-red">метод <span class="code text-orange">merge()</span> не змінює об'єкт, що передається.</p>
+
+<p>По-друге, якщо об'єкт, що передається в <span class="code text-orange">merge()</span> має статус Transient (і у нього немає ID), то для нього створиться окремий рядок у базі даних. Іншими словами, буде виконана команда <span class="code text-orange">persist()</span>.</p>
+
+<p>По-третє, якщо метод <span class="code text-orange">merge()</span> передати об'єкт вже приєднаний до сесії (зі статусом Persist), то нічого не відбудеться - метод просто поверне цей же об'єкт. Чому? А все тому, що при коміті транзакції дані й так запишуться до бази:</p>
+ 
+<pre class='language-java line-numbers'><code>
+User user = new User();
+user.setName("Колян");
+session.save(user);
+ 
+user.setName("Маша"); //змінюємо об'єкт приєднаний до сесії
+ 
+session.close(); //В базу запишуться всі змінені об'єкти
+</code></pre>
+ 
+<p>Не потрібно зберігати об'єкт після будь-яких його змін. Якщо цей об'єкт у статусі Persist, то Hibernate все зробить сам. Якщо ви змінюєте об'єкт, який “приєднано до бази”, всі його зміни будуть записані до бази.</p>
+
+<h2>Нюанси роботи методу update()</h2>
+
+<p>Також Hibernate має метод <span class="code text-orange">update()</span>, який як і метод <span class="code text-orange">save()</span> дістався йому від попередніх версій. За допомогою цього методу можна лише оновити дані збереженого об'єкта. При цьому буде викликано SQL-запит UPDATE. Приклад:</p>
+ 
+<pre class='language-java line-numbers'><code>
+User user = new User();
+user.setName("Колян");
+session.save(user);
+ 
+session.evict(user); // від'єднуємо об'єкт від сесії
+user.setName("Маша");
+ 
+session.update(user);
+</code></pre>
+ 
+<p>Цей метод нічого не повертає і не змінює наявний об'єкт.</p>
+
+<p>Якщо викликати цей метод для нового об'єкта, то просто кинеться виняток:</p>
+ 
+<pre class='language-java line-numbers'><code>
+User user = new User();
+user.setName("Колян");
+session.update(user); //тут кинеться виняток
+</code></pre>
+ 
+<h2>Метод saveOrUpdate()</h2>
+
+<p>До появи JPA функцію методу <span class="code text-orange">persist()</span> виконував метод <span class="code text-orange">saveOrUpdate()</span>. Його завданням було оновити в базі інформацію щодо існуючого об'єкта, а якщо такого немає, то створити його. Його майже завжди використовують замість методів <span class="code text-orange">save()</span> та <span class="code text-orange">update()</span>.</p>
+
+<p>На відміну від методу <span class="code text-orange">update()</span>, він може змінювати об'єкт, що йому передається. Наприклад, встановити йому ID, який було присвоєно при збереженні до бази даних. Приклад:</p>
+ 
+<pre class='language-java line-numbers'><code>
+User user = new User();
+user.setName("Колян");
+session.saveOrUpdate(user); //об'єкт буде записаний до бази
+</code></pre>
+ 
+<p>Як це працює:</p>
+
+<ul>
+<li>якщо у об'єкта, що передається, встановлений ID, то викликається SQL-метод UPDATE</li>
+<li>якщо у переданого об'єкта ID не встановлено, то викликається SQL-метод INSERT</li>
+</ul>

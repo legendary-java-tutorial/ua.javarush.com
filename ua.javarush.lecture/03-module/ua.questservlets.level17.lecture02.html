@@ -1,0 +1,77 @@
+<h2>3.1 Active object</h2>
+<p><strong>Активний об'єкт (Active object)</strong> — це шаблон проектування, який відокремлює потік виконання методу від потоку, у якому викликаний. Мета цього шаблону – надавати паралельність виконання, використовуючи асинхронні виклики методів та планувальник обробки запитів.</p>
+<p>Спрощений варіант:</p><img data-max-width="800" data-id="19841270-318f-4d3e-ad78-23c7e8acf225" alt="Active object" src="https://cdn.javarush.com/images/article/19841270-318f-4d3e-ad78-23c7e8acf225/800.jpeg" style="width: 800px;">
+<p>Класичний варіант:</p><img data-max-width="800" data-id="db9858eb-5021-40ae-a561-9989b344f1fd" alt="Active object 2" src="https://cdn.javarush.com/images/article/db9858eb-5021-40ae-a561-9989b344f1fd/800.jpeg" style="width: 800px;">
+<p>Цей шаблон складається із шести елементів:</p>
+<ul>
+ <li>Об'єкт-заступник (proxy), який надає інтерфейс публічно-доступних методів клієнта.</li>
+ <li>Інтерфейс, який визначає способи доступу до активного об'єкта.</li>
+ <li>Список запитів, що надходять від клієнтів.</li>
+ <li>Планувальник (scheduler), який визначає порядок виконання запитів.</li>
+ <li>Реалізація методів активного об'єкта.</li>
+ <li>Процедура зворотного виклику (callback) чи змінна (variable) для отримання клієнтом результату.</li>
+</ul>
+<h2>3.2 Lock</h2>
+<p><strong>Паттерн Блокування (Lock)</strong> — механізм синхронізації, що дозволяє виключний доступ до розділеного ресурсу між кількома потоками. Блокування - це один із способів забезпечити політику управління розпаралелюванням.</p><img data-max-width="800" data-id="c1de466a-7e83-4372-a79e-7344cbe094f8" alt="" src="https://cdn.javarush.com/images/article/c1de466a-7e83-4372-a79e-7344cbe094f8/800.jpeg" style="width: 800px;">
+<p>В основному, використовується м'яке блокування, при цьому передбачається, що кожен потік намагається "захопити блокування" перед доступом до відповідного ресурсу, що розділяється.</p>
+<p>Однак у деяких системах надається механізм обов'язкового блокування, при його використанні спроба несанкціонованого доступу до заблокованого ресурсу буде перервана через створення виключення потоку, який намагався отримати доступ.</p>
+<p><strong>Семафор</strong> - найпростіший тип блокування. З точки зору доступу до даних не робиться жодної різниці між режимами доступу: загальним (тільки читання) або ексклюзивним (читання та запис). У режимі загального доступу кілька потоків можуть запитити блокування доступу до даних у режимі “тільки читання”. Також використовується ексклюзивний режим доступу в алгоритмах оновлення та видалення.</p><img data-max-width="800" data-id="14da5562-e2ce-49f4-b330-3312f977f4b4" alt="Lock pattern" src="https://cdn.javarush.com/images/article/14da5562-e2ce-49f4-b330-3312f977f4b4/800.jpeg" style="width: 800px;">
+<p>Типи блокування розрізняють за стратегією блокування продовження виконання потоку. У більшості реалізацій запит блокування перешкоджає подальшому виконанню потоку, доки не з'явиться доступ до заблокованого ресурсу.</p>
+<p><strong>Спинлок</strong> – це блокування, яке очікує у циклі, доки не з'явиться доступ. Таке блокування дуже ефективне, якщо потік чекає на блокування незначного інтервалу часу, це дозволяє уникнути надлишкового перепланування потоків. Витрати на очікування доступу будуть значними при тривалому утриманні блокування одним із потоків.</p><img data-max-width="800" data-id="8c7fe29c-5d7b-4888-9745-b45fbe9a0424" alt="Lock pattern 2" src="https://cdn.javarush.com/images/article/8c7fe29c-5d7b-4888-9745-b45fbe9a0424/800.jpeg" style="width: 800px;">
+<p>Для ефективної реалізації механізму блокування потрібна підтримка апаратного рівня. Апаратна підтримка може бути реалізована у вигляді однієї або декількох атомарних операцій, таких як “test-and-set”, “fetch-and-add” або “compare-and-swap”. Такі інструкції дозволяють без переривань перевірити, чи блокування вільне, і якщо це так, то зайняти блокування.</p>
+<h2>3.3 Monitor</h2>
+<p><strong>Паттерн Монітор</strong> — високорівневий механізм взаємодії та синхронізації процесів, що забезпечує доступ до ресурсів, що розділяються. Підхід до синхронізації двох або більше комп'ютерних завдань, що використовують спільний ресурс, зазвичай апаратуру або набір змінних.</p>
+<p>При багатозадачності, що базується на моніторах, компілятор або інтерпретатор прозоро для програміста вставляє код блокування-розблокування в оформлені відповідним чином процедури, позбавляючи програміста від явного звернення до примітивів синхронізації.</p><img data-max-width="800" data-id="3b7a2de5-610e-43da-9752-9ae8fa604eb8" alt="" src="https://cdn.javarush.com/images/article/3b7a2de5-610e-43da-9752-9ae8fa604eb8/800.jpeg" style="width: 800px;">
+<p>Монітор складається з:</p>
+<ul>
+ <li>набору процедур, що взаємодіють із загальним ресурсом</li>
+ <li>м'ютексу</li>
+ <li>змінних, пов'язаних із цим ресурсом</li>
+ <li>інваріанту, який визначає умови, що дозволяють уникнути стан гонки</li>
+</ul>
+<p>Процедура монітора захоплює м'ютекс перед початком роботи і тримає його або до виходу з процедури, або до очікування певної умови. Якщо кожна процедура гарантує, що перед звільненням м'ютексу інваріант дійсний, то жодне завдання не може отримати ресурс у стані, що веде до гонки.</p>
+<p>Саме так у Java працює оператор <strong>synchronized</strong> у парі з методами <code>wait()</code>та <code>notify()</code>.</p>
+<h2>3.4 Double check locking</h2>
+<p><strong>Блокування з подвійною перевіркою (Double checked locking)</strong> — паралельний шаблон проектування, який призначається зменшення накладних витрат, що з отриманням блокування.</p>
+<p>Спочатку перевіряється умова блокування без синхронізації. Потік намагається отримати блокування тільки якщо результат перевірки говорить про те, що отримання блокування необхідно.</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token comment">//Double-Checked Locking</span>
+<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">class</span> <span class="token class-name">Singleton</span> <span class="token punctuation">{</span>
+<span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token class-name">Singleton</span> instance<span class="token punctuation">;</span> <span class="token comment">//Don't forget volatile modifier</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">Singleton</span> <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+     <span class="token keyword">if</span> <span class="token punctuation">(</span>instance <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>                <span class="token comment">//Read</span>
+
+         <span class="token keyword">synchronized</span> <span class="token punctuation">(</span><span class="token class-name">Singleton</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>    <span class="token comment">//</span>
+             <span class="token keyword">if</span> <span class="token punctuation">(</span>instance <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>         <span class="token comment">//Read Write</span>
+                 instance <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Singleton</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//</span>
+             <span class="token punctuation">}</span>
+         <span class="token punctuation">}</span>
+     <span class="token punctuation">}</span>
+ <span class="token punctuation">}</span></code></pre>
+<p>Як створити об'єкт-синглетон у потокобезпечному середовищі?</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">Singleton</span> <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token keyword">if</span> <span class="token punctuation">(</span>instance <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+    instance <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Singleton</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Якщо ти створюєш об'єкт Singleton з різних потоків, може виникнути ситуація, коли створиться кілька об'єктів одночасно, але це неприйнятно. Тому розумно обернути створення об'єкта на оператора synchronized.</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">Singleton</span> <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">synchronized</span> <span class="token punctuation">(</span><span class="token class-name">Singleton</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>instance <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+        instance <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Singleton</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Такий підхід працюватиме, проте має невеликий мінус. Після того, як об'єкт створено, щоразу при спробі його отримати в майбутньому буде виконуватися перевірка в блоці synchronized, а значить буде лікуватися поточний потік і все, що з цим пов'язано. Отже, цей код можна трохи оптимізувати:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">Singleton</span> <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+     <span class="token keyword">if</span> <span class="token punctuation">(</span>instance <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> instance<span class="token punctuation">;</span>
+
+    <span class="token keyword">synchronized</span> <span class="token punctuation">(</span><span class="token class-name">Singleton</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>instance <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+        instance <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Singleton</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Деякі мови та/або деякі машини не можуть безпечно реалізувати цей шаблон. Тому іноді його називають антипатерном. Такі особливості призвели до появи відносини строгого порядку “happens before” Java Memory Model і C++ Memory Model.</p>
+<p>Зазвичай він використовується зменшення накладних витрат при реалізації лінивої ініціалізації в многопоточных програмах, наприклад, у складі шаблону проектування Одиночка. При лінивій ініціалізації змінної ініціалізація відкладається доти, доки значення змінної не знадобиться при обчисленнях.</p>
+<h2>3.5 Scheduler</h2>
+<p><strong>Планувальник (Scheduler)</strong> - паралельний шаблон проектування, що забезпечує механізм реалізації політики планування, але при цьому не залежить від жодної конкретної політики. Керує порядком, відповідно до якого потоки потрібно виконати послідовний код, використовуючи для цього об'єкт, який явно задає послідовність очікуваних потоків.</p><img data-max-width="800" data-id="6cf63a65-1fe5-44f8-a43c-6f5219728c9a" alt="" src="https://cdn.javarush.com/images/article/6cf63a65-1fe5-44f8-a43c-6f5219728c9a/800.jpeg" style="width: 800px;">
+<p>Більш детально з цим шаблоном ви можете ознайомитись у офіційній документації. Також є відмінна <a href="https://habr.com/ru/company/vk/blog/317440/" target="_blank">стаття російською мовою</a> .</p>

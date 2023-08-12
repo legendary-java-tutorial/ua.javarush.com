@@ -1,0 +1,80 @@
+<h2>6.1 Знайомство з плагінами</h2>
+<p>Стандартні життєві цикли можна доповнити функціоналом за допомогою Maven-плагінів. Плагіни дозволяють вставляти в стандартний цикл нові кроки (наприклад, розподіл на сервер додатків) або розширювати існуючі кроки.</p>
+<p>Плагіни в Maven не є чимось екстраординарним, навпаки, це звичайнісінька річ, що часто зустрічається. Адже якщо ви хочете задати якісь нюанси складання вашого проекту, то вам потрібно вказати потрібну інформацію у pom.xml. І єдиний спосіб це зробити – написати “плагін”.</p>
+<p>Так як плагіни є такими ж артефактами, як і залежність, то вони описуються практично так само. Замість розділу dependencies – plugins, замість dependency – plugin, замість repositories – pluginRepositories, repository – pluginRepository.</p>
+<p>Приклад:</p>
+<pre class=""><code>&lt;plugins&gt;
+    &lt;plugin&gt;
+        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+        &lt;artifactId&gt;maven-checkstyle-plugin&lt;/artifactId&gt;
+        &lt;version&gt;2.6&lt;/version&gt;
+    &lt;/plugin&gt;
+&lt;/plugins&gt;
+</code></pre>
+<p>Оголошення плагіна в pom.xml дозволяє зафіксувати версію плагіна, а також задати йому необхідні параметри, визначити різні параметри конфігурації і прив'язати до фаз.</p>
+<p>Інакше кажучи, Maven запускає певні плагіни, які виконують всю роботу. Тобто, якщо ми хочемо навчити Maven особливим складанням проекту, <strong>то необхідно додати в pom.xml вказівку на запуск потрібного плагіна в потрібну фазу і з потрібними параметрами</strong> .</p>
+<p>Кількість доступних плагінів дуже велика, є різноманітні плагіни, що дозволяють безпосередньо з maven запускати web-додаток для тестування його у браузері, генерувати ресурси тощо. Головним завданням розробника в цій ситуації є <strong>знайти та застосувати найбільш відповідний набір плагінів</strong> .</p>
+<h2>6.2 Життєвий цикл та плагіни</h2>
+<p>Дуже часто плагін використовується для того, щоб під час виконання певної фази запустити якусь консольну утиліту. Більш того, ми можемо запустити навіть звичайний Java-клас (який має метод main, звичайно).</p>
+<p>Приклад:</p>
+<pre class=""><code>&lt;plugin&gt;
+  &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;
+  &lt;artifactId&gt;exec-maven-plugin&lt;/artifactId&gt;
+  &lt;version&gt;1.2.1&lt;/version&gt;
+  &lt;executions&gt;
+    &lt;execution&gt;
+      &lt;goals&gt;
+        &lt;goal&gt;java&lt;/goal&gt;
+      &lt;/goals&gt;
+    &lt;/execution&gt;
+  &lt;/executions&gt;
+  &lt;configuration&gt;
+  <span class="text-green">  &lt;mainClass&gt;com.example.Main&lt;/mainClass&gt;
+    &lt;arguments&gt;
+      &lt;argument&gt;first-argument&lt;/argument&gt;
+      &lt;argument&gt;second-argument&lt;/argument&gt;
+    &lt;/arguments&gt;</span>
+  &lt;/configuration&gt;
+&lt;/plugin&gt;
+</code></pre>
+<p>Зазвичай плагіни можна дуже гнучко налаштовувати. Усі офіційні плагіни від розробників Maven дуже добре документовані на офіційному сайті Maven. Наприклад, для <strong>maven-compiler-plugin</strong> на сторінці Apache Maven Project можна побачити список усіх змінних, що управляють плагіном. Інформація про плагін доступна <a href="https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html" target="_blank">за посиланням</a></p>
+<p>Ще важлива інформація. Різні плагіни викликаються Maven'ом на різних стадіях життєвого циклу. Так проект, що описує десктопне Java-додаток на swing, має стадії життєвого циклу відмінні від тих, що характерні для розробки web-додатку (war).</p>
+<p>Або, наприклад, коли виконується команда “mvn test”, ініціюється цілий набір кроків у життєвому циклі проекту: “process-resources”, “compile”, “process-classes”, “process-test-resources”, “test-compile” , "Test". Згадки цих фаз ви можете бачити у виведених Maven-ом повідомленнях:</p>
+<pre class=""><code>[INFO] Scanning for projects...
+[INFO]
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources)     @ codegym ---
+[INFO] --- maven-compiler-plugin:3.1:compile (default-compile)      @ codegym
+[INFO] --- maven-resources-plugin:2.6:testResources         (default-testResources) @ codegym ---
+[INFO] --- maven-compiler-plugin:3.1:testCompile (default-testCompile)          @ codegym ---
+[INFO] --- maven-surefire-plugin:2.12.4:test (default-test)         @ codegym ---
+[INFO] Surefire report directory:           t:\ projects\codegym\target\surefire-reports
+</code></pre>
+<h2>6.3 Цілі в Maven – goals</h2>
+<p>У Maven є ще таке поняття як ціль (goal). goal - це мета запуску Maven'а. Основні цілі збігаються з основними фазами:</p>
+<ul>
+ <li><strong>validate;</strong></li>
+ <li><strong>compile;</strong></li>
+ <li><strong>test;</strong></li>
+ <li><strong>package;</strong></li>
+ <li><strong>verify;</strong></li>
+ <li><strong>install;</strong></li>
+ <li><strong>deploy.</strong></li>
+</ul>
+<p>У кожній фазі життєвого циклу проекту викликається певний плагін (jar-бібліотека), який включає певну кількість цілей (goal)</p>
+<p>Наприклад, плагін "maven-compiler-plugin" містить дві мети: compiler:compile для компіляції основного вихідного коду проекту та compiler:testCompile для компіляції тестів. Формально список фаз можна змінювати, хоча необхідність у цьому буває рідко.</p>
+<p>Якщо тобі потрібно виконати якісь нестандартні дії у певній фазі, то всього лише потрібно додати відповідний плагін у pom.xml</p>
+<pre class=""><code>&lt;plugin&gt;
+  &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+  &lt;artifactId&gt;ім'я-плагіна&lt;/artifactId&gt;
+  &lt;executions&gt;
+    &lt;execution&gt;
+      &lt;id&gt;customTask&lt;/id&gt;
+      &lt;phase&gt;generate-sources&lt;/phase&gt;
+      &lt;goals&gt;
+        &lt;goal&gt;pluginGoal&lt;/goal&gt;
+      &lt;/goals&gt;
+    &lt;/execution&gt;
+  &lt;/executions&gt;
+&lt;/plugin&gt;
+</code></pre>
+<p>Найважливіше у разі – це визначити для плагіна найменування фази “execution/phase”, у якому потрібно вбудувати виклик мети плагіна “goal”. Наприклад, тобі потрібно створити Java-код на основі xml. Тоді тобі потрібна фаза “generate-sources”, вона розташовується перед викликом фази compile та ідеально підходить для генерування частини вихідних кодів проекту.</p>

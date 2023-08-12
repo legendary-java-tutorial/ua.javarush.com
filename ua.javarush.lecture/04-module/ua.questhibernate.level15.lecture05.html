@@ -1,0 +1,78 @@
+Вибір стратегії збереження ієрархії
+<p>----------------------------------------</p>
+Опис
+EXPLICIT.
+<p>----------------------------------------</p>
+<h2>Опис</h2>
+
+<p>Кожна з перерахованих вище стратегій та прийомів має свої переваги та недоліки. Загальні рекомендації щодо вибору конкретної стратегії виглядатимуть так:</p>
+
+<h4>Стратегія TABLE_PER_CLASS на основі UNION</h4>
+
+<p>Цю стратегію краще вибирати, якщо поліморфні запити та асоціації не потрібні. Якщо ти рідко виконуєш (або взагалі не виконуєш) “select user from User user”. Якщо у тебе немає Entity-класів, які посилаються на User, цей варіант буде найкращим (оскільки можливість додавання оптимізованих поліморфних запитів та асоціацій збережеться).</p>
+
+<h4>Стратегія SINGLE_TABLE</h4>
+
+<p>Цю стратегію варто використовувати:</p>
+
+<p>а) Тільки для простих завдань. У ситуаціях, коли нормалізація та обмеження NOT NULL є критичними, слід віддати перевагу стратегії №3 (JOINED). Має сенс замислитись, чи не варто в даному випадку повністю відмовитися від наслідування та замінити його на делегування.</p>
+
+<p>б) Якщо потрібні поліморфні запити та асоціації, а також динамічне визначення конкретного класу під час виконання. При цьому підкласи оголошують відносно мало нових полів, і основна різниця із суперкласом полягає у поведінці.</p>
+
+<p>І на додаток до цього, тебе чекає серйозна розмова з адміністратором БД.</p>
+
+<h4>Стратегія JOINED</h4>
+
+<p>Ця стратегія найефективніша за швидкістю та CONSTRAINTS. Вона підійде у випадках, коли потрібні поліморфні запити та асоціації, але підкласи оголошують відносно багато нових полів.</p>
+
+<p>Тут варто зазначити: рішення між JOINED та TABLE_PER_CLASS вимагає оцінки планів виконання запитів на реальних даних, оскільки ширина та глибина ієрархії успадкування можуть зробити вартість з'єднань (і, як наслідок, продуктивність) неприйнятними.</p>
+
+<p>Особливо варто взяти до уваги, що анотації наслідування неможливо застосувати до інтерфейсів.</p>
+
+<h2>EXPLICIT</h2>
+
+<p>Ще може бути ситуація, коли ти маєш ієрархію Entity-класів із спільною стратегією зберігання в базі банних. Але через якісь причини ти не хочеш, щоб якийсь клас ієрархії повертався, коли робиться запит за базовим класом.</p>
+
+<p>Для цього є інструкція:</p>
+ 
+    <div class="lesson-example lesson-example-center">
+    <pre class="lecture-code lecture-code--present language-java"><code>
+@Polymorphism(type = PolymorphismType.EXPLICIT)</code></pre>
+    </div>
+
+<p>Якщо ми додамо її до класу <span class="code"><span class="text-green">Client</span></span>:</p>
+
+<pre class='language-java line-numbers'><code>
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Entity
+class User {
+  int id;
+  String name;
+  LocalDate birthday;
+}
+</code></pre>
+
+<pre class='language-java line-numbers'><code>
+@Entity
+class Employee extends User {
+ String occupation;
+ int salary;
+ LocalDate join;
+}
+</code></pre>
+
+<pre class='language-java line-numbers'><code>
+@Entity
+@Polymorphism(type = PolymorphismType.EXPLICIT)
+class Client extends User {
+   String address;
+}
+</code></pre>
+
+<p>То HQL-запити будуть ігнорувати об'єкти цього класу при запиті базового класу:</p>
+ 
+<pre class='language-java line-numbers'><code>
+ List&lt;User> accounts = session.createQuery("from User").getResultList();
+</code></pre>
+ 
+<p>Цей запит поверне список об'єктів <span class="code"><span class="text-green">User</span></span> та <span class="code"><span class="text -green">Employee</span></span>, але не <span class="code"><span class="text-green">Client</span></span>.</p>

@@ -1,0 +1,310 @@
+<h2>Проблема Runnable</h2>
+<p>Ти вже знайомий з інтерфейсом <span class="text-neon"><span class="text-bold"><em>Runnable</em></span></span> і реалізує його класом <span class="code"><span class="text-green">Thread</span></span> . Давай пригадаємо, як виглядає цей інтерфейс:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Runnable</span> <span class="token punctuation">{</span>
+	<span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Звернімо увагу, що у методу <span class="code text-orange">run</span> значення, що повертається — <span class="text-orange">void</span> . Але що, якщо нам потрібно отримати якийсь результат роботи нитки у вигляді числа, рядка чи іншого об'єкта? Тоді доведеться якось викручуватися, наприклад, так:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Fibonacci</span> <span class="token keyword">implements</span> <span class="token class-name">Runnable</span> <span class="token punctuation">{</span>
+
+
+
+	<span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">int</span> index<span class="token punctuation">;</span>
+
+	<span class="token keyword">private</span> <span class="token keyword">int</span> result<span class="token punctuation">;</span>
+
+
+
+	<span class="token keyword">public</span> <span class="token class-name">Fibonacci</span><span class="token punctuation">(</span><span class="token keyword">int</span> index<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    		<span class="token keyword">this</span><span class="token punctuation">.</span>index <span class="token operator">=</span> index<span class="token punctuation">;</span>
+
+	<span class="token punctuation">}</span>
+
+
+
+	<span class="token annotation punctuation">@Override</span>
+
+	<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    		<span class="token keyword">int</span> first <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+    		<span class="token keyword">int</span> second <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+
+    		<span class="token keyword">if</span> <span class="token punctuation">(</span>index <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        			result <span class="token operator">=</span> first<span class="token punctuation">;</span>
+
+    		<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>index <span class="token operator">==</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        			result <span class="token operator">=</span> second<span class="token punctuation">;</span>
+
+    		<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+
+        			<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> index <span class="token operator">-</span> <span class="token number">2</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+            				<span class="token keyword">int</span> temp <span class="token operator">=</span> second<span class="token punctuation">;</span>
+
+            				second <span class="token operator">+=</span> first<span class="token punctuation">;</span>
+
+            				first <span class="token operator">=</span> temp<span class="token punctuation">;</span>
+
+        			<span class="token punctuation">}</span>
+
+
+
+            			result <span class="token operator">=</span> second<span class="token punctuation">;</span>
+
+    		<span class="token punctuation">}</span>
+
+	<span class="token punctuation">}</span>
+
+
+
+	<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">printByIndex</span><span class="token punctuation">(</span><span class="token keyword">int</span> index<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">{</span>
+
+    		<span class="token class-name">Fibonacci</span> fibonacci <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Fibonacci</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    		<span class="token class-name">Thread</span> thread <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span>fibonacci<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    		thread<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    		thread<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    		<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>index <span class="token operator">+</span> <span class="token string">"-е число Фибоначчи: "</span> <span class="token operator">+</span> fibonacci<span class="token punctuation">.</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+	<span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span></code></pre>
+<p>Запустимо такий метод <span class="code text-orange">main</span> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+    		<span class="token class-name">Fibonacci</span><span class="token punctuation">.</span><span class="token function">printByIndex</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>У консоль буде виведено:</p>
+<div class="terminal">
+ 10-те число Фібоначчі: 34
+</div>
+<p>Цей код має ряд недоліків. Наприклад, головна нитка буде заблокована під час виклику методу <span class="code text-orange">printByIndex</span> , оскільки він містить виклик методу <span class="code text-orange">join</span> .</p>
+<h2>Інтерфейс Callable</h2>
+<p>Тепер давай розглянемо інтерфейс, який Java надає нам з коробки і який може виступати альтернативою <span class="text-neon"><span class="text-bold"><em>Runnable</em></span></span> . Це інтерфейс <span class="text-neon"><span class="text-bold"><em>Callable</em></span></span> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Callable</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">V</span><span class="token punctuation">&gt;</span></span> <span class="token punctuation">{</span>
+
+	<span class="token class-name">V</span> <span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span></code></pre>
+<p>Як бачиш, у нього так само, як і у <span class="text-neon"><span class="text-bold"><em>Runnable</em></span></span> , всього один метод. Призначення методу таке ж, як і у методу <span class="code text-orange">run</span> , - він міститиме код, який буде виконуватися в паралельній нитці. З відмінностей можеш помітити значення, що повертається. Тепер це може бути будь-який тип, який ти вкажеш під час реалізації інтерфейсу:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CurrentDate</span> <span class="token keyword">implements</span> <span class="token class-name">Callable</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Long</span><span class="token punctuation">&gt;</span></span> <span class="token punctuation">{</span>
+
+	<span class="token annotation punctuation">@Override</span>
+
+	<span class="token keyword">public</span> <span class="token class-name">Long</span> <span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    		<span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+	<span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span></code></pre>
+<p>Ще приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Callable</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> task <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-&gt;</span> <span class="token punctuation">{</span>
+
+	<span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+	<span class="token keyword">return</span> <span class="token string">"Done"</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+<p>Ще з корисностей: метод <span class="code text-orange">call</span> може прокидати <span class="text-red"><span class="text-bold">Exception</span></span> , так що на відміну від методу <span class="code text-orange">run</span> , тут можна не стежити за винятками, що перевіряються, які виникають усередині методу:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Sleep</span> <span class="token keyword">implements</span> <span class="token class-name">Runnable</span> <span class="token punctuation">{</span>
+
+	<span class="token annotation punctuation">@Override</span>
+
+	<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    	    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+
+        	        <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    	    <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> ignored<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    	    <span class="token punctuation">}</span>
+
+	<span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span></code></pre></td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Sleep</span> <span class="token keyword">implements</span> <span class="token class-name">Callable</span> <span class="token punctuation">{</span>
+
+	<span class="token annotation punctuation">@Override</span>
+
+	<span class="token keyword">public</span> <span class="token class-name">Object</span> <span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">{</span>
+
+    	    <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    	    <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+
+	<span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<h2>Інтерфейс Future</h2>
+<p>Ще один інтерфейс, який працюватиме в тісній зв'язці з <span class="text-neon"><span class="text-bold"><em>Callable</em></span></span> , - це <span class="text-neon"><span class="text-bold"><em>Future</em></span></span> . <span class="text-neon"><span class="text-bold"><em>Future</em></span></span> представляє результат асинхронних (паралельних) обчислень (те саме значення, яке повертає метод <span class="code text-orange">call</span> ). Він дозволяє перевірити, чи завершабося обчислення, почекати завершення обчислень, отримати результат обчислень та інше.</p>
+<h2>Методи Future</h2>
+<ul>
+ <li>
+  <p><span class="code text-orange">boolean isDone()</span> — метод повертає <span class="text-green"><em>true</em></span> якщо це завдання (обчислення) завершено. Завершеними вважаються завдання, які завершабося штатним способом, завершабося винятком або були скасовані.</p></li>
+ <li>
+  <p><span class="code text-orange">V get()</span> — метод за необхідності блокує нитку, що його викликала, і після закінчення обчислень повертає їх результат.</p></li>
+ <li>
+  <p><span class="code text-orange">V get(long timeout, TimeUnit unit)</span> — як і попередній метод, блокує нитку, що викликала його, в очікуванні результату, але тільки на час, заданий параметрами методу.</p></li>
+ <li>
+  <p><span class="code text-orange">boolean cancel(boolean mayInterruptIfRunning)</span> - метод намагається зупинити виконання завдання. Якщо завдання ще не почало виконуватися, воно вже ніколи не запуститься. Якщо завдання було в процесі виконання, то параметр <span class="text-green">MayinterruptIfRunning</span> визначає, чи буде спроба перервати нитку, що виконує завдання. Після виклику методу <span class="code text-orange">cancel</span> метод <span class="code text-orange">isDone</span> завжди буде повертати <span class="text-green"><em>true</em></span> .</p></li>
+ <li>
+  <p><span class="code text-orange">boolean isCancelled()</span> — метод повертає <span class="text-green"><em>true</em></span> , якщо завдання було скасовано, не встигнувши завершиться штатним способом. Метод завжди буде повертати <span class="text-green"><em>true</em></span> , якщо перед цим був викликаний метод <span class="code text-orange">cancel</span> , який повернув <span class="text-green"><em>true</em></span> .</p></li>
+</ul>
+<h2>Приклад коду на Callable та Future</h2>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">HashMap</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Map</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>concurrent<span class="token punctuation">.</span></span><span class="token operator">*</span><span class="token punctuation">;</span>
+
+
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Fibonacci</span> <span class="token keyword">implements</span> <span class="token class-name">Callable</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> <span class="token punctuation">{</span>
+
+
+
+	<span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">int</span> index<span class="token punctuation">;</span>
+
+
+
+	<span class="token keyword">public</span> <span class="token class-name">Fibonacci</span><span class="token punctuation">(</span><span class="token keyword">int</span> index<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    		<span class="token keyword">this</span><span class="token punctuation">.</span>index <span class="token operator">=</span> index<span class="token punctuation">;</span>
+
+	<span class="token punctuation">}</span>
+
+
+
+	<span class="token annotation punctuation">@Override</span>
+
+	<span class="token keyword">public</span> <span class="token class-name">Integer</span> <span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    		<span class="token keyword">int</span> first <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+    		<span class="token keyword">int</span> second <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+
+    		<span class="token keyword">if</span> <span class="token punctuation">(</span>index <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        			<span class="token keyword">return</span> first<span class="token punctuation">;</span>
+
+    		<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>index <span class="token operator">==</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        			<span class="token keyword">return</span> second<span class="token punctuation">;</span>
+
+    		<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+
+        		<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> index <span class="token operator">-</span> <span class="token number">2</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+            			<span class="token keyword">int</span> temp <span class="token operator">=</span> second<span class="token punctuation">;</span>
+
+            			second <span class="token operator">+=</span> first<span class="token punctuation">;</span>
+
+            			first <span class="token operator">=</span> temp<span class="token punctuation">;</span>
+
+        		<span class="token punctuation">}</span>
+
+
+
+        			<span class="token keyword">return</span> second<span class="token punctuation">;</span>
+
+    		<span class="token punctuation">}</span>
+
+	<span class="token punctuation">}</span>
+
+
+
+	<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">Future</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> <span class="token function">calculateAsync</span><span class="token punctuation">(</span><span class="token keyword">int</span> index<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+
+    		<span class="token class-name">Fibonacci</span> fibonacci <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Fibonacci</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+
+    		<span class="token comment">// об'єкт future будет представлять результат вычислений задачи fibonacci</span>
+
+    		<span class="token class-name">FutureTask</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> future <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FutureTask</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span>fibonacci<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+
+    		<span class="token comment">// т.к. класс FutureTask реализует и интерфейс Future и интерфейс Runnable,</span>
+
+	 	<span class="token comment">// можно передавать его экземпляры в конструктор Thread</span>
+
+    		<span class="token class-name">Thread</span> thread <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span>future<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    		thread<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+
+    		<span class="token keyword">return</span> future<span class="token punctuation">;</span>
+
+	<span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span></code></pre>
+<p>Запустимо такий метод <span class="code text-orange">main</span> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+    		<span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">,</span> <span class="token class-name">Future</span><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">&gt;</span><span class="token punctuation">&gt;</span></span> tasks <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    		<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">20</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        			tasks<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> <span class="token class-name">Fibonacci</span><span class="token punctuation">.</span><span class="token function">calculateAsync</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    		<span class="token punctuation">}</span>
+
+    		<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">Map<span class="token punctuation">.</span>Entry</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">,</span> <span class="token class-name">Future</span><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">&gt;</span><span class="token punctuation">&gt;</span></span> entry <span class="token operator">:</span> tasks<span class="token punctuation">.</span><span class="token function">entrySet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        			<span class="token class-name">Future</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> task <span class="token operator">=</span> entry<span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        			<span class="token keyword">int</span> index <span class="token operator">=</span> entry<span class="token punctuation">.</span><span class="token function">getKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        			<span class="token keyword">int</span> result<span class="token punctuation">;</span>
+        			<span class="token comment">// проверяем завершено ли задание</span>
+        			<span class="token keyword">if</span> <span class="token punctuation">(</span>task<span class="token punctuation">.</span><span class="token function">isDone</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            				<span class="token comment">// получаем результат вычислений</span>
+            				result <span class="token operator">=</span> task<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        			<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            				<span class="token keyword">try</span> <span class="token punctuation">{</span>
+                				<span class="token comment">// ожидаем результат вычислений еще 100 миллисекунд</span>
+                				result <span class="token operator">=</span> task<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>MILLISECONDS<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            				<span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">TimeoutException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                				<span class="token comment">// прерываем выполнение задания</span>
+                				task<span class="token punctuation">.</span><span class="token function">cancel</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                				<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Вычисление "</span> <span class="token operator">+</span> index <span class="token operator">+</span> <span class="token string">"-го числа Фибоначчи не уложилось в отведенное время."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                				<span class="token keyword">return</span><span class="token punctuation">;</span>
+            				<span class="token punctuation">}</span>
+        			<span class="token punctuation">}</span>
+        			<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>index <span class="token operator">+</span> <span class="token string">"-е число Фибоначчи: "</span> <span class="token operator">+</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    		<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>У консоль буде виведено:</p>
+<div class="terminal">
+ 16-е число Фібоначчі: 610 
+ <br>
+  17-е число Фібоначчі: 987 
+ <br>
+  18-е число Фібоначчі: 1597 
+ <br>
+  19-е число Фібоначчі: 2584 
+ <br>
+  10 
+ <br>
+  -е число Фібоначчі: 34 
+ <br>
+  11-е число Фібоначчі: 
+ <br>
+  35 -е число Фібоначчі: 144 
+ <br>
+  14-е число Фібоначчі: 233 
+ <br>
+  15-е число Фібоначчі: 377
+</div>

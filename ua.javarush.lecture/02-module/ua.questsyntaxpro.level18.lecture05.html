@@ -1,0 +1,241 @@
+<h2>1. Перевірка</h2>
+<p>Думаю, вам вже нудно вивчати, як конструювати ланцюги потоків даних. Хочеться з цими даними щось робити.</p>
+<p>Клас <code>Stream</code>має три стандартні методи, які не конструюють потоки, а перевіряють, що за дані знаходяться в цих потоках. Це методи: <code>anyMatch()</code>, <code>allMatch()</code>і <code>noneMatch()</code>.</p>
+<p><strong>Метод<code>boolean anyMatch(правило)</code></strong></p>
+<p>Цей метод перевіряє, що в потоці є хоча б один елемент, який задовольняє правило, яке передається в метод. Якщо такий елемент є, метод повертає <code>true</code>, інакше - <code>false</code>.</p>
+<p>Приклади</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код</th>
+    <th>Примітка</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token class-name">Stream</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> <span class="text-user">stream</span> <span class="token operator">=</span> <span class="token class-name">Stream</span><span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">boolean</span> <span class="text-green">result</span> <span class="token operator">=</span> <span class="text-user">stream</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">anyMatch</span></span><span class="token punctuation">(</span><span class="text-orange">x <span class="token operator">-&gt;</span> x <span class="token operator">&gt;</span> <span class="token number">0</span></span><span class="token number"></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>
+     <pre><code>
+true</code></pre></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token class-name">Stream</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> <span class="text-user">stream</span> <span class="token operator">=</span> <span class="token class-name">Stream</span><span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">boolean</span> <span class="text-green">result</span> <span class="token operator">=</span> <span class="text-user">stream</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">anyMatch</span></span><span class="token punctuation">(</span><span class="text-orange">x <span class="token operator">-&gt;</span> x <span class="token operator">&gt;</span> <span class="token number">0</span></span><span class="token number"></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>
+     <pre><code>
+true</code></pre></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token class-name">Stream</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> <span class="text-user">stream</span> <span class="token operator">=</span> <span class="token class-name">Stream</span><span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">boolean</span> <span class="text-green">result</span> <span class="token operator">=</span> <span class="text-user">stream</span><span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="text-orange">x <span class="token operator">-&gt;</span> x <span class="token operator">&lt;</span> <span class="token number">0</span></span><span class="token number"></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">anyMatch</span></span><span class="token punctuation">(</span><span class="text-orange">x <span class="token operator">-&gt;</span> x <span class="token operator">&gt;</span> <span class="token number">0</span></span><span class="token number"></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>
+     <pre><code>
+false</code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>В останньому прикладі ми спочатку відфільтровуємо (пропускаємо через фільтр) всі елементи менше нуля, а потім вже серед них проводимо перевірку, чи є хоча б один елемент більший за нуль. Певна річ, таких елементів там уже немає.</p>
+<p><strong>Метод boolean allMatch(правило)</strong></p>
+<p>Цей метод перевіряє, що це елементи у потоці відповідають правилу. Правило передається в метод як параметр:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код</th>
+    <th>Примітка</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token class-name">Stream</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> <span class="text-user">stream</span> <span class="token operator">=</span> <span class="token class-name">Stream</span><span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">boolean</span> <span class="text-green">result</span> <span class="token operator">=</span> <span class="text-user">stream</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">allMatch</span></span><span class="token punctuation">(</span><span class="text-orange">x <span class="token operator">-&gt;</span> x <span class="token operator">&gt;</span> <span class="token number">0</span></span><span class="token number"></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>
+     <pre><code>true</code></pre> (Всі елементи більше нуля)</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token class-name">Stream</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> <span class="text-user">stream</span> <span class="token operator">=</span> <span class="token class-name">Stream</span><span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">boolean</span> <span class="text-green">result</span> <span class="token operator">=</span> <span class="text-user">stream</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">allMatch</span></span><span class="token punctuation">(</span><span class="text-orange">x <span class="token operator">-&gt;</span> x <span class="token operator">&gt;</span> <span class="token number">0</span></span><span class="token number"></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>
+     <pre><code>false</code></pre> (є елементи менші або рівні нулю)</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token class-name">Stream</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> <span class="text-user">stream</span> <span class="token operator">=</span> <span class="token class-name">Stream</span><span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">boolean</span> <span class="text-green">result</span> <span class="token operator">=</span> <span class="text-user">stream</span><span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="text-orange">x <span class="token operator">-&gt;</span> x <span class="token operator">&lt;</span> <span class="token number">0</span></span><span class="token number"></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">allMatch</span></span><span class="token punctuation">(</span><span class="text-orange">x <span class="token operator">-&gt;</span> x <span class="token operator">&lt;</span> <span class="token number">0</span></span><span class="token number"></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>
+     <pre><code>true</code></pre> (відфільтрували елементи менше нуля)</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>В останньому прикладі ми спочатку пропускаємо через фільтр тільки елементи менше за нуль, а потім вже серед них виконуємо перевірку, що всі елементи менше за нуль. Перевірка відбувається успішно.</p>
+<p><strong>Метод boolean noneMatch(правило)</strong></p>
+<p>Метод <code><span class="text-red">noneMatch</span>()</code>перевіряє, що у потоці немає жодного елемента, що відповідає переданому правилу. Протилежний за змістом метод до методу <code>anyMatch()</code>.</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код</th>
+    <th>Примітка</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token class-name">Stream</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> <span class="text-user">stream</span> <span class="token operator">=</span> <span class="token class-name">Stream</span><span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">boolean</span> <span class="text-green">result</span> <span class="token operator">=</span> <span class="text-user">stream</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">noneMatch</span></span><span class="token punctuation">(</span><span class="text-orange">x <span class="token operator">-&gt;</span> x <span class="token operator">&gt;</span> <span class="token number">0</span></span><span class="token number"></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>
+     <pre><code>
+false</code></pre></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token class-name">Stream</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> <span class="text-user">stream</span> <span class="token operator">=</span> <span class="token class-name">Stream</span><span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">boolean</span> <span class="text-green">result</span> <span class="token operator">=</span> <span class="text-user">stream</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">noneMatch</span></span><span class="token punctuation">(</span><span class="text-orange">x <span class="token operator">-&gt;</span> x <span class="token operator">&gt;</span> <span class="token number">0</span></span><span class="token number"></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>
+     <pre><code>
+false</code></pre></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token class-name">Stream</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> <span class="text-user">stream</span> <span class="token operator">=</span> <span class="token class-name">Stream</span><span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">boolean</span> <span class="text-green">result</span> <span class="token operator">=</span> <span class="text-user">stream</span><span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="text-orange">x <span class="token operator">-&gt;</span> x <span class="token operator">&lt;</span> <span class="token number">0</span></span><span class="token number"></span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">noneMatch</span></span><span class="token punctuation">(</span><span class="text-orange">x <span class="token operator">-&gt;</span> x <span class="token operator">&gt;</span> <span class="token number">0</span></span><span class="token number"></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>
+     <pre><code>
+true</code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<hr>
+<hr>
+<h2>2. Службові класи: клас<code>Optional</code></h2>
+<p>Іноді програмістам дуже незручно працювати з посиланнями на <code>null</code>. Наприклад, ви порівнюєте два рядки. Якщо обидві змінні не <code>null</code>, тоді можна просто викликати <code>s1.equals(s2)</code>, і все буде працювати. А от якщо <code>s1</code>можливо <code>null</code>, доведеться писати код, який враховує цю ситуацію, щоб не виникло <code>NullPointerException</code>.</p>
+<p>Тому програмісти вигадали службовий клас <code>Optional&lt;T&gt;</code>. Виглядає його код приблизно так:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код</th>
+    <th>Примітка</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name"><span class="text-neon">Optional</span></span><span class="token operator">&lt;</span><span class="token class-name"></span><span class="text-orange"><span class="token class-name">T</span> іп</span><span class="token operator">&gt;</span>
+<span class="token punctuation">{</span>
+   <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name"></span><span class="text-orange"><span class="token class-name">T</span> іп</span> <span class="code text-user">value</span><span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name"><span class="text-neon">Optional</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="code text-user">value</span> <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span><span class="token punctuation">}</span>
+   <span class="token keyword">private</span> <span class="token class-name"><span class="text-neon">Optional</span></span><span class="token punctuation">(</span>value<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="code text-user">value</span> <span class="token operator">=</span> <span class="text-green">value</span><span class="token punctuation">;</span><span class="token punctuation">}</span>
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token operator">&lt;</span><span class="token class-name"></span><span class="text-orange"><span class="token class-name">T</span> іп</span><span class="token operator">&gt;</span> <span class="token class-name"><span class="text-neon">Optional</span></span><span class="token operator">&lt;</span><span class="token class-name"></span><span class="text-orange"><span class="token class-name">T</span> іп</span><span class="token operator">&gt;</span> <span class="token function">of</span><span class="token punctuation">(</span><span class="token class-name"></span><span class="text-orange"><span class="token class-name">T</span> іп</span> <span class="text-green">value</span><span class="token punctuation">)</span>
+   <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-neon">Optional</span></span><span class="token operator">&lt;</span><span class="token class-name"></span><span class="text-orange"><span class="token class-name">T</span> іп</span><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="text-green">value</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function"><span class="text-red">isPresent</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+   <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="code text-user">value</span> <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function"><span class="text-red">isEmpty</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+   <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="code text-user">value</span> <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token keyword">public</span> <span class="token class-name"></span><span class="text-orange"><span class="token class-name">T</span> іп</span> <span class="token function"><span class="text-red">get</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+   <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="code text-user">value</span> <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+      <span class="token punctuation">{</span>
+         <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">NoSuchElementException</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+      <span class="token keyword">return</span> <span class="code text-user">value</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token keyword">public</span> <span class="token class-name"></span><span class="text-orange"><span class="token class-name">T</span> іп</span> <span class="token function"><span class="text-red">orElse</span></span><span class="token punctuation">(</span><span class="token class-name"></span><span class="text-orange"><span class="token class-name">T</span> іп</span> <span class="text-green">other</span><span class="token punctuation">)</span>
+   <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="code text-user">value</span> <span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token operator">?</span> <span class="code text-user">value</span> <span class="token operator">:</span> <span class="text-green">other</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token keyword">public</span> <span class="token class-name"></span><span class="text-orange"><span class="token class-name">T</span> іп</span> <span class="token function"><span class="text-red">orElseThrow</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+   <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="code text-user">value</span> <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+      <span class="token punctuation">{</span>
+         <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">NoSuchElementException</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+      <span class="token keyword">return</span> <span class="code text-user">value</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td><br><br><br><br><br><br><br><br><br><br>
+     Перевіряє, що всередині знаходиться значення (посилання не <code>null</code>) <br><br><br><br>
+     Перевіряє, що об'єкт зберігає посилання на <code>null</code> <br><br><br><br><br>
+     Повертає значення, яке зберігає. Кидає виняток, якщо значення немає. <br><br><br><br><br><br><br><br>
+     Повертає значення, або якщо всередині зберігається <code>null</code>, то передане метод друге значення <br><br><br><br>
+     Повертає значення або кидає виняток, якщо значення немає.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Мета цього класу – просто зберігати у собі об'єкт T (посилання об'єкт типу T). Посилання на об'єкт усередині класу <code>Optional&lt;T&gt;</code>може бути <code>null</code>.</p>
+<p>Цей клас дозволяє писати програмістам код трохи красивішим. Порівняйте:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>З використанням Optional</th>
+    <th>Без використання Optional</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printString</span><span class="token punctuation">(</span><span class="token class-name"><span class="text-viola">String</span></span> s<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+   <span class="token class-name"><span class="text-neon">Optional</span></span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-viola">String</span></span><span class="token punctuation">&gt;</span></span> <span class="text-green">str</span> <span class="token operator">=</span> <span class="token class-name"><span class="text-neon">Optional</span></span><span class="token punctuation">.</span><span class="token function"><span class="text-red">ofNullable</span></span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="text-green">str</span><span class="token punctuation">.</span><span class="token function"><span class="text-user">orElse</span></span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>
+     <pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printString</span><span class="token punctuation">(</span><span class="token class-name"><span class="text-viola">String</span></span> s<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+   <span class="token class-name"><span class="text-viola">String</span></span> <span class="text-green">str</span> <span class="token operator">=</span> <span class="text-user">s</span> <span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token operator">?</span> <span class="text-user">s</span> <span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">;</span>
+   <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="text-green">str</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Один об'єкт <code>Optional</code>завжди можна порівняти з іншим об'єктом <code>Optional</code>через метод <code>equals</code>, навіть якщо вони зберігають посилання на <code>null</code>.</p>
+<p>Грубо кажучи, клас Optional дозволяє «красивіше» записувати перевірки на <code>null</code>дії у випадку, якщо всередині об'єкт <code>Optional</code>зберігається <code>null</code>.</p>
+<hr>
+<hr>
+<h2>3. Пошук елементів</h2>
+<p>Повернемося до класу <code>Stream</code>. Клас <code>Stream</code>має ще 4 методи, які дозволяють шукати елементи в потоці. Це методи <code>findFirst()</code>, <code>findAny()</code>, <code>min()</code>та <code>max()</code>.</p>
+<p><strong>Метод<code>Optional&lt;T&gt; findFirst()</code></strong></p>
+<p>Метод <code>findFirst()</code>просто повертає перший елемент із потоку і все – на цьому його робота завершується.</p>
+<p>Цікавіше, що метод повертає не об'єкт типу <code>T</code>, а обгортку з нього — об'єкт типу <code>Optional&lt;T&gt;</code>. Це зроблено для того, щоб ніколи не стикатися з ситуацією, коли метод не знаходить об'єкта і повертає <code>null</code>.</p>
+<p>Приклад:</p>
+<pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token class-name"><span class="text-neon">ArrayList</span></span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> <span class="text-green">list</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-neon">ArrayList</span></span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-orange">String</span></span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name"><span class="text-neon">Collections</span></span><span class="token punctuation">.</span><span class="token function">addAll</span><span class="token punctuation">(</span><span class="text-green">list</span><span class="token punctuation">,</span> <span class="token string">"Вітання"</span><span class="token punctuation">,</span> <span class="token string">"як"</span><span class="token punctuation">,</span> <span class="token string">"дела?"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name"><span class="text-orange">String</span></span> str <span class="token operator">=</span> <span class="text-green">list</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">stream</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">findFirst</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">get</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Привет</span></code></pre>
+<p>Давайте для більшої ясності розпишемо останній рядок у кілька рядків:</p>
+<pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token class-name"><span class="text-neon">ArrayList</span></span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-orange">String</span></span><span class="token punctuation">&gt;</span></span> <span class="text-green">list</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-neon">ArrayList</span></span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-orange">String</span></span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name"><span class="text-neon">Collections</span></span><span class="token punctuation">.</span><span class="token function">addAll</span><span class="token punctuation">(</span><span class="text-green">list</span><span class="token punctuation">,</span> <span class="token string">"Вітання"</span><span class="token punctuation">,</span> <span class="token string">"як"</span><span class="token punctuation">,</span> <span class="token string">"дела?"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token class-name">Stream</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-orange">String</span></span><span class="token punctuation">&gt;</span></span> <span class="text-user">stream</span> <span class="token operator">=</span> <span class="text-green">list</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">stream</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Optional</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-orange">String</span></span><span class="token punctuation">&gt;</span></span> <span class="text-viola">result</span> <span class="token operator">=</span> <span class="text-user">stream</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">findFirst</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name"><span class="text-orange">String</span></span> str <span class="token operator">=</span> <span class="text-viola">result</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">get</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Привет</span></code></pre>
+<p>Останній метод <code>get()</code>- це просто витягування значення, яке зберігається всередині об'єкта <code>Optional</code>.</p>
+<p><strong>Метод<code>Optional&lt;T&gt; findAny()</code></strong></p>
+<p>Метод <code><span class="text-red">findAny()</span></code>повертає будь-який елемент із потоку і на цьому завершується. Цей метод - це аналог методу <code><span class="text-red">findFirst()</span></code>, тільки для потоків, що обробляються паралельно.</p>
+<p>При паралельній обробці потоків може статися така ситуація, що в якійсь частині потоку елемент вже знайдений, але поки що не зрозуміло, буде він першим чи ні.</p>
+<p>Якщо елементів, які пройшли всі фільтри, багато і для програміста важливо отримати саме перший з них, слід викликати спосіб <code><span class="text-red">findFirst()</span></code>. Якщо програміст знає, що реально через всі фільтри пройде 0 або 1 елемент, тоді досить просто викликати <code><span class="text-red">findAny()</span></code>так буде швидше.</p>
+<p><strong>Метод<code>Optional&lt;T&gt; min(Comparator&lt;T&gt;)</code></strong></p>
+<p>Метод <code>min()</code>порівнює всі елементи потоку за допомогою об'єкта <code>comparator</code>та повертає мінімальний елемент. Найзручніше задати об'єкт-компаратор за допомогою лямбда-функції.</p>
+<p>Приклад - пошук рядка з мінімальною довжиною:</p>
+<pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token class-name"><span class="text-neon">ArrayList</span></span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-orange">String</span></span><span class="token punctuation">&gt;</span></span> <span class="text-green">list</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-neon">ArrayList</span></span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-orange">String</span></span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name"><span class="text-neon">Collections</span></span><span class="token punctuation">.</span><span class="token function">addAll</span><span class="token punctuation">(</span><span class="text-green">list</span><span class="token punctuation">,</span> <span class="token string">"Вітання"</span><span class="token punctuation">,</span> <span class="token string">"як"</span><span class="token punctuation">,</span> <span class="token string">"дела?"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name"><span class="text-orange">String</span></span> min <span class="token operator">=</span> <span class="text-green">list</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">stream</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">min</span></span><span class="token punctuation">(</span><span class="text-viola"> <span class="token punctuation">(</span>s1<span class="token punctuation">,</span> s2<span class="token punctuation">)</span><span class="token operator">-&gt;</span> s1<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-</span>s2<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> </span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">get</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p><strong>Метод<code>Optional&lt;T&gt; max(Comparator&lt;T&gt;)</code></strong></p>
+<p>Метод <code>max()</code>порівнює всі елементи потоку за допомогою об'єкта <code>comparator</code>та повертає максимальний елемент. Найзручніше задати об'єкт-компаратор за допомогою лямбда-функції.</p>
+<p>Приклад — пошук рядка з максимальною довжиною:</p>
+<pre class=" language-java" tabindex="0"><code class=" language-java"><span class="token class-name"><span class="text-neon">ArrayList</span></span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-orange">String</span></span><span class="token punctuation">&gt;</span></span> <span class="text-green">list</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-neon">ArrayList</span></span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-orange">String</span></span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name"><span class="text-neon">Collections</span></span><span class="token punctuation">.</span><span class="token function">addAll</span><span class="token punctuation">(</span><span class="text-green">list</span><span class="token punctuation">,</span> <span class="token string">"Вітання"</span><span class="token punctuation">,</span> <span class="token string">"як"</span><span class="token punctuation">,</span> <span class="token string">"дела?"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name"><span class="text-orange">String</span></span> max <span class="token operator">=</span> <span class="text-green">list</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">stream</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">max</span></span><span class="token punctuation">(</span><span class="text-viola"> <span class="token punctuation">(</span>s1<span class="token punctuation">,</span> s2<span class="token punctuation">)</span><span class="token operator">-&gt;</span> s1<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-</span>s2<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> </span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function"><span class="text-red">get</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>

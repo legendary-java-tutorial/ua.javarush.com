@@ -1,0 +1,123 @@
+<a href="https://cdn.javarush.com/images/article/424819a8-8e18-4ec8-b8be-af76d2a1ed6f/original.jpeg" target="_blank"><img data-id="424819a8-8e18-4ec8-b8be-af76d2a1ed6f" data-max-width="850" alt="Метод getClass(), об'єкт клас, знайомство з Reflection - 1" src="https://cdn.javarush.com/images/article/424819a8-8e18-4ec8-b8be-af76d2a1ed6f/800.jpeg" style="width: 850px;"></a>
+<p>- Привіт, Аміго!</p>
+<p>А тепер найцікавіше. Ми познайомимося з класом Class та трохи з Reflection. <br>
+  Як ти вже, напевно, встиг зрозуміти, Java все є об'єктом. А що потрібне для об'єкта? Що має кожен об'єкт і визначає саму його суть?</p>
+<p><span class="text-user">- Клас об'єкта!</span></p>
+<p>- Правильно! Молодець. Кожен об'єкт має клас. Але повернемось до об'єктів. Деякі об'єкти повністю містять якусь сутність, інші просто допомагають їй управляти.</p>
+<p>До других можна віднести <strong>FileOutputStream</strong> або <strong>Thread</strong> . Коли ти створюєш об'єкт <strong>Thread</strong> , нова нитка не створюється. Її створює Java-машина після виклику методу start(). Цей об'єкт легко допомагає керувати процесом.</p>
+<p>Так само і <strong>FileOutputStream</strong> : файл зберігається на диску та його зберіганням та доступом до нього управляє ОС. Але ми можемо взаємодіяти з ним за допомогою об'єктів типу File, за допомогою допомоги Java-машини.</p>
+<p><span class="text-user">— Так, я вже це зрозумів.</span></p>
+<p>— Так от, для взаємодії із класами є спеціальний клас і називається він — Class.</p>
+<p><span class="text-user">— Не важко було здогадатися.</span></p>
+<p>- Ага. Щоразу, коли Java-машина завантажує на згадку новий клас, вона створює об'єкт типу Class, з якого можна отримати деяку інформацію про завантаженому класі.</p>
+<p>До кожного класу та об'єкта прив'язаний такий « <strong>об'єкт класу</strong> ».</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>приклад</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">Class</span> clazz <span class="token operator">=</span> <span class="token class-name">Integer</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">;</span></code></pre></td>
+    <td>Отримання "об'єкт класу" у класу Integer.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">Class</span> clazz <span class="token operator">=</span> <span class="token keyword">int</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">;</span></code></pre></td>
+    <td>Отримання "об'єкт класу" у класу int.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">Class</span> clazz <span class="token operator">=</span> <span class="token string">"123"</span><span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>Отримання об'єкт класу в об'єкта типу String.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">Class</span> clazz <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Object</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>Отримання об'єкт класу в об'єкта типу Object.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">- Ух ти, як цікаво.</span></p>
+<p><span class="text-user">А чому ти пишеш clazz, а чи не class?</span></p>
+<p>— А ти пам'ятаєш, що слово <strong>class</strong> – це ключове слово Java і використовувати його для іменування змінних не можна?</p>
+<p><strong>— Так, я знаю, знаю. Тільки забув.</strong></p>
+<p>- Ти десь уже використовував об'єкт Class?</p>
+<p><strong>— Так, ми використали його, коли писали свою реалізацію методу equals.</strong></p>
+<p>— Так, можна порівняти – чи однакові об'єкти класи, якщо скористатися методом getClass().</p>
+<p><span class="text-user">— А що можна робити із цим об'єктом?</span></p>
+<p>- Ну, багато чого:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код на Java</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">Class</span> s <span class="token operator">=</span> <span class="token keyword">int</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">;</span>
+<span class="token class-name">String</span> name <span class="token operator">=</span> s<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>Отримати назву класу.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">Class</span> s <span class="token operator">=</span> <span class="token class-name">Class</span><span class="token punctuation">.</span><span class="token function">forName</span><span class="token punctuation">(</span><span class="token string">"java.lang.String"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>Отримати клас на ім'я.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Object</span> o1 <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">valueOf</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Object</span> o2 <span class="token operator">=</span> <span class="token number">123</span> <span class="token operator">+</span> <span class="token string">"T"</span><span class="token punctuation">;</span>
+o1<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> o2<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>Порівняти класи об'єктів.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">— Цікаво, але не так круто, як я гадав.</span></p>
+<p>- Хочеш, щоб було круто? Є ще <strong>Reflection</strong> . <strong>Reflection</strong> – це дуже круто.</p>
+<p><span class="text-user">- А що таке <strong>Reflection</strong> ?</span></p>
+<p>— <strong>Reflection</strong> – це здатність класу отримати інформацію про себе. У Java є спеціальні класи: <strong>Field</strong> – поле, <strong>Method</strong> – метод за аналогією з <strong>Class</strong> для класів. Т.к. об'єкт типу <strong>Class</strong> дає можливість отримати інформацію про клас, то об'єкт типу Field-отримати інформацію про «поле класу», а Method-про «метод класу». І ось що з ними можна робити:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код на Java</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">Class</span><span class="token punctuation">[</span><span class="token punctuation">]</span> interfaces <span class="token operator">=</span> <span class="token class-name">List</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">getInterfaces</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>Отримуємо список "об'єктів класу" для інтерфейсів класу List</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">Class</span> parent <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">getSuperclass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>Отримуємо «об'єкт класу» батьківського класу для класу String</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">Method</span><span class="token punctuation">[</span><span class="token punctuation">]</span> methods <span class="token operator">=</span> <span class="token class-name">List</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">getMethods</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>Отримуємо список методів, які є у класу List</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">String</span> s <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">newInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>Створюємо новий об'єкт класу String</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">String</span> s <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">newInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Method</span> m <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">getMethod</span><span class="token punctuation">(</span><span class="token string">"length"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> length <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span> m<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></td>
+    <td>Отримуємо метод length у класу String, викликаємо його у рядка s</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">- Вау! Ось це реально круто!</span></p>
+<p>- Радий що тобі сподобалося.</p>

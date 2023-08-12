@@ -1,0 +1,147 @@
+<h2>Для чого потрібні текстові формати?</h2>
+<p>Текстові формати зручні для зберігання інформації, тому що можуть бути створені та оброблені як програмами, так і людиною.</p>
+<p>Текстові файли (файли у текстовому форматі) можна відкрити, прочитати та редагувати у великій кількості текстових редакторів.</p>
+<p>У файлух конфігурації багатьох програм застосовується текстовий формат, навіть якщо там представлені числа та двійкові перемикачі (так/ні).</p>
+<p>Це дещо ускладнює програми через необхідність перетворення текстових даних у внутрішній формат і назад, проте дає можливість правити конфігурацію вручну, без використання засобів налаштування самої програми.</p>
+<h2>Де зараз використовують XML?</h2>
+<p>XML використовують у різних сферах IT. Це може бути як файли конфігурацій (налаштувань) програм, і файли, з яких дані передаються між програмами. Один з найпоширеніших випадків використання в Java – конфігурування інструменту для автоматизації складання проектів Maven.</p>
+<h2>Структура документа XML</h2>
+<p>Виділяють фізичну та логічну структури документа XML. Відповідно до фізичної структури документ складається з сутностей (entities), кожна з яких може посилатися на іншу.</p>
+<p>Єдиний кореневий елемент – документна сутність. Сутність - це найменша частина документа. Усі сутності мають ім'я і містять символи.</p>
+<p>Символи у свою чергу розділені на два типи: символи даних (character data) та символи розмітки.</p>
+<p>До розмітки належать:</p>
+<ul>
+ <li>теги (tags), позначають межі елементів,</li>
+ <li>оголошення та інструкції обробки, включаючи їх атрибути (attributes),</li>
+ <li>посилання на сутність,</li>
+ <li>коментарі,</li>
+ <li>послідовності символів, що обрамляють секції "CDATA".</li>
+</ul>
+<p>Відповідно до логічної структури документ складається з елементів (elements), коментарів (comments), оголошень (declarations), посилань на сутності (character references) та інструкцій обробки (processing instructions). Усе це у документі структурується розміткою (markup).</p>
+<p>Усі складники документа поділяються на пролог і кореневий елемент. Кореневий елемент — обов'язкова частина, що є суттю XML-документа, а пролог може взагалі не існувати. Кореневий елемент може складатися з вкладених елементів, символьних даних та коментарів. Вкладеність елементів документа має бути правильною: будь-який елемент, який починається всередині іншого, повинен закінчуватися всередині цього елемента.</p>
+<h2>Символи розмітки</h2>
+<p>Розмітка завжди починається символом <span class="code">&lt;</span> і закінчується символом <span class="code">&gt;</span> .</p>
+<p>Разом із символами <span class="code">&lt;</span> і <span class="code">&gt;</span> (кутові дужки) спеціальну роль відведено також символу <span class="code">&amp;</span> (амперсанд). Кордони елементів, інструкцій обробки та деяких інших послідовностей позначаються кутовими дужками. Амперсанд допомагає при заміні тексту за допомогою сутностей.</p>
+<h2>Оголошення XML</h2>
+<p>Під час оголошення XML вказується версія мови, яка використовується для написання документа. Специфікація передбачає починати документ з оголошення XML, тому що від версії мови залежить трактування вмісту документа.</p>
+<p>І якщо у першій (1.0) версії мови оголошення було не обов'язковим, то в нових версіях це обов'язково, і якщо оголошення відсутнє, то під цим розуміється версія 1.0. У оголошенні також може бути інформація про кодування документа.</p>
+<p>Приклад:</p>
+<div class="terminal">
+ &lt;?XML version="1.1" encoding="UTF-8" ?&gt;
+</div>
+<h2>Теги</h2>
+<p>Тег (tag) – конструкція розмітки, яка містить ім'я елемента. Теги можуть бути такими, що відкриваються (початковими) і закриваються (кінцевими). Також існують теги порожнього елемента, які поєднують у собі відкривається і закривається.</p>
+<p>Приклади:</p>
+<ul>
+ <li>
+  <p>Початковий тег: <span class="code">&lt;tag1&gt;</span></p></li>
+ <li>
+  <p>Кінцевий тег: <span class="code">&lt;/tag1&gt;</span></p></li>
+ <li>
+  <p>Порожній елемент тег: <span class="code">&lt;empty_tag1 /&gt;</span></p></li>
+</ul>
+<h2>Атрибути</h2>
+<p>Ще однією частиною елементів XML є атрибути. Елемент може мати декілька унікальних атрибутів. Атрибути дозволяють вказати більше інформації про елемент. Правильніше сказати, що атрибути визначають властивості елементів.</p>
+<p>Атрибут завжди є парою ім'я = значення:</p>
+<div class="terminal">
+ name = "value"
+</div>
+<p>Приклад атрибуту у тезі:</p>
+<div class="terminal">
+ &lt;tag1 name = "value"&gt;element&lt;/tag1&gt;
+</div>
+<p>Значення атрибута має бути в подвійних ( <span class="code">""</span> ) або в одинарних лапках ( <span class="code">''</span> ). Атрибути використовуються лише у початковому тезі та тезі порожнього елемента.</p>
+<h2>Кодування п'яти службових символів (&lt;,&gt;,',”,&amp;)</h2>
+<p>Очевидно, що символи <span class="code">&lt;</span> , <span class="code">&gt;</span> та <span class="code">&amp;</span> не можуть бути використані у символьних даних та значеннях атрибутів у такому вигляді. Для їхнього подання потрібно використовувати спеціальні послідовності. Також спеціальні послідовності використовуються при написанні апострофів та лапок усередині значень атрибутів:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Символ</th>
+    <th>Заміна</th>
+   </tr>
+   <tr>
+    <td>&lt;</td>
+    <td>&lt;</td>
+   </tr>
+   <tr>
+    <td>&gt;</td>
+    <td>&gt;</td>
+   </tr>
+   <tr>
+    <td>&amp;</td>
+    <td>&amp;</td>
+   </tr>
+   <tr>
+    <td>'</td>
+    <td>'</td>
+   </tr>
+   <tr>
+    <td>"</td>
+    <td>"</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Крім того, для написання символу необхідно використовувати <span class="code">\ </span><span class="code">.</span></p>
+<h2>Секція CDATA</h2>
+<p>Секція CDATA не є логічною одиницею тексту. Ця секція може зустрічатися в документі там, де синтаксис дозволяє нам розміщувати символьні дані.</p>
+<p>Секція починається з <span class="code">&lt;![CDATA[</span> і завершується <span class="code">]]&gt;</span> . <span class="code">Між</span> цією розміткою розміщуються символьні дані, і при цьому символи <span class="code">&lt;</span> , <span class="code">&gt;</span> &amp; можуть бути використані в їх безпосередній формі.<span class="code"></span></p>
+<h2>Коментарі</h2>
+<p>Коментарі (comment) не належать до символьних даних документа. Коментар починається з <span class="code">&lt;!--</span> і закінчується <span class="code">--&gt;</span> , всередині коментаря може бути використана послідовність символів <span class="code">--</span> . Також усередині коментаря символ амперсанда не використовується як розмітка.</p>
+<p>Приклад:</p>
+<div class="terminal">
+ &lt;!-- це коментар --&gt;
+</div>
+<h2>Імена</h2>
+<p>У мові XML всі імена можуть містити лише літери, що входять до секції літер кодування Unicode, цифри (арабські), крапки, двокрапки, дефіси та символи підкреслення. Починатися імена можуть з літери, двокрапки або символу підкреслення. Зверніть увагу, що рядок <span class="code">XML</span> у будь-якому регістрі не може бути початком для імені.</p>
+<h4>приклад</h4>
+<p>Подивимося на Java-клас та об'єкт цього класу. Потім спробуємо серіалізувати об'єкт у форматі XML. Код класу:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Book</span> <span class="token punctuation">{</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> title<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> author<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">Integer</span> pageCount<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> chapters<span class="token punctuation">;</span>
+
+   <span class="token keyword">public</span> <span class="token class-name">Book</span><span class="token punctuation">(</span><span class="token class-name">String</span> title<span class="token punctuation">,</span> <span class="token class-name">String</span> author<span class="token punctuation">,</span> <span class="token class-name">Integer</span> pageCount<span class="token punctuation">,</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> chapters<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">this</span><span class="token punctuation">.</span>title <span class="token operator">=</span> title<span class="token punctuation">;</span>
+       <span class="token keyword">this</span><span class="token punctuation">.</span>author <span class="token operator">=</span> author<span class="token punctuation">;</span>
+       <span class="token keyword">this</span><span class="token punctuation">.</span>pageCount <span class="token operator">=</span> pageCount<span class="token punctuation">;</span>
+       <span class="token keyword">this</span><span class="token punctuation">.</span>chapters <span class="token operator">=</span> chapters<span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token comment">// геттеры/сеттеры</span>
+<span class="token punctuation">}</span></code></pre>
+<p>та створення об'єкта:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">Book</span> book <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Book</span><span class="token punctuation">(</span><span class="token string">"My Favorite Book"</span><span class="token punctuation">,</span> <span class="token string">"Amigo"</span><span class="token punctuation">,</span> <span class="token number">999</span><span class="token punctuation">,</span> <span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span><span class="token string">"Chapter 1"</span><span class="token punctuation">,</span> <span class="token string">"Chapter 2"</span><span class="token punctuation">,</span> <span class="token string">"Chapter 3"</span><span class="token punctuation">,</span> <span class="token string">"Chapter 4"</span><span class="token punctuation">,</span> <span class="token string">"Chapter 5"</span><span class="token punctuation">,</span> <span class="token string">"Chapter 6"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Ось так виглядає приклад валідного XML-подання Java-об'єкта, який містить 4 поля, одне з яких є колекцією (Java-код вище):</p>
+<div class="terminal">
+ &lt;Book&gt; 
+ <br>
+  &nbsp;&nbsp;&lt;title&gt;My Favorite Book&lt;/title&gt; 
+ <br>
+  &nbsp;&nbsp;&lt;author&gt;Amigo&lt;/author&gt; 
+ <br>
+  &nbsp;&nbsp;&lt;pageCount&gt;999&lt;/pageCount&gt; 
+ <br>
+  &nbsp;&lt;chapters&gt; 
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;chapters&gt;Chapter 1&lt;/chapters&gt; 
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;chapters&gt;Chapter 2&lt;/chapters&gt; 
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;chapters&gt;Chapter 3&lt;/chapters&gt; 
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;chapters&gt;Chapter 4&lt;/chapters&gt; 
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;chapters&gt;Chapter 5&lt;/chapters&gt; 
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;chapters&gt;Chapter 6&lt;/chapters&gt; 
+ <br>
+  &nbsp;&lt;/chapters&gt; 
+ <br>
+  &lt;/Book&gt;
+</div>
+<h2>XML Schema</h2>
+<p>XML Schema — мова опису структури документа XML. Специфікація XML Schema є рекомендацією W3C.</p>
+<p>XML Schema була придумана визначення правил, яким повинен підпорядковуватися XML-документ. Але що найцікавіше, XML Schema була розроблена так, щоб її можна було використовувати при розробці програмного забезпечення для обробки XML-документів, тобто ми можемо перевіряти коректність XML-документа програмно.</p>
+<p>Файл, який містить XML Schema, має розширення ".xsd" (XML Schema definition). Проектування XML Schema виходить за межі цієї лекції, тому просто знай, що така можливість існує.</p>

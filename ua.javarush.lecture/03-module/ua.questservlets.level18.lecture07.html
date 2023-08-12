@@ -1,0 +1,54 @@
+<h2>8.1 Слабкі посилання в Java</h2>
+<p>У Java є кілька видів посилань.</p>
+<p>Є <strong>StrongReference</strong> - це звичайні посилання, які ми створюємо щодня.</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">Object</span> object <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Object</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//Створив об'єкт</span>
+object <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span><span class="token comment">//тепер може бути зібраний збирачем сміття</span></code></pre>
+<p>І є три "особливі" типи посилань - SoftReference, WeakReference, PhantomReference. По суті, різницю між усіма типами посилань лише одне — поведінка GC з об'єктами, куди вони посилаються. Ми більш детально обговоримо особливості кожного типу посилань пізніше, а поки що достатньо буде наступних знань:</p>
+<ul>
+ <li><strong>SoftReference</strong> — м'яке посилання, якщо GC бачить, що об'єкт доступний лише через ланцюжок soft-посилань, він видалити його з пам'яті. Мабуть.</li>
+ <li><strong>WeakReference</strong> – слабке посилання , якщо GC бачить, що об'єкт доступний тільки через ланцюжок weak-посилань, він видалити його з пам'яті.</li>
+ <li><strong>PhantomReference</strong> - фантомне посилання, якщо GC бачить, що об'єкт доступний тільки через ланцюжок phantom-посилань, то він його видалити з пам'яті. Після кількох запусків GC.</li>
+</ul>
+<p>Також можна сказати, що типи посилань мають певний ступінь м'якості:</p>
+<ul>
+ <li><strong>Звичайне жорстке посилання</strong> – будь-яка змінна типу посилання. Очиститься збирачем сміття не раніше, ніж стане невикористовуваною.</li>
+ <li><strong>SoftReference</strong> . Об'єкт не стане причиною витрати всієї пам'яті – гарантовано буде видалено до виникнення OutOfMemoryError. Можливо раніше, залежить від реалізації збирача сміття.</li>
+ <li><strong>WeakReference</strong> . Слабкіша за м'яку. Не запобігає утилізації об'єкта, збирач сміття ігнорує такі посилання.</li>
+ <li><strong>PhantomReference</strong> . Використовується для “передсмертної” обробки об'єкта: об'єкт доступний після фіналізації, доки не очищений збирачем сміття.</li>
+</ul>
+<p>Якщо поки що не зрозуміло, в чому ж різниця, то не переживайте, скоро все стане на свої місця. Дрібниці у деталях, а деталі будуть далі.</p>
+<h2>8.2 WeakReference та SoftReference у Java</h2>
+<p>Для початку розглянемо різницю між <strong>WeakReference</strong> і <strong>SoftReference</strong> в Java.</p>
+<p>Якщо коротко, то збирач сміття звільнить пам'ять об'єкта, якщо на нього вказують лише слабкі посилання. Якщо на об'єкт вказують посилання SoftReferences, то звільнення пам'яті відбувається, коли JVM дуже потребує пам'яті.</p>
+<p>Це дає певну перевагу <strong>SoftReference</strong> перед Strong посиланням у певних випадках. Наприклад, SoftReference використовують для реалізації кешу додатків, тому JVM насамперед вилучить об'єкти, на які вказують лише SoftReferences.</p>
+<p><strong>WeakReference</strong> відмінно підходить для зберігання метаданих, наприклад для зберігання посилання на ClassLoader. Якщо жоден клас не завантажений, не варто посилатися на ClassLoader. Саме тому WeakReference робить можливість збирачеві сміття виконати свою роботу з ClassLoader, як тільки на нього вийде останнє сильне посилання.</p>
+<p>Приклад WeakReference в Java:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token comment">// якийсь об'єкт</span>
+<span class="token class-name">Student</span> student <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Student</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// слабке посилання на нього</span>
+<span class="token class-name">WeakReference</span><student> weakStudent <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">WeakReference</span><span class="token punctuation"></span><student><span class="token punctuation">(</span>student<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// тепер об'єкт Student може бути зібраний збирачем сміття</span>
+student <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+</student></student></code></pre>
+<p><strong>Приклад SoftReference в Java:</strong></p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token comment">// якийсь об'єкт</span>
+<span class="token class-name">Student</span> student <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Student</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// слабке посилання на нього</span>
+<span class="token class-name">SoftReference</span><student> softStudent <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SoftReference</span><span class="token punctuation"></span><student><span class="token punctuation">(</span>student<span class="token punctuation">)</span>
+
+<span class="token comment">// тепер об'єкт Student може бути зібраний збирачем сміття</span>
+<span class="token comment">// Але це станеться тільки у разі сильної необхідності JVM у пам'яті</span>
+student <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+</student></student></code></pre>
+<h2>8.3 Посилання PhantomReference у Java</h2>
+<p>Примірник PhantomReference створюється так само, як і на прикладах WeakReference та SoftReference, але використовується він досить рідко.</p>
+<p>PhantomReference може бути зібрана збирачем сміття, якщо на об'єкт немає сильних (Strong), слабких посилань (WeakReference) або м'яких (SoftReference).</p>
+<p>Ви можете створити об'єкт Phantom Reference таким чином:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">PhantomReference</span> myObjectRef <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PhantomReference</span><span class="token punctuation">(</span><span class="token class-name">MyObject</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p><strong>PhantomReference</strong> може використовуватися в ситуаціях, коли використання finalize() не має сенсу. Цей тип посилань відрізняється від інших типів, оскільки він не призначений для доступу до об'єкта. Він є сигналом про те, що об'єкт уже фіналізований, і збирач сміття готовий повернути свою пам'ять.</p>
+<p>Для цього збирач сміття поміщає його у спеціальний <strong>ReferenceQueue</strong> для подальшої обробки. ReferenceQueue - це місце, куди розміщуються посилання на об'єкти для звільнення пам'яті.</p>
+<p>Фантомні посилання - це безпечний спосіб дізнатися, що об'єкт видалено з пам'яті. Наприклад, розглянемо програму, яка має справу з великими зображеннями. Припустимо, що ми хочемо завантажити зображення в пам'ять, коли воно вже знаходиться в пам'яті, яка готова до складання сміття. У цьому випадку ми хочемо почекати, поки збирач сміття уб'є старе зображення і тільки потім завантажувати в пам'ять нове.</p>
+<p>Тут PhantomReference є гнучким та безпечним вибором. Посилання на старе зображення буде передано до ReferenceQueue після знищення старого об'єкта зображення. Отримавши це посилання, ми можемо завантажити нове зображення на згадку.</p>

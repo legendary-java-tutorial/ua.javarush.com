@@ -1,0 +1,60 @@
+Інші типи запитів
+<p>----------------------------------------</p>
+NamedQueries
+NativeQuery
+<p>----------------------------------------</p>
+<h2>6.1 NamedQueries</h2>
+<p>Hibernate дозволяє не зберігати запити прямо у коді. Натомість він пропонує давати запитам імена та зберігати їх окремо у вигляді анотацій. Ну а потім брати потрібний запит прямо на його ім'я. Приклад:</p>
+<pre class='language-java line-numbers'><code>
+<span class="text-brown">@org.hibernate.annotations.NamedQueries</span>({
+    <span class="text-brown">@org.hibernate.annotations.NamedQuery</span>(name = <span class="text-user">"Employee_FindById"</span>,
+  query = "з Employee where id = :id"),
+    <span class="text-brown">@org.hibernate.annotations.NamedQuery</span>(name = <span class="text-user">"Employee_FindAllEmployes"</span>,
+  query = "від Employee"),
+    <span class="text-brown">@org.hibernate.annotations.NamedQuery</span>(name = <span class="text-user">"Employee_UpdateEmployeeName"</span>,
+  query = "Update Employee set name = :newName where id = :id"),
+...
+})
+
+</code></pre>
+<p>Аннотації можна додати перед будь-яким Entity-класом: імена запитів не прив'язані ні до якого Entity.</p>
+<p>Також до запиту (query) можна додати різні параметри:</p>
+<pre class='language-java line-numbers'><code>
+<span class="text-brown">@org.hibernate.annotations.NamedQuery</span>(
+  name = "<span class="text-user">Employee_ FindAllEmployes</span>",
+  query = "від Employee",
+  timeout = <span class="text-neon">1</span>,
+  fetchSize = <span class="text-neon">10</span>,
+  cacheable = true,
+  cacheMode = "GET"
+)
+</code></pre>
+<p>Використовувати такі запити дуже просто – для цього потрібно використовувати метод <code>createNamedQuery</code> замість методу <code>createQuery</code>:</p>
+<pre class='line-numbers'><code>
+Query&lt;<span class="token keyword">Employee</span>&gt; <span class="text-viola">query</span> = session.createNamedQuery("<span class="text-user">Employee_FindAllEmployes</span>", <span class="token keyword">Employee</ span>.class);
+List&lt;<span class="token keyword">Employee</span>&gt; resultLIst = <span class="text-viola">query</span>.list();
+
+</code></pre>
+<h2>6.2 NativeQuery</h2>
+<p>І ще одна проста, але дуже корисна річ – <strong>NativeQuery</strong>.</p>
+<p>Якщо ти не хочеш використовувати HQL, але хочеш використовувати Hibernate для мапінгу сутностей, то ти можеш писати запити на старому доброму SQL. Ніхто тебе не обмежує.</p>
+<p>Для цього лише потрібно викликати метод <code>createNativeQuery()</code>, замість <code>createQuery()</code>.</p>
+<pre class='line-numbers'><code>
+NativeQuery&lt;<span class="token keyword">Employee</span>&gt; <span class="text-viola">query</span> = session.<span class="text-red">createNativeQuery</span>(<span class="text-green">"select * from employee" </span>, <span class="token keyword">Employee</span>.class);
+List&lt;<span class="token keyword">Employee</span>&gt; resultLIst = <span class="text-viola">query</span>.list();
+</code></pre>
+<p>Ти просто пишеш <code>createNativeQuery</code> і все буде працювати, як і раніше. Цей метод повертає об'єкт типу <strong>NativeQuery</strong>, який підтримує всі методи, як і клас <strong>Query</strong>. Для тебе нічого не зміниться.</p>
+<p>Крім того, <strong>Native SQL Query</strong> також можна зберігати у вигляді <strong>Named Queries</strong>.</p>
+<pre class='line-numbers'><code>
+@org.hibernate.annotations.<span class="text-brown">NamedNativeQueries</span>(
+    @org.hibernate.annotations.<span class="text-brown">NamedNativeQuery</span>(name = <span class="text-user">"Employee_GetAll"</span>,
+  query = <span class="text-green">"select * from employee"</span>,
+  resultClass = <span class="token keyword">Employee</span>.class)
+)
+</code></pre>
+<p>І звичайно ж наведемо код роботи з ними:</p>
+<pre class='line-numbers'><code>
+NativeQuery&lt;<span class="token keyword">Employee</span>&gt; <span class="text-viola">query</span> = session.<span class="text-red">createNamedQuery</span>(<span class="text-user">"Employee_GetAll"</span >, Employee.class);
+List&lt;<span class="token keyword">Employee</span>&gt; resultLIst = <span class="text-viola">query</span>.list();
+
+</code></pre>

@@ -1,0 +1,145 @@
+<p>- Привіт, Аміго! Тема сьогоднішньої лекції – розширення та звуження типів. З розширенням та звуженням примітивних типів ти познайомився вже давно. на 10 рівні. Сьогодні ми розповімо, як це працює для типів посилань, тобто. для класових об'єктів.</p>
+<p>Тут все досить просто насправді. Уяви собі ланцюжок успадкування класу: клас, його батько, батько батька і т.д. до класу Object. Т.к.&nbsp;<strong><span class="text-red">Клас містить всі методи класу, від якого він був успадкований</span></strong> , то об'єкт цього класу&nbsp; <span class="text-red">можна зберегти в змінну&nbsp; <strong>кожного з його типів батьків.</strong></span></p>
+<p>Приклад:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th width="50%">Код</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Animal</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">doAnimalActions</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">class</span> <span class="token class-name">Cat</span> <span class="token keyword">extends</span> <span class="token class-name">Animal</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">doCatActions</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">class</span> <span class="token class-name">Tiger</span> <span class="token keyword">extends</span> <span class="token class-name">Cat</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">doTigerActions</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Тут бачимо три оголошених класу: тварина, кіт і тигр. Кіт успадковується від Тварини. А Тигр від Кота.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token class-name">Tiger</span> tiger <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Tiger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token class-name"></span><span class="text-red"><span class="token class-name">Cat</span> cat <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Tiger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token class-name">Animal</span> animal <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Tiger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token class-name">Object</span> obj <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Tiger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Об'єкт класу Tiger завжди можна спокійно присвоїти змінній з типом класу-батька. Для класу Tiger це Cat, Animal і Object.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Тепер розглянемо, що таке розширення і звуження типів.</p>
+<p>Якщо в результаті присвоєння ми рухаємося по ланцюжку успадкування вгору (до типу Object), то це - розширення типу (воно ж - висхідне перетворення або upcasting), а якщо вниз, до типу об'єкта, то це - звуження типу (воно ж - низхідне перетворення або downcasting).</p>
+<p><strong>Рух вгору ланцюжком успадкування називається розширенням, оскільки він призводить до більш загального типу. Але при цьому втрачається можливість викликати методи, які були додані до класу при спадкуванні.</strong></p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th width="50%">Код</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token class-name">Object</span> obj <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Tiger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token class-name"></span><span class="text-red"><span class="token class-name">Animal</span> animal <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">Animal</span><span class="token punctuation">)</span> obj<span class="token punctuation">;</span>
+  <span class="token class-name">Cat</span> cat <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">Cat</span><span class="token punctuation">)</span> obj<span class="token punctuation">;</span>
+  <span class="token class-name">Tiger</span> tiger <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">Tiger</span><span class="token punctuation">)</span> animal<span class="token punctuation">;</span>
+  <span class="token class-name">Tiger</span> tiger2 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">Tiger</span><span class="token punctuation">)</span> cat<span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>При звуженні типу потрібно використовувати оператор перетворення типу, тобто ми виконуємо явне перетворення.
+     <p></p>
+     <p>При цьому Java-машина виконує перевірку, а чи дійсно цей об'єкт успадкований від Типу, до якого ми хочемо його перетворити.</p>
+     <p>Таке невелике нововведення зменшило кількість помилок у перетворенні типів у рази, і суттєво підвищило стабільність роботи Java-програм.</p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<div class="task-widget-container" showcover="true" taskkey="com.codegym.task.task14.task1422"></div>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th width="50%">Код</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token class-name">Object</span> obj <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Tiger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>obj <span class="token keyword"><span class="text-red">instanceof</span></span> <span class="token class-name">Cat</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token class-name">Cat</span> cat <span class="token operator">=</span> <span class="token punctuation"></span><span class="text-red"><span class="token punctuation">(</span><span class="token class-name">Cat</span><span class="token punctuation">)</span></span><span class="token punctuation"></span> obj<span class="token punctuation">;</span>
+    cat<span class="token punctuation">.</span><span class="token function">doCatActions</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Ще краще - використовувати перевірку&nbsp; <strong>instanceof</strong></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token class-name">Animal</span> animal <span class="token operator">=</span> <span class="token keyword"></span><span class="text-red"><span class="token keyword">new</span> <span class="token class-name">Tiger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+  <span class="token function"><span class="text-user">doAllAction</span></span><span class="token punctuation">(</span>animal<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token class-name">Animal</span> animal2 <span class="token operator">=</span> <span class="token keyword"></span><span class="text-red"><span class="token keyword">new</span> <span class="token class-name">Cat</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+  <span class="token function"><span class="text-user">doAllAction</span></span><span class="token punctuation">(</span>animal2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token class-name">Animal</span> animal3 <span class="token operator">=</span> <span class="token keyword"></span><span class="text-red"><span class="token keyword">new</span> <span class="token class-name">Animal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+  <span class="token function"><span class="text-user">doAllAction</span></span><span class="token punctuation">(</span>animal3<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function"><span class="text-user">doAllAction</span></span><span class="token punctuation">(</span><span class="token class-name"><span class="text-red">Animal</span></span> <span class="text-user">animal</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="text-user">animal</span> <span class="token keyword"><span class="text-red">instanceof</span></span> <span class="token class-name">Tiger</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token class-name">Tiger</span> tiger <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">Tiger</span><span class="token punctuation">)</span> animal<span class="token punctuation">;</span>
+    tiger<span class="token punctuation">.</span><span class="token function">doTigerActions</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="text-user">animal</span> <span class="token keyword"><span class="text-red">instanceof</span></span> <span class="token class-name">Cat</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token class-name">Cat</span> cat <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">Cat</span><span class="token punctuation">)</span> animal<span class="token punctuation">;</span>
+    cat<span class="token punctuation">.</span><span class="token function">doCatActions</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="text-user">animal</span><span class="token punctuation">.</span><span class="token function">doAnimalActions</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>І ось чому. Дивимося на приклад зліва.
+     <p></p>
+     <p>Ми (наш код) не завжди знаємо, з об'єктом якого типу ми працюємо. Це може бути як об'єкт того ж типу, що і змінна (Animal), так і будь-який тип-спадкоємець (Cat, Tiger).</p>
+     <p>Розглянемо метод doAllAction. Він коректно працює незалежно від того, об'єкт якого типу в нього передали.</p>
+     <p>Тобто. він коректно працює всім трьох типів Animal, Cat, Tiger.</p></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token class-name"></span><span class="text-red"><span class="token class-name">Cat</span> cat <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Tiger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token class-name">Animal</span> animal <span class="token operator">=</span> cat<span class="token punctuation">;</span>
+  <span class="token class-name">Object</span> obj <span class="token operator">=</span> cat<span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>Тут ми бачимо три присвоєння. Усі є прикладами розширення типу.
+     <p></p>
+     <p>Оператор перетворення типу тут не потрібен, тому що не потрібна перевірка.&nbsp;<strong><span class="text-red">Посилання на об'єкт завжди можна зберегти змінну будь-якого його базового типу.</span></strong></p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">— На передостанньому прикладі все стало зрозуміло. І для чого потрібна перевірка, і для чого потрібне перетворення типів.</span></p>
+<p>- Сподіваюся, що так. Хочу звернути твою увагу на таку річ:</p>
+<p><strong><span class="text-red">З об'єктом за такого присвоєння нічого не відбувається! Змінюється лише кількість методів</span></strong> , які можна викликати за допомогою&nbsp;<strong><span class="text-red"> конкретної змінної-посилання.</span></strong></p>
+<p>Наприклад, змінна класу Cat дозволяє викликати методи doAnimalActions &amp; doCatActions, і нічого не знає про метод doTigerActions, навіть якщо посилається на об'єкт класу Tiger.</p>
+<p><span class="text-user">— Ну, це вже ясно. Виявилося легше, ніж я думав.</span></p>

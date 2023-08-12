@@ -1,0 +1,164 @@
+<p>Розберемося з наступним методом, який готує нам <span class="text-green"><span class="text-bold"><em>ExecutorService</em></span></span> - <span class="code text-orange">newWorkStealingPool</span> .</p><img data-max-width="512" data-id="98dd51bb-7f44-411a-9db2-521aa66b959d" alt="" src="https://cdn.javarush.com/images/article/98dd51bb-7f44-411a-9db2-521aa66b959d/512.jpeg" style="width: 512px;">
+<p>Цей пул потоків особливий - концепція його роботи стоїть на крадіжці роботи.</p>
+<p>Завдання збираються у чергу і розподіляються за процесорами. Але якщо процесор зайнятий, інший вільний процесор може вкрасти в нього завдання і його виконати. Такий формат був введений в Java для того, щоб скоротити суперечки у багатопотокових додатках. В основі лежить фреймворк <span class="text-bold">fork/join</span> .</p>
+<h2>fork/join</h2><img data-max-width="800" data-id="b01a75b9-2c21-4b1f-ac9b-707003d7202c" alt="" src="https://cdn.javarush.com/images/article/b01a75b9-2c21-4b1f-ac9b-707003d7202c/800.jpeg" style="width: 800px;">
+<p>У фреймворку <span class="text-bold">fork/join</span> завдання рекурсивно декомпозуються, тобто розбираються на підзавдання. Далі завдання виконуються індивідуально, а результати підзадач об'єднуються на формування результатів головного завдання.</p>
+<p>Метод <span class="code text-orange">fork</span> запускає асинхронно у певному потоці завдання, а метод <span class="code text-orange">join</span> дозволяє дочекатися завершення роботи над цим завданням.</p>
+<h2>newWorkStealingPool</h2>
+<p>Метод <span class="code text-orange">NewWorkStealingPool</span> має дві реалізації:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">ExecutorService</span> <span class="token function">newWorkStealingPool</span><span class="token punctuation">(</span><span class="token keyword">int</span> parallelism<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ForkJoinPool</span>
+            <span class="token punctuation">(</span>parallelism<span class="token punctuation">,</span>
+             <span class="token class-name">ForkJoinPool</span><span class="token punctuation">.</span>defaultForkJoinWorkerThreadFactory<span class="token punctuation">,</span>
+             <span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">ExecutorService</span> <span class="token function">newWorkStealingPool</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ForkJoinPool</span>
+            <span class="token punctuation">(</span><span class="token class-name">Runtime</span><span class="token punctuation">.</span><span class="token function">getRuntime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">availableProcessors</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+             <span class="token class-name">ForkJoinPool</span><span class="token punctuation">.</span>defaultForkJoinWorkerThreadFactory<span class="token punctuation">,</span>
+             <span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span></code></pre>
+<p>Ми відразу ж помічаємо, що під капотом ми не викликаємо конструктор <span class="text-green"><span class="text-bold"><em>ThreadPoolExecutor</em></span></span> , тут ми працюємо з сутністю <span class="text-green"><span class="text-bold"><em>ForkJoinPool</em></span></span> . Це, як і <span class="text-green"><span class="text-bold"><em>ThreadPoolExecutor</em></span></span> , - реалізація <span class="code"><span class="text-green">AbstractExecutorService</span></span> .</p>
+<p>На вибір нам надають 2 методи. Відрізняються вони тим, що у першому випадку ми самі вказуємо який рівень паралелізму хочемо бачити. Якщо ми не вказуємо це значення, то в нашому пулі ми побачимо рівень паралелізму, що дорівнює кількості ядер процесора доступних віртуальній машині Java в даний момент часу.</p>
+<p>Залишилося розібратися на ділі, як це працює:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Collection</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Callable</span><span class="token punctuation">&lt;</span><span class="token class-name">Void</span><span class="token punctuation">&gt;</span><span class="token punctuation">&gt;</span></span> tasks <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">ExecutorService</span> executorService <span class="token operator">=</span> <span class="token class-name">Executors</span><span class="token punctuation">.</span><span class="token function">newWorkStealingPool</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">int</span> taskNumber <span class="token operator">=</span> i<span class="token punctuation">;</span>
+            <span class="token class-name">Callable</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Void</span><span class="token punctuation">&gt;</span></span> callable <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-&gt;</span> <span class="token punctuation">{</span>
+                <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Обработан запит пользователя №"</span> <span class="token operator">+</span> taskNumber <span class="token operator">+</span> <span class="token string">" на потоке "</span> <span class="token operator">+</span> <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span><span class="token punctuation">;</span>
+            tasks<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>callable<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        executorService<span class="token punctuation">.</span><span class="token function">invokeAll</span><span class="token punctuation">(</span>tasks<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Ми створюємо 10 завдань, де виводимо статус виконання. Після чого всі завдання ми запускаємо в роботу за допомогою методу <span class="code text-orange">invokeAll</span> .</p>
+<p>Результати під час виконання 10 завдань на 10 потоках у пулі:</p>
+<div class="terminal">
+ Оброблено запит користувача №9 на потоці ForkJoinPool-1-worker-10 
+ <br>
+  Оброблено запит користувача №4 на потоці ForkJoinPool-1-worker-5 
+ <br>
+  Оброблено запит користувача №7 на потоці ForkJoinPool-1-worker- 
+ <br>
+  8 -1-worker-2 
+ <br>
+  Оброблено запит користувача №2 на потоці ForkJoinPool-1-worker-3 
+ <br>
+  Оброблено запит користувача №3 на потоці ForkJoinPool-1-worker-4 
+ <br>
+  Опрацьовано запит користувача №6 на потоці ForkJoinPool-1-worker- 
+ <br>
+  7 користувача №0 на потоці ForkJoinPool-1-worker-1 
+ <br>
+  Оброблено запит користувача №5 
+ <br>
+  на потоці ForkJoinPool-1-worker-6
+</div>
+<p>Ми бачимо, що після формування черги потоки брали завдання виконання. Також можна перевірити, як поведеться розподіл між потоками з пулу для 20 завдань на 10 потоках.</p>
+<div class="terminal">
+ Оброблено запит користувача №3 на потоці ForkJoinPool-1-worker-4 
+ <br>
+  Оброблено запит користувача №7 на потоці ForkJoinPool-1-worker-8 
+ <br>
+  Оброблено запит користувача №2 на потоці ForkJoinPool-1-worker- 
+ <br>
+  3 -1-worker-5 
+ <br>
+  Оброблено запит користувача №1 на потоці ForkJoinPool-1-worker-2 
+ <br>
+  Оброблено запит користувача №5 на потоці ForkJoinPool-1-worker-6 
+ <br>
+  Опрацьовано запит користувача №8 на потоці ForkJoinPool-1-worker- 
+ <br>
+  9 користувача №9 на потоці ForkJoinPool-1-worker-10 
+ <br>
+  Оброблено запит користувача №0 на потоці 
+ <br>
+  ForkJoinPool-1-worker-1
+ <br>
+  Оброблено запит користувача №10 на потоці ForkJoinPool-1-worker-9 
+ <br>
+  Оброблено запит користувача №12 на потоці ForkJoinPool-1-worker-1 Оброблено запит користувача №13 на потоці ForkJoinPool- 1 
+ <br>
+  -worker-8 
+ <br>
+ -1-worker-6 
+ <br>
+  Оброблено запит користувача №15 на потоці ForkJoinPool-1-worker-8 
+ <br>
+  Оброблено запит користувача №14 на потоці ForkJoinPool-1-worker-1 
+ <br>
+  Опрацьовано запит користувача №17 на потоці ForkJoinPool-1-worker- 
+ <br>
+  6 користувача №16 на потоці ForkJoinPool-1-worker-7 
+ <br>
+  Оброблено запит користувача №19 на потоці 
+ <br>
+  ForkJoinPool-1-worker-6
+</div>
+<p>З висновку видно, деякі потоки встигають виконати кілька завдань ( <span class="text-green"><span class="text-bold">ForkJoinPool-1-worker-6</span></span> виконав 4 завдання), а деякі — лише одну ( <span class="text-green"><span class="text-bold">ForkJoinPool-1-worker-2</span></span> ). Якщо до реалізації методу <span class="code text-orange">call</span> додати затримку в 1 секунду, картина зміниться.</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Callable</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Void</span><span class="token punctuation">&gt;</span></span> callable <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-&gt;</span> <span class="token punctuation">{</span>
+   <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Обработан запит пользователя №"</span> <span class="token operator">+</span> taskNumber <span class="token operator">+</span> <span class="token string">" на потоке "</span> <span class="token operator">+</span> <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>SECONDS<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+<p>Заради експерименту виконаємо цей же код на іншій машині. Отриманий висновок:</p>
+<div class="terminal">
+ Оброблено запит користувача №2 на потоці ForkJoinPool-1-worker-23 
+ <br>
+  Оброблено запит користувача №7 на потоці ForkJoinPool-1-worker-31 Оброблено запит користувача №4 
+ <br>
+  на потоці ForkJoinPool-1-worker-27 
+ <br>
+ -1-worker-13 
+ <br>
+  Оброблено запит користувача №0 на потоці ForkJoinPool-1-worker-19 
+ <br>
+  Оброблено запит користувача №8 на потоці ForkJoinPool-1-worker-3 
+ <br>
+  Оброблено запит користувача №9 на потоці ForkJoinPool-1-worker- 
+ <br>
+  21 користувача №6 на потоці ForkJoinPool-1-worker-17 
+ <br>
+  Опрацьовано запит користувача №3 на потоці ForkJoinPool-1-worker-9 
+ <br>
+  Оброблено запит користувача №1 на потоці ForkJoinPool-1-worker-5
+ <br>
+  Оброблено запит користувача №12 на потоці ForkJoinPool-1-worker-23 
+ <br>
+  Оброблено запит користувача №15 на потоці ForkJoinPool-1-worker-19 Оброблено запит користувача №14 
+ <br>
+  на потоці ForkJoinPool-1-worker-27 
+ <br>
+ -1-worker-3 
+ <br>
+  Опрацьовано запит користувача №13 на потоці ForkJoinPool-1-worker-13 
+ <br>
+  Опрацьовано запит користувача №10 на потоці ForkJoinPool-1-worker-31 
+ <br>
+  Опрацьовано запит користувача №18 на потоці ForkJoinPool-1-worker-5 
+ <br>
+  Оброблено запит користувача №16 на потоці ForkJoinPool-1-worker-9 
+ <br>
+  Оброблено запит користувача №17 на потоці 
+ <br>
+  ForkJoinPool-1-worker-21
+</div>
+<p>З цікавого цього висновку можна назвати, що ми “замовляли” потоки у пулі. А імена воркерів йдуть не з одиниці до десяти включно, а більше. Якщо дивитися за унікальними назвами, то воркерів справді десять (3, 5, 9, 13, 17, 19, 21, 23, 27 і 31). Виникає резонне запитання: чому так сталося? У будь-якій незрозумілій ситуації використовуй debug.</p>Цим і займемося. Наведемо об'єкт<mark class="green">executorService</mark>до типу <span class="text-green"><span class="text-bold"><em>ForkJoinPool</em></span></span> :
+<p></p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">final</span> <span class="token class-name">ForkJoinPool</span> forkJoinPool <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">ForkJoinPool</span><span class="token punctuation">)</span> executorService<span class="token punctuation">;</span></code></pre>
+<p>Дивитися будемо саме на цей об'єкт після виклику методу <span class="code text-orange">invokeAll</span> в режимі Evaluate Expression. Для цього після методу <span class="code text-orange">введеннявсі</span> додамо будь-яку команду, наприклад, порожній sout, і на ньому поставимо брейкпоінт.</p><img data-max-width="800" data-id="3d7ef6f9-97cb-4e54-8380-6f6ed65492f1" alt="" src="https://cdn.javarush.com/images/article/3d7ef6f9-97cb-4e54-8380-6f6ed65492f1/800.jpeg" style="width: 800px;">
+<p>Бачимо, що в пулі 10 потоків, але масив потоків (воркерів) має розмірність 32. Дивно, але добре, копатимемо далі. Спробуємо під час створення пулу параметр паралелізму поставити більше, ніж 32, наприклад, 40.</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">ExecutorService</span> executorService <span class="token operator">=</span> <span class="token class-name">Executors</span><span class="token punctuation">.</span><span class="token function">newWorkStealingPool</span><span class="token punctuation">(</span><span class="token number">40</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>І в дебазі ще раз подивимось на об'єкт<mark class="green">ForkJoinPool.</mark></p><img data-max-width="800" data-id="ad0001ac-1097-4a84-80e6-bc3ecfcf4471" alt="" src="https://cdn.javarush.com/images/article/ad0001ac-1097-4a84-80e6-bc3ecfcf4471/800.jpeg" style="width: 800px;">
+<p>Тепер розмір масиву воркерів 128. Можна припустити, що це є внутрішня оптимізація JVM. Давай спробуємо її знайти в коді JDK (openjdk-14):</p><img data-max-width="512" data-id="b8662303-b52e-4289-93f1-dc6ec32405f9" alt="" src="https://cdn.javarush.com/images/article/b8662303-b52e-4289-93f1-dc6ec32405f9/512.jpeg" style="width: 512px;">
+<p>Так, дійсно: розмір масиву воркерів розраховується виходячи із значення паралелізму, та побітових маніпуляцій із ним. Не треба намагатися розібратися, що саме тут відбувається. Просто достатньо знати факт наявності такої оптимізації.</p>
+<p>Ще одна особливість нашого прикладу - використання методу <span class="code text-orange">invokeAll</span> . Варто зазначити, що метод <span class="code text-orange">invokeAll</span> нам може повернути результат, вірніше аркуш результатів (у нашому випадку - <span class="text-red">List&lt;Future&lt;Void&gt;&gt;)</span> , де ми можемо отримати результат виконання кожної із завдань.</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">var</span> results <span class="token operator">=</span> executorService<span class="token punctuation">.</span><span class="token function">invokeAll</span><span class="token punctuation">(</span>tasks<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">Future</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Void</span><span class="token punctuation">&gt;</span></span> result <span class="token operator">:</span> results<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment">// Обработать результат выполнения задачи</span>
+        <span class="token punctuation">}</span></code></pre>
+<p>Такий особливий вид сервісу і пулу потоків можна використовувати у завданнях, де прогнозується рівень паралелізму, або прогнозується, але мається на увазі.</p>

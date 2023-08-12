@@ -1,0 +1,112 @@
+<p>Повторення мати навчання. Хоча раніше ми вже говорабо про <span class="text-viola">switch</span> в Java, сьогодні згадаємо основне і розберемо трохи нової інформації.</p>
+<p>Java має 2 варіанти <span class="text-viola">switch</span> — це switch statement і switch expression. Switch expression офіційно був у Java у версії 14, маючи до цього 2 модифікації у 12 та 13 версіях.</p>
+<p>Але почнемо спочатку, згадаємо як виглядає старий добрий свитч до версії 12:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getProductTypeByName</span><span class="token punctuation">(</span><span class="token class-name">String</span> product<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">String</span> productType <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">switch</span> <span class="token punctuation">(</span>product<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">case</span> <span class="token string">"Apple"</span><span class="token operator">:</span>
+            productType <span class="token operator">=</span> <span class="token string">"Fruit"</span><span class="token punctuation">;</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">case</span> <span class="token string">"Peach"</span><span class="token operator">:</span>
+            productType <span class="token operator">=</span> <span class="token string">"Fruit"</span><span class="token punctuation">;</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">case</span> <span class="token string">"Raspberry"</span><span class="token operator">:</span>
+            productType <span class="token operator">=</span> <span class="token string">"Berry"</span><span class="token punctuation">;</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">case</span> <span class="token string">"Cherry"</span><span class="token operator">:</span>
+            productType <span class="token operator">=</span> <span class="token string">"Berry"</span><span class="token punctuation">;</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">case</span> <span class="token string">"Tomato"</span><span class="token operator">:</span>
+            productType <span class="token operator">=</span> <span class="token string">"Vegetables"</span><span class="token punctuation">;</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">default</span><span class="token operator">:</span>
+            productType <span class="token operator">=</span> <span class="token string">"other"</span><span class="token punctuation">;</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">return</span> productType<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>switch statement — це набір конструкцій, які виконуватимуться один за одним, не дозволяючи повернути результат виконання. Головна проблема використання switch statement полягає в тому, що він дозволяє додавати нескінченну кількість <span class="text-viola">case</span> виражений, і цим часто зловживають програмісти.</p>
+<p>У Java 12 його додали як experimental feature, і вже не як switch statement, а як switch expression - нову версію світчу, яка дає можливість зберігати результат виконання, використовувати функціональний підхід усередині і групувати значення в case виразах, тим самим дозволяючи зробити його компактним.</p>
+<p>Переписати метод <span class="code text-orange">getProductTypeByName()</span> з використанням Java 12 можна так:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getProductTypeByName</span><span class="token punctuation">(</span><span class="token class-name">String</span> product<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">switch</span> <span class="token punctuation">(</span>product<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">case</span> <span class="token string">"Apple"</span><span class="token punctuation">,</span> <span class="token string">"Peach"</span> <span class="token operator">-&gt;</span> <span class="token string">"Fruit"</span><span class="token punctuation">;</span>
+        <span class="token keyword">case</span> <span class="token string">"Raspberry"</span><span class="token punctuation">,</span> <span class="token string">"Cherry"</span> <span class="token operator">-&gt;</span> <span class="token string">"Berry"</span><span class="token punctuation">;</span>
+        <span class="token keyword">case</span> <span class="token string">"Tomato"</span> <span class="token operator">-&gt;</span> <span class="token string">"Vegetables"</span><span class="token punctuation">;</span>
+        <span class="token keyword">default</span> <span class="token operator">-&gt;</span> <span class="token string">"other"</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Тепер код виглядає акуратніше. Використання arrow syntax з функціонального програмування дає можливість повертати значення без ключового слова <span class="text-user"><span class="text-bold">break</span></span> , і взагалі результат виконання <span class="text-viola">switch</span> тепер можна зберегти змінну або повернути через <span class="text-viola">return</span> .</p>
+<p>У випадках, коли потрібно не тільки повернути результат, але й мати кілька рядків коду, <span class="text-viola">switch</span> буде таким:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getProductTypeByName</span><span class="token punctuation">(</span><span class="token class-name">String</span> product<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">var</span> result <span class="token operator">=</span> <span class="token keyword">switch</span> <span class="token punctuation">(</span>product<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">case</span> <span class="token string">"Apple"</span><span class="token punctuation">,</span> <span class="token string">"Peach"</span> <span class="token operator">-&gt;</span> <span class="token punctuation">{</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"This is fruit"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">break</span> <span class="token string">"Fruit"</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">case</span> <span class="token string">"Raspberry"</span><span class="token punctuation">,</span> <span class="token string">"Cherry"</span> <span class="token operator">-&gt;</span> <span class="token punctuation">{</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"This is a Berry"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">break</span> <span class="token string">"Berry"</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">case</span> <span class="token string">"Tomato"</span> <span class="token operator">-&gt;</span> <span class="token punctuation">{</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"This is a Vegetables"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">break</span> <span class="token string">"Vegetables"</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">default</span> <span class="token operator">-&gt;</span> <span class="token punctuation">{</span>
+            <span class="token keyword">break</span> <span class="token string">"other"</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+     <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>У Java 13 switch expression все ще знаходиться в статусі experimental feature, і щоб він був доступний для запуску, як і Java 12, потрібно використовувати команду <em>--enable-preview</em> для компіляції і для запуску. Головна і в принципі єдина "обновка" <span class="text-viola">switch</span> Java 13 - це ключове слово <span class="text-user"><span class="text-bold">yield</span></span> , яке замінило <span class="text-viola">break</span> .</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getProductTypeByName</span><span class="token punctuation">(</span><span class="token class-name">String</span> product<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">var</span> result <span class="token operator">=</span> <span class="token keyword">switch</span> <span class="token punctuation">(</span>product<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">case</span> <span class="token string">"Apple"</span><span class="token punctuation">,</span> <span class="token string">"Peach"</span> <span class="token operator">-&gt;</span> <span class="token punctuation">{</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"This is fruit"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">yield</span> <span class="token string">"Fruit"</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">case</span> <span class="token string">"Raspberry"</span><span class="token punctuation">,</span> <span class="token string">"Cherry"</span> <span class="token operator">-&gt;</span> <span class="token punctuation">{</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"This is a Berry"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">yield</span> <span class="token string">"Berry"</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">case</span> <span class="token string">"Tomato"</span> <span class="token operator">-&gt;</span> <span class="token punctuation">{</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"This is a Vegetables"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">yield</span> <span class="token string">"Vegetables"</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">default</span> <span class="token operator">-&gt;</span> <span class="token punctuation">{</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Other"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">yield</span> <span class="token string">"other"</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Головною відмінністю <span class="text-user"><span class="text-bold">yield</span></span> від <span class="text-viola">break</span> є те, що <span class="text-viola">break</span> повертав управління з <span class="text-viola">case</span> - команди, коли <span class="text-user"><span class="text-bold">yield</span></span> повертає результат із цілого <span class="text-viola">switch</span> , граючи роль внутрішнього <span class="text-viola">return</span> -a.</p>
+<p>У Java 14 змінився оператор <span class="text-viola">instanceOf</span> , і тепер можна використовувати так:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">if</span><span class="token punctuation">(</span>o <span class="token keyword">instanceof</span> <span class="token class-name">String</span> s<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+s<span class="token punctuation">.</span><span class="token function">toLowerCase</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Замість старого і не дуже красивого варіанта, де крім перевірки на <span class="text-viola">instanceOf</span> потрібно ще обов'язково приводити змінну до певного типу.</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">if</span><span class="token punctuation">(</span>s <span class="token keyword">instanceof</span> <span class="token class-name">String</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">)</span> s<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toLowerCase</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Ці зміни є частиною проекту Amber, мета якого - додати Java підтримку pattern matching.</p>
+<p>Завдяки зміні оператора <span class="text-viola">instanceOf</span> в 14 версії і розширенню в 16, Pattern Matching таки додали в 17 версії. Правда поки що тільки як preview, і протестувати його можна за допомогою <em>--enable-preview</em> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getObjectType</span><span class="token punctuation">(</span><span class="token class-name">Object</span> object<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">switch</span> <span class="token punctuation">(</span>object<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">case</span> <span class="token class-name">Integer</span> i <span class="token operator">-&gt;</span> <span class="token string">"Integer"</span><span class="token punctuation">;</span>
+        <span class="token keyword">case</span> <span class="token class-name">Long</span> l <span class="token operator">-&gt;</span> <span class="token string">"Long"</span><span class="token punctuation">;</span>
+        <span class="token keyword">case</span> <span class="token class-name">String</span> s <span class="token operator">-&gt;</span> <span class="token string">"String"</span><span class="token punctuation">;</span>
+        <span class="token keyword">default</span> <span class="token operator">-&gt;</span> object<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Взагалі з кожною новою версією в мові з'являється все більше і більше цікавих фічів для розробки, що робить Java ще крутішим.</p>

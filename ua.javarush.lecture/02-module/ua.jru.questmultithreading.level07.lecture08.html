@@ -1,0 +1,33 @@
+<p>- Привіт, Аміго!</p>
+<p>І ще кілька деталей. Так би мовити практичних порад.</p>
+<p>Нехай у тебе є метод, який щось чекає та засинає, доки умова не виконана.</p>
+<div class="code-heading">
+ Якщо колекція порожня, то чекаємо
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword"></span><strong><span class="token keyword">public</span> <span class="token keyword">synchronized</span></strong><span class="token keyword"></span> <span class="token class-name">Runnable</span> <span class="token function">getJob</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword"><strong>if</strong></span> <span class="token punctuation">(</span>jobs<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">==</span><span class="token number">0</span><span class="token punctuation">)</span>
+  <span class="token keyword"></span><span class="text-red"><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">wait</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+
+ <span class="token keyword">return</span> jobs<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>У документації з Java дуже старанно радять викликати метод wait у циклі:</p>
+<div class="code-heading">
+ Якщо колекція порожня, то чекаємо
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword"></span><strong><span class="token keyword">public</span> <span class="token keyword">synchronized</span></strong><span class="token keyword"></span> <span class="token class-name">Runnable</span> <span class="token function">getJob</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword"><strong>while</strong></span> <span class="token punctuation">(</span>jobs<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">==</span><span class="token number">0</span><span class="token punctuation">)</span>
+  <span class="token keyword"></span><span class="text-red"><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">wait</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+
+ <span class="token keyword">return</span> jobs<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Для чого це треба. Справа в тому, що таких сплячих ниток може бути два десятки. Розбудабо всіх, а завдання забрати зможе лише одна. Нитку розбудабо - але це ще не означає, що умова виконалася!</p>
+<p>Грубо кажучи, можуть бути «неправдиві побудки». Хороший розробник має враховувати цю справу.</p>
+<p><span class="text-user">- Ясно. А чи не простіше тоді використовувати просто notify?</span></p>
+<p>— А якщо у списку більше одного завдання? Notify зазвичай рекомендують використовувати для оптимізації. У всіх інших випадках рекомендується використовувати метод notifyall.</p>
+<p><span class="text-user">- Ок.</span></p>
+<p>— Але це ще не все. По-перше, може виникнути ситуація, коли хтось успадкувався від твого класу, додав туди свої методи і теж використовує wait/notifyAll. Тобто. Можливо ситуація, коли на одному об'єкті висять незалежні пари wait/notifyAll, які один про одного не знають. Тож що треба робити?</p>
+<p><span class="text-user">— Завжди викликати wait у циклі та перевіряти, що умова виходу з циклу справді виконалася!</span></p>
+<p>- Правильно. А щоб тобі стало зовсім зрозуміло, що від цього нікуди не подітися, багато розробників вказують на те, що іноді нитки прокидаються самі. Нитки, які гарантовано, ніхто не може будити випадково. Схоже, це побічний процес оптимізації/прискорення коду в працюючій Java-машині.</p>
+<p><span class="text-user">- Нічого собі. Зрозумів, без циклу перед wait нікуди.</span></p>

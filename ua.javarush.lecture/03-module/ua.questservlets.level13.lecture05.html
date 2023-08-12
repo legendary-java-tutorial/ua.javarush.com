@@ -1,0 +1,50 @@
+<h2>6.1 Що таке JavaBeans</h2>
+<p>Вже наприкінці 90-х мова Java почала активно використовуватися для великих серверних додатків, де кількість класів вимірюється десятками та сотнями тисяч. Тоді й виникла ідея стандартизувати вид Java-об'єктів.</p>
+<p>Усю мову Java чіпати не стали, щоб не позбавляти його гнучкості. Ну, зворотна сумісність і таке інше. Тоді розробабо низку критеріїв для Java-об'єктів нового покоління та назвали такі об'єкти Java Beans. Java названа на честь популярної марки кави, тому Java Beans дослівно перекладається, як «кава боби».</p>
+<p>Найважливіші критерії були такі:</p>
+<ul>
+ <li>Доступ до внутрішніх полів класу йде через метод <code>getProperty()</code>.</li>
+ <li>Запис даних у поля класу йде через метод <code>setProperty(value)</code>.</li>
+ <li>У класу має бути <strong>публічний конструктор без параметрів</strong> .</li>
+ <li>Клас повинен бути серіалізується.</li>
+ <li>Клас повинен мати перевизначені методи <code>equals()</code>, <code>hashCode()</code>та <code>toString()</code>.</li>
+</ul>
+<p>Такий підхід дозволив зробити програми менш зв'язковими. Завжди зрозуміло:</p>
+<ul>
+ <li>як створити об'єкт – є громадський конструктор за замовчуванням;</li>
+ <li>як отримати/установити значення якості;</li>
+ <li>як передати/зберегти об'єкт (використовуємо серіалізацію);</li>
+ <li>як порівнювати об'єкти (використовуємо equals() та hashCode());</li>
+ <li>як вивести інформацію про об'єкт у балку (використовуємо toString).</li>
+</ul>
+<p>Нині це фактично стандарт галузі, а колись був новим віянням. Здається, що вже всі так пишуть, хоча якщо згадати HttpClient та його Builders, то видно, що новий стандарт комусь сильно тисне.</p>
+<p>Такі об'єкти набули широкого поширення там, де їхнє основне смислове навантаження — це зберігання даних. Наприклад, у графічних інтерфейсах, базах даних та JSP-сторінках.</p>
+<h2>6.2 JSP та JavaBeans</h2>
+<p>Однією з причин появи JSP було те, що роботу з нього можна було віддати фронтендникам. А що? У тебе є людина, яка розуміється на HTML, нехай він JSP і пише. Java-програмісти пишуть свою частину, фронтендники свою – все чудово.</p>
+<p>І все було непогано доти, доки фронтендникам не довелося розбиратися в написаному Java-коді, вбудованому в JSP. Або ще гірше писати такий код самим.</p>
+<p>Java-програмісти теж від такого були не в захваті. Ну скажіть на милість, які з верстальників бекенд-розробники? Та вони ж, крім скриптів, нічого писати не можуть. Та й вся парадигма програмування стверджує, що змішувати різні мови в одному файлі – поганий тон.</p>
+<p>Тоді і з'явилася ідея, що мовляв дати фронтендникам можливість працювати з Java-об'єктами, як із HTML-кодом. Кожен HTML-тег - це теж якийсь об'єкт зі своїми полями, чому за схожим принципом не побудувати роботу з Java-об'єктами?</p>
+<p>Сказано зроблено. Додали спеціальні теги і помчало.</p>
+<p>Створення об'єкта:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token operator">&lt;</span>jsp<span class="token operator">:</span><span class="text-red">useBean</span> id<span class="token operator">=</span><span class="token string">"ім'я"</span> <span class="token keyword">class</span><span class="token operator">=</span><span class="token string">"<span class="text-user">тип-об'єкта</span>"</span> scope<span class="token operator">=</span><span class="token string">"<span class="text-viola">session</span>"</span><span class="token operator">/</span><span class="token operator">&gt;</span></code></pre>
+</div>
+<p>Ця команда створювала об'єкт з типом <code class="text-user">тип-об'єкта</code>і клала його під <code class="text-viola">сессию</code>ім'ям <code class="text-green">ім'я</code>.</p>
+<p>Об'єкти можна було зберігати в одному з чотирьох сховищ: application (глобальне), session, request та page. Також можна було встановити властивість таких об'єктів:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token operator">&lt;</span>jsp<span class="token operator">:</span><span class="text-red">setProperty</span> name<span class="token operator">=</span><span class="token string">"ім'я"</span> property<span class="token operator">=</span><span class="token string">"<span class="text-red">propName</span>"</span> value<span class="token operator">=</span><span class="token string">"<span class="text-user">string constant</span>"</span><span class="token operator">/</span><span class="token operator">&gt;</span></code></pre>
+</div>
+<p>Отримати властивість таких об'єктів можна було так:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token operator">&lt;</span>jsp<span class="token operator">:</span><span class="text-red">getProperty</span> name<span class="token operator">=</span><span class="token string">"ім'я"</span> property<span class="token operator">=</span><span class="token string">"<span class="text-red">propName</span>"</span><span class="token operator">/</span><span class="token operator">&gt;</span></code></pre>
+</div>
+<p>Приклад використання тегів:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token generics"><span class="token punctuation">&lt;</span>body<span class="token punctuation">&gt;</span></span>
+    <span class="token generics"><span class="token punctuation">&lt;</span>center<span class="token punctuation">&gt;</span></span>
+        <span class="token generics"><span class="token punctuation">&lt;</span>h2<span class="token punctuation">&gt;</span></span><span class="token class-name">Using</span> <span class="token class-name">JavaBeans</span> in JSP<span class="token operator">&lt;</span><span class="token operator">/</span>h2<span class="token operator">&gt;</span>
+<span class="text-red">        <span class="token operator">&lt;</span>jsp<span class="token operator">:</span>useBean id <span class="token operator">=</span></span><span class="token operator"></span> <span class="token string">"test"</span> <span class="token keyword"><span class="text-red">class</span></span> <span class="token operator">=</span> <span class="token string">"<span class="text-user">com.example.TestBean</span>"</span><span class="text-red"> <span class="token operator">/</span><span class="token operator">&gt;</span>
+        <span class="token operator">&lt;</span>jsp<span class="token operator">:</span>setProperty name</span> <span class="token operator">=</span> <span class="token string">"test"</span> <span class="text-red">property</span> <span class="token operator">=</span> <span class="token string">"<span class="text-viola">message</span>"</span> <span class="text-red">value</span> <span class="token operator">=</span> <span class="token string">"<span class="text-user">Hello JSP...</span>"</span><span class="text-red"> <span class="token operator">/</span><span class="token operator">&gt;</span></span><span class="token operator"></span>
+        <span class="token generics"><span class="token punctuation">&lt;</span>p<span class="token punctuation">&gt;</span></span> Що<span class="token operator">-</span>то робимо важливе<span class="token operator">&lt;</span><span class="token operator">/</span>p<span class="token operator">&gt;</span>
+<span class="text-red">        <span class="token operator">&lt;</span>jsp<span class="token operator">:</span>getProperty name</span> <span class="token operator">=</span> <span class="token string">"test"</span> <span class="text-red">property</span> <span class="token operator">=</span> <span class="token string">"<span class="text-viola">message</span>"</span> <span class="token operator"></span><span class="text-red"><span class="token operator">/</span><span class="token operator">&gt;</span></span><span class="token operator"></span>
+    <span class="token operator">&lt;</span><span class="token operator">/</span>center<span class="token operator">&gt;</span>
+   <span class="token operator">&lt;</span><span class="token operator">/</span>body<span class="token operator">&gt;</span></code></pre>

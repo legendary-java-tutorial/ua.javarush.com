@@ -1,0 +1,290 @@
+<h2>Знайомство зі StringUtils</h2>
+<p><strong>StringUtils</strong> - найбільш використовуваний клас Apache Commons. Він містить різні утиліти та методи, які допомагають розробникам уникати написання шаблонного або просто громіздкого коду для базових операцій.</p>
+<p>Багато методів у класі <span class="code"><span class="text-green">StringUtils</span></span> мають свої еквіваленти в <strong>java.lang.String</strong> , але, на відміну від методів <strong>java.lang.String</strong> , є безпечними для роботи з null. Це означає, що виняток <span class="text-red"><span class="text-bold">NullPointerException</span></span> не викидається в найнесподіваніший момент.</p>
+<p>Apache Commons містить ряд методів, і ми розглянемо деякі з найчастіше використовуваних.</p>
+<p>Список методів StringUtils:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td><span class="code text-orange">isEmpty()</span></td>
+    <td>Перевіряє, чи порожній рядок</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">equals()</span></td>
+    <td>Порівнює рядки</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">compare()</span></td>
+    <td>Порівнює рядки</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">indexOf()</span></td>
+    <td>Пошук підрядки у рядку</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">lastIndexOf()</span></td>
+    <td>Пошук підрядки у рядку</td>
+   </tr>
+   <tr>
+    <td></td>
+    <td></td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">contains()</span></td>
+    <td>Перевіряє входження підрядка в рядок</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">containsIgnoreCase()</span></td>
+    <td>Перевіряє входження підрядки в рядок, ігноруючи регістр</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">containsAny()</span></td>
+    <td>Перевіряє входження підрядка в будь-якому місці рядка</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">containsNone()</span></td>
+    <td>Перевіряє, чи немає входження підрядки в будь-якому місці рядка</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">containsOnly()</span></td>
+    <td>Перевіряє входження підрядка в рядок</td>
+   </tr>
+   <tr>
+   </tr>
+   <tr>
+    <td></td>
+    <td></td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">substring()</span></td>
+    <td>Отримання підрядка</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">split()</span></td>
+    <td>Розбиваємо рядок на підрядки</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">join()</span></td>
+    <td>Об'єднуємо підрядки</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">remove()</span></td>
+    <td>Видаляємо підрядок</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">replace()</span></td>
+    <td>Замінити підрядок</td>
+   </tr>
+   <tr>
+    <td><span class="code text-orange">countMatches()</span></td>
+    <td>Вважаємо кількість збігів</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<h2>StringUtils.isEmpty() та StringUtils.isBlank()</h2>
+<p>Обидва методи використовуються для перевірки того, чи містить рядок текст. Вони повертають true, якщо рядок справді порожній. Крім того, <span class="code text-orange">isBlank()</span> також поверне <span class="text-green"><em>true</em></span> якщо рядок містить тільки пробіли.</p>
+<p>Вони також мають свої зворотні методи: <span class="code text-orange">isNotEmpty()</span> і <span class="code text-orange">isNotBlank()</span> .</p>
+<p>Давай подивимося, як ти можеш використовувати <span class="code text-orange">isEmpty()</span> разом з його аналогом <span class="code text-orange">java.lang.String.isEmpty()</span> , а також <span class="code text-orange">isBlank()</span> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">String</span> nullValue <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+<span class="token class-name">String</span> emptyValue <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
+<span class="token class-name">String</span> blankValue <span class="token operator">=</span> <span class="token string">"\n \t   \n"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span>emptyValue<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"emptyValue is emptyValue"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">isBlank</span><span class="token punctuation">(</span>blankValue<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"blankValue is blankValue"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">!</span>nullValue<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"nullString isn't null"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Тут три змінних типу <span class="text-orange">String</span> . Одна вказує на <em><strong>null</strong></em> , друга не є <em><strong>null</strong></em> , але немає вмісту (порожній рядок), а третя не порожня, але за друку видасть порожній результат.</p>
+<p>Виконання цього коду призводить до:</p>
+<pre><code>emptyValue is emptyValue
+blankValue is blankValue
+Exception in thread "main" java.lang.NullPointerException
+</code></pre>
+<p>Метод <span class="code text-orange">isEmpty()</span> , вбудований в <strong>java.lang.String</strong> , небезпечний для <em><strong>null</strong></em> . Ти легко отримаєш <span class="text-red"><span class="text-bold">NullPointerException</span></span> , якщо спробуєш перевірити, чи вона порожня, оскільки викличеш метод за посиланням <em><strong>null</strong></em> . Потрібно буде заздалегідь перевірити, чи є посилання нульовим:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">String</span> nullValue <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+<span class="token class-name">String</span> emptyValue <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
+<span class="token class-name">String</span> blankValue <span class="token operator">=</span> <span class="token string">"\n \t   \n"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span>emptyValue<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"emptyValue is emptyValue"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">isBlank</span><span class="token punctuation">(</span>blankValue<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"blankValue is blankValue"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">if</span><span class="token punctuation">(</span>nullValue <span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>nullValue<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"nullString isn't null"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Тепер це призводить до:</p>
+<pre><code>emptyValue is emptyValue
+blankValue is blankValue
+</code></pre>
+<p>І якщо ми протестуємо ці методи на<mark class="user">nullString</mark>:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">String</span> nullValue <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+
+<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span>nullValue<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"nullValue is emptyValue"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">isBlank</span><span class="token punctuation">(</span>nullValue<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"nullValue is blankValue"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>То отримаємо:</p>
+<pre><code>nullValue is emptyValue
+nullValue is blankValue
+</code></pre>
+<p>Методи <span class="code"><span class="text-green">StringUtils</span></span> безпечні для <em><strong>null</strong></em> і дають очікуваний результат, навіть якщо вони передали <em><strong>null</strong></em> .</p>
+<h2>StringUtils.equals()</h2>
+<p>Цей метод порівнює два рядки і повертає <span class="text-green"><em>true</em></span> , якщо вони ідентичні або обидві посилання вказують на <em><strong>null</strong></em> , але май на увазі, що цей метод чутливий до регістру.</p>
+<p>Давай подивимося, як він працює:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token string">"якась інформація"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span><span class="token string">"якась інформація"</span><span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span><span class="token string">"якась інформація"</span><span class="token punctuation">,</span>  <span class="token string">"якась інформація"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span><span class="token string">"якась додаткова інформація"</span><span class="token punctuation">,</span> <span class="token string">"якась інформація"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Результат:</p>
+<pre><code>true
+false
+false
+true
+false
+</code></pre>
+<p>Для порівняння методу <span class="code text-orange">equals()</span> з <span class="code"><span class="text-green">StringUtils</span></span> з <span class="code text-orange">java.lang.String.equals()</span> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">String</span> nullValue <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>nullValue<span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>nullValue<span class="token punctuation">,</span> <span class="token string">"якась інформація"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>nullValue<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>nullValue<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span><span class="token string">"якась інформація"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Це знову привело тебе до:</p>
+<pre><code>true
+false
+Exception in thread "main" java.lang.NullPointerException
+</code></pre>
+<p>Знову ж таки, виклик методу для посилання <em><strong>null</strong></em> призводить до виключення <span class="text-red"><span class="text-bold">NullPointerException</span></span> , і потрібно буде заздалегідь перевірити, чи є змінна <em><strong>null</strong></em> , перед її використанням.</p>
+<h2>StringUtils.compare()</h2>
+<p>Оголошення цього методу виглядає так:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">compare</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">String</span> str1<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token class-name">String</span> str2<span class="token punctuation">)</span></code></pre>
+<p>Цей метод порівнює два рядки лексикографічно, як це робить метод <span class="code text-orange">java.lang.String.compareTo()</span> , повертаючи:</p>
+<ul>
+ <li>0, якщо str1 дорівнює str2 (або обидва рівні null)</li>
+ <li>Значення менше, ніж 0, якщо str1 менше, ніж str2</li>
+ <li>Значення більше, ніж 0, якщо str1 більше, ніж str2</li>
+</ul>
+<p>Лексикографічний порядок - це порядок за словником. Давай подивимося, як ми можемо використовувати це у нашій програмі:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">compare</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">compare</span><span class="token punctuation">(</span><span class="token keyword">null</span> <span class="token punctuation">,</span> <span class="token string">"codeGym"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">compare</span><span class="token punctuation">(</span><span class="token string">"codeGym"</span><span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">compare</span><span class="token punctuation">(</span><span class="token string">"codeGym"</span><span class="token punctuation">,</span> <span class="token string">"CODEGYM"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">compare</span><span class="token punctuation">(</span><span class="token string">"codeGym"</span><span class="token punctuation">,</span> <span class="token string">"codeGym"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Отримуємо:</p>
+<pre><code>0
+-1
+1
+32
+0
+</code></pre>
+<p>Примітка: значення <em><strong>null</strong></em> вважається меншим, ніж значення, відмінне від <em><strong>null</strong></em> . Два значення <em><strong>null</strong></em> вважаються рівними.</p>
+<h2>Перевіряємо, чи містить рядок інший підрядок</h2>
+<p>Для цього у <span class="code"><span class="text-green">StringUtils</span></span> є 5 методів:</p>
+<ul>
+ <li><span class="code text-orange">contains()</span></li>
+ <li><span class="code text-orange">containsIgnoreCase()</span></li>
+ <li><span class="code text-orange">containsAny()</span></li>
+ <li><span class="code text-orange">containsNone()</span></li>
+ <li><span class="code text-orange">containsOnly()</span></li>
+</ul>
+<p>Метод <span class="code text-orange">contains()</span> повертає <span class="text-green"><em>true</em></span> чи <span class="text-red"><em>false</em></span> залежно від цього, міститься чи послідовність пошуку у інший послідовності чи ні.</p>
+<p>Якщо такий метод передати <em><strong>null</strong></em> , він поверне <span class="text-red"><em>false</em></span> . Якщо передати не <em><strong>null</strong></em> , то метод просто викличе <span class="code text-orange">java.lang.String.indexOf(String str)</span> у об'єкта, що передається.</p>
+<p>Приклади:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">String</span> value <span class="token operator">=</span> <span class="token string">"CodeGym is cool"</span><span class="token punctuation">;</span>
+
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">contains</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token string">"a"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">contains</span><span class="token punctuation">(</span>value<span class="token punctuation">,</span> <span class="token string">"CodeGym"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">contains</span><span class="token punctuation">(</span>value<span class="token punctuation">,</span> <span class="token string">"C++"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">contains</span><span class="token punctuation">(</span>value<span class="token punctuation">,</span> <span class="token string">"codegym"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Метод чутливий до регістру, тому останній виклик також <span class="text-red"><em>поверне</em></span> :</p>
+<pre><code>false
+true
+false
+false
+</code></pre>
+<p>Метод <span class="code text-orange">containsAny()</span> повертає <span class="text-green"><em>true</em></span> , якщо рядок, переданий першим аргументом, містить хоча б один із підрядків, переданий 2-N аргументами.</p>
+<p>Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">String</span> value <span class="token operator">=</span> <span class="token string">"CodeGym is cool"</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">containsAny</span><span class="token punctuation">(</span>value<span class="token punctuation">,</span> <span class="token string">"cool"</span><span class="token punctuation">,</span> <span class="token string">"c00l"</span><span class="token punctuation">,</span> <span class="token string">"bro"</span><span class="token punctuation">,</span> <span class="token string">"hello"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Виведе на екран:</p>
+<pre><code>true
+</code></pre>
+<p>Цей метод також чутливий до регістру.</p>
+<h4>Метод containsNone()</h4>
+<p>Коли потрібно перевірити, що певний рядок не містить нічого зі списку, можна скористатися методом <span class="code text-orange">containsNone()</span> . Першим параметром до нього передається рядок, а наступні параметри – це рядки, яких має бути цільової стоку.</p>
+<p>Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">String</span> s <span class="token operator">=</span> <span class="token string">"CodeGym is cool"</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">containsNone</span><span class="token punctuation">(</span>s<span class="token punctuation">,</span> <span class="token string">'g'</span><span class="token punctuation">,</span> <span class="token string">'a'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Виведення в консоль:</p>
+<pre><code>false
+</code></pre>
+<h2>Робота з підрядками</h2>
+<p>Робота з підрядками схожа на роботу методів класу <span class="code"><span class="text-green">String</span></span> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token function">substring</span><span class="token punctuation">(</span><span class="token class-name">String</span> str<span class="token punctuation">,</span> <span class="token keyword">int</span> start<span class="token punctuation">)</span>
+substring <span class="token punctuation">(</span><span class="token class-name">String</span> str<span class="token punctuation">,</span> <span class="token keyword">int</span> start<span class="token punctuation">,</span> <span class="token keyword">int</span> end<span class="token punctuation">)</span></code></pre>
+<p>Ці методи повертають підрядок з рядка <span class="code">str</span> . Рядок задається двома індексами: <strong>start</strong> і <strong>end</strong> . І як заведено в Java, останній символ діапазону - <strong>end-1</strong> . У чому перевага цих методів?</p>
+<p>Якщо передати в такий метод <em><strong>null</strong></em> , він просто поверне <em><strong>null</strong></em> , а не кине виняток. Ці методи підтримують негативні значення індексів. У цьому рядок розглядається як замкнута петля. Після останнього символу йде перший т.д.</p>
+<p>Давай подивимося, як ми можемо його використати:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">substring</span><span class="token punctuation">(</span><span class="token string">"lets java"</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">substring</span><span class="token punctuation">(</span><span class="token string">"lets java"</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">substring</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Виконання наведеного вище коду дає нам:</p>
+<pre><code>ts j
+ets java
+null
+</code></pre>
+<h3>StringUtils.split()</h3>
+<p>Метод, який дозволяє розбити рядок на підрядки, використовуючи спеціальний розділювач. Якщо така є в цільовому рядку, то метод поверне масив підрядків. Якщо символу немає – повернеться порожній масив. Ну а якщо в метод передати <em><strong>null</strong></em> , він поверне <em><strong>null</strong></em> . Давай розглянемо цей код та роботу методу:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">String</span> myData <span class="token operator">=</span> <span class="token string">"Address, City, State, Zip, Phone, Email, Password"</span><span class="token punctuation">;</span>
+
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span>myData<span class="token punctuation">,</span> <span class="token string">','</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token string">'.'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">,</span> <span class="token string">'.'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Результат:</p>
+<pre><code>[Address,  City,  State,  Zip,  Phone,  Email,  Password]
+null
+[]
+</code></pre>
+<h3>StringUtils.join()</h3>
+<p>Метод <span class="code text-orange">join()</span> дозволяє склеїти масив рядків в один рядок. При цьому в нього можна передати спеціальний символ-розділювач, який буде доданий між підрядками в результуючому рядку. Якщо ж метод передати <em><strong>null</strong></em> , він поверне <em><strong>null</strong></em> .</p>
+<p>Цей метод є прямою протилежністю методу <span class="code text-orange">split()</span> . Давай розглянемо цей простий приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">String</span> myData <span class="token operator">=</span> <span class="token string">"Address, City, State, Zip, Phone, Email, Password"</span><span class="token punctuation">;</span>
+
+<span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> myString <span class="token operator">=</span>  <span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span>myData<span class="token punctuation">,</span> <span class="token string">','</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span>myString<span class="token punctuation">,</span> <span class="token string">'-'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Виконання наведеного вище коду дає нам:</p>
+<pre><code>Address- City- State- Zip- Phone- Email- Password
+</code></pre>
+<h4>StringUtils.replace()</h4>
+<p>Шукає рядок усередині рядка, знаходить його, якщо він існує, і замінює всі його входження на новий рядок.</p>
+<p>Оголошення цього методу виглядає так:</p>
+<pre><code>public static String replace(final String text, final String searchString, final String replacement)
+</code></pre>
+<p>Якщо рядок пошуку не знайдено в тексті, нічого не станеться і текст залишиться тим самим. Дотримуючись тієї ж логіки, якщо текст дорівнює <em><strong>null</strong></em> , цей метод повертає <em><strong>null</strong></em> . Якщо ти шукаєш <em><strong>null</strong></em> -рядок або замінюєш підрядок на <em><strong>null</strong></em> , то метод поверне оригінальний рядок.</p>
+<p>Давай спробуємо цей метод:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">String</span> value <span class="token operator">=</span> <span class="token string">"CodeGym is the best"</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">replace</span><span class="token punctuation">(</span>value<span class="token punctuation">,</span> <span class="token string">"best"</span><span class="token punctuation">,</span> <span class="token string">"cool"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Результат:</p>
+<pre><code>CodeGym is the cool
+</code></pre>
+<ul>
+ <li><a href="https://stackabuse.com/guide-to-apache-commons-stringutils-class-in-java/" target="_blank">Guide to Apache Commons' StringUtils Class in Java</a></li>
+ <li><a href="https://rukovodstvo.net/posts/id_649/" target="_blank">Посібник з класу StringUtils Apache Commons в Java</a></li>
+</ul>

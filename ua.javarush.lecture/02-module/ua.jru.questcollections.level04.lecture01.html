@@ -1,0 +1,257 @@
+<p>- Привіт, Аміго. Сьогодні Білаабо розповість тобі, що таке рекурсія.</p><a href="https://cdn.javarush.com/images/article/97781a1d-fc0f-473c-93e3-9471baa7c37e/original.jpeg" target="_blank"><img data-id="97781a1d-fc0f-473c-93e3-9471baa7c37e" data-max-width="850" alt="Рекурсія - 1" src="https://cdn.javarush.com/images/article/97781a1d-fc0f-473c-93e3-9471baa7c37e/800.jpeg" style="width: 850px;"></a>
+<p>Як ти знаєш, Java одні методи викликають інші методи. При цьому при виклику методу в нього передаються конкретні значення аргументів, а під час його роботи локальні змінні методи набувають деяких значень.</p>
+<p><span class="text-user">- Ага.</span></p>
+<p>— І як ти знаєш, внутрішні змінні різних методів є незалежними один від одного.</p>
+<p><span class="text-user">- Ага.</span></p>
+<p>— Так от уяви ситуацію, коли метод може викликати сам себе. Саме вона називається рекурсією. Приклад:</p>
+<div class="code-heading">
+ приклад
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token function"><span class="text-red">countDown</span></span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function"><span class="text-red">countDown</span></span><span class="token punctuation">(</span><span class="token keyword">int</span> x<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">if</span> <span class="token punctuation">(</span>x <span class="token operator">&lt;=</span><span class="token number">0</span><span class="token punctuation">)</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"<span class="text-viola">Boom!</span>"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token keyword">else</span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="text-viola">x</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function"><span class="text-red">countDown</span></span><span class="token punctuation">(</span>x <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<div class="code-heading">
+ Виведення на екран:
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token number">10</span>
+<span class="token number">9</span>
+<span class="token number">8</span>
+<span class="token number">7</span>
+<span class="token number">6</span>
+<span class="token number">5</span>
+<span class="token number">4</span>
+<span class="token number">3</span>
+<span class="token number">2</span>
+<span class="token number">1</span>
+<span class="token class-name">Boom</span><span class="token operator">!</span></code></pre>
+<p><span class="text-user">— Чесно кажучи, бачу, що метод у коді сам себе викликає, але не розумію, що саме відбувається.</span></p>
+<p>— Та приблизно те саме, що й під час виклику іншого методу.</p>
+<p><span class="text-user">— Ні, я питаю, що відбувається зі змінними? З їхніми значеннями? І як ми виходимо із методу? Чи ми виходимо з усіх одразу?</span></p>
+<p>- Господи. Та все набагато простіше. Уяви, що метод, який викликає сам себе, розмножабо багато разів. Тоді буде аналогічна ситуація:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Рекурсивний виклик методу</th>
+    <th>Що відбувається «насправді»</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token function"><span class="text-red">countDown</span></span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function"><span class="text-red">countDown</span></span><span class="token punctuation">(</span><span class="token keyword">int</span> x<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">if</span> <span class="token punctuation">(</span>x <span class="token operator">&lt;=</span><span class="token number">0</span><span class="token punctuation">)</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string"><span class="text-viola">"Boom!"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token keyword">else</span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="text-viola">x</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function"><span class="text-red">countDown</span></span><span class="token punctuation">(</span>x <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token function"><span class="text-red">countDown1</span></span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function"><span class="text-red">countDown1</span></span><span class="token punctuation">(</span><span class="token keyword">int</span> x<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">if</span> <span class="token punctuation">(</span>x <span class="token operator">&lt;=</span><span class="token number">0</span><span class="token punctuation">)</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string"><span class="text-viola">"Boom!"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token keyword">else</span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="text-viola">x</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function"><span class="text-red">countDown2</span></span><span class="token punctuation">(</span>x <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function"><span class="text-red">countDown2</span></span><span class="token punctuation">(</span><span class="token keyword">int</span> x<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">if</span> <span class="token punctuation">(</span>x <span class="token operator">&lt;=</span><span class="token number">0</span><span class="token punctuation">)</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"<span class="text-viola">Boom!</span>"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token keyword">else</span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="text-viola">x</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function"><span class="text-red">countDown3</span></span><span class="token punctuation">(</span>x <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function"><span class="text-red">countDown3</span></span><span class="token punctuation">(</span><span class="token keyword">int</span> x<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">if</span> <span class="token punctuation">(</span>x <span class="token operator">&lt;=</span><span class="token number">0</span><span class="token punctuation">)</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"<span class="text-viola">Boom!</span>"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token keyword">else</span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="text-viola">x</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function"><span class="text-red">countDown4</span></span><span class="token punctuation">(</span>x <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function"><span class="text-red">countDown4</span></span><span class="token punctuation">(</span><span class="token keyword">int</span> x<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">if</span> <span class="token punctuation">(</span>x <span class="token operator">&lt;=</span><span class="token number">0</span><span class="token punctuation">)</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"<span class="text-viola">Boom!</span>"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token keyword">else</span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="text-viola">x</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">countDown5</span><span class="token punctuation">(</span>x <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Виведення на екран:</th>
+    <th>Виведення на екран:</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token number">3</span>
+<span class="token number">2</span>
+<span class="token number">1</span>
+<span class="token class-name">Boom</span><span class="token operator">!</span></code></pre></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token number">3</span>
+<span class="token number">2</span>
+<span class="token number">1</span>
+<span class="token class-name">Boom</span><span class="token operator">!</span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Тобто.&nbsp;<span class="text-red">щоразу під час виклику методу (навіть себе) створюються нові змінні, які зберігають дані цього методу. Жодних загальних змінних немає.</span></p>
+<p>При кожному виклику у пам'яті з'являється ще одна копія аргументів методу, але з новими значеннями. При поверненні в старий метод там використовуються його змінні. Тобто. при рекурсії <strong>&nbsp;фактично ми викликаємо інший метод, але з таким самим кодом як наш!</strong></p>
+<p><span class="text-user">- Ясно. А як працює вихід із цих методів? Чи можна приклад?</span></p>
+<p>- Гаразд. Один приклад коштує тисячі слів. Ось тобі приклад:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Рекурсивний виклик методу</th>
+    <th>Що відбувається «насправді»</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token function"><span class="text-red">print</span></span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function"><span class="text-red">print</span></span><span class="token punctuation">(</span><span class="token keyword">int</span> x<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">if</span> <span class="token punctuation">(</span>x <span class="token operator">&lt;=</span><span class="token number">0</span><span class="token punctuation">)</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Boom!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token keyword">else</span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="text-viola">x</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function"><span class="text-red">print</span></span><span class="token punctuation">(</span>x <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="text-viola">x</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token function"><span class="text-red">print1</span></span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function"><span class="text-red">print1</span></span><span class="token punctuation">(</span><span class="token keyword">int</span> x<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">if</span> <span class="token punctuation">(</span>x <span class="token operator">&lt;=</span><span class="token number">0</span><span class="token punctuation">)</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Boom!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token keyword">else</span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="text-viola">x</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function"><span class="text-red">print2</span></span><span class="token punctuation">(</span>x <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="text-viola">x</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function"><span class="text-red">print2</span></span><span class="token punctuation">(</span><span class="token keyword">int</span> x<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">if</span> <span class="token punctuation">(</span>x <span class="token operator">&lt;=</span><span class="token number">0</span><span class="token punctuation">)</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Boom!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token keyword">else</span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="text-viola">x</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function"><span class="text-red">print3</span></span><span class="token punctuation">(</span>x <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="text-viola">x</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+…</code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Виведення на екран:</th>
+    <th>Виведення на екран:</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token number">3</span>
+<span class="token number">2</span>
+<span class="token number">1</span>
+<span class="token class-name">Boom</span><span class="token operator">!</span>
+<span class="token number">1</span>
+<span class="token number">2</span>
+<span class="token number">3</span></code></pre></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token number">3</span>
+<span class="token number">2</span>
+<span class="token number">1</span>
+<span class="token class-name">Boom</span><span class="token operator">!</span>
+<span class="token number">1</span>
+<span class="token number">2</span>
+<span class="token number">3</span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">- Ок. Начебто зрозумів. А навіщо потрібна рекурсія?</span></p>
+<p>— Є дуже багато завдань, які розбиваються на окремі завдання, ідентичні початковому завданню. Наприклад, треба обійти всі елементи дерева XML. Кожен елемент може мати кілька дочірніх елементів, а вони — свої.</p>
+<p>Або тобі потрібно вивести список файлів, які є в директорії та усі її піддиректорії. Тоді ти пишеш метод, який виводить файли поточної директорії, а потім для отримання файлів усіх піддиректорій викликаєш його, але з іншим параметром – піддиректорією.</p>
+<p>Приклад:</p>
+<div class="code-heading">
+ Виведення всіх файлів на екран із директорії та її піддиректорій
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token function"><span class="text-red">printAllFiles</span></span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span><span class="token string">"c:/windows/"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function"><span class="text-red">printAllFiles</span></span><span class="token punctuation">(</span><span class="token class-name">File</span> dir<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">File</span> <span class="text-green">file</span> <span class="token operator">:</span> dir<span class="token punctuation">.</span><span class="token function">listFiles</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="text-green">file</span><span class="token punctuation">.</span><span class="token function">isDirectory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+   <span class="token function"><span class="text-red">printAllFiles</span></span><span class="token punctuation">(</span><span class="text-green">file</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">else</span>
+   <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="text-green">file</span><span class="token punctuation">.</span><span class="token function">getAbsolutePath</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Рядок 8 – отримуємо список всіх файлів (і директорій) у директорії dir.</p>
+<p>Рядки 10-11 – якщо файл насправді директорія, то виведення її файлів знову викликаємо&nbsp; <span class="text-red"><strong>printAllFiles</strong></span> , але з іншим параметром – піддиректорією.</p>
+<p>Рядок 13 - виводимо ім'я поточного файлу.</p>
+<p><span class="text-user">- Ок. Начебто зрозумів. Дякую, Білаабо.</span></p>

@@ -1,0 +1,165 @@
+<p>- Привіт, Аміго!</p>
+<p><span class="text-user">- Привіт, Еллі!</span></p>
+<p>— Сьогодні ми з Рішею збираємося розповісти тобі все про generic'и.</p>
+<p><span class="text-user">— Так я вже начебто майже все знаю.</span></p>
+<p>— Майже все та не все.</p>
+<p><span class="text-user">- Так? Гаразд, я готовий слухати.</span></p>
+<p>- Тоді почнемо.</p>
+<p>Generic'ами в Java називають класи, які містять типи-параметри.</p>
+<p>Причини появи generic'ів – див. коментар у коді:</p>
+<div class="code-heading">
+ приклад
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name"></span><span class="text-green"><span class="token class-name">ArrayList</span> stringList</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-green">ArrayList</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="text-green">stringList</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"abc"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//добавляем строку в список</span>
+<span class="text-green">stringList</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"abc"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//добавляем строку в список</span>
+<span class="text-green">stringList</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span> <span class="token number">1</span> <span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//добавляем число в список</span>
+
+<span class="token keyword"><strong>for</strong></span><span class="token punctuation">(</span><span class="token class-name">Object</span> o<span class="token operator">:</span> <span class="text-green">stringList</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token class-name">String</span> s <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">)</span> o<span class="token punctuation">;</span> <span class="token comment"><span class="text-red">//тут будет исключение, когда дойдем до елемента-числа</span></span>
+<span class="token punctuation">}</span></code></pre>
+<p>Як вирішують проблему Generic'и:</p>
+<div class="code-heading">
+ приклад
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name"><span class="text-green">ArrayList</span></span><span class="token generics"><span class="token punctuation"><span class="text-red">&lt;</span></span><span class="token class-name"><span class="text-user">String</span></span><span class="token punctuation"><span class="text-red">&gt;</span></span></span> stringList <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-green">ArrayList</span></span><span class="token generics"><span class="token punctuation"><span class="text-red">&lt;</span></span><span class="token class-name"><span class="text-user">String</span></span><span class="token punctuation"><span class="text-red">&gt;</span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="text-green">stringList</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"abc"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//добавляем строку в список</span>
+<span class="text-green">stringList</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"abc"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//добавляем строку в список</span>
+<span class="text-green">stringList</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span> <span class="token number">1</span> <span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment"><span class="text-red"><strong>//тут будет ошибка компиляции</strong></span></span>
+
+<span class="token keyword"><strong>for</strong></span><span class="token punctuation">(</span><span class="token class-name">Object</span> o<span class="token operator">:</span> <span class="text-green">stringList</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token class-name"><span class="text-user">String</span></span> s <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name"><span class="text-user">String</span></span><span class="token punctuation">)</span> o<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Такий код просто не скомпілюється, і помилка з додаванням даних не типу буде помічена ще на етапі компіляції.</p>
+<p><span class="text-user">— Я вже це знаю.</span></p>
+<p>- От і відмінно. Повторення мати навчання.</p>
+<p>Але розробники Java трохи схалявіли при створенні Generic і замість того щоб робити повноцінні типи з параметрами прикрутабо хитру оптимізацію. Насправді в типи не додали жодної інформації про їх типи-параметри, а вся магія відбувалася на етапі компіляції.</p>
+<div class="row compare">
+ <div class="col-xs-12 col-sm-6 col-md-6">
+  <div class="code-heading">
+   Код із generic'ами
+  </div>
+  <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name"></span><span class="text-green"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation"></span><span class="text-red"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-user">String</span></span><span class="token punctuation">&gt;</span></span><span class="token punctuation"></span></span> strings</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-green">ArrayList</span></span><span class="token generics"><span class="token punctuation"></span><span class="text-red"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-user">String</span></span><span class="token punctuation">&gt;</span></span><span class="token punctuation"></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="text-green">strings</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"abc"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="text-green">strings</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"abc"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="text-green">strings</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment"><span class="text-red">// тут ошибка компиляции</span></span>
+
+<span class="token keyword">for</span><span class="token punctuation">(</span><span class="token class-name">String</span> s<span class="token operator">:</span> <span class="text-green">strings</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+ </div>
+ <div class="col-xs-12 col-sm-6 col-md-6">
+  <div class="code-heading">
+   Що відбувається насправді
+  </div>
+  <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name"></span><span class="text-green"><span class="token class-name">List</span> <strong>strings</strong></span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-green">ArrayList</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="text-green">strings</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">)</span><span class="token string">"abc"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="text-green">strings</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">)</span><span class="token string">"abc"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="text-green">strings</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">)</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment"><span class="text-red">//ошибка компиляции</span></span>
+
+<span class="token keyword">for</span><span class="token punctuation">(</span><span class="token class-name">String</span> s<span class="token operator">:</span> <span class="text-green">strings</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+ <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+ </div>
+</div>
+<p><span class="text-user">- Хитро, так.</span></p>
+<p>— Так, але цей підхід має побічний ефект. <span class="text-red">Усередині класу-generic'а не зберігається жодної інформації про його тип-параметр. </span>Такий підхід пізніше назвали <strong>стиранням типів.</strong></p>
+<p>Тобто. якщо у тебе є свій клас із типами-параметрами, то ти не можеш використовувати інформацію про них усередині класу.</p>
+<div class="row compare">
+ <div class="col-xs-12 col-sm-6 col-md-6">
+  <div class="code-heading">
+   Код із generic'ами
+  </div>
+  <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Zoo</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"><span class="text-green">T</span></span><span class="token punctuation">&gt;</span></span>
+<span class="token punctuation">{</span>
+ <span class="token class-name"></span><span class="text-green"><span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> pets</span> <span class="token operator">=</span> <span class="token keyword">new</span><span class="text-green"> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span></span><span class="token generics"><span class="token punctuation"></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ <span class="token keyword"><strong>public</strong></span> <span class="token class-name"><span class="text-green">T</span></span> <span class="token function">createAnimal</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name"><span class="text-green">T</span></span> animal <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-green">T</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="text-green">pets</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>animal<span class="token punctuation">)</span>
+  <span class="token keyword"><strong>return</strong></span> animal<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+ </div>
+ <div class="col-xs-12 col-sm-6 col-md-6">
+  <div class="code-heading">
+   Що відбувається насправді
+  </div>
+  <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Zoo</span>
+<span class="token punctuation">{</span>
+ <span class="token class-name"></span><span class="text-green"><span class="token class-name">ArrayList</span> <strong>pets</strong></span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-green">ArrayList</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ <span class="token keyword">public</span> <span class="token class-name">Object</span> <span class="token function">createAnimal</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token class-name"><span class="text-green">Object</span></span> animal <span class="token operator">=</span> <span class="token keyword"></span><span class="text-red"><span class="token keyword">new</span> <span class="token operator">?</span><span class="token operator">?</span><span class="token operator">?</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<strong><span class="text-green">  pets</span></strong><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>animal<span class="token punctuation">)</span>
+  <span class="token keyword"><strong>return</strong></span> animal<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+ </div>
+</div>
+<p>При компіляції всі типи параметрів замінюються Object. І інформації про тип, що його передавали, у класі немає.</p>
+<p><span class="text-user">— Так, згоден, це не дуже добре.</span></p>
+<p>— Гаразд, все не так страшно, я тобі згодом розповім, як цю проблему навчабося оминати.</p>
+<p>Але це ще не все. Java дозволяє задати тип-батько для типів-параметрів. І тому використовується ключове слово extends. Приклад:</p>
+<div class="row compare">
+ <div class="col-xs-12 col-sm-6 col-md-6">
+  <div class="code-heading">
+   Код із generic'ами
+  </div>
+  <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Zoo</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name"></span><span class="text-red"><span class="token class-name">T</span> <span class="token keyword">extends</span> <span class="token class-name">Cat</span></span><span class="token class-name"></span><span class="token punctuation">&gt;</span></span>
+<span class="token punctuation">{</span>
+<span class="text-red"> <span class="token class-name">T</span></span><span class="token class-name"></span> cat<span class="token punctuation">;</span>
+
+<span class="text-red"> <span class="token class-name">T</span></span><span class="token class-name"></span> <span class="token function">getCat</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> cat<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token keyword"><strong>void</strong></span> setCat <span class="token punctuation">(</span><span class="token class-name"><span class="text-red">T</span></span> cat<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>cat <span class="token operator">=</span> cat<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token class-name"></span><span class="text-user"><span class="token class-name">String</span> <span class="token function">getCatName</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>cat<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span></span><span class="token punctuation"></span>
+<span class="token punctuation">}</span></code></pre>
+ </div>
+ <div class="col-xs-12 col-sm-6 col-md-6">
+  <div class="code-heading">
+   Що відбувається насправді
+  </div>
+  <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Zoo</span>
+<span class="token punctuation">{</span>
+ <span class="token class-name"><span class="text-red">Cat</span></span> cat<span class="token punctuation">;</span>
+
+ <span class="token class-name"><span class="text-red">Cat</span></span> <span class="token function">getCat</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> cat<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token keyword"><strong>void</strong></span> <span class="token function">setCat</span><span class="token punctuation">(</span><span class="token class-name"><span class="text-red">Cat</span></span> cat<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>cat <span class="token operator">=</span> cat<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token class-name"></span><span class="text-user"><span class="token class-name">String</span> <span class="token function">getCatName</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>cat<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span></span><span class="token punctuation"></span>
+<span class="token punctuation">}</span></code></pre>
+ </div>
+</div>
+<p>Зверни увагу на два факти.</p>
+<p><span class="text-viola">По-перше, як тип параметра тепер можна передати не будь-який тип, а тип Cat або один з його спадкоємців.</span></p>
+<p><span class="text-green">По-друге, у класі Zoo у змінних типу T тепер можна викликати методи класу Cat. </span>Чому - пояснено в стовпці праворуч (бо замість типу T скрізь підставиться тип Cat)</p>
+<p><span class="text-user">- Ага. Якщо ми сказали, що як тип-параметр у нас передають тип Cat або його спадкоємців, значить, ми впевнені, що методи класу Cat у типу T обов'язково є.</span></p>
+<p><span class="text-user">Що ж. Розумно.</span></p>

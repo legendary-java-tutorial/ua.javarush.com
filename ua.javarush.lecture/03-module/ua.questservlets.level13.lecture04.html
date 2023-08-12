@@ -1,0 +1,68 @@
+<h2>5.1 include</h2>
+<p>Є ще кілька чарівних директив, про які хотілося б розповісти. Перша така директива – це директива <strong>include</strong> . Вона дозволяє вставити інший файл у місце сторінки, де вона вказана. Загальний формат такої директиви має вигляд:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token operator"></span><span class="text-red"><span class="token operator">&lt;</span><span class="token operator">%</span>@</span> <span class="text-green">include file<span class="token operator">=</span></span><span class="token operator"></span><span class="token string">"<span class="text-user">url</span>"</span><span class="token operator"></span><span class="text-red"><span class="token operator">%</span><span class="token operator">&gt;</span></span><span class="token operator"></span></code></pre>
+</div>
+<p>Можна встановити не просто файл, а, наприклад, інший jsp-сервлет, або навіть url.</p>
+<p>Приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="text-red">    <span class="token operator">&lt;</span><span class="token operator">%</span>@ include file<span class="token operator">=</span><span class="token string">"header.jsp"</span><span class="token operator">%</span><span class="token operator">&gt;</span></span><span class="token operator"></span>
+
+    <span class="token operator">&lt;</span><span class="token operator">%</span>
+        <span class="token keyword">double</span> num <span class="token operator">=</span> <span class="token class-name">Math</span><span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>num <span class="token operator">&gt;</span> <span class="token number">0.95</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>num<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token operator">%</span><span class="token operator">&gt;</span>
+
+<span class="text-red">    <span class="token operator">&lt;</span><span class="token operator">%</span>@ include file<span class="token operator">=</span><span class="token string">"footer.jsp"</span><span class="token operator">%</span><span class="token operator">&gt;</span></span><span class="token operator"></span></code></pre>
+<p>Можна, наприклад, винести верхню частину всіх сторінок сайту в header.jsp, а нижню – у footer.jsp та збирати усі сторінки як конструктор.</p>
+<h2>5.2 forward</h2>
+<p>Пам'ятаєш, що у класичних сервлетах є можливість виконати <strong>redirect</strong> чи <strong>forward</strong> на інший url? У JSP це також можливо і для цього є спеціальна дія. Його вигляд трохи відрізняється від того, що ти бачив раніше:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="text-red"> <span class="token operator">&lt;</span>jsp<span class="token operator">:</span>forward</span> <span class="text-green">page</span><span class="token operator">=</span><span class="token string">"<span class="text-user">url</span>"</span><span class="token operator"></span><span class="text-red"><span class="token operator">/</span><span class="token operator">&gt;</span></span><span class="token operator"></span></code></pre>
+</div>
+<p>Також є більш сучасний варіант – з параметрами:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token operator"></span><span class="text-red"><span class="token operator">&lt;</span>jsp<span class="token operator">:</span>forward</span> <span class="text-green">page</span><span class="token operator">=</span><span class="token string">"<span class="text-user">url</span>"</span> <span class="token operator"><span class="text-red">&gt;</span></span>
+<span class="text-red">    <span class="token operator">&lt;</span>jsp<span class="token operator">:</span>param</span> <span class="text-green">name</span><span class="token operator">=</span><span class="token string">"<span class="text-user">ім'я</span>"</span> <span class="text-green">value</span><span class="token operator">=</span><span class="token string">"<span class="text-user">значення</span>"</span><span class="token operator"></span><span class="text-red"><span class="token operator">/</span><span class="token operator">&gt;</span></span><span class="token operator"></span>
+<span class="text-red">    <span class="token operator">&lt;</span>jsp<span class="token operator">:</span>param</span> <span class="text-green">name</span><span class="token operator">=</span><span class="token string">"<span class="text-user">ім'я</span>"</span> <span class="text-green">value</span><span class="token operator">=</span><span class="token string">"<span class="text-user">значення</span>"</span><span class="token operator"></span><span class="text-red"><span class="token operator">/</span><span class="token operator">&gt;</span></span><span class="token operator"></span>
+<span class="text-red">    <span class="token operator">&lt;</span>jsp<span class="token operator">:</span>param</span> <span class="text-green">name</span><span class="token operator">=</span><span class="token string">"<span class="text-user">ім'я</span>"</span> <span class="text-green">value</span><span class="token operator">=</span><span class="token string">"<span class="text-user">значення</span>"</span><span class="token operator"></span><span class="text-red"><span class="token operator">/</span><span class="token operator">&gt;</span></span><span class="token operator"></span>
+<span class="token operator"></span><span class="text-red"><span class="token operator">&lt;</span><span class="token operator">/</span>jsp<span class="token operator">:</span>forward<span class="token operator">&gt;</span></span><span class="token operator"></span></code></pre>
+<p>Приклад:</p>
+<pre class="line-numbers"><code>
+&lt;html&gt;
+   &lt;head&gt;
+    &lt;title&gt;The Forward Example&lt;/title&gt;
+   &lt;/head&gt;
+   &lt;body&gt;
+    &lt;center&gt;
+        &lt;h2&gt; Forward example &lt;/h2&gt;
+<span class="text-red">        &lt;jsp:forward</span> <span class="text-green">page</span>="<span class="text-user">login.jsp</span>"<span class="text-red">/&gt;</span>
+    &lt;/center&gt;
+   &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h2>5.3 Редирект</h2>
+<p>Для редагування спеціальної директиви немає, але можна його виконати за допомогою дзвінка Java-коду.</p>
+<p>Приклад:</p>
+<pre class="line-numbers"><code>
+
+&lt;body&gt;
+<span class="text-red">    &lt;%</span>
+<span class="text-user">        String</span> <span class="text-orange">redirectURL</span> = <span class="text-green">"https://codegym.cc/"</span>;
+<span class="text-yellow">        response</span>.<span class="text-user">sendRedirect</span>(<span class="text-orange">redirectURL</span>);
+<span class="text-red">    %&gt;</span>
+&lt;/body&gt;
+
+</code></pre>
+<p>Цей приклад відправить <code>302</code>редирект. Якщо тобі потрібен <code>301</code>редирект, то треба написати на кілька рядків коду більше:</p>
+<pre class="line-numbers"><code>
+
+&lt;body&gt;
+<span class="text-red">    &lt;%</span>
+<span class="text-yellow">        response</span>.<span class="text-user">setStatus</span>(<span class="text-green">301</span>);
+<span class="text-yellow">        response</span>.<span class="text-user">setHeader</span>(<span class="text-green">"Location", "https://codegym.cc/"</span>);
+<span class="text-yellow">        response</span>.<span class="text-user">setHeader</span>(<span class="text-green">"Connection", "close"</span>);
+<span class="text-red">    %&gt;</span>
+&lt;/body&gt;
+
+</code></pre>

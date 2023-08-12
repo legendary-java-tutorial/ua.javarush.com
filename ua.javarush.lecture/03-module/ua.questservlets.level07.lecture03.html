@@ -1,0 +1,62 @@
+<h2>4.1 Об'єкти браузера</h2>
+<p>Як ти вже знаєш, мова JavaScript працює всередині браузера, тому йому якось потрібно взаємодіяти з цим браузером. Для цього браузер має кілька об'єктів і функцій, які доступні з JavaScript.</p>
+<p>По-перше, це <code>об'єкт window</code>, що описує вікно браузера. Точніше, раніше описував, коли браузери були без вкладок. Тепер об'єкт window описує поточну вкладку браузера, на яку завантажена сторінка зі скриптом.</p>
+<p>По-друге, це <code>об'єкт document</code>, який відповідає за документ, що відображається у вкладці. Це може трохи плутати. Для простоти скажемо, що document – ​​це те, що відображається користувачеві, а window – це те, у чому цей document відображається.</p>
+<p>По-третє, це <code>об'єкт console</code>, який відповідає за виведення в консоль браузера. Так, у браузерів теж є консоль, вона використовується переважно для налагодження скрипту та виведення повідомлень про помилки. Зазвичай відкрити її можна, натиснувши кнопку F12 у вашому браузері.</p>
+<p><code>Объект window</code>, об'єкт верхнього рівня для всіх об'єктів сторінки. І хоча ви можете прямо писати імена об'єктів <code>document</code>у <code>console</code>вашому скрипті, насправді їх імена <code>window.document</code>і <code>window.console</code>.</p>
+<h2>4.2 Діалоги у JavaScript</h2>
+<h3>Метод alert()</h3>
+<p>Також <code>об'єкта window</code>є кілька функцій, які видно скрипту сторінки. Найчастіше використовувана - це функція <code>alert()</code>. Вона дозволяє відобразити діалогове вікно з повідомленням користувача. Робота скрипта при цьому припиняється, доки користувач не натисне OK.</p>
+<p>Приклад:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token function"><span class="text-red">alert</span></span><span class="token punctuation">(</span><span class="token string"><span class="text-green">"JavaScript is the best!"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</div>
+<h3>Метод prompt()</h3>
+<p>Також є функція, за допомогою якої можна попросити користувача ввести якесь значення – це <code>prompt()</code>.</p>
+<p>Приклад:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token keyword">var</span> age <span class="token operator">=</span> <span class="token function"><span class="text-red">prompt</span></span><span class="token punctuation">(</span><span class="token string"><span class="text-green">"Введіть рік народження"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</div>
+<h3>Метод confirm()</h3>
+<p>Можна вивести діалогове вікно з двома кнопками <code>Ok</code>– <code>Cancel</code>запитати користувача про якусь дію.</p>
+<p>Приклад:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token keyword">var</span> isOK <span class="token operator">=</span> <span class="token function"><span class="text-red">confirm</span></span><span class="token punctuation">(</span><span class="token string"><span class="text-green">"Are you ready"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</div>
+<h2>4.3 Подія onload()</h2>
+<p>І ще один корисний та цікавий момент. У вікна браузера є <strong>event</strong> (подія), що виникає, коли документ повністю завантажено. Ти можеш задати код, який повинен виконатися після того, як документ буде завантажено та відображено.</p>
+<p>Зробити це можна трьома способами.</p>
+<p>По-перше, можна вбудувати JavaScript-код прямо в HTML-сторінку як значення атрибута:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token operator">&lt;</span>body <span class="text-red">onload</span><span class="token operator">=</span><span class="token string">"<span class="text-green">alert('документ завантажений');</span>"</span><span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>img src<span class="token operator">=</span><span class="token string">"big-image.png"</span><span class="token operator">&gt;</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>body<span class="token operator">&gt;</span></code></pre>
+<p>По-друге, можна вбудувати JavaScript-код просто в HTML-сторінку:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token generics"><span class="token punctuation">&lt;</span>head<span class="token punctuation">&gt;</span></span>
+<span class="text-yellow">    <span class="token generics"><span class="token punctuation">&lt;</span>script<span class="token punctuation">&gt;</span></span></span><span class="token generics"><span class="token punctuation"></span></span>
+        function <span class="token function"><span class="text-user">load</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+<span class="text-green">            <span class="token function">alert</span><span class="token punctuation">(</span><span class="token string">'документ завантажений'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+        <span class="token punctuation">}</span>
+        window<span class="token punctuation">.</span><span class="text-red">onload</span> <span class="token operator">=</span> <span class="text-user">load</span><span class="token punctuation">;</span>
+<span class="text-yellow">    <span class="token operator">&lt;</span><span class="token operator">/</span>script<span class="token operator">&gt;</span></span><span class="token operator"></span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>head<span class="token operator">&gt;</span>
+<span class="token generics"><span class="token punctuation">&lt;</span>body<span class="token punctuation">&gt;</span></span>
+    <span class="token operator">&lt;</span>img src<span class="token operator">=</span><span class="token string">"big-image.png"</span><span class="token operator">&gt;</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>body<span class="token operator">&gt;</span></code></pre>
+<p>По-третє, можна записати трохи коротше, оголосивши анонімну функцію:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token generics"><span class="token punctuation">&lt;</span>head<span class="token punctuation">&gt;</span></span>
+<span class="text-yellow">    <span class="token generics"><span class="token punctuation">&lt;</span>script<span class="token punctuation">&gt;</span></span></span><span class="token generics"><span class="token punctuation"></span></span>
+        window<span class="token punctuation">.</span><span class="text-red">onload</span> <span class="token operator">=</span> function <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="text-green">            <span class="token function">alert</span><span class="token punctuation">(</span><span class="token string">'документ завантажений'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+        <span class="token punctuation">}</span>
+<span class="text-yellow">    <span class="token operator">&lt;</span><span class="token operator">/</span>script<span class="token operator">&gt;</span></span><span class="token operator"></span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>head<span class="token operator">&gt;</span>
+<span class="token generics"><span class="token punctuation">&lt;</span>body<span class="token punctuation">&gt;</span></span>
+    <span class="token operator">&lt;</span>img src<span class="token operator">=</span><span class="token string">"big-image.png"</span><span class="token operator">&gt;</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>body<span class="token operator">&gt;</span></code></pre>
+<h3>4.4 Подія onclick()</h3>
+<p>І нарешті, ще одна важлива подія (event) – це <code>event OnClick</code>. Який виникає у будь-якого елемента, на який клацнув користувач. Так само, як і <code>event OnLoad</code>його можна задати різними способами, тому ми наведемо лише найпростіший:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token generics"><span class="token punctuation">&lt;</span>body<span class="token punctuation">&gt;</span></span>
+  <span class="token operator">&lt;</span>img src<span class="token operator">=</span><span class="token string">"big-image.png"</span> <span class="text-red">onclick</span><span class="token operator">=</span><span class="token string">"<span class="text-green">alert('користувач клікнув по картинці');</span>"</span><span class="token operator">&gt;</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>body<span class="token operator">&gt;</span></code></pre>
+<p></p>

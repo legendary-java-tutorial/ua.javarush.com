@@ -1,0 +1,50 @@
+<h2>3.1 Тег html</h2>
+<p>Якщо ти читаєш цей текст, то передбачається, що в майбутньому працюватимеш Java Developer, ну або Full Stack Java Developer. Писати HTML-документи ти навряд чи, але <strong>читати їх тобі доведеться часто</strong> . Так вже влаштований світ, так що доведеться розібратися, як влаштовані HTML-документи.</p>
+<p>З чого починається будь-який HTML-документ? Кожен HTML-документ має структуру, що складається з трьох вкладених тегів: <code>html</code>, <code>head</code>і <code>body</code>. Це стандарт, приклад:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token operator">&lt;</span><span class="token operator">!</span>DOCTYPE html<span class="token operator">&gt;</span>
+<span class="token generics"><span class="token punctuation"></span><span class="text-red"><span class="token punctuation">&lt;</span>html<span class="token punctuation">&gt;</span></span><span class="token punctuation"></span></span>
+<span class="text-user">    <span class="token generics"><span class="token punctuation">&lt;</span>head<span class="token punctuation">&gt;</span></span></span><span class="token generics"><span class="token punctuation"></span></span>
+        Службові теги
+<span class="text-user">    <span class="token operator">&lt;</span><span class="token operator">/</span>head<span class="token operator">&gt;</span></span><span class="token operator"></span>
+<span class="text-green">    <span class="token generics"><span class="token punctuation">&lt;</span>body<span class="token punctuation">&gt;</span></span></span><span class="token generics"><span class="token punctuation"></span></span>
+        Основний документ
+<span class="text-green">    <span class="token operator">&lt;</span><span class="token operator">/</span>body<span class="token operator">&gt;</span></span><span class="token operator"></span>
+<span class="token operator"></span><span class="text-red"><span class="token operator">&lt;</span><span class="token operator">/</span>html<span class="token operator">&gt;</span></span><span class="token operator"></span></code></pre>
+<p>Все, що відображає браузер, знаходиться всередині парного тега <code>body</code>(тіло документа). Усередині тега <code>head</code>знаходяться теги зі службовою/допоміжною інформацією для браузера.</p>
+<p>Також на початку документа прийнято (не обов'язково) писати тип документа – <code>DOCTYPE</code>щоб парсер краще розумів, як йому інтерпретувати помилки. Багато браузери вміють коректно відображати документи з поламаною версткою.</p>
+<p>Або навпаки є стандарт <code>XHTML = XML+HTML</code>, у якому жорсткіші правила, ніж у звичайному <code>HTML</code>. Але така інформація буде тобі корисна, коли ти вирішиш написати свій браузер, ну чи хоча б свій <code>HTML-парсер</code>.</p>
+<h2>3.2 Тег head</h2>
+<p>Всередині тега <code>head</code>зазвичай розташовуються такі теги: <code>title</code>, <code>meta</code>, <code>style</code>, …</p>
+<p>Тег <code>&lt;title&gt; </code>визначає назву документа, що відображається у вкладці браузера.</p><img data-max-width="256" data-id="be78152f-6689-4c01-afee-ef440b633f9c" alt="" src="https://cdn.javarush.com/images/article/be78152f-6689-4c01-afee-ef440b633f9c/256.jpeg" style="width: 256px;">
+<p>Тег <code>&lt;meta&gt;</code>використовується для завдання різноманітної службової інформації. Наприклад, можна допомогти браузеру зрозуміти кодування HTML-документа (адже він містить звичайний текст, якщо ти пам'ятаєш).</p>
+<pre class="line-numbers"><code>
+&lt;html&gt;
+    &lt;head&gt;
+<span class="text-viola">        &lt;title&gt; Escape character&lt;/title&gt;</span>
+<span class="text-red">           &lt;meta charset="utf-8" /&gt;</span>
+   &lt;/head&gt;
+    &lt;body&gt;
+ 
+    &lt;/body&gt;
+&lt;/html&gt;
+
+</code></pre>
+<h2>3.3 Мітки body, p, b</h2>
+<p>Тег <code>&lt;body&gt;</code>містить весь html-текст, який буде відображатися браузером. Найпростіші теги для відображення документа є: <code>&lt;h1&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;b&gt;</code>,<code>&lt;br&gt;</code></p>
+<p><code class="text-red">&lt;h1&gt;</code>це парний тег, він дозволяє задати заголовок твоєї сторінки/статті. Якщо твоя стаття велика і тобі потрібні підзаголовки, то для цієї справи ти можеш використовувати тег <code>&lt;h2&gt;</code>, <code>&lt;h3&gt;</code>і так далі<code>&lt;h6&gt;</code></p>
+<p>Приклад:</p>
+<pre class="line-numbers"><code>
+&lt;body&gt;
+<span class="text-red">     &lt;h1&gt; Коти &lt;/h1&gt;</span>
+          &lt;h2&gt; Опис котів&lt;/h2&gt;
+            докладний опис котів
+          &lt;h2&gt; Походження котів&lt;/h2&gt;
+              Інформація про походження котів.
+          &lt;h2&gt; Лапки котів&lt;/h2&gt;
+              Величезна стаття про лапки котів
+&lt;/body&gt;
+
+</code></pre>
+<p>Якщо твоя стаття велика і ти хочеш спростити читання, розділивши її на абзаци, то для цього знадобиться парний тег <code> &lt;p&gt;</code>(від слова paragraph). Просто оберни текст у теги <code>&lt;p&gt;</code>та <code>&lt;/p&gt;</code>й браузер відобразить його як окремий абзац.</p>
+<p>Увага! Браузер ігноруватиме перенесення рядків та/або зайві прогалини у вашому тексті. Якщо ти хочеш додати перенесення рядка, то встав у текст одиночний тег <code>&lt;br&gt;</code>(від <strong>br</strong> eak line).</p>
+<p>Та й найприємніше – це виділення тексту жирним кольором. Якщо хочеш зробити текст жирним, оберни його на теги <code>&lt;b&gt;</code> <code>&lt;/b&gt;</code>(від <strong>b</strong> old).</p>

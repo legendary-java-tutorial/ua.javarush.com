@@ -1,0 +1,67 @@
+<a href="https://cdn.javarush.com/images/article/dfcfe1de-b1b1-4965-bbb0-8763e1fe4c4c/original.jpeg" target="_blank"><img data-id="dfcfe1de-b1b1-4965-bbb0-8763e1fe4c4c" data-max-width="850" alt="Стратегія «wait-notify-notifyAll» - 1" src="https://cdn.javarush.com/images/article/dfcfe1de-b1b1-4965-bbb0-8763e1fe4c4c/800.jpeg" style="width: 850px;"></a>
+<p>- Привіт, Аміго!</p>
+<p>Хочу ґрунтовно розібрати з тобою тему wait-notify. Методи wait-notify забезпечують зручний механізм взаємодії ниток. Також їх можна використовувати для побудови складних високорівневих механізмів взаємодії ниток.</p>
+<p>Почну з невеликого прикладу. Нехай ми маємо програму для сервера, яка повинна виконувати різні завдання, які користувачі додають через сайт. Користувачі додають різні завдання у різний час. Завдання ресурсомісткі, але сервер у нас із восьмиядерним процесором - впорається. Як виконувати завдання на сервері?</p>
+<p>По-перше, ми створимо групу ниток-виконавців, стільки ж, скільки кількість ядер процесора. Кожна нитка зможе працювати на своєму ядрі: нитки не заважатимуть один одному, а ядра процесора не простоюватимуть.</p>
+<p>По-друге, створимо об'єкт-чергу, в який розміщуватимуться отримані від користувачів завдання. Різним типам завдань будуть відповідати різні об'єкти, але всі вони реалізуватимуть інтерфейс Runnable, щоб їх можна було виконати.</p>
+<p><span class="text-user">— А чи можна приклад такого об'єкта-завдання?</span></p>
+<p>- Ось дивись:</p>
+<div class="code-heading">
+ Клас обчислює факторіал числа n за виклику методу run()
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword"><strong>class</strong></span> <span class="token class-name">Factorial</span> <span class="token keyword"></span><strong><span class="token keyword">implements</span> <span class="token class-name">Runnable</span></strong><span class="token class-name"></span>
+<span class="token punctuation">{</span>
+ <span class="token keyword"><strong>public</strong></span> <span class="token keyword">int</span> n <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+ <span class="token keyword"><strong>public</strong></span> <span class="token keyword">long</span> result <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+
+ <span class="token keyword"><strong>public</strong></span> <span class="token class-name">Factorial</span> <span class="token punctuation">(</span><span class="token keyword">int</span> n<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>n <span class="token operator">=</span> n<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token keyword"></span><strong><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span></strong><span class="token function"></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword"><strong>for</strong></span> <span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">;</span>i<span class="token operator">&lt;=</span>n<span class="token punctuation">;</span>i<span class="token operator">++</span><span class="token punctuation">)</span>
+   result<span class="token operator">*=</span>i<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><span class="text-user">— Поки що зрозуміло.</span></p>
+<p>- Чудово. Тоді розберемо, як має виглядати об'єкт-черга. Що ти можеш сказати про нього?</p>
+<p><span class="text-user">— Він має бути thread-safe. У нього кладуться об'єкти-завдання (таски) ниткою, яка приймає їх від користувачів, а забираються завдання нитками-виконавцями.</span></p>
+<p>- Ага. А якщо завдання тимчасово скінчабося?</p>
+<p><span class="text-user">— Тоді нитки-виконавці мають чекати, доки вони з'являться.</span></p>
+<p>- Правильно. Тоді уяви, що все це можна вбудувати в одну чергу. Ось дивись:</p>
+<div class="code-heading">
+ Черга завдань, якщо завдання немає, то нитка засинає і чекає на його появу:
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword"><strong>public</strong></span> <span class="token keyword"><strong>class</strong></span> <span class="token class-name">JobQueue</span>
+<span class="token punctuation">{</span>
+ <span class="token class-name">ArrayList</span> jobs <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ <span class="token keyword"></span><strong><span class="token keyword">public</span> <span class="token keyword">synchronized</span></strong><span class="token keyword"></span> <span class="token keyword">void</span> <span class="token function"><strong>put</strong></span><span class="token punctuation">(</span><span class="token class-name">Runnable</span> job<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  jobs<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>job<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function"><strong><span class="text-red">notifyAll</span></strong></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token keyword">public</span> <span class="token keyword">synchronized</span> <span class="token class-name">Runnable</span> <span class="token function">getJob</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">while</span> <span class="token punctuation">(</span>jobs<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">==</span><span class="token number">0</span><span class="token punctuation">)</span>
+   <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function"><strong><span class="text-red">wait</span></strong></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> jobs<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>У нас є метод <strong>getJob</strong> , який дивиться, якщо список роботи (jobs) порожній, то нитка засинає (wait), доки у списку щось не з'явиться.</p>
+<p>А ще є метод <strong>put</strong> , який дозволяє додати до списку jobs нове завдання (job). Як тільки нове завдання додано, викликається метод <strong>notifyAll</strong> . Виклик цього методу пробудить усі нитки-виконавці, які заснули всередині методу getJob.</p>
+<p><span class="text-user">— А можеш ще раз нагадати, як працюють методи wait і notify?</span></p>
+<p>— Метод wait викликається лише всередині блоку synchronized у об'єкта-мютексу. У нашому випадку це this. При цьому відбувається дві речі:</p>
+<p><strong>1)</strong> Нитка засинає.</p>
+<p><strong>2)</strong> Нитка тимчасово звільняє мютекс (поки не прокинеться).</p>
+<p>Після цього інші нитки можуть входити в блок synchronized і займати той самий мютекс.</p>
+<p>Метод <strong>notifyAll</strong> теж можна викликати лише всередині блоку synchronized у об'єкта-мютекса. У нашому випадку це this. При цьому відбувається дві речі:</p>
+<p><strong>1)</strong> Прокидаються всі нитки, що заснули на цьому ж об'єкті-мютексі.</p>
+<p><strong>2) Як тільки поточна нитка вийде з блоку synchronized, одна з ниток, що прокинулися, захопить мютекс і продовжить свою роботу. Коли вона звільнить мютекс, інша нитка, що прокинулася, захопить мютекс і т.д.</strong></p>
+<p>Дуже схоже на автобус. Ви заходите усередину, хочете передати за проїзд, а водія немає. І ви «засинаєте». Згодом вас набивається цілий автобус, але за проїзд поки що ніхто не передає – нікому. Потім заходить водій, ви чуєте «Передаємо за проїзд». І тут починається…</p>
+<p><span class="text-user">- Цікаве порівняння. А що таке автобус?</span></p>
+<p>— А це Хуліо розповідав. Були такі дивні штуки у 21 столітті.</p>

@@ -1,0 +1,113 @@
+<p>JSON – це один із найпопулярніших форматів текстового представлення даних. Використовується JSON, наприклад, для передачі даних між фронтендом та бекендом, у файлух конфігурації, в іграх, у текстових редакторах та у багатьох інших сферах. Ставши на шлях програміста, ти точно зіткнешся з JSON.</p>
+<h2>Знайомство із синтаксисом</h2>
+<p>Перерахуємо типи даних, доступні в JSON:</p>
+<ol>
+ <li>
+  <p>Рядки - будь-які символи, укладені в подвійні лапки:</p>
+  <div class="terminal">
+   "йцукен"
+  </div>
+  <div class="terminal">
+   "125 + 42"
+  </div>
+  <div class="terminal">
+   "G"
+  </div>
+  <p>Спеціальні символи екрануються за допомогою слешу:</p>
+  <div class="terminal">
+   "first line\nsecond line"
+  </div>
+  <div class="terminal">
+   "ВАТ \"Роги\/копита\""
+  </div></li>
+ <li>
+  <p>Числа, у тому числі негативні та речові. Без лапок:</p>
+  <div class="terminal">
+   18 -333 17.88 1.2e6
+  </div></li>
+ <li>
+  <p>Логічний тип - <span class="code">true</span> / <span class="code">false</span> (без лапок).</p></li>
+ <li>
+  <p><span class="code">null</span> - стандартне позначення для "нічого". Лапки не потрібні.</p></li>
+ <li>
+  <p>Масив – цей тип може містити значення будь-яких інших типів. Оточується квадратними дужками, елементи розділяються комами:</p>
+  <div class="terminal">
+   ["Java", "Rush", "CodeGym", "¯\_(ツ)_/¯"]
+  </div>
+  <div class="terminal">
+   [true, true, false, true, false, false, false, false, false]
+  </div>
+  <div class="terminal">
+   [[1, 2], [3, 999, 4, -5], [77]]
+  </div>
+  <p>Останній приклад - масив масивів</p></li>
+ <li>
+  <p>Об'єкт - складний тип, але найчастіше використовується. Містить пари ключ: значення, де як значення можуть бути будь-які типи, наведені вище, а також інші об'єкти. Оточується фігурними дужками, пари розділяються комами:</p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token punctuation">{</span>
+ <span class="token string">"name"</span><span class="token operator">:</span> <span class="token string">"Vova"</span><span class="token punctuation">,</span>
+ <span class="token string">"age"</span><span class="token operator">:</span> <span class="token number">7</span>
+<span class="token punctuation">}</span></code></pre></li>
+</ol>
+<h2>Подання Java-об'єкта у вигляді JSON</h2>
+<p>Тепер давай візьмемо якийсь Java-об'єкт і подивимося на нього у вигляді JSON.</p>
+<p>Спочатку опишемо клас:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Human</span> <span class="token punctuation">{</span>
+	<span class="token class-name">String</span> name<span class="token punctuation">;</span>
+	<span class="token keyword">boolean</span> male<span class="token punctuation">;</span>
+	<span class="token keyword">int</span> age<span class="token punctuation">;</span>
+	<span class="token class-name">Set</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Human</span><span class="token punctuation">&gt;</span></span> parents<span class="token punctuation">;</span>
+
+	<span class="token keyword">public</span> <span class="token class-name">Human</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">,</span> <span class="token keyword">boolean</span> male<span class="token punctuation">,</span> <span class="token keyword">int</span> age<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    	    <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+    	    <span class="token keyword">this</span><span class="token punctuation">.</span>male <span class="token operator">=</span> male<span class="token punctuation">;</span>
+    	    <span class="token keyword">this</span><span class="token punctuation">.</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Потім створимо наш об'єкт:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Human</span> father <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Human</span><span class="token punctuation">(</span><span class="token string">"Петро"</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token number">31</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Human</span> mather <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Human</span><span class="token punctuation">(</span><span class="token string">"Мария"</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token number">28</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+mather<span class="token punctuation">.</span>parents <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashSet</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Human</span> son <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Human</span><span class="token punctuation">(</span><span class="token string">"Павел"</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+son<span class="token punctuation">.</span>parents <span class="token operator">=</span> <span class="token class-name">Set</span><span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span>father<span class="token punctuation">,</span> mather<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>А тепер постараємося найточніше зобразити об'єкт<mark class="green">son</mark>у форматі JSON:</p>
+<div class="terminal">
+ { 
+ <br>
+  &nbsp;"name" : "Павло", 
+ <br>
+  &nbsp;"male" : true, 
+ <br>
+  &nbsp;"age" : 7, 
+ <br>
+  &nbsp;"parents" : [ 
+ <br>
+  &nbsp;{ 
+ <br>
+  &nbsp;&nbsp;&nbsp;"name" : "Петроо", 
+ <br>
+  &nbsp;&nbsp;&nbsp;"male" : true, 
+ <br>
+  &nbsp;&nbsp;&nbsp;"age" : 31, 
+ <br>
+  &nbsp;&nbsp;&nbsp;"parents" : null 
+ <br>
+  &nbsp;}, 
+ <br>
+  &nbsp;{ 
+ <br>
+  &nbsp;&nbsp;&nbsp;"name" : "Марія", 
+ <br>
+  &nbsp;&nbsp;&nbsp;"male" : false, 
+ <br>
+  &nbsp;&nbsp;&nbsp;"age" : 28, 
+ <br>
+  &nbsp;&nbsp;&nbsp;"parents" : null 
+ <br>
+  &nbsp;} 
+ <br>
+  ] 
+ <br>
+  }
+</div>
+<h2>Коментарі в JSON</h2>
+<p>Тут все так само, як і в Java: є два види коментарів: // і /*...*/ . Сподіваюся, чи не потрібно нагадувати, чим вони відрізняються?</p>

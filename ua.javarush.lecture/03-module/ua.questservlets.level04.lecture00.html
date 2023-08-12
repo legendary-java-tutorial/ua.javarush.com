@@ -1,0 +1,39 @@
+<h2>1.1 Бібліотека Mockito</h2>
+<p>Сьогодні ми познайомимося із просунутим тестуванням. А точніше з бібліотекою <strong>Mockito</strong> . Навіть і не думайте уникнути цієї справи.</p>
+<p>По-перше, ця бібліотека – це стандарт у тестуванні <strong>Spring'а</strong> . Що фактично є стандартом у галузі Java-backend розробки.</p>
+<p>По-друге, <span class="text-red">тобі доведеться писати тести для свого Spring-коду</span> . <span class="text-green">Єдиний спосіб зрозуміти, що написаний тобою бекенд працює як потрібно - це викликати методи його API</span> . І зробити це за допомогою тестів у 10 разів легше, ніж без них. Ти сам у цьому переконаєшся.</p>
+<p>Додати бібліотеку Mockito у ваш <code>pom.xml</code>можна за допомогою коду:</p>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.mockito&lt;/groupId&gt;
+    &lt;artifactId&gt;mockito-junit-jupiter&lt;/artifactId&gt;
+    &lt;version&gt;4.2.0&lt;/version&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>Весь вихідний код проекту Mockito можна знайти на <a href="https://github.com/mockito/mockito" target="_blank">GitHub</a> .</p>
+<h2>1.2 Mock-об'єкти</h2>
+<p>Так що ж таке ця Mockito і чим вона така гарна?</p>
+<p>У процесі розвитку та становлення тестування часто виникала необхідність замість реального об'єкта підсунути коду якусь «заглушку».</p>
+<p>Наприклад, тестується код, який працює з базою даних та щось там змінює. Добре, щоб перед кожним тестом стан цієї бази був одним і тим же (інакше тести будуть різні). І базу хотілося б простіше, щоб швидко ці стани відкочувати.</p>
+<p>Або, наприклад, ти тестуєш код, який надсилає корисні SMS. А для безпосередньо розсилок він використовує якийсь платний SMS Gateway. Добре, щоб для тестування коду підсунути йому якийсь віртуальний Gateway, щоб не розсилати сотні SMS незрозуміло кому.</p>
+<p>Або твій код запитує дані інших веб-серверів, які банально недоступні на тестовому сервері. Або ти пишеш код для інтернет-платежів, який потрібно 50 разів протестувати і лише потім допускати до реальних фінансових каналів.</p>
+<p>Думаю, ви зрозуміли… Віртуальні об'єкти чи як їх ще називають об'єкти-заглушки – дуже корисна штука.</p>
+<p>І тут виникає складність - у Java-то статична типізація. Значить, щоб замість об'єкта типу <code>ReadDatabase</code>привласнити змінну посилання на об'єкт <code>VirtualDatabase</code>, потрібно успадкувати клас <code>VirtualDatabase</code>від <code>RealDatabase</code>.</p>
+<p>Потім виявляється, що у класу <code>RealDatabase</code>купа приватних методів та змінних, які зберігають посилання на інші реальні об'єкти, і нормальну заглушку таким чином не напишеш. Теоретично хороший, але практично тупиковий варіант.</p>
+<p>І тут нам на допомогу приходить <code>DynamicProxy</code>(докладніше <a href="https://www.baeldung.com/java-dynamic-proxies" target="_blank">можна почитати</a> ), які з'явабося ще в Java 5. Вона дозволяє створювати віртуальні об'єкти, до яких у компілятора немає претензій.</p>
+<p>Такі віртуальні об'єкти називають <strong>mock'ами</strong> (від слова mock – макет). Бібліотека Mockito спромоглася піднести роботу з цими моками на небувалу висоту. Звідси, до речі, назва бібліотеки.</p>
+<h2>1.3 Анотація @ExtendWith</h2>
+<p>Бібліотека Mockito відмінно працює разом із JUnit, її можна навіть розглядати як його розширення.</p>
+<p>Є два способи активувати роботу бібліотеки Mockito у ваших unit-тестах. Перший спосіб – це додати спеціальну інструкцію:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation"></span><span class="text-green"><span class="token annotation punctuation">@ExtendWith</span><span class="token punctuation">(</span><span class="token class-name">MockitoExtension</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span></span><span class="token punctuation"></span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MockitoAnnotationTest</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Другий спосіб - включити її роботу викликавши метод <code>openMocks()</code>:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MockitoAnnotationTest</span> <span class="token punctuation">{</span>
+<span class="text-green">    <span class="token annotation punctuation">@BeforeEach</span></span><span class="token annotation punctuation"></span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="text-red">        <span class="token class-name">MockitoAnnotations</span><span class="token punctuation">.</span><span class="token function">openMocks</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Найчастіше ти бачитимеш перший варіант, але іноді корисно знати, що є і другий.</p>

@@ -1,0 +1,166 @@
+<h2>1.1 Список плагінів для збирання в Maven</h2>
+<p>Складання Maven може бути налаштована дуже гнучко. Розробники Maven спеціально створабо десятки плагінів, використовуючи які можна дуже гнучко налаштовувати різні збирання. Найпопулярніші з них наведені у таблиці нижче:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th></th>
+    <th width="40%">Плагін</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>1</td>
+    <td>maven-compiler-plugin</td>
+    <td>Керує Java-компіляцією</td>
+   </tr>
+   <tr>
+    <td>2</td>
+    <td>maven-resources-plugin</td>
+    <td>Керує включенням ресурсів у складання</td>
+   </tr>
+   <tr>
+    <td>3</td>
+    <td>maven-source-plugin</td>
+    <td>Керує включенням вихідного коду у складання</td>
+   </tr>
+   <tr>
+    <td>4</td>
+    <td>maven-dependency-plugin</td>
+    <td>Керує процесом копіювання бібліотек залежностей</td>
+   </tr>
+   <tr>
+    <td>5</td>
+    <td>maven-jar-plugin</td>
+    <td>Плагін для створення підсумкового jar-файлу</td>
+   </tr>
+   <tr>
+    <td>6</td>
+    <td>maven-war-plugin</td>
+    <td>Плагін для створення підсумкового war-файлу</td>
+   </tr>
+   <tr>
+    <td>7</td>
+    <td>maven-surefire-plugin</td>
+    <td>Керує запуском тестів</td>
+   </tr>
+   <tr>
+    <td>8</td>
+    <td>buildnumber-maven-plugin</td>
+    <td>Генерує номер збирання</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Кожен плагін по-своєму цікавий, але розібрати нам доведеться їх усі. Почнемо ми з головного – плагіна з управління компіляцією.</p>
+<h2>1.2 Плагін компіляції maven-compiler-plugin</h2>
+<p>Найпопулярніший плагін, що дозволяє керувати версією компілятора і практично у всіх проектах, - це компілятор <code>maven-compiler-plugin</code>. У нього є стандартні налаштування, проте практично в кожному проекті їх потрібно задати заново.</p>
+<p>У найпростішому варіанті в плагіні потрібно задати версію вихідного Java-коду та версію Java-машини, під які здійснюється складання:</p>
+<pre class=""><code>&lt;plugin&gt;
+    &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+    &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+    &lt;version&gt;3.2&lt;/version&gt;
+    &lt;configuration&gt;
+        &lt;source&gt;1.11&lt;/source&gt;
+        &lt;target&gt;1.13&lt;/target&gt;
+        &lt;encoding&gt;UTF-8&lt;/encoding&gt;
+    &lt;/configuration&gt;
+&lt;/plugin&gt;
+</code></pre>
+<p>У прикладі вище ми задаємо три параметри Java-компілятора: <code>source</code>, <code>target</code>і <code>encoding</code>.</p>
+<p>Параметр <code>source</code>дозволяє задати версію Java для наших вихідних. Параметр <code>target</code>– версію Java-машини, під яку необхідно скомпілювати класи. Якщо версія коду або Java-машини не задана, за замовчуванням використовується параметр 1.3</p>
+<p>Нарешті, параметр <code>encoding</code>дозволяє вказати кодування Java-файлів. Ми вказали <code>UTF-8</code>. Зараз практично всі вихідні коди зберігаються в кодуванні <code>UTF-8</code>. Але якщо цей параметр не вказано, вибереться поточне кодування операційної системи. Для Windows – це кодування <code>Windows-1251</code>.</p>
+<p>Також трапляються випадки, коли комп'ютер, на якому проводиться складання, має кілька встановлених версій Java: для складання різних модулів та/або різних проектів. І тут у змінної <code>JAVA_HOME</code>може бути лише шлях до однієї з них.</p>
+<p>Крім того, бувають різні продажі Java-машини: OpenJDK, OracleJDK, Amazon JDK. І чим більший проект, тим складніша його структура. Але ви можете явно задати плагін шлях до компілятора javac за допомогою тега<executable>
+  . Його додали спеціально для цього випадку.
+ </executable></p>
+<p>Плагін <code>maven-compiler-plugin</code>має дві цілі (goals):</p>
+<ul>
+ <li><code>compiler:compile</code>- компіляція вихідних джерел, за умовчанням пов'язана з фазою compile</li>
+ <li><code>compiler:testCompile</code>- Компіляція тестів, за умовчанням пов'язана з фазою test-compile.</li>
+</ul>
+<p>Також можна вказати список аргументів, які будуть передані javac-компілятору у командному рядку:</p>
+<pre class=""><code>&lt;plugin&gt;
+    &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+    &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+    &lt;version&gt;3.2&lt;/version&gt;
+    &lt;configuration&gt;
+        &lt;compilerArgs&gt;
+            <span class="text-red">&lt;arg&gt;-verbose&lt;/arg&gt;
+            &lt;arg&gt;-Xlint:all,-options,-path&lt;arg&gt;</span>
+        &lt;/compilerArgs&gt;
+    &lt;/configuration&gt;
+&lt;/plugin&gt;
+</code></pre>
+<h2>1.3 Плагін створення jar-файлу maven-jar-plugin</h2>
+<p>Якщо ви захочете зібрати за допомогою Maven свою власну jar-бібліотеку, вам знадобиться плагін maven-jar-plugin. Цей плагін вміє багато корисних речей.</p>
+<p>Приклад такого плагіна:</p>
+<pre><code>&lt;plugin&gt;
+    &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+    &lt;artifactId&gt;maven-jar-plugin&lt;/artifactId&gt;
+    &lt;version&gt;2.4&lt;/version&gt;
+    &lt;configuration&gt;
+        <span class="text-green">&lt;includes&gt;
+            &lt;include&gt;**/properties/*&lt;/include&gt;
+        &lt;/includes&gt;</span>
+        <span class="text-red">&lt;archive&gt;
+           &lt;manifestFile&gt;src/main/resources/META-INF/MANIFEST.MF&lt;/manifestFile&gt;
+        &lt;/archive&gt;</span>
+    &lt;/configuration&gt;
+&lt;/plugin&gt;
+</code></pre>
+<p>По-перше, за його допомогою можна вказати, які файли потраплять до бібліотеки, а які – ні. За допомогою тегів <code>&lt;include&gt;</code>у секції <code>&lt;includes&gt;</code>можна задати <span class="text-green">список директорій, чий контент потрібно додати до бібліотеки</span> .</p>
+<p>По-друге, кожна jar-бібліотека повинна мати маніфест (файл <strong>MANIFEST.MF</strong> ). Плагін сам покладе його в потрібне місце бібліотеки, вам лише потрібно вказати, яким шляхом його взяти. Для цього використовується тег <code>&lt;manifestFile&gt;</code>.</p>
+<p>І, нарешті, плагін може самостійно згенерувати маніфест. Для цього замість тега <code>&lt;manifestFile&gt;</code>вам потрібно додати тег <code>&lt;manifest&gt;</code>і вказати дані для майбутнього маніфесту. Приклад:</p>
+<pre><code>&lt;configuration&gt;
+    &lt;archive&gt;
+        &lt;manifest&gt;
+            &lt;addClasspath&gt;true&lt;/addClasspath&gt;
+            &lt;classpathPrefix&gt;lib/&lt;/classpathPrefix&gt;
+            &lt;mainClass&gt;com.codegym.MainApplication&lt;/mainClass&gt;
+        &lt;/manifest&gt;
+    &lt;/archive&gt;
+&lt;/configuration&gt;
+</code></pre>
+<p>Тег <code>&lt;addClasspath&gt;</code>визначає необхідність додавання в маніфест <code>CLASSPATH</code>.</p>
+<p>Тег <code>&lt;classpathPrefix&gt;</code>дозволяє дописувати префікс (у прикладі lib) перед кожним ресурсом. Визначення префікса <code>&lt;classpathPrefix&gt;</code>дозволяє розміщувати залежності в окремій папці.</p>
+<p>Так, ви можете розміщувати бібліотеки всередині іншої бібліотеки. І на вас чекає багато сюрпризів, коли вам потрібно буде кудись передати шлях до properties-файлу, який знаходиться в jar-бібліотеці, яка знаходиться в jar-бібліотеці.</p>
+<p>І нарешті, тег <code>&lt;mainClass&gt;</code>вказує на головний клас, що виконується. Що за <span class="text-green">головний виконуваний клас? </span>”, – спитайте ви. А вся річ у тому, що Java-машина може запустити програму, яка задана не лише Java-класом, а й jar-файлом. І саме для такого випадку потрібний головний стартовий клас.</p>
+<h2>1.4 Плагін генерації номера складання buildnumber-maven-plugin</h2>
+<p>Дуже часто jar-бібліотеки та war-файли включають інформацію з назвою проекту та його версією, а також версією складання. Мало того, що це корисно для управління залежностями, то ще й спрощує тестування: зрозуміло, в якій версії бібліотеки помилка виправлена, а в якій – додана.</p>
+<p>Найчастіше це завдання вирішують так - створюють спеціальний файл <code>application.properties</code>, який містить всю потрібну інформацію і включають його в складання. Також можна налаштувати сценарій збирання так, щоб дані з цього файлу перекочовували в <code>MANIFEST.MF</code>тому подібне.</p>
+<p>Але що найцікавіше, так це те, що Maven має спеціальний плагін, який може генерувати такий application.properties файл. Для цього потрібно створити такий файл та заповнити його спеціальними шаблонами даних. Приклад:</p>
+<pre><code># application.properties
+<span class="text-green">app.name=${pom.name}
+app.version=${pom.version}
+app.build=${buildNumber}</span>
+</code></pre>
+<p>Значення всіх трьох параметрів будуть підставлятися на етапі збирання.</p>
+<p>Параметри <code>pom.name</code>і <code>pom.version</code>будуть братися прямо з <code>pom.xml</code>. А для створення унікального номера збірки в Maven є спеціальний плагін – <code>buildnumber-maven-plugin</code>. Дивіться приклад нижче:</p>
+<pre><code>&lt;packaging&gt;war&lt;/packaging&gt;
+&lt;version&gt;1.0&lt;/version&gt;
+&lt;plugins&gt;
+    &lt;plugin&gt;
+        <span class="text-red">&lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;
+        &lt;artifactId&gt;buildnumber-maven-plugin&lt;/artifactId&gt;
+        &lt;version&gt;1.2&lt;/version&gt;</span>
+        <span class="text-user">&lt;executions&gt;
+            &lt;execution&gt;
+                &lt;phase&gt;validate&lt;/phase&gt;
+                &lt;goals&gt;
+                    &lt;goal&gt;create&lt;/goal&gt;
+                &lt;/goals&gt;
+            &lt;/execution&gt;
+        &lt;/executions&gt;</span>
+        <span class="text-green">&lt;configuration&gt;
+            &lt;revisionOnScmFailure&gt;true&lt;/revisionOnScmFailure&gt;
+            &lt;format&gt;{0}-{1,date,yyyyMMdd}&lt;/format&gt;
+            &lt;items&gt;
+                 &lt;item&gt;${project.version}&lt;/item&gt;
+                 &lt;item&gt;timestamp&lt;/item&gt;
+            &lt;/items&gt;
+        &lt;/configuration&gt;</span>
+    &lt;/plugin&gt;
+&lt;/plugins&gt;
+</code></pre>
+<p>У прикладі вище відбуваються три важливі речі. <span class="text-red">По-перше, вказано сам плагін для завдання версії складання</span> . <span class="text-user">По-друге, зазначено, що він запускатиметься під час фази validate (найперша фаза)</span> і генеруватиме номер складання – <code>${buildNumber}</code>.</p>
+<p>І по-третє, <span class="text-green">вказано формат цього номера збирання, який склеюється з кількох частин</span> . Це версія проекту <code>project.version</code>та поточний час заданий шаблоном. Формат шаблону задається Java-класом <code>MessageFormat</code>.</p><span class="text-red"></span> <span class="text-green"></span> <span class="text-user"></span>

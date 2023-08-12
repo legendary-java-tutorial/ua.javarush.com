@@ -1,0 +1,88 @@
+<h2>Загальний вигляд pom-файлу</h2>
+<p>Структура проекту описується у файлі pom.xml, який має знаходитись у кореневій папці проекту. Вміст проектного файлу має такий вигляд:</p>
+<div class="terminal">
+ <span class="text-viola">&lt;project&gt; </span>
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-gray">&lt;!—Опис поточного проекту --&gt; </span>
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-viola">&lt;groupId&gt;...&lt;/groupId&gt; <br>
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;artifactId&gt;...&lt;/artifactId&gt; <br>
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;packaging&gt;...&lt;/packaging&gt; <br>
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;version&gt;...&lt;/ version&gt; </span>
+ <br>
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-yellow">&lt;properties&gt; </span>
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-gray">&lt;!-- Секція властивостей --&gt; </span>
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-yellow">&lt;/properties&gt; </span>
+ <br>
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-red">&lt;repositories&gt; </span>
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-gray">&lt;!-- Секція репозиторіїв --&gt; </span>
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-red">&lt;/repositories&gt; </span>
+ <br>
+ <br>
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-neon">&lt;dependencies&gt; </span>
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-gray">&lt;!-- Секція залежностей --&gt; </span>
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-neon">&lt;/dependencies&gt; </span>
+ <br>
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green">&lt;build&gt; </span>
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-gray">&lt;!-- Секція складання --&gt; </span>
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green">&lt;/build&gt; </span>
+ <br><span class="text-viola">&lt;/project&gt;</span>
+</div>
+<p>Не всі секції можуть бути присутніми в описі pom.xml. Так секції <span class="text-yellow">properties</span> і <span class="text-red">repositories</span> часто не використовуються. Параметри <span class="text-viola">опису поточного проекту</span> є <span class="text-bold">обов'язковими</span> . Про останню секцію ми зараз і поговоримо.</p>
+<h2>Секція build</h2>
+<p><span class="text-bold">Секція build не є обов'язковою</span> – Maven уміє збирати проект без неї. Але якщо ти хочеш налаштувати складання більш-менш складного проекту, то розуміння як там усе влаштовано тобі стане в нагоді.</p>
+<p>Давай розглянемо простий приклад:</p>
+<div class="terminal">
+ &nbsp;&nbsp;&lt;build&gt; 
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-red">&lt;finalName&gt;projectName&lt;/finalName&gt; </span>
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green">&lt;sourceDirectory&gt;${basedir}/src/java&lt;/sourceDirectory&gt; </span>
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-neon">&lt;outputDirectory&gt;${basedir}/targetDir&lt;/outputDirectory&gt;</span>
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;resources&gt; 
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-viola">&lt;resource&gt; <br>
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;directory&gt;${ basedir}/src/java/resources&lt;/directory&gt; <br>
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;includes&gt; <br>
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;include&gt;**/*.properties&lt;/include&gt; <br>
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/includes&gt; <br>
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/resource&gt;</span>
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/resources&gt; 
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;plugins&gt; 
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;. . . 
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/plugins&gt; 
+ <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;/build&gt;
+</div>
+<p>Ця секція містить основну інформацію зі збирання: де розташовані Java-файли, файли ресурсів, які плагіни використовуються, куди складати зібраний проект.</p>
+<p>Основних тегів тут чотири:</p>
+<ul>
+ <li><span class="text-red">&lt;finalName&gt;</span></li>
+ <li><span class="text-green">&lt;sourceDirectory&gt;</span></li>
+ <li><span class="text-neon">&lt;outputDirectory&gt;</span></li>
+ <li><span class="text-viola">&lt;resources&gt;</span></li>
+</ul>
+<p>Коротко розберемо їх призначення:</p>
+<p>Тег <span class="text-red">&lt;finalName&gt;</span> задає ім'я результуючого файлу збирання (jar, war, ear..), що створюється у фазі <span class="text-bold">package</span> . Якщо параметр не заданий, використовується значення за промовчанням - <span class="text-bold">artifactId-version</span> .</p>
+<p>Тег <span class="text-green">&lt;sourceDirectory&gt;</span> дозволяє перевизначити розташування файлів з вихідним кодом. За промовчанням файли розміщуються в директорії <span class="text-bold">${basedir}/src/main/java</span> , але можна вказати будь-яке інше місце.</p>
+<p>Тег <span class="text-neon">&lt;outputDirectory&gt;</span> задає директорію, куди компілятор зберігатиме результати компіляції – <span class="text-bold">*.class</span> файли. За промовчанням визначено значення <span class="text-bold">target/classes</span> .</p>
+<p>Тег <span class="text-viola">&lt;resources&gt;</span> та вкладені в неї теги <span class="text-viola">&lt;resource&gt;</span> визначають розташування файлів ресурсів. Файли ресурсів при збиранні просто копіюються в директорію <span class="text-bold">outputDirectory</span> . Значення за замовчуванням директорії з ресурсами дорівнює <span class="text-bold">src/main/resources</span> .</p>
+<p>Секцію складання можна налаштовувати особливо гнучко. Докладніше ми розглянемо її трохи згодом.</p>

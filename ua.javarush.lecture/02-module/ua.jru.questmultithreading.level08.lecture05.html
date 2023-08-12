@@ -1,0 +1,47 @@
+<a href="https://cdn.javarush.com/images/article/2e3ac2f9-81d3-4ece-9c97-b364c6a1027b/original.jpeg" target="_blank"><img data-id="2e3ac2f9-81d3-4ece-9c97-b364c6a1027b" data-max-width="850" alt="Пріоритети потоків - 1" src="https://cdn.javarush.com/images/article/2e3ac2f9-81d3-4ece-9c97-b364c6a1027b/800.jpeg" style="width: 850px;"></a>
+<p>— Продовжимо наш урок. Що таке пріоритети ниток і навіщо вони потрібні.</p>
+<p>У реальних завданнях важливість роботи різних ниток може різнитися. Для контролю цього процесу було придумано пріоритет роботи. Кожна нитка має такий пріоритет – це число від 1 до 10.</p>
+<p>10 – це найвищий пріоритет.</p>
+<p>1 – найнижчий.</p>
+<p>Якщо пріоритет не заданий, нитку отримує пріоритет 5 - середній.</p>
+<p>Пріоритет нитки не сильно впливає на її роботу, а має радше рекомендаційний характер. Якщо є кілька сплячих ниток, які потрібно запустити, Java-машина спочатку запустить нитку з вищим пріоритетом.</p>
+<p>Java-машина управляє нитками так, як вважатиме за потрібне. Нитки з низьким пріоритетом не простоюватимуть. Просто вони отримуватимуть менше часу, ніж інші, але виконуватимуться все одно.</p>
+<p>Найчастіше нитки завжди виконуються з однаковим пріоритетом. Спроба дати одній нитці більше часу, ніж іншим, часто свідчить про архітектурну помилку програми.</p>
+<p><span class="text-user">- Нічого собі. А я вже мріяв, що зараз призначу нитки найвищий пріоритет, і вона робитиме вдесятеро більше.</span></p>
+<p>— А тут, виявляється, ситуація – близька до finalize: нитка з високим пріоритетом може й працюватиме більше, а може й ні – ніхто не дає жодної гарантії.</p>
+<p><span class="text-user">— До речі, а як змінити пріоритет нитки?</span></p>
+<p>- Це дуже просто. У класу Thread є два методи:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Метод</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">void</span> <span class="token function">setPriority</span><span class="token punctuation">(</span><span class="token keyword">int</span> newPriority<span class="token punctuation">)</span></code></pre></td>
+    <td>Встановлює нове значення пріоритету</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers block-inline language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">int</span> <span class="token function">getPriority</span><span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre></td>
+    <td>Повертає поточний пріоритет нитки</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>У класу Thread також є три константи:</p>
+<p>public final static int MIN_PRIORITY = 1;</p>
+<p>public final static int NORM_PRIORITY = 5;</p>
+<p>public final static int MAX_PRIORITY = 10;</p>
+<p><span class="text-user">- Дай, я вгадаю. MIN_PRIORITY - це мінімальний пріоритет, MAX_PRIORITY - максимальний, а NORM_PRIORITY - пріоритет за замовчуванням?</span></p>
+<p>- Так, саме так. Чи зможеш сам написати код, який виставляє нитки найвищий пріоритет.</p>
+<p><span class="text-user">— А тут є якась каверза? Начебто так:</span></p>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Thread</span> thread <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MyThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+thread<span class="token punctuation">.</span><span class="token function">setPriority</span><span class="token punctuation">(</span><span class="token class-name">Thread</span><span class="token punctuation">.</span> MAX_PRIORITY<span class="token punctuation">)</span>
+thread<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>- Все вірно. Нічого складного так?</p>
+<p><span class="text-user">- Ага. А чи можна встановлювати/міняти пріоритет нитки після її запуску? Або тут як із setDaemon – обов'язково виставити значення до старту нитки?</span></p>
+<p>— Пріоритет можна міняти і після старту. Як я вже говорила, кардинальних змін це не спричиняє.</p>
+<p><span class="text-user">- Невелика, але цікава тема. Дякую, Еллі.</span></p>

@@ -1,0 +1,143 @@
+<h2>Використовуємо maven-deploy-plugin</h2>
+<p>І ще одна цікава тема — автоматичний deploy зібраного пакета. Допустимо, ми зібрали власну бібліотеку за допомогою Maven. Як нам автоматично викласти її у локальний, корпоративний чи центральний Maven-репозиторій?</p>
+<p>Для цього у Maven є спеціальний плагін <span class="text-bold">maven-deploy-plugin</span> . Приклад:</p>
+<pre><code>    <span class="text-viola">&lt;plugin&gt;
+        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+        &lt;artifactId&gt;maven-deploy-plugin&lt;/artifactId&gt;
+    	&lt;version&gt;2.5&lt;/version&gt;</span>
+    	<span class="text-green">&lt;configuration&gt;
+          &lt;file&gt;${project.build.directory}\${project.artifactId}-src.zip&lt;/file&gt;</span>
+          <span class="text-red">&lt;url&gt;${project.distributionManagement.repository.url}&lt;/url&gt;
+          &lt;repositoryId&gt;${project.distributionManagement.repository.id}&lt;/repositoryId&gt;</span>
+          <span class="text-neon">&lt;groupId&gt;${project.groupId}&lt;/groupId&gt;
+          &lt;artifactId&gt;${project.artifactId}&lt;/artifactId&gt;
+          &lt;version&gt;${project.version}&lt;/version&gt;</span>
+      	  <span class="text-yellow">&lt;packaging&gt;zip&lt;/packaging&gt;
+          &lt;pomFile&gt;pom.xml&lt;/pomFile&gt;</span>
+    	<span class="text-green">&lt;/configuration&gt;</span>
+  	<span class="text-viola">&lt;/plugin&gt;</span>
+</code></pre>
+<p>З цими налаштуваннями ти можеш викласти зібрану бібліотеку Maven-репозиторій як валідний пакет. Докладно розбирати цей процес ми не будемо, але коротко розглянемо, що відбувається:</p>
+<p>Тег <span class="text-green">file</span> задає файл, який буде відправлений до репозиторію Maven як нова бібліотека.</p>
+<p>Тег <span class="text-red">url</span> – шлях до репозиторію Maven (локальний/корпоративний/…).</p>
+<p>Тег <span class="text-red">реpositoryId</span> задає ідентифікатор репозиторію, в який буде вироблятися депллою.</p>
+<p>Теги <span class="text-neon">groupId</span> , <span class="text-neon">artifactId</span> , <span class="text-neon">version</span> задають стандартну ідентифікацію пакета в репозиторії Maven. Саме за цими трьома параметрами можна однозначно ідентифікувати бібліотеку.</p>
+<p>packaging використовується для того, щоб результат був відправлений одним zip-файлом <span class="text-yellow">. </span>Якщо його не вказати, то буде один jar-файл, навіть якщо у вас було кілька jar-файлів.</p>
+<p>Тег <span class="text-yellow">pomFile</span> є опціональним і дозволяє відправити в репозиторій інший pom.xml, який не містить прихованих або службових даних.</p>
+<h2>Розгортання web-програми в Tomcat за допомогою Maven</h2>
+<p>Найпопулярніший веб-сервер для веб-додатків Java — це <span class="text-bold">Apache Tomcat</span> . І звичайно ж, за допомогою Maven можна деплоїти war-файли прямо в локальний або навіть віддалений Tomcat-сервер.</p>
+<p>Встановлювати і налаштовувати Tomcat ми навчимося якось потім, зараз же торкнемося тільки теми автоматичного деплою нашого web-додатку.</p>
+<p><span class="text-bold">Крок перший. </span>Ми повинні дати доступ Maven'у до Tomcat-сервера. Для цього відкриваємо файл <span class="text-bold">conf/tomcat-users.xml</span> в директорії, де розпакований Apache Tomcat, і додаємо ролі <span class="text-bold">manager-gui</span> та <span class="text-bold">manager-script</span> :</p>
+<pre><code>&lt;?xml version='1.0' encoding='utf-8'?&gt;
+&lt;tomcat-users&gt;
+  &lt;role rolename="manager-gui"/&gt;
+  &lt;role rolename="manager-script"/&gt;
+  <span class="text-red">&lt;user username="admin" password="admin" roles="manager-gui,manager-script" /&gt;</span>
+&lt;/tomcat-users&gt;
+</code></pre>
+<p><span class="text-bold">Крок другий. </span>Дозволяємо доступ Maven до Tomcat. Для цього відкриваємо файл <span class="text-bold">$MAVEN_HOME/conf/settings.xml</span> та додаємо сервер:</p>
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;settings ...&gt;
+  &lt;servers&gt;
+	<span class="text-red">&lt;server&gt;
+  	&lt;id&gt;TomcatServer&lt;/id&gt;
+  	&lt;username&gt;admin&lt;/username&gt;
+  	&lt;password&gt;admin&lt;/password&gt;
+	&lt;/server&gt;</span>
+  &lt;/servers&gt;
+&lt;/settings&gt;
+</code></pre>
+<p><span class="text-bold">Крок третій. </span>Додаємо спеціальний плагін для автоматизованого деплою нашої програми в Apache Tomcat. Плагін називається <span class="text-bold">tomcat7-maven-plugin</span> . До речі, створено не розробниками Maven, а розробниками Tomcat, про що можна здогадатися по імені.</p>
+<pre><code>	&lt;build&gt;
+    	&lt;plugins&gt;
+        	&lt;plugin&gt;
+                <span class="text-green">&lt;groupId&gt;org.apache.tomcat.maven&lt;/groupId&gt;
+                &lt;artifactId&gt;tomcat7-maven-plugin&lt;/artifactId&gt;
+                &lt;version&gt;2.2&lt;/version&gt;
+            	&lt;configuration&gt;</span>
+                    <span class="text-red">&lt;url&gt;http://localhost:8080/manager/text&lt;/url&gt;</span>
+                    <span class="text-green">&lt;server&gt;TomcatServer&lt;/server&gt;</span>
+                	<span class="text-neon">&lt;path&gt;/simpleProject&lt;/path&gt;</span>
+            	<span class="text-green">&lt;/configuration&gt;</span>
+        	&lt;/plugin&gt;
+    	&lt;/plugins&gt;
+	&lt;/build&gt;
+</code></pre>
+<p>У розділі configuration вказуємо:</p>
+<ul>
+ <li><span class="text-red">url</span> - адресаа, де запущено Tomcat, і шлях до <span class="text-bold">manager/text</span></li>
+ <li><span class="text-green">server</span> - ID сервера з файлу <span class="text-bold">settings.xml</span></li>
+ <li><span class="text-neon">path</span> — адресаа, за якою буде доступний додаток, що розгортається.</li>
+</ul>
+<p>Команди для управління деплоєм:</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>mvn tomcat7:deploy</th>
+    <td>Виконати деплой програми в Tomcat</td>
+   </tr>
+   <tr>
+    <th>mvn tomcat7:undeploy</th>
+    <td>Видалити програму з Tomcat</td>
+   </tr>
+   <tr>
+    <th>mvn tomcat7:redeploy</th>
+    <td>Передати програму</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<h2>Деплой за допомогою плагіна Cargo Plugin</h2>
+<p>Ще один корисний та універсальний плагін для деплою веб-додатків - <span class="text-bold">Cargo Plugin</span> . Він може працювати з різними типами веб-серверів. Ось як зробити деплой за його допомогою в Apache Tomcat:</p>
+<pre><code>&lt;build&gt;
+    &lt;plugins&gt;
+    	&lt;plugin&gt;
+            <span class="text-green">&lt;groupId&gt;org.codehaus.cargo&lt;/groupId&gt;
+            &lt;artifactId&gt;cargo-maven2-plugin&lt;/artifactId&gt;
+        	&lt;version&gt;1.9.10&lt;/version&gt;
+        	&lt;configuration&gt;
+            	&lt;container&gt;</span>
+                	<span class="text-red">&lt;containerId&gt;tomcat8x&lt;/containerId&gt;</span>
+                    <span class="text-neon">&lt;type&gt;installed&lt;/type&gt;
+                	&lt;home&gt;Insert absolute path to tomcat 7 installation&lt;/home&gt;</span>
+            	<span class="text-green">&lt;/container&gt;
+            	&lt;configuration&gt;</span>
+                    <span class="text-orange">&lt;type&gt;existing&lt;/type&gt;
+                    &lt;home&gt;Insert absolute path to tomcat 7 installation&lt;/home&gt;</span>
+            	<span class="text-green">&lt;/configuration&gt;
+        	&lt;/configuration&gt;</span>
+   	    &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;
+</code></pre>
+<p>Щоб встановити веб-програму в локальний Tomcat, потрібно просто виконати команди:</p>
+<pre><code>mvn install
+mvn cargo:deploy
+</code></pre>
+<p>Якщо ми хочемо виконати деплой на віддалений веб-сервер, то тут доведеться налаштувати права доступу до цього серверу. Для цього їх потрібно просто прописати в <span class="text-bold">pom.xml</span> :</p>
+<pre><code><span class="text-viola">&lt;configuration&gt;</span>
+	<span class="text-green">&lt;container&gt;
+        &lt;containerId&gt;tomcat8x&lt;/containerId&gt;
+    	&lt;type&gt;remote&lt;/type&gt;
+	&lt;/container&gt;</span>
+	<span class="text-viola">&lt;configuration&gt;
+    	&lt;type&gt;runtime&lt;/type&gt;
+    	&lt;properties&gt;</span>
+            <span class="text-red">&lt;cargo.remote.username&gt;admin&lt;/cargo.remote.username&gt;
+            &lt;cargo.remote.password&gt;admin&lt;/cargo.remote.password&gt;
+        	&lt;cargo.tomcat.manager.url&gt;http://localhost:8080/manager/text&lt;/cargo.tomcat.manager.url&gt;</span>
+    	<span class="text-viola">&lt;/properties&gt;
+	&lt;/configuration&gt;
+&lt;/configuration&gt;</span>
+</code></pre>
+<h2>Деплой за допомогою IntelliJ IDEA</h2>
+<p>Intellij IDEA робить всю роботу сама, потрібен лише встановлений <a href="https://tomcat.apache.org/download-90.cgi" target="_blank">Tomcat</a> .</p>
+<p><span class="text-bold">Крок перший. </span>Створюємо локальну конфігурацію Tomcat:</p><img data-id="3a5858c5-a7f9-4c63-a7ae-d0a63089fe4a" data-max-width="512" alt="" src="https://cdn.javarush.com/images/article/3a5858c5-a7f9-4c63-a7ae-d0a63089fe4a/512.jpeg" style="width: 512px;">
+<p><span class="text-bold">Крок другий. </span>Потім вибираємо локальний Tomcat:</p><img data-id="0894b449-5e49-45e3-8db7-f879b04c5fa5" data-max-width="512" alt="" src="https://cdn.javarush.com/images/article/0894b449-5e49-45e3-8db7-f879b04c5fa5/512.jpeg" style="width: 512px;">
+<p><span class="text-bold">Крок третій. </span>Конфігуруємо Tomcat:</p><img data-max-width="1024" data-id="d5b772ca-0825-418b-ad3c-1394839ad074" alt="" src="https://cdn.javarush.com/images/article/d5b772ca-0825-418b-ad3c-1394839ad074/1024.jpeg" style="width: 1024px;">
+<p><span class="text-bold">Крок четвертий. </span>Додаємо шлях до папки Tomcat.</p><img data-max-width="1024" data-id="f8de836e-d742-4265-a728-67316fa070a7" alt="" src="https://cdn.javarush.com/images/article/f8de836e-d742-4265-a728-67316fa070a7/1024.jpeg" style="width: 1024px;">
+<p><span class="text-bold">Крок п'ятий. </span>Додаємо наш проект як артефакт Tomcat.</p>
+<p>Для цього переходимо на вкладку Deployment і праворуч натискає кнопку <span class="code">+</span> .</p><img data-max-width="800" data-id="ae492baf-148d-4c2a-9364-6e24fdcd3f7b" alt="" src="https://cdn.javarush.com/images/article/ae492baf-148d-4c2a-9364-6e24fdcd3f7b/800.jpeg" style="width: 800px;">
+<p>От і все.</p>
+<p>До речі, якщо тобі потрібно деплоїти на віддалений сервер, просто виберіть у другому кроці Remote Tomcat.</p>

@@ -1,0 +1,63 @@
+<p>- Привіт, Аміго! Нарешті ми дісталися дуже цікавої теми. Сьогодні я розповім тобі про&nbsp; <strong><span class="text-red">множинне спадкування</span></strong> . Насправді множинний спадок дуже цікавий і потужний інструмент. І якби не деякі проблеми, то в Java було б множинне успадкування класів. Але т.к. його немає, доведеться задовольнятися&nbsp; <span class="text-red"><strong>множинним успадкуванням інтерфейсів</strong></span> . Що теж не мало.</p><a href="https://cdn.javarush.com/images/article/db1a2ff7-692c-45b5-8588-0bc2d60f20ea/original.jpeg" target="_blank"><img data-id="db1a2ff7-692c-45b5-8588-0bc2d60f20ea" data-max-width="850" alt="Множинне наслідування інтерфейсів - 1" src="https://cdn.javarush.com/images/article/db1a2ff7-692c-45b5-8588-0bc2d60f20ea/800.jpeg" style="width: 850px;"></a>
+<p>Уяви, що ти пишеш комп'ютерну гру. І її герої – твої об'єкти – мають демонструвати дуже складну поведінку: ходити картою, збирати предмети, виконувати квести, спілкуватися з іншими героями, когось вбивати, когось рятувати. Допустимо, ти зміг розділити всі об'єкти на 20 категорій. Це означає, що якщо тобі пощастить, ти можеш обійтися всього 20 класами, для їх опису. А тепер питання на засипку: скільки всього унікальних видів взаємодії цих об'єктів. Об'єкт кожного типу може мати унікальні взаємодії з 20 видами інших об'єктів (собі подібних теж вважаємо). Тобто. всього потрібно запрограмувати 20 на 20 - 400 взаємодій! Якщо ж унікальних видів об'єктів буде не 20, а 100, кількість взаємодій може досягти 10,000!</p>
+<p><span class="text-user">- Нічого собі! Тепер розумію, чому програмування є такою непростою роботою.</span></p>
+<p>- Вона проста. Завдяки багатьом абстракціям. І в останню чергу – множинному успадкування інтерфейсів.</p>
+<p>Дуже часто можна спростити взаємодію об'єктів, якщо взаємодіяти будуть не об'єкти, а їхні ролі та/або здібності. А здібності, як ми вже знаємо, легко додаються до класу, коли він реалізує певний інтерфейс.</p>
+<p>Коли пишеться велика програма, зазвичай із цього відразу й починають:</p>
+<p><strong>1)</strong> Визначають усі існуючі здібності/ролі.</p>
+<p><strong>2)</strong> Потім описують взаємодію між цими ролями.</p>
+<p><strong>3)</strong> А потім просто наділяють усі класи їхніми ролями.</p>
+<p><span class="text-user">— А чи можна приклад?</span></p>
+<p>- Звичайно. Давай розглянемо ролі на основі героїв мультика «Том і Джеррі».</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Код на Java</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token keyword">interface</span> <span class="token class-name">Moveable</span>
+<span class="token punctuation">{</span><span class="token punctuation">}</span></code></pre></td>
+    <td>- Роль / здатність пересуватися.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token keyword">interface</span> <span class="token class-name">Eatable</span>
+<span class="token punctuation">{</span><span class="token punctuation">}</span></code></pre></td>
+    <td>- роль/здатність бути з'їденим.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token keyword">interface</span> <span class="token class-name">Eat</span>
+<span class="token punctuation">{</span><span class="token punctuation">}</span></code></pre></td>
+    <td>- роль / здатність з'їсти когось.</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Tom</span> <span class="token keyword"></span><span class="text-user"><span class="token keyword">extends</span> <span class="token class-name">Cat</span></span><span class="token class-name"></span> <span class="token keyword"></span><span class="text-red"><span class="token keyword">implements</span> <span class="token class-name">Moveable</span><span class="token punctuation">,</span> <span class="token class-name">Eatable</span><span class="token punctuation">,</span> <span class="token class-name">Eat</span></span><span class="token class-name"></span>
+<span class="token punctuation">{</span><span class="token punctuation">}</span></code></pre></td>
+    <td>Tom – це кіт, який має три ролі: <br>
+      1) може пересуватися <br>
+      2) може когось з'їсти <br>
+      3) може бути з'їденим кимось (собакою)</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Jerry</span> <span class="token keyword"></span><span class="text-user"><span class="token keyword">extends</span> <span class="token class-name">Mouse</span></span><span class="token class-name"></span> <span class="token keyword"></span><span class="text-red"><span class="token keyword">implements</span> <span class="token class-name">Moveable</span><span class="token punctuation">,</span> <span class="token class-name">Eatable</span></span><span class="token class-name"></span>
+<span class="token punctuation">{</span><span class="token punctuation">}</span></code></pre></td>
+    <td>Jerry – це миша, яка має дві ролі: <br>
+      1) може пересуватися <br>
+      2) може бути з'їденим кимось</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Killer</span> <span class="token keyword"></span><span class="text-user"><span class="token keyword">extends</span> <span class="token class-name">Dog</span></span><span class="token class-name"></span> <span class="token keyword"></span><span class="text-red"><span class="token keyword">implements</span> <span class="token class-name">Moveable</span><span class="token punctuation">,</span> <span class="token class-name">Eat</span></span><span class="token class-name"></span>
+<span class="token punctuation">{</span><span class="token punctuation">}</span></code></pre></td>
+    <td>Killer – це собака, який має дві ролі: 1) може пересуватися 2) може когось з'їсти</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Знаючи ці три ролі (інтерфейсу) можна написати програму і описати коректне взаємодія цих ролей. Наприклад, об'єкт гнатиметься (за допомогою інтерфейсу Moveable) за тим, «кого ти можеш з'їсти» і тікати від того, «хто може з'їсти тебе». І все це без знань про конкретні об'єкти. Якщо до програми додати ще об'єктів (класів), але залишити ці ролі, вона чудово працюватиме – керуватиме поведінкою своїх об'єктів.</p>

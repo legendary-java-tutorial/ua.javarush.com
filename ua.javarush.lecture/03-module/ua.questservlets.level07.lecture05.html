@@ -1,0 +1,42 @@
+<h2>6.1 Різні способи оголошення функцій</h2>
+<p>Ще трохи корисної інформації про функції JavaScript. Функції можна оголосити кількома способами, кожен з них має свої нюанси.</p>
+<p>Найстандартніший спосіб такий: ключове слово <code>function</code>та <code>ім'я</code>.</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="text-red">   function</span> <span class="token function"><span class="text-green">print</span></span><span class="token punctuation">(</span>data<span class="token punctuation">)</span>
+   <span class="token punctuation">{</span>
+     console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span></code></pre>
+<p>Другий спосіб це спочатку оголосити змінну, а потім привласнити їй анонімну функцію.</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java">window<span class="token punctuation">.</span><span class="text-green">print</span> <span class="token operator">=</span> <span class="token function"><span class="text-red">function</span></span><span class="token punctuation">(</span>data<span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+     console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span></code></pre>
+<p>Ці два способи дають <strong>абсолютно еквівалентний результат</strong> . Коли ви оголошуєте звичайну функцію першим способом, то об'єкт window створює нове поле з ім'ям твоєї функції і в нього присвоюється посилання на неї.</p>
+<h2>6.2 Анонімні функції</h2>
+<p>Також можна створити анонімну функцію і не надавати її значення нічого. А навіщо така функція потрібна? Як її спричинити?</p>
+<p>А вся річ у тому, що можна викликати її одразу. Допустимо ми оголосабо функцію <code>temp</code>і відразу викликали її:</p>
+<pre class="line-numbers"><code>
+var <span class="text-green">temp</span> = <span class="text-red">function</span>(data)
+    {
+        console.log(data);
+    }
+ 
+<span class="text-green">temp</span>(<span class="text-user">"some info"</span>);
+</code></pre>
+<p>Також можна її оголосити і відразу викликати:</p>
+<pre class="line-numbers"><code>
+<span class="text-yellow">   (</span><span class="text-red">function</span>(data)
+    {
+        console.log(data);
+    }<span class="text-yellow">)</span>(<span class="text-user">"some info"</span>);
+</code></pre>
+<p>Чимось нагадує анонімні inner-класи в Java.</p>
+<h2>6.3 Метод eval()</h2>
+<p>І ще один цікавий спосіб виконати код JavaScript - це взагалі не створювати функції. JavaScript можна просто виконати код, заданий у вигляді рядка. І тому є спеціальна функція <code>eval()</code>(від evaluation). Загальний формат виклику виглядає так:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present  language-java" tabindex="0"><code class=" language-java"><span class="token keyword">var</span> result <span class="token operator">=</span> <span class="token function"><span class="text-red">eval</span></span><span class="token punctuation">(</span><span class="token string"><span class="text-green">"код або вираз"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</div>
+<p>Приклади:</p>
+<pre class="line-numbers"><code>
+var <span class="text-user">x</span> = <span class="text-red">eval</span>(<span class="text-green">"1/2"</span>);
+<span class="text-red">eval</span>(<span class="text-green">"alert('Hi!')"</span>);
+</code></pre>

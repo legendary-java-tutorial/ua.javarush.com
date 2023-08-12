@@ -1,0 +1,38 @@
+<h2>Знайомство з архетипами</h2>
+<p>Є ще один спосіб створити Maven-проект у IDEA – на основі архетипу:</p><img data-max-width="1024" data-id="ba39b165-cff9-4d4e-ae7c-f5d9edbd8cb0" alt="Maven-проект у IDEA" src="https://cdn.javarush.com/images/article/ba39b165-cff9-4d4e-ae7c-f5d9edbd8cb0/1024.jpeg" style="width: 1024px;">
+<p>Тут пропонується створити проект на основі одного з існуючих <span class="text-bold">архетипів</span> . Що ж це за такі архетипи і навіщо вони нам потрібні?</p>
+<p>Maven стандартизував шаблони проектів – такі шаблони називаються архетипами. Пам'ятаєте стартову структуру проекту - папки <span class="text-bold">src</span> , <span class="text-bold">java</span> , <span class="text-bold">test</span> і так далі? Так ця структура папок задана за допомогою архетипу.</p>
+<p>Зразки шаблонів є на офіційному <a href="https://maven.apache.org/archetypes/index.html" target="_blank">сайті Maven</a> . З їх допомогою можна згенерувати різні стартові проекти - простий додаток, плагін, сайт.</p>
+<p>Список доступних архетипів можна отримати, виконавши в консолі команду: <span class="text-yellow">mvn archetype:generate</span></p>
+<h2>Популярні архетипи</h2>
+<p>Найпопулярніші архетипи - це:</p>
+<ul>
+ <li><span class="text-bold">maven-archetype-quickstart</span> ;</li>
+ <li><span class="text-bold">maven-archetype-site</span> ;</li>
+ <li><span class="text-bold">maven-archetype-webapp</span> ;</li>
+ <li><span class="text-bold">maven-archetype-j2ee-simple</span> ;</li>
+ <li><span class="text-bold">jpa-maven-archetype</span> ;</li>
+ <li><span class="text-bold">spring-mvc-quickstart</span> .</li>
+</ul>
+<p>Якщо хочеш створити порожній Java-проект, то використовуй архетип <span class="text-bold">maven-archetype-quickstart</span> . Саме результат його роботи ти бачив при створенні проекту в IDEA в минулій лекції.</p>
+<p>Якщо хочеш створити веб-додаток, який буде працювати всередині веб-сервера, відображати HTML-сторінки і таке інше, то можеш сміливо брати за основу архетип <span class="text-bold">maven-archetype-webapp</span> .</p>
+<p>Для створення сайту можна використовувати архетип <span class="text-bold">maven-archetype-site</span> . Або навіть архетип maven-archetype-site-simple, якщо передбачається дуже простий сайт. Спробуй різні варіанти та подивися, який тобі більше сподобається.</p>
+<p>Для роботи з Hibernate або JPA можна використовувати архетип <span class="text-bold">jpa-maven-archetype</span> .</p>
+<p>Ну і нарешті для роботи зі Spring теж є спеціальний архетип - <span class="text-bold">spring-mvc-quickstart</span> . Дуже корисним буде саме для новачків. Більш подібну інформацію з останнього можна знайти тут, <a href="https://github.com/kolorobot/spring-mvc-quickstart-archetype" target="_blank">за посиланням</a> .</p>
+<p>Чим хороші архетипи? Вони навчають писати проекти з нуля. Ніхто вже не пише проекти просто на Java. Сучасні проекти пишуться на стеку технологій: список з 5-10 фреймворків та пари десятків бібліотек — ось сучасна «мова, якою я пишу».</p>
+<h2>Веб-додаток на Maven</h2>
+<p>Окремо хотілося б зупинитися на архетипі <span class="text-bold">maven-archetype-webapp</span> .</p>
+<p>Це класична веб-програма, написана на Java. І хоча воно трохи застаріло після Spring'а, що набрав популярності, тобі як новачкові, воно буде дуже корисно. Що потрібно знати про цей архетип?</p>
+<p>Він дозволяє зібрати простий <span class="text-bold">веб-додаток</span> - результатом складання буде <span class="text-bold">war-файл</span> . Deploy можна налаштувати так, щоб твоя веб-додаток відразу додавалася до Tomcat. І нарешті, ти можеш поекспериментувати з примітивними сервлетами та JSP.</p>
+<p>Якщо ти створиш проект на основі цього архетипу, то отримаєш таку структуру папок:</p><img data-max-width="512" data-id="0cffc06b-44e6-4dfc-b4ad-1ced138a8211" alt="Maven-проект у IDEA 2" src="https://cdn.javarush.com/images/article/0cffc06b-44e6-4dfc-b4ad-1ced138a8211/512.jpeg" style="width: 512px;">
+<p>З цікавого тут кілька речей:</p>
+<ul>
+ <li>папка webapp;</li>
+ <li>папка WEB-INF;</li>
+ <li>файл web.xml;</li>
+ <li>index.jsp.</li>
+</ul>
+<p>По-перше, тут є папка <span class="text-bold">webapp</span> (від Web Application), в якій зберігатимуться всі ресурси твого веб-додатку.</p>
+<p>По-друге, файл <span class="text-bold">web.xml</span> – це <span class="text-green">дескриптор розгортання веб-програми</span> . У ньому описано як твоя веб-додаток має взаємодіяти з веб-сервером та його клієнтами.</p>
+<p>По-третє, тут є файл <span class="text-bold">index.jsp</span> , який є досить простою формою сервлета. Він робітник і ти можеш поекспериментувати зі своїм першим JSP-сервлетом, змінюючи його.</p>
+<p>Докладніше про все це ми розповімо у темі присвяченій сервлетам та веб-додаткам.</p>

@@ -1,0 +1,57 @@
+<h2>Скриптлети &lt;%</h2>
+<h2>Що взагалі можна вставити у JSP-файл?</h2>
+<p>По-перше, Java-код. Якщо ти хочеш вставити Java-код у свій JSP, то загальний формат задається шаблоном:</p>
+<pre><code> <span class="text-red">&lt;%</span>
+	<span class="text-green">Java-код</span>
+ <span class="text-red">%&gt;</span>
+</code></pre>
+<p>Можна розбивати такий код на кілька частин:</p>
+<pre><code> <span class="text-red">&lt;%</span>
+   <span class="text-green">Початок Java-коду</span>
+ <span class="text-red">%&gt;</span>
+  HTML-код
+<span class="text-red">&lt;%</span>
+   <span class="text-green">Кінець Java-коду</span>
+ <span class="text-red">%&gt;</span>
+</code></pre>
+<p>Приклад:</p>
+<pre><code>
+    &lt;html&gt; 
+    &lt;body&gt; 
+	<span class="text-red">&lt;%</span>
+    	<span class="text-neon">double num = Math.random();
+    	if (num &gt; 0.95) {</span>
+     <span class="text-red">%&gt;</span>
+         &lt;h2&gt; Ти везунчик, user!&lt;/h2&gt;&lt;p&gt;(<span class="text-red">&lt;%=</span> <span class="text-neon">num</span> <span class="text-red">%&gt;</span>)&lt;/p&gt;
+ 	<span class="text-red">&lt;%</span>
+   	<span class="text-neon">    } else {</span>
+     <span class="text-red">%&gt;</span> 
+         &lt;h2&gt; Сьогодні не твій день, user!&lt;/h2&gt;&lt;p&gt;(<span class="text-red">&lt;%=</span> <span class="text-neon">num</span> <span class="text-red">%&gt;</span>)&lt;/p&gt;
+ 	<span class="text-red">&lt;%
+   	<span class="text-neon">    }</span>
+ 	<span class="text-red">%&gt;</span>
+  &lt;/body&gt; 
+   &lt;/html&gt; 
+</span></code></pre>
+<h2>Вираз &lt;%=</h2>
+<p>Також в JSP-файл можна вставити будь-який вираз, що обчислюється. При цьому JSP-парсер сам дбає про те, щоб воно не просто обчислювалося, але й присвоювалося, куди потрібно. Вираз усередині коду задається шаблоном:</p>
+<pre><code> <span class="text-red">&lt;%=</span> <span class="text-green">вираз</span> <span class="text-red">%&gt;</span>
+</code></pre>
+<p>Зверніть увагу, що крапку з комою тут ставити не потрібно.</p>
+<p>Приклад JSP-сервлета з кількома виразами:</p>
+<pre><code>&lt;p&gt;Корінь із 10 дорівнює <span class="text-red">&lt;%=</span> <span class="text-green">Math.sqrt(10)</span> <span class="text-red">%&gt;</span>&lt;/p&gt;
+&lt;h5&gt;<span class="text-red">&lt;%=</span> <span class="text-green">item[10]</span> <span class="text-red">%&gt;</span>&lt;/h5&gt;
+&lt;p&gt;поточний час: <span class="text-red">&lt;%=</span>  <span class="text-green">new java.util.Date()</span> <span class="text-red">%&gt;</span>&lt;/p&gt;
+</code></pre>
+<p>Цей код буде перетворено на такий Java-код:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java">out<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token string">"&lt;р&gt;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+out<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token string">"Корінь з 10 дорівнює"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span> <span class="token class-name">Math</span><span class="token punctuation">.</span><span class="token function">sqrt</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+out<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token string">"&lt;/p&gt;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+out<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token string">"&lt;h5&gt;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span> item<span class="token punctuation">[</span><span class="token number">10</span><span class="token punctuation">]</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+out<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token string">"&lt;/h5&gt;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+out<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token string">"&lt;p&gt; Поточний час: "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span> <span class="token keyword">new</span> <span class="token class-name"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span>Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+out<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token string">"&lt;/p&gt;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p><span class="text-red"><span class="text-span">Важливо! </span></span>У своєму Java-коді та виразах ти можеш використовувати певні змінні, такі як<mark class="user">request</mark>,<mark class="user">response</mark>,<mark class="user">session</mark>,<mark class="user">out</mark>і т.п.</p>

@@ -1,0 +1,148 @@
+<h2>6.1 Атрибут class та тег style</h2>
+<p>Але це ще не все. Після того, як були придумані сотні «стилів», постало питання: як їх використовувати? І тоді вигадали їх групувати у «класи». Це, звичайно, не такі класи як Java. Просто спеціальні групи стилів.</p>
+<p>І якщо до використання «класів» у тебе була картинка:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present language"><code>
+       &lt;img src="logo.png" <span class="text-red">style</span>="<span class="text-green">width=100px;</span><span class="text-user">height=100px;</span><span class="text-viola">opacity=0.5"</span>&gt;
+    </code></pre>
+</div>
+<p>То тепер її можна було записати у вигляді:</p>
+<pre class="line-numbers"><code>
+
+&lt;img src="logo.png" <span class="text-red">class</span>="<span class="text-orange">picture</span>"&gt;
+ 
+&lt;style&gt;
+    img.<span class="text-orange">picture</span> {
+<span class="text-green">        width=100px;</span>
+<span class="text-user">        height=100px;</span>
+<span class="text-viola">        opacity=0.5</span>
+    }
+&lt;/style&gt;
+</code></pre>
+<p>Ми створабо спеціальний <code class="text-orange">«стиль» picture</code>і перенесли до нього значення стилів з атрибуту <code class="text-red">style</code>. А потім пов'язали і «стиль» picture за допомогою тега <code class="text-red">class</code>.</p>
+<h2>6.2 Селектор, види селекторів</h2>
+<p>Ці стилі, винесені окремо, стали називати <code>классами</code>або <code>селекторами</code>. Вони мають кілька важливих особливостей.</p>
+<p>В одного <code>html-елемента</code>може бути кілька селекторів. Їхні назви вказуються через пробіл. Приклад:</p>
+<div class="lesson-example lesson-example--center">
+ <pre class="lecture-code lecture-code--present language"><code>
+       &lt;img src="logo.png" <span class="text-red">class</span>="<span class="text-green">picture </span><span class="text-user">main</span>"&gt;
+    </code></pre>
+</div>
+<p>Одна з причин, чому ми тут торкнулися селектори, - це те, що вони можуть застосовуватися автоматично. І ця їхня корисна властивість надалі буде дуже часто використовуватися. У тому числі і Java-розробниками.</p>
+<p>Ось їх короткий список:</p>
+<pre><code></code></pre>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th width="40">#</th>
+    <th width="160">Селектор</th>
+    <th>приклад</th>
+    <th width="250">Опис</th>
+   </tr>
+   <tr>
+    <td>1</td>
+    <td><strong>*</strong></td>
+    <td>
+     <pre><code>* {
+  margin: 0;
+  padding: 0;
+}
+</code></pre></td>
+    <td>Застосовується до всіх елементів HTML-документу.</td>
+   </tr>
+   <tr>
+    <td>2</td>
+    <td><strong>#id</strong></td>
+    <td>
+     <pre><code>#img123 {
+   width:100px;
+   height 100px;
+}</code></pre></td>
+    <td>Після # слідує id елемента, до якого потрібно застосувати даних стиль.</td>
+   </tr>
+   <tr>
+    <td>3</td>
+    <td><strong>tag</strong></td>
+    <td>
+     <pre><code>table {
+   color: black;
+}</code></pre></td>
+    <td>Застосовується до всіх таблиць документа.</td>
+   </tr>
+   <tr>
+    <td>4</td>
+    <td><strong>tag.selector</strong></td>
+    <td>
+     <pre><code>table.important {
+   color: red;
+}</code></pre></td>
+    <td>Застосовується до всіх таблиць документа, які вказані в атрибуті class.</td>
+   </tr>
+   <tr>
+    <td>5</td>
+    <td><strong>.selector</strong></td>
+    <td>
+     <pre><code>.picture {
+  opacity: 0.5
+}</code></pre></td>
+    <td>Застосовується до всіх елементів, які вказані в атрибуті class. Будь-який tag.</td>
+   </tr>
+   <tr>
+    <td>6</td>
+    <td><strong>parent child</strong></td>
+    <td>
+     <pre><code>main article {
+  color: blue;
+}</code></pre></td>
+    <td>Застосовується всім елементам, у яких тег батько містить клас main, а дочірній тег містить клас article.</td>
+   </tr>
+   <tr>
+    <td>7</td>
+    <td><strong>tag:link</strong></td>
+    <td>
+     <pre><code>a:link {
+color: blue;
+}</code></pre></td>
+    <td>Псевдоклас link використовується для стилізації посилань, на які користувач ще не натискав.</td>
+   </tr>
+   <tr>
+    <td>8</td>
+    <td><strong>tag:visited</strong></td>
+    <td>
+     <pre><code>a:visited {
+color: red;
+}</code></pre></td>
+    <td>Псевдоклас link використовується для стилізації посилань, на які користувач вже натискав.</td>
+   </tr>
+   <tr>
+    <td>9</td>
+    <td><strong>tag:checked</strong></td>
+    <td>
+     <pre><code>input[type=radio]:checked {
+ border: 1px solid black;
+}</code></pre></td>
+    <td>Цей псевдоклас вибере лише зазначені елементи інтерфейсу користувача: радіокнопки або чекбокси.</td>
+   </tr>
+   <tr>
+    <td>10</td>
+    <td><strong>tag:hover</strong></td>
+    <td>
+     <pre><code>div:hover {
+  background: red;
+}</code></pre></td>
+    <td>Цей псевдоклас дозволяє змінити стиль елемента при наведенні мишкою.</td>
+   </tr>
+   <tr>
+    <td>11</td>
+    <td><strong>tag:first-child</strong></td>
+    <td>
+     <pre><code>ul li:first-child {
+ border-top: none;
+}</code></pre></td>
+    <td>Цей псевдоклас дозволить обрати лише перший дочірній елемент.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p>Тобі не треба все це запам'ятовувати. Але добре, щоб ти вивчив цю таблицю кілька разів і все це у тебе в голові відклалося. Без Інтернету в сучасному житті нікуди, а в Інтернеті - нікуди без селекторів.</p>

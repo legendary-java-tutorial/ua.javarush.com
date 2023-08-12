@@ -1,0 +1,341 @@
+<p>Jackson – це популярна бібліотека для серіалізації/десеріалізації Java-об'єктів у різні текстові формати. Основний функціонал для роботи з форматом JSON – клас <span class="code"><span class="text-green">ObjectMapper</span></span> . А працювати з іншими форматами допоможуть його спадкоємці ( <span class="code"><span class="text-green">XmlMapper</span></span> , <span class="code"><span class="text-green">YAMLMapper</span></span> ). Завдяки успадкування робота з усіма форматами відбуватиметься однаково, через єдиний інтерфейс.</p>
+<h2>Качаємо jar-ники</h2>
+<p>Перед тим, як вивчити приклади, потрібно завантажити jar-файли Jackson і підключити їх до проекту в IntellijIDEA. Розглянемо, як шукати потрібні файли на прикладі <span class="code">jackson-databind</span> :</p>
+<ol>
+ <li>
+  <p>Перейди на сайт <a href="https://mvnrepository.com/" target="_blank">Maven Repository</a> .</p></li>
+ <li>
+  <p>У пошуковий рядок введи “ <span class="text-bold"><em>jackson-databind</em></span> ”, отримаєш результат:</p><img data-max-width="800" data-id="6d2f19a0-4a17-4e38-ab63-dee36d87fd21" alt="" src="https://cdn.javarush.com/images/article/6d2f19a0-4a17-4e38-ab63-dee36d87fd21/800.jpeg" style="width: 800px;"></li>
+ <li>
+  <p>Нас цікавить перший результат пошуку, переходимо за посиланням.</p></li>
+ <li>
+  <p>Іноді може знадобитися певна версія бібліотеки, щоб забезпечити сумісність з іншими компонентами проекту. Тобі підійде остання версія (на момент написання лекції це 2.13.2.2), переходь за посиланням.</p></li>
+ <li>
+  <p>На сторінці, що відкрилася, тобі потрібне посилання “bundle”:</p><img data-max-width="800" data-id="086431cc-2be3-4049-a082-ac6a05737449" alt="" src="https://cdn.javarush.com/images/article/086431cc-2be3-4049-a082-ac6a05737449/800.jpeg" style="width: 800px;">
+  <p></p></li>
+ <li>
+  <p>Завантажуємо jar-файл <a href="https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.13.2.2/jackson-databind-2.13.2.2.jar" target="_blank">за посиланням</a> .</p></li>
+</ol>
+<p>Аналогічно можна знайти та завантажити інші необхідні jar-ники:</p>
+<ul>
+ <li>
+  <p><a href="https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.13.2/jackson-annotations-2.13.2.jar" target="_blank">jackson-annotations</a></p></li>
+ <li>
+  <p><a href="https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.13.2/jackson-core-2.13.2.jar" target="_blank">jackson-core</a></p></li>
+ <li>
+  <p><a href="https://repo1.maven.org/maven2/com/fasterxml/jackson/dataformat/jackson-dataformat-xml/2.13.2/jackson-dataformat-xml-2.13.2.jar" target="_blank">jackson-dataformat-xml</a></p></li>
+ <li>
+  <p><a href="https://repo1.maven.org/maven2/com/fasterxml/jackson/dataformat/jackson-dataformat-yaml/2.13.2/jackson-dataformat-yaml-2.13.2.jar" target="_blank">jackson-dataformat-yaml</a></p></li>
+ <li>
+  <p><a href="https://repo1.maven.org/maven2/org/yaml/snakeyaml/1.30/snakeyaml-1.30.jar" target="_blank">snakeyaml</a></p></li>
+ <li>
+  <p><a href="https://repo1.maven.org/maven2/com/fasterxml/woodstox/woodstox-core/6.2.8/woodstox-core-6.2.8.jar" target="_blank">woodstox-core</a></p></li>
+ <li>
+  <p><a href="https://repo1.maven.org/maven2/org/codehaus/woodstox/stax2-api/4.2.1/stax2-api-4.2.1.jar" target="_blank">stax2-api</a></p></li>
+</ul>
+<p>Завантаживши всі необхідні файли, підключи їх до проекту IntellijIDEA:</p>
+<ol>
+ <li>
+  <p>Відкрий налаштування проекту (це можна зробити комбінацією <span class="text-bold">Ctrl+Alt+Shift+S</span> ).</p></li>
+ <li>
+  <p>Перейди в <span class="text-bold">Libraries</span> .</p></li>
+ <li>
+  <p>Тисніть <span class="text-bold">+</span> , потім Java, вибери всі завантажені файли. Повинно вийти так:</p><img data-max-width="800" data-id="6cfea82b-eaad-4585-be1e-5bdd63a43bef" alt="" src="https://cdn.javarush.com/images/article/6cfea82b-eaad-4585-be1e-5bdd63a43bef/800.jpeg" style="width: 800px;"></li>
+ <li>
+  <p>На цьому підготовка закінчена, пробуватимемо <span class="code"><span class="text-green">ObjectMapper</span></span> у справі.</p></li>
+</ol>
+<h2>Серіалізація в JSON</h2>
+<p>Спочатку серіалізуємо якийсь об'єкт у JSON:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>fasterxml<span class="token punctuation">.</span>jackson<span class="token punctuation">.</span>databind<span class="token punctuation">.</span></span><span class="token class-name">ObjectMapper</span><span class="token punctuation">;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">Book</span> <span class="token punctuation">{</span>
+	<span class="token keyword">public</span> <span class="token class-name">String</span> title<span class="token punctuation">;</span>
+	<span class="token keyword">public</span> <span class="token class-name">String</span> author<span class="token punctuation">;</span>
+	<span class="token keyword">public</span> <span class="token keyword">int</span> pages<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Solution</span> <span class="token punctuation">{</span>
+	<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+    	<span class="token class-name">Book</span> book <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Book</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    	book<span class="token punctuation">.</span>title <span class="token operator">=</span> <span class="token string">"Обитаемый остров"</span><span class="token punctuation">;</span>
+    	book<span class="token punctuation">.</span>author <span class="token operator">=</span> <span class="token string">"Стругацкий А., Стругацкий Б."</span><span class="token punctuation">;</span>
+    	book<span class="token punctuation">.</span>pages <span class="token operator">=</span> <span class="token number">413</span><span class="token punctuation">;</span>
+
+    	<span class="token class-name">ObjectMapper</span> mapper <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ObjectMapper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    	<span class="token class-name">String</span> jsonBook <span class="token operator">=</span> mapper<span class="token punctuation">.</span><span class="token function">writeValueAsString</span><span class="token punctuation">(</span>book<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    	<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>jsonBook<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Запустивши <span class="code text-orange">main</span> , отримаєш такий висновок:</p>
+<div class="terminal">
+ {"title":"Заселений острів","author":"Стругацький А., Стругацький Б.","pages":413}
+</div>
+<p>ObjectMapper <span class="code"><span class="text-green">-а</span></span> має багато додаткових налаштувань. Скористаємося однією з них, щоб JSON-рядок був легковідчитано відформатований. Після створення об'єкта<mark class="green">ObjectMapper</mark>виконаємо команду:</p>
+<div class="terminal">
+ mapper.enable(SerializationFeature.INDENT_OUTPUT);
+</div>
+<p>Інформація у висновку залишилася та ж, але додалися відступи та перенесення рядків:</p>
+<div class="terminal">
+ { 
+ <br>
+  &nbsp;&nbsp;"title": "Заселений острів", 
+ <br>
+  &nbsp;&nbsp;"author": "Стругацький А., Стругацький Б.", 
+ <br>
+  &nbsp;"pages": 413 
+ <br>
+  }
+</div>
+<h2>Десеріалізація з JSON</h2>
+<p>Тепер виконаємо зворотну дію: десеріалізуємо рядок об'єкт. Щоб можна було оцінити роботу програми, до класу <span class="code"><span class="text-green">Book</span></span> додамо метод <span class="code text-orange">toString</span> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@Override</span>
+<span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">return</span> <span class="token string">"Book{"</span> <span class="token operator">+</span>
+        	<span class="token string">"title='"</span> <span class="token operator">+</span> title <span class="token operator">+</span> <span class="token string">'\''</span> <span class="token operator">+</span>
+        	<span class="token string">", author='"</span> <span class="token operator">+</span> author <span class="token operator">+</span> <span class="token string">'\''</span> <span class="token operator">+</span>
+        	<span class="token string">", pages="</span> <span class="token operator">+</span> pages <span class="token operator">+</span>
+        	<span class="token string">'}'</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>І виконаємо такий <span class="code text-orange">main</span> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+	<span class="token class-name">String</span> jsonString <span class="token operator">=</span> <span class="token string">"{\"title\":\"Обитаемый остров\",\"author\":\"Стругацкий А., Стругацкий Б.\",\"pages\":413}"</span><span class="token punctuation">;</span>
+	<span class="token class-name">Book</span> book <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ObjectMapper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">readValue</span><span class="token punctuation">(</span>jsonString<span class="token punctuation">,</span> <span class="token class-name">Book</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>book<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Висновок:</p>
+<div class="terminal">
+ Book{title='Заселений острів', author='Стругацький А., Стругацький Б.', pages=413}
+</div>
+<p>Метод <span class="code text-orange">readValue</span> перевантажений, у нього є багато варіацій, що приймають файл, посилання, різні потоки читання і т. д. Для спрощення в нашому прикладі використано варіант, що приймає JSON у вигляді рядка.</p>
+<p>Як говорилося вище, <span class="code"><span class="text-green">ObjectMapper</span></span> має багато налаштувань, розглянемо деякі з них.</p>
+<h3>Ігноруємо невідомі властивості</h3>
+<p>Розглянемо ситуацію, коли у JSON-рядка є властивість, якої немає в класі <span class="code"><span class="text-green">Book</span></span> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+	<span class="token class-name">String</span> jsonString <span class="token operator">=</span> <span class="token triple-quoted-string string">"""
+        	{
+          	"title" : "Обитаемый остров",
+          	"author" : "Стругацкий А., Стругацкий Б.",
+          	"pages" : 413,
+          	"unknown property" : 42
+        	}"""</span><span class="token punctuation">;</span>
+	<span class="token class-name">ObjectMapper</span> mapper <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ObjectMapper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token class-name">Book</span> book <span class="token operator">=</span> mapper<span class="token punctuation">.</span><span class="token function">readValue</span><span class="token punctuation">(</span>jsonString<span class="token punctuation">,</span> <span class="token class-name">Book</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>book<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Спробувавши виконати цей код, отримаємо <span class="text-red"><span class="text-bold">UnrecognizedPropertyException</span></span> . Така поведінка встановлена ​​за умовчанням, але ми можемо її змінити:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">ObjectMapper</span> mapper <span class="token operator">=</span>
+<span class="token keyword">new</span> <span class="token class-name">ObjectMapper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">configure</span><span class="token punctuation">(</span><span class="token class-name">DeserializationFeature</span><span class="token punctuation">.</span>FAIL_ON_UNKNOWN_PROPERTIES<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Під час створення об'єкта<mark class="green">ObjectMapper</mark>використовуємо метод <span class="code text-orange">configure</span> , щоб встановити потрібне налаштування в <span class="text-red"><em>false</em></span> . Метод <span class="code text-orange">configure</span> змінює об'єкт, у якого його викликали, і повертає той самий об'єкт, тому його можна викликати і по-іншому:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">ObjectMapper</span> mapper <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ObjectMapper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+mapper<span class="token punctuation">.</span><span class="token function">configure</span><span class="token punctuation">(</span><span class="token class-name">DeserializationFeature</span><span class="token punctuation">.</span>FAIL_ON_UNKNOWN_PROPERTIES<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>За функціональністю такий запис аналогічний попередньому.</p>
+<p>Якщо тепер запустити <span class="code text-orange">main</span> , десеріалізація пройде успішно, а <span class="code">unknown property</span> буде проігноровано.</p>
+<h3>Зручні інструкції</h3>
+<p>Jackson надає нам ряд анотацій для всебічної кастомізації серіалізації. Розглянемо кілька найкорисніших:</p>
+<p><span class="text-bold">@JsonIgnore</span> — ставиться над елементом, який потрібно ігнорувати під час серіалізації/десеріалізації:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Book</span> <span class="token punctuation">{</span>
+	<span class="token keyword">public</span> <span class="token class-name">String</span> title<span class="token punctuation">;</span>
+	<span class="token annotation punctuation">@JsonIgnore</span>
+	<span class="token keyword">public</span> <span class="token class-name">String</span> author<span class="token punctuation">;</span>
+	<span class="token keyword">public</span> <span class="token keyword">int</span> pages<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>В результаті при серіалізації поле<mark>author</mark>не потрапить до результуючого JSON. При десеріалізації поле<mark>author</mark>отримає значення за замовчуванням (null), навіть якщо в JSON було інше значення.</p>
+<p><span class="text-bold">@JsonFormat</span> - дозволяє задати формат серіалізованих даних. Додамо в клас <span class="code"><span class="text-green">Book</span></span> ще одне поле типу <span class="text-orange">Date</span> :</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Book</span> <span class="token punctuation">{</span>
+	<span class="token keyword">public</span> <span class="token class-name">String</span> title<span class="token punctuation">;</span>
+	<span class="token keyword">public</span> <span class="token class-name">String</span> author<span class="token punctuation">;</span>
+	<span class="token keyword">public</span> <span class="token keyword">int</span> pages<span class="token punctuation">;</span>
+	<span class="token keyword">public</span> <span class="token class-name">Date</span> createdDate <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Після серіалізації отримаємо такий JSON:</p>
+<div class="terminal">
+ &nbsp;{ 
+ <br>
+  &nbsp;&nbsp;"title" : "Заселений острів", 
+ <br>
+  &nbsp;&nbsp;"author" : "Стругацький А., Стругацький Б.", 
+ <br>
+  &nbsp;&nbsp;"pages" : 413, 
+ <br>
+  &nbsp;&nbsp;"createdDate" : 1649330880788 
+ <br>
+  }
+</div>
+<p>Як бачиш, дата серіалізувалася у вигляді числа. Додамо анотацію та задамо формат:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Book</span> <span class="token punctuation">{</span>
+	<span class="token keyword">public</span> <span class="token class-name">String</span> title<span class="token punctuation">;</span>
+	<span class="token keyword">public</span> <span class="token class-name">String</span> author<span class="token punctuation">;</span>
+	<span class="token keyword">public</span> <span class="token keyword">int</span> pages<span class="token punctuation">;</span>
+	<span class="token annotation punctuation">@JsonFormat</span><span class="token punctuation">(</span>shape <span class="token operator">=</span> <span class="token class-name">JsonFormat<span class="token punctuation">.</span>Shape</span><span class="token punctuation">.</span>STRING<span class="token punctuation">,</span> pattern <span class="token operator">=</span> <span class="token string">"yyyy-MM-dd"</span><span class="token punctuation">)</span>
+	<span class="token keyword">public</span> <span class="token class-name">Date</span> createdDate <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Тепер результат серіалізації:</p>
+<div class="terminal">
+ { 
+ <br>
+  &nbsp;&nbsp;"title" : "Заселений острів", 
+ <br>
+  &nbsp;&nbsp;"author" : "Стругацький А., Стругацький Б.", 
+ <br>
+  &nbsp;&nbsp;"pages" : 413, 
+ <br>
+  &nbsp;&nbsp;"createdDate" : "2022-04-07" 
+ <br>
+  }
+</div>
+<p><span class="text-bold">@JsonProperty</span> — дозволяє змінити назву властивості, в яку буде серіалізоване поле. Ще цією анотацією можна помічати методи, і їх значення, що повертається, буде перетворено в JSON-властивість при серіалізації:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Book</span> <span class="token punctuation">{</span>
+	<span class="token annotation punctuation">@JsonProperty</span><span class="token punctuation">(</span><span class="token string">"name"</span><span class="token punctuation">)</span>
+	<span class="token keyword">public</span> <span class="token class-name">String</span> title<span class="token punctuation">;</span>
+	<span class="token keyword">public</span> <span class="token class-name">String</span> author<span class="token punctuation">;</span>
+	<span class="token keyword">public</span> <span class="token keyword">int</span> pages<span class="token punctuation">;</span>
+
+	<span class="token annotation punctuation">@JsonProperty</span><span class="token punctuation">(</span><span class="token string">"quotedTitle"</span><span class="token punctuation">)</span>
+	<span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getQuotedTitle</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    	    <span class="token keyword">return</span> <span class="token string">"«"</span> <span class="token operator">+</span> title <span class="token operator">+</span> <span class="token string">"»"</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Результат серіалізації:</p>
+<div class="terminal">
+ { 
+ <br>
+  &nbsp;&nbsp;"author" : "Стругацький А., Стругацький Б.", 
+ <br>
+  &nbsp;&nbsp;"pages" : 413, 
+ <br>
+  &nbsp;&nbsp;"name" : "Заселений острів", 
+ <br>
+  &nbsp;&nbsp;"quotedTitle" : "«Заселений острів»" 
+ <br>
+  }
+</div>
+<p><span class="text-bold">@JsonInclude</span> — за допомогою цієї інструкції можна вказати, у якому разі поле має серіалізуватися. Можна додавати як окремим полям, і всьому класу. Спочатку спробуємо серіалізувати об'єкт із неініціалізованими полями:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Solution</span> <span class="token punctuation">{</span>
+	<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+    		<span class="token class-name">Book</span> book <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Book</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    		<span class="token class-name">ObjectMapper</span> mapper <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ObjectMapper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    		mapper<span class="token punctuation">.</span><span class="token function">enable</span><span class="token punctuation">(</span><span class="token class-name">SerializationFeature</span><span class="token punctuation">.</span>INDENT_OUTPUT<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    		<span class="token class-name">String</span> jsonBook <span class="token operator">=</span> mapper<span class="token punctuation">.</span><span class="token function">writeValueAsString</span><span class="token punctuation">(</span>book<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    		<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>jsonBook<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Результат серіалізації:</p>
+<div class="terminal">
+ { 
+ <br>
+  &nbsp;&nbsp;"title" : null, 
+ <br>
+  &nbsp;&nbsp;"author" : null, 
+ <br>
+  &nbsp;&nbsp;"pages" : 0 
+ <br>
+  }
+</div>
+<p>А якщо додати інструкцію:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@JsonInclude</span><span class="token punctuation">(</span><span class="token class-name">JsonInclude<span class="token punctuation">.</span>Include</span><span class="token punctuation">.</span>NON_NULL<span class="token punctuation">)</span>
+<span class="token keyword">class</span> <span class="token class-name">Book</span> <span class="token punctuation">{</span>
+	<span class="token keyword">public</span> <span class="token class-name">String</span> title<span class="token punctuation">;</span>
+	<span class="token keyword">public</span> <span class="token class-name">String</span> author<span class="token punctuation">;</span>
+	<span class="token keyword">public</span> <span class="token keyword">int</span> pages<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>То отримаємо результат:</p>
+<div class="terminal">
+ { 
+ <br>
+  &nbsp;&nbsp;"pages" : 0 
+ <br>
+  }
+</div>
+<p>Тепер поля, що мають значення <span class="text-bold">null</span> , не серіалізувалися.</p>
+<p><span class="text-bold">@JsonPropertyOrder</span> - дозволяє встановити порядок серіалізації полів:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@JsonPropertyOrder</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">"author"</span><span class="token punctuation">,</span> <span class="token string">"title"</span><span class="token punctuation">,</span> <span class="token string">"pages"</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token keyword">class</span> <span class="token class-name">Book</span> <span class="token punctuation">{</span>
+	<span class="token keyword">public</span> <span class="token class-name">String</span> title<span class="token punctuation">;</span>
+	<span class="token keyword">public</span> <span class="token class-name">String</span> author<span class="token punctuation">;</span>
+	<span class="token keyword">public</span> <span class="token keyword">int</span> pages<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Результат серіалізації:</p>
+<div class="terminal">
+ { 
+ <br>
+  &nbsp;&nbsp;"author": "Стругацький А., Стругацький Б.", 
+ <br>
+  &nbsp;&nbsp;"title": "Заселений острів", 
+ <br>
+  &nbsp;&nbsp;"pages": 413 
+ <br>
+  }
+</div>
+<p>Зараз можеш просто запам'ятати, як використовувати анотації, а наприкінці цього модуля будемо детальніше з ними знайомитись та створювати власні анотації.</p>
+<h2>Серіалізація та десеріалізація у XML</h2>
+<p>Якщо потрібно серіалізувати в XML-формат, можемо використовувати ті самі налаштування та анотації. Єдиною відмінністю буде реалізація об'єкту<mark class="green">mapper:</mark></p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+	<span class="token class-name">Book</span> book <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Book</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	book<span class="token punctuation">.</span>title <span class="token operator">=</span> <span class="token string">"Обитаемый остров"</span><span class="token punctuation">;</span>
+	book<span class="token punctuation">.</span>author <span class="token operator">=</span> <span class="token string">"Стругацкий А., Стругацкий Б."</span><span class="token punctuation">;</span>
+	book<span class="token punctuation">.</span>pages <span class="token operator">=</span> <span class="token number">413</span><span class="token punctuation">;</span>
+
+	<span class="token class-name">ObjectMapper</span> mapper <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">XmlMapper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	mapper<span class="token punctuation">.</span><span class="token function">enable</span><span class="token punctuation">(</span><span class="token class-name">SerializationFeature</span><span class="token punctuation">.</span>INDENT_OUTPUT<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token class-name">String</span> xmlBook <span class="token operator">=</span> mapper<span class="token punctuation">.</span><span class="token function">writeValueAsString</span><span class="token punctuation">(</span>book<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>xmlBook<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Висновок:</p>
+<div class="terminal">
+ &nbsp;&lt;Book&gt; 
+ <br>
+  &nbsp;&nbsp;&lt;title&gt;Заселений острів&lt;/title&gt; 
+ <br>
+  &nbsp;&nbsp;&lt;author&gt;Стругацький А., Стругацький Б.&lt;/author&gt; 
+ <br>
+  &nbsp;&nbsp;&lt;pages&gt;413&lt;/pages&gt; 
+ <br>
+  &lt;/Book&gt;
+</div>
+<p>Десеріалізація XML:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+   <span class="token class-name">String</span> xmlString <span class="token operator">=</span> <span class="token triple-quoted-string string">"""
+            &lt;Book&gt;
+             &lt;title&gt;Обитаемый остров&lt;/title&gt;
+             &lt;author&gt;Стругацкий А., Стругацкий Б.&lt;/author&gt;
+             &lt;pages&gt;413&lt;/pages&gt;
+           &lt;/Book&gt;"""</span><span class="token punctuation">;</span>
+   <span class="token class-name">ObjectMapper</span> mapper <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">XmlMapper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token class-name">Book</span> book <span class="token operator">=</span> mapper<span class="token punctuation">.</span><span class="token function">readValue</span><span class="token punctuation">(</span>xmlString<span class="token punctuation">,</span> <span class="token class-name">Book</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>book<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h2>Серіалізація та десеріалізація у YAML</h2>
+<p>Аналогічно XML діє і з YAML:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+	<span class="token class-name">Book</span> book <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Book</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	book<span class="token punctuation">.</span>title <span class="token operator">=</span> <span class="token string">"Обитаемый остров"</span><span class="token punctuation">;</span>
+	book<span class="token punctuation">.</span>author <span class="token operator">=</span> <span class="token string">"Стругацкий А., Стругацкий Б."</span><span class="token punctuation">;</span>
+	book<span class="token punctuation">.</span>pages <span class="token operator">=</span> <span class="token number">413</span><span class="token punctuation">;</span>
+
+	<span class="token class-name">ObjectMapper</span> mapper <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">YAMLMapper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	mapper<span class="token punctuation">.</span><span class="token function">enable</span><span class="token punctuation">(</span><span class="token class-name">SerializationFeature</span><span class="token punctuation">.</span>INDENT_OUTPUT<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token class-name">String</span> yamlBook <span class="token operator">=</span> mapper<span class="token punctuation">.</span><span class="token function">writeValueAsString</span><span class="token punctuation">(</span>book<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>yamlBook<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Висновок:</p>
+<div class="terminal">
+ --- 
+ <br>
+  title: "Заселений острів" 
+ <br>
+  author: "Стругацький А., Стругацький Б." 
+ <br>
+  pages: 413
+</div>
+<p>Десеріалізація YAML:</p>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+   <span class="token class-name">String</span> yamlString <span class="token operator">=</span> <span class="token triple-quoted-string string">"""
+           ---
+           title: "Обитаемый остров"
+           author: "Стругацкий А., Стругацкий Б."
+           pages: 413"""</span><span class="token punctuation">;</span>
+   <span class="token class-name">ObjectMapper</span> mapper <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">YAMLMapper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token class-name">Book</span> book <span class="token operator">=</span> mapper<span class="token punctuation">.</span><span class="token function">readValue</span><span class="token punctuation">(</span>yamlString<span class="token punctuation">,</span> <span class="token class-name">Book</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>book<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>

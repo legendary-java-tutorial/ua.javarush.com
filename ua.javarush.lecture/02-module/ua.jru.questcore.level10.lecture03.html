@@ -1,0 +1,55 @@
+<p>— Пам'ятаєш, ми сьогодні розбирали збереження об'єктів у файлі та читання з файлу?</p>
+<p><span class="text-user">— Так, тільки ми зберігали в потік виводу, а читали з введення.</span></p>
+<p>- Молодець, Аміго. Приємно чути, що ти помічаєш такі дрібниці. А ти зміг би дописати код, щоб було збереження у файл і читання з файлу?</p>
+<p><span class="text-user">— А що там писати? Оголосив FileInputStream та FileOutputStream і передавай їх у методи save&amp;load. Тут уже нічого не переплутаєш – все просто.</span></p>
+<p>- Рада за тебе. Отже, нова тема – <strong><span class="text-red">серіалізація</span></strong> .</p>
+<p><strong><span class="text-red">Серіалізація</span></strong> - це практично те саме, що ми з тобою щойно робабо, тільки набагато крутіше і вбудоване прямо в Java-машину. <span class="text-red">Java-машина вміє зберігати та завантажувати свої об'єкти. </span>Для цього їй навіть не потрібні методи save&amp;load: всі об'єкти зберігаються всередині Java-машини, і вона має до них повний доступ.</p>
+<p>Ми просто беремо об'єкт і зберігаємо його в потік/читаємо з потоку:</p>
+<div class="code-heading">
+ Код
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span>
+<span class="token punctuation">{</span>
+<span class="text-green"> <span class="token class-name">Cat</span> cat</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="text-green">Cat</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ <span class="token comment">//save cat to file</span>
+ <span class="token class-name">FileOutputStream</span> <span class="text-user">fileOutput</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileOutputStream</span><span class="token punctuation">(</span><span class="token string">"cat.dat"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token class-name"></span><span class="text-red"><span class="token class-name">ObjectOutputStream</span> outputStream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ObjectOutputStream</span></span><span class="token class-name"></span><span class="token punctuation">(</span><span class="text-user">fileOutput</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="text-red">outputStream<span class="token punctuation">.</span><span class="token function">writeObject</span></span><span class="token function"></span><span class="token punctuation">(</span><span class="text-green">cat</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="text-user">fileOutput<span class="token punctuation">.</span><span class="token function">close</span></span><span class="token function"></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="text-red">outputStream<span class="token punctuation">.</span><span class="token function">close</span></span><span class="token function"></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ <span class="token comment">//load cat from file</span>
+ <span class="token class-name">FileInputStream</span> <span class="text-user">fiStream</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span><span class="token string">"cat.dat"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token class-name"></span><span class="text-red"><span class="token class-name">ObjectInputStream</span> objectStream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ObjectInputStream</span></span><span class="token class-name"></span><span class="token punctuation">(</span><span class="text-user">fiStream</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token class-name">Object</span> object <span class="token operator">=</span> <span class="text-red">objectStream<span class="token punctuation">.</span><span class="token function">readObject</span></span><span class="token function"></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="text-user">fiStream<span class="token punctuation">.</span><span class="token function">close</span></span><span class="token function"></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="text-red">objectStream<span class="token punctuation">.</span><span class="token function">close</span></span><span class="token function"></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ <span class="token class-name"></span><span class="text-green"><span class="token class-name">Cat</span> newCat</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name"><span class="text-green">Cat</span></span><span class="token punctuation">)</span>object<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p><span class="text-user">- І все?</span></p>
+<p>- Так. Там дуже великий і складний механізм серіалізації, який підтримує збереження потоку і читання з потоку майже всіх типів даних.</p>
+<p><span class="text-user">— Майже всіх, це не всіх?</span></p>
+<p>— Так, річ у тому, що <span class="text-red">не всі об'єкти за своєю суттю можна зберегти</span> . Деякі об'єкти не зберігають усі свої дані у собі, лише посилаються інші об'єкти і/або джерела даних. Наприклад, консоль (System.in), потік введення (InputStream), або ще щось.</p>
+<p>Тому розробники Java вигадали спеціальний <span class="text-red">інтерфейс-маркер - <strong>Serializable</strong></span> . Його називають <strong>маркером</strong> , т.к. він не містить жодних даних та методів. Він використовується тільки для того, щоб "помічати" (маркувати) класи. Якщо ми вважаємо, що наш клас зберігає всі свої дані, тоді ми можемо помітити його цим маркером - написати <strong>implements Serializable</strong> .</p>
+<p>Приклад кота з підтримкою серіалізації:</p>
+<div class="code-heading">
+ Код
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Cat</span> <span class="token keyword"></span><span class="text-red"><span class="token keyword">implements</span> <span class="token class-name">Serializable</span></span><span class="token class-name"></span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token class-name">String</span> name<span class="token punctuation">;</span>
+ <span class="token keyword">public</span> <span class="token keyword">int</span> age<span class="token punctuation">;</span>
+ <span class="token keyword">public</span> <span class="token keyword">int</span> weight<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Коли ми намагаємося серіалізувати (зберегти) якийсь об'єкт, Java-машина перевіряє – чи підтримує він серіалізацію: чи реалізує він інтерфейс Serializable? Якщо так, то зберігає об'єкт, якщо ні – викидає виняток про неможливість серіалізації. <br>
+  Тут треба розуміти, що об'єкт, що серіалізується, повинен складатися теж тільки з об'єктів, що серіалізуються.</p>
+<p><span class="text-user">— Ну, цього й треба було чекати. Не можна ж зберегти ціле, не зберігши якісь його частини.</span></p>
+<p>- Саме так.</p>
+<p><span class="text-user">- А як же типи int, String, ArrayList?</span></p>
+<p>— Вони всі підтримують серіалізацію, щодо цього розробники Java спеціально подбали. Тут проблем не повинно бути.</p>
+<p>Більше того, під час серіалізації об'єкта зберігається його тип. Тепер ти можеш у змінну класу з типом Object зберегти посилання на об'єкт Cat, і все це чудово серіалізується та десеріалізується.</p>
+<p><span class="text-user">- Десеріалізується?</span></p>
+<p>— <span class="text-red">Десеріалізація</span> – так називають процес, зворотний серіалізації – читання та відновлення об'єкта з потоку/файлу.</p>
+<p><span class="text-user">— Тоді запитань більше нема.</span></p>

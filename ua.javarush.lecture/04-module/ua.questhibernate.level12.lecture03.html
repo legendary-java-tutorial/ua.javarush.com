@@ -1,0 +1,168 @@
+Мапінг дат
+<p>----------------------------------------</p>
+Екскурс в історію
+Новий час
+Робота з тимчасовими зонами
+Встановлення своєї часової зони
+Анотація @TimeZoneStorage
+<p>----------------------------------------</p>
+<h2>4.1 Екскурс в історію</h2>
+<p>Завдання щодо збереження Java-об'єктів у базу даних було актуальним чи не відразу після створення мови Java. У той час у мові Java був лише один тип даних – Date, який зберігав час за стандартом UNIX-time: як кількість мілісекунд, що минули з 1970 року.</p>
+<p>Ну а в базах даних на той час були вже різні типи даних для дат, як мінімум, були окремі типи для дати, часу і дата+час:</p>
+<ul>
+<li>DATE</li>
+<li>TIME</li>
+<li>TIMESTAMP</li>
+</ul>
+<p>Тому творці мови Java додали до нього спеціальний пакет – java.sql, який містив класи:</p>
+<ul>
+<li>java.sql.Date</li>
+<li>java.sql.Time</li>
+<li>java.sql.Timestamp</li>
+</ul>
+<p>Мапати такі класи суцільне задоволення:</p>
+<pre class='line-numbers'><code>
+<span class="text-brown">@Entity</span>
+public class TemporalValues {
+ 
+<span class="text-brown">@Basic</span>
+    private <span class="text-user">java.sql.Date</span> sqlDate;
+ 
+<span class="text-brown">@Basic</span>
+    private <span class="text-user">java.sql.Time</span> sqlTime;
+ 
+    <span class="text-brown">@Basic</span>
+    private <span class="text-user">java.sql.Timestamp</span> sqlTimestamp;
+}
+
+</code></pre>
+<p>Але оскільки програмістам раніше доводилося працювати з класом <code>java.util.Date</code>, то в Hibernate додали спеціальну анотацію <code>@Temporal</code> для того, щоб керувати мапінгом типу Date. </p>
+<p>Приклад:</p>
+<pre class='language-java line-numbers'><code>
+// Якщо анотація відсутня, то базі буде тип TIMESTAMP
+Date dateAsTimestamp;
+ 
+<span class="text-brown">@Temporal(TemporalType.DATE)</span> // буде замалений на тип DATE
+Date dateAsDate;
+ 
+<span class="text-brown">@Temporal(TemporalType.TIME)</span> // буде замалений на тип TIME
+Date dateAsTime;
+</code></pre>
+<p>Для типу <code>java.util.Calendar</code> та типу <code>java.util.Date</code> за замовчуванням використовується тип <strong>TIMESTAMP</strong> для їх представлення в базі даних. </p>
+<h2>4.2 Новий час</h2>
+<p>Нині з мапінгом все набагато простіше і краще. Всі бази даних підтримують 4 типи даних для роботи з часом:</p>
+<ul>
+<li><strong>DATE</strong> – дата: рік, місяць та день.</li>
+<li><strong>TIME</strong> – час: години, хвилини, секунди.</li>
+<li><strong>TIMESTAMP</strong> – дата, час та наносекунди.</li>
+<li><strong>TIMESTAMP WITH TIME ZONE</strong> – TIMESTAMP та тимчасова зона (ім'я зони або усунення).
+</li>
+</ul>
+<p>Для того, щоб представити <strong>тип</strong> <mark class="red">DATE</mark> в Java, потрібно використовувати клас <code>java.time.LocalDate</code> з JDK 8 DateTime API.</p>
+<p>Тип <mark class="red">TIME</mark> з бази даних можна представити двома типами з Java: <code>java.time.LocalTime</code> та <code>java.time.OffsetTime</ code>. Нічого складного.</p>
+<p>А точну дату та час, представлену типом <mark class="red">TIMESTAMP</mark> в базі, в Java можна представити 4 типами:</p>
+<ul>
+<li><strong>java.time.Instant</strong></li>
+<li><strong>java.time.LocalDateTime</strong></li>
+<li><strong>java.time.OffsetDateTime</strong></li>
+<li><strong>java.time.ZonedDateTime</strong></li>
+</ul>
+<p>Ну і нарешті <mark class="red">TIMESTAMP WITH TIME ZONE</mark> можна представити двома типами:</p>
+<ul>
+<li><strong>java.time.OffsetDateTime</strong></li>
+<li><strong>java.time.ZonedDateTime</strong></li>
+</ul>
+<p>Оскільки ти вже знайомий з <strong>DateTime API</strong>, то запам'ятати цю справу тобі не складе :)</p>
+<p>Мапати їхнє суцільне задоволення:</p>
+<pre class='language-java line-numbers'><code>
+<span class="text-brown">@Basic</span>
+private <span class="text-user">java.time.LocalDate</span> localDate;
+ 
+<span class="text-brown">@Basic</span>
+private <span class="text-user">java.time.LocalTime</span> localTime;
+ 
+<span class="text-brown">@Basic</span>
+private <span class="text-user">java.time.OffsetTime</span> offsetTime;
+ 
+<span class="text-brown">@Basic</span>
+private <span class="text-user">java.time.Instant</span> instant;
+ 
+<span class="text-brown">@Basic</span>
+private <span class="text-user">java.time.LocalDateTime</span> localDateTime;
+ 
+<span class="text-brown">@Basic</span>
+private <span class="text-user">java.time.OffsetDateTime</span> offsetDateTime;
+ 
+<span class="text-brown">@Basic</span>
+private <span class="text-user">java.time.ZonedDateTime</span> zonedDateTime;
+</code></pre>
+<p>Аннотація <code>@Basic</code> означає, що поле має бути оброблене <strong>автоматично</strong>: Hibernate сам вирішить на яку колонку і тип має бути замаплене дане поле.</p>
+<h2>4.3 Робота з часовими зонами</h2>
+<p>Якщо тимчасова зона є частиною дати, то зберігати їх у базі просто – просто як звичайну дату:</p>
+<pre class='language-java line-numbers'><code>
+<span class="text-brown">@Basic</span>
+private <span class="text-user">java.time.OffsetDateTime</span> offsetDateTime;
+ 
+<span class="text-brown">@Basic</span>
+private <span class="text-user">java.time.ZonedDateTime</span> zonedDateTime;
+
+</code></pre>
+<p>Але якщо ти хочеш зберігати часові зони окремо від дати:</p>
+<pre class='language-java line-numbers'><code>
+<span class="text-brown">@Basic</span>
+private <span class="text-user">java.time.TimeZone</span> timeZone;
+ 
+<span class="text-brown">@Basic</span>
+private <span class="text-user">java.time.ZoneOffset</span> zonedOffset;
+</code></pre>
+<p>Те Hibernate за умовчанням зберігатиме їх у типі VARCHAR. Що, власне, логічно, тому що TimeZone зазвичай має рядкове ім'я типу "UTC+3" або "Cairo".</p>
+<h2>4.4 Встановлення тимчасової зони</h2>
+<p>Коли ти працюватимеш зі збереженням дат у базу даних, то зіткнешся з тим, що є аж 4 місця, де можна задати поточну тимчасову зону:</p>
+<ul>
+<li>Операційна система сервера;</li>
+<li>СУБД;</li>
+<li>Java-додаток;</li>
+<li>Hibernate.</li>
+</ul>
+<p>Якщо в СУБД не вказано тимчасову зону (TimeZone), то вона візьме її з налаштувань операційної системи. Це може бути незручно, оскільки резервні СУБД часто розміщують в інших датацентрах, які мають свою тимчасову зону.</p>
+<p>Тому майже у всіх СУБД адміни задають єдину зону, щоб дані можна було легко переносити з одного сервера на інший.</p>
+<p>Схожа ситуація і з Java-додатком. Воно також може запускатися на різних серверах у різних датацентрах, тому зазвичай йому задають тимчасову зону явно.</p>
+<pre class='line-numbers'><code>
+java -Duser.timezone=UTC ...
+</code></pre>
+<p>Або під час роботи програми:</p>
+<pre class='language-java line-numbers'><code>
+<span class="text-brown">TimeZone</span>.setDefault(<span class="text-brown">TimeZone</span>.<span class="text-user">getTimeZone</span>( "UTC"));
+</code></pre>
+<p>І, звичайно, Hibernate дозволяє задати свою тимчасову зону явно.</p>
+<p>По-перше, її можна вказати при конфігуруванні SessionFactory:</p>
+<pre class='language-java line-numbers'><code>
+settings.put(
+    <span class="text-viola">AvailableSettings.JDBC_TIME_ZONE,</span>
+    <span class="text-brown">TimeZone</span>.<span class="text-user">getTimeZone</span>("UTC")
+);
+</code></pre>
+<p>По-друге, тимчасову зону можна вказати <mark class="user">для конкретної сесії</mark>:</p>
+<pre class='language-java line-numbers'><code>
+Session session = sessionFactory()
+    .withOptions()
+    .jdbcTimeZone(<span class="text-brown">TimeZone</span>.<span class="text-user">getTimeZone</span>("UTC"))
+    .openSession();
+</code></pre>
+<h2>4.5 Анотація @TimeZoneStorage</h2>
+<p>Часто буває ситуація, що програмісти почали проектувати базу з розрахунку роботи в одній країні (і одній тимчасовій зоні), а потім через кілька років їм довелося додати підтримку роботи в різних тимчасових зонах.</p>
+<p>Тому вони просто додали до бази окрему колонку для зберігання часової зони. Це така часта ситуація, що Hibernate додав спеціальну анотацію, яка дозволяє зберігати TimeZone конкретної дати в окремій колонці.</p>
+<p>Приклад:</p>
+<pre class='language-java line-numbers'><code>
+<span class="text-brown">@</span><span class="text-red">TimeZoneStorage</span><span class="text-brown">(TimeZoneStorageType.COLUMN)</span>
+<span class="text-brown">@TimeZoneColumn(name</span> = "birthday_offset_offset"<span class="text-brown">)</span>
+<span class="text-brown">@Column(name</span> = "birthday_offset"<span class="text-brown">)</span>
+private OffsetDateTime offsetDateTimeColumn;
+ 
+<span class="text-brown">@</span><span class="text-red">TimeZoneStorage</span><span class="text-brown">(TimeZoneStorageType.COLUMN)</span>
+<span class="text-brown">@TimeZoneColumn(name</span> = "birthday_zoned_offset"<span class="text-brown">)</span>
+<span class="text-brown">@Column(name</span> = "birthday_zoned"<span class="text-brown">)</span>
+private ZonedDateTime zonedDateTimeColumn;
+</code></pre>
+<p>Це милиця. Але є йому і виправдання: він з'явився ще за часів, коли DateTime API ще не було. А в класі <code>java.util.Date</code> не можна було зберігати TimeZone.</p>
+<p>Дуже сподіваюся, що ти не часто зустрічатимеш таке у своєму коді. </p>

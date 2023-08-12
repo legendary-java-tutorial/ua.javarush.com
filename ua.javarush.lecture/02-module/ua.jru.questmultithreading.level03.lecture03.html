@@ -1,0 +1,163 @@
+<a href="https://cdn.javarush.com/images/article/245c0141-e994-41e2-b97c-5c057ade535a/original.jpeg" target="_blank"><img data-id="245c0141-e994-41e2-b97c-5c057ade535a" data-max-width="850" alt="Вкладені класи - 1" src="https://cdn.javarush.com/images/article/245c0141-e994-41e2-b97c-5c057ade535a/800.jpeg" style="width: 850px;"></a>
+<p>- Привіт, Аміго!</p>
+<p><span class="text-user">- Привіт, Еллі!</span></p>
+<p>— Сьогодні буде дуже цікава тема. Я сьогодні розповім про внутрішні класи.</p>
+<p>Якщо один клас оголосити всередині іншого, такий клас називається внутрішнім.</p>
+<p>p align="justify"&gt; Об'єкти внутрішніх класів при цьому вкладені в об'єкти зовнішніх класів і можуть звертатися до змінних зовнішніх класів.</p>
+<div class="code-heading">
+ приклад
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Car</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">int</span> <span class="text-red">height</span> <span class="token operator">=</span> <span class="token number">160</span><span class="token punctuation">;</span>
+ <span class="token class-name">ArrayList</span> doors <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ <span class="token keyword">public</span> <span class="token class-name">Car</span>
+ <span class="token punctuation">{</span>
+  doors<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword"></span><span class="text-green"><span class="token keyword">new</span> <span class="token class-name">Door</span></span><span class="token class-name"></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  doors<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword"></span><span class="text-green"><span class="token keyword">new</span> <span class="token class-name">Door</span></span><span class="token class-name"></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  doors<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword"></span><span class="text-green"><span class="token keyword">new</span> <span class="token class-name">Door</span></span><span class="token class-name"></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  doors<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword"></span><span class="text-green"><span class="token keyword">new</span> <span class="token class-name">Door</span></span><span class="token class-name"></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+<span class="token keyword">class</span> <span class="token class-name"><span class="text-green">Door</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getDoorHeight</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+   <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="text-red">height</span> <span class="token operator">*</span> <span class="token number">0.80</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Зверніть увагу, у класу Door є метод, який повертає висоту дверей – getDoorHeight, цей метод використовує змінну height об'єкта Car.</p><a href="https://cdn.javarush.com/images/article/87c9f75b-b904-4672-bfc5-4204b7574d84/original.jpeg" target="_blank"><img data-id="87c9f75b-b904-4672-bfc5-4204b7574d84" data-max-width="1024" alt="Вкладені класи - 2" src="https://cdn.javarush.com/images/article/87c9f75b-b904-4672-bfc5-4204b7574d84/1024.jpeg" style="width: 1024px;"></a>
+<p>Об'єкт типу Door не може існувати окремо від об'єкта типу Car, адже він використовує його змінні. Компілятор непомітно додає в конструктор і клас Door посилання на об'єкт зовнішнього класу Car, щоб методи внутрішнього класу Door могли звертатися до змінних і викликати методи зовнішнього класу Car.</p>
+<p><span class="text-user">- Вкладені об'єкти. Мені все зрозуміло. Судячи з картинки тут все просто.</span></p>
+<p>- Так і є. Лише кілька нюансів.</p>
+<p>У внутрішньому класі Door є посилання на об'єкт класу Car, тому:</p>
+<p><strong>1) Не можна створити об'єкт Door всередині статичного методу в класі Car:</strong> ніде взяти посилання об'єкт типу Car, який неявно передається конструктор типу Door.</p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Правильно</th>
+    <th><span class="text-red">Неправильно</span></th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Car</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">Door</span> <span class="token function">createDoor</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+<span class="text-green">  <span class="token class-name">Car</span> car <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Car</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+  <span class="token keyword">return</span> <span class="text-green">car<span class="token punctuation">.</span><span class="token keyword">new</span> <span class="token class-name">Door</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+ <span class="token punctuation">}</span>
+
+ <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Door</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">int</span> width<span class="token punctuation">,</span> height<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Car</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">Door</span> <span class="token function">createDoor</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword"></span><span class="text-red"><span class="token keyword">new</span> <span class="token class-name">Door</span></span><span class="token class-name"></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Door</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">int</span> width<span class="token punctuation">,</span> height<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><strong>2) Клас Door не може містити статичні змінні та методи.</strong></p>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Правильно</th>
+    <th><span class="text-red">Неправильно</span></th>
+   </tr>
+   <tr>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Car</span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="text-green">count</span><span class="token punctuation">;</span>
+ <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getCount</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="text-green">count</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Door</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">int</span> width<span class="token punctuation">,</span> height<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+    <td>
+     <pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Car</span>
+<span class="token punctuation">{</span>
+
+ <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Door</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword"><span class="text-red">static</span></span> <span class="token keyword">int</span> <span class="text-red">count</span><span class="token punctuation">;</span>
+  <span class="token keyword">int</span> width<span class="token punctuation">,</span> height<span class="token punctuation">;</span>
+
+  <span class="token keyword">public</span> <span class="token keyword"><span class="text-red">static</span></span> <span class="token keyword">int</span> <span class="token function">getCount</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+   <span class="token keyword">return</span> <span class="text-red">count</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<p><span class="text-user">— А якщо мені потрібна спільна змінна для всіх об'єктів Door?</span></p>
+<p>Ти завжди можеш оголосити її просто в класі Car - це і буде загальна змінна для всіх об'єктів Door, вкладених у Car.</p>
+<p>3) Зверніть увагу, що <strong>й внутрішній клас оголошено як public, його об'єкти можна створювати поза зовнішнього класу, але об'єкт зовнішнього класу у своїй має бути:</strong></p>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name"></span><span class="text-green"><span class="token class-name">Car</span> car <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Car</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation"></span>
+<span class="token class-name">Car<span class="token punctuation">.</span>Door</span> door <span class="token operator">=</span> <span class="text-green">car</span><span class="token punctuation">.</span><span class="token keyword">new</span> <span class="token class-name">Door</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">Car<span class="token punctuation">.</span>Door</span> door <span class="token operator">=</span> <span class="token keyword"></span><span class="text-green"><span class="token keyword">new</span> <span class="token class-name">Car</span><span class="token punctuation">(</span><span class="token punctuation">)</span></span><span class="token punctuation"></span><span class="token punctuation">.</span><span class="token keyword">new</span> <span class="token class-name">Door</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p><strong>4)</strong> І ще одне зауваження – мало не забула.</p>
+<p>Т.к. у нас два вкладені об'єкти, то в методах внутрішнього об'єкта є два посилання this:</p>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name"><span class="text-green">Car</span></span>
+<span class="token punctuation">{</span>
+ <span class="token keyword">int</span> width<span class="token punctuation">,</span> height<span class="token punctuation">;</span>
+
+ <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Door</span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">int</span> width<span class="token punctuation">,</span> height<span class="token punctuation">;</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setHeight</span><span class="token punctuation">(</span><span class="token keyword">int</span> height<span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+   <span class="token keyword"><span class="text-viola">this</span></span><span class="token punctuation">.</span>height <span class="token operator">=</span> height<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getHeight</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+   <span class="token keyword">if</span> <span class="token punctuation">(</span>height<span class="token operator">!=</span><span class="token number">0</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token keyword"><span class="text-viola">this</span></span><span class="token punctuation">.</span>height<span class="token punctuation">;</span>
+   <span class="token keyword">else</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token class-name"></span><span class="text-green"><span class="token class-name">Car</span><span class="token punctuation">.</span><span class="token keyword">this</span></span><span class="token keyword"></span><span class="token punctuation">.</span>height <span class="token operator">*</span> <span class="token number">0.8</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Я спеціально оголосила у класах однакові змінні.</p>
+<p>Щоб звернутися до змінної зовнішнього класу, коли вона прихована, або до цього зовнішнього класу, достатньо написати «ім'я класу» точка this:</p>
+<div class="code-heading">
+ Як отримати доступ до цього зовнішнього (або будь-якого) класу
+</div>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">Car</span><span class="token punctuation">.</span><span class="token keyword">this</span></code></pre>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">Car<span class="token punctuation">.</span>Door</span><span class="token punctuation">.</span><span class="token keyword">this</span></code></pre>
+<pre class="line-numbers  language-java" data-line="" data-start="" tabindex="0" style="counter-reset: linenumber 0 NaN 0;"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">Car<span class="token punctuation">.</span>Door<span class="token punctuation">.</span>InnerClass2<span class="token punctuation">.</span>InnerClass3</span><span class="token punctuation">.</span><span class="token keyword">this</span></code></pre>
+<p><span class="text-user">- Тобто. якщо ми всередині методу внутрішнього класу пишемо this, то цей this відноситься до внутрішнього класу?</span></p>
+<p>- Так. Саме так.</p>
+<p>Як тобі внутрішні класи, Аміго?</p>
+<p><span class="text-user">- Дуже цікаво. Я не сказав би, що дуже складно.</span></p>
+<p>Є багато обмежень, але вони є цілком логічними, коли ти мені пояснила, звідки і навіщо вони беруться.</p>
+<p><span class="text-user">А я вже два місяці у практичних завданнях постійно пишу вкладені класи і тільки зараз зрозумів, що я писав насправді.</span></p>
+<p><span class="text-user">Дякую за чудовий урок, Еллі.</span></p>
+<p>— Рада, що тобі сподобалося, Аміго.</p>
