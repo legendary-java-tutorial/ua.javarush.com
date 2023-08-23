@@ -1,0 +1,281 @@
+Створення системи моніторингу цін на авіаквитки: покрокове керівництво [Частина 3]
+<p>----------------------------------------</p>
+Останній етап - написання REST API, через який спілкуватимемося з додатком. Для цього буде використовуватися . У SubscriptionController буде 4 методи для CRUD операцій. Для контролерів є набір анотацій, за допомогою яких це працює:
+<p>----------------------------------------</p>
+<a href="https://codegym.cc/groups/posts/2400-sozdanie-sistemih-monitoringa-cen-na-aviabiletih-poshagovoe-rukovodstvo" target="_blank">Створення системи моніторингу цін на авіаквитки: покрокове керівництво [Частина 1]</a> <a href="https://codegym.cc/groups/posts/2401-sozdanie-sistemih-monitoringa-cen-na-aviabiletih-poshagovoe-rukovodstvo-chastjh-2" target="_blank"> Створення системи моніторингу цін на авіаквитки: покрокове керівництво [Частина 2]</a>
+<h3>Зміст</h3>
+<ul>
+ <li><a href="https://codegym.cc/groups/posts/2402#topic7">Пишемо рівень Controller'ів. SubscriptionController</a></li>
+ <li><a href="https://codegym.cc/groups/posts/2402#topic8">Тестування програми</a></li>
+ <li><a href="https://codegym.cc/groups/posts/2402#topic9">Плани на розвиток</a></li>
+ <li><a href="https://codegym.cc/groups/posts/2402#topic10">Висновки</a></li>
+ <li><a href="https://codegym.cc/groups/posts/2402#topic11">Корисні посилання</a></li>
+</ul><img data-id="40ba4c05-f725-47e4-ba22-cb4de8cda06a" data-max-width="850" alt="Створення системи моніторингу цін на авіаквитки: покрокове керівництво [Частина 3] - 1" src="https://cdn.javarush.com/images/article/40ba4c05-f725-47e4-ba22-cb4de8cda06a/800.jpeg" style="width: 850px;">
+<h2 id="topic7">Пишемо рівень Controller'ів. SubscriptionController</h2>Останній етап - написання REST API, через який спілкуватимемося з додатком. Для цього буде використовуватися <strong>Spring boot starter web</strong> . У SubscriptionController буде 4 методи для CRUD операцій. Для контролерів є набір анотацій, за допомогою яких це працює: 
+<ul>
+ <li>@Controller — використовується для додавання до ApplicationContext;</li>
+ <li>@RequestMapping("path") - визначає, що в цьому класі будуть REST методи, також path - шлях, на якому буде починатися запит;</li>
+ <li>@PostMapping — для запитів POST, використовується для створення;</li>
+ <li>@ GetMapping - для GET запитів, використовується для читання;</li>
+ <li>@PutMapping – для PUT запитів, використовується для редагування;</li>
+ <li>@DeleteMapping — для DELETE запитів, що використовується для видалення;</li>
+ <li>@PathVariable - значить змінна буде задана в URI запиту;</li>
+ <li>@RequestBody означає, що дані будуть лежати в тілі запиту;</li>
+ <li>@Valid - означає, що проходитиме валідація даних, якщо вони не відповідають, то буде помилка.</li>
+</ul><strong>SubscriptionController</strong>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>romankh3<span class="token punctuation">.</span>flightsmonitoring<span class="token punctuation">.</span>rest<span class="token punctuation">.</span>dto<span class="token punctuation">.</span></span><span class="token class-name">SubscriptionCreateDto</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>romankh3<span class="token punctuation">.</span>flightsmonitoring<span class="token punctuation">.</span>rest<span class="token punctuation">.</span>dto<span class="token punctuation">.</span></span><span class="token class-name">SubscriptionDto</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>romankh3<span class="token punctuation">.</span>flightsmonitoring<span class="token punctuation">.</span>rest<span class="token punctuation">.</span>dto<span class="token punctuation">.</span></span><span class="token class-name">SubscriptionUpdateDto</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>romankh3<span class="token punctuation">.</span>flightsmonitoring<span class="token punctuation">.</span>service<span class="token punctuation">.</span></span><span class="token class-name">SubscriptionService</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>swagger<span class="token punctuation">.</span>annotations<span class="token punctuation">.</span></span><span class="token class-name">Api</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>swagger<span class="token punctuation">.</span>annotations<span class="token punctuation">.</span></span><span class="token class-name">ApiOperation</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">List</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">javax<span class="token punctuation">.</span>validation<span class="token punctuation">.</span></span><span class="token class-name">Valid</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>beans<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">Autowired</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>stereotype<span class="token punctuation">.</span></span><span class="token class-name">Controller</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>web<span class="token punctuation">.</span>bind<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">DeleteMapping</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>web<span class="token punctuation">.</span>bind<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">GetMapping</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>web<span class="token punctuation">.</span>bind<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">PathVariable</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>web<span class="token punctuation">.</span>bind<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">PostMapping</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>web<span class="token punctuation">.</span>bind<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">PutMapping</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>web<span class="token punctuation">.</span>bind<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">RequestBody</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>web<span class="token punctuation">.</span>bind<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">RequestMapping</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>web<span class="token punctuation">.</span>bind<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">ResponseBody</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+* {@link Controller} to handle Subscriptions.
+*/</span>
+<span class="token annotation punctuation">@Api</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Operations with Subscriptions"</span><span class="token punctuation">,</span> tags <span class="token operator">=</span> <span class="token string">"Subscription Controller"</span><span class="token punctuation">)</span>
+<span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token class-name">SubscriptionController</span><span class="token punctuation">.</span>SUBSCRIPTION_CONTROLLER_EP<span class="token punctuation">)</span>
+<span class="token annotation punctuation">@Controller</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SubscriptionController</span> <span class="token punctuation">{</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">String</span> SUBSCRIPTION_CONTROLLER_EP <span class="token operator">=</span> <span class="token string">"/subscription"</span><span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@Autowired</span>
+   <span class="token keyword">private</span> <span class="token class-name">SubscriptionService</span> subscriptionService<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@ApiOperation</span><span class="token punctuation">(</span><span class="token string">"Create new subscription based on SubscriptionDto"</span><span class="token punctuation">)</span>
+   <span class="token annotation punctuation">@PostMapping</span>
+   <span class="token keyword">public</span> <span class="token annotation punctuation">@ResponseBody</span>
+   <span class="token class-name">SubscriptionDto</span> <span class="token function">create</span><span class="token punctuation">(</span><span class="token annotation punctuation">@RequestBody</span> <span class="token annotation punctuation">@Valid</span> <span class="token class-name">SubscriptionCreateDto</span> dto<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">return</span> subscriptionService<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>dto<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token annotation punctuation">@ApiOperation</span><span class="token punctuation">(</span><span class="token string">"Finds all subscriptions based on email"</span><span class="token punctuation">)</span>
+   <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/{email}"</span><span class="token punctuation">)</span>
+   <span class="token keyword">public</span> <span class="token annotation punctuation">@ResponseBody</span>
+   <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">SubscriptionDto</span><span class="token punctuation">&gt;</span></span> <span class="token function">findByEmail</span><span class="token punctuation">(</span><span class="token annotation punctuation">@PathVariable</span> <span class="token keyword">final</span> <span class="token class-name">String</span> email<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">return</span> subscriptionService<span class="token punctuation">.</span><span class="token function">findByEmail</span><span class="token punctuation">(</span>email<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token annotation punctuation">@ApiOperation</span><span class="token punctuation">(</span><span class="token string">"Updates subscription based on it ID"</span><span class="token punctuation">)</span>
+   <span class="token annotation punctuation">@PutMapping</span><span class="token punctuation">(</span><span class="token string">"/{id}"</span><span class="token punctuation">)</span>
+   <span class="token keyword">public</span> <span class="token class-name">SubscriptionDto</span> <span class="token function">update</span><span class="token punctuation">(</span><span class="token annotation punctuation">@PathVariable</span> <span class="token keyword">final</span> <span class="token class-name">Long</span> id<span class="token punctuation">,</span>
+           <span class="token annotation punctuation">@RequestBody</span> <span class="token annotation punctuation">@Valid</span> <span class="token class-name">SubscriptionUpdateDto</span> dto<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">return</span> subscriptionService<span class="token punctuation">.</span><span class="token function">update</span><span class="token punctuation">(</span>id<span class="token punctuation">,</span> dto<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token annotation punctuation">@ApiOperation</span><span class="token punctuation">(</span><span class="token string">"Deletes subscription based on it ID"</span><span class="token punctuation">)</span>
+   <span class="token annotation punctuation">@DeleteMapping</span><span class="token punctuation">(</span><span class="token string">"/{id}"</span><span class="token punctuation">)</span>
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">delete</span><span class="token punctuation">(</span><span class="token annotation punctuation">@PathVariable</span> <span class="token keyword">final</span> <span class="token class-name">Long</span> id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       subscriptionService<span class="token punctuation">.</span><span class="token function">delete</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Також визначимо які нові класи DTO додалися: 
+<ul>
+ <li>
+  <p>SubscriptionCreateDto</p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>fasterxml<span class="token punctuation">.</span>jackson<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">JsonFormat</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>romankh3<span class="token punctuation">.</span>flightsmonitoring<span class="token punctuation">.</span>repository<span class="token punctuation">.</span>entity<span class="token punctuation">.</span></span><span class="token class-name">Subscription</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>swagger<span class="token punctuation">.</span>annotations<span class="token punctuation">.</span></span><span class="token class-name">ApiModelProperty</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>time<span class="token punctuation">.</span></span><span class="token class-name">LocalDate</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">javax<span class="token punctuation">.</span>validation<span class="token punctuation">.</span>constraints<span class="token punctuation">.</span></span><span class="token class-name">Email</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">javax<span class="token punctuation">.</span>validation<span class="token punctuation">.</span>constraints<span class="token punctuation">.</span></span><span class="token class-name">NotNull</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">lombok<span class="token punctuation">.</span></span><span class="token class-name">Data</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+* Data transfer object to create a {@link Subscription} object.
+*/</span>
+<span class="token annotation punctuation">@Data</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SubscriptionCreateDto</span> <span class="token punctuation">{</span>
+
+   <span class="token annotation punctuation">@NotNull</span>
+   <span class="token annotation punctuation">@Email</span>
+   <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Subscriber's email"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"test@test.com"</span><span class="token punctuation">)</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> email<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@NotNull</span>
+   <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Country Code"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"UA"</span><span class="token punctuation">)</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> country<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@NotNull</span>
+   <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Currency Code"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"UAH"</span><span class="token punctuation">)</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> currency<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@NotNull</span>
+   <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Locale"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"ru-RU"</span><span class="token punctuation">)</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> locale<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@NotNull</span>
+   <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Code of the origin place"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"HRK-sky"</span><span class="token punctuation">)</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> originPlace<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@NotNull</span>
+   <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Code of the destination place"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"KBP-sky"</span><span class="token punctuation">)</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> destinationPlace<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@NotNull</span>
+   <span class="token annotation punctuation">@JsonFormat</span><span class="token punctuation">(</span>pattern <span class="token operator">=</span> <span class="token string">"yyyy-MM-dd"</span><span class="token punctuation">)</span>
+   <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Date front"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"2019-12-18"</span><span class="token punctuation">)</span>
+   <span class="token keyword">private</span> <span class="token class-name">LocalDate</span> outboundPartialDate<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@JsonFormat</span><span class="token punctuation">(</span>pattern <span class="token operator">=</span> <span class="token string">"yyyy-MM-dd"</span><span class="token punctuation">)</span>
+   <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Date back"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"2019-12-25"</span><span class="token punctuation">)</span>
+   <span class="token keyword">private</span> <span class="token class-name">LocalDate</span> inboundPartialDate<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></li>
+ <li>
+  <p>SubscriptionUpdateDto</p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>fasterxml<span class="token punctuation">.</span>jackson<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">JsonFormat</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>romankh3<span class="token punctuation">.</span>flightsmonitoring<span class="token punctuation">.</span>repository<span class="token punctuation">.</span>entity<span class="token punctuation">.</span></span><span class="token class-name">Subscription</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>swagger<span class="token punctuation">.</span>annotations<span class="token punctuation">.</span></span><span class="token class-name">ApiModelProperty</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>time<span class="token punctuation">.</span></span><span class="token class-name">LocalDate</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">javax<span class="token punctuation">.</span>validation<span class="token punctuation">.</span>constraints<span class="token punctuation">.</span></span><span class="token class-name">Email</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">javax<span class="token punctuation">.</span>validation<span class="token punctuation">.</span>constraints<span class="token punctuation">.</span></span><span class="token class-name">NotNull</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">lombok<span class="token punctuation">.</span></span><span class="token class-name">Data</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+* Dto for updating {@link Subscription} object.
+*/</span>
+<span class="token annotation punctuation">@Data</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SubscriptionUpdateDto</span> <span class="token punctuation">{</span>
+
+   <span class="token annotation punctuation">@NotNull</span>
+   <span class="token annotation punctuation">@Email</span>
+   <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Subscriber's email"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"test@test.com"</span><span class="token punctuation">)</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> email<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@NotNull</span>
+   <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Country Code"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"UA"</span><span class="token punctuation">)</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> country<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@NotNull</span>
+   <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Currency Code"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"UAH"</span><span class="token punctuation">)</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> currency<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@NotNull</span>
+   <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Locale"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"ru-RU"</span><span class="token punctuation">)</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> locale<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@NotNull</span>
+   <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Code of the origin place"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"HRK-sky"</span><span class="token punctuation">)</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> originPlace<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@NotNull</span>
+   <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Code of the destination place"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"KBP-sky"</span><span class="token punctuation">)</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> destinationPlace<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@NotNull</span>
+   <span class="token annotation punctuation">@JsonFormat</span><span class="token punctuation">(</span>pattern <span class="token operator">=</span> <span class="token string">"yyyy-MM-dd"</span><span class="token punctuation">)</span>
+   <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Date front"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"2019-12-18"</span><span class="token punctuation">)</span>
+   <span class="token keyword">private</span> <span class="token class-name">LocalDate</span> outboundPartialDate<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@JsonFormat</span><span class="token punctuation">(</span>pattern <span class="token operator">=</span> <span class="token string">"yyyy-MM-dd"</span><span class="token punctuation">)</span>
+   <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Date back"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"2019-12-25"</span><span class="token punctuation">)</span>
+   <span class="token keyword">private</span> <span class="token class-name">LocalDate</span> inboundPartialDate<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></li>
+ <li>
+  <p>SubscriptionDto</p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>fasterxml<span class="token punctuation">.</span>jackson<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">JsonFormat</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>romankh3<span class="token punctuation">.</span>flightsmonitoring<span class="token punctuation">.</span>client<span class="token punctuation">.</span>dto<span class="token punctuation">.</span></span><span class="token class-name">FlightPricesDto</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>swagger<span class="token punctuation">.</span>annotations<span class="token punctuation">.</span></span><span class="token class-name">ApiModelProperty</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>time<span class="token punctuation">.</span></span><span class="token class-name">LocalDate</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">javax<span class="token punctuation">.</span>validation<span class="token punctuation">.</span>constraints<span class="token punctuation">.</span></span><span class="token class-name">Email</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">javax<span class="token punctuation">.</span>validation<span class="token punctuation">.</span>constraints<span class="token punctuation">.</span></span><span class="token class-name">NotNull</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">lombok<span class="token punctuation">.</span></span><span class="token class-name">Data</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+* Data transfer object to see all the data related to subscription.
+*/</span>
+<span class="token annotation punctuation">@Data</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SubscriptionDto</span> <span class="token punctuation">{</span>
+
+   <span class="token keyword">private</span> <span class="token class-name">Long</span> id<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@NotNull</span>
+   <span class="token annotation punctuation">@Email</span>
+   <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Subscriber's email"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"test@test.com"</span><span class="token punctuation">)</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> email<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@NotNull</span>
+   <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Country Code"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"UA"</span><span class="token punctuation">)</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> country<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@NotNull</span>
+   <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Currency Code"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"UAH"</span><span class="token punctuation">)</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> currency<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@NotNull</span>
+   <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Locale"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"ru-RU"</span><span class="token punctuation">)</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> locale<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@NotNull</span>
+   <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Code of the origin place"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"HRK-sky"</span><span class="token punctuation">)</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> originPlace<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@NotNull</span>
+   <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Code of the destination place"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"KBP-sky"</span><span class="token punctuation">)</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> destinationPlace<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@NotNull</span>
+   <span class="token annotation punctuation">@JsonFormat</span><span class="token punctuation">(</span>pattern <span class="token operator">=</span> <span class="token string">"yyyy-MM-dd"</span><span class="token punctuation">)</span>
+   <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Date front"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"2019-12-18"</span><span class="token punctuation">)</span>
+   <span class="token keyword">private</span> <span class="token class-name">LocalDate</span> outboundPartialDate<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@JsonFormat</span><span class="token punctuation">(</span>pattern <span class="token operator">=</span> <span class="token string">"yyyy-MM-dd"</span><span class="token punctuation">)</span>
+   <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Date back"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"2019-12-25"</span><span class="token punctuation">)</span>
+   <span class="token keyword">private</span> <span class="token class-name">LocalDate</span> inboundPartialDate<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Min price based on all these data"</span><span class="token punctuation">,</span> example <span class="token operator">=</span> <span class="token string">"100"</span><span class="token punctuation">)</span>
+   <span class="token keyword">private</span> <span class="token class-name">Integer</span> minPrice<span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@ApiModelProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"Response which contains all the need info about min price flight"</span><span class="token punctuation">)</span>
+   <span class="token keyword">private</span> <span class="token class-name">FlightPricesDto</span> flightPricesDto<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></li>
+</ul>У DTO є анотації з Bean Validation API ( <a href="https://habr.com/ru/post/68318/" rel="nofollow" target="_blank">стаття на хабрі</a> ), такі як: 
+<ul>
+ <li>@ Email – перевіряє на правильність написання електронної пошти;</li>
+ <li>@NotNull - Перевіряє, що змінна не повинна бути порожньою.</li>
+</ul>І це все ... Повністю проект можна подивитися на <a href="https://github.com/romankh3/flights-monitoring" rel="nofollow" target="_blank">GitHub flights-monitoring</a> . Більше того, він зараз розгорнутий на Heroku і його можна подивитися <a href="https://flights-monitoring.herokuapp.com/" rel="nofollow" target="_blank">тут</a> . PS не дивуйтеся, що довго вантажиться перший запит. Це обліковий запис безкоштовний, і тому після 30 хвабон бездіяльності хероку зупиняє програму і при запиті він його назад розгортає. Тому дані не зберігаються, оскільки при зупинці H2 вбиває всі дані. 
+<h2 id="topic8">Тестування програми</h2>У статті я не описуватиму тестування. Тим не менш, <a href="https://github.com/romankh3/flights-monitoring/tree/master/src/test/java/com/github/romankh3/flightsmonitoring" rel="nofollow" target="_blank">тести на проекті є</a> , і їх можна подивитися та вивчити самостійно. Більше того, якщо будуть якісь питання, можна ставити їх тут у коментарях: я із задоволенням відповім на них. 
+<h2 id="topic9">Плани на розвиток</h2>Проект уже є, і я планую займатися ним далі. У найближчому майбутньому хочу зробити таке: 
+<ul>
+ <li>написати окремо як бібліотеку клієнт для Skyscanner Flight Search, щоб можна було використовувати це як залежність у цьому проекті, а й у інших;</li>
+ <li>перевести на PostgreSQL, щоб не губабося дані на Heroku при зупинці програми. Це зробить його стабільнішим;</li>
+ <li>створити контролери даних клієнта, які підтримуються ним. Наприклад для Places, Currencies, Countries;</li>
+ <li>розширити функціонал пошуку. Там є ще багато опцій;</li>
+ <li>чекаю пропозиції від спільноти.</li>
+</ul>
+<h2 id="topic10">Висновки</h2>Написати веб-додаток з REST API на основі Spring Boot та екосистеми загалом – це не так складно, як може здатися. Так, є нюанси, які треба знати. Щоб прояснити все, що пов'язане зі спрингом, я рекомендую прочитати <strong>Spring in Action 5th edition</strong> . Після цієї книги стане ясніше, що тут відбувається. PS її можна знайти у вк безкоштовно. <a href="https://codegym.cc/welcome" target="_blank"><img id="click_banner1_articles" data-max-width="1024" data-id="2106c3a0-d5c9-46c3-8343-5d3419a0648d" class="img-fluid" alt="Створення системи моніторингу цін на авіаквитки: покрокове керівництво [Частина 3] - 2" src="https://cdn.javarush.com/images/article/2106c3a0-d5c9-46c3-8343-5d3419a0648d/1024.jpeg" style="width: 1024px;"></a>
+<h2 id="topic11">Корисні посилання</h2>Всі дані, якими я користувався при написанні проекту та просто корисні посилання для розуміння того, що добре б вивчити: 
+<ol>
+ <li>Посилання на проект: <a href="https://github.com/romankh3/flights-monitoring" rel="nofollow" target="_blank">flights-monitoring</a> .</li>
+ <li>Посилання на <a href="https://flights-monitoring.herokuapp.com/" rel="nofollow" target="_blank">розгорнутий проект на хероку</a> .</li>
+ <li><a href="https://start.spring.io/" rel="nofollow" target="_blank">Sptring Initializr</a> – швидкий спосіб сформувати проект із потрібними конфігураціями, залежностями. <a href="https://start.spring.io/#!type=maven-project&amp;language=java&amp;platformVersion=2.1.10.RELEASE&amp;packaging=jar&amp;jvmVersion=1.8&amp;groupId=com.codegym&amp;artifactId=flights-monitoring&amp;name=flights-monitoring&amp;description=Demo%20project%20for%20Spring%20Boot&amp;packageName=com.codegym.flights-monitoring&amp;dependencies=web,mail,data-jpa,h2" rel="nofollow" target="_blank">Посилання на сформований проект</a> .</li>
+ <li><a href="https://english.api.rakuten.net/skyscanner/api/skyscanner-flight-search/endpoints" rel="nofollow" target="_blank">Skyscanner Flight Search</a> — відкритий API для отримання даних про польоти.</li>
+ <li>Хабр: <a href="https://habr.com/ru/post/435144/" rel="nofollow" target="_blank">Введення у Spring Boot: створення простого REST API на Java</a> .</li>
+ <li>CodeGym: <a href="https://codegym.cc/groups/posts/579-vvedenie-v-jackson-framework" target="_blank">Вступ до Jackson Framework</a> .</li>
+ <li>CodeGym: <a href="https://habr.com/ru/post/142356/" rel="nofollow" target="_blank">Project Lombok, або оголошуємо війну бойлерплейту</a> .</li>
+ <li>Rapidapi: <a href="https://rapidapi.com/blog/skyscanner-api-overview/java/" rel="nofollow" target="_blank">Skyscanner Flight Search API(Java)</a> .</li>
+ <li>Wiki: <a href="https://ru.wikipedia.org/wiki/POJO" rel="nofollow" target="_blank">POJO</a> .</li>
+ <li><a href="https://www.baeldung.com/spring-boot-h2-database" rel="nofollow" target="_blank">Spring Boot With H2 database</a> .</li>
+ <li><a href="https://stackoverflow.com/questions/35347269/javax-mail-authenticationfailedexception-535-5-7-8-username-and-password-not-ac/45212730#45212730" rel="nofollow" target="_blank">Вирішення проблем з Gmail для надсилання листів.</a></li>
+ <li><a href="https://www.mkyong.com/spring-boot/spring-boot-how-to-send-email-via-smtp/" rel="nofollow" target="_blank">Spring Boot - how to send email via SMTP.</a></li>
+ <li><a href="https://spring.io/guides/gs/scheduling-tasks/" rel="nofollow" target="_blank">Scheduling tasks.</a></li>
+ <li><a href="https://www.baeldung.com/swagger-2-documentation-for-spring-rest-api" rel="nofollow" target="_blank">Setting Up Swagger 2 with a Spring REST API.</a></li>
+</ol><strong>Дивіться також інші мої статті:</strong>
+<ul>
+ <li><a href="https://codegym.cc/groups/posts/2367-kak-ja-napisal-open-source-biblioteku-kotoruju-ispoljhzujut-v-realjhnihkh-proektakh" target="_blank">Як тестове завдання на співбесіду перетворилося на open-source бібліотеку</a></li>
+ <li><a href="https://codegym.cc/groups/posts/2430-gayd-po-sozdaniju-klienta-dlja-skyscanner-api-i-ego-publikacii-v-jcenver-i-maven-central" target="_blank">Гайд зі створення клієнта для Skyscanner API та його публікації в jCenter та Maven Central [Частина 1]</a></li>
+ <li><a href="https://codegym.cc/groups/posts/2388-logirovanie-chto-kak-gde-i-chem" target="_blank">Логування: що, як, де та чим?</a></li>
+ <li><a href="https://codegym.cc/groups/posts/2463-debug-v-intellij-idea-gayd-dlja-novichkov" target="_blank">Debug в Intellij IDEA: гайд для новачків</a></li>
+</ul>

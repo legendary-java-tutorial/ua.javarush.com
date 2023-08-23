@@ -1,0 +1,48 @@
+Шаблони проектування для чайників
+<p>----------------------------------------</p>
+Доброго дня, Шановні javarushеві! У міру вивчення java, все частіше і частіше почав стикатися з таким поняттям, як патерни (або шаблони) проектування, але на просторах інтернету дуже мало інформації на цю тему для програмістів-початківців. 
+<p>----------------------------------------</p>
+<img data-max-width="200" alt="Шаблони проектування для чайників." src="https://cdn.javarush.com/images/article/a1c1b127-94c5-4cfa-b81d-833695303718/original.jpeg"> Доброго дня, Шановні codegymеві! У міру вивчення java, все частіше і частіше почав стикатися з таким поняттям, як патерни (або шаблони) проектування, але на просторах інтернету дуже мало інформації на цю тему для програмістів-початківців. Простіше кажучи – чайників (ким я і є). Я вирішив приділити трохи часу і постаратися розповісти про деякі з них якнайпростіше. Вони ж зустрічаються нам у міру просування на курсі codegym: 
+<ul>
+ <li><strong>Singleton / Одинак</strong></li>
+ <li><strong>Wpapper / Decorator / Обгортка</strong></li>
+ <li><strong>Adapter / Адаптер</strong></li>
+ <li><strong>Стратегія / Стратегія</strong></li>
+</ul> Хочеться заздалегідь сказати, що я міг у якомусь місці помаботися – будь ласка, поправляйте мене, я врахую та виправлю. Отже, поїхали... Про шаблони загалом //TODO <img data-id="34c641ba-fe77-40d8-9ed2-21bc494a8919" data-max-width="400" alt="Шаблони проектування для чайників." src="https://cdn.javarush.com/images/article/34c641ba-fe77-40d8-9ed2-21bc494a8919/256.jpeg" style="width: 400px;"> <strong>Singleton / Одинак </strong> <em>​​Що таке? </em> Один з патернів, що породжує, який гарантує, що у класу є тільки один екземпляр + надає до нього глобальну точку доступу. Буває потокобезпечний (може працювати в багатопотоковій програмі) і ні, з простою та відкладеною ініціалізацією*. *Відкладена (лінива) ініціалізація (англ. Lazy initialization). Прийом у програмуванні, коли деяка ресурсомістка операція (створення об'єкта, обчислення значення) виконується безпосередньо перед тим, як буде використано її результат. Отже, ініціалізація виконується «на вимогу», а чи не заздалегідь. (wiki) <em>Навіщо потрібен?</em> Сінглтон потрібен, щоб точно знати, що у нас створено ОДИН об'єкт цього класу. <em>Приклади:</em>
+<ul>
+ <li>Ведення логів</li> Об'єкт, який відповідає за запис логів. Нам необхідний лише один екземпляр, оскільки потрібно писати лог, використовуючи той самий файл. 
+ <li>Зберігання налаштувань</li> Об'єкт з налаштуваннями потрібен лише один, тому що для всієї програми налаштування одні й ті самі.
+</ul><em>Порядок дій:</em>
+<ol>
+ <li>Створюємо єдиний екземпляр деякого типу</li>
+ <li>Надаємо до нього доступ ззовні</li>
+ <li>Забороняємо створення кількох примірників того ж типу</li>
+</ol> Є кілька популярних реалізацій даного патерну, я розгляну тут <em>два найпростіші</em> : 
+<ol>
+ <li>З лінивою ініціалізацією*, не синхронізований</li>
+ <li>Синхронізований</li>
+</ol><u><em></em></u> 1. З лінивою ініціалізацією, не<u><em> синхронізований</em></u><code class=" language-none">public class NonSynchronizedSingleton { private static NonSynchronizedSingleton instance; private NonSynchronizedSingleton(){} public static NonSynchronizedSingleton getInstance(){ if(instance == null) instance = new NonSynchronizedSingleton(); return instance; } }</code> Робимо приватним наш інстанс(об'єкт) класу, щоб заборонити безпосередньо до нього звертатися. робимо <code class=" language-none">private static NonSynchronizedSingleton instance;</code> приватним конструктор, щоб наш синглтон і через конструктор було не створити. модифікатор доступу public - глобальний, тобто тепер ми з будь-якого місця можемо скористатися нашим singleton. <em>У цьому вся методі ми запитуємо об'єкт даного класу - якщо об'єкта ще немає, створюємо його, якщо він є, отримуємо його ж</em> . Звертаємось до нашого об'єкту ми таким чином <code class=" language-none">private NonSynchronizedSingleton(){}</code><code class=" language-none">public static NonSynchronizedSingleton getInstance()</code><em></em><code class=" language-none">NonSynchronizedSingleton.getInstance()</code> Плюси/мінуси: Даний варіант реалізації хороший всім, крім того, що він не працює в багатопотоковому середовищі, а тому підходить виключно для однопотокових додатків. Чому? Тому що кілька ниток можуть одночасно створити об'єкти цього класу. <u><em>2. Синхронізований</em></u> <code class=" language-none">public class SynchronizedSingleton { private static SynchronizedSingleton instance = new SynchronizedSingleton(); private SynchronizedSingleton(){} public static SynchronizedSingleton getInstance(){ return instance; } }</code> Опис: Створюємо змінну <code class=" language-none">private static SynchronizedSingleton instance = new SynchronizedSingleton();</code> Але робимо її приватною, щоб ніхто до неї безпосередньо не міг звернутися. Конструктор теж приватний <code class=" language-none">private SynchronizedSingleton(){}</code> Ну і для роботи з об'єктом створюємо метод (гетер), який повертає нам наш об'єкт <code class=" language-none">public static SynchronizedSingleton getInstance(){</code> Плюси: Проблему багатопоточності ми вирішабо, оскільки static змінна ініціалізується відразу ж під час ініціалізації класу, і скільки б ниток одночасно не звернулися, отримають завжди один і той самий об'єкт. Мінуси: Тепер у нас немає відкладеної ініціалізації (Об'єкт instance буде створений classloader під час ініціалізації класу) Підсумок: <code class=" language-none">public class Test { public static void main(String[] args) { NonSynchronizedSingleton nonSynchronizedSingleton = NonSynchronizedSingleton.getInstance(); NonSynchronizedSingleton secondNonSynchronizedSingleton = NonSynchronizedSingleton.getInstance(); SynchronizedSingleton synchronizedSingleton = SynchronizedSingleton.getInstance(); SynchronizedSingleton secondSynchronizedSingleton = SynchronizedSingleton.getInstance(); System.out.println(nonSynchronizedSingleton.hashCode()); System.out.println(secondNonSynchronizedSingleton.hashCode()); System.out.println(nonSynchronizedSingleton.equals(secondNonSynchronizedSingleton)); System.out.println(synchronizedSingleton.hashCode()); System.out.println(secondSynchronizedSingleton.hashCode()); System.out.println(synchronizedSingleton.equals(secondSynchronizedSingleton)); Car car1 = new Car(); Car car2 = new Car(); System.out.println(car1.hashCode()); System.out.println(car2.hashCode()); System.out.println(car1.equals(car2)); } public static class Car {} } </code> Намагаємося створити більше одного об'єкта в кожній реалізації, але на виході отримуємо один і той же об'єкт: хешкоди рівні, equals повертає true. Для прикладу створив клас <code class=" language-none">public static class Car {}</code> І порівняв хешкоди, equals двох об'єктів даного класу (вже не singleton) - хешкоди різні, equals повертає false <code class=" language-none">1956725890 1956725890 true 356573597 356573597 true 1735600054 21685669 false </code> Плюси: //TODO Мінуси: //TODO <img data-id="7c10f01a-34d8-42e9-a58f-05d7f5c16312" data-max-width="400" alt="Шаблони проектування для чайників." src="https://cdn.javarush.com/images/article/7c10f01a-34d8-42e9-a58f-05d7f5c16312/256.jpeg" style="width: 400px;"> <strong>Wpapper / Decorator / Обгортка</strong> Опис: //TODO <em>Що таке </em> <em>Навіщо потрібно </em> <em>Приклади</em> Порядок дій: //TODO Код: //TODO Плюси: //TODO Мінуси: //TODO <img data-id="0426e447-d217-48d1-a509-06ef51f2fda4" data-max-width="400" alt="Шаблони проектування для чайників." src="https://cdn.javarush.com/images/article/0426e447-d217-48d1-a509-06ef51f2fda4/256.jpeg" style="width: 400px;"> <strong>Adapter / Адаптер</strong> Опис: //TODO <em>Що таке </em> <em>Навіщо потрібно </em> <em>Приклади</em> Порядок дій: //TODO Код: //TODO Плюси: //TODO Мінуси: //TODO <img data-id="4a1ae144-0844-4d04-a65c-de0a15317b67" data-max-width="400" alt="Шаблони проектування для чайників." src="https://cdn.javarush.com/images/article/4a1ae144-0844-4d04-a65c-de0a15317b67/256.jpeg" style="width: 400px;"> <strong>Strategy / Стратегія</strong> Опис: //TODO <em>Що таке Навіщо </em> <em>потрібен </em> <em>Приклади</em> Порядок дій: //TODO Код: //TODO Плюси: //TODO Мінуси: //TODO Під час вивчення тем використовував 
+<ul>
+ <li>http://www.programcreek.com/java-design-patterns-in-stories/</li>
+ <li>http://habrahabr.ru/post/103681/</li>
+ <li>http://habrahabr.ru/post/116577/</li>
+ <li>http://habrahabr.ru/post/129494/</li>
+ <li>http://cpp-reference.ru/patterns/catalog/</li>
+ <li>https://ua.wikipedia.org/wiki/%D0%9E%D1%82%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%BD%D0%B0%D1 %8F_%D0%B8%D0%BD%D0%B8%D1%86%D0%B8%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8 %D1%8F</li>
+ <li>http://habrahabr.ru/post/27108/</li>
+ <li>http://www.amse.ru/courses/cpp1/2010.03.05.html</li>
+ <li></li>
+ <li></li>
+ <li></li>
+ <li></li>
+ <li></li>
+ <li></li>
+ <li></li>
+ <li></li>
+ <li></li>
+ <li></li>
+ <li></li>
+ <li></li>
+ <li></li>
+ <li></li>
+</ul> Авторам <strong>велике спасибі.</strong>

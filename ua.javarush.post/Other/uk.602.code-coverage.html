@@ -1,0 +1,99 @@
+Code Coverage
+<p>----------------------------------------</p>
+Вітаю, друзі, колеги та... пінгвіни! Сьогодні ми поговоримо про , розберемося, що це, навіщо він потрібен і як прокачати свій open-source project надавши статистику Code Coverage. Ця стаття є лаконічним продовженням попередньої про . Тут ми
+<p>----------------------------------------</p>
+Вітаю, друзі, колеги та... пінгвіни! <img data-id="5c258f3a-bf2c-4b43-9fc2-a8ccf92836bd" data-max-width="850" alt="Code Coverage - 1" src="https://cdn.javarush.com/images/article/5c258f3a-bf2c-4b43-9fc2-a8ccf92836bd/800.jpeg" style="width: 850px;">Сьогодні ми поговоримо про <strong>Code Coverage</strong> , розберемося, що це, навіщо він потрібен і як прокачати свій open-source project надавши статистику Code Coverage. Ця стаття є лаконічним продовженням попередньої про <a href="https://codegym.cc/groups/posts/594-continuous-integration" target="_blank" rel="nofollow">Continuous Integration</a> . Тут ми дізнаємося ще одна сильна перевага CI у поєднанні з... а скоро дізнаєтесь із чим самі! Підкреслю лише те, що тут не буде вказівок, як правильно писати тести для своїх програм, і як домагатися максимально можливого корисного покриття, цей весь гріх залишиться лише на ваших плечах. Отже, погнали! 
+<h2>Що таке Code Coverage?</h2><em><a href="https://en.wikipedia.org/wiki/Code_coverage" target="_blank" rel="nofollow">Code Coverage</a> (покриття коду) - це певна величина, що показує відсоток виконаного вихідного коду, під час тестування.</em> Окей, тут начебто все ясно. Відсоток Code Coverage (покриття коду, далі просто CC) може коливатися від 0 до 100, і може виникнути питання, чи потрібно прагнути максимального відсотка CC? Моя відповідь така: і так і ні. Чому так? Допустимо ви створюєте проект, який буде використовуватися деякими іншими проектами, в ньому повно функціоналу, і серед всього жаху є гетери та сеттери, і їх не мало. При покритті функціоналу покрабося не всі, скажімо, гетери, але ви точно знаєте, що ті, які не покрабося, і не викликаються у вашому проекті, але гетери не завжди пишуться "для себе", тому вони потрібні для "клієнта". Що ж робити? Покрити кожен гетер окремо? Це буде неефективне тестування. Але якщо не покрити їх, ми не досягнемо максимального відсотка CC. Тут виникає палиця двох кінців. 
+<h2>Для чого нам потрібно Code Coverage?</h2>Я думаю на це питання відповідь буде дуже проста: Будь-який код потребує тестування, щоб при рефакторингу або при додаванні/зміні функціоналу не виникли "невидимі" баги, і ми їх могли відстежити. Не будемо ж ми бігати фреймворками з breakpoint і дебаггером і ловити цього підлого Бага. Життя занадто коротке. <strong>Отже</strong> , найцікавіше. Завдання таке: <strong><em>Впровадити в наш <a href="https://github.com/qThegamEp/ForCodeGymPublication.git" target="_blank" rel="nofollow">open-source project</a> , який ми написали на <a href="https://codegym.cc/groups/posts/594-continuous-integration" target="_blank" rel="nofollow">попередній статті</a> , технологію, яка збиратиме інформацію про CC, оброблятиме десь її, і буде можливість помістити цю інформацію у себе на GitHub у формі бейджика, наприклад. </em></strong> Усі вихідні коди будуть викладені на моєму <a href="https://github.com/qThegamEp" target="_blank" rel="nofollow">GitHub</a> . 
+<ol>
+ <li>
+  <p>Почнемо з вибору <a href="https://en.wikipedia.org/wiki/Java_Code_Coverage_Tools" target="_blank" rel="nofollow">плагіна</a> для збирання інформації про покриття коду в одну купу. Я особисто для себе вибрав <a href="http://www.eclemma.org/jacoco/" target="_blank" rel="nofollow">JaCoCo</a> , який саме збирає інформацію про покриття коду. Але є й <a href="https://confluence.atlassian.com/clover/comparison-of-code-coverage-tools-681706101.html" target="_blank" rel="nofollow">альтернативи</a> .</p>
+  <p>Сайт <a href="http://www.eclemma.org/jacoco/" target="_blank" rel="nofollow">JaCoCo</a> пропонує нам скачати плагін, але качати ми нічого не будемо, адже ми використовуємо Build System Maven. Заходимо в <a href="https://mvnrepository.com/" target="_blank" rel="nofollow">Maven Repository</a> і шукаємо <a href="https://mvnrepository.com/artifact/org.jacoco/jacoco-maven-plugin" target="_blank" rel="nofollow">JaCoCo Plugin</a> . Беремо останню версію і вставляємо в наш pom.xml залежність.</p>
+  <p>Але через dependencies я робити <em>не рекомендую</em> , адже є найкращий, функціональніший альтернативний варіант, і навіть не один.</p>
+  <ol>
+   <li>
+    <p>Заходимо <a href="https://docs.codecov.io/docs/supported-languages" target="_blank" rel="nofollow">CodeCov Setup</a> вибираємо мову Java та вибираємо <a href="https://github.com/codecov/example-java" target="_blank" rel="nofollow">Using JaCoCo</a> плагін, і ставимо за інструкцією.</p></li>
+   <li>
+    <p>За тим самим <a href="https://docs.codecov.io/docs/supported-languages" target="_blank" rel="nofollow">посиланням</a> вибираємо <a href="https://github.com/codecov/example-java-maven" target="_blank" rel="nofollow">Using Maven</a> . Цей варіант буде навіть кращим. Cobertura витягуватиме інформацію з CI тестів, але на жаль і тут є каверза. Все, що вище JDK 7 (А на даний момент вже 10 є) <a href="https://github.com/cobertura/cobertura/issues/271" target="_blank" rel="nofollow">не підійде</a> . Тому ми зупинимося на 1 варіанті.</p></li>
+  </ol>
+  <p>В результаті в нашому pom.xml мало з'явитися щось на кшталт того:</p>
+  <pre class=" line-numbers language-xml" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-xml"><span class="token comment">&lt;!-- JaCoCo plugin --&gt;</span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">&gt;</span></span>org.jacoco<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">&gt;</span></span>jacoco-maven-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">&gt;</span></span>0.8.1<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>executions</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>execution</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>goals</span><span class="token punctuation">&gt;</span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>goal</span><span class="token punctuation">&gt;</span></span>prepare-agent<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>goal</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>goals</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>execution</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>execution</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>id</span><span class="token punctuation">&gt;</span></span>report<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>id</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>phase</span><span class="token punctuation">&gt;</span></span>test<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>phase</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>goals</span><span class="token punctuation">&gt;</span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>goal</span><span class="token punctuation">&gt;</span></span>report<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>goal</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>goals</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>execution</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>executions</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">&gt;</span></span></code></pre>
+  <p>І в Maven Projects у списку плагінів з'явиться JaCoCo Plugin:</p>
+  <div class="row justify-content-center jr-image-wrap">
+   <div class="col-12 col-sm-10 col-md-8">
+    <img data-id="cdae7117-f0c3-428d-8f2d-26dd8e68218b" data-max-width="469" alt="Code Coverage - 2" src="https://cdn.javarush.com/images/article/cdae7117-f0c3-428d-8f2d-26dd8e68218b/256.jpeg" style="width: 469px;">
+   </div>
+  </div></li>
+ <li>
+  <p>Плагін стоїть. Все начебто чудово. Але якщо ви уважно читали інструкцію з встановлення JaCoCo плагіна, там була вказівка ​​додати в .travis.yml рядок, що відповідає за відправку звіту плагіна на сайт <a href="https://codecov.io/gh" target="_blank" rel="nofollow">Codecov</a> .</p>
+  <p>Отже, виходячи з <a href="https://github.com/codecov/example-java" target="_blank" rel="nofollow">Using JaCoCo</a> нам потрібно вписати в наш файл:</p>
+  <pre class=" line-numbers language-yml" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-yml"><span class="token key atrule">after_success</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> bash &lt;(curl <span class="token punctuation">-</span>s https<span class="token punctuation">:</span>//codecov.io/bash)</code></pre>
+  <p>Вписали. Чудово.</p></li>
+ <li>
+  <p>Все начебто готове і залишабося фінальні штрихи. По-перше, давайте скомпілюємо наш код, і запустимо всі тести, причому зробимо це через Lifecycle Maven:</p>
+  <div class="row justify-content-center jr-image-wrap">
+   <div class="col-12 col-sm-10 col-md-8">
+    <img data-id="bef4bb10-97f2-4433-a283-8640465e1ebb" data-max-width="292" alt="Code Coverage - 3" src="https://cdn.javarush.com/images/article/bef4bb10-97f2-4433-a283-8640465e1ebb/256.jpeg" style="width: 292px;">
+   </div>
+  </div>
+  <p>Так як у нас у плагіні JaCoCo стоїть фаза виконання test, то мав з'явитися звіт після виконання циклу тестів Maven у папці target:</p>
+  <div class="row justify-content-center jr-image-wrap">
+   <div class="col-12 col-sm-10 col-md-8">
+    <img data-id="ec520b80-2a7a-4a95-87df-775f176ddfa7" data-max-width="480" alt="Code Coverage - 4" src="https://cdn.javarush.com/images/article/ec520b80-2a7a-4a95-87df-775f176ddfa7/256.jpeg" style="width: 480px;">
+   </div>
+  </div></li>
+ <li>
+  <p>Підходимо до завершення. Ми бачимо, що все працює чудово, залишилося лише переконається, що це "все прекрасно" також буде працювати на зовнішніх джерелах. Настав час зібрати все в купу. Збираємо проект і робимо push на GitHub, перед цим відкривши <a href="https://travis-ci.org/" target="_blank" rel="nofollow">Travis CI</a> та <a href="https://codecov.io/gh" target="_blank" rel="nofollow">Codecov</a> для моніторингу того, що відбувається.</p>
+  <p>Після push ми бачимо що збирання є успішним:</p><img data-id="ca73f3f5-ee73-4bca-b9b5-c460ac1165d1" data-max-width="1513" alt="Code Coverage - 5" src="https://cdn.javarush.com/images/article/ca73f3f5-ee73-4bca-b9b5-c460ac1165d1/1080.jpeg" style="width: 1513px;">
+  <p>І результат JaCoCo плагіна про покриття коду:</p><img data-id="a03c3d78-ce89-4d71-acc8-a24d940c268c" data-max-width="1173" alt="Code Coverage - 6" src="https://cdn.javarush.com/images/article/a03c3d78-ce89-4d71-acc8-a24d940c268c/1080.jpeg" style="width: 1173px;"></li>
+ <li>
+  <p>Пам'ятаєте наше завдання? Так, так, ми забув про бейджик. Я хотів винести тему "Прикраса" open-source project'ів в окрему статтю, але маленьку частину все ж таки залишу тут.</p>
+  <p>Отже, покрокова інструкція що б не заблукає:</p>
+  <ol>
+   <li>
+    <p>Переходимо на сайт <a href="https://codecov.io/gh" target="_blank" rel="nofollow">Codecov</a> ;</p></li>
+   <li>
+    <p>Вибираємо проект, який вам потрібний;</p></li>
+   <li>
+    <p>Вибираємо Setting:</p><img data-id="2d93c397-10b5-4a17-8914-5268a9e73b3a" data-max-width="1288" alt="Code Coverage - 7" src="https://cdn.javarush.com/images/article/2d93c397-10b5-4a17-8914-5268a9e73b3a/1080.jpeg" style="width: 1288px;"></li>
+   <li>
+    <p>Вибираємо Badge і бачимо посилання на ваш бейджик у різних формах подання:</p>
+    <p>Перші це стандартні бейджики, їх можна вставити, наприклад, у README.md:</p><img data-id="487823cf-d325-45a3-8253-f482dc886c34" data-max-width="1152" alt="Code Coverage - 8" src="https://cdn.javarush.com/images/article/487823cf-d325-45a3-8253-f482dc886c34/1080.jpeg" style="width: 1152px;">
+    <p>Їх особливість у тому, що при натисканні на них вас буде перенаправляти на сторінку зі звітом про CC;</p>
+    <p>Другі це графи, таблиці тощо.</p><img data-id="0ce4f6c5-1299-431d-8fb0-480dde13eecf" data-max-width="1020" alt="Code Coverage - 9" src="https://cdn.javarush.com/images/article/0ce4f6c5-1299-431d-8fb0-480dde13eecf/800.jpeg" style="width: 1020px;"></li>
+  </ol></li>
+</ol><strong>Корисні посилання</strong>
+<ul>
+ <li><a href="https://github.com/qThegamEp/ForCodeGymPublication/tree/JaCoCo" target="_blank" rel="nofollow">Мій тестовий проект</a> , який ви можете завантажити, подивитися, оцінити. Все за цією статтею знаходиться у branch: JaCoCo;</li>
+ <li><a href="https://en.wikipedia.org/wiki/Java_Code_Coverage_Tools" target="_blank" rel="nofollow">Java Code Coverage Tools</a> ;</li>
+ <li><a href="https://confluence.atlassian.com/clover/comparison-of-code-coverage-tools-681706101.html" target="_blank" rel="nofollow">Альтернативи</a> JaCoCo;</li>
+ <li><a href="http://www.eclemma.org/jacoco/" target="_blank" rel="nofollow">JaCoCo Library</a> ;</li>
+ <li>JaCoCo Maven Plugin <a href="https://mvnrepository.com/artifact/org.jacoco/jacoco-maven-plugin" target="_blank" rel="nofollow">Dependency</a> ;</li>
+ <li>Codecov <a href="https://docs.codecov.io/docs/supported-languages" target="_blank" rel="nofollow">туторіал</a> з налаштування;</li>
+ <li>Власне налаштування самого <a href="https://github.com/codecov/example-java" target="_blank" rel="nofollow">JaCoCo</a> ;</li>
+ <li>Налаштування <a href="https://github.com/codecov/example-java-maven" target="_blank" rel="nofollow">Cobertura</a> ;</li>
+</ul>
+<ul>
+ <li><a href="https://codegym.cc/groups/posts/612-markdown" target="_blank" rel="nofollow">Наступна стаття (Markdown)</a></li>
+ <li><a href="https://codegym.cc/groups/posts/594-continuous-integration" target="_blank" rel="nofollow">Попередня стаття (Continuous Integration)</a></li>
+</ul>Можуть бути помилки, ВІДЧИП'ЯТКИ в тексті. Всім дякую за увагу!

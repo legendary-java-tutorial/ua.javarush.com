@@ -1,0 +1,100 @@
+Рівень 21. Відповіді на запитання до співбесіди на тему рівня
+<p>----------------------------------------</p>
+Перерахуйте методи класуObject equals() hashCode() toString() getClass() notify() notifyAll() wait() wait(long timeOut) wait(long timeOut, int nanos) Навіщо потрібні методи equals?hashCode Використовуються для порівняння об'єктів. Мета мето
+<p>----------------------------------------</p>
+<img data-id="eec1534d-954b-4400-80fe-d2851c225f2f" data-max-width="850" alt="Рівень 21. Відповіді на запитання до співбесіди на тему рівня - 1" src="https://cdn.javarush.com/images/article/eec1534d-954b-4400-80fe-d2851c225f2f/800.jpeg" style="width: 850px;">
+<ol>
+ <li>
+  <p><strong>Перерахуйте методи класу<code class=" language-none">Object</code></strong></p>
+  <ul>
+   <li><code class=" language-none">equals()</code></li>
+   <li><code class=" language-none">hashCode()</code></li>
+   <li><code class=" language-none">toString()</code></li>
+   <li><code class=" language-none">getClass()</code></li>
+   <li><code class=" language-none">notify()</code></li>
+   <li><code class=" language-none">notifyAll()</code></li>
+   <li><code class=" language-none">wait()</code></li>
+   <li><code class=" language-none">wait(long timeOut)</code></li>
+   <li><code class=" language-none">wait(long timeOut, int nanos)</code></li>
+  </ul></li>
+ <li>
+  <p><strong>Навіщо потрібні методи <code class=" language-none">equals</code>?<code class=" language-none">hashCode</code></strong></p>
+  <p>Використовуються для порівняння об'єктів.</p>
+  <p>Мета методу <code class=" language-none">equals</code>– визначити чи ідентичні об'єкти всередині, порівнявши внутрішній зміст об'єктів. Так <code class=" language-none">equals</code>працює повільно, спочатку порівнюються хеш коди об'єктів, і, в тому випадку, якщо хеш коди рівні, йде перевірка<code class=" language-none">equals</code></p></li>
+ <li>
+  <p><strong>Що буде, якщо перевизначити equals, але не перевизначити <code class=" language-none">hashCode</code>?</strong></p>
+  <p>Спочатку <code class=" language-none">hashCode</code>- випадкове число.</p>
+  <p>Колекції Java перед тим як порівняти об'єкти за допомогою <code class=" language-none">equals</code>завжди шукають/порівнюють їх за допомогою методу <code class=" language-none">hashCode()</code>. І якщо у однакових об'єктів будуть різні <code class=" language-none">hashCode</code>, то об'єкти будуть вважатися різними — порівняння за допомогою <code class=" language-none">equals</code>просто не дійде.</p></li>
+ <li>
+  <p><strong>Навіщо потрібні методи <code class=" language-none">wait</code>?<code class=" language-none">notify</code><code class=" language-none">notifyAll</code></strong></p>
+  <p>Іноді у програмі може бути така ситуація, що нитка увійшла блок коду <code class=" language-none">synchronized</code>, заблокувала монітор і може працювати далі, т.к. якихось даних ще не вистачає: наприклад, файл який вона повинна обробити ще не завантажився або щось таке. Для вирішення цієї проблеми і був придуманий метод <code class=" language-none">wait()</code>. Виклик цього методу призводить до того, що нитка звільняє монітор і стає на паузу.</p>
+  <p>Для зняття з паузи використовують методи <code class=" language-none">notify</code>, <code class=" language-none">notifyAll</code>. Метод <code class=" language-none">notify</code>«розморожує» одну випадкову нитку, метод <code class=" language-none">notifyAll</code>– усі «заморожені» нитки монітора.</p></li>
+ <li>
+  <p><strong>Як правильно клонувати об'єкт?</strong></p>
+  <p>Два типи клонування.</p>
+  <p>Для клонування за замовчуванням об'єкта потрібно:</p>
+  <ul style="list-style-type:lower-alpha;">
+   <li>Додати інтерфейс <code class=" language-none">Cloneable</code>до свого класу</li>
+   <li>Перевизначити метод <code class=" language-none">clone</code>та викликати в ньому базову реалізацію:</li>
+  </ul>
+  <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">class</span></span> <span class="token class-name"><span class="token class-name">Point</span></span> <span class="token keyword"><span class="token keyword">implements</span></span> <span class="token class-name"><span class="token class-name">Cloneable</span></span>
+<span class="token punctuation"><span class="token punctuation">{</span></span>
+ <span class="token keyword"><span class="token keyword">int</span></span> x<span class="token punctuation"><span class="token punctuation">;</span></span>
+ <span class="token keyword"><span class="token keyword">int</span></span> y<span class="token punctuation"><span class="token punctuation">;</span></span>
+
+ <span class="token keyword"><span class="token keyword">public</span></span> <span class="token class-name"><span class="token class-name">Object</span></span> <span class="token function"><span class="token function">clone</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span>
+ <span class="token punctuation"><span class="token punctuation">{</span></span>
+  <span class="token keyword"><span class="token keyword">return</span></span> <span class="token keyword"><span class="token keyword">super</span></span><span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">clone</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+ <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre>
+  <p>Або можна написати реалізацію методу <code class=" language-none">clone</code>самому:</p>
+  <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">class</span></span> <span class="token class-name"><span class="token class-name">Point</span></span>
+<span class="token punctuation"><span class="token punctuation">{</span></span>
+ <span class="token keyword"><span class="token keyword">int</span></span> x<span class="token punctuation"><span class="token punctuation">;</span></span>
+ <span class="token keyword"><span class="token keyword">int</span></span> y<span class="token punctuation"><span class="token punctuation">;</span></span>
+
+ <span class="token keyword"><span class="token keyword">public</span></span> <span class="token class-name"><span class="token class-name">Object</span></span> <span class="token function"><span class="token function">clone</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span>
+ <span class="token punctuation"><span class="token punctuation">{</span></span>
+  <span class="token class-name"><span class="token class-name">Point</span></span> point <span class="token operator"><span class="token operator">=</span></span> <span class="token keyword"><span class="token keyword">new</span></span> <span class="token class-name"><span class="token class-name">Point</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+  point<span class="token punctuation"><span class="token punctuation">.</span></span>x <span class="token operator"><span class="token operator">=</span></span> <span class="token keyword"><span class="token keyword">this</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>x<span class="token punctuation"><span class="token punctuation">;</span></span>
+  point<span class="token punctuation"><span class="token punctuation">.</span></span>y <span class="token operator"><span class="token operator">=</span></span> <span class="token keyword"><span class="token keyword">this</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>y<span class="token punctuation"><span class="token punctuation">;</span></span>
+  <span class="token keyword"><span class="token keyword">return</span></span> point<span class="token punctuation"><span class="token punctuation">;</span></span>
+ <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre></li>
+ <li>
+  <p><strong>Навіщо потрібний метод <code class=" language-none">finalize()</code>і як він працює?</strong></p>
+  <p>Якщо ти пам'ятаєш, то <code class=" language-none">finalize()</code>це спеціальний метод, який викликається у об'єкта перед тим, як збирач сміття його знищить.</p>
+  <p>Основна мета цього методу – звільнити зовнішні не-Java ресурси, що використовуються: закрити файли, потоки вводу-виводу і т.п.</p>
+  <p><code class=" language-none">finalize()</code>працює нестабільно.</p>
+  <p>Цей метод не виправдовує покладених на нього надій. Java-машина може відкласти знищення об'єкта, як і виклик методу <code class=" language-none">finalize</code>скільки завгодно. Більше того, вона взагалі не гарантує, що цей метод буде викликано. У купі ситуацій заради «оптимізації» він не викликається.</p></li>
+ <li>
+  <p><strong>У чому <code class=" language-none">final</code>відмінність <code class=" language-none">finally</code>?<code class=" language-none">finalize</code></strong></p>
+  <ul>
+   <li><code class=" language-none">final</code>- Модифікатор</li>
+   <li>Поля не можуть бути змінені, методи перевизначені</li>
+   <li>Класи не можна наслідувати</li>
+   <li>Цей модифікатор застосовується тільки до класів, методів та змінних (також і до локальних змінних)</li>
+   <li>Аргументи методів, позначені як <code class=" language-none">final</code>, призначені лише для читання, при спробі зміни буде помилка компіляції</li>
+   <li>Змінні <code class=" language-none">final</code>не ініціалізуються за умовчанням, їм необхідно явно надати значення при оголошенні або в конструкторі, інакше - помилка компіляції</li>
+   <li>Якщо final змінна містить посилання на об'єкт, об'єкт може бути змінений, але змінна завжди буде посилатися на той самий об'єкт</li>
+   <li>Також це справедливо і для масивів, тому що масиви є об'єктами, – масив може бути змінений, а змінна завжди посилатиметься на той самий масив.</li>
+   <li>Якщо клас оголошений <code class=" language-none">final</code>і <code class=" language-none">abstract</code>(взаємовиключні поняття), буде помилка компіляції</li>
+   <li>Так як <code class=" language-none">final</code>клас не може успадковуватись, його методи ніколи не можуть бути перевизначені</li>
+  </ul>
+  <p><code class=" language-none">finally</code>— блок у зв'язці <code class=" language-none">try-catch-finally</code>, код у якому виконається незалежно від того, чи вилетів виняток у блоці <code class=" language-none">try</code>чи ні. Використовується для звільнення ресурсів.</p>
+  <p><code class=" language-none">finalize</code>- Метод у класі <code class=" language-none">Object</code>см 6.</p></li>
+ <li>
+  <p><strong>Що таке <code class=" language-none">try-with-resources</code>?</strong></p>
+  <p>Це спеціальна конструкція <code class=" language-none">try</code>, звана <code class=" language-none">try-with-resources</code>, в якій звернути увагу - після <code class=" language-none">try</code>йдуть круглі дужки, де оголошуються змінні і створюються об'єкти. Ці об'єкти можна використовувати всередині блоку <code class=" language-none">try</code>, позначеного дужками <code class=" language-none">{}</code>. Коли виконання команд блоку <code class=" language-none">try</code>закінчиться, незалежно від цього – нормально воно закінчилося чи було виняток, для об'єкта, створеного всередині круглих дужок <code class=" language-none">()</code>, буде викликаний метод <code class=" language-none">close()</code>;</p></li>
+ <li>
+  <p><strong>Чим відрізняються методи <code class=" language-none">wait(1000)</code>і <code class=" language-none">sleep(1000)</code>?</strong></p>
+  <p><code class=" language-none">sleep()</code>зупиняє потік на вказане. стан змінюється на TIMED_WAITING, після закінчення - RUNNABLE</p>
+  <p><code class=" language-none">wait()</code>змінює стан потоку на WAITING</p>
+  <p>може бути викликано тільки у об'єкта, що володіє блокуванням, в іншому випадку викинеться виняток <em>IllegalMonitorStateException</em> . при спрацьовуванні методу блокування відпускається, що дозволяє продовжити роботу іншим потокам, що очікують захопити ту ж саму блокування . у випадку <code class=" language-none">wait(int)</code>з аргументом стан буде TIMED_WAITING</p></li>
+ <li>
+  <p><strong>У чому відмінність <code class=" language-none">i++</code>і <code class=" language-none">++i</code>?</strong></p>
+  <ul>
+   <li><code class=" language-none">++i</code><code class=" language-none">i</code>спочатку збільшується на 1, потім бере участь у виразі .</li>
+   <li><code class=" language-none">i++</code>спочатку бере участь у виразі <code class=" language-none">i</code>, потім збільшується на 1.</li>
+  </ul></li>
+</ol>

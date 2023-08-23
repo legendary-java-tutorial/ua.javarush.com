@@ -1,0 +1,67 @@
+HashMap та ConcurrentHashMap популярні питання на співбесідах
+<p>----------------------------------------</p>
+У моєму минулому прев'ю я розповідав про те “Як працює ”. Я розповідав про нутрощі цього класу і про те, як вони вписуються в концепцію. Але коли мене запитали про HashMap і пов'язані з ним речі опитуючий не зупинився тільки на основній кон
+<p>----------------------------------------</p>
+У моєму минулому прев'ю я розповідав про те “Як працює <a href="https://codegym.cc/groups/posts/732-kak-rabotaet-hashmap-v-java" target="_blank">HashMap у Java</a> ”. Я розповідав про нутрощі цього класу і про те, як вони вписуються в концепцію. Але коли мене запитали про HashMap і пов'язані з ним речі опитуючий не зупинився тільки на основній концепції. У ході дискусії зачіпаються різні напрями, в результаті все зводиться до того, чи ви дійсно розумієте ці речі, чи ні. <img data-id="c50716c0-c79c-41a2-931f-61a06a4bf6b0" data-max-width="850" alt="HashMap та ConcurrentHashMap популярні питання на співбесідах - 1" src="https://cdn.javarush.com/images/article/c50716c0-c79c-41a2-931f-61a06a4bf6b0/800.jpeg" style="width: 850px;">У цьому прев'ю я постараюся освятити всі основні теми питань на співбесідах. 
+<ol>
+ <li>Як створити ключ для HashMap?</li>
+ <li>Відмінності між HashMap і ConcurrentHashMap?</li>
+ <li>Відмінності між Collections.synchronizedMap(HashMap) та HashMap?</li>
+ <li>Відмінності між ConcurrentHashMap і Collections.synchronizedMap(HashMap)?</li>
+ <li>Відмінності між HashMap та HashTable?</li>
+ <li>Різниця між HashTable і Collections.synchronizedMap(HashMap)?</li>
+ <li>Вплив випадкових/фіксованих значень hashCode() для ключа</li>
+ <li>Використання HashMap у несинхронізованому коді багатопотокових програм</li>
+</ol> Отже приступимо: 
+<ol>
+ <li>
+  <p><strong>Створення ключа для HashMap</strong></p>
+  <p>Однією з головних потреб є те, що ми повинні повертати значення об'єкта без помилок. Правильно? В іншому випадку незрозуміло як уявити структуру даних, яку ви проектуєте. Це неможливо буде використовувати. Щоб вирішити, що ми створабо хороший ключ, ми повинні знати, як працює HashMap. Робота HashMap побудована на принципах Хешування. Ключ у хеш-коді використовуються насамперед у поєднанні з методом equals(), для додавання та пошуку елемента HashMap. Якщо хеш-код об'єкта змінюється на іншу пару ключ – значення (key-value), значення від карти (Map) отримати практично неможливо. Цей випадок називається витоком пам'яті. Щоб уникнути цього, ключ і карта повинні бути незмінні. Це головна причина того, що незмінні класи такі як String,</p>
+  <p>Але слід пам'ятати, що незмінність рекомендована, але не є обов'язковою. Якщо ти хочеш зробити ключем об'єкт, що змінюється, тоді ти повинен переконатися в тому, що ключовий об'єкт не змінює хеш-код об'єкта. Це можна зробити шляхом перевизначення методу hashCode(). Крім того, ключові класи повинні працювати коректно з методами hashCode() та equals() щоб уникнути небажаної та дивовижної поведінки при виконанні.</p></li>
+ <li>
+  <p><strong>Відмінності між HashMap і ConcurrentHashMap</strong></p>
+  <p>Щоб краще візуалізувати СoncurrentHashMap, потрібно розглядати цей клас як групу HashMap'ів. Щоб брати і класти значення пар (key-value) у HashMap, необхідно обчислити хеш-код і знайти правильний сегмент масиву Collection.Entry. У ConcurrentHashMap відмінність полягає у внутрішній структурі для зберігання пар key-value. ConcurrentHashMap має додаткову концепцію сегментів. Буде легко зрозуміти якщо уявити, що один сегмент еквівалентний одному HashMap [концептуально]. ConcurrentHashMap розділена на безліч сегментів [за замовчуванням їхнє число дорівнює 16] при ініціалізації. ConcurrentHashMap схожим потокам приблизно (16) отримувати одночасний доступ до цього сегменту, кожен потік працює одночасно з високим паралелізмом. Звідси, якщо ваша пара key-value зберігається в сегменті 10, не потрібно блокувати інші 15 сегментів додатково.</p><img data-id="4e6cb2de-0c43-4b34-8f5c-ac44e5939a91" data-max-width="500" alt="HashMap та ConcurrentHashMap популярні питання на співбесідах - 2" src="https://cdn.javarush.com/images/article/4e6cb2de-0c43-4b34-8f5c-ac44e5939a91/256.jpeg" style="width: 500px;">
+  <p>Тобто Concurrent HashMap використовує безліч замків і кожен замок управляє одним сегментом структури. Установки даних у певному сегменті заблоковані для отримання в цьому сегменті так синхронізовано операції оновлення. При отриманні даних читання на льоту використовується без синхронізації. Якщо зчитувати дані на льоту, то сегмент блокується і запис проводиться в синхронізований блок.</p></li>
+ <li>
+  <p><strong>Відмінності між HashMap та Collection.synchronizedMap(HashMap)</strong></p>
+  <p>Все насправді просто! HashMap не синхронізована і Collection.synchronizedMap(HashMap) повертає упаковані методи HashMap, які є синхронізованими get і put методами.</p>
+  <p>Фактично, Collection.synchronizedMap(HashMap) внутрішньо створеного внутрішнього класу SunchronizedMap містить пари key-value передаються в HashMap як аргумент. Такий приклад внутрішніх класів нічого не змінює у початкових параметрах HashMap і є цілком незалежним.</p></li>
+ <li>
+  <p><strong>Відмінності між ConcurrentHashMap і Collections.synchronizedMap(HashMap)</strong></p>
+  <p>Обидва є синхронізованими версіями HashMap з відмінностями у функціональності та внутрішній структурі. Як зазначено вище, ConcurrentHashMap складається з внутрішніх сегментів, які можуть розглядатися як незалежні HashMap'и концептуально. Всі ці сегменти можуть бути заблоковані окремими потоками виконуваними одночасно. Таким чином, кілька потоків можу одночасно отримати/покласти пари key-value з ConcurrentHashMap без блокування/очікування один одного.</p>
+  <p>З Collections.synchronizedMap() ми отримуємо синхронізовану версію HashMap та доступ у блокуванні способом. Це означає, що якщо кілька потоків намагаються отримати доступ до synchronizedMap в один і той же час їм буде дозволено взяти/покласти пари key-value по одному синхронізованому образу.</p></li>
+ <li>
+  <p><strong>Відмінності між HashMap та HashTable</strong></p>
+  <p>Це питання також є простим. Головна відмінність у тому, що HashTable синхронізований, а HashMap немає. Якщо вас запитають з інших причин, то скажіть їм, що HashTable є спадщиною класу (частина JDK 1.0) який був зроблений в рамках колекції реалізувавши інтерфейс Map пізніше. У ньому все ще є речі яких немає в HashMap, наприклад, як Enumerators (лічильники). Іншою незначною причиною є те, що HashMap підтримує ключ зі значенням null.(Відображається як порожня область пам'яті). HashTable не підтримує ключ зі значенням null і викликає виняток NullPointerException, намагаючись його задати.</p></li>
+ <li>
+  <p><strong>Відмінності між HashTable і Collection.synchronized(HashMap)</strong></p>
+  <p>До цих пір ви, можливо, тільки знали про їхні подібності. Обидва синхронізовані версії колекцій. Обидва синхронізовані методи всередині. Обидва блокують потоки і змушують чекати, коли можна взяти/покласти що-небудь в колекцію. Тож у чому відмінності? Добре! Немає основних відмінностей для зазначених вище причин. Продуктивність обох однакова. Єдине що розрізняє їх це те, що HashTable успадкований клас він отримав свої додаткові функції такі як Enumerators(лічильники).</p></li>
+ <li>
+  <p><strong>Вплив випадкових/фіксованих значень значення ключа.</strong></p>
+  <p>Вплив в обох випадках чи то фіксоване значення, чи випадкове буде мати однаковий результат і ця незрозуміла поведінка. Велике значення має місце в HashMap, де поставити пару key-value і де відновити. Якщо положення об'єкта ключа змінюється кожного разу, то його положення буде розраховуватися щоразу різними способами. Таким чином об'єкт, що зберігається в HashMap, буде втрачений назавжди з мінімальною можливістю відновлення. Тому значення ключів є незмінними і щоразу повертають унікальні значення.</p></li>
+ <li>
+  <p><strong>Використання HashMap у несинхронізованому коді багатопотокових програм.</strong></p>
+  <p>- У гіршому випадку це може викликати нескінченний цикл.</p>
+  <p>- Так.</p>
+  <p>— Ти мав рацію, це дійсно може призвести до нескінченного циклу. Ти спитаєш: "Як?"</p>
+  <p>- Добре! Ось причина!</p>
+  <p>HashMap має концепцію повторного хешування, коли досягає своєї верхньої межі. Це процес створення нової області пам'яті та копіювання туди існуючих елементів. Допустимо Потік A поклав пару key-value в <a href="https://codegym.cc/groups/posts/763-9-glavnihkh-voprosov-o-map-v-java" target="_blank">Map</a> і повторне хешування почалося, в той же час потік Б почав маніпулювати з областю пам'яті, використовуючи операцію put (покласти). Під час повторного хешування існує можливість для створення циклічної залежності, де елемент знаходиться в посилальному аркуші [у будь-якій області пам'яті] може вказувати на будь-який попередній вузол в ту ж область пам'яті. Це призведе до нескінченного циклу так як код повторного хешування містить while(TRUE) {//отримуємо наступний вузол} який буде працювати нескінченно.</p>
+  <p>Подивіться уважно на цей код, що містить метод передачі, який використовує операцію повторного хешування:</p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token class-name">Object</span> <span class="token function">get</span><span class="token punctuation">(</span><span class="token class-name">Object</span> key<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">Object</span> k <span class="token operator">=</span> <span class="token function">maskNull</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> hash <span class="token operator">=</span> <span class="token function">hash</span><span class="token punctuation">(</span>k<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token function">indexFor</span><span class="token punctuation">(</span>hash<span class="token punctuation">,</span> table<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">Entry</span> e <span class="token operator">=</span> table<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+    <span class="token comment">//While true is always a bad practice and cause infinite loops</span>
+
+    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>e <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> e<span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>e<span class="token punctuation">.</span>hash <span class="token operator">==</span> hash <span class="token operator">&amp;&amp;</span> <span class="token function">eq</span><span class="token punctuation">(</span>k<span class="token punctuation">,</span> e<span class="token punctuation">.</span>key<span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> e<span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+        e <span class="token operator">=</span> e<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+  <p>Докладніше про це у статті. Якщо ви знайшли статтю корисною, будь ласка, поділіться з друзями! Щасливого навчання!</p></li>
+</ol>

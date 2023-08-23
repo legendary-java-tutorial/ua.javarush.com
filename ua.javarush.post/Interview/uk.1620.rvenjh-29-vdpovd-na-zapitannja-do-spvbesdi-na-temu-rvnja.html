@@ -1,0 +1,65 @@
+Рівень 29. Відповіді на запитання до співбесіди на тему рівня
+<p>----------------------------------------</p>
+Що таке autoboxing? Автоупаковка - це механізм неявної ініціалізації об'єктів класів-оберток (Byte, Short, Character, Integer, byteLong , Float , Double) значеннями відповідних ним вихідних примітивних типів (відповід.,,,,,,,,), без явного 
+<p>----------------------------------------</p>
+<img data-id="f9ee242a-3758-4530-8129-0a9206f323c1" data-max-width="850" alt="Рівень 29. Відповіді на запитання до співбесіди на тему рівня - 1" src="https://cdn.javarush.com/images/article/f9ee242a-3758-4530-8129-0a9206f323c1/800.jpeg" style="width: 850px;">
+<ol>
+ <li>
+  <p><strong>Що таке <code class=" language-none">autoboxing</code>?</strong></p>
+  <p><strong>Автоупаковка</strong> - це механізм неявної ініціалізації об'єктів класів-оберток (Byte, Short, Character, Integer, <code class=" language-none">byte</code>Long , Float , Double) значеннями відповідних ним вихідних примітивних типів (відповід.,,,,,,,,), без явного використання конструктора класу .<code class=" language-none">short</code><code class=" language-none">char</code><code class=" language-none">int</code><code class=" language-none">long</code><code class=" language-none">float</code><code class=" language-none">double</code></p>
+  <p>Автоупаковка відбувається при прямому присвоєння примітиву - класу-обгортці (за допомогою оператора " <code class=" language-none">=</code>"), або при передачі примітиву в параметри методу (типу "класу-обгортки"). Автопакування в "класи-обертки" можуть бути піддані як змінні примітивних типів, так і константи часу компіляції (літерали та <code class=" language-none">final</code>-примітиви). При цьому літерали мають бути синтаксично коректними для ініціалізації змінної вихідного примітивного типу.</p>
+  <p>Автоупаковка змінних примітивних типів вимагає точної відповідності типу вихідного примітиву - типу "класу-обгортки". Наприклад, спроба автоупакувати змінну типу <code class=" language-none">byte</code>в <code class=" language-none">Short</code>без попереднього явного приведення <code class=" language-none">byte-&gt;short</code>викликає помилку компіляції.</p>
+  <p>Автоупаковка констант примітивних типів допускає ширші межі відповідності. У цьому випадку компілятор здатний попередньо здійснювати неявне розширення/звуження типу примітивів. Перетворення відбувається у два етапи:</p>
+  <ol>
+   <li>
+    <p>неявне розширення (звуження) вихідного типу примітиву до типу примітиву відповідного класу-обертці (для перетворення <code class=" language-none">int-&gt;Byte</code>, спочатку компілятор неявно звужує <code class=" language-none">int</code>в <code class=" language-none">byte</code>)</p></li>
+   <li>
+    <p>автоупаковку примітиву у відповідний "клас-обгортку" (компілятор автоупаковує <code class=" language-none">byte-&gt;Byte</code>). однак у цьому випадку існують два додаткові обмеження:</p></li>
+   <ul style="list-style-type:lower-alpha">
+    <li>
+     <p>присвоєння примітиву - "обертці" може здійснюватися тільки оператором " <code class=" language-none">=</code>" (не можна передати такий примітив у параметри методу, без явного приведення типів)</p></li>
+    <li>
+     <p>тип лівого операнда повинен бути старше ніж <code class=" language-none">Character</code>, тип правого не дожен старше <code class=" language-none">int</code>, (припустимо розширення/звуження <code class=" language-none">byte &lt;-&gt; short</code>, <code class=" language-none">byte &lt;-&gt; char</code>, <code class=" language-none">short &lt;-&gt; char</code><br>
+       і лише звуження <code class=" language-none">byte &lt;- int</code>, <code class=" language-none">short &lt;- int</code>, <code class=" language-none">char &lt;- int</code>, інші варіанти вимагають явного приведення типів)</p></li>
+   </ul>
+  </ol>
+  <p>Додаткова особливість цілих "класів-оберток" створених автоупаковкою констант в діапазоні -128 +127 , в те що вони кешуються JVM. Тому такі обгортки з однаковими значеннями будуть посилання на один об'єкт.</p></li>
+ <li>
+  <p><strong>Навіщо використовується <code class=" language-none">autoboxing</code>?</strong></p>
+  <p>Я процитую лекцію:</p>
+  <p>Наскільки ти пам'ятаєш, Java є як типи, успадковані від класу <code class=" language-none">Object</code>, так і примітивні типи. Але, як виявилося, така зручна річ як колекції та generic'и можуть працювати тільки з типами, успадкованими від <code class=" language-none">Object</code>.</p></li>
+ <li>
+  <p><strong>Альтернативи <code class=" language-none">autoboxing</code>?</strong></p>
+  <p>Не знайшов відповіді, але застиг на <a href="http://stackoverflow.com/questions/39212744/what-is-the-alternative-to-autoboxing-in-java" rel="nofollow" target="_blank">StackOverFlow</a> .</p>
+  <p>Виходячи з цієї дискусії, виходить, що альтернатива <code class=" language-none">autoboxing</code>це використання примітивних типів, так як використання <code class=" language-none">autoboxing</code>знижує продуктивність. Висновок: використовувати <code class=" language-none">autoboxing</code>тільки там, де це необхідно.</p>
+  <p>Написано статтю про <code class=" language-none">Autoboxing</code>: <a href="https://effective-java.com/2010/05/the-advantages-and-traps-of-autoboxing/" rel="nofollow" target="_blank">Autoboxing: Traps and Advantages</a></p></li>
+ <li>
+  <p><strong>Типи-обертки для примітивних типів <code class=" language-none">mutable</code>або <code class=" language-none">immutable</code>?</strong></p>
+  <p><code class=" language-none">Immutable</code>, оскільки примітивні об'єкти також <code class=" language-none">immutable</code>. Щоб працювати з <code class=" language-none">Mutable</code>типом є клас <code class=" language-none">MutableInteger</code>, і.т.д.</p></li>
+ <li>
+  <p><strong>Як примітивні типи наводяться до непримітивних аналогів?</strong></p>
+  <p>На це та наступне питання добре відповідає ось ця стаття: <a href="https://codegym.cc/groups/posts/706-avtoupakovka-i-raspakovka-v-java" target="_blank">Автоупаковка та розпакування в Java</a></p>
+  <p>Це висновок з неї: автоупаковка є механізмом прихованого перетворення примітивних типів даних у відповідні класи-оболонки (об'єкти). Компілятор використовує метод, <code class=" language-none">valueOf()</code>щоб перетворити примітивні типи на об'єкти, а методи <code class=" language-none">IntValue()</code>, <code class=" language-none">doubleValue()</code>і т.д., щоб отримати примітивні типи з об'єкта (тобто зворотне перетворення). Автоупаковка перетворює логічний тип <code class=" language-none">boolean</code>в <code class=" language-none">Boolean</code>, <code class=" language-none">byte</code>в <code class=" language-none">Byte</code>, <code class=" language-none">char</code>в <code class=" language-none">Character</code>, <code class=" language-none">float</code>в <code class=" language-none">Float</code>, <code class=" language-none">int</code>в <code class=" language-none">Integer</code>, <code class=" language-none">long</code>в <code class=" language-none">Long</code>, <code class=" language-none">short</code>в <code class=" language-none">Short</code>. Розпакування відбувається у зворотному напрямку.</p></li>
+ <li>
+  <p><strong>Як непримітивні типи наводяться до примітивних?</strong></p>
+  <p>Вище відповів.</p></li>
+ <li>
+  <p><strong>Як порівнюються примітивні та непримітивні типи?</strong></p>
+  <p>У лекції це докладно розглядається, але я знайшов так скажемо те саме, але іншими словами.</p>
+  <p></p>
+  <p>У Java є два способи порівнювати об'єкти на рівність <code class=" language-none">==</code>і метод <code class=" language-none">equals()</code>.</p>
+  <p><code class=" language-none">==</code>використовується примітивних типів. Для об'єктів « <code class=" language-none">==</code>» це виключно порівняння посилань. Для решти випадків потрібно використовувати метод <code class=" language-none">equals()</code>. Крім того, метод <code class=" language-none">hashCode()</code>служить (теоретично) для тієї ж мети. Хорошим тоном вважається, якщо ви перевизначабо <code class=" language-none">equals()</code>та <code class=" language-none">hashCode()</code>. Після ініціалізації деяких об'єктів <strong>a</strong> і <strong>b</strong> має виконуватися правило:</p>
+  <p>Якщо вираз <code class=" language-none">a.equals(b)</code>поверне <em>true</em> , то <code class=" language-none">a.hashCode()</code>повинен дорівнювати <code class=" language-none">b.hashCode()</code>.</p></li>
+ <li>
+  <p><strong>Чи завжди створюється новий об'єкт під час операції <code class=" language-none">autoboxing</code>?</strong></p>
+  <p>Це у лекціях є:</p>
+  <p>Коли ми присвоюємо змінної типу Integer значення типу <code class=" language-none">int</code>, у своїй викликається метод <code class=" language-none">Integer.valueOf</code>: функція який <code class=" language-none">valueOf</code>завжди створює новий об'єкт типу Integer. Вона кешує значення від -128 до 127.</p>
+  <p>Якщо значення, що передається, виходить за ці межі, то новий об'єкт створюється, а якщо ні, то ні.</p>
+  <p>Якщо ми пишемо <code class=" language-none">new Integer()</code>, то гарантовано створюється новий об'єкт. Якщо ми викликаємо <code class=" language-none">Integer.valueOf()</code>, явно чи при <code class=" language-none">autoboxing</code>, цей метод може повернути нам як новий об'єкт, і віддати об'єкт з кешу, якщо передане число лежить у діапазоні від -128 до 127.</p></li>
+ <li>
+  <p><strong>Як працює кешування при операції <code class=" language-none">autoboxing</code>?</strong></p>
+  <p>Відповів у питанні вище, про всяк випадок створив питання на <a href="http://stackoverflow.com/questions/39314971/how-cache-works-in-autoboxing-operation-java" rel="nofollow" target="_blank">StackOverFlow</a> , але там відповідають те саме</p></li>
+ <li>
+  <p><strong>Для яких типів та/або значень працює кешування?</strong></p>
+  <p>У восьмому питанні. Якщо у когось – тобто міркування на тему трьох останніх питань, то напишіть у коментарях.</p></li>
+</ol>

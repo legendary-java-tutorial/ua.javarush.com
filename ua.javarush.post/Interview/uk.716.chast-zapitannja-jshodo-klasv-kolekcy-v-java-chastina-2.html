@@ -1,0 +1,170 @@
+Часті запитання щодо класів колекцій в Java (Частина 2)
+<p>----------------------------------------</p>
+Не марнуючи час, приступимо до пояснень
+<p>----------------------------------------</p>
+<img data-id="488299e9-ba6c-425b-aefa-6695638f1641" data-max-width="850" alt="Часті питання на класах колекцій в Java (Частина 2) - 1" src="https://cdn.javarush.com/images/article/488299e9-ba6c-425b-aefa-6695638f1641/800.jpeg" style="width: 850px;"><strong>Питання про відмінності різних колекцій</strong>
+<ol>
+ <li value="18">Назвіть різницю між <code class=" language-none">Set</code>і <code class=" language-none">List</code>?</li>
+ <li>Назвіть різницю між <code class=" language-none">List</code>і <code class=" language-none">Map</code>?</li>
+ <li>Назвіть різницю між <code class=" language-none">HashMap</code>і<code class=" language-none">HashTable?</code></li>
+ <li>Назвіть різницю між <code class=" language-none">Vector</code>і <code class=" language-none">ArrayList</code>?</li>
+ <li>Назвіть різницю між <code class=" language-none">Iterator</code>і <code class=" language-none">Enumeration</code>?</li>
+ <li>Назвіть різницю між <code class=" language-none">HashMap</code>і <code class=" language-none">HashSet</code>?</li>
+ <li>Назвіть різницю між <code class=" language-none">Iterator</code>і <code class=" language-none">ListIterator</code>?</li>
+ <li>Назвіть різницю між <code class=" language-none">TreeSet</code>і <code class=" language-none">SortedSet</code>?</li>
+ <li>Назвіть різницю між <code class=" language-none">ArrayList</code>і <code class=" language-none">LinkedList</code>?</li>
+</ol><strong>І ще питання</strong>
+<ol>
+ <li value="27">Як зробити колекцію лише для читання?</li>
+ <li>Як зробити потокобезпечну колекцію?</li>
+ <li>Чому не існує методу <code class=" language-none">Iterator.add()</code>додавання елементів до колекції?</li>
+ <li>Які є способи перебирати елементи списку?</li>
+ <li>Як ви розумієте роботу якості ітератора <code class=" language-none">fail-fast</code>?</li>
+ <li>Яка різниця між <code class=" language-none">fail-fast</code>і <code class=" language-none">fail-safe</code>?</li>
+ <li>Як уникнути <code class=" language-none">ConcurrentModificationException</code>під час перебору колекції?</li>
+ <li>Що таке <code class=" language-none">UnsupportedOperationException</code>?</li>
+ <li>Які класи колекцій дають доступ до будь-якого елемента?</li>
+ <li>Що таке <code class=" language-none">BlockingQueue</code>?</li>
+ <li>Що таке черга та стек, перерахуйте різницю між ними?</li>
+ <li>Що таке інтерфейси <code class=" language-none">Comparable</code>та <code class=" language-none">Comparator</code>?</li>
+ <li>Що таке класи <code class=" language-none">Collections</code>та <code class=" language-none">Arrays</code>?</li>
+ <li>Список використаної літератури</li>
+</ol>Не марнуючи час, приступимо до пояснень 
+<h2>Питання про відмінності різних колекцій</h2>
+<ol>
+ <li value="18">
+  <p><strong>Назвіть різницю між <code class=" language-none">Set</code>і <code class=" language-none">List</code>?</strong></p>
+  <p>Список ключових відмінностей: <br>
+    Безліч - неупорядковані колекції, тоді як списки - впорядковані, де кожен елемент має індекс, що починається з нуля. Списки можуть містити два і більше однакові елементи, а безліч не можуть. У списку може міститися скільки завгодно елементів <code class=" language-none">null</code>, у безлічі лише один.</p></li>
+ <li>
+  <p><strong>Назвіть різницю між <code class=" language-none">List</code>і <code class=" language-none">Map</code>?</strong></p>
+  <p>Найлегше питання. Список це колекція елементів, а словник це колекція пар ключ/значення. Є ще безліч змін, але всі вони є наслідком цього. Вони мають різний інтерфейс верхнього рівня, різний набір методів і різні представлення даних. У більшості випадків достатньо лише першої відповіді.</p></li>
+ <li>
+  <p><strong>Назвіть різницю між <code class=" language-none">HashMap</code>і <code class=" language-none">HashTable</code>?</strong></p>
+  <p>Є кілька відмінностей між <code class=" language-none">HashMap</code>і <code class=" language-none">HashTable</code>Java:</p>
+  <ul>
+   <li><code class=" language-none">HashTable</code>потокобезпечна, а <code class=" language-none">HashMap</code>ні</li>
+   <li><code class=" language-none">HashTable</code>не може містити елементи <code class=" language-none">null</code>, тоді як <code class=" language-none">HashMap</code>може містити один ключ <code class=" language-none">null</code>і будь-яку кількість значень<code class=" language-none">null</code></li>
+   <li>Третя ключова відмінність між ними — ітератор <code class=" language-none">HashMap</code>, на відміну від перелічувача <code class=" language-none">HashTable</code>, працює за принципом <code class=" language-none">fail-fast</code>(видає виняток за будь-якої неузгодженості даних)</li>
+  </ul>
+  <p></p></li>
+ <li>
+  <p><strong>Назвіть різницю між <code class=" language-none">Vector</code>і <code class=" language-none">ArrayList</code>?</strong></p>
+  <p>Зазначимо деякі відмінності:</p>
+  <ul>
+   <li>Усі методи <code class=" language-none">Vector</code>потокобезпечні, а у <code class=" language-none">ArrayList</code>- ні</li>
+   <li><code class=" language-none">Vector</code>це застарілий клас доданий у першому релізі JDK. <code class=" language-none">ArrayList</code>з'явився в JDK 1.2, разом з іншими класами фреймворку<code class=" language-none">Collection</code></li>
+   <li>За замовчуванням <code class=" language-none">Vector</code>подвоює свій розмір, коли закінчується виділена під елементи пам'ять. <code class=" language-none">ArrayList</code>ж збільшує свій розмір лише на половину</li>
+  </ul>
+  <p></p></li>
+ <li>
+  <p><strong>Назвіть різницю між <code class=" language-none">Iterator</code>і <code class=" language-none">Enumeration</code>?</strong></p>
+  <p>Ітератори відрізняються від перелічників за трьома ознаками:</p>
+  <ul>
+   <li>Існують ітератори, які дозволяють видаляти елементи зі своєї колекції під час перебору з використанням методу <code class=" language-none">remove()</code>. Клас <code class=" language-none">Iterator</code>даного функціоналу не підтримує. За допомогою перелічувача не можна додавати/вилучати елементи</li>
+   <li>Перелічувачі присутні у застарілих класах, таких як <code class=" language-none">Vector/Stack</code>, тоді як ітератори є у всіх сучасних класах-колекціях</li>
+   <li>Ще невелика відмінність у цьому, що з ітераторів і перелічувачів відрізняється найменування способів, тобто <code class=" language-none">Enumeration.hasMoreElements()</code>відповідає <code class=" language-none">Iterator.hasNext()</code>і <code class=" language-none"> Enumeration.nextElement()</code>відповідає <code class=" language-none">Iterator.next()</code>і т.д.</li>
+  </ul>
+  <p></p></li>
+ <li>
+  <p><strong>Назвіть різницю між <code class=" language-none">HashMap</code>і <code class=" language-none">HashSet</code>?</strong></p>
+  <p><code class=" language-none">HashMap</code>— колекція пар ключ/значення, тоді як <code class=" language-none">HashSet</code>упорядкована колекція унікальних елементів. І це все, не потрібно більше жодних пояснень.</p></li>
+ <li>
+  <p><strong>Назвіть різницю між <code class=" language-none">Iterator</code>і <code class=" language-none">ListIterator</code>?</strong></p>
+  <p>Є три відмінності:</p>
+  <ul>
+   <li><code class=" language-none">Iterator</code>може використовуватися для перебору елементів <code class=" language-none">Set</code>і <code class=" language-none">List</code>Map <a href="https://codegym.cc/groups/posts/763-9-glavnihkh-voprosov-o-map-v-java" target="_blank">. </a>На відміну від нього <code class=" language-none">ListIterator</code>може бути використаний тільки для перебору елементів колекції.<code class=" language-none">List</code></li>
+   <li><code class=" language-none">Iterator</code>дозволяє перебирати елементи лише одному напрямку, з допомогою методу <code class=" language-none">next()</code>. Тоді як <code class=" language-none">ListIterator</code>дозволяє перебирати список в обох напрямках, за допомогою методів <code class=" language-none">next()</code>і<code class=" language-none">previous()</code></li>
+   <li>За допомогою <code class=" language-none">ListIterator</code>ви можете модифікувати список, додаючи/видаляючи елементи за допомогою методів <code class=" language-none">add()</code>та <code class=" language-none">remove()</code>. <code class=" language-none">Iterator</code>не підтримує цього функціоналу</li>
+  </ul>
+  <p></p></li>
+ <li>
+  <p><strong>Назвіть різницю між TreeSet і SortedSet?</strong></p>
+  <p><code class=" language-none">SortedSet</code>це інтерфейс, що реалізується класом <code class=" language-none">TreeSet</code>. От і все!</p></li>
+ <li><strong>Назвіть різницю між <code class=" language-none">ArrayList</code>і <code class=" language-none">LinkedList</code>?</strong>
+  <ul>
+   <li><code class=" language-none">LinkedList</code>зберігає елементи у двозв'язному списку, тоді як <code class=" language-none">ArrayList</code>зберігає їх у масиві, розмір якого може динамічно змінюватися</li>
+   <li><code class=" language-none">LinkedList</code>підтримує додавання/видалення елементів за фіксований час, але лише послідовний доступ до елементів. Тобто ви можете перебрати список з початку в кінець і з кінця в початок, але отримання елемента в середині списку займе час пропорційне розміру списку. <code class=" language-none">ArrayList</code>А дозволяє отримати будь-який елемент за його індексом за фіксований час. Але додавання/видалення елементів туди вимагає витрат часу пропорційних розміру, тому що потрібно посунути всі елементи з місця вставки/видалення і до кінця списку, або щоб звільнити місце для вставляння або щоб прибрати пропуск на місці віддаленого</li>
+   <li><code class=" language-none">LinkedList</code>вимагає більше пам'яті для зберігання такої ж кількості елементів, тому що крім самого елемента зберігаються ще покажчики на наступний та попередній елементи списку, тоді як елементи <code class=" language-none">ArrayList</code>просто йдуть по порядку</li>
+  </ul></li>
+</ol>
+<h2>І ще питання</h2>
+<ol>
+ <li value="27">
+  <p><strong>Як зробити колекцію лише для читання?</strong></p>
+  <p>Використовуйте такі методи:</p>
+  <ul>
+   <li><code class=" language-none">Collections.unmodifiableList(list)</code>;</li>
+   <li><code class=" language-none">Collections.unmodifiableSet(set)</code>;</li>
+   <li><code class=" language-none">Collections.unmodifiableMap(map)</code>;</li>
+  </ul>
+  <p>Всі вони приймають колекцію як параметр і повертають колекцію тільки для читання з тими ж елементами всередині.</p></li>
+ <li>
+  <p><strong>Як зробити потокобезпечну колекцію?</strong></p>
+  <p>Використовуйте такі методи:</p>
+  <ul>
+   <li><code class=" language-none">Collections.synchronizedList(list)</code>;</li>
+   <li><code class=" language-none">Collections.synchronizedSet(set)</code>;</li>
+   <li><code class=" language-none">Collections.synchronizedMap(map)</code>;</li>
+  </ul>
+  <p>Усі вони приймають колекцію як параметр, і повертають потокобезопасную колекцію з тими самими елементами всередині.</p></li>
+ <li>
+  <p><strong>Чому не існує методу <code class=" language-none">Iterator.add()</code>додавання елементів до колекції?</strong></p>
+  <p>Єдине завдання ітератора – це перебір колекції. Кожна колекція має метод <code class=" language-none">add()</code>, яким ви можете скористатися. Немає сенсу додавати цей метод до ітератора, тому що колекції можуть бути впорядкованими та невпорядкованими, і метод <code class=" language-none">add()</code>при цьому має бути влаштований по-різному.</p></li>
+ <li>
+  <p><strong>Які є способи перебирати елементи списку?</strong></p>
+  <p>Є 4 способи:</p>
+  <ul>
+   <li>Цикл із ітератором</li>
+   <li>Цикл<code class=" language-none">for</code></li>
+   <li>Розширений цикл for</li>
+   <li>Цикл<code class=" language-none">while</code></li>
+  </ul> Читайте <a href="http://www.mkyong.com/java/how-do-loop-iterate-a-list-in-java/" rel="nofollow" target="_blank">статтю</a> .
+  <p></p></li>
+ <li>
+  <p>Як ви розумієте роботу якості ітератора <code class=" language-none">fail-fast</code>?</p>
+  <p>Ітератор <code class=" language-none">fail-fast</code>викликає виняток відразу як виявить, що структура колекції була змінена після початку перебору. Під зміною структури ми розуміємо додавання/видалення/зміну елемента колекції, тоді як інший потік перебирає колекцію.</p></li>
+ <li>
+  <p><strong>Яка різниця між <code class=" language-none">fail-fast</code>і <code class=" language-none">fail-safe</code>?</strong></p>
+  <p>На противагу <code class=" language-none">fail-fast</code>, ітератори <code class=" language-none">fail-safe</code>не викликають жодних винятків при зміні структури, тому що вони працюють із клоном колекції замість оригіналу.</p>
+  <p>Ітератор колекції <code class=" language-none">CopyOnWriteArrayList</code>та ітератор представлення <code class=" language-none">keySet</code>колекції <code class=" language-none">ConcurrentHashMap</code>є прикладами ітераторів <code class=" language-none">fail-safe</code>.</p></li>
+ <li>
+  <p><strong>Як уникнути <code class=" language-none">ConcurrentModificationException</code>під час перебору колекції?</strong></p>
+  <p>Насамперед, можна підібрати інший ітератор, який працює за принципом <code class=" language-none">fail-safe</code>. Наприклад, якщо ви використовуєте <code class=" language-none">List</code>, можете взяти <code class=" language-none">ListIterator</code>. Якщо вам потрібна застаріла колекція — то використовуйте перелічувачі.</p>
+  <p>У тому випадку, коли вищевикладене вам не підходить, у вас є три варіанти:</p>
+  <ul>
+   <li>При використанні JDK 1.5 або вище, вам підійдуть класи <code class=" language-none">ConcurrentHashMap</code>та <code class=" language-none">CopyOnWriteArrayList</code>. Це найкращий варіант</li>
+   <li>Ви можете перетворити список на масив і перебирати масив</li>
+   <li>Ви можете блокувати зміни списку на час перебору за допомогою блоку<code class=" language-none">synchronized</code></li>
+  </ul>
+  <p>Зверніть увагу, що останні два варіанти негативно позначаться на продуктивності.</p></li>
+ <li>
+  <p><strong>Що таке <code class=" language-none">UnsupportedOperationException</code>?</strong></p>
+  <p>Цей виняток виникає під час виклику методу, який не підтримується цією колекцією. Наприклад, якщо ви створите список тільки для читання за допомогою <code class=" language-none">Collections.unmodifiableList(list)</code>, а потім у нього викличете метод <code class=" language-none">add()</code>або <code class=" language-none">remove()</code>ви точно отримаєте цей виняток.</p></li>
+ <li>
+  <p><strong>Які класи колекцій дозволяють отримати доступ до будь-якого елемента?</strong></p>
+  <p>Класи <code class=" language-none">ArrayList</code>, <code class=" language-none">HashMap</code>, <code class=" language-none">TreeMap</code>, <code class=" language-none">Hashtable</code>дозволяють доступ до будь-якого елемента.</p></li>
+ <li>
+  <p><strong>Що таке <code class=" language-none">BlockingQueue</code>?</strong></p>
+  <p>Це черга, яка дозволяє обробляти ситуації, коли з порожньої черги намагаються отримати елемент, або коли намагаються додати елемент до черги, а місце у ній закінчилося. Методи блокуючої черги можуть бути чотирьох типів: Перші викликають виняток, другі повертають спеціальні значення ( <code class=" language-none">null</code>або <code class=" language-none">false</code>, залежно від операції), треті блокують поточний потік доти, поки операція не може бути виконана, і четверті блокують потік тільки на певний проміжок часу.</p>
+  <p>Приклади можна переглянути в цій <a href="https://howtodoinjava.com/java/multi-threading/how-to-use-blockingqueue-and-threadpoolexecutor-in-java/" rel="nofollow" target="_blank">статті</a> .</p></li>
+ <li>
+  <p><strong>Що таке черга та стек, перерахуйте різницю між ними?</strong></p>
+  <p>Колекції, створені для того, щоб зберігати елементи для подальшої обробки. Крім базових операцій інтерфейсу <code class=" language-none">Collection</code>, черги підтримують додаткові операції додавання, видалення та перевірки стану елемента. Зазвичай, але не обов'язково черги працюють за принципом FIFO – першим прийшов, першим пішов. Стек майже як черга, але працює за принципом LIFO останнім прийшов, першим пішов.</p> Незалежно від порядку додавання/видалення, голова черги – це елемент, який буде видалений під час виклику методів <code class=" language-none">remove()</code>або <code class=" language-none">poll()</code>. Також зверніть увагу на те, що <code class=" language-none">Stack</code>обидва <code class=" language-none">Vector</code>потокобезпечні.
+  <p></p>
+  <p><strong>Використання:</strong> Використовуйте чергу, якщо ви хочете обробляти потік елементів в тому ж порядку, в якому вони надходять. Добре для списку завдань та обробки запитів. Використовуйте стек якщо ви хочете класти та видаляти елементи тільки з вершини стеку, що корисно у рекурсивних алгоритмах.</p>
+  <p>(А тепер відвернемося і пояснимо все трохи інакше. Отже, уявіть обойму автомата. Ви вставляєте туди патрони по одному, тільки з одного кінця. І з цього ж кінця, по одному їх забиратиме механізм при стрільбі. Це — стек, покласти елемент можна тільки на його вершину, зняти звідти ж і більше нізвідки, останній елемент буде знятий першим.</p>
+  <p>Черга - як трубка, в яку ви можете закочувати кульки, і з іншого кінця їх забирати. Черга дозволяє класти елементи лише у свій хвіст, а забирати лише з голови. Той елемент який був першим покладений, першим буде і забраний.</p>
+  <p>Загальне у черзі і стека тільки те, що у них обох є фіксоване місце, куди можна покласти елемент, і фіксоване місце, звідки його можна забрати - всі інші елементи недоступні.(Прим. пров.))</p></li>
+ <li>
+  <p><strong>Що таке інтерфейси <code class=" language-none">Comparable</code>та <code class=" language-none">Comparator</code>?</strong></p>
+  <p>У Java, всі колекції, що підтримують автоматичне сортування, використовують методи порівняння для того, щоб правильно розсортувати елементи. Як приклад таких класів ми можемо вказати <code class=" language-none">TreeSet</code>і <code class=" language-none">TreeMap</code>т.д. Щоб розсортувати елементи, клас повинен реалізувати інтерфейси <code class=" language-none">Comparator</code>або <code class=" language-none">Comparable</code>. Саме тому класи-обертки як <code class=" language-none">Integer</code>, <code class=" language-none">Double</code>і <code class=" language-none">String</code>реалізують інтерфейс <code class=" language-none">Comparable</code>. Інтерфейс <code class=" language-none">Comparable</code>допомагає зберігати природне сортування, тоді як <code class=" language-none">Comparator</code>дозволяє сортувати елементи за різними спеціальними шаблонами. Примірник компаратора зазвичай передається конструктору колекції, якщо це підтримує.</p>
+  <p>(Знову пояснюю інакше. Інтерфейс <code class=" language-none">Comparator</code>описує метод <code class=" language-none">int compare(T o1, T o2)</code>, тобто об'єкт реалізує цей інтерфейс може бути використаний для порівняння двох інших об'єктів одного класу. Якщо даний метод поверне 0 - об'єкти рівні, +1 і -1 говорять про те, що перший об'єкт "більше" другий або навпаки Який сенс ви вкладете в поняття "більше" і "менше" стосовно ваших об'єктів - виключно ваша справа - ви описуєте клас, що реалізує інтерфейс<code class=" language-none">Сomparator</code>, і в цьому методі визначаєте, як ви хочете порівнювати ваші об'єкти. Потім передаєте об'єкт цього класу конструктору колекції, в якій зберігаються об'єкти, що порівнюються даним методом, і колекція зможе їх сортувати за зростанням/зменшенням. Повторюю - у вас є колекція в якій зберігаються об'єкти класу T, і є ще один об'єкт, іншого класу, що реалізує інтерфейс <code class=" language-none">Comparator</code>, вся суть якого в тому, що він вміє порівнювати ці об'єкти класу <code class=" language-none">T</code>, більше він ні для чого не потрібен.</p>
+  <p>Інтерфейс <code class=" language-none">Comparable</code>описує метод <code class=" language-none">int compareTo(T o)</code>, тобто викликається не для порівняння двох інших об'єктів, а порівняння себе самого з кимось ще. Тобто вам не потрібен окремий об'єкт-порівняльник, ви закладаєте механізм порівняння в сам елемент, що зберігається в колекції. Що й у якій ситуації зручніше – вирішувати вам.(Прим. пров.))</p></li>
+ <li><strong>Що таке класи <code class=" language-none">Collections</code>та <code class=" language-none">Arrays</code>?</strong>
+  <p></p>
+  <p>Класи <code class=" language-none">Collections</code>і <code class=" language-none">Arrays</code>це спеціальні службові класи для роботи з класами-колекціями. Вони дозволяють перетворювати колекції, робити їх захищеними від запису або потокобезпечними, сортувати їх у різний спосіб тощо.</p></li>
+ <li><strong>Список використаної літератури</strong>
+  <p></p>
+  <p>Ну це не питання для співбесіди. Чисто за приколом. (Але для досягнення нірвани ви повинні читати якомога більше статей, ваше волосся стане шовковистим і кучерявим і карма очиститься.(Прим. пров.))</p></li>
+</ol>Сподіваюся ці питання допоможуть вам на наступній співбесіді. Надалі, я раджу вам почитати щось додатково. Чим більше ви знаєте, тим краще! Хорошого навчання! <a href="https://howtodoinjava.com/interview-questions/useful-java-collection-interview-questions/#difference_set_and_list" rel="nofollow" target="_blank"><em>Оригінал статті</em></a>

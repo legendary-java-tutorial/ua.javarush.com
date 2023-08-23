@@ -1,0 +1,203 @@
+Частина 6. Контейнери сервлетів
+<p>----------------------------------------</p>
+Цей матеріал - частина циклу "Введення в Enterprise-розробку". Попередні статті: Минулої статті ми познайомилися із сервлетами, навчилися з їх допомогою створювати веб-додатки. Настав час уважніше поглянути на те, без чого це свято було б н
+<p>----------------------------------------</p>
+Цей матеріал - частина циклу "Введення в Enterprise-розробку". Попередні статті: 
+<ul>
+ <li><a href="https://codegym.cc/groups/posts/2514-vvedenie-v-enterprise-razrabotku" target="_blank">про мережу</a> ;</li>
+ <li><a href="https://codegym.cc/groups/posts/2519-chastjh-2-pogovorim-nemnogo-ob-arkhitekture-po" target="_blank">про архітектуру ПЗ</a> ;</li>
+ <li><a href="https://codegym.cc/groups/posts/2521-chastjh-3-protokolih-httphttps" target="_blank">про протоколи HTTP/HTTPS</a> ;</li>
+ <li><a href="https://codegym.cc/groups/posts/2523-chastjh-4osnovih-maven" target="_blank">про основи Maven;</a></li>
+ <li><a href="https://codegym.cc/groups/posts/2529-chastjh-5-servletih-pishem-prostoe-veb-prilozhenie" target="_blank">про сервлети (пишемо просте веб-додаток)</a> .</li>
+</ul><img data-max-width="850" alt="Частина 6. Контейнери сервлетів - 1" src="https://cdn.javarush.com/images/article/ab74c65f-1f4d-4970-9c03-c5c75857acd7/original.jpeg">Минулої статті ми познайомабося із сервлетами, навчабося з їх допомогою створювати веб-додатки. Настав час уважніше поглянути на те, без чого це свято було б неможливим — контейнери сервлетів. 
+<h2>Зміст:</h2>
+<ul>
+ <li><a href="https://codegym.cc/groups/posts/2533#topic1">Що таке контейнер сервлетів</a></li>
+ <li><a href="https://codegym.cc/groups/posts/2533#topic2">Як використовують контейнери сервлетів</a></li>
+ <li><a href="https://codegym.cc/groups/posts/2533#topic3">Встановлення та запуск Tomcat"</a></li>
+ <li><a href="https://codegym.cc/groups/posts/2533#topic4">Розгортання програми в Tomcat</a></li>
+ <li><a href="https://codegym.cc/groups/posts/2533#topic5">Використання протоколу HTTPS замість HTTP</a></li>
+ <li><a href="https://codegym.cc/groups/posts/2533#topic6">Генерація сертифіката</a></li>
+ <li><a href="https://codegym.cc/groups/posts/2533#topic7">Налаштовуємо сервер</a></li>
+ <li><a href="https://codegym.cc/groups/posts/2533#topic8">Динамічна генерація HTML-сторінок</a></li>
+ <li><a href="https://codegym.cc/groups/posts/2533#topic9">Альтернативи Tomcat</a></li>
+</ul>
+<h2 id="topic1">Що таке контейнер сервлетів</h2>Це програма, яка запускається на сервері та вміє взаємодіяти зі створеними нами сервлетами. Іншими словами, якщо ми хочемо запустити наш веб-додаток на сервері, ми спочатку розгортаємо контейнер сервлетів, а потім поміщаємо до нього сервлети. Схема роботи проста: коли клієнт звертається на сервер, контейнер обробляє його запит, визначає який саме сервлет повинен його обробити і передає його. <img data-max-width="850" alt="Частина 6. Контейнери сервлетів - 2" src="https://cdn.javarush.com/images/article/3ded8c5f-bd0d-4df6-8657-43ad40797ba8/original.jpeg">
+<h2 id="topic2">Як використовують контейнери сервлетів</h2>Крім маршрутизації запитів, контейнер сервлетів виконує інші функції: 
+<ol>
+ <li>Динамічно генерує HTML-сторінки із JSP-файлів.</li>
+ <li>Зашифровує/розшифровує повідомлення HTTPS.</li>
+ <li>Надає розмежований доступ для адміністрування сервлетів.</li>
+</ol>Загалом, звучить непогано, лишилося тільки розібратися, як це все застосувати. Ну а щоб навчитися щось використати, потрібно просто... спробувати це використати :) Тож сьогодні практикуватимемося! Найпопулярніший контейнер сервлетів - <a href="http://tomcat.apache.org/" rel="nofollow" target="_blank">Apache Tomcat</a> . Він має відкритий вихідний код і його можна використовувати безкоштовно. Скачай Tomcat для своєї операційної системи <a href="https://tomcat.apache.org/download-90.cgi" rel="nofollow" target="_blank">за цим посиланням</a> і подивимося на роботу з контейнерами "у справі". 
+<h2 id="topic3">Встановлення та запуск Tomcat</h2>
+<ol>
+ <li>
+  <p>Для встановлення Tomcat просто розпакуй завантажений архів у потрібну директорію.</p></li>
+ <li>
+  <p>Зверни увагу, що для запуску та роботи Tomcat потрібна Java версії 8 або вище. Переконайтеся, що змінне середовище JAVA_HOME посилається на актуальну версію jdk.</p></li>
+ <li>
+  <p>Далі необхідно налаштувати <span class="text-bold">доступ користувачів до Tomcat</span> . Це робиться у файлі tomcat-users.xml, який знаходиться у папці conf.</p>
+  <p>У Tomcat заздалегідь передбачені чотири ролі:</p>
+  <ul>
+   <li>manager-gui — доступ до графічного інтерфейсу та сторінки статусів;</li>
+   <li>manager-script — доступ до текстового інтерфейсу та сторінки статусів;</li>
+   <li>manager-jmx — доступ до JMX та сторінки статусів;</li>
+   <li>manager-status — доступ лише до сторінки статусів.</li>
+  </ul>
+  <p></p>
+  <p>Усередині тега &lt;tomcat-users&gt; явно пропишемо ці ролі та призначимо їх нашому користувачеві:</p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token operator">&lt;</span>role rolename<span class="token operator">=</span><span class="token string">"manager-gui"</span><span class="token operator">/</span><span class="token operator">&gt;</span>
+<span class="token operator">&lt;</span>role rolename<span class="token operator">=</span><span class="token string">"manager-script"</span><span class="token operator">/</span><span class="token operator">&gt;</span>
+<span class="token operator">&lt;</span>role rolename<span class="token operator">=</span><span class="token string">"manager-jmx"</span><span class="token operator">/</span><span class="token operator">&gt;</span>
+<span class="token operator">&lt;</span>role rolename<span class="token operator">=</span><span class="token string">"manager-status"</span><span class="token operator">/</span><span class="token operator">&gt;</span>
+<span class="token operator">&lt;</span>user username<span class="token operator">=</span><span class="token string">"user"</span> password<span class="token operator">=</span><span class="token string">"password"</span>
+    roles<span class="token operator">=</span><span class="token string">"manager-gui, manager-script, manager-jmx, manager-status"</span><span class="token operator">/</span><span class="token operator">&gt;</span></code></pre>
+  <p>Тепер все готове до запуску!</p></li>
+ <li>
+  <p>У папці bin запусти файл startup.bat (startup.sh на Linux).</p></li>
+ <li>
+  <p>Через кілька секунд у браузері відкрий посилання <a href="http://localhost:8080/" rel="nofollow" target="_blank">http://localhost:8080/</a> . Там з'явиться графічний менеджер:</p><img data-max-width="850" alt="Частина 6. Контейнери сервлетів – 3" src="https://cdn.javarush.com/images/article/d7ce894c-c534-44d3-8425-f101595237c6/original.jpeg">
+  <p>Якщо бачиш таке меню, то Tomcat запущений.</p></li>
+ <li>
+  <p>Якщо не працює, вручну перевір змінні середовища JAVA_HOME та CATALINA_HOME:</p>
+  <ul>
+   <li>JAVA_HOME - має посилатися на актуальну версію джави 8+;</li>
+   <li>CATALINA_HOME — має посилатися на Tomcat або бути відсутнім (не повинна вказувати на іншу версію Tomcat).</li>
+  </ul></li>
+</ol>
+<h2 id="topic4">Розгортання програми в Tomcat</h2>Запустити Tomcat у нас вийшло час розгорнути в ньому якийсь проект. Давай використовуємо сервлети з <a href="https://codegym.cc/groups/posts/2529-chastjh-5-servletih-pishem-prostoe-veb-prilozhenie" target="_blank">минулої статті</a> . MainServlet: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">import</span> <span class="token namespace">javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">WebServlet</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span></span><span class="token class-name">HttpServlet</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span></span><span class="token class-name">HttpServletRequest</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span></span><span class="token class-name">HttpServletResponse</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span></span><span class="token class-name">HttpSession</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">IOException</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">PrintWriter</span><span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@WebServlet</span><span class="token punctuation">(</span><span class="token string">"/hello"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MainServlet</span> <span class="token keyword">extends</span> <span class="token class-name">HttpServlet</span> <span class="token punctuation">{</span>
+
+   <span class="token annotation punctuation">@Override</span>
+   <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">doGet</span><span class="token punctuation">(</span><span class="token class-name">HttpServletRequest</span> req<span class="token punctuation">,</span> <span class="token class-name">HttpServletResponse</span> resp<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">{</span>
+       <span class="token class-name">HttpSession</span> session <span class="token operator">=</span> req<span class="token punctuation">.</span><span class="token function">getSession</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token class-name">Integer</span> visitCounter <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">Integer</span><span class="token punctuation">)</span> session<span class="token punctuation">.</span><span class="token function">getAttribute</span><span class="token punctuation">(</span><span class="token string">"visitCounter"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token keyword">if</span> <span class="token punctuation">(</span>visitCounter <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+           visitCounter <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+           visitCounter<span class="token operator">++</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+       session<span class="token punctuation">.</span><span class="token function">setAttribute</span><span class="token punctuation">(</span><span class="token string">"visitCounter"</span><span class="token punctuation">,</span> visitCounter<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token class-name">String</span> username <span class="token operator">=</span> req<span class="token punctuation">.</span><span class="token function">getParameter</span><span class="token punctuation">(</span><span class="token string">"username"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       resp<span class="token punctuation">.</span><span class="token function">setContentType</span><span class="token punctuation">(</span><span class="token string">"text/html"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token class-name">PrintWriter</span> printWriter <span class="token operator">=</span> resp<span class="token punctuation">.</span><span class="token function">getWriter</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token keyword">if</span> <span class="token punctuation">(</span>username <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+           printWriter<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token string">"Hello, Anonymous"</span> <span class="token operator">+</span> <span class="token string">"<br>"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+           printWriter<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token string">"Hello, "</span> <span class="token operator">+</span> username <span class="token operator">+</span> <span class="token string">"<br>"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+       printWriter<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token string">"Page was visited "</span> <span class="token operator">+</span> visitCounter <span class="token operator">+</span> <span class="token string">" times."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       printWriter<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> IndexServlet: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">import</span> <span class="token namespace">javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">WebServlet</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span></span><span class="token class-name">HttpServlet</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span></span><span class="token class-name">HttpServletRequest</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span></span><span class="token class-name">HttpServletResponse</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">IOException</span><span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@WebServlet</span><span class="token punctuation">(</span><span class="token string">"/"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">IndexServlet</span> <span class="token keyword">extends</span> <span class="token class-name">HttpServlet</span> <span class="token punctuation">{</span>
+
+   <span class="token annotation punctuation">@Override</span>
+   <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">doGet</span><span class="token punctuation">(</span><span class="token class-name">HttpServletRequest</span> req<span class="token punctuation">,</span> <span class="token class-name">HttpServletResponse</span> resp<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">{</span>
+       resp<span class="token punctuation">.</span><span class="token function">sendRedirect</span><span class="token punctuation">(</span>req<span class="token punctuation">.</span><span class="token function">getContextPath</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"/hello"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Перед розгортанням наші сервлети необхідно запакувати в war-архів. Зазвичай для цього використовується Мавен, але для створення war-архіву потрібен файл web.xml, в якому мапяться всі сервлети. Ми ж писали сервлети з використанням нової інструкції @WebServlet, тому web.xml у нас немає. Благо, IDEA може виконати брудну роботу за нас і поштучно загорнути наш проект у war-архів. Для цього потрібно відкрити структуру проекту (Ctrl+Shift+Alt+S) -&gt; Artifacts -&gt; Вибрати потрібний варник -&gt; Поставити галочку біля поля "Include in project build" -&gt; Натиснути "ОК". <img data-max-width="850" alt="Частина 6. Контейнери сервлетів - 4" src="https://cdn.javarush.com/images/article/3684e801-e669-4d17-ad5f-747d5965c8ce/original.jpeg">Білдим проект за допомогою комбінації Ctrl+F9. Тепер у директорії target лежить наш war-архів <img data-max-width="300" alt="Частина 6. Контейнери сервлетів - 5" src="https://cdn.javarush.com/images/article/126236dd-b005-4754-b6cd-b3e27f0df4e2/original.jpeg">Файл можна переназвати якось простіше — наприклад, servlet.war — і перенести у зручніше місце — C:\my\. Коли варник готовий до використання,<span class="text-bold">поміщаємо його в контейнер</span> . Це можна зробити двома способами. 
+<ol>
+ <li>
+  <p><big>За допомогою графічного інтерфейсу</big></p>
+  <p>Для цього переходимо за посиланням <a href="http://localhost:8080/manager/html" rel="nofollow" target="_blank">http://localhost:8080/manager/html</a> . Tomcat повинен запитити логін та пароль.</p>
+  <p>Якщо ти повторював усі дії за мною, то <span class="text-bold">логін – user, пароль – password</span> .</p>
+  <p>Після успішної авторизації побачиш Tomcat Web Application Manager. У розділі Applications вже містяться 5 додатків – це службові програми Tomcat, необхідні для спрощення роботи з ним. У майбутньому їх можна буде видалити.</p><img data-max-width="850" alt="Частина 6. Контейнери сервлетів - 6" src="https://cdn.javarush.com/images/article/a6011e3a-6472-407b-b12d-0bb5f57dbf98/original.jpeg">
+  <p>Нижче наведено розділ Deploy. З його допомогою можна вибрати war-архів для розгортання. Пропишемо шлях та контекст вручну:</p><img data-max-width="500" alt="Частина 6. Контейнери сервлетів - 7" src="https://cdn.javarush.com/images/article/d75c5595-1162-40d9-835e-2a8e871b9554/original.jpeg">
+  <p>Натискаємо “Deploy”, бачимо, що у розділі Applications з'явився наш додаток:</p><img data-max-width="850" alt="Частина 6. Контейнери сервлетів - 8" src="https://cdn.javarush.com/images/article/b1c6d384-47a2-48b1-a94f-b037497b4b6a/original.jpeg"> За допомогою графічного інтерфейсу Tomcat ми можемо його зупиняти, перезапускати, встановлювати довжину сесії і видаляти. При розгортанні ми вказали контекст /demo, а значить, звертатися до нашого додатку потрібно за посиланням <a href="http://localhost:8080/demo" rel="nofollow" target="_blank">http://localhost:8080/demo</a> . Перевір, все має працювати.
+  <p></p></li>
+ <li>
+  <p><big>Через файлову систему</big></p>
+  <p>Щоб задеплоїти програму таким способом, необхідно відкрити директорію, в якій розархівований Tomcat, перейти до webapps. Тут знаходяться знайомі нам службові програми:</p><img data-max-width="100" alt="Частина 6. Контейнери сервлетів - 9" src="https://cdn.javarush.com/images/article/d0074695-1800-4145-a596-1c2b774de60c/original.jpeg">
+  <p>Все, що потрібно від нас – перемістити сюди наші servlet.war.</p>
+  <p>Чекаємо кілька секунд, бачимо, що з'явилася нова папка servlet, а це означає, що наша програма розгорнута. Переходимо в знайомий нам Application Manager інтерфейс - <a href="http://localhost:8080/manager/" rel="nofollow" target="_blank">http://localhost:8080/manager/</a> . Тут ми бачимо, що наша програма розгорнута в контексті /servlet:</p><img data-max-width="850" alt="Частина 6. Контейнери сервлетів – 10" src="https://cdn.javarush.com/images/article/a2bc2fd9-50a1-4d5b-8b8c-1798296bd940/original.jpeg">
+  <p>При розгортанні таким способом контекст автоматично присвоюється за назвою розгорнутого war-архіву. Для зміни контексту можна переназвати новостворену папку з програмою, але перед цим потрібно видалити варник: в іншому випадку Tomcat повторно розгорне програму з ім'ям архіву.</p>
+  <p>Як бачиш, деплоїти програми в Tomcat набагато простіше, ніж може здатися. Але й іншими його функціями скористатися нескладно. Давай перевіримо.</p></li>
+</ol>
+<h2 id="topic5">Використання протоколу HTTPS замість HTTP</h2>Якщо пам'ятаєш, різницю між HTTP та HTTPS ми розглядали <a href="https://codegym.cc/groups/posts/2521-chastjh-3-protokolih-httphttps" target="_blank">в окремій статті</a> . HTTPS — той самий протокол, що й HTTP, лише за допомогою шифрування даних, що передаються. На стороні клієнта шифрування займається браузер, а шифрування на стороні сервера повинні забезпечити ми. Так як HTTP запити приймає та маршрутизує Tomcat, логічно делегуватиме йому і шифрування. <span class="text-bold">Для цього необхідно:</span>
+<ol>
+ <li>Згенерувати самопідписаний сертифікат;</li>
+ <li>Зробити додаткові параметри сервера.</li>
+</ol>Давай попрактикуємось у цьому. 
+<h2 id="topic6">Генерація сертифіката</h2>У JDK незалежно від версії поставляється велика кількість утиліт, одна з яких – <span class="text-bold">keytool</span> . Це інструмент для створення ключів шифрування і роботи з ними. Щоб його використовувати, за допомогою командного рядка перейдемо в директорію <em>C: Program Files Java jdk1.8.0_181bin</em> і виконаємо команду <em>keytool -genkey -alias tomcat -keyalg RSA</em> . 
+<ul>
+ <li>keytool - запускаємо утиліту з параметрами;</li>
+ <li>-genkey - Вказуємо, що ми хочемо згенерувати новий ключ;</li>
+ <li>-alias tomcat - створюємо псевдонім ключа;</li>
+ <li>-keyalg RSA – вибираємо RSA як алгоритм генерації ключа.</li>
+</ul>Після виконання команди, утиліта розпочне з нами діалог: <img data-max-width="850" alt="Частина 6. Контейнери сервлетів - 11" src="https://cdn.javarush.com/images/article/2e8459df-9aaf-478f-a222-33f51b919dd2/original.jpeg">Вводимо необхідну інформацію. Тепер ми створабо сховище ключів у нашому домашньому каталозі (для Windows це C:\Users\{username}\.keystore) та ключ tomcat у ньому. Ми згенерували простий сертифікат, на який лаятиметься більшість браузерів. Такий сертифікат не підійде для комерційних програм: його можна використовувати тільки в тестових цілях. На продакшн-сервері необхідно використовувати сертифікат від центру сертифікації (наприклад, <a href="https://letsencrypt.org/" rel="nofollow" target="_blank">https://letsencrypt.org/</a> ). 
+<h2 id="topic7">Налаштовуємо сервер</h2>Тепер, коли сертифікат готовий, потрібно підкоригувати серверні налаштування, а саме SSL-конектор. Це робиться у файлі server.xml, який знаходиться у <em>apache-tomcat-9.0.30/conf/</em> . Знаходимо там блоки типу: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token operator">&lt;</span><span class="token class-name">Connector</span> port<span class="token operator">=</span><span class="token string">"8443"</span> protocol<span class="token operator">=</span><span class="token string">"org.apache.coyote.http11.Http11NioProtocol"</span>
+               maxThreads<span class="token operator">=</span><span class="token string">"150"</span> <span class="token class-name">SSLEnabled</span><span class="token operator">=</span><span class="token string">"true"</span><span class="token operator">&gt;</span>
+        <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">SSLHostConfig</span><span class="token punctuation">&gt;</span></span>
+            <span class="token operator">&lt;</span><span class="token class-name">Certificate</span> certificateKeystoreFile<span class="token operator">=</span><span class="token string">"conf/localhost-rsa.jks"</span>
+                         type<span class="token operator">=</span><span class="token string">"RSA"</span> <span class="token operator">/</span><span class="token operator">&gt;</span>
+        <span class="token operator">&lt;</span><span class="token operator">/</span><span class="token class-name">SSLHostConfig</span><span class="token operator">&gt;</span>
+ <span class="token operator">&lt;</span><span class="token operator">/</span><span class="token class-name">Connector</span><span class="token operator">&gt;</span></code></pre> і біля них розміщуємо свою конфігурацію: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token operator">&lt;</span><span class="token class-name">Connector</span>
+       protocol<span class="token operator">=</span><span class="token string">"org.apache.coyote.http11.Http11NioProtocol"</span>
+       port<span class="token operator">=</span><span class="token string">"8443"</span> maxThreads<span class="token operator">=</span><span class="token string">"200"</span>
+       scheme<span class="token operator">=</span><span class="token string">"https"</span> secure<span class="token operator">=</span><span class="token string">"true"</span> <span class="token class-name">SSLEnabled</span><span class="token operator">=</span><span class="token string">"true"</span>
+       keystoreFile<span class="token operator">=</span><span class="token string">"C:\Users\user\.keystore"</span> keystorePass<span class="token operator">=</span><span class="token string">"mypass"</span>
+       clientAuth<span class="token operator">=</span><span class="token string">"false"</span> sslProtocol<span class="token operator">=</span><span class="token string">"TLS"</span><span class="token operator">/</span><span class="token operator">&gt;</span></code></pre> Параметрам keystoreFile та keystorePass присвоюємо актуальні для нас значення, зберігаємо та перезапускаємо Tomcat за допомогою файлів shutdown.bat та startup.bat. Тепер сервер готовий обробляти https-запити, ось тільки трохи за зміненою адресаою - <a href="https://localhost:8443/demo/hello" rel="nofollow" target="_blank">https://localhost:8443/demo/hello</a> . При переході на посилання у тебе з'явиться попередження про сумнівність сертифіката, що й не дивно. Як описувалося трохи раніше, для отримання нормального сертифіката потрібно скористатися послугами одного із сервісів сертифікації. Але поки ми досягли нашої мети: програма працює за HTTPS-протоколом, а це головне! <a href="https://codegym.cc/welcome" target="_blank"><img id="click_banner1_articles" data-id="7929cab9-f1d5-4bf7-be7f-89848f1a8dd2" data-max-width="1080" alt="Частина 6. Контейнери сервлетів - 12" src="https://cdn.javarush.com/images/article/7929cab9-f1d5-4bf7-be7f-89848f1a8dd2/1080.jpeg" style="width: 1080px;"></a>
+<h2 id="topic8">Динамічна генерація HTML-сторінок</h2>Тепер продовжимо огляд інших фіч контейнерів сервлетів - динамічної генерації HTML-сторінок. Уяви собі ідеальний світ, де замість нудного статичного HTML-коду можна було б писати JAVA-код, використовуючи змінні, цикли, масиви та інші конструкції мови. Уявив? Хороша новина – щось схоже існує, погана – не повною мірою. Якщо ти не здогадався, йдеться про технологію JSP (Java Server Pages). Якщо коротко, це технологія, яка дозволяє вставляти в HTML сторінку шматки JAVA-коду. Правда, потім цей код все одно перетворюється на HTML перед відправкою клієнту, але він буде динамічно згенерований з урахуванням різних факторів. Наприклад, можна використовувати умовні конструкції, й у залежність від якогось умови віддавати різний контент. Приклад JSP-сторінки: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token operator">&lt;</span><span class="token operator">%</span>@ page language<span class="token operator">=</span><span class="token string">"java"</span>" <span class="token operator">%</span><span class="token operator">&gt;</span>
+<span class="token generics"><span class="token punctuation">&lt;</span>html<span class="token punctuation">&gt;</span></span>
+<span class="token generics"><span class="token punctuation">&lt;</span>head<span class="token punctuation">&gt;</span></span>
+<span class="token generics"><span class="token punctuation">&lt;</span>title<span class="token punctuation">&gt;</span></span>JSP<span class="token operator">&lt;</span><span class="token operator">/</span>title<span class="token operator">&gt;</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>head<span class="token operator">&gt;</span>
+
+<span class="token generics"><span class="token punctuation">&lt;</span>body<span class="token punctuation">&gt;</span></span>
+<span class="token operator">&lt;</span><span class="token operator">%</span>
+<span class="token class-name">String</span> firstName<span class="token operator">=</span><span class="token string">"name"</span><span class="token punctuation">;</span>
+<span class="token class-name">String</span> secondName<span class="token operator">=</span><span class="token string">"surname"</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span><span class="token punctuation">(</span>firstName<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span><span class="token string">"name"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+      out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"Hello :"</span><span class="token operator">+</span>firstName<span class="token operator">+</span><span class="token string">"&lt;br&gt;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">if</span><span class="token punctuation">(</span>firstName<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span><span class="token string">"name"</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> secondName<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span><span class="token string">"surname"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"Hello, my dear friend! &lt;br&gt;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">else</span>
+    <span class="token punctuation">{</span>
+      out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"I don’t know you. Go away! &lt;br&gt;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token operator">%</span><span class="token operator">&gt;</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>body<span class="token operator">&gt;</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>html<span class="token operator">&gt;</span></code></pre> Додатково про JSP можна почитати <a href="https://www.oracle.com/technetwork/java/index-jsp-138231.html" rel="nofollow" target="_blank">тут</a>. Взагалі... ми не заради цього тут зібралися, а заради сервлетових контейнерів! До чого тут JSP? Все просто: перетворення JAVA-коду з JSP на HTML-код здійснює саме контейнер сервлетів. Коли сервлет збирається повернути як відповідь JSP-контент, контейнер звертає на це увагу, і перед відправкою такого контенту клієнту спочатку перетворює його на зрозумілу для браузера HTML-сторінку. Сьогодні відомо багато аналогів технології JSP – Thymeleaf, FreeMarket, Mustache та інші. Усі вони працюю за схожим принципом. Який із них вибирати для роботи – справа смаку. Це стосується й вибору контейнера сервлетів. У прикладах ми використовували Tomcat – найпоширеніший контейнер, але в деяких проектах використовуються інші. З найпопулярнішими варто коротко ознайомитися і подивитися на їхню відмінність від Tomcat. 
+<h2 id="topic9">Альтернативи Tomcat</h2>
+<ol>
+ <li>
+  <p><span class="text-bold">GlassFish</span> — контейнер із відкритим вихідним кодом, розробку якого підтримує Oracle.</p>
+  <p>На відміну від Tomcat, це повноцінний веб-сервер, який, крім сервлетів, може оперувати й іншими компонентами з фреймворку JavaEE. У той же час він використовує набагато більше оперативної пам'яті. Гнучкіший при тонкому налаштуванні сервера, що ускладнює його використання. Варто використовувати при розробці програм на фреймворку JavaEE.</p></li>
+ <li>
+  <p><span class="text-bold">WildFly</span> - раніше <span class="text-bold">Jboss</span> . Також має відкритий вихідний код. Розробляється компанією Red Hat. Назва змінабо, щоб уникнути плутанини з іншим продуктом компанії – JBoss Enterprise Application Platform.</p>
+  <p>WildFly, як і GlassFish, є повноцінним веб-сервером. До речі, під капотом WildFly використовує Tomcat як контейнер сервлетів. На відміну від GlassFish, WildFly більш легкий і простий у налаштуванні.</p></li>
+ <li>
+  <p><span class="text-bold">Jetty</span> – аналогічно попереднім має відкритий вихідний код. Розвивається фірмою Eclipse.</p>
+  <p>Як і Tomcat, є простим контейнером сервлетів без підтримки всіх компонентів фреймворку JavaEE. У той же час він легковажніший, і його можна запустити навіть на мобільному телефоні. Він швидко запускається та зупиняється, добре масштабується. На відміну від Tomcat, має менше ком'юніті та базу знань.</p></li>
+ <li>
+  <p><span class="text-bold">WebLogic</span> — ліцензоване програмне забезпечення, яке потребує покупки перед використанням. Належить компанії Oracle.</p>
+  <p>У порівнянні з Tomcat, його функціонал трохи ширший. Може працювати з протоколом FTP. Але він не настільки гнучкий при розробці та тестуванні додатків.</p></li>
+ <li>
+  <p><span class="text-bold">WebSphere</span> ( WebSphere Application Server, якщо бути точним) - платне програмне забезпечення. Розробляється компанією IBM. Аналогічно WildFly та GlassFish є повноцінним сервером додатків. Але у нього більш доброзичливий інтерфейс налаштування плюс висока надійність у роботі.</p>
+  <p>З мінусів він використовує дуже багато ресурсів, довго запускається і зупиняється, що не дуже зручно при розробці невеликих проектів.</p></li>
+</ol>Який контейнер сервлетів чи сервер додатків вибрати залежить від конкретного проекту. Бувають проекти, де навіть явний аутсайдер зможе проявити себе максимально якісно, ​​але спочатку краще якісно розібратися з чимось одним. Напевно, ідеальний кандидат на роль цього одного – Tomcat. Перші кроки у його вивченні ми вже зробабо, а далі справа за тобою! У завершальних статтях циклу "Вступ до Enterprise-розробки" ми з тобою познайомимося з патерном MVC. <a href="https://codegym.cc/groups/posts/2536-chastjh-7-znakomstvo-s-patternom-mvc-model-view-controller" target="_blank">Частина 7. Знайомство з патерном MVC (Model-View-Controller) </a> <a href="https://codegym.cc/groups/posts/2537-chastjh-8-pishem-neboljhshoe-prilozhenie-na-spring-boot" target="_blank">Частина 8. Пишемо невелику програму на spring-boot</a>

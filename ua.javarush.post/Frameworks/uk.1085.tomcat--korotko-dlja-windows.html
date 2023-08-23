@@ -1,0 +1,74 @@
+tomcat – коротко для windows
+<p>----------------------------------------</p>
+У мене виникло бажання встановити tomcat, і зробити кілька хостів для початку на локальному комп'ютері. Отже, спершу я з сайту встановив сервіс . Він елементарно налаштовується, але без докладного дослідження неясно, яких користувачів і з я
+<p>----------------------------------------</p>
+У мене виникло бажання встановити tomcat, і зробити кілька хостів для початку на локальному комп'ютері. <img data-id="228ee737-ae80-44cf-9aac-6c6e2a52a616" data-max-width="500" alt="слон" src="https://cdn.javarush.com/images/article/228ee737-ae80-44cf-9aac-6c6e2a52a616/256.jpeg" style="width: 500px;">Отже, спершу я з сайту встановив сервіс <strong>tomcat</strong> . Він елементарно налаштовується, але без докладного дослідження неясно, яких користувачів і з якими паролями треба забивати в нетбінс, щоб він скомпілював та залив проект. Тому я вирішив витратити час і скористатися тими описами, які легко знайти в інтернеті на запит «tomcat налаштування», або на сторінці tomcat. Отже, якщо ми не йдемо простим шляхом (надалі з'ясувалося, що і шлях, що лежить через установку інсталятором теж вірний), то послідовність буде наступною. 
+<ol>
+ <li>
+  <p>З сайту <a href="http://tomcat.apache.org/index.html" rel="nofollow" target="_blank">http://tomcat.apache.org</a> зберігаємо zip-архів, і розпаковуємо його в папку без без пробілів і будь-яких складних символів, наприклад, «E:\tomcat\apache-tomcat-8.0.15».</p></li>
+ <li>
+  <p>Завантажуємо останню версію JDK з сайту оракл <a href="https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html" rel="nofollow" target="_blank">https://www.oracle.com</a> і ставимо її теж у папку з назвою без пробілів (якщо так не зробити, і встановити в папку X:\Program Files\... , то потім, коли ми будемо правити батник, нам доведеться неявно вказувати ім'я папки, це не дуже добре, чому буде видно далі.</p></li>
+ <li>
+  <p>Відкриваємо "e:\tomcat\apache-tomcat-8.0.15\bin". Бачимо багато батників та sh сценаріїв.</p>
+  <p>Відкриваємо "catalina.bat". Там бачимо багато закоментованих рядків із змінними оточення, які мають бути оголошені, або які можна оголошувати, а можна й ні.</p>
+  <p>Ті змінні, які мають бути оголошені, — це</p>
+  <ul>
+   <li>set CATALINA_HOME="e:\tomcat\apache-tomcat-8.0.15"</li>
+   <li>set JAVA_HOME="e:\ProgramFiles\Java\jre1.8.0_25"</li>
+  </ul>
+  <p>причому бажано це зробити в окремому файлі з ім'ям setenv.bat, для цього просто в текстовому редакторі вбиваємо ці два рядки і зберігаємо файл з таким ім'ям в e:\tomcat\apache-tomcat-8.0.15\bin\</p>
+  <p><strong>Примітка:</strong> якщо папка з встановленим jre містить пробіли, то ім'я має складатися з максимум шести перших літер реальної назви папки, і якщо таке поєднання по алфавіту в диску перше, ~1, якщо друге, то ~2, і т.д.</p>
+  <p>Наприклад, назва папки, всередині якої знаходиться jre, "C: Program Files JRE", а крім того є папка "C:places", тоді другий рядок в setenv.bat буде</p>
+  <ul>
+   <li>set JAVA_HOME="e:\Progra~1\Java\jre1.8.0_25", або</li>
+   <li>set JAVA_HOME="e:\P~2\Java\jre1.8.0_25"</li>
+  </ul>
+  <p>Звичайно, це не дуже добре, особливо коли у вас дві папки “Program Files” та “Program Files (x86)”. У такому випадку, щоб назвати правильно папку з JRE, доведеться поекспериментувати ~1 або ~2.</p></li>
+ <li>
+  <p>Пробуємо запустити, для цього із поточної директорії запускаємо cmd.exe, в ньому запускаємо startup.bat. Це нам дасть контроль над тим, що відбувається. Якщо все пішло добре, то запуститься вікно Java-програми в режимі консолі, в якому після запуску буде написано час старту, якщо щось пішло не так, наприклад, папки в setenv.bat вказані невірно, ми побачимо повідомлення про помилки.</p></li>
+ <li>
+  <p>Якщо глобальні змінні налаштовані правильно, і запустилося вікно java - консолі, але якісь налаштування зроблено неправильно, то помилки можна подивитися в папці "e:\tomcat\apache-tomcat-8.0.15\logs\".</p></li>
+ <li>
+  <p>Якщо пункт 4 виконаний повністю успішно, у вікні браузера можна набрати 127.0.0.1:8080 і у вікні буде вікно tomcat сервера.</p></li>
+ <li>
+  <p>Але якщо ми захочемо увійти в налаштування Host Manager, і т. д., то нас попросять ввести логін і пароль. Взяти їх ніде, але в папці conf є файл tomcat-users.xml, який якщо відкрити, то спочатку здається правильним, але ролі і користувачі там взяті в коментар <!--   ...   -->. Та й ролі, і користувачі там явно неправильні. Отже, що робити.</p></li>
+ <li>
+  <p>Щоб відповісти на запитання, які ролі мають бути, та яких користувачів призначати, щоб увійти в адмінку, на сторінці 127.0.0.1:8080. Наприклад, про роль manager можна дізнатися на сторінці ttp://127.0.0.1:8080/docs/manager-howto.html, і замість одного користувача admin, як було раніше, тепер є два користувача: admin-gui та admin-script.</p>
+  <p>Докладніше про роботу з паролями тут http://127.0.0.1:8080/docs/realm-howto.html</p>
+  <p>Отже, відкриваємо файл conf\tomcat-user.xml і додаємо там після закоментованого блоку з логінами та паролями</p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token operator">&lt;</span><span class="token operator">!</span><span class="token operator">--</span>
+  NOTE<span class="token operator">:</span>  <span class="token class-name">By</span> <span class="token keyword">default</span><span class="token punctuation">,</span> no user is included in the <span class="token string">"manager-gui"</span> role required
+  <span class="token keyword">to</span> <span class="token namespace">operate</span> the <span class="token string">"/manager/html"</span> web <span class="token class-name"><span class="token namespace">application<span class="token punctuation">.</span></span>  If</span> you wish <span class="token keyword">to</span> <span class="token namespace">use</span> <span class="token keyword">this</span> app<span class="token punctuation">,</span>
+  you must define such a user <span class="token operator">-</span> the username and password are arbitrary<span class="token punctuation">.</span>
+<span class="token operator">--</span><span class="token operator">&gt;</span>
+<span class="token operator">&lt;</span><span class="token operator">!</span><span class="token operator">--</span>
+  NOTE<span class="token operator">:</span>  <span class="token class-name">The</span> sample user and role entries below are wrapped in a comment
+  and thus are ignored when reading <span class="token keyword">this</span> <span class="token class-name"><span class="token namespace">file<span class="token punctuation">.</span></span> Do</span> not forget <span class="token keyword">to</span> <span class="token namespace">remove</span>
+  <span class="token operator">&lt;</span><span class="token operator">!</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span>&gt; that surrounds them<span class="token punctuation">.</span>
+<span class="token operator">--</span><span class="token operator">&gt;</span>
+<span class="token operator">&lt;</span><span class="token operator">!</span><span class="token operator">--</span>
+  <span class="token operator">&lt;</span>role rolename<span class="token operator">=</span><span class="token string">"tomcat"</span><span class="token operator">/</span><span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>role rolename<span class="token operator">=</span><span class="token string">"role1"</span><span class="token operator">/</span><span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>user username<span class="token operator">=</span><span class="token string">"tomcat"</span> password<span class="token operator">=</span><span class="token string">"tomcat"</span> roles<span class="token operator">=</span><span class="token string">"tomcat"</span><span class="token operator">/</span><span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>user username<span class="token operator">=</span><span class="token string">"both"</span> password<span class="token operator">=</span><span class="token string">"tomcat"</span> roles<span class="token operator">=</span><span class="token string">"tomcat,role1"</span><span class="token operator">/</span><span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>user username<span class="token operator">=</span><span class="token string">"role1"</span> password<span class="token operator">=</span><span class="token string">"tomcat"</span> roles<span class="token operator">=</span><span class="token string">"role1"</span><span class="token operator">/</span><span class="token operator">&gt;</span>
+<span class="token operator">--</span><span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>role rolename <span class="token operator">=</span> <span class="token string">"admin-gui"</span><span class="token operator">/</span><span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>role rolename <span class="token operator">=</span> <span class="token string">"admin-script"</span><span class="token operator">/</span><span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>role rolename <span class="token operator">=</span> <span class="token string">"manager-gui"</span><span class="token operator">/</span><span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>role rolename <span class="token operator">=</span> <span class="token string">"manager-script"</span><span class="token operator">/</span><span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>role rolename <span class="token operator">=</span> <span class="token string">"manager-jne"</span><span class="token operator">/</span><span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>user username <span class="token operator">=</span> <span class="token string">"superadmin"</span> password <span class="token operator">=</span> <span class="token string">"pass"</span> roles<span class="token operator">=</span><span class="token string">"admin-gui, admin-script, manager-gui, manager-jne, manager-script"</span> <span class="token operator">/</span><span class="token operator">&gt;</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>tomcat<span class="token operator">-</span>users<span class="token operator">&gt;</span></code></pre>
+  <p>Таким чином, ми отримаємо користувача superadmin із паролем pass.</p></li>
+ <li>
+  <p><a href="http://wiki.apache.org/tomcat/HowTo#How_can_I_access_members_of_a_custom_Realm_or_Principal.3F" rel="nofollow" target="_blank">Про те, як налагоджувати роботу</a> додатків і т. д.<a href="http://wiki.apache.org/tomcat/HowTo#How_can_I_access_members_of_a_custom_Realm_or_Principal.3F" rel="nofollow" target="_blank"></a></p></li>
+ <li>
+  <p>Тепер за допомогою скриптів shutdown.bat і startup.bat перезапускаємо сервер і можемо увійти в адмінку.</p></li>
+ <li>
+  <p>Створюємо віртуальні хости. Для цього подивимося сюди <a href="http://wiki.apache.org/tomcat/TomcatDevelopmentVirtualHosts" rel="nofollow" target="_blank">http://wiki.apache.org/tomcat/TomcatDevelopmentVirtualHosts</a></p></li>
+ <li>
+  <p>можна ще створити в адмінці посилання на хост (Це те саме, що ми зараз зробабо).</p></li>
+ <li>
+  <p>При створенні нових записів у hosts для win8, спочатку копіюємо файл в іншу папку, там правимо, а потім пишемо назад. Після цього рестарт комп'ютера чи сервера не потрібний.</p></li>
+</ol>І на завершення у безкоштовній версії IntelliJ Idea не підтримує web, тому для початку можна скористатися нетбінсом. <a href="https://netbeans.org/kb/trails/java-ee_ru.html" rel="nofollow" target="_blank">https://netbeans.org/kb/trails/java-ee_ru.html </a> <a href="https://netbeans.org/kb/docs/web/ajax-quickstart_ru.html" rel="nofollow" target="_blank">https://netbeans.org/kb/docs/web/ajax-quickstart_ua.html</a>

@@ -1,0 +1,234 @@
+Java @Аннотації. Що це та як цим користуватися?
+<p>----------------------------------------</p>
+Ця стаття призначена для людей, які ніколи не працювали з Анотаціями, але хотіли б розібратися, що це та з чим його їдять. Якщо ж ви маєте досвід у цій сфері, не думаю, що ця стаття якось розширить ваші знання (та й, власне, такої мети я не
+<p>----------------------------------------</p>
+Ця стаття призначена для людей, які ніколи не працювали з Анотаціями, але хотіли б розібратися, що це та з чим його їдять. Якщо ж ви маєте досвід у цій сфері, не думаю, що ця стаття якось розширить ваші знання (та й, власне, такої мети я не переслідую). <span>Також</span> стаття не підходить для тих, хто тільки починає вивчати мову Java. Якщо Ви не розумієте що таке <span>Map&lt;&gt;</span> або <span>HashMap&lt;&gt;</span> або не знаєте що означає запис <span>static{ }</span> всередині визначення класу, або ніколи не працювали з рефлексією – Вам рано читати цю статтю і намагатися зрозуміти, що таке анотації. <span>Сам по собі цей інструмент не створений для використання новачками, оскільки потребує вже не зовсім базових розуміння взаємодії класів та об'єктів.</span>(моя думка) (дякую коментарям за те, що показали необхідність цієї приписки). <img width="800" height="500" data-id="30a09fa9-4766-40fa-bae8-345ed391c67c" alt="Java @Аннотації.  Що це та як цим користуватися?  - 1" src="https://cdn.javarush.com/images/article/30a09fa9-4766-40fa-bae8-345ed391c67c/1080.jpeg">Отже, почнемо. Анотації Java є свого роду мітками в коді, що описують метадані для функції/класу/пакета. Наприклад, всім відома інструкція @Override, що означає, що ми збираємося перевизначити метод батьківського класу. Так, з одного боку, можна і без неї, але якщо у батьків не виявиться цього методу, існує ймовірність, що ми дарма писали код, т.к. Саме цей спосіб може і викликатися ніколи, і з Інструкцією @Override компілятор нам скаже, що: " Не знайшов такого методу у батьках... щось тут нечисто " . Проте Анотації можуть нести у собі як сенс " надійності " : у яких можна зберігати якісь дані, які потім використовуватимуться. 
+<h2>Для початку розглянемо найпростіші інструкції, що надаються стандартною бібліотекою.</h2>(Знову ж дякую коментарям, спочатку не подумав що цей блок потрібен) Спочатку обговоримо, які бувають анотації. Кожна з них має 2 головні <span>обов'язкові</span> параметри:
+<ul>
+ <li>Тип зберігання (Retention);</li>
+ <li>Тип об'єкта з якого вона вказується (Target).</li>
+</ul>
+<h4>Тип зберігання</h4>Під "типом зберігання" розуміється стадія до якої "доживає" наша інструкція всередині класу. Кожна інструкція має <span>тільки один</span> з можливих "типів зберігання", зазначений у класі <span>RetentionPolicy</span> :
+<ul>
+ <li><span>SOURCE</span> – анотація використовується тільки при написанні коду та ігнорується компілятором (тобто не зберігається після компіляції). Зазвичай використовується для будь-яких препроцесорів (умовно), або вказівок компілятора</li>
+ <li><span>CLASS</span> – анотація зберігається після компіляції, проте ігнорується JVM (тобто не може бути використана під час виконання). Зазвичай використовується для будь-яких сторонніх сервісів, що підвантажують ваш код як plug-in додаток</li>
+ <li><span>RUNTIME</span> - анотація яка зберігається після компіляції та підвантажується JVM (тобто може використовуватися під час виконання самої програми). Використовується як мітки у коді, які безпосередньо впливають на хід виконання програми (приклад буде розглянуто в даній статті)</li>
+</ul>
+<h4>Тип об'єкта над яким вказується</h4>Даний опис варто розуміти буквально, т.к. Java анотації можуть вказуватися над чим завгодно (Поля, класи, функції, т.д.) і кожної анотації вказується, з чого саме може бути задана. Тут вже немає правила "щось одне", анотацію можна вказувати над усім нижче перерахованим, або вибрати тільки потрібні елементи класу <span>ElementType</span> :
+<ul>
+ <li><span>ANNOTATION_TYPE</span> - інша інструкція</li>
+ <li><span>CONSTRUCTOR</span> – конструктор класу</li>
+ <li><span>FIELD</span> – поле класу</li>
+ <li><span>LOCAL_VARIABLE</span> - локальна змінна</li>
+ <li><span>METHOD</span> – метод класу</li>
+ <li><span>PACKAGE</span> - опис пакету <span>package</span></li>
+ <li><span>PARAMETER</span> - параметр методу <span>public void hello (@ Annontation String param) {}</span></li>
+ <li><span>TYPE</span> – вказується над класом</li>
+</ul>Загалом на момент версії Java SE 1.8 стандартна бібліотека мови надає нам 10 анотацій. У цій статті розглянемо найпоширеніші з них (кому цікаві вони всі <a href="https://docs.oracle.com/javase/tutorial/java/annotations/predefined.html" target="_blank" rel="nofollow">Welcome to Javadoc</a> ):
+<h4>@Override</h4>Retention: SOURCE; Target: METHOD. Ця інструкція показує, що метод над яким вона прописана успадкований у батьківського класу. Перша анотація з якою стикався кожен Java-програміст, що починає, при використанні IDE, яка наполегливо пхає ці @Override. Найчастіше вчителі з ютуба рекомендують або: "зітріть щоб не заважало", або: "залиште не замислюючись навіщо воно тут". Насправді анотація більш ніж корисна: вона не тільки дозволяє зрозуміти які методи були визначені в цьому класі вперше, а які вже є у батьків (що безперечно підвищує читання вашого коду), але також дана анотація служить "самоперевіркою", що ви не помаболися при визначенні функції, що перевантажується.
+<h4>@Deprecated</h4>Retention: Runtime; Target: CONSTRUCTOR, FIELD, LOCAL_VARIABLE, METHOD, PACKAGE, PARAMETER, TYPE. Ця інструкція вказує на методи, класи або змінні, які є "застарілими" і можуть бути прибрані в наступних версіях продукту. З цією інструкцією зазвичай стикаються ті, хто читає документацію будь-яких API, або тієї ж стандартної бібліотеки Java. Іноді цю інструкцію ігнорують, т.к. вона не викликає жодних помилок і в принципі сама по собі сильно жити не заважає. Однак головний посил, який несе в собі дана інструкція - "ми вигадали більш зручний спосіб реалізації даного функціоналу, використовуй його, не використовуй старий" - ну, або ж - "ми перейменували функцію, а це так, для леґаси залишабо..." (що теж загалом непогано). Коротше кажучи, якщо бачите @Deprecated - краще намагатися не використовувати те, над чим вона висить, якщо в цьому немає прямої необхідності і, можливо, варто перечитати документацію, щоб зрозуміти яким чином тепер реалізується завдання, що виконується застарілим елементом. Наприклад, замість використання<span>new Date().getYear()</span> рекомендується використовувати <span>Calendar.getInstance().get(Calendar.YEAR)</span> .
+<h4>@SuppressWarnings</h4>Retention: SOURCE; Target: TYPE, FIELD, METHOD, PARAMETER, CONSTRUCTOR, LOCAL_VARIABLE Ця інструкція вимикає виведення попереджень компілятора, які стосуються елемента, над яким вона вказана. Є SOURCE анотацією, що вказується над полями, методами, класами.
+<h4>@Retention</h4>Retention: RUNTIME; Target: ANNOTATION_TYPE; Дана інструкція задає "тип зберігання" інструкції над якою вона вказана. Та ця анотація використовується навіть для самої себе... магія та й годі.
+<h4>@Target</h4>Retention: RUNTIME; Target: ANNOTATION_TYPE; Ця інструкція задає тип об'єкта з якого може вказуватися створювана нами інструкція. Та й вона теж використовується для себе, звикайте... Думаю, на цьому можна завершити ознайомлення зі стандартними анотаціями бібліотеки Java, т.к. інші використовуються досить рідко і, хоч і несуть свою користь, стикатися з ними доводиться не всім і необов'язково. <em>Якщо ж ви хочете щоб я розповів про якусь конкретну інструкцію зі стандартної бібліотеки (або, можливо, інструкції типу @NotNull і @Nullable які в STL не входять) напишіть у коментарях - або вам там дадуть відповідь добрі користувачі, або я коли побачу. Якщо вже багато людей будуть просити якусь інструкцію - також внесу її до статті.</em>
+<h2>Практичне застосування RUNTIME анотацій</h2>Власне, думаю, вистачить теоретичної балаканини: давайте перейдемо до практики на прикладі робота. Допустимо ви хочете написати бота для якоїсь соцмережі. Всі великі мережі, такі як ВК, Facebook, Discord, мають свої API, які дозволяють написати бота. Для цих мереж є вже написані бібліотеки для роботи з API, на мові Java в тому числі. Тому не заглиблюватимемося в роботу будь-якого API або бібліотеки. Все, що нам потрібно знати в цьому прикладі - те, що наш робот вміє реагувати на повідомлення, надіслані в чат, в якому, власне, наш бот знаходиться. Тобто припустимо, у нас є клас <span>MessageListener</span> з функцією: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MessageListener</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onMessageReceived</span><span class="token punctuation">(</span><span class="token class-name">MessageReceivedEvent</span> event<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Вона відповідає за обробку прийнятого повідомлення. Все, що нам потрібно від класу <span>MessageReceivedEvent</span> - рядок отриманого повідомлення (наприклад, "Привіт" або "Біт, привіт"). Варто зважити: у різних бібліотеках ці класи називаються по-різному. Я використав бібліотеку для Discord. І ось ми хочемо зробити так, щоб бот реагував на якісь команди, що починаються з "Бот" (з комою чи без - вирішуйте самі: для уроку припустимо, що комою там бути не повинно). Тобто вже наша функція буде починатися з чогось на кшталт: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onMessageReceived</span><span class="token punctuation">(</span><span class="token class-name">MessageReceivedEvent</span> event<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token comment">//Убираем чувствительность к регистру (БоТ, бОт и т.д.)</span>
+    <span class="token class-name">String</span> message <span class="token operator">=</span> event<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toLowerCase</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>message<span class="token punctuation">.</span><span class="token function">startsWith</span><span class="token punctuation">(</span><span class="token string">"бот"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> І ось тепер маємо безліч варіантів реалізації тієї чи іншої команди. Безперечно, спочатку потрібно відокремити команду від її аргументів, тобто розбити на масив. 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onMessageReceived</span><span class="token punctuation">(</span><span class="token class-name">MessageReceivedEvent</span> event<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token comment">//Убираем чувствительность к регистру (БоТ, бОт и т.д.)</span>
+    <span class="token class-name">String</span> message <span class="token operator">=</span> event<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toLowerCase</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>message<span class="token punctuation">.</span><span class="token function">startsWith</span><span class="token punctuation">(</span><span class="token string">"бот"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">try</span>
+        <span class="token punctuation">{</span>
+            <span class="token comment">//получим массив {"Бот", "(команду)", "аргумент1", "аргумент2",... "аргументN"};</span>
+            <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args <span class="token operator">=</span> message<span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">//Для удобства уберем "бот" и отделим команду от аргументов</span>
+            <span class="token class-name">String</span> command <span class="token operator">=</span> args<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> nArgs <span class="token operator">=</span> <span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">copyOfRange</span><span class="token punctuation">(</span>args<span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> args<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">//Получабо command = "(команда)"; nArgs = {"аргумент1", "аргумент2",..."аргументN"};</span>
+            <span class="token comment">//Данный массив может быть пустым</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">ArrayIndexOutOfBoundsException</span> e<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token comment">//Вывод списка команд або якого-либо повідомлення</span>
+            <span class="token comment">//В случае если просто написать "Бот"</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Цього шматка коду нам ніяк не уникнути, тому що відокремлення команди від аргументів потрібно завжди. А ось далі вже маємо вибір: 
+<ul>
+ <li>Зробити if(command.equalsIngnoreCase("..."))</li>
+ <li>Зробити switch(command)</li>
+ <li>Зробити ще якийсь спосіб...</li>
+ <li>Або ж вдатися до допомоги Анотацій.</li>
+</ul>І ось ми нарешті дійшли практичної частини використання Анотацій. Давайте розглянемо код анотації нашого завдання (він може відрізнятися, звичайно ж). 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">ElementType</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">Retention</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">RetentionPolicy</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">Target</span><span class="token punctuation">;</span>
+
+<span class="token comment">//Указывает, что наша Аннотация может быть использована</span>
+<span class="token comment">//Во время выполнения через Reflection (нам як раз это нужно).</span>
+<span class="token annotation punctuation">@Retention</span><span class="token punctuation">(</span><span class="token class-name">RetentionPolicy</span><span class="token punctuation">.</span>RUNTIME<span class="token punctuation">)</span>
+
+<span class="token comment">//Указывает, что целью нашей Аннотации является метод</span>
+<span class="token comment">//Не класс, не переменная, не поле, а именно метод.</span>
+<span class="token annotation punctuation">@Target</span><span class="token punctuation">(</span><span class="token class-name">ElementType</span><span class="token punctuation">.</span>METHOD<span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token annotation punctuation">@interface</span> <span class="token class-name">Command</span> <span class="token comment">//Описание. Заметим, что перед interface стоит @;</span>
+<span class="token punctuation">{</span>
+    <span class="token comment">//Команда за которую будет отвечать функция (например "привет");</span>
+    <span class="token class-name">String</span> <span class="token function">name</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+     <span class="token comment">//Аргументы команды, использоваться будут для вывода списка команд</span>
+    <span class="token class-name">String</span> <span class="token function">args</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+     <span class="token comment">//Минимальное количество аргументов, сразу присвоабо 0 (логично)</span>
+    <span class="token keyword">int</span> <span class="token function">minArgs</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">default</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+    <span class="token comment">//Описание, тоже для списка</span>
+    <span class="token class-name">String</span> <span class="token function">desc</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+     <span class="token comment">//Максимальное число аргументов. В целом не обязательно, но тоже можно использовать</span>
+    <span class="token keyword">int</span> <span class="token function">maxArgs</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">default</span> <span class="token class-name">Integer</span><span class="token punctuation">.</span>MAX_VALUE<span class="token punctuation">;</span>
+
+     <span class="token comment">//Показывать ли команду в списке (вовсе необязательная строка, но мало ли, пригодится!)</span>
+    <span class="token keyword">boolean</span> <span class="token function">showInHelp</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">default</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+
+    <span class="token comment">//Какие команды будут считаться эквивалентными нашей</span>
+    <span class="token comment">//(Например для "привет", это может быть "Здаров", "Прив" и т.д.)</span>
+    <span class="token comment">//Под каждый случай заводить функцию - не рационально</span>
+    <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token function">aliases</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span></code></pre><span>Важливо! </span>Кожен параметр описується як функція (з круглими дужками). Як параметри можуть бути використані тільки примітиви, <span>String</span> , <span>Enum</span> . Не можна написати <span>List&lt;String&gt; args(); </span>- Помилка. Тепер, коли ми описали Анотацію, заведемо клас, назвемо його <span>CommandListener</span> . 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CommandListener</span>
+<span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Command</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"привет"</span><span class="token punctuation">,</span>
+            args <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">,</span>
+            desc <span class="token operator">=</span> <span class="token string">"Будь культурным, поздоровайся"</span><span class="token punctuation">,</span>
+            showInHelp <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+            aliases <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">"здаров"</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">hello</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token comment">//Какой-то функционал, на Ваше усмотрение.</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Command</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"пока"</span><span class="token punctuation">,</span>
+            args <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">,</span>
+            desc <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">,</span>
+            aliases <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">"удачи"</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">bye</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+         <span class="token comment">// Функционал</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Command</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"помощь"</span><span class="token punctuation">,</span>
+            args <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">,</span>
+            desc <span class="token operator">=</span> <span class="token string">"Выводит список команд"</span><span class="token punctuation">,</span>
+            aliases <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">"help"</span><span class="token punctuation">,</span> <span class="token string">"команды"</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">help</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token class-name">StringBuilder</span> sb <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token string">"Список команд: \n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">Method</span> m <span class="token operator">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getDeclaredMethods</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>m<span class="token punctuation">.</span><span class="token function">isAnnotationPresent</span><span class="token punctuation">(</span><span class="token class-name">Command</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token punctuation">{</span>
+                <span class="token class-name">Command</span> com <span class="token operator">=</span> m<span class="token punctuation">.</span><span class="token function">getAnnotation</span><span class="token punctuation">(</span><span class="token class-name">Command</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>com<span class="token punctuation">.</span><span class="token function">showInHelp</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">//Если нужно показывать команду в списке.</span>
+                <span class="token punctuation">{</span>
+                    sb<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">"Бот, "</span><span class="token punctuation">)</span>
+                       <span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>com<span class="token punctuation">.</span><span class="token function">name</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">)</span>
+                       <span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>com<span class="token punctuation">.</span><span class="token function">args</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">" - "</span><span class="token punctuation">)</span>
+                       <span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>com<span class="token punctuation">.</span><span class="token function">desc</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">"\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        <span class="token comment">//Отправка sb.toString();</span>
+
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre><em>Варто відзначити одну невелику незручність: т.к. ми зараз боремося за універсальність, всі функції повинні мати однаковий список формальних параметрів, тому навіть якщо команда не має аргументів, функція повинна мати параметр </em><span>String[] args </span><em>. </em> Ми зараз описали 3 команди: привіт, поки що, допомога. Тепер давайте модифікуємо наш <span>MessageListener</span> так, щоб він якось із цим працював. Для зручності та швидкості роботи, будемо відразу зберігати наші команди в <span>HashMap</span> : 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MessageListner</span>
+<span class="token punctuation">{</span>
+    <span class="token comment">//Map который хранит як ключ команду</span>
+    <span class="token comment">//А як значення функцию которая будет обрабатывать команду</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">Method</span><span class="token punctuation">&gt;</span></span> COMMANDS <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">//Объект класса с командами (по сути нужен нам для рефлексии)</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">CommandListener</span> LISTENER <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">CommandListener</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">static</span>
+    <span class="token punctuation">{</span>
+       <span class="token comment">//Берем список всех методов в классе CommandListener</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">Method</span> m <span class="token operator">:</span> LISTENER<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getDeclaredMethods</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token comment">//Смотрим, есть ли у метода нужная нам Аннотация @Command</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>m<span class="token punctuation">.</span><span class="token function">isAnnotationPresent</span><span class="token punctuation">(</span><span class="token class-name">Command</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token punctuation">{</span>
+                <span class="token comment">//Берем об'єкт нашей Аннотации</span>
+                <span class="token class-name">Command</span> cmd <span class="token operator">=</span> m<span class="token punctuation">.</span><span class="token function">getAnnotation</span><span class="token punctuation">(</span><span class="token class-name">Command</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token comment">//Кладем в качестве ключа нашей карты параметр name()</span>
+                <span class="token comment">//Определенный у нашей аннотации,</span>
+                <span class="token comment">//m — переменная, хранящая наш метод</span>
+                COMMANDS<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>cmd<span class="token punctuation">.</span><span class="token function">name</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> m<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                <span class="token comment">//Также заносим каждый элемент aliases</span>
+               <span class="token comment">//Как ключ указывающий на тот же самый метод.</span>
+                <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">String</span> s <span class="token operator">:</span> cmd<span class="token punctuation">.</span><span class="token function">aliases</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">{</span>
+                    COMMANDS<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>s<span class="token punctuation">,</span> m<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onMessageReceived</span><span class="token punctuation">(</span><span class="token class-name">MessageReceivedEvent</span> event<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+
+        <span class="token class-name">String</span> message <span class="token operator">=</span> event<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toLowerCase</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>message<span class="token punctuation">.</span><span class="token function">startsWith</span><span class="token punctuation">(</span><span class="token string">"бот"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword">try</span>
+            <span class="token punctuation">{</span>
+                <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args <span class="token operator">=</span> message<span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token class-name">String</span> command <span class="token operator">=</span> args<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+                <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> nArgs <span class="token operator">=</span> <span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">copyOfRange</span><span class="token punctuation">(</span>args<span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> args<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token class-name">Method</span> m <span class="token operator">=</span> COMMANDS<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>command<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>m <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+                <span class="token punctuation">{</span>
+                    <span class="token comment">//(вывод помощи)</span>
+                    <span class="token keyword">return</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+                <span class="token class-name">Command</span> com <span class="token operator">=</span> m<span class="token punctuation">.</span><span class="token function">getAnnotation</span><span class="token punctuation">(</span><span class="token class-name">Command</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>nArgs<span class="token punctuation">.</span>length <span class="token operator">&lt;</span> com<span class="token punctuation">.</span><span class="token function">minArgs</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">{</span>
+                    <span class="token comment">//что-то если аргументов меньше чем нужно</span>
+                <span class="token punctuation">}</span>
+                <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>nArgs<span class="token punctuation">.</span>length <span class="token operator">&gt;</span> com<span class="token punctuation">.</span><span class="token function">maxArgs</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">{</span>
+                    <span class="token comment">//что-то если аргументов больше чем нужно</span>
+                <span class="token punctuation">}</span>
+                <span class="token comment">//Через рефлексию вызываем нашу функцию-обработчик</span>
+                <span class="token comment">//Именно потому что мы всегда передаем nArgs у функции должен быть параметр</span>
+                <span class="token comment">//String[] args — иначе она просто не будет найдена;</span>
+                m<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span>LISTENER<span class="token punctuation">,</span> nArgs<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">ArrayIndexOutOfBoundsException</span> e<span class="token punctuation">)</span>
+            <span class="token punctuation">{</span>
+                <span class="token comment">//Вывод списка команд або якого-либо повідомлення</span>
+                <span class="token comment">//В случае если просто написать "Бот"</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Ось, власне, і все, що потрібно, щоб наші команди працювали. Тепер додавання нової команди - це не новий if, не новий case, в яких потрібно було б заново перевчити кількість аргументів, також довелося б переписувати help, додаючи до нього нові рядки. Тепер, щоб додати команду, нам потрібно просто в класі CommandListener додати нову функцію з анотацією @Command і все - команда додана, випадки враховані, help доповнений автоматично. Абсолютно безперечно, що це завдання можна вирішити безліччю інших шляхів. Так, все що можна зробити за допомогою анотацій/рефлексій можна зробити і без них, питання лише у зручності, оптимальності та розмірах коду, звичайно ж, пхати Анотацію скрізь де є найменший натяк на те, що вийде її використовувати - теж не найраціональніший варіант , у всьому потрібно знати міру =). Але при написанні API,

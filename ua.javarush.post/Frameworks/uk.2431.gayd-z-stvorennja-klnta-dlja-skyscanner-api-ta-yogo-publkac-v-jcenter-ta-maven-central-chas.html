@@ -1,0 +1,151 @@
+Гайд зі створення клієнта для Skyscanner API та його публікації в jCenter та Maven Central [Частина 2]
+<p>----------------------------------------</p>
+Тепер покроково зробимо таке: Що таке bintray і навіщо він нам? bintray – це система зберігання бібліотек, яка є посередником між JCenter, Maven Central та іншими сховищами. Щоб створити обліковий запис, переходимо за цим і створюємо open-s
+<p>----------------------------------------</p>
+<a href="https://codegym.cc/groups/posts/2430-gayd-po-sozdaniju-klienta-dlja-skyscanner-api-i-ego-publikacii-v-jcenver-i-maven-central" target="_blank">Гайд зі створення клієнта для Skyscanner API та його публікації у jCenver та Maven Central [Частина 1]</a>
+<h2>Зміст:</h2>
+<ul>
+ <li><a href="https://codegym.cc/groups/posts/2431#topic3">Частина 2: публікація клієнта в JCenter та Maven Central</a>
+  <ul>
+   <li><a href="https://codegym.cc/groups/posts/2431#topic3_1">Крок 1: створюємо bintray аккаунт та пакет для клієнта</a></li>
+   <li><a href="https://codegym.cc/groups/posts/2431#topic3_2">Крок 2: Створення Sonatype облікового запису та реєстрація groupId через jira issue</a></li>
+   <li><a href="https://codegym.cc/groups/posts/2431#topic3_3">Крок 3: Підготовка build.gradle для публікації на bintray</a></li>
+  </ul></li>
+ <li><a href="https://codegym.cc/groups/posts/2431#topic4">Частина 3. Застосування клієнта для flights-monitoring</a></li>
+ <li><a href="https://codegym.cc/groups/posts/2431#topic5">Частина 4: Підсумок</a></li>
+ <li><a href="https://codegym.cc/groups/posts/2431#topic6">Корисні посилання</a></li>
+</ul><img data-max-width="850" alt="Гайд зі створення клієнта для Skyscanner API та його публікації в jCenter та Maven Central [Частина 2] - 1" src="https://cdn.javarush.com/images/article/2939efe1-d9b8-4a15-8765-a62d029421f9/original.jpeg">
+<h2 id="topic3">Частина 2: публікація клієнта в JCenter та Maven Central</h2>Тепер покроково зробимо таке: 
+<ul>
+ <li>Створимо Sonatype аккаунт і зареєструємо groupId через Jira issue;</li>
+ <li>Створимо bintray аккаунт та пакет для клієнта;</li>
+ <li>Підготуємо <span class="text-bold">build.gradle</span> для публікації на bintray, опублікуємо.</li>
+</ul>
+<h3 id="topic3_1">Крок 1: створюємо bintray аккаунт та пакет для клієнта</h3>Що таке bintray і навіщо він нам? bintray – це система зберігання бібліотек, яка є посередником між JCenter, Maven Central та іншими сховищами. Щоб створити обліковий запис, переходимо за цим <a href="https://bintray.com/signup/oss" rel="nofollow" target="_blank">посиланням</a> і створюємо open-source обліковий запис. Далі створюємо репозиторій, в якому зберігатимуться проекти, як показано нижче: <img data-max-width="850" alt="Гайд зі створення клієнта для Skyscanner API та його публікації в jCenter та Maven Central [Частина 2] - 2" src="https://cdn.javarush.com/images/article/bc69b8b7-633c-4b87-bae0-a20b02efa569/original.jpeg">Заповнюємо обов'язково Name, Type та опціонально Default Licenses та Description. У полі Type вибираємо саме Maven, тому що він нам потрібен: <img data-max-width="850" alt="Гайд зі створення клієнта для Skyscanner API та його публікації в jCenter та Maven Central [Частина 2] - 3" src="https://cdn.javarush.com/images/article/747c29b0-adf1-4044-9626-94d3efcf9aab/original.jpeg">Далі, створюємо новий пакет ( <span class="text-bold">Add New Package</span> ). Заповнюємо поля: 
+<ul>
+ <li><span class="text-bold">Name</span> – обов'язкове поле. У ньому зазвичай ставлю таке ж ім'я, як на GitHub;</li>
+ <li><span class="text-bold">Description</span> - поле не обов'язкове, але краще заповнити, щоб якщо хтось захоче використати ваше рішення, він хоч би знав, що це таке;</li>
+ <li><span class="text-bold">License</span> – тут уже обов'язково вибрати ліцензію. Це взагалі непросте питання, і треба добре все обміркувати. Зазвичай вибираю ліцензію від Apache 2;</li>
+ <li><span class="text-bold">Tags</span> - те саме, що і Description: можна додавати, можна не додавати. Тут це просто теги, якими можна знайти проект;</li>
+ <li><span class="text-bold">Maturity</span> — тут варто зазначити, на якому етапі знаходиться проект. Так як у мене версія лише 0.1, ставлю у Development;</li>
+ <li><span class="text-bold">Website</span> - тут вказуємо <a href="https://github.com/romankh3/skyscanner-flight-api-client" rel="nofollow" target="_blank">посилання на Github проекту</a> ;</li>
+ <li><span class="text-bold">Issue tracker</span> — посилання на секцію <a href="https://github.com/romankh3/skyscanner-flight-search-api-client/issues" rel="nofollow" target="_blank">Issues</a> у GitHub”</li>
+ <li><span class="text-bold">Version control</span> - тут також посилання на проект + в кінці додаємо ".git": <a href="https://github.com/romankh3/skyscanner-flight-search-api-client.git" rel="nofollow" target="_blank">https://github.com/romankh3/skyscanner-flight-api-client.git</a> .</li>
+</ul><img data-max-width="850" alt="Гайд зі створення клієнта для Skyscanner API та його публікації в jCenter та Maven Central [Частина 2] - 4" src="https://cdn.javarush.com/images/article/ff5d1626-503f-439f-8f8a-ff25b263ecea/original.jpeg">І натискаємо Create Package. 
+<h3 id="topic3_2">Крок 2: Створення Sonatype облікового запису та реєстрація groupId через jira issue</h3>Створюємо обліковий запис у <a href="https://issues.sonatype.org/secure/Signup!default.jspa" rel="nofollow" target="_blank">Sonatype</a> і після створення натискаємо на Create нового Jira тикета. Тут вказуємо посилання на проект, на .git так само, як і в bintray. <img data-max-width="850" alt="Гайд зі створення клієнта для Skyscanner API та його публікації в jCenter та Maven Central [Частина 2] - 5" src="https://cdn.javarush.com/images/article/010ccc8c-c186-4bc1-8d0b-da2adb327e30/original.jpeg"><img data-max-width="850" alt="Гайд зі створення клієнта для Skyscanner API та його публікації в jCenter та Maven Central [Частина 2] - 6" src="https://cdn.javarush.com/images/article/57f3fe6e-8a56-4671-8322-131825a33979/original.jpeg">Так буде виглядати Jira тикет: <img data-max-width="1024" alt="Гайд зі створення клієнта для Skyscanner API та його публікації в jCenter та Maven Central [Частина 2] - 7" src="https://cdn.javarush.com/images/article/7dc17f23-ce9b-442d-9db9-7d84a20a41ac/original.jpeg">Створений Jira Issue буде оброблятись людиною протягом 2-3 робочих днів. Якщо все пройде успішно, вам дадуть відповідь, що groupId - com.github.romankh3 підготовлений: <img data-max-width="1024" alt="Гайд зі створення клієнта для Skyscanner API та його публікації в jCenter та Maven Central [Частина 2] - 8" src="https://cdn.javarush.com/images/article/cdae497a-754a-4c7b-86cf-0b0646a72afa/original.jpeg">Тепер прив'яжемо Sonatype аккаунт, який ми створабо до bintray. Для цього заходимо до секції Edit profile у bintray: <img data-max-width="1024" alt="Гайд зі створення клієнта для Skyscanner API та його публікації в jCenter та Maven Central [Частина 2] - 9" src="https://cdn.javarush.com/images/article/76834959-27b6-401d-bd35-a65fad1eccfe/original.jpeg">Рухаємось далі! 
+<h3 id="topic3_3">Крок 3: Підготовка build.gradle для публікації на bintray</h3>Для публікації на bintray є плагін, за допомогою якого можна відносно зручно та швидко опублікувати код. Потрібно додати новий до секції плагінів: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java">plugins <span class="token punctuation">{</span>
+   id <span class="token string">"com.jfrog.bintray"</span> version <span class="token string">"1.8.4"</span>
+<span class="token punctuation">}</span></code></pre> Для публікації потрібен не лише сам клієнт, а й вихідний код і джавадоки. Додаємо в скрипт методи: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java">task <span class="token function">javadocJar</span><span class="token punctuation">(</span>type<span class="token operator">:</span> <span class="token class-name">Jar</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   classifier <span class="token operator">=</span> <span class="token string">'javadoc'</span>
+   from javadoc
+<span class="token punctuation">}</span>
+
+task <span class="token function">sourcesJar</span><span class="token punctuation">(</span>type<span class="token operator">:</span> <span class="token class-name">Jar</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   classifier <span class="token operator">=</span> <span class="token string">'sources'</span>
+   from sourceSets<span class="token punctuation">.</span>main<span class="token punctuation">.</span>allSource
+<span class="token punctuation">}</span>
+
+artifacts <span class="token punctuation">{</span>
+   archives javadocJar<span class="token punctuation">,</span> sourcesJar
+<span class="token punctuation">}</span></code></pre> Нижче є вся необхідна інформація для публікації в Maven Central: ім'я, опис, посилання, розробник, ліцензія. Без цього Maven Central не пустить до себе проект. 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token function">configure</span><span class="token punctuation">(</span>install<span class="token punctuation">.</span>repositories<span class="token punctuation">.</span>mavenInstaller<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   pom<span class="token punctuation">.</span>project <span class="token punctuation">{</span>
+       inceptionYear <span class="token string">'2019'</span>
+       name project<span class="token punctuation">.</span>name
+       packaging <span class="token string">'jar'</span>
+       description project<span class="token punctuation">.</span>description
+
+       url <span class="token string">'https://github.com/romankh3/skyscanner-flight-api-client'</span>
+
+       scm <span class="token punctuation">{</span>
+           connection <span class="token string">'scm:git:https://github.com/romankh3/skyscanner-flight-api-client'</span>
+           developerConnection <span class="token string">'scm:git:git@github.com:romankh3/skyscanner-flight-api-client.git'</span>
+           url <span class="token string">'https://github.com/romankh3/skyscanner-flight-api-client'</span>
+       <span class="token punctuation">}</span>
+
+       licenses <span class="token punctuation">{</span>
+           license <span class="token punctuation">{</span>
+               name <span class="token string">'The Apache Software License, Version 2.0'</span>
+               url <span class="token string">'http://www.apache.org/licenses/LICENSE-2.0.txt'</span>
+           <span class="token punctuation">}</span>
+       <span class="token punctuation">}</span>
+
+       developers <span class="token punctuation">{</span>
+           developer <span class="token punctuation">{</span>
+               id <span class="token string">'romankh3'</span>
+               name <span class="token string">'Roman Beskrovnyi'</span>
+               email <span class="token string">'roman.beskrovnyy@gmail.com'</span>
+           <span class="token punctuation">}</span>
+       <span class="token punctuation">}</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> І інформація, яка необхідна для публікації в jCenter - та, яка потрібна для bintray: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java">bintray <span class="token punctuation">{</span>
+   user <span class="token operator">=</span> getProjectProperty <span class="token string">"bintrayUserName"</span>
+   key <span class="token operator">=</span> getProjectProperty <span class="token string">"bintrayApiKey"</span>
+   configurations <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'archives'</span><span class="token punctuation">]</span>
+   publish <span class="token operator">=</span> <span class="token boolean">true</span>
+   pkg <span class="token punctuation">{</span>
+       repo <span class="token operator">=</span> <span class="token string">'maven'</span>
+       name <span class="token operator">=</span> <span class="token string">'skyscanner-flight-api-client'</span>
+       licenses <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'Apache-2.0'</span><span class="token punctuation">]</span>
+       labels <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'java'</span><span class="token punctuation">,</span> <span class="token string">'api-client '</span><span class="token punctuation">,</span> <span class="token string">' skyscanner '</span><span class="token punctuation">,</span> <span class="token string">'library '</span><span class="token punctuation">]</span>
+       publicDownloadNumbers <span class="token operator">=</span> <span class="token boolean">true</span>
+
+       <span class="token comment">//noinspection GroovyAssignabilityCheck</span>
+       version <span class="token punctuation">{</span>
+           name <span class="token operator">=</span> project<span class="token punctuation">.</span>version
+           vcsTag <span class="token operator">=</span> project<span class="token punctuation">.</span>version
+           gpg <span class="token punctuation">{</span>
+               sign <span class="token operator">=</span> <span class="token boolean">true</span>
+           <span class="token punctuation">}</span>
+           mavenCentralSync <span class="token punctuation">{</span>
+               sync <span class="token operator">=</span> <span class="token boolean">true</span>
+               user <span class="token operator">=</span> getProjectProperty <span class="token string">'ossrhUsername'</span>
+               password <span class="token operator">=</span> getProjectProperty <span class="token string">'ossrhPassword'</span>
+               close <span class="token operator">=</span> <span class="token string">'1'</span> <span class="token comment">// '0' to NOT close</span>
+           <span class="token punctuation">}</span>
+       <span class="token punctuation">}</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> bintray plugin додає gradle task для публікації - <span class="text-bold">bintrayUpload</span> , але щоб це запрацювало, потрібно ще вказати користувача bintray і sonatype. Для цього я створив порожній файл <span class="text-bold">gradle.properties</span> , який в момент публікації передаються значення: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java">bintrayUserName<span class="token operator">=</span>bintray<span class="token operator">-</span>name
+bintrayApiKey<span class="token operator">=</span>bintray<span class="token operator">-</span>api<span class="token operator">-</span>key
+ossrhUsername<span class="token operator">=</span>sonatypeAccountName
+ossrhPassword<span class="token operator">=</span>sonatypeAccountPassword</code></pre> де bintray-api-key можна знайти, як показано нижче на зображенні: <img data-max-width="1024" alt="Гайд зі створення клієнта для Skyscanner API та його публікації в jCenter та Maven Central [Частина 2] - 10" src="https://cdn.javarush.com/images/article/bc137097-0ead-456f-90a7-5df1f061a720/original.jpeg"><a href="https://github.com/romankh3/skyscanner-flight-api-client/blob/master/build.gradle" rel="nofollow" target="_blank">Підсумковий build.gradle буде виглядати так</a> . Після пишемо в терміналі або запускаємо через IDEA <span class="text-bold">gradlew bintrayUpload</span> і все готово! Результат буде лежати на bintray обліковому записі як показано нижче: <img data-max-width="1024" alt="Гайд зі створення клієнта для Skyscanner API та його публікації в jCenter та Maven Central [Частина 2] - 11" src="https://cdn.javarush.com/images/article/0ac3dec5-901c-4986-b861-80809a03cbca/original.jpeg">Це означає, що ми успішно опублікували клієнт, але він ще не знаходиться ні в Maven Central ні в jCentral. Щоб додати клієнт до jCenter, потрібно натиснути <span class="text-bold">Add to jCenter</span> , потім ввести groupId, під яким буде проект, як зазначено нижче: <img data-max-width="1024" alt="Гайд зі створення клієнта для Skyscanner API та його публікації в jCenter та Maven Central [Частина 2] - 12" src="https://cdn.javarush.com/images/article/863861d3-244a-41fa-ab87-e1649511c0ac/original.jpeg">Тепер чекаємо, поки обробиться запит. після цього можна буде синхронізувати клієнт із jCenter. Протягом доби надійшла відповідь, що запит на додавання клієнта підтверджено: <img data-max-width="1473" alt="Гайд зі створення клієнта для Skyscanner API та його публікації в jCenter та Maven Central [Частина 2] - 13" src="https://cdn.javarush.com/images/article/30c70c1a-ee23-4c65-ae6d-beb133675ce8/original.jpeg">Тепер залишився останній крок: додати клієнт до Maven Central. Для цього потрібно знайти в пакеті клієнта опцію <span class="text-bold">Maven Central</span> : <img data-max-width="1024" alt="Гайд зі створення клієнта для Skyscanner API та його публікації в jCenter та Maven Central [Частина 2] - 14" src="https://cdn.javarush.com/images/article/dac44cc1-44d4-4a1d-8031-dc7654d284a9/original.jpeg">Ми вже прив'язали Sonatype акаунт, тому залишається натиснути тільки <span class="text-bold">Sync</span> , як показано нижче: <img data-max-width="1024" alt="Гайд зі створення клієнта для Skyscanner API та його публікації в jCenter та Maven Central [Частина 2] - 15" src="https://cdn.javarush.com/images/article/51ab5e50-b74a-43f5-a4d2-7bc3761b0648/original.jpeg">І ось така бажана відповідь буде, як тільки Sonatype дозволить опублікувати в Maven Central: <img data-max-width="1502" alt="Гайд зі створення клієнта для Skyscanner API та його публікації в jCenter та Maven Central [Частина 2] - 16" src="https://cdn.javarush.com/images/article/ccfb42df-f45c-41ac-b4d7-ecb097183ad4/original.jpeg">Причому з цієї картинки можемо зробити висновок, що валідація пройшла успішно і клієнт був успішно опублікований на Maven Central. На цьому процес публікації в jCenter та Maven Central закінчено успішно! Кому здалося, що зробити це просто ви неймовірні люди і здивувати вас складно :) 
+<h2 id="topic4">Частина 3. Застосування клієнта для flights-monitoring</h2>Просто так щось написати, аби лежало — несерйозно. Код повинен працювати, тому відразу після публікації в останній частині підключаю клієнта для проекту, якому він потрібен — для <a href="https://github.com/romankh3/flights-monitoring" rel="nofollow" target="_blank">flight-monitoring</a> . Для цього: 
+<ul>
+ <li>
+  <p>додаю ще одну залежність у pom.xml:</p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token generics"><span class="token punctuation">&lt;</span>dependency<span class="token punctuation">&gt;</span></span>
+  <span class="token generics"><span class="token punctuation">&lt;</span>groupId<span class="token punctuation">&gt;</span></span>com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>romankh3<span class="token operator">&lt;</span><span class="token operator">/</span>groupId<span class="token operator">&gt;</span>
+  <span class="token generics"><span class="token punctuation">&lt;</span>artifactId<span class="token punctuation">&gt;</span></span>skyscanner<span class="token operator">-</span>flight<span class="token operator">-</span>api<span class="token operator">-</span>client<span class="token operator">&lt;</span><span class="token operator">/</span>artifactId<span class="token operator">&gt;</span>
+  <span class="token generics"><span class="token punctuation">&lt;</span>version<span class="token punctuation">&gt;</span></span><span class="token number">0.1</span><span class="token number">.8</span><span class="token operator">&lt;</span><span class="token operator">/</span>version<span class="token operator">&gt;</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>dependency<span class="token operator">&gt;</span></code></pre></li>
+ <li>
+  <p>видаляю пакет client з проекту;</p></li>
+ <li>
+  <p>перевикористовую імпорти на посилання на клієнта і замість FlightPriceDto використовую BrowseFlightPricesResponseDto;</p></li>
+ <li>
+  <p>і все :)</p></li>
+</ul>Результат можна подивитися у <a href="https://github.com/romankh3/flights-monitoring/pull/11" rel="nofollow" target="_blank">відкритому Pull-Request'e</a> , який я не зливаю в майстер гілку лише для того, щоб ті, хто читає попередню статтю, не дивувалися. <a href="https://codegym.cc/welcome" target="_blank"><img id="click_banner1_articles" data-max-width="1024" data-id="a02b0453-6c71-4d07-8a04-20adbd09bda0" class="img-fluid" alt="Гайд зі створення клієнта для Skyscanner API та його публікації в jCenter та Maven Central [Частина 2] - 17" src="https://cdn.javarush.com/images/article/a02b0453-6c71-4d07-8a04-20adbd09bda0/1024.jpeg" style="width: 1024px;"></a>
+<h2 id="topic5">Частина 4: Підсумок</h2>
+<ul>
+ <li>Написаний клієнт для Skyscanner API у вигляді <a href="https://github.com/romankh3/skyscanner-flight-api-client" rel="nofollow" target="_blank">окремого проекту</a> .</li>
+ <li>Зроблено тернистий шлях публікації клієнта в Maven Central і jCenter через <a href="https://bintray.com/romankh3/maven/skyscanner-flight-api-client#" rel="nofollow" target="_blank">bintray</a> .</li>
+ <li>Успішно використано клієнта для потреб проекту — flights-monitoring.</li>
+ <li>Ця стаття може бути використана як покроковий посібник для тих, хто хоче стати на шлях open-source.</li>
+</ul>
+<h2 id="topic6">Корисні посилання:</h2>
+<ul>
+ <li><a href="https://codegym.cc/groups/posts/2400-sozdanie-sistemih-monitoringa-cen-na-aviabiletih-poshagovoe-rukovodstvo" target="_blank">Створення системи моніторингу цін на авіаквитки: покрокове керівництво.</a></li>
+ <li><a href="https://blog.bintray.com/2014/02/11/bintray-as-pain-free-gateway-to-maven-central/" rel="nofollow" target="_blank">Enjoy Bintray і use it as pain-free gateway to Maven Central</a></li>
+ <li><a href="https://habr.com/ru/post/266801/" rel="nofollow" target="_blank">Публікація Android бібліотеки в jCenter</a></li>
+ <li><a href="https://habr.com/ru/company/redmadrobot/blog/275515/" rel="nofollow" target="_blank">Gradle: керуючи залежностями</a></li>
+</ul><span class="text-bold">Дивіться також інші мої статті:</span>
+<ul>
+ <li><a href="https://codegym.cc/groups/posts/2367-kak-ja-napisal-open-source-biblioteku-kotoruju-ispoljhzujut-v-realjhnihkh-proektakh" target="_blank">Як тестове завдання на співбесіду перетворилося на open-source бібліотеку</a></li>
+ <li><a href="https://codegym.cc/groups/posts/2400-sozdanie-sistemih-monitoringa-cen-na-aviabiletih-poshagovoe-rukovodstvo" target="_blank">Створення системи моніторингу цін на авіаквитки: покрокове керівництво [Частина 1]</a></li>
+ <li><a href="https://codegym.cc/groups/posts/2388-logirovanie-chto-kak-gde-i-chem" target="_blank">Логування: що, як, де та чим?</a></li>
+ <li><a href="https://codegym.cc/groups/posts/2463-debug-v-intellij-idea-gayd-dlja-novichkov" target="_blank">Debug в Intellij IDEA: гайд для новачків</a></li>
+</ul>

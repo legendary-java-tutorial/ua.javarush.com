@@ -1,0 +1,170 @@
+Топ 10 питань про колекції Java
+<p>----------------------------------------</p>
+Стаття є перекладом статті . Нижче представлені найпопулярніші питання з приводу колекцій Java, задані та обговорені на Stackowerflow. До того, як Ви подивіться на ці питання, добре подивитися діаграму ієрархії класів.
+<p>----------------------------------------</p>
+Стаття є перекладом статті <b>" <a href="http://www.programcreek.com/2013/09/top-10-questions-for-java-collections/" rel="nofollow">Top 10 questions o Java Collections</a> "</b> . Нижче представлені найпопулярніші питання з приводу колекцій Java, задані та обговорені на Stackowerflow. До того, як Ви подивіться на ці питання, добре подивитися діаграму ієрархії класів. <cut>
+ <strong>1. Коли використовувати LinkedList замість ArrayList? </strong>
+ <a href="https://codegym.cc/quests/lectures/questsyntax.level07.lecture05" target="_blank">ArrayList</a> за фактом є масивом, його елементи можуть бути доступні безпосередньо за індексом. У разі переповнення масиву виникає необхідність у новому, що має більше місця. Розміщення та переміщення всіх елементів займатиме O(n) часу. Також, необхідно додавання та видалення елементів для пересування існуючих елементів у масиві. Це, можливо, найбільша незручність у використанні ArrayList. LinkedList - це подвійний перелік посилань на елементи. Таким чином, для доступу до елемента в центрі доводиться шукати з самого початку і до кінця аркуша. З іншого боку, додавання та видалення елемента в LinkedList швидше з тієї причини, що ці операції лише змінюють сам список. Найгірші моменти часу порівнюються нижче: 
+ <div class="table-container">
+  <table border="1">
+   <tbody>
+    <tr>
+     <td>Метод</td>
+     <td>Arraylist</td>
+     <td>LinkedList</td>
+    </tr>
+    <tr>
+     <td>get(index)</td>
+     <td>O(1)</td>
+     <td>O(n)</td>
+    </tr>
+    <tr>
+     <td>add(E)</td>
+     <td>O(n)</td>
+     <td>O(1)</td>
+    </tr>
+    <tr>
+     <td>add(E, index)</td>
+     <td>O(n)</td>
+     <td>O(n)</td>
+    </tr>
+    <tr>
+     <td>remove(index)</td>
+     <td>O(n)</td>
+     <td>O(n)</td>
+    </tr>
+    <tr>
+     <td>Iterator.remove()</td>
+     <td>O(n)</td>
+     <td>O(1)</td>
+    </tr>
+    <tr>
+     <td>Iterator.add(E)</td>
+     <td>O(n)</td>
+     <td>O(1)</td>
+    </tr>
+   </tbody>
+  </table>
+ </div> Незважаючи на час роботи, використання пам'яті має бути продуманим індивідуально для великих списків. У LinkedList кожен вузол повинен мати щонайменше два додаткові покажчики, щоб пов'язувати попередній і наступний вузли, тоді як ArrayList потрібен лише масив елементів. Більше порівнянь списків ArrayList, LinkedList та Vector 
+ <a href="http://www.programcreek.com/2013/03/arraylist-vs-linkedlist-vs-vector/" rel="nofollow">(англ.)</a> . 
+ <b>2. Ефективний еквівалент видалення елементів під час ітерації колекції</b> Єдиний коректний шлях для модифікації (видалення елементів) колекції під час ітерації - це використання 
+ <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html" rel="nofollow">Iterator.remove()</a> . Наприклад: Найпоширеніший варіант помилки: Ви отримаєте 
+ <a href="http://docs.oracle.com/javase/7/docs/api/java/util/ConcurrentModificationException.html" rel="nofollow">ConcurrentModificationException</a>
+ <code class=" language-none">Iterator<integer>
+   itr = list.iterator(); while(itr.hasNext()) { // do something itr.remove(); }
+  </integer></code>
+ <code class=" language-none">for(Integer i: list) { list.remove(i); }</code>
+ <a href="http://docs.oracle.com/javase/7/docs/api/java/util/ConcurrentModificationException.html" rel="nofollow"></a>під час роботи коду вище. Так відбувається через те, що ітератор був згенерований для переміщення по всьому списку, але в той же час лист змінюється викликом Iterator.remove(). Як написано в документації з цього виключення, 
+ <blockquote>
+  "Це не є цілком можливою для одного треку до зміни колекції, коли інша річ є помітною над ним."
+ </blockquote> У цілому нині, неприпустима ситуація, коли одна нитка (thread) змінює колекцію тоді, як інша нитка проходить нею. 
+ <b>3. Як конвертувати List масив int[]? </b> Найлегшим шляхом для цього є використання 
+ <a href="http://commons.apache.org/proper/commons-lang/javadocs/api-2.6/org/apache/commons/lang/ArrayUtils.html" rel="nofollow">ArrayUtils</a> , що знаходиться в бібліотеці 
+ <a href="http://commons.apache.org/proper/commons-lang/" rel="nofollow">Apache Commons Lang</a> . 
+ <code class=" language-none">int[] array = ArrayUtils.toPrimitive(list.toArray(new Integer[0]));</code> У JDK немає скорочення цього висловлювання. Запам'ятайте, що Ви не можете використовувати List.toArray() тому, що цей вираз конвертує List в Integer[] (який 
+ <b>не</b> є примітивним типом, прим. переклад). Правильним шляхом буде наступний варіант: 
+ <code class=" language-none">int[] array = new int[list.size()]; for(int i=0; i &lt; list.size(); i++) { array[i] = list.get(i); }</code>
+ <b>4. Як конвертувати масив int[] у List? </b> Найпростішим способом також є використання 
+ <a href="http://commons.apache.org/proper/commons-lang/javadocs/api-2.6/org/apache/commons/lang/ArrayUtils.html" rel="nofollow">ArrayUtils</a> у бібліотеці
+ <a href="http://commons.apache.org/proper/commons-lang/" rel="nofollow">Apache Commons Lang</a> , як і вище. 
+ <code class=" language-none">List list = Arrays.asList(ArrayUtils.toObject(array));</code> Також, у JDK немає скорочення цього висловлювання. 
+ <b>5. Як краще фільтрувати колекцію? </b> Ви можете використовувати сторонні пакети, такі як 
+ <a href="https://code.google.com/p/guava-libraries/" rel="nofollow">Guava</a> або 
+ <a href="http://commons.apache.org/proper/commons-lang/" rel="nofollow">Apache Commons Lang</a> для збільшення функціоналу. Обидва ці пакети мають метод filter() (у класі 
+ <a href="http://google-collections.googlecode.com/svn/trunk/javadoc/com/google/common/collect/Collections2.html" rel="nofollow">Collections2</a> від Guava і 
+ <a href="http://commons.apache.org/proper/commons-collections//javadocs/api-3.2.1/org/apache/commons/collections/CollectionUtils.html" rel="nofollow">CollectionUtils</a> від Apache). Метод filter() поверне елементи, які збігаються із взятим Предикатом (Predicate). У JDK все складніше. Хороші новини полягають у тому, що Java 8 предикати будуть додані ( 
+ <a href="http://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html" rel="nofollow">вже додані</a> , прим. переклад.), але зараз Вам необхідно використовувати Iterator для переміщення по всій колекції. 
+ <code class=" language-none">int[] array = {1,2,3,4,5}; List<integer>
+   list = new ArrayList
+   <integer>
+    (); for(int i: array) { list.add(i); }
+   </integer>
+  </integer></code>
+ <b></b>
+ <a href="https://code.google.com/p/guava-libraries/" rel="nofollow"></a>
+ <a href="http://commons.apache.org/proper/commons-lang/" rel="nofollow"></a>
+ <a href="http://google-collections.googlecode.com/svn/trunk/javadoc/com/google/common/collect/Collections2.html" rel="nofollow"></a>
+ <a href="http://commons.apache.org/proper/commons-collections//javadocs/api-3.2.1/org/apache/commons/collections/CollectionUtils.html" rel="nofollow"></a>
+ <a href="http://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html" rel="nofollow"></a>
+ <code class=" language-none">Iterator<integer>
+   itr = list.iterator(); while(itr.hasNext()) { int i = itr.next(); if (i &gt; 5) { // filter all ints bigger than 5 itr.remove(); } }
+  </integer></code> Звичайно, Ви можете імітувати той шлях, яким йдуть Guava та Apache, познайомившись із новим інтерфейсом Predicate. Тепер ми можемо використовувати наступний код для фільтрації колекції: 
+ <b>6. Як легко конвертувати List у Set? </b> Існує два шляхи для цього залежно від того, як Ви хочете визначати рівність. Перший шматок коду містить список у HashSet. Дублікат у такому випадку визначається в основному за hashCode(). Як правило, це працюватиме. Але якщо Вам потрібно враховувати шлях порівняння, то краще використовувати другу частину коду, де Ви можете визначити Ваш власний компаратор. 
+ <b>7. Як я можу видалити повторювані елементи з ArrayList?</b>
+ <code class=" language-none">public interface Predicate<t>
+   { boolean test(T o); } public static 
+   <t>
+    void filter(Collection
+    <t>
+     collection, Predicate
+     <t>
+      predicate) { if ((collection != null) &amp;&amp; (predicate != null)) { Iterator
+      <t>
+       itr = collection.iterator(); while(itr.hasNext()) { T obj = itr.next(); if (!predicate.test(obj)) { itr.remove(); } } } }
+      </t>
+     </t>
+    </t>
+   </t>
+  </t></code>
+ <code class=" language-none">filter(list, new Predicate<integer>
+   () { public boolean test(Integer i) { return i &lt;= 5; } });
+  </integer></code>
+ <b></b>
+ <code class=" language-none">Set<integer>
+   set = new HashSet
+   <integer>
+    (list);
+   </integer>
+  </integer></code>
+ <code class=" language-none">Set<integer>
+   set = new TreeSet
+   <integer>
+    (aComparator); set.addAll(list);
+   </integer>
+  </integer></code>
+ <b></b> Це питання певною мірою пов'язане з питанням вище. Якщо вам не має значення порядок елементів в ArrayList, розумним ходом буде помістити лист у набір (Set) для видалення дубліуатів, а потім повернути назад до списку (List). Нижче наведено приклад. Якщо для Вас має значення порядок елементів, то порядок може бути забезпечений шляхом розміщення списку в 
+ <a href="http://docs.oracle.com/javase/6/docs/api/java/util/LinkedHashSet.html" rel="nofollow">LinkedHashSet</a> , який є стандартним JDK. 
+ <b>8. Сортована колекція</b> Існує кілька шляхів для підтримки сортованої колекції Java. Усі з них забезпечують колекцію в натуральному порядку або за вказаним компаратором. У випадку з натуральним порядком, Вам також потрібно реалізувати інтерфейс 
+ <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparable.html" rel="nofollow">Comparable</a> в елементі. 
+ <code class=" language-none">ArrayList** list = ... // initial a list with duplicate elements Set<integer>
+   set = new HashSet
+   <integer>
+    (list); list.clear(); list.addAll(set);
+   </integer>
+  </integer></code>
+ <a href="http://docs.oracle.com/javase/6/docs/api/java/util/LinkedHashSet.html" rel="nofollow"></a>
+ <b></b>
+ <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparable.html" rel="nofollow"></a>
+ <ol>
+  <li><a href="http://docs.oracle.com/javase/6/docs/api/java/util/Collections.html#sort(java.util.List)" rel="nofollow">Collections.sort()</a> може відсортувати List. Як зазначено в документації Java, це сортування стабільне і гарантує продуктивність n log(n).</li>
+  <li><a href="http://docs.oracle.com/javase/7/docs/api/java/util/PriorityQueue.html" rel="nofollow">PriorityQueue</a> забезпечує впорядковану чергу. Різниця між PriorityQueue і Collections.sort() полягає в тому, що PriorityQueue підтримує порядок черги весь час, але Ви можете отримати лише перший елемент черги. Ви не можете отримати випадковий доступ до елемента, наприклад, як PriorityQueue.get(4).</li>
+  <li>Якщо немає дублікатів у колекції, можна вибрати <a href="http://docs.oracle.com/javase/7/docs/api/java/util/TreeSet.html" rel="nofollow">TreeSet</a> . Так само, як і PriorityQueue, TreeSet підтримує впорядкований набір весь час. Ви можете отримати найменший або найбільший елемент TreeSet, але ви все одно не можете мати випадковий доступ до елементів.</li>
+ </ol> Простіше кажучи Collections.sort() забезпечує одноразовий упорядкований список. PriorityQueue та TreeSet підтримує впорядковану колекцію постійно, за що доводиться платити відсутністю індексованого доступу до елементів. 
+ <strong>9. Collections.emptyList() або новий екземпляр</strong> Те саме питання застосовується до emptyMap() і emptySet(). Обидва методи повертають порожній список, але Collections.emptyList() незаперечний (immutable) список. Це означає, що ви 
+ <b>не</b> можете додавати нові елементи до "порожнього" списку. На тлі кожен виклик методу Collections.emptyList() фактично не створює новий екземпляр порожнього списку. Натомість воно використовуватиме знову вже існуючий порожній екземпляр. Якщо Ви знайомі із синглтоном (Singleton, 
+ <a href="http://info.codegym.cc/translation/2013/09/14/%D0%A8%D0%B0%D0%B1%D0%BB%D0%BE%D0%BD-%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F-Singleton-%D0%BE%D0%B4%D0%B8%D0%BD%D0%BE%D1%87%D0%BA%D0%B0-%D0%BD%D0%B0%D0%B8%D0%B1%D0%BE%D0%BB%D0%B5%D0%B5-%D1%80%D0%B0%D1%86%D0%B8%D0%BE%D0%BD%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5-%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8-%D0%B2-%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85-.html">тиц</a>, прим. переклад.) як із патерном проектування, Ви повинні зрозуміти що мають на увазі. Це має Вам дати 
+ <strong>більшу</strong> продуктивність, якщо викликається часто. 
+ <strong>10 Копіювання колекції, Collections.copy()</strong> Існує два способи копіювання вихідного списку до призначеного. Один шлях – використання конструктора ArrayList. Інший спосіб - використання методу 
+ <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collections.html" rel="nofollow">Collections.copy ()</a> . Зверніть увагу на перший рядок: ми виділяємо список як мінімум такої ж довжини, що й довжина вихідного списку, тому що в документації Java про колекції сказано: 
+ <code class=" language-none">ArrayList<integer>
+   dstList = new ArrayList
+   <integer>
+    (srcList);
+   </integer>
+  </integer></code>
+ <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collections.html" rel="nofollow"></a>
+ <blockquote>
+  The list list must be at least as long as the source list.
+ </blockquote> Що означає, що кінцевий список має бути не коротшим, ніж вихідний. Обидва методи є поверхневим копіюванням (shallow copy). Тож яка різниця між цими двома методами? По-перше, Collections.copy() не перерозподілятиме місткість колекції dstList, навіть якщо dstList не матиме достатньо простору для утримання всіх елементів з srcList. Замість цього, він буде кидати 
+ <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IndexOutOfBoundsException.html" rel="nofollow">IndexOutOfBoundsException</a> . Можна спитати, чи є користь від цього. Причина в тому, що це гарантує, що метод запускається лінійно за часом. Також це підходить у випадку, коли Ви хочете використовувати знову масиви, а не виділяти знову пам'ять у конструкторі ArrayList. 
+ <b>Замість ув'язнення</b>
+ <code class=" language-none">ArrayList<integer>
+   dstList = new ArrayList
+   <integer>
+    (srcList.size()); Collections.copy(dstList, srcList);
+   </integer>
+  </integer></code>
+ <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IndexOutOfBoundsException.html" rel="nofollow"></a>
+ <b></b> Якщо після прочитання статті у Вас ще залишабося питання, сміливо ставте їх у коментарі. Також, якщо Ви знайшли якусь неточність у перекладі або ще якусь помилку, то пишіть у ЛЗ, буде виправлена, а Вам буде спасибі. 
+ <a href="http://www.programcreek.com/2013/09/top-10-questions-for-java-collections/" rel="nofollow">Оригінал.</a>
+</cut>

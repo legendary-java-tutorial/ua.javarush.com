@@ -1,0 +1,94 @@
+new ArrayList(????) як і де краще ініціалізувати
+<p>----------------------------------------</p>
+Написання коду без використання було б божевіллям. Це чудова частина Java з безліччю витончених рішень. Що важливіше, на відміну від масивів, тут вам не потрібно дбати про розміри. буде зростати доти, доки не закінчиться пам'ять. Розробнику
+<p>----------------------------------------</p>
+Написання коду без використання <a href="http://ru.wikipedia.org/wiki/Java_Collections_Framework" rel="nofollow">колективних framework</a> було б божевіллям. Це чудова частина Java з безліччю витончених рішень. Що важливіше, на відміну від масивів, тут вам не потрібно дбати про розміри. <a href="https://codegym.cc/quests/lectures/questsyntax.level07.lecture05">ArrayList</a> буде зростати доти, доки не закінчиться пам'ять. Розробнику не потрібно турбуватися про початковий розмір і помилку <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ArrayIndexOutOfBoundsException.html" rel="nofollow">ArrayIndexOutOfBoundsException</a> . Але що якщо поставлена ​​умова стежити за обсягом пам'яті? Чи можемо ми ефективно використовувати пам'ять, працюючи з колекціями?<cut>
+ <br>
+  Виникає стандартне питання: як ініціалізувати список? Нижченаведений код працювати не буде: Це приведе до помилки компіляції: 
+ <em>Local variable names не може бути initialized</em> – локальна змінна 
+ <em>names</em> може бути неініціалізована. Специфікація Java вимагає, щоб усі локальні змінні (ті, що існують у стеку) були ініціалізовані відповідними значеннями. Ось так це можна зробити: Поза всякими сумнівами, список має бути ініціалізований. Ви можете або створити список у першому ж рядку, або зробити розумніше - використовувати відкладену ( 
+ <em>ледачу</em> ) ініціалізацію, як ми зробабо в методі 
+ <em>getAllNames()</em>
+ <br>
+ <code class=" language-none">public List<string>
+   getAllNames() { List
+   <string>
+    names; if (/*необходимые условия выполнены*/) { names = new ArrayList
+    <string>
+     (); /*заполнение списка*/ } return names; }
+    </string>
+   </string>
+  </string></code>
+ <em></em>
+ <em></em>
+ <br>
+ <code class=" language-none">List<string>
+   names = null; List
+   <string>
+    names = new ArrayList
+    <string>
+     (); List
+     <string>
+      names = new ArrayList
+      <string>
+       (0); List
+       <string>
+        names = new ArrayList
+        <string>
+         (size);
+        </string>
+       </string>
+      </string>
+     </string>
+    </string>
+   </string>
+  </string></code>
+ <em></em>
+ <em></em>. У такому разі список буде створений лише за потреби - якщо початкові умови не виконані, список ніколи не з'явиться в купі. Тут ми підійшли до головного питання: 
+ <em><strong>який розмір ми повинні задати у списку? </strong></em>Найкращий варіант дати йому точний розмір. Наприклад: У цьому випадку рівно 
+ <em>n</em> імен має бути повернено, і, як наслідок, створюється колекція з елементів 
+ <em>n</em> . Однак, точне значення 
+ <em>n</em> відомо далеко не завжди. Навіть у наведеному прикладі, якщо 
+ <em>n=1000</em> , а доступно було лише 100 імен? При роботі з колекціями найбільш популярним є виклик конструктора за замовчуванням. Якщо заглянути у вихідний код Java (версії 1.6) Як можна побачити,
+ <br>
+ <code class=" language-none">public List<string>
+   getTopNames (int n) { List
+   <string>
+    names = null; if ( /*необходимые условия выполнены*/) { names = new ArrayList
+    <string>
+     (n); /*заполнение списка*/ } return names; }
+    </string>
+   </string>
+  </string></code>
+ <em></em>
+ <em></em>
+ <em></em>
+ <em></em>
+ <br>
+ <code class=" language-none">names = new ArrayList<string>
+   ();
+  </string></code>
+ <br>
+ <br>
+ <code class=" language-none">/** * Конструирует пустой список с указанной начальной емкостью. * * @param initialCapacity начальная емкость списка * @exception IllegalArgumentException если указанная начальная емкость отрицательна * */ public ArrayList(int initialCapacity) { super(); if (initialCapacity &lt; 0) this.elementData = new Object[initialCapacity]; } /** * Конструирует пустой список с начальной емкостью, равной 10. */ public ArrayList() { this(10); }</code>
+ <br>
+ <strong>за замовчуванням створюється список із 10 елементів</strong> . Тобто ми сміливо можемо використовувати конструктор за замовчуванням, коли у списку не планується зберігати понад 10 елементів. Що станеться, якщо спробувати додати 11 елемент? Ну, нічого поганого… елемент успішно додасться. Подивіться на метод: 
+ <code class=" language-none">public Boolean add(E e) { ensureCapacity(size + 1); //увеличивает modCount!! elementData[size++] = e; return true; }</code>Розміром масиву керує метод 
+ <em>забезпечення Capacity</em> . 
+ <code class=" language-none">public void ensureCapacity (int minCapacity) { modCount++; int oldCapacity = elementData.length; if (minCapacity &gt; oldCapacity) { throw new IllegalArgumentException(“Illegal Capacity: ” + initialCapacity); Object oldData[] = elementData; int newCapacity = (oldCapacity * 3) / 2 + 1; if (newCapacity &lt; minCapacity) newCapacity = minCapacity; // minCapacity обычно ближе к размеру, так что это беспроигрышно: elementData = Arrays.copyOf(elementData, newCapacity); } }</code>
+ <strong>Розмір збільшується в 1,5 рази</strong> . Створюється новий масив, і елементи переміщуються до нього. Якщо ми задали розмір 10, то на 11 елементі: 
+ <ul>
+  <li>розмір змінюється на 10*3/2 + 1 = 16</li>
+  <li>наступне збільшення = 16*3/2 + 1 = 25</li>
+  <li>наступне збільшення = 25 * 3 / 2 + 1 = 39 і таке інше.</li>
+ </ul> У разі 100 елементів, 
+ <a href="http://ru.wikipedia.org/wiki/Java_Virtual_Machine" rel="nofollow">JVM</a> необхідно буде кілька разів створювати новий масив і копіювати елементи. З огляду на це, якщо є припущення про необхідний розмір масиву, краще задавати початкову ємність близькою до нього. Ось кілька вказівок до дії: 
+ <ol>
+  <li><strong>Створюйте колекцію тільки тоді, коли її потребуєте</strong> , інакше ініціалізуйте null-значенням або використовуйте <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collections.html#EMPTY_LIST" rel="nofollow">Collections.EMPTY_LIST</a> .</li>
+  <li><strong>Якщо відомий необхідний розмір</strong> , вкажіть його в конструкторі колекції.</li>
+  <li><strong>Якщо є впевненість, що кількість елементів не перевищить 10</strong> , вільно використовуйте конструктор за замовчуванням.</li>
+  <li><strong>Ризик, пов'язаний зі створенням колекції нульового розміру</strong> , полягає в тому, що частота створення нових масивів та копіювання даних може бути вищою. Потрібно дуже ретельно продумати, <strong>чи висока вигода від використання колекцій нульового розміру</strong> .</li>
+  <li>Якщо ініціалізували колекцію <strong>надто великого розміру на початку методу і хочеться зменшити його, є метод <a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html#trimToSize()" rel="nofollow">trimToSize()</a></strong> .</li>
+ </ol> Звичайно, ці вказівки застосовні при роботі з колекціями на основі масиву, і все це не має сенсу у зв'язковому списку. Насправді ці проблеми навряд чи будуть убивцями програми, але якщо є можливість зробити трохи краще, чому б її не використовувати. Чи є у вас інші корисні вказівки? Знайдені вами способи змусити речі працювати краще? Чи це все зайве? Що ви думаєте? 
+ <a href="http://learningviacode.blogspot.in/2013/03/new-arraylist.html" rel="nofollow">Оригінал статті тут.</a>
+</cut>

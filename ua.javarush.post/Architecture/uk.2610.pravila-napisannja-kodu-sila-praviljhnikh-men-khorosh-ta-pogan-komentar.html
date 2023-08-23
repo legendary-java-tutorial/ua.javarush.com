@@ -1,0 +1,217 @@
+Правила написання коду: сила правильних імен, хороші та погані коментарі
+<p>----------------------------------------</p>
+Як часто вам доводилося розумітися на чужому коді? Коли замість кількох годин ти витрачаєш дні, щоб просто розібратися в логіці того, що відбувається. Найцікавіше, що для людини, яка писала цей код, тут все ясно і дуже прозоро. І це не дивн
+<p>----------------------------------------</p>
+<img data-max-width="256" class="img-fluid" alt="Правила написання коду: сила правильних імен, хороші та погані коментарі." src="https://codegym-com.translate.goog/images/article/ac29136e-db21-4474-b311-aed74a37f929/original.jpeg"> Як часто вам доводилося розумітися на чужому коді? Коли замість кількох годин ти витрачаєш дні, щоб просто розібратися в логіці того, що відбувається. Найцікавіше, що для людини, яка писала цей код, тут все ясно і дуже прозоро. І це не дивно: адже досконалий чи ідеальний код — це дуже розмите поняття, бо кожен розробник має своє бачення на світ і код, відповідно, теж. Неодноразово стикався з ситуацією, коли я і мій колега дивабося на один і той же код мали різну думку щодо його коректності та чистоти. <img data-max-width="512" class="img-fluid" alt="Правила написання коду: сила правильних імен, хороші та погані коментарі." border="0" src="https://codegym-com.translate.goog/images/article/bfd3bcd7-705c-4c57-8ee5-1b2e86d38135/original.jpeg">Знайоме почуття, чи не так? Тим не менш, є деякі моменти, перевірені часом, яких варто було б дотримуватися, що в результаті зіграє нам на руку, адже якщо ви залишатимете свій код у такому стані, в якому хотіли б самі хотіли його отримати, світ став би трішки щасливішим і чистіше. <img data-max-width="800" class="img-fluid" alt="Правила написання коду: сила правильних імен, хороші та погані коментарі." src="https://codegym-com.translate.goog/images/article/db9f84e6-2b37-4b39-b103-505796470138/original.jpeg">У своїй <a href="https://codegym.cc/groups/posts/2573-pravila-napisanija-koda-ot-sozdanija-sistemih-do-rabotih-s-obhhektami" target="_blank">минулій статті</a>про правила написання коду (а точніше, невеликому посібнику), ми трохи помацали рекомендації щодо написання системи в цілому та таких її елементах як об'єкти, їх інтерфейси, класи, методи та змінні. Там же я побіжно згадував про правильні іменування тих чи інших елементів. Сьогодні мені хотілося б поговорити саме про це, адже правильні назви полегшують читання коду у рази. Закривати ж тему правильного коду будемо за допомогою роздумів та невеликих прикладів коментарів у коді — добре це чи все ж таки не дуже. Отже, давайте приступимо. 
+<h2>Правильні іменування</h2>Правильні назви покращують читабельність коду, відповідно заощаджуючи час на ознайомлення, адже значно простіше використовувати метод, коли назва приблизно описує його функціонал. Так як у коді все складається з назв (змінні, методи, класи, об'єкти, файли і т. д.), цей пункт стає дуже важливим при створенні правильного, чистого коду. Виходячи з вищесказаного, ім'я має передавати сенс, чому, наприклад, змінна існує, що вона робить і як використовується. Ще не раз зазначу, що найкращим коментарем для опису змінної є її правильне ім'я. <img data-max-width="512" class="img-fluid" alt="Правила написання коду: сила правильних імен, хороші та погані коментарі." src="https://codegym-com.translate.goog/images/article/4fd73291-495e-417a-9992-451d69300875/original.jpeg">
+<h3>Найменування інтерфейсів</h3>Інтерфейси, як правило, використовують імена, що починаються з великої літери та написані у верблюжому стилі (CamelCase). Раніше при написанні інтерфейсу гарною практикою вважалося додати префікс I для позначення його як інтерфейсу (наприклад, IUserService), але це виглядає дуже потворно і відволікає. У таких випадках краще писати без нього (UserService), а до реалізації його додати -Impl (UserServiceImpl). Ну або на крайній випадок, до його реалізації додати префікс (UserService). 
+<h3>Назви класів</h3>Так само, як і в інтерфейсів, імена пишуться з великої літери та використовують верблюжий стиль (CamelCase). Який би не робився апокаліпсис, як би не горіли терміни, але ніколи, запам'ятайте — ніколи ім'я класу не повинно бути дієсловом! Імена класів та об'єктів повинні бути іменниками та їх комбінаціями (UserController, UserDetails, UserAccount тощо). Не слід забезпечувати ім'я кожного класу абревіатурою цієї програми, оскільки це лише додасть зайву складність (наприклад, у нас додаток User Data Migration, і ми до кожного класу додамо UDM — UDMUserDeatils, UDMUserAccount, UDMUserController). 
+<h3>Імена методів</h3>Зазвичай назви методів починаються з маленької літери, але вони юзають верблюжий стиль (СamelCase). Вище ми говорабо про те, що імена класів ніколи не мають бути дієсловами. Тут ситуація діаметрально протилежна: найменування методів якраз мають бути дієсловами чи його поєднаннями з дієсловами: findUserById, findAllUsers, createUser тощо. При створенні методу (як і змінних і класів), щоб не заплутатися, використовуйте один підхід в іменуванні. Наприклад, для пошуку користувача метод можна написати як getUserById або findUserById. І ще: не використовуйте в назвах методів гумор, бо жарт можуть і не зрозуміти, як і те, що робить цей метод. 
+<h3>Назви змінних</h3>Найчастіше імена змінних починаються з невеликої літери і теж застосовують Сamelcase, крім тих випадків, коли змінна — це світова константа. У таких випадках всі літери імені написані у верхньому регістрі та слова розділені нижнім підкресленням - "_". При назві змінних для зручності можна використовувати змістовий контекст. Інакше кажучи, коли є змінна як частина чогось більшого — наприклад firstName, lastName, status — у таких випадках можна додати приставку, що вказує на об'єкт, частиною якого є змінна. Наприклад: userFirstName, userLastName, userStatus. Ще потрібно уникати схожих імен для змінних, коли вони мають різну суть. Антоніми для змінних, що часто зустрічаються: 
+<ul>
+ <li>begin/end</li>
+ <li>first/last</li>
+ <li>locked/unlocked</li>
+ <li>min/max</li>
+ <li>next/previous</li>
+ <li>old/new</li>
+ <li>opened/closed</li>
+ <li>visible/invisible</li>
+ <li>source/target</li>
+ <li>source/destination</li>
+ <li>up/down</li>
+</ul>
+<h3>Короткі імена змінних</h3>Коли ми маємо змінні види x чи n чи щось на зразок цього, ми відразу й побачимо наміри людини, писав код. Не очевидно, що робить метод n: він вимагає більш вдумливого осмислення (а це час, час). Наприклад, у нас є поле - id відповідального користувача, і замість якогось імені типу - x або просто id, ми назвемо цю змінну responsibleUserId, що відразу нам підвищує читальність і свідомість. Тим не менш, короткі імена виду n мають місце як локальні зміни невеликих методів, де блок коду з цією зміною — лише пара рядків коду, і ім'я методу чудово описує, що там відбувається. Розробник, побачивши таку змінну, розуміє її другорядність і обмежену область видимості. За підсумком є ​​певна залежність від довжини імені змінних: чим довше воно, тим паче глобальна змінна і навпаки. Як приклад, метод для пошуку останнього збереженого користувача за датою: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token class-name">User</span> <span class="token function">findLastUser</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token keyword">return</span> <span class="token function">findAllUsers</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+           <span class="token punctuation">.</span><span class="token function">sorted</span><span class="token punctuation">(</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span> <span class="token operator">-&gt;</span> <span class="token operator">-</span>x<span class="token punctuation">.</span><span class="token function">getCreatedDate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">compareTo</span><span class="token punctuation">(</span>y<span class="token punctuation">.</span><span class="token function">getCreatedDate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+           <span class="token punctuation">.</span><span class="token function">findFirst</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+           <span class="token punctuation">.</span><span class="token function">orElseThrow</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-&gt;</span> <span class="token keyword">new</span> <span class="token class-name">ResourceNotFoundException</span><span class="token punctuation">(</span><span class="token string">"Any user doesn't exist "</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre> Тут ми використовуємо короткі іменування x та y для завдання сортування стриму, і забуваємо про них. 
+<h3>Оптимальна довжина</h3>Продовжимо тему довжини назв. Оптимальна довжина імені - десь між довжиною імен maximumNumberOfUsersInTheCurrentGroup і n. Тобто, занадто короткі страждають від нестачі сенсу, а занадто довгі розтягують програму, не додаючи читабельності, і їх просто ліньки щоразу писати. Незважаючи на вищеописаний випадок, для змінних з коротким ім'ям виду n потрібно дотримуватися довжини приблизно 8 -16 символів. Це не суворе правило: скоріше як орієнтир. 
+<h3>Малі відмінності</h3>Не можу пройти повз і малопомітні відмінності в іменах, адже це теж погана практика, тому що можна просто наплутати або витратити багато зайвого часу на те, щоб помітити незначні відмінності в іменах. Наприклад, різницю між InvalidDataAccessApiUsageException і InvalidDataAccessResourceUsageException побіжним поглядом важко знайти. Також часто дезінформація може виникнути при використанні маленьких L та O, адже їх можна легко переплутати з 1 та 0: у деяких шрифтах різниця більш очевидна, у деяких – менша. 
+<h3>Змістова частина</h3>Потрібно вкладати смислову частину в назви, але не перегравати з синонімами, тому що, наприклад, у UserData і UserInfo фактично один і той же сенс, і доведеться трохи поколупатися в коді, щоб зрозуміти, який конкретно об'єкт нам потрібен. Уникайте неінформативних слів, наприклад firstNameString: до чого нам слово string? Хіба може бути ім'я типу дати? Звичайно, ні: тому просто firstName. Ще як приклад хотілося б відзначити boolean змінні, наприклад, - flagDelete. Слово flag не несе жодного смислового навантаження. Розумнішим було назвати — isDelete. 
+<h3>Дезінформація</h3>Також хотілося б сказати кілька слів про неправильні імена. Припустимо, у нас є ім'я userActivityList, і при цьому названий так об'єкт має не тип List, а якийсь інший контейнер або кастомний об'єкт для зберігання. Це може ввести рядового програміста в ступор: краще вже назвати якось userActivityGroup або userActivities. 
+<h3>Пошук</h3>Одним із недоліків коротких і простих імен є те, що їх складно шукати у великому обсязі коду, адже що буде найпростіше знайти: змінну з ім'ям name або NAME_FOR_DEFAULT_USER? Звісно ж, другий варіант. Потрібно уникати в назвах слів (букв), що часто зустрічаються, так це буде лише збільшувати кількість знайдених файлів при пошуку, що не є гуд. За читанням коду програмісти проводять більше часу, ніж за його написанням, так що з головою підходите до найменування елементів вашої програми. Але якщо вдало назвати не вдалося? Якщо назва методу погано описує його функціонал? Тут і виходить на сцену, наш наступний пункт — коментарі 
+<h3>Коментарі</h3><img data-max-width="512" class="img-fluid" alt="Правила написання коду: сила правильних імен, хороші та погані коментарі." src="https://codegym-com.translate.goog/images/article/aec80831-d348-4436-b041-89029de00cc1/original.jpeg">Немає нічого кращого за доречний коментар, але і ніщо не захаращує модуль так, як беззмістовні, застарілі або помилкові коментарі. Палиця з двома кінцями, чи не так? Все ж таки не варто ставитися до коментарів як до однозначного добра: скоріше як до меншого зла. Адже коментар за своєю суттю — це компенсація невдало вираженої думки в коді. Наприклад, ми використовуємо їх, щоб якось донести суть методу, якщо він виявився надто заплутаним. У такій ситуації краще грамотно відрефакторити код, ніж писати позначки, що описують. Чим давніший коментар, тим гірше, адже код має властивість розростатися і еволюціонувати, а коментар може залишитися тим самим, і чим далі, тим сумнівніші ці замітки. Неточні коментарі набагато гірші, ніж їх відсутність, адже вони спантеличують і обманюють, даючи помилкові очікування. <a href="https://codegym.cc/welcome" target="_blank"><img id="click_banner1_articles" data-max-width="1024" data-id="8839f21e-90b7-4171-b395-fcc71d05f093" class="img-fluid" alt="Правила написання коду: сила правильних імен, хороші та погані коментарі." src="https://cdn.javarush.com/images/article/8839f21e-90b7-4171-b395-fcc71d05f093/1024.jpeg" style="width: 1024px;"></a>
+<h3>Різновиди коментарів</h3>
+<ul>
+ <li>
+  <p><span class="text-bold">юридичні коментарі</span> - коментарі, що залишаються на початку кожного файлу з вихідним кодом, з юридичних міркувань, як наприклад:</p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token operator">*</span> <span class="token class-name">Copyright</span> <span class="token punctuation">(</span>c<span class="token punctuation">)</span> <span class="token number">2007</span><span class="token punctuation">,</span> <span class="token number">2013</span><span class="token punctuation">,</span> <span class="token class-name">Oracle</span> and<span class="token operator">/</span>or its <span class="token class-name"><span class="token namespace">affiliates<span class="token punctuation">.</span></span> All</span> rights reserved<span class="token punctuation">.</span>
+<span class="token operator">*</span> ORACLE PROPRIETARY<span class="token operator">/</span><span class="token class-name">CONFIDENTIAL<span class="token punctuation">.</span> Use</span> is subject <span class="token keyword">to</span> <span class="token namespace">license</span> terms<span class="token punctuation">.</span></code></pre>
+  <p></p></li>
+ <li>
+  <p><span class="text-bold">інформативні коментарі</span> — коментарі, які мають пояснення до коду (що надають додаткову інформацію або наміри даної ділянки коду).</p>
+  <p>Як приклад:</p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token comment">/*
+* Объединяет пользователя из бд и пришедшего для обновления
+* Когда в requestUser поле пустое, оно заполняется старыми данными из foundUser
+*/</span>
+<span class="token keyword">private</span> <span class="token class-name">User</span> <span class="token function">mergeUser</span><span class="token punctuation">(</span><span class="token class-name">User</span> requestUser<span class="token punctuation">,</span> <span class="token class-name">User</span> foundUser<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">User</span><span class="token punctuation">(</span>
+       foundUser<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+       requestUser<span class="token punctuation">.</span><span class="token function">getFirstName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token keyword">null</span> <span class="token operator">?</span> requestUser<span class="token punctuation">.</span><span class="token function">getFirstName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">:</span> foundUser<span class="token punctuation">.</span><span class="token function">getFirstName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+       requestUser<span class="token punctuation">.</span><span class="token function">getMiddleName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token keyword">null</span> <span class="token operator">?</span> requestUser<span class="token punctuation">.</span><span class="token function">getMiddleName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">:</span> foundUser<span class="token punctuation">.</span><span class="token function">getMiddleName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+       requestUser<span class="token punctuation">.</span><span class="token function">getLastName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token keyword">null</span> <span class="token operator">?</span> requestUser<span class="token punctuation">.</span><span class="token function">getLastName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">:</span> foundUser<span class="token punctuation">.</span><span class="token function">getLastName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+       requestUser<span class="token punctuation">.</span><span class="token function">getAge</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token keyword">null</span> <span class="token operator">?</span> requestUser<span class="token punctuation">.</span><span class="token function">getAge</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">:</span> foundUser<span class="token punctuation">.</span><span class="token function">getAge</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+       <span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span></code></pre>
+  <p></p>
+  <p>У цьому випадку можна обійтися і без коментарів, оскільки назва методу та його аргументів разом із вельми прозорим функціоналом самі себе непогано описують.</p></li>
+ <li>
+  <p><span class="text-bold">попереджувальний коментар</span> - коментар, метою якого є попередити інших розробників про небажані наслідки якоїсь дії (наприклад, чому тест був позначений як @Ignore):</p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token comment">// Слишком долго отрабатывает</span>
+<span class="token comment">// Не запускайте, если не располагаете избытком времени</span>
+<span class="token annotation punctuation">@Ignore</span>
+<span class="token annotation punctuation">@Test</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">someIntegrationTest</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       ……
+       <span class="token punctuation">}</span></code></pre></li>
+ <li>
+  <p><span class="text-bold">TODO</span> - коментарі, які є заміткою на майбутнє, що потрібно буде зробити, але з якоїсь причини не можна зробити зараз. Це непогана практика, але все ж таки їх потрібно регулярно переглядати для видалення неактуальних, щоб уникнути нагромадження.</p>
+  <p>Прикладом послужить:</p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token comment">//TODO: Add a check for the current user ID (when will be created security context)</span>
+
+<span class="token annotation punctuation">@Override</span>
+<span class="token keyword">public</span> <span class="token class-name">Resource</span> <span class="token function">downloadFile</span><span class="token punctuation">(</span><span class="token class-name">File</span> file<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">return</span> fileManager<span class="token punctuation">.</span><span class="token function">download</span><span class="token punctuation">(</span>file<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span></code></pre>
+  <p></p>
+  <p>Тут ми помічаємо, що необхідно додати перевірку користувача, який завантажує (id якого ми витягнемо з security контексту) про те, хто зберіг.</p></li>
+ <li>
+  <p><span class="text-bold">посилюючий коментар</span> — коментар, що наголошує на важливості якоїсь обставини, що на перший погляд може здатися несуттєвим.</p>
+  <p>Як приклад, шматочок способу, що заповнює тестову БД, деякими скриптами:</p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Stream</span><span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span><span class="token class-name">IOUtils</span><span class="token punctuation">.</span><span class="token function">resourceToString</span><span class="token punctuation">(</span><span class="token string">"/fill-scripts/"</span> <span class="token operator">+</span> x<span class="token punctuation">,</span> <span class="token class-name">StandardCharsets</span><span class="token punctuation">.</span>UTF_8<span class="token punctuation">)</span>
+       <span class="token punctuation">.</span><span class="token function">trim</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+       <span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">";"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+       <span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span>jdbcTemplate<span class="token operator">::</span><span class="token function">update</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// Вызов trim() очень важен, убирает возможные пробелы в конце скрипта</span>
+<span class="token comment">// чтобы при считке и разбивке на отдельные запиты не было пустых</span></code></pre>
+  <p></p></li>
+ <li>
+  <p><span class="text-bold">javaDoc</span> - коментарі, що описують API певного функціоналу для загального користування. Напевно, найкорисніші коментарі, оскільки з документованим API у рази легше працювати, але вони також можуть застаріти, як і будь-які інші. Тому не забуваємо, що головний внесок у документацію вноситься не коментарями, а добрим кодом.</p>
+  <p>Приклад цілком звичайного методу оновлення користувача:</p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token comment">/**
+* Обновляет передаваемые поля для пользователя по id.
+*
+* @param id  id обновляемого пользователя
+* @param user пользователь с заполненными полями для обновления
+* @return обновленный пользователь
+*/</span>
+       <span class="token class-name">User</span> <span class="token function">update</span><span class="token punctuation">(</span><span class="token class-name">Long</span> id<span class="token punctuation">,</span> <span class="token class-name">User</span> user<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+  <p></p></li>
+</ul>
+<h3>Погані сценарії коментарів</h3><img data-max-width="512" class="img-fluid" alt="Правила написання коду: сила правильних імен, хороші та погані коментарі." src="https://codegym-com.translate.goog/images/article/7b415b05-37b7-46f6-bd29-4f758a346d99/original.jpeg">
+<ul>
+ <li>
+  <p><span class="text-bold">бормочучий коментар</span> — коментарі, які зазвичай пишуть нашвидкуруч, сенс яких зрозумілий тільки розробнику, який писав їх, оскільки тільки він бачить ту ситуацію з тими нюансами, на які він посилається.</p>
+  <p>Розглянемо цей приклад:</p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">configureSomeSystem</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">try</span><span class="token punctuation">{</span>
+       <span class="token class-name">String</span> configPath <span class="token operator">=</span> filesLocation<span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span><span class="token string">"/"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span>CONFIGURATION_FILE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token class-name">FileInputStream</span> stream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span>configPath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>  <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">FileNotFoundException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token comment">//В случае отсутствия конфигурационного файлу, загружается конфигурация по умолчанию</span>
+      <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+  <p></p>
+  <p>Хто завантажує ці установки? Чи були вони завантажені раніше? Метод призначений для перехоплення винятків та виклику дефолтних налаштувань? Занадто багато питань виникає, відповіді на які можна отримати лише заглибившись у вивчення інших елементів системи.</p></li>
+ <li>
+  <p><span class="text-bold">надлишковий коментар</span> - коментар, який не несе смислового навантаження, так як і так зрозуміло що відбувається в заданій ділянці коду (він читається не простіше, ніж код).</p>
+  <p>Дивимося приклад:</p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">JdbcConnection</span><span class="token punctuation">{</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">JdbcConnection</span><span class="token punctuation">{</span>
+   <span class="token comment">/**
+    * Журнальный компонент, связанный с текущим классом
+    */</span>
+   <span class="token keyword">private</span> <span class="token class-name">Logger</span> log <span class="token operator">=</span> <span class="token class-name">Logger</span><span class="token punctuation">.</span><span class="token function">getLogger</span><span class="token punctuation">(</span><span class="token class-name">JdbcConnection</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+   <span class="token comment">/**
+    * Создаёт и возвращает connection с помощью входящих параметров
+    */</span>
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">Connection</span> <span class="token function">buildConnection</span><span class="token punctuation">(</span><span class="token class-name">String</span> url<span class="token punctuation">,</span> <span class="token class-name">String</span> login<span class="token punctuation">,</span> <span class="token class-name">String</span> password<span class="token punctuation">,</span> <span class="token class-name">String</span> driver<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+       <span class="token class-name">Class</span><span class="token punctuation">.</span><span class="token function">forName</span><span class="token punctuation">(</span>driver<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       connection <span class="token operator">=</span> <span class="token class-name">DriverManager</span><span class="token punctuation">.</span><span class="token function">getConnection</span><span class="token punctuation">(</span>url<span class="token punctuation">,</span> login<span class="token punctuation">,</span> password<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       log<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"Created connection with db"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token keyword">return</span> connection<span class="token punctuation">;</span>
+   <span class="token punctuation">}</span></code></pre>
+  <p></p>
+  <p>Який сенс таких коментарів, якщо ми і так все чудово бачимо</p></li>
+ <li>
+  <p><span class="text-bold">недостовірні коментарі</span> - коментарі, що не відповідають істині і лише вводять в оману (дезінформують). Як наприклад:</p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token comment">/**
+* Вспомогательный метод, закрывает соединение со сканером, если isNotUsing истинно
+*/</span>
+<span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">scanClose</span><span class="token punctuation">(</span><span class="token class-name">Scanner</span> scan<span class="token punctuation">,</span> <span class="token keyword">boolean</span> isNotUsing<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+   <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>isNotUsing<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Exception</span><span class="token punctuation">(</span><span class="token string">"The scanner is still in use"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span> scan<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+  <p></p>
+  <p>Що в цьому коментарі не так? А те, що він трошки бреше нам, адже з'єднання закривається, якщо isNotUsing = false, але ніяк не навпаки, як нам мовить позначка.</p></li>
+ <li>
+  <p><span class="text-bold">обов'язкові коментарі</span> — коментарі, які вважають обов'язковими (Javadoc), але які за фактом іноді бувають надмірно нагромаджуючими, недостовірними та непотрібними (треба замислитися, а чи потрібні тут такі коментарі).</p>
+  <p>Приклад:</p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token comment">/**
+*  створення пользователя по переданным параметрам
+* @param firstName ім'я созданного пользователя
+* @param middleName среднее ім'я созданного пользователя
+* @param lastName фамабоя созданного пользователя
+* @param age возраст созданного пользователя
+* @param address адресас созданного пользователя
+* @return пользователь который был создан
+*/</span>
+<span class="token class-name">User</span> <span class="token function">createNewUser</span><span class="token punctuation">(</span><span class="token class-name">String</span> firstName<span class="token punctuation">,</span> <span class="token class-name">String</span> middleName<span class="token punctuation">,</span> <span class="token class-name">String</span> lastName<span class="token punctuation">,</span> <span class="token class-name">String</span> age<span class="token punctuation">,</span> <span class="token class-name">String</span> address<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+  <p></p>
+  <p>Чи змогли б ви зрозуміти, що робить метод без цих коментарів? Швидше за все так, тому коментарі в цьому випадку стають безглуздими.</p></li>
+ <li>
+  <p><span class="text-bold">журнальні коментарі</span> — коментарі, які іноді додають на початок модуля, при кожному його редагуванні (щось на кшталт журналу змін, що вносяться).</p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token comment">/**
+*  Записи ведутся с 09 января 2020;
+**********************************************************************
+*  09.01.2020  : Обеспечение соединения с БД с помощью Jdbc Connection;
+*  15.01.2020  : Добавление интерфейсов уровня дао для работы с БД;
+*  23.01.2020  : Добавление интеграционных тестов для БД;
+*  28.01.2020  : Имплементация интерфейсов уровня дао;
+*  01.02.2020  : Разработка интерфейсов для сервисов,
+*  согласно требованиям прописанным в user stories;
+*  16.02.2020  : Имплементация интерфейсов сервисов
+*  (реализация бизнес логики связанной с работой БД);
+*  25.02.2020  : Добавление тестов для сервисов;
+*  08.03.2020  : Празднование восьмого марта(Миша опять в хлам);
+*  21.03.2020  : Рефакторинг сервис слоя;
+*/</span></code></pre>
+  <p></p>
+  <p>Колись цей прохід був виправданий, але з появою систем керування вихідним кодом (наприклад Git), це стало зайвим нагромадженням і ускладненням коду.</p></li>
+ <li>
+  <p>коментарі посилання на авторів — коментарі, призначенням яких є, вказівка ​​людини, яка писала код, щоб можна було зв'язатися та обговорити, як що й навіщо:</p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token operator">*</span> <span class="token annotation punctuation">@author</span>  <span class="token class-name">Bender</span> <span class="token class-name">Benderovich</span></code></pre>
+  <p></p>
+  <p>Знову ж таки, системи контролю версій чудово запам'ятовують, хто і коли додав цей код, і подібний підхід зайвий.</p></li>
+ <li>
+  <p><span class="text-bold">закоментований код</span> - код, який був з тих чи інших причин закоментований. Одна з найгірших звичок, бо ви закоментували та забули, а в інших розробників просто не вистачить хоробрості його видалити (а раптом це щось цінне).</p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token comment">//    public void someMethod(SomeObject obj) {</span>
+<span class="token comment">//    .....</span>
+<span class="token comment">//    }</span></code></pre>
+  <p></p>
+  <p>Як результат він - накопичується, як мотлох. У жодному разі не можна залишати подібний код. Якщо дуже потрібно, не забуваємо знову ж таки про систему контролю версій.</p></li>
+ <li>
+  <p><span class="text-bold">неочевидні коментарі</span> — коментарі, які надмірно складно щось описують.</p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token comment">/*
+    * Начать с массива, размер которого достаточен для хранения
+    * всех байтов данных (плюс байты фильтра) с запасом, плюс 300 байт
+    * для данных заголовка
+    */</span>
+<span class="token keyword">this</span><span class="token punctuation">.</span>dataBytes <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>size <span class="token operator">*</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>deep <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token number">300</span><span class="token punctuation">]</span><span class="token punctuation">;</span></code></pre>
+  <p></p>
+  <p>Коментар повинен пояснювати код, а не сам потребувати пояснення. А що ж тут? Що за байти фільтра? До чого тут +1? Чому саме 300?</p></li>
+</ul>Якщо вже вирішабо писати коментарі, ось пара порад щодо їх використання: 
+<ol>
+ <li>Використовуйте стилі, які легко підтримувати: підтримувати занадто химерні та екзотичні стилі набридає і з'їдає чимало часу.</li>
+ <li>Не використовуйте коментарі наприкінці рядків, що належать до одиночних рядків: виходить велике нагромадження коментів, при цьому важко вигадати виразний коментар для кожного рядка.</li>
+ <li>Вигадуючи коментар, постарайтеся відповісти на запитання: «чому», а не «як».</li>
+ <li>Уникайте скорочень. Як і говорив вище, нам не потрібне пояснення для коментаря: коментар і є пояснення.</li>
+ <li>Можна використовувати коментарі для позначення одиниць вимірювання та діапазону допустимих величин.</li>
+ <li>Розташовуйте коментарі близько до описуваного ними коду.</li>
+</ol>Як результат все ж таки хочеться нагадати: найкращі коментар - це відсутність коментаря, а замість нього - грамотне найменування в додатку. Як правило, більшість часу ми вже працюватимемо вже з готовим кодом, з його підтримкою та розширенням. Набагато зручніше, коли цей код зручно читаємо і зрозумілий, адже поганий код заважає, ставить ще палиці в колеса і поспіх — його вірний товариш. І чим більше у нас поганого коду, тим більше падає продуктивність, тому потрібно час від часу влаштовувати рефакторинг. Але якщо з самого початку намагатися писати код, за який вас не захочуть знайти та вбити наступні розробники, то й рефакторити його потрібно буде рідше. Але все ж таки потрібно буде, оскільки умови, вимоги до продукту постійно змінюються, доповнюються навішуючи додаткові зв'язки, і від цього не втекти.<a href="https://refactoring.guru/ru/refactoring/what-is-refactoring" rel="nofollow" target="_blank">тут</a> , <a href="https://dou.ua/lenta/articles/perfect-code/" rel="nofollow" target="_blank">тут</a> і <a href="https://codegym.cc/groups/posts/560-kak-napisatjh-chistihy-kod" target="_blank">тут</a> Мабуть, на цьому у мене сьогодні все, дякую всім хто дочитав)) <img data-max-width="512" class="img-fluid" alt="Правила написання коду: сила правильних імен, хороші та погані коментарі." src="https://codegym-com.translate.goog/images/article/004ee61b-7330-46e6-9aef-9ca32d1b5edd/original.jpeg">

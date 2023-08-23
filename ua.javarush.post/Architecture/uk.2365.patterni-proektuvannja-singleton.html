@@ -1,0 +1,238 @@
+Паттерни проектування: Singleton
+<p>----------------------------------------</p>
+Вітання! Сьогодні детально розбиратимемося в різних патернах проектування, і почнемо з шаблону Singleton, який ще називають "одиначка". Давай згадаємо: що ми знаємо про шаблони проектування загалом? Шаблони проектування — це найкращі практи
+<p>----------------------------------------</p>
+Вітання! Сьогодні детально розбиратимемося в різних патернах проектування, і почнемо з шаблону Singleton, який ще називають "одиначка". <img data-max-width="800" data-id="226faa2c-6d47-48a7-8312-5abe29894e72" class="img-fluid" alt="Паттерни проектування: Singleton - 1" src="https://cdn.javarush.com/images/article/226faa2c-6d47-48a7-8312-5abe29894e72/800.jpeg" style="width: 800px;">Давай згадаємо: що ми знаємо про шаблони проектування загалом? Шаблони проектування — це найкращі практики, дотримуючись яких можна вирішити низку відомих проблем. Шаблони проектування зазвичай не прив'язані до будь-якої мови програмування. Сприймай їх як рекомендацій, дотримуючись яких можна уникнути помилок і не винаходити свій велосипед. 
+<h2>Що таке синглтон?</h2>Сінглтон - це один із найпростіших шаблонів (патернів) проектування, який застосовується до класу. Іноді кажуть: "цей клас - синглтон", маючи на увазі, що цей клас реалізує патерн проектування синглтон. Іноді потрібно написати клас, у якого можна буде створити лише один об'єкт. Наприклад, клас, який відповідає за логування або підключення до бази даних. Шаблон проектування синглтон визначає, як ми можемо виконати таке завдання. Сінглтон - це шаблон (патерн) проектування, який робить дві речі: 
+<ol>
+ <li>
+  <p>Дає гарантію, що у класу буде лише один екземпляр класу.</p></li>
+ <li>
+  <p>Надає глобальну точку доступу до екземпляра цього класу.</p></li>
+</ol>Звідси — дві особливості, характерні практично кожної реалізації патерну синглтон: 
+<ol>
+ <li>
+  <p>Приватний конструктор. Обмежує можливість створення об'єктів класу поза самим класом.</p></li>
+ <li>
+  <p>Публічний статичний метод, який повертає екземпляр класу. Цей метод називають <code class=" language-none">getInstance</code>. Це глобальна точка доступу до екземпляра класу.</p></li>
+</ol>
+<h2>Варіанти реалізації</h2>Шаблон проектування синглтон застосовують по-різному. Кожен варіант по-своєму хороший і поганий. Тут як завжди: ідеалу немає, але треба до нього прагнути. Але насамперед давай визначимося, що таке добре і що таке погано, і які метрики впливають на оцінку реалізації шаблону проектування. Почнемо із позитивного. Ось критерії, які надають реалізації соковитості та привабливості: 
+<ul>
+ <li>
+  <p>Лінива ініціалізація: коли клас завантажується під час роботи програми саме тоді, коли він потрібний.</p></li>
+ <li>
+  <p>Простота та прозорість коду: метрика, звичайно, суб'єктивна, але важлива.</p></li>
+ <li>
+  <p>Потокобезпека: коректна робота у багатопотоковому середовищі.</p></li>
+ <li>
+  <p>Висока продуктивність у багатопотоковому середовищі: потоки блокують один одного мінімально, або взагалі не блокують при спільному доступі до ресурсу.</p></li>
+</ul>Тепер мінуси. Перерахуємо критерії, які виставляють реалізацію в ненайкращому світлі: 
+<ul>
+ <li>
+  <p>Не лінива ініціалізація: коли клас завантажується при старті програми, незалежно від того, потрібен він чи ні (парадокс, у світі IT краще бути ледарем)</p></li>
+ <li>
+  <p>Складність та погана читаність коду. Метрика також суб'єктивна. Вважатимемо, що якщо кров пішла з очей, реалізація так собі.</p></li>
+ <li>
+  <p>Відсутність потокобезпеки. Іншими словами, "потоконебезпечність". Некоректна робота у багатопотоковому середовищі.</p></li>
+ <li>
+  <p>Низька продуктивність у многопоточной середовищі: потоки блокують одне одного постійно чи нерідко, при спільному доступі до ресурсу.</p></li>
+</ul><a href="https://codegym.cc/welcome" target="_blank"><img id="click_banner1_articles" data-max-width="1024" data-id="ba72b0c7-2999-4cde-b5af-56c1468582a8" class="img-fluid" alt="Паттерни проектування: Singleton - 2" src="https://cdn.javarush.com/images/article/ba72b0c7-2999-4cde-b5af-56c1468582a8/1024.jpeg" style="width: 1024px;"></a>
+<h2>Код</h2>Тепер ми готові розглянути різні варіанти реалізації з перерахуванням плюсів та мінусів: 
+<p id="Simple_Solution"><span class="text-bold">Simple Solution</span></p>
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="token class-name"><span class="token class-name">Singleton</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+    <span class="token keyword"><span class="token keyword">private</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token keyword"><span class="token keyword">final</span></span> <span class="token class-name"><span class="token class-name">Singleton</span></span> INSTANCE <span class="token operator"><span class="token operator">=</span></span> <span class="token keyword"><span class="token keyword">new</span></span> <span class="token class-name"><span class="token class-name">Singleton</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+    <span class="token keyword"><span class="token keyword">private</span></span> <span class="token class-name"><span class="token class-name">Singleton</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+    <span class="token punctuation"><span class="token punctuation">}</span></span>
+
+    <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token class-name"><span class="token class-name">Singleton</span></span> <span class="token function"><span class="token function">getInstance</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+        <span class="token keyword"><span class="token keyword">return</span></span> INSTANCE<span class="token punctuation"><span class="token punctuation">;</span></span>
+    <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre> Найпростіша реалізація. Плюси: 
+<ul>
+ <li>
+  <p>Простота та прозорість коду</p></li>
+ <li>
+  <p>Потокобезпека</p></li>
+ <li>
+  <p>Висока продуктивність у багатопотоковому середовищі</p></li>
+</ul>Мінуси: 
+<ul>
+ <li>Чи не лінива ініціалізація.</li>
+</ul>У спробі виправити останній недолік ми отримуємо реалізацію номер два: 
+<p id="Lazy_Initialization"><span class="text-bold">Lazy Initialization</span></p>
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="token class-name"><span class="token class-name">Singleton</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+  <span class="token keyword"><span class="token keyword">private</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token class-name"><span class="token class-name">Singleton</span></span> INSTANCE<span class="token punctuation"><span class="token punctuation">;</span></span>
+
+  <span class="token keyword"><span class="token keyword">private</span></span> <span class="token class-name"><span class="token class-name">Singleton</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span><span class="token punctuation"><span class="token punctuation">}</span></span>
+
+  <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token class-name"><span class="token class-name">Singleton</span></span> <span class="token function"><span class="token function">getInstance</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+    <span class="token keyword"><span class="token keyword">if</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span>INSTANCE <span class="token operator"><span class="token operator">==</span></span> <span class="token keyword"><span class="token keyword">null</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+      INSTANCE <span class="token operator"><span class="token operator">=</span></span> <span class="token keyword"><span class="token keyword">new</span></span> <span class="token class-name"><span class="token class-name">Singleton</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+    <span class="token punctuation"><span class="token punctuation">}</span></span>
+    <span class="token keyword"><span class="token keyword">return</span></span> INSTANCE<span class="token punctuation"><span class="token punctuation">;</span></span>
+  <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre> Плюси: 
+<ul>
+ <li>
+  <p>Лінива ініціалізація.</p></li>
+</ul>Мінуси: 
+<ul>
+ <li>
+  <p>Чи не потокобезпечно</p></li>
+</ul>Реалізація цікава. Ми можемо ініціалізуватися ліниво, але втратабо безпеку. Не біда: у реалізації номер три ми всі синхронізуємо. 
+<p id="Synchronized_Accessor"><span class="text-bold">Synchronized Accessor</span></p>
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="token class-name"><span class="token class-name">Singleton</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+  <span class="token keyword"><span class="token keyword">private</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token class-name"><span class="token class-name">Singleton</span></span> INSTANCE<span class="token punctuation"><span class="token punctuation">;</span></span>
+
+  <span class="token keyword"><span class="token keyword">private</span></span> <span class="token class-name"><span class="token class-name">Singleton</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+  <span class="token punctuation"><span class="token punctuation">}</span></span>
+
+  <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token keyword"><span class="token keyword">synchronized</span></span> <span class="token class-name"><span class="token class-name">Singleton</span></span> <span class="token function"><span class="token function">getInstance</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+    <span class="token keyword"><span class="token keyword">if</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span>INSTANCE <span class="token operator"><span class="token operator">==</span></span> <span class="token keyword"><span class="token keyword">null</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+      INSTANCE <span class="token operator"><span class="token operator">=</span></span> <span class="token keyword"><span class="token keyword">new</span></span> <span class="token class-name"><span class="token class-name">Singleton</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+    <span class="token punctuation"><span class="token punctuation">}</span></span>
+    <span class="token keyword"><span class="token keyword">return</span></span> INSTANCE<span class="token punctuation"><span class="token punctuation">;</span></span>
+  <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre> Плюси: 
+<ul>
+ <li>
+  <p>Лінива ініціалізація.</p></li>
+ <li>
+  <p>Потокобезпека</p></li>
+</ul>Мінуси: 
+<ul>
+ <li>
+  <p>Низька продуктивність у багатопотоковому середовищі</p></li>
+</ul>Чудово! У реалізації номер три ми повернули безпеку! Щоправда, повільну… Тепер метод <code class=" language-none">getInstance</code>синхронізований, і входити до нього можна лише по одному. Насправді нам потрібно синхронізувати не весь метод, а лише ту його частину, де ми ініціалізуємо новий об'єкт класу. Але ми не можемо просто обернути до <code class=" language-none">synchronized</code>блоку частину, що відповідає за створення нового об'єкта: це не забезпечить потокобезпеку. Все трохи складніше. Правильний спосіб синхронізації представлений нижче: 
+<p id="Double_Checked_Locking"><span class="text-bold">Double Checked Locking</span></p>
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="token class-name"><span class="token class-name">Singleton</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+    <span class="token keyword"><span class="token keyword">private</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token class-name"><span class="token class-name">Singleton</span></span> INSTANCE<span class="token punctuation"><span class="token punctuation">;</span></span>
+
+  <span class="token keyword"><span class="token keyword">private</span></span> <span class="token class-name"><span class="token class-name">Singleton</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+  <span class="token punctuation"><span class="token punctuation">}</span></span>
+
+    <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token class-name"><span class="token class-name">Singleton</span></span> <span class="token function"><span class="token function">getInstance</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+        <span class="token keyword"><span class="token keyword">if</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span>INSTANCE <span class="token operator"><span class="token operator">==</span></span> <span class="token keyword"><span class="token keyword">null</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+            <span class="token keyword"><span class="token keyword">synchronized</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">Singleton</span></span><span class="token punctuation"><span class="token punctuation">.</span></span><span class="token keyword"><span class="token keyword">class</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+                <span class="token keyword"><span class="token keyword">if</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span>INSTANCE <span class="token operator"><span class="token operator">==</span></span> <span class="token keyword"><span class="token keyword">null</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+                    INSTANCE <span class="token operator"><span class="token operator">=</span></span> <span class="token keyword"><span class="token keyword">new</span></span> <span class="token class-name"><span class="token class-name">Singleton</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+                <span class="token punctuation"><span class="token punctuation">}</span></span>
+            <span class="token punctuation"><span class="token punctuation">}</span></span>
+        <span class="token punctuation"><span class="token punctuation">}</span></span>
+        <span class="token keyword"><span class="token keyword">return</span></span> INSTANCE<span class="token punctuation"><span class="token punctuation">;</span></span>
+    <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre> Плюси: 
+<ul>
+ <li>
+  <p>Лінива ініціалізація.</p></li>
+ <li>
+  <p>Потокобезпека</p></li>
+ <li>
+  <p>Висока продуктивність у багатопотоковому середовищі</p></li>
+</ul>Мінуси: 
+<ul>
+ <li>
+  <p>Не підтримується на версіях Java нижче за 1.5 (у версії 1.5 виправабо роботу ключового слова volatile)</p></li>
+</ul>Зазначу, що для коректної роботи цього варіанта реалізації обов'язково одна з двох умов. Змінна <code class=" language-none">INSTANCE</code>має бути або <code class=" language-none">final</code>, або <code class=" language-none">volatile</code>. Остання реалізація, яку сьогодні обговоримо, — <code class=" language-none">Class Holder Singleton</code>. 
+<p id="Class_Holder_Singleton"><span class="text-bold">Class Holder Singleton</span></p>
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="token class-name"><span class="token class-name">Singleton</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+   <span class="token keyword"><span class="token keyword">private</span></span> <span class="token class-name"><span class="token class-name">Singleton</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+   <span class="token punctuation"><span class="token punctuation">}</span></span>
+
+   <span class="token keyword"><span class="token keyword">private</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="token class-name"><span class="token class-name">SingletonHolder</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+       <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token keyword"><span class="token keyword">final</span></span> <span class="token class-name"><span class="token class-name">Singleton</span></span> HOLDER_INSTANCE <span class="token operator"><span class="token operator">=</span></span> <span class="token keyword"><span class="token keyword">new</span></span> <span class="token class-name"><span class="token class-name">Singleton</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+   <span class="token punctuation"><span class="token punctuation">}</span></span>
+
+   <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token class-name"><span class="token class-name">Singleton</span></span> <span class="token function"><span class="token function">getInstance</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+       <span class="token keyword"><span class="token keyword">return</span></span> <span class="token class-name"><span class="token class-name">SingletonHolder</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>HOLDER_INSTANCE<span class="token punctuation"><span class="token punctuation">;</span></span>
+   <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre> Плюси: 
+<ul>
+ <li>
+  <p>Лінива ініціалізація.</p></li>
+ <li>
+  <p>Потокобезпека.</p></li>
+ <li>
+  <p>Висока продуктивність у багатопотоковому середовищі.</p></li>
+</ul>Мінуси: 
+<ul>
+ <li>
+  <p>Для коректної роботи потрібна гарантія, що об'єкт класу <code class=" language-none">Singleton</code>ініціалізується без помилок. Інакше перший виклик методу <code class=" language-none">getInstance</code>закінчиться помилкою <code class=" language-none">ExceptionInInitializerError</code>, проте наступні <code class=" language-none">NoClassDefFoundError</code>.</p></li>
+</ul>Реалізація практично ідеальна. І лінива, і потокобезпечна, і швидка. Але є нюанс, описаний у мінусі. <span class="text-bold">Порівняльна таблиця різних реалізацій патерну Singleton:</span>
+<div class="table-container">
+ <table>
+  <thead>
+   <tr>
+    <th>Реалізація</th>
+    <th>Лінива ініціалізація</th>
+    <th>Потокобезпека</th>
+    <th>Швидкість роботи при багатопоточності</th>
+    <th>Коли використати?</th>
+   </tr>
+  </thead>
+  <tbody>
+   <tr>
+    <td><a href="https://codegym.cc/groups/posts/2365#Simple_Solution">Simple Solution</a></td>
+    <td>-</td>
+    <td>+</td>
+    <td>Швидко</td>
+    <td>Ніколи. Або коли не важлива лінива ініціалізація. Але краще ніколи.</td>
+   </tr>
+   <tr>
+    <td><a href="https://codegym.cc/groups/posts/2365#Lazy_Initialization">Lazy Initialization</a></td>
+    <td>+</td>
+    <td>-</td>
+    <td>Не застосовується</td>
+    <td>Завжди, коли не потрібна багатопоточність</td>
+   </tr>
+   <tr>
+    <td><a href="https://codegym.cc/groups/posts/2365#Synchronized_Accessor">Synchronized Accessor</a></td>
+    <td>+</td>
+    <td>+</td>
+    <td>Повільно</td>
+    <td>Ніколи. Або коли швидкість роботи при багатопоточності не має значення. Але краще ніколи</td>
+   </tr>
+   <tr>
+    <td><a href="https://codegym.cc/groups/posts/2365#Double_Checked_Locking">Double Checked Locking</a></td>
+    <td>+</td>
+    <td>+</td>
+    <td>Швидко</td>
+    <td>В окремих випадках, коли потрібно обробляти винятки при створенні синглтона. (коли не застосовується Class Holder Singleton)</td>
+   </tr>
+   <tr>
+    <td><a href="https://codegym.cc/groups/posts/2365#Class_Holder_Singleton">Class Holder Singleton</a></td>
+    <td>+</td>
+    <td>+</td>
+    <td>Швидко</td>
+    <td>Завжди коли потрібна багатопоточність і є гарантія, що об'єкт синглтон класу буде створений без проблем.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<h2>Плюси та мінуси патерну Singleton</h2>Загалом синглтон робить саме те, що від нього чекають: 
+<ol>
+ <li>
+  <p>Дає гарантію, що у класу буде лише один екземпляр класу.</p></li>
+ <li>
+  <p>Надає глобальну точку доступу до екземпляра цього класу.</p></li>
+</ol>Однак цей шаблон має недоліки: 
+<ol>
+ <li>
+  <p>Сінглтон порушує SRP (Single Responsibility Principle) - клас синглтона, окрім безпосередніх обов'язків, займається ще й контролюванням кількості своїх екземплярів.</p></li>
+ <li>
+  <p>Залежність традиційного класу чи способу від синглтона не видно у громадському договорі класу.</p></li>
+ <li>
+  <p>Глобальні змінні це погано. Сінглтон перетворюється в результаті на одну здоровенну глобальну змінну.</p></li>
+ <li>
+  <p>Наявність синглтона знижує тестованість програми загалом і класів, які використовують синглтон, зокрема.</p></li>
+</ol>Ну от і все. Ми розглянули з тобою шаблон проектування синглтон. Тепер у розмові за життя з друзями програмістами ти зможеш сказати не тільки чим він гарний, а й кілька слів про те, чим він поганий. Успіхів у освоєнні нових знань. 
+<h2>Додаткове читання:</h2>
+<ul>
+ <li><a href="https://habr.com/ru/post/116577/" rel="nofollow" target="_blank">Використання патерну синглтон</a></li>
+ <li><a href="https://habr.com/ru/post/129494/" rel="nofollow" target="_blank">Правильний Singleton в Java</a></li>
+ <li><a href="https://javatalks.ru/topics/45005" rel="nofollow" target="_blank">Singleton "On Demand Holder idiom"</a></li>
+ <li><a href="https://community.oracle.com/docs/DOC-918906" rel="nofollow" target="_blank">Effective Ways to Implement and Use the Singleton Design Pattern</a></li>
+ <li><a href="https://www.journaldev.com/1377/java-singleton-design-pattern-best-practices-examples" rel="nofollow" target="_blank">Java Singleton Design Pattern Best Practices with Examples</a></li>
+</ul>

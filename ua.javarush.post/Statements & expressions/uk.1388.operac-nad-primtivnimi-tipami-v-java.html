@@ -1,0 +1,344 @@
+Операції над примітивними типами в Java
+<p>----------------------------------------</p>
+Більшість операцій над примітивними типами виконується не за допомогою методів, а за допомогою спеціальних символів, які називаються . Присвоєння змінної значення константи, іншої змінної або виразу (змінних та/або констант, розділених знак
+<p>----------------------------------------</p>
+Більшість операцій над примітивними типами виконується не за допомогою методів, а за допомогою спеціальних символів, які називаються <strong>знаком операції</strong> . 
+<div class="row justify-content-center jr-image-wrap">
+ <div class="col-12 col-sm-10 col-md-8">
+  <img data-id="7fead672-c08e-4007-9c49-30f0967654c5" data-max-width="710" alt="Операції над примітивними типами в Java - 1" src="https://cdn.javarush.com/images/article/7fead672-c08e-4007-9c49-30f0967654c5/512.jpeg" style="width: 710px;">
+ </div>
+</div>
+<h2>Операція присвоєння</h2>Присвоєння змінної значення константи, іншої змінної або виразу (змінних та/або констант, розділених знаками операцій), називається <strong>операцією присвоєння</strong> та позначається знаком " <strong>=</strong> ", наприклад: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class="  language-java">x <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">3</span></span><span class="token punctuation"><span class="token punctuation">;</span></span> y <span class="token operator"><span class="token operator">=</span></span> x<span class="token punctuation"><span class="token punctuation">;</span></span> z <span class="token operator"><span class="token operator">=</span></span> x<span class="token punctuation"><span class="token punctuation">;</span></span></code></pre> У Java допустимо багаторазове використання операції присвоєння в одному виразі, наприклад: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class="  language-java">x1 <span class="token operator"><span class="token operator">=</span></span> x2 <span class="token operator"><span class="token operator">=</span></span> x3 <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">0</span></span><span class="token punctuation"><span class="token punctuation">;</span></span></code></pre> Ця операція виконується праворуч наліво, тобто. спочатку змінної <code class=" language-none">x3</code>присвоюється значення <code class=" language-none">0</code>, потім змінної <code class=" language-none">x2</code>присвоюється значення змінної <code class=" language-none">x3</code>( <code class=" language-none">0</code>), і, нарешті, змінної <code class=" language-none">x1</code>присвоюється значення змінної <code class=" language-none">x2</code>( <code class=" language-none">0</code>). Знаки операцій, аргументами яких є числа, поділяються на дві категорії: <em>унарні</em> знаки операцій з одним аргументом і <em>бінарні</em> з двома аргументами. 
+<h2>Унарні операції</h2>У Java визначено такі <code class=" language-none">унарные операции</code>:<cut>
+ <ul>
+  <li>унарний мінус " <code class=" language-none">-</code>" - змінює знак числа чи висловлювання на протилежний;</li>
+  <li>унарний плюс " <code class=" language-none">+</code>" - не виконує жодних дій над числом чи виразом;</li>
+  <li>побітове доповнення " <code class=" language-none">~</code>" (лише цілих) – інвертує все біти поля числа (змінює 0 на 1 і 1 на 0);</li>
+  <li>инкремент " <code class=" language-none">++</code>" (лише цілих) – збільшує значення змінної на 1;</li>
+  <li>декремент " <code class=" language-none">--</code>" (лише цілих) – зменшує значення змінної на 1.</li>
+ </ul>Приклади унарних операцій " 
+ <code class=" language-none">+</code>" і " 
+ <code class=" language-none">-</code>" : 
+ <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">int</span></span> i <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">3</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> j<span class="token punctuation"><span class="token punctuation">,</span></span> k<span class="token punctuation"><span class="token punctuation">;</span></span>
+j<span class="token operator"><span class="token operator">=</span></span> <span class="token operator"><span class="token operator">-</span></span>i<span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">// j = -3</span></span>
+k <span class="token operator"><span class="token operator">=</span></span> <span class="token operator"><span class="token operator">+</span></span>i<span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">// k = 3</span></span></code></pre> Приклад операції побітового доповнення: 
+ <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">int</span></span> a <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">15</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token keyword"><span class="token keyword">int</span></span> b<span class="token punctuation"><span class="token punctuation">;</span></span>
+b <span class="token operator"><span class="token operator">=</span></span> <span class="token operator"><span class="token operator">~</span></span>a<span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">// b = -16</span></span></code></pre> Числа 
+ <code class=" language-none">a</code>є 
+ <code class=" language-none">b</code>числами типу 
+ <code class=" language-none">int</code>, тобто. представляються всередині комп'ютера як двійкові цілі числа зі знаком довжиною 32 біта, тому двійкове уявлення чисел 
+ <code class=" language-none">a</code>виглядатиме 
+ <code class=" language-none">b</code>так: 
+ <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class="  language-java">a <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">00000000</span></span> <span class="token number"><span class="token number">00000000</span></span> <span class="token number"><span class="token number">00000000</span></span> <span class="token number"><span class="token number">00001111</span></span>
+b <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">11111111</span></span> <span class="token number"><span class="token number">11111111</span></span> <span class="token number"><span class="token number">11111111</span></span> <span class="token number"><span class="token number">11110000</span></span></code></pre> Як видно з цього уявлення, всі нульові біти в числі a змінені на поодинокі біти в числі 
+ <code class=" language-none">b</code>, а поодинокі біти в a змінені на нульові біти. Десятичним поданням числа 
+ <code class=" language-none">b</code>буде 
+ <code class=" language-none">–16</code>. Знаки операції інкременту та декременту можуть розміщуватися як до, так і після змінної. Ці варіанти називаються відповідно 
+ <strong>префіксною</strong> та 
+ <strong>постфіксною</strong> записом цих операцій. Знак операції у префіксному записі повертає значення свого операнда 
+ <em>після</em> обчислення виразу. При постфіксному записі знак операції 
+ <em>спочатку</em> повертає значення свого операнда і лише після цього обчислює інкремент чи декремент, наприклад: 
+ <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">int</span></span> x <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">1</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> y<span class="token punctuation"><span class="token punctuation">,</span></span> z<span class="token punctuation"><span class="token punctuation">;</span></span>
+y <span class="token operator"><span class="token operator">=</span></span> <span class="token operator"><span class="token operator">++</span></span>x<span class="token punctuation"><span class="token punctuation">;</span></span>
+z<span class="token operator"><span class="token operator">=</span></span>x<span class="token operator"><span class="token operator">++</span></span><span class="token punctuation"><span class="token punctuation">;</span></span></code></pre> Змінна 
+ <code class=" language-none">y</code>буде присвоєно значення 
+ <code class=" language-none">2</code>, оскільки спочатку значення 
+ <code class=" language-none">x</code>буде збільшено на 
+ <code class=" language-none">1</code>, а потім результат буде надано змінної 
+ <code class=" language-none">y</code>. Змінною 
+ <code class=" language-none">z</code>буде присвоєно значення 
+ <code class=" language-none">1</code>, оскільки спочатку змінної 
+ <code class=" language-none">z</code>буде надано значення, а потім значення 
+ <code class=" language-none">x</code>буде збільшено на 
+ <code class=" language-none">1</code>. В обох випадках нове значення змінної 
+ <code class=" language-none">x</code>дорівнюватиме 
+ <code class=" language-none">2</code>. Слід зазначити, що в Java, на відміну від мови C, операції декременту та інкременту можуть застосовуватися і до речових змінних (типу 
+ <code class=" language-none">float</code>та 
+ <code class=" language-none">double</code>). 
+ <strong>Бінарні знаки операцій</strong> поділяються на операції з числовим результатом та операції порівняння, результатом яких є булевське значення. 
+ <h2>Арифметичні бінарні операції</h2>У Java визначені наступні 
+ <strong>арифметичні бінарні операції</strong> : 
+ <ul>
+  <li>додавання " <code class=" language-none">+</code>";</li>
+  <li>віднімання " <code class=" language-none">-</code>";</li>
+  <li>множення " <code class=" language-none">*</code>";</li>
+  <li>розподіл " <code class=" language-none">/</code>";</li>
+  <li>обчислення залишку від розподілу цілих чисел " <code class=" language-none">%</code>" (повертає залишок від розподілу першого числа на друге, причому результат матиме той самий знак, що й ділене), наприклад, результат операції <code class=" language-none">5%3</code>дорівнюватиме <code class=" language-none">2</code>, а результат операції (-7)%(-4) дорівнюватиме <code class=" language-none">-3</code>. Java операція може використовуватися і для речових змінних (типу <code class=" language-none">float</code>або <code class=" language-none">double</code>).</li>
+ </ul>
+ <strong>Приклади бінарних арифметичних операцій:</strong>
+ <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">int</span></span> x <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">7</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> x1<span class="token punctuation"><span class="token punctuation">,</span></span> x2<span class="token punctuation"><span class="token punctuation">,</span></span> x3<span class="token punctuation"><span class="token punctuation">,</span></span> x4<span class="token punctuation"><span class="token punctuation">,</span></span> x5<span class="token punctuation"><span class="token punctuation">;</span></span>
+
+x1 <span class="token operator"><span class="token operator">=</span></span> x <span class="token operator"><span class="token operator">+</span></span><span class="token number"><span class="token number">10</span></span><span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">// x1 = 17</span></span>
+
+x2 <span class="token operator"><span class="token operator">=</span></span> x – <span class="token number"><span class="token number">8</span></span><span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">// x2 = -1</span></span>
+
+x3 <span class="token operator"><span class="token operator">=</span></span> x2 <span class="token operator"><span class="token operator">*</span></span> x<span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">// x3 = -7</span></span></code></pre>
+ <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java">x4 <span class="token operator"><span class="token operator">=</span></span> x<span class="token operator"><span class="token operator">/</span></span><span class="token number"><span class="token number">4</span></span><span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">// x4 = 1 (при делении целых чисел</span></span>
+
+<span class="token comment"><span class="token comment">// дробная часть отбрасывается)</span></span>
+
+x5 <span class="token operator"><span class="token operator">=</span></span> x<span class="token operator"><span class="token operator">%</span></span><span class="token number"><span class="token number">4</span></span> <span class="token comment"><span class="token comment">// x5 = 3 (остаток от деления</span></span>
+
+<span class="token comment"><span class="token comment">// 7 на 4)</span></span></code></pre>
+ <h2>Побітові операції</h2>
+ <ul>
+  <li><code class=" language-none">Побитовые операции</code>розглядають вихідні числові значення поля бітів і виконують з них такі действия:</li>
+  <li>установка біта в <em>i</em> -ої позиції поля результату <code class=" language-none">1</code>, якщо обидва біта в <em>i</em> -их позиціях операндів рівні <code class=" language-none">1</code>, або в <code class=" language-none">0</code>іншому випадку – <code class=" language-none">побитовое И</code>(" <code class=" language-none">&amp;</code>");</li>
+  <li>установка біта в <em>i</em> -ой позиції поля результату <code class=" language-none">1</code>, якщо хоча б один біт в <em>i</em> -их позиціях операндів дорівнює <code class=" language-none">1</code>, або в <code class=" language-none">0</code>іншому випадку - <code class=" language-none">побитовое ИЛИ</code>(" <code class=" language-none">|</code>");</li>
+  <li>установка біта в <em>i</em> -ої позиції поля результату <code class=" language-none">1</code>, якщо біти в <em>i</em> -их позиціях операндів не рівні один одному, або в <code class=" language-none">0</code>іншому випадку - <code class=" language-none">побитовое исключающее ИЛИ</code>(" <code class=" language-none">^</code>");</li>
+  <li>зсув ліворуч бітів поля першого операнда на кількість бітів, що визначається другим операндом (біт знака числа при цьому не змінюється) - <code class=" language-none">побитовый сдвиг влево с учетом знака</code>" <code class=" language-none">&lt;&lt;</code>";</li>
+  <li>зсув вправо бітів поля першого операнда на кількість бітів, що визначається другим операндом (біт знака числа при цьому не змінюється) - <code class=" language-none">побитовый сдвиг вправо с учетом знака</code>" <code class=" language-none">&gt;&gt;</code>";</li>
+  <li>зсув вправо бітів поля першого операнда на кількість бітів, що визначається другим операндом (біт знака числа при цьому також зсувається) - <code class=" language-none">побитовый сдвиг вправо без учета знака</code>" <code class=" language-none">&gt;&gt;&gt;</code>".</li>
+ </ul>
+ <strong>Приклади побітових операцій:</strong>
+ <ol>
+  <li>
+   <p><strong>Побітове І</strong></p>
+   <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">int</span></span> x <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">112</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token comment"><span class="token comment">// x: 00000000 00000000 00000000 01110000</span></span>
+<span class="token keyword"><span class="token keyword">int</span></span> y <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">94</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token comment"><span class="token comment">// y: 00000000 00000000 00000000 01011110</span></span>
+<span class="token keyword"><span class="token keyword">int</span></span> z<span class="token punctuation"><span class="token punctuation">;</span></span>
+z <span class="token operator"><span class="token operator">=</span></span> x <span class="token operator"><span class="token operator">&amp;</span></span> y<span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token comment"><span class="token comment">// z=80: 00000000 00000000 00000000 01010000</span></span></code></pre></li>
+  <li>
+   <p><strong>Побітове АБО</strong></p>
+   <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">int</span></span> x <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">112</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token comment"><span class="token comment">// x: 00000000 00000000 00000000 01110000</span></span>
+<span class="token keyword"><span class="token keyword">int</span></span> y <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">94</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token comment"><span class="token comment">// y: 00000000 00000000 00000000 01011110</span></span>
+<span class="token keyword"><span class="token keyword">int</span></span> z<span class="token punctuation"><span class="token punctuation">;</span></span>
+z <span class="token operator"><span class="token operator">=</span></span>x <span class="token operator"><span class="token operator">|</span></span> y<span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token comment"><span class="token comment">// z = 126: 00000000 00000000 00000000 01111110</span></span></code></pre></li>
+  <li>
+   <p><strong>Побітове виключне АБО</strong></p>
+   <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">int</span></span> x <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">112</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token comment"><span class="token comment">// x: 00000000 00000000 00000000 01110000</span></span>
+<span class="token keyword"><span class="token keyword">int</span></span> y <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">94</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token comment"><span class="token comment">// y: 00000000 00000000 00000000 01011110</span></span>
+<span class="token keyword"><span class="token keyword">int</span></span> z<span class="token punctuation"><span class="token punctuation">;</span></span>
+z <span class="token operator"><span class="token operator">=</span></span>x <span class="token operator"><span class="token operator">^</span></span> y<span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token comment"><span class="token comment">// z = 46: 00000000 00000000 00000000 00101110</span></span></code></pre></li>
+  <li>
+   <p><strong>Зсув вліво з урахуванням знаку</strong></p>
+   <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">int</span></span> x <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">31</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> z<span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token comment"><span class="token comment">// x: 00000000 00000000 00000000 00011111</span></span>
+z <span class="token operator"><span class="token operator">=</span></span> x <span class="token operator"><span class="token operator">&lt;&lt;</span></span> <span class="token number"><span class="token number">2</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token comment"><span class="token comment">// z = 124: 00000000 00000000 00000000 01111100</span></span></code></pre></li>
+  <li>
+   <p><strong>Зсув праворуч з урахуванням знака</strong></p>
+   <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">int</span></span> x <span class="token operator"><span class="token operator">=</span></span> <span class="token operator"><span class="token operator">-</span></span><span class="token number"><span class="token number">17</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> z<span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token comment"><span class="token comment">// x: 11111111 11111111 11111111 11101111</span></span>
+z <span class="token operator"><span class="token operator">=</span></span> x <span class="token operator"><span class="token operator">&gt;&gt;</span></span> <span class="token number"><span class="token number">2</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token comment"><span class="token comment">// z = -5: 11111111 11111111 11111111 11111011</span></span></code></pre></li>
+  <li>
+   <p><strong>Зсув праворуч без урахування знака</strong></p>
+   <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">int</span></span> x <span class="token operator"><span class="token operator">=</span></span> <span class="token operator"><span class="token operator">-</span></span><span class="token number"><span class="token number">17</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> z<span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token comment"><span class="token comment">// x: 11111111 11111111 11111111 11101111</span></span>
+z <span class="token operator"><span class="token operator">=</span></span> x <span class="token operator"><span class="token operator">&gt;&gt;&gt;</span></span> <span class="token number"><span class="token number">2</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token comment"><span class="token comment">// z = 1073741819</span></span>
+<span class="token comment"><span class="token comment">// z: 00111111 11111111 11111111 11111011</span></span></code></pre></li>
+ </ol>
+ <h2>Комбіновані операції</h2>У Java для бінарних арифметичних операцій можна використовувати 
+ <strong>комбіновані</strong> (складові) знаки операцій: 
+ <code class=" language-none">идентификатор операция = выражение</code> Це еквівалентно наступній операції: 
+ <code class=" language-none">идентификатор = идентификатор операция выражение</code> Приклади: 
+ <ol>
+  <li>Вираз <code class=" language-none">x += b</code>означає <code class=" language-none">x = x + b</code>.</li>
+  <li>Вираз <code class=" language-none">x -= b</code>означає <code class=" language-none">x = x - b</code>.</li>
+  <li>Вираз <code class=" language-none">x *= b</code>означає <code class=" language-none">x = x * b</code>.</li>
+  <li>Вираз <code class=" language-none">x /= b</code>означає <code class=" language-none">x = x / b</code>.</li>
+  <li>Вираз <code class=" language-none">x %= b</code>означає <code class=" language-none">x = x % b</code>.</li>
+  <li>Вираз <code class=" language-none">x &amp;= b</code>означає <code class=" language-none">x = x &amp; b</code>.</li>
+  <li>Вираз <code class=" language-none">x |= b</code>означає <code class=" language-none">x = x | b</code>.</li>
+  <li>Вираз <code class=" language-none">x ^= b</code>означає <code class=" language-none">x = x ^ b</code>.</li>
+  <li>Вираз <code class=" language-none">x &lt;&lt;= b</code>означає <code class=" language-none">x = x &lt;&lt; b</code>.</li>
+  <li>Вираз <code class=" language-none">x &gt;&gt;= b</code>означає <code class=" language-none">x = x &gt;&gt; b</code>.</li>
+  <li>Вираз <code class=" language-none">x &gt;&gt;&gt;= b</code>означає <code class=" language-none">x = x &gt;&gt;&gt; b</code>.</li>
+ </ol>
+ <h2>Операції порівняння</h2>У Java визначено такі операції порівняння: 
+ <ul>
+  <li>" <code class=" language-none">==</code>" (рівно), " <code class=" language-none">!=</code>" (не рівно),</li>
+  <li>" <code class=" language-none">&gt;</code>" (більше), " <code class=" language-none">&gt;=</code>" (більше чи одно),</li>
+  <li>" <code class=" language-none">&lt;</code>" (менше) " <code class=" language-none">&lt;=</code>" (менше чи одно)</li>
+ </ul>мають два операнди і повертають булевське значення, що відповідає результату порівняння ( 
+ <strong>false</strong> або 
+ <strong>true</strong> ). Слід звернути увагу, що при порівнянні двох величин на рівність Java, як і C і C++, використовуються символи "== 
+ <strong>"</strong> (два знаки рівності, що йдуть без пробілу один за одним), на відміну від оператора присвоювання, в якому використовується символ " 
+ <strong>=</strong> ". Використання символу " 
+ <code class=" language-none">=</code>" при порівнянні двох величин або викликає помилку при компіляції, або призводить до неправильного результату. 
+ <strong>Приклади операцій порівняння:</strong>
+ <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">boolean</span></span> isEqual<span class="token punctuation"><span class="token punctuation">,</span></span> isNonEqual<span class="token punctuation"><span class="token punctuation">,</span></span> isGreater<span class="token punctuation"><span class="token punctuation">,</span></span>
+isGreaterOrEqual<span class="token punctuation"><span class="token punctuation">,</span></span> isLess<span class="token punctuation"><span class="token punctuation">,</span></span> isLessOrEqual<span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token keyword"><span class="token keyword">int</span></span> x1 <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">5</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> x2 <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">5</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> x3 <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">3</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> x4 <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">7</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+isEqual <span class="token operator"><span class="token operator">=</span></span> x1 <span class="token operator"><span class="token operator">==</span></span> x2<span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">// isEqual = true</span></span>
+isNonEqual <span class="token operator"><span class="token operator">=</span></span> x1 <span class="token operator"><span class="token operator">!=</span></span> x2<span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">// isNonEqual = false</span></span>
+isGreater <span class="token operator"><span class="token operator">=</span></span> x1 <span class="token operator"><span class="token operator">&gt;</span></span> x3<span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">// isGreater = true</span></span>
+<span class="token comment"><span class="token comment">// isGreaterOrEqual = true</span></span>
+isGreaterOrEqual <span class="token operator"><span class="token operator">=</span></span> x2 <span class="token operator"><span class="token operator">&gt;=</span></span> x3<span class="token punctuation"><span class="token punctuation">;</span></span>
+isLess <span class="token operator"><span class="token operator">=</span></span> x3 <span class="token operator"><span class="token operator">&lt;</span></span> x1<span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">// isLess = true</span></span>
+isLessOrEqual <span class="token operator"><span class="token operator">=</span></span> x1 <span class="token operator"><span class="token operator">&lt;=</span></span> x3<span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">// isLessOrEqual = false</span></span></code></pre>
+ <h2>Булівські операції</h2>
+ <strong>Булевські операції</strong> виконуються над булевськими змінними та їх результатом також є значення типу 
+ <strong>boolean</strong> . У Java визначено такі булевські операції: 
+ <ul>
+  <li>заперечення <code class=" language-none">"!"</code>– заміна <code class=" language-none">false</code>на <code class=" language-none">true</code>, чи навпаки;</li>
+  <li>операція <code class=" language-none">И</code> <code class=" language-none">"&amp;"</code>– результат дорівнює <code class=" language-none">true</code>, тільки якщо обидва операнда рівні <code class=" language-none">true</code>, інакше результат – <code class=" language-none">false</code>;</li>
+  <li>операція <code class=" language-none">ИЛИ</code>" <code class=" language-none">|</code>" - результат дорівнює <code class=" language-none">true</code>, тільки, якщо хоча б один з операндів дорівнює <code class=" language-none">true</code>, інакше результат - <code class=" language-none">false</code>.</li>
+  <li>операція що виключає <code class=" language-none">ИЛИ</code>" <code class=" language-none">^</code>" – результат дорівнює <code class=" language-none">true</code>, тільки якщо операнди не рівні один одному, інакше результат – <code class=" language-none">false</code>.</li>
+ </ul>Операції " 
+ <code class=" language-none">&amp;</code>", " 
+ <code class=" language-none">|</code>" і " 
+ <code class=" language-none">^</code>" можна, як і відповідні побітові операції використовувати у складових операціях присвоювання: " 
+ <code class=" language-none">&amp;=</code>" , " 
+ <code class=" language-none">|=</code>" і " 
+ <code class=" language-none">^=</code>" Крім того, до булевским операндам застосовні операції " 
+ <code class=" language-none">==</code>" (і) і " 
+ <code class=" language-none">!=</code>" ). Як видно з визначення операцій АБО і І, операція АБО призводить до результату 
+ <code class=" language-none">true</code>коли перший операнд дорівнює 
+ <code class=" language-none">true</code>незалежно від значення другого операнда, а операція І призводить до результату 
+ <code class=" language-none">false</code>коли перший операнд дорівнює 
+ <code class=" language-none">false</code>незалежно від значення другого операнда. У Java визначено ще дві булевські операції: другі версії булевських операцій І та АБО, відомі як укорочені (short-circuit) логічні операції:
+ <code class=" language-none">&amp;&amp;</code>
+ <code class=" language-none">||</code>При використанні цих операцій другий операнд взагалі не буде обчислюватися, що корисно в тих випадках, коли правильне функціонування правого операнда залежить від того, чи має лівий операнд 
+ <strong>значення</strong>
+ <code class=" language-none">true</code> або 
+ <code class=" language-none">false</code>. 
+ <strong></strong>
+ <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">boolean</span></span> isInRange<span class="token punctuation"><span class="token punctuation">,</span></span> isValid<span class="token punctuation"><span class="token punctuation">,</span></span> isNotValid<span class="token punctuation"><span class="token punctuation">,</span></span>
+isEqual<span class="token punctuation"><span class="token punctuation">,</span></span> isNotEqual<span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token keyword"><span class="token keyword">int</span></span> x <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">8</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+isInRange <span class="token operator"><span class="token operator">=</span></span> x <span class="token operator"><span class="token operator">&gt;</span></span> <span class="token number"><span class="token number">0</span></span> <span class="token operator"><span class="token operator">&amp;&amp;</span></span> x <span class="token operator"><span class="token operator">&lt;</span></span> <span class="token number"><span class="token number">5</span></span><span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">// isInRange = false</span></span>
+isValid <span class="token operator"><span class="token operator">=</span></span> x <span class="token operator"><span class="token operator">&gt;</span></span> <span class="token number"><span class="token number">0</span></span> <span class="token operator"><span class="token operator">||</span></span> x <span class="token operator"><span class="token operator">&gt;</span></span> <span class="token number"><span class="token number">5</span></span><span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">// isValid = true</span></span>
+isNotValid <span class="token operator"><span class="token operator">=</span></span> <span class="token operator"><span class="token operator">!</span></span>isValid<span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">// isNotValid = false</span></span>
+isEqual <span class="token operator"><span class="token operator">=</span></span> isInRange <span class="token operator"><span class="token operator">==</span></span> isValid<span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">// isEqual = false</span></span>
+<span class="token comment"><span class="token comment">// isNotEqual = true</span></span>
+isNotEqual <span class="token operator"><span class="token operator">=</span></span> isInRange <span class="token operator"><span class="token operator">!=</span></span> isValid</code></pre>
+ <h2>Умовна операція</h2>Умовна операція записується у формі 
+ <code class=" language-none">выражение-1?выражение-2:выражение-3</code>. У цьому спочатку обчислюється вираз 
+ <code class=" language-none">выражение-1</code>, що має дати булевское значення, та був, якщо 
+ <code class=" language-none">выражение-1</code>має значення 
+ <code class=" language-none">true</code>, обчислюється і повертається 
+ <code class=" language-none">выражение-2</code>як результат виконання операції, чи (якщо 
+ <code class=" language-none">выражение-1</code>має значення 
+ <code class=" language-none">false</code>), обчислюється і, як результат виконання операції, повертається 
+ <code class=" language-none">выражение-3</code>. 
+ <strong>Приклад умовної операції:</strong>
+ <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class="  language-java">x<span class="token operator"><span class="token operator">=</span></span>n<span class="token operator"><span class="token operator">&gt;</span></span><span class="token number"><span class="token number">1</span></span><span class="token operator"><span class="token operator">?</span></span><span class="token number"><span class="token number">0</span></span><span class="token operator"><span class="token operator">:</span></span><span class="token number"><span class="token number">1</span></span><span class="token punctuation"><span class="token punctuation">;</span></span></code></pre> Змінної x буде надано значення 
+ <code class=" language-none">0</code>, якщо 
+ <code class=" language-none">n&gt;1</code>(вираз 
+ <code class=" language-none">n&gt;1</code>має значення 
+ <code class=" language-none">true</code>) або 
+ <code class=" language-none">1</code>, якщо 
+ <code class=" language-none">n≤1</code>(вираз 
+ <code class=" language-none">n&gt;1</code>має значення 
+ <code class=" language-none">false</code>). 
+ <h2>Старшинство операцій</h2>Операції у виразах виконуються зліва направо, проте, відповідно до свого пріоритету. Так операції множення у виразі 
+ <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class="  language-java">y <span class="token operator"><span class="token operator">=</span></span> x <span class="token operator"><span class="token operator">+</span></span>z<span class="token operator"><span class="token operator">*</span></span><span class="token number"><span class="token number">5</span></span><span class="token punctuation"><span class="token punctuation">;</span></span></code></pre> буде виконано раніше, ніж операція додавання, оскільки пріоритет операції множення вище, ніж пріоритет операції додавання. Пріоритети операцій (у порядку зменшення пріоритету) Java наведені в табл. 1. 
+ <img data-id="7bb245f1-14f4-4c3d-bf37-8a4f533c60e3" data-max-width="701" alt="Операції над примітивними типами в Java - 2" src="https://cdn.javarush.com/images/article/7bb245f1-14f4-4c3d-bf37-8a4f533c60e3/512.jpeg" style="width: 701px;"> Круглі дужки підвищують старшинство операцій, що усередині них. Так, якщо в наведеному вище виразі вставити дужки: 
+ <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class="  language-java">y <span class="token operator"><span class="token operator">=</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span>x <span class="token operator"><span class="token operator">+</span></span>z<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token operator"><span class="token operator">*</span></span><span class="token number"><span class="token number">5</span></span><span class="token punctuation"><span class="token punctuation">;</span></span></code></pre> то спочатку буде виконано операцію додавання, а потім операцію множення. Іноді дужки використовують просто для того, щоб зробити вираз більш читаним, наприклад: 
+ <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class="  language-java"><span class="token punctuation"><span class="token punctuation">(</span></span>x <span class="token operator"><span class="token operator">&gt;</span></span> <span class="token number"><span class="token number">1</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token operator"><span class="token operator">&amp;&amp;</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span>x <span class="token operator"><span class="token operator">&lt;=</span></span> <span class="token number"><span class="token number">5</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span></code></pre>
+ <h2>Перетворення та приведення типів при виконанні операцій</h2>В операції присвоєння та арифметичних виразах можуть використовуватися літерали, змінні та вирази різних типів, наприклад: 
+ <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">double</span></span> y<span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token keyword"><span class="token keyword">byte</span></span> x<span class="token punctuation"><span class="token punctuation">;</span></span>
+y <span class="token operator"><span class="token operator">=</span></span> x <span class="token operator"><span class="token operator">+</span></span> <span class="token number"><span class="token number">5</span></span><span class="token punctuation"><span class="token punctuation">;</span></span></code></pre> У цьому прикладі виконується операція складання змінної 
+ <code class=" language-none">x</code>типу 
+ <code class=" language-none">byte</code>та літералу 
+ <code class=" language-none">5</code>(типу 
+ <code class=" language-none">int</code>) і результат присвоюється змінної 
+ <code class=" language-none">y</code>типу 
+ <code class=" language-none">double</code>. У Java, як і в мові C, перетворення типів при обчисленні виразів можуть виконуватися автоматично або за допомогою оператора приведення типу. Однак правила приведення типів дещо відрізняються від правил мови C, і в цілому є суворішими, ніж у мові C. При виконанні операції присвоювання перетворення типів відбувається автоматично, якщо відбувається 
+ <em>розширення перетворення</em> (widening conversion) і 
+ <em>два типи сумісні</em> . Розширювальними перетвореннями є перетворення 
+ <strong>byte</strong> ® 
+ <strong>short</strong> ® 
+ <strong>int</strong>® 
+ <strong>long</strong> ® 
+ <strong>float</strong> ® 
+ <strong>double</strong> . Для розширювальних перетворень числові типи, включаючи цілий і з точкою, що плаває, є сумісними один з одним. Однак числові типи не сумісні з типами 
+ <code class=" language-none">char</code>та 
+ <code class=" language-none">boolean</code>. Типи 
+ <code class=" language-none">char</code>і 
+ <code class=" language-none">boolean</code>не сумісні також один з одним. У мові Java виконується автоматичне перетворення типів також і при збереженні літеральної цілісної константи (яка має за замовчуванням тип 
+ <code class=" language-none">int</code>) змінних типу 
+ <code class=" language-none">byte</code>, 
+ <code class=" language-none">short</code>або 
+ <code class=" language-none">long</code>(проте якщо літерал має значення поза діапазоном допустимих значень для цього типу, видається повідомлення про помилку: можлива втрата точності). Якщо перетворення звужує (narrowing conversion), тобто виконується перетворення
+ <code class=" language-none">byte</code>¬ 
+ <code class=" language-none">short</code>¬ 
+ <code class=" language-none">char</code>¬ 
+ <code class=" language-none">int</code>¬ 
+ <code class=" language-none">long</code>¬ 
+ <code class=" language-none">float</code>¬ 
+ <code class=" language-none">double</code>, то таке перетворення може призвести до втрати точності числа або його спотворення. Тому при звужуючих перетвореннях при компіляції програми виводиться діагностичне повідомлення про несумісність типів та файли класів не створюються. Таке повідомлення буде видано і при спробі перетворення виразів типу 
+ <code class=" language-none">byte</code>або 
+ <code class=" language-none">short</code>змінну типу 
+ <code class=" language-none">char</code>. Якщо все ж таки необхідно виконати такі перетворення, використовується операція приведення (cast) типу, яка має наступний формат: ( 
+ <em>тип-перетворення</em> ) 
+ <em>значення</em> , де 
+ <em>тип-перетворення</em> визначає тип, на який необхідно перетворити задане 
+ <em>значення</em>, наприклад, у результаті виконання операторів: 
+ <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">byte</span></span> x <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">71</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token keyword"><span class="token keyword">char</span></span> symbol <span class="token operator"><span class="token operator">=</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span><span class="token keyword"><span class="token keyword">char</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> x<span class="token punctuation"><span class="token punctuation">;</span></span></code></pre> змінна 
+ <code class=" language-none">symbol</code>отримає значення ' 
+ <code class=" language-none">G</code>'. Якщо значення з плаваючою точкою присвоюється цілому типу, то (якщо значення з плаваючою точкою має дробову частину) при явному перетворенні типу відбувається 
+ <strong>усічення</strong> (truncation) числа. Так, у результаті виконання оператора 
+ <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">int</span></span> x <span class="token operator"><span class="token operator">=</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span><span class="token keyword"><span class="token keyword">int</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token number"><span class="token number">77.85</span></span><span class="token punctuation"><span class="token punctuation">;</span></span></code></pre> змінна x отримає значення 
+ <code class=" language-none">77</code>. Якщо ж значення, що присвоюється, лежить поза діапазоном 
+ <em>типу-перетворення</em> , то результатом перетворення буде залишок від поділу значення на модуль діапазону присвоюється типу (для чисел типу 
+ <code class=" language-none">byte</code>модуль діапазону буде дорівнює 
+ <code class=" language-none">256</code>, для 
+ <code class=" language-none">short – 65536</code>, для 
+ <code class=" language-none">int – 4294967296</code>і для 
+ <code class=" language-none">long – 18446744073709551616</code>). Наприклад, у результаті виконання оператора 
+ <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">byte</span></span> x <span class="token operator"><span class="token operator">=</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span><span class="token keyword"><span class="token keyword">byte</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token number"><span class="token number">514</span></span><span class="token punctuation"><span class="token punctuation">;</span></span></code></pre> змінна x отримає значення 
+ <code class=" language-none">2</code>. При перетворенні цілих чи речових чисел у дані типу 
+ <code class=" language-none">char</code>, перетворення на символ відбувається, якщо вихідне число лежить у діапазоні від 0 до 127, інакше символ отримує значення ' 
+ <code class=" language-none">?</code>'. При виконанні арифметичних і побітових перетворень всі значення 
+ <code class=" language-none">byte</code>і 
+ <code class=" language-none">short</code>, а також 
+ <code class=" language-none">char</code>розширюються до 
+ <code class=" language-none">int</code>, (при цьому в обчисленнях 
+ <code class=" language-none">char</code>використовується числове значення коду символу) потім, якщо хоча б один операнд має тип 
+ <code class=" language-none">long</code>, тип виразу розширюється до 
+ <code class=" language-none">long</code>. Якщо один із операндів має тип 
+ <code class=" language-none">float</code>, то тип повного виразу розширюється до 
+ <code class=" language-none">float</code>, а якщо один з операндів має тип 
+ <code class=" language-none">double</code>, то тип результату буде 
+ <code class=" language-none">double</code>. Так, якщо оголошено змінні 
+ <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">byte</span></span> a<span class="token punctuation"><span class="token punctuation">,</span></span> c<span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token keyword"><span class="token keyword">short</span></span> b<span class="token punctuation"><span class="token punctuation">;</span></span></code></pre> то у виразі 
+ <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class="  language-java">a <span class="token operator"><span class="token operator">+</span></span> b<span class="token operator"><span class="token operator">*</span></span>c – <span class="token number"><span class="token number">15L</span></span> <span class="token operator"><span class="token operator">+</span></span> <span class="token number"><span class="token number">1.5F</span></span> <span class="token operator"><span class="token operator">+</span></span> <span class="token number"><span class="token number">1.08</span></span> <span class="token operator"><span class="token operator">-</span></span> <span class="token number"><span class="token number">10</span></span><span class="token punctuation"><span class="token punctuation">;</span></span></code></pre> спочатку, перед обчисленням 
+ <code class=" language-none">a + b*c</code>значення змінних буде розширено до 
+ <code class=" language-none">int</code>, потім, оскільки константа 
+ <code class=" language-none">15</code>має тип 
+ <code class=" language-none">long</code>, перед відніманням результат обчислення буде збільшено до 
+ <code class=" language-none">long</code>. Після цього, оскільки літерал 
+ <code class=" language-none">1.5</code>має тип 
+ <code class=" language-none">float</code>перед додаванням з цим літералом результат обчислення 
+ <code class=" language-none">a + b*c – 15L</code>буде розширено до 
+ <code class=" language-none">float</code>. Перед виконанням додавання з числом 
+ <code class=" language-none">1.08</code>результат попередніх обчислень буде розширено до 
+ <code class=" language-none">double</code>(оскільки речові константи за замовчуванням мають тип 
+ <code class=" language-none">double</code>) і, нарешті, перед виконанням останньої додавання літерал 10 (за замовчуванням 
+ <code class=" language-none">int</code>) буде розширений до 
+ <code class=" language-none">double</code>. Таким чином, результат обчислення виразу матиме тип 
+ <code class=" language-none">double</code>. Автоматичні розширення типів (особливо розширення)
+ <code class=" language-none">short</code>і 
+ <code class=" language-none">byte</code>до 
+ <code class=" language-none">int</code>) можуть викликати помилки, що погано розпізнаються під час компіляції. Наприклад, в операторах: 
+ <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">byte</span></span> x <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">30</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> y <span class="token operator"><span class="token operator">=</span></span><span class="token number"><span class="token number">5</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+x <span class="token operator"><span class="token operator">=</span></span> x <span class="token operator"><span class="token operator">+</span></span> y<span class="token punctuation"><span class="token punctuation">;</span></span></code></pre> перед виконанням додавання значення змінних 
+ <code class=" language-none">x</code>і 
+ <code class=" language-none">y</code>буде розширено до 
+ <code class=" language-none">int</code>, а потім під час спроби присвоєння результату обчислення типу 
+ <code class=" language-none">int</code>змінної типу 
+ <code class=" language-none">byte</code>буде видано повідомлення про помилку. Щоб цього уникнути, треба використовувати в другому операторі явне перетворення типів: 
+ <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class="  language-java">x <span class="token operator"><span class="token operator">=</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span><span class="token keyword"><span class="token keyword">byte</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span>x <span class="token operator"><span class="token operator">+</span></span> y<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span></code></pre> Вираз 
+ <code class=" language-none">x + y</code>необхідно укласти в дужки тому, що пріоритет операції приведення типу, укладеної в дужки, вищий, ніж пріоритет операції складання. До речі, якщо записати другий оператор у вигляді: 
+ <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class="  language-java">x <span class="token operator"><span class="token operator">+=</span></span> y<span class="token punctuation"><span class="token punctuation">;</span></span></code></pre> то повідомлення про помилку не буде. 
+ <em>Посилання на першоджерело: <a href="http://www.znannya.org/?view=Java_PrimitiveTypesOp" rel="nofollow">Операції над примітивними типами Java</a></em>
+</cut>

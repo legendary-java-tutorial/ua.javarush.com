@@ -1,0 +1,148 @@
+Ах, ці рядки...
+<p>----------------------------------------</p>
+Клас , мабуть, є одним з найбільш використовуваних у Java. І дуже часто його використовують неписьменно, що породжує безліч проблем, насамперед із продуктивністю. У цій статті я хочу розповісти про рядки, про тонкощі під час їх використання
+<p>----------------------------------------</p>
+Клас <strong>java.lang.String</strong> , мабуть, є одним з найбільш використовуваних у Java. І дуже часто його використовують неписьменно, що породжує безліч проблем, насамперед із продуктивністю. У цій статті я хочу розповісти про рядки, про тонкощі під час їх використання, про джерела проблем тощо. 
+<div class="row justify-content-center jr-image-wrap">
+ <div class="col-12 col-sm-10 col-md-8">
+  <img data-id="2d25a539-763e-4af8-820c-9ef746e7fc45" data-max-width="710" alt="Ах, ці рядки... - 1" src="https://cdn.javarush.com/images/article/2d25a539-763e-4af8-820c-9ef746e7fc45/512.jpeg" style="width: 710px;">
+ </div>
+</div>Ось про що ми поговоримо: 
+<ul>
+ <li>Влаштування рядка</li>
+ <li>Рядкові літерали</li>
+ <li>Порівняння рядків</li>
+ <li>Складання рядків</li>
+ <li>Вибірка підрядки та копіруючий конструктор</li>
+ <li>Зміна рядка</li>
+ <li>Почнемо з основ.</li>
+</ul>
+<h2>Влаштування рядка</h2>Клас <strong>java.lang.String</strong> містить у собі три поля: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token comment">/**
+ * NOTE: This is just a partial API
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">class</span> <span class="token class-name">String</span><span class="token punctuation">{</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">char</span> value<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">int</span> offset<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">int</span> count<span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span></code></pre> Насправді там містяться й інші поля, наприклад, hash-код, але зараз це не має значення. Основні – ці. Отже, в основі рядка лежить масив символів ( <strong>char</strong> ). При зберіганні символів у пам'яті використовується кодування Unicode <em>UTF-16BE</em> . Докладніше про неї можна почитати <a href="http://www.skipy.ru/technics/encodings.html#UTF" rel="nofollow">тут</a> . Починаючи з версії Java 5.0, введена підтримка Unicode версії вище 2 і, відповідно, символів з кодами більше <strong>0xFFFF</strong> . Для цих символів використовуються вже не один <strong>char</strong> , а два, докладніше про кодування цих символів <a href="http://www.skipy.ru/technics/encodings.html#UTF" rel="nofollow">у тій же статті</a> . Хоча підтримка цих символів і введена, та ось невдача – відобразити їх не вдасться. Я знайшов набір музичних символів ( <a href="http://www.unicode.org/charts/PDF/U1D100.pdf" rel="nofollow">U1D100</a>) і спробував вивести хоч кудись скрипковий ключ (символ з кодом 1D120). Переклав код у два <strong>char</strong> , як і належить – '\uD834' і '\uDD20'. Декодер ними не лається, чесно розпізнає як символ. Ось тільки шрифту немає, де цей символ існує. А тому – квадратик. І зважаючи на все – це надовго. Отже, введення підтримки Unicode 4 можна розглядати виключно через призму зачепила на майбутнє. Ходімо далі. Я прошу звернути пильну увагу на друге та третє поля – <strong>offset</strong> та <strong>count</strong> . Здавалося б, масив повністю визначає рядок, якщо використовуються <strong>ВСЕ</strong>символи. Якщо ж є такі поля – символи в масиві можуть використовуватися не всі. Так воно і є, про це ми поговоримо в частині вибірка підрядка та конструктор конструктор.<cut>
+ <h2>Рядкові літерали</h2>Що таке рядковий літерал? Це рядок, записаний у подвійних лапках, наприклад, такий: "abc". Такі вирази використовуються в коді часто-густо. Рядок ця може містити escape-послідовності unicode, наприклад, що відповідатиме російській букві 'А'. Однак, цей рядок 
+ <strong>НЕ МОЖЕ</strong>містити послідовностей \u000A та \u000D, відповідні символам LF і CR відповідно. Справа в тому, що послідовності обробляються на ранній стадії компіляції, і ці символи будуть замінені на реальні LF і CR (якби в редакторі просто натиснули "Enter"). Для вставки в рядок цих символів слід використовувати послідовності \n та \r відповідно. Рядкові літерали зберігаються в пулі рядків. Я згадував про кулю у статті про порівняння на практиці, але повторюся. Віртуальна машина Java підтримує пул рядків. У нього кладуться всі строкові літерали, оголошені кодом. При збігу літералів (з точки зору equals, див 
+ <a href="http://www.skipy.ru/technics/objCompPr.html#str_equals_vs_eqeq" rel="nofollow">.</a>) використовується той самий об'єкт, що у пулі. Це дозволяє заощаджувати пам'ять, а в деяких випадках і підвищувати продуктивність. Справа в тому, що рядок в пул можна помістити примусово за допомогою методу 
+ <strong>String.intern()</strong> . Цей метод повертає з пулу рядок, рівний тому, у якого був викликаний цей метод. Якщо ж такого рядка немає - в пул кладеться та, у якої викликаний метод, після чого повертається посилання на неї. Таким чином, при грамотному використанні пула з'являється можливість порівнювати рядки не за значенням через equals, а за посиланням, що значно, на порядки, швидше. Так реалізований, наприклад, клас 
+ <strong>java.util.Locale</strong> , який має справу з купою маленьких, переважно двосимвольних, рядків – кодами країн, мов тощо. також тут:
+ <a href="http://www.skipy.ru/technics/objCompPr.html#str_equals_vs_eqeq" rel="nofollow">Порівняння об'єктів: практика – метод String.intern</a> . Дуже часто я бачу у різній літературі конструкції наступного виду: 
+ <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">String</span> SOME_STRING <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span><span class="token string">"abc"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> Якщо говорити ще точніше, нарікання у мене викликає 
+ <strong>new String("abc")</strong> . Справа в тому, що ця конструкція – безграмотна. У Java рядковий літерал – "abc" – 
+ <strong>ВЖЕ</strong> є об'єктом класу 
+ <strong>String</strong> . А тому, використання ще й конструктора призводить до 
+ <strong>копіювання</strong> рядка. Оскільки строковий літерал вже зберігається в пулі, і нікуди з нього не подінеться, то створений 
+ <strong>НОВИЙ</strong> об'єкт – ніщо інше, як марна трата пам'яті. Цю конструкцію з чистою совістю можна переписати так: 
+ <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">String</span> SOME_STRING <span class="token operator">=</span> <span class="token string">"abc"</span><span class="token punctuation">;</span></code></pre> З погляду коду це буде абсолютно те саме, але дещо ефективніше. Переходимо до наступного питання – 
+ <h2>Порівняння рядків</h2>Власне, все про це питання я вже писав у статті 
+ <a href="http://www.skipy.ru/technics/objCompPr.html" rel="nofollow">Порівняння об'єктів: практика</a> . І додати більше нема чого. Резюмуючи сказане там – рядки треба порівнювати за значенням, використовуючи метод 
+ <strong>equals</strong> . На посилання їх можна порівнювати, але акуратно, тільки якщо точно знаєш, що робиш. У цьому допомагає метод 
+ <strong>String.intern</strong> . Єдиний момент, який би хотілося згадати – порівняння з літералами. Я часто бачу конструкції типу 
+ <strong>str.equals("abc")</strong> . І тут є невеликі граблі - перед цим порівнянням правильно було б порівняти 
+ <strong>str</strong> з 
+ <strong>null</strong> , щоб не отримати 
+ <strong>NullPointerException</strong> . Тобто. правильною буде конструкція 
+ <strong>str != null &amp;&amp; str.equals("abc")</strong>. Тим часом її можна спростити. Достатньо написати лише 
+ <strong>"abc".equals(str)</strong> . Перевірка на 
+ <strong>null</strong> у разі не потрібна. На черзі у нас... 
+ <h2>Складання рядків</h2>Рядки - єдиний об'єкт, для якого визначено операцію складання посилань. Принаймні так було до версії Java 5.0, в якій з'явився autoboxing/unboxing, але зараз не про це. Загальний опис принципу роботи оператора конкатенації можна знайти у статті про посилання, а саме – 
+ <a href="http://www.skipy.ru/technics/references.html#concat" rel="nofollow">тут</a> . Я ж хочу торкнутися глибшого рівня. Уявіть собі, уявіть собі... Прямо як у пісеньці про коника. :) Так ось, уявіть собі, що нам треба скласти два рядки, вірніше, до одного додати інший: 
+ <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">String</span> str1 <span class="token operator">=</span> <span class="token string">"abc"</span><span class="token punctuation">;</span>
+str1 <span class="token operator">+=</span> <span class="token string">"def"</span><span class="token punctuation">;</span></code></pre> Як відбувається додавання? Оскільки об'єкт класу рядка незмінний, то результатом додавання буде новий об'єкт. Отже. Спочатку виділяється пам'ять, достатня для того, щоб умістити туди вміст обох рядків. У цю пам'ять копіюється вміст спочатку першого рядка, потім другого. Далі змінній str1 надається посилання на новий рядок, а старий рядок відкидається. Ускладнимо завдання. Нехай у нас є файл із чотирьох рядків: 
+ <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java">abc
+def
+ghi
+jkl</code></pre> Нам треба прочитати ці рядки та зібрати їх в один. Надаємо за тією ж схемою. 
+ <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">BufferedReader</span> br <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BufferedReader</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">FileReader</span><span class="token punctuation">(</span><span class="token string">"... filename ..."</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">String</span> result <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
+<span class="token keyword">while</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token class-name">String</span> line <span class="token operator">=</span> br<span class="token punctuation">.</span><span class="token function">readLine</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>line <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token keyword">break</span><span class="token punctuation">;</span>
+    result <span class="token operator">+=</span> line<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre> Начебто поки все добре і логічно. Давайте розберемо, що відбувається нижньому рівні. Перший прохід циклу. 
+ <strong>result=""</strong> , 
+ <strong>line="abc"</strong> . Виділяється пам'ять на 3 символи, туди копіюється вміст 
+ <strong>line</strong> - 
+ <strong>"abc"</strong> . Змінній 
+ <strong>result</strong> надається посилання на новий рядок, старий відкидається. Другий прохід циклу. 
+ <strong>result="abc"</strong> , 
+ <strong>line="def"</strong> . Виділяється пам'ять на 6 символів, туди копіюється вміст 
+ <strong>result</strong> - 
+ <strong>"abc"</strong> , потім 
+ <strong>line</strong> - 
+ <strong>"def"</strong> . Змінній 
+ <strong>result</strong> надається посилання на новий рядок, старий відкидається.
+ <strong>result="abcdef"</strong> , 
+ <strong>line="ghi"</strong> . Виділяється пам'ять на 9 символів, туди копіюється вміст 
+ <strong>result</strong> - 
+ <strong>"abcdef"</strong> , потім 
+ <strong>line</strong> - 
+ <strong>"ghi"</strong> . Змінній 
+ <strong>result</strong> надається посилання на новий рядок, старий відкидається. Четвертий прохід циклу. 
+ <strong>result="abcdefghi"</strong> , 
+ <strong>line="jkl"</strong> . Виділяється пам'ять на 12 символів, туди копіюється вміст 
+ <strong>result</strong> - 
+ <strong>"abcdefghi"</strong> , потім 
+ <strong>line</strong> - 
+ <strong>"jkl"</strong> . Змінній 
+ <strong>result</strong> надається посилання на новий рядок, старий відкидається.
+ <strong>result="abcdefghijkl"</strong> , 
+ <strong>line=null</strong> . Цикл закінчено. Отже. Три символи "abc" копіювалися в пам'яті 4 рази, "def" – 3 рази, "ghi" – 2 рази, "jkl" – один раз. Страшно? Не дуже? А ось тепер уявіть собі файл із довжиною рядка 80 символів, у якому десь 1000 рядків. Всього лише 80кб. Уявабо? Що буде у цьому випадку? перший рядок, як неважко підрахувати, буде скопійовано в пам'яті 1000 разів, другий - 999 і т.д. І за середньої довжини 80 символів через пам'ять пройде ((1000 + 1) * 1000 / 2) * 80 = ... барабанний дріб... 40 040 000 символів, що становить близько 80 Мб (!!!) пам'яті. Який же результат 
+ <strong>ТАКОГО</strong>циклу? Читання 80-кілобайтного файлу викликало виділення 80 Мб пам'яті. Не багато не мало – у 1000 разів більше, ніж корисний обсяг. Який із цього слід зробити висновок? Дуже простий. Ніколи, запам'ятайте – 
+ <strong>НІКОЛИ</strong> не використовуйте пряму конкатенацію рядків, особливо у циклах. Навіть у якомусь методі 
+ <strong>toString</strong> , якщо він викликається досить часто, має сенс використовувати 
+ <strong>StringBuffer</strong> замість конкатенації. Власне, компілятор при оптимізації найчастіше так і робить – прямі додавання він виконує через 
+ <strong>StringBuffer</strong>. Однак у випадках, подібних до того, що навів я, оптимізацію компілятор зробити не в змозі. Що і призводить до вельми сумних наслідків, описаних трохи нижче. На жаль, подібні конструкції зустрічаються дуже часто. Тому я вважав за необхідне загострити на цьому увагу. 
+ <em>Власний досвід Не можу не згадати один епізод із власної практики. Один із програмістів, які працювали зі мною, якось поскаржився, що в нього дуже повільно працює його код. Він читав досить великий файл у HTML форматі, після чого робив якісь маніпуляції. І справді, працювало все з черепашою швидкістю. Я взяв подивитись вихідник, і виявив, що він... використовує конкатенацію рядків. Він мав по 200-250 рядків у кожному файлі, і при читанні файлу близько 200Кб через пам'ять проходило більше 40Мб! У результаті я переписав трохи код, замінивши операції з рядками на операції з StringBuffer-ом. Чесно сказати, коли я запустив переписаний код, я подумав, що він просто десь упав. Обробка займала частки секунди. Швидкість зросла у 300-800 разів.</em> Наступний акт марлезонського балету – 
+ <h2>Вибірка підрядки та копіруючий конструктор</h2>Уявімо, що у нас є рядок, з якого треба вирізати підрядок. Питання "як це зробити" не варто – і так зрозуміло. Питання в іншому – що при цьому відбувається? 
+ <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">String</span> str <span class="token operator">=</span> <span class="token string">"abcdefghijklmnopqrstuvwxyz"</span><span class="token punctuation">;</span>
+str <span class="token operator">=</span> str<span class="token punctuation">.</span><span class="token function">substring</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> Начебто тривіальний код. І перша думка така - вибирається підрядок "efghi", змінній str надається посилання на новий рядок, а старий об'єкт відкидається. Так? Майже. Справа в тому, що для збільшення швидкості при вибірці підрядка використовується ТІЙ МАСИВ, що і у вихідному рядку. Інакше кажучи, ми отримаємо не об'єкт, в якому масив 
+ <strong>value</strong> (див. 
+ <a href="http://www.skipy.ru/technics/strings.html#internal" rel="nofollow">пристрій рядка</a>) має довжину 5 і містить символи 'e', ​​'f', 'g', 'h' і 'i', count=5 і offset=0. Ні, довжина масиву буде, як і раніше, 26, count=5 і offset=5. І при відкиданні старого рядка масив не відкинеться, а як і раніше буде перебувати в пам'яті, бо на нього є посилання з нового рядка. І існувати в пам'яті він буде до того моменту, як буде відкинуто вже новий рядок. Це зовсім неочевидний момент, який може спричинити проблеми з пам'яттю. Постає питання – як цього уникнути? Відповідь – за допомогою копіруючого конструктора 
+ <strong>String (String)</strong> . Справа в тому, що в цьому конструкторі в явному вигляді виділяється пам'ять під новий рядок, і в цю пам'ять копіюється вихідний вміст. Таким чином, якщо ми перепишемо код так: 
+ <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">String</span> str <span class="token operator">=</span> <span class="token string">"abcdefghijklmnopqrstuvwxyz"</span><span class="token punctuation">;</span>
+str <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>str<span class="token punctuation">.</span><span class="token function">substring</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> ..., то довжина масиву 
+ <strong>value</strong> об'єкта 
+ <strong>str</strong> буде дійсно 5, count=5 і offset=0. І це – єдиний випадок, де виправдано застосування конструктора для рядка. І як фінальний акорд – 
+ <h2>Зміна рядка</h2>Це до рядка як такого ставиться слабко. Я лише хочу показати той факт, що рядок є незмінним лише до певної міри. Отже, код. 
+ <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">tests</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>reflect<span class="token punctuation">.</span></span><span class="token class-name">Field</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>reflect<span class="token punctuation">.</span></span><span class="token class-name">Modifier</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * This application demonstrates how to modify java.lang.String object
+ * through reflection API.
+ *
+ * @version 1.0
+ * @author Eugene Matyushkin
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">StringReverseTest</span> <span class="token punctuation">{</span>
+
+    <span class="token comment">/**
+     * final static string that should be modified.
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">String</span> testString <span class="token operator">=</span> <span class="token string">"abcde"</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span><span class="token punctuation">{</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Initial static final string:  "</span><span class="token operator">+</span>testString<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">Field</span><span class="token punctuation">[</span><span class="token punctuation">]</span> fields <span class="token operator">=</span> testString<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getDeclaredFields</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">Field</span> value <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+            <span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span> i</code></pre> Що тут відбувається? Спочатку я шукаю поле типу 
+ <strong>char[]</strong> . Я міг би шукати і на ім'я. Однак ім'я може змінитися, а ось тип сильно сумніваюся. Далі, у знайденого поля викликаю метод 
+ <strong>setAccessible(true)</strong> . Це ключовий момент – я відключаю перевірку рівня доступу до поля (інакше я просто не зможу змінити значення, тому що поле 
+ <strong>private</strong> ). У цьому місці я можу отримати по голові від менеджера безпеки, який перевіряє, чи дозволено таку дію (через виклик 
+ <strong>checkPermission(new ReflectPermission("suppressAccessChecks")))</strong> . Якщо дозволено (а за замовчуванням для звичайних програм так і є) – я можу отримати доступ до 
+ <strong>private</strong> -поля. Решта, як кажуть, справа техніки. В результаті я отримую висновок: 
+ <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">Initial</span> <span class="token keyword">static</span> <span class="token keyword">final</span> string<span class="token operator">:</span>  abcde
+<span class="token class-name">Reversed</span> <span class="token keyword">static</span> <span class="token keyword">final</span> string<span class="token operator">:</span> edcba</code></pre> Що й потрібно було довести. А тому – у реальних додатках я раджу ретельніше підходити до настроювання політики безпеки. Інакше може виявитися, що об'єкти, які ви вважаєте гарантовано незмінними, не є такими. * * * Напевно, це все, що я хочу розповісти про рядки на даний момент. Дякую за увагу! 
+ <em>Посилання на першоджерело: <a href="http://www.skipy.ru/technics/strings.html" rel="nofollow">Ах, ці рядки...</a></em>
+</cut>

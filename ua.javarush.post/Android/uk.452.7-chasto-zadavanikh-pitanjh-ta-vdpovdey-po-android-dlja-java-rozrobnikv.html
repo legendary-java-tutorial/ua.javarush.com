@@ -1,0 +1,63 @@
+7 часто задаваних питань та відповідей по Android для Java-розробників
+<p>----------------------------------------</p>
+У цій статті ми розглянемо деякі з найчастіше поставлених питань на співбесідах з Android. Професія розробника додатків під Android дуже популярна. Наступні питання часто зустрічаються на співбесідах на посаду Android-розробників середнього
+<p>----------------------------------------</p>
+У цій статті ми розглянемо деякі з найчастіше поставлених питань на співбесідах з Android. Професія розробника додатків під Android дуже популярна. Наступні питання часто зустрічаються на співбесідах на посаду Android-розробників середнього і початкового рівня. Вони прості за своєю суттю, і відмінно підходять для повторення та тренування перед походом на співбесіду з Android. <img data-id="d7dc7a6c-b863-4b72-9c2f-b5436ae352f5" data-max-width="850" alt="7 часто задаваних питань і відповідей по Android для Java-розробників - 1" src="https://cdn.javarush.com/images/article/d7dc7a6c-b863-4b72-9c2f-b5436ae352f5/800.jpeg" style="width: 850px;">
+<h2>Запитання 1: У чому різниця між звичайним png-зображенням та 9-patch?</h2>Це одне з найпопулярніших питань на співбесідах з операційної системи Android. Його задають розробникам із досвідом від 1-2 до 5 років. Відповідь така: це ресурс, що допускає зміну розміру, - точкове зображення, який можна використовувати для фону або інших зображень на пристрої. Клас <em><strong>NinePatch</strong></em> надає можливість відтворення зображення у дев'яти областях. Розширення подібних зображень – <em><strong>.9.png</strong></em> . Їх можна розширювати дев'ятьма способами: 4 кута не масштабуються, 4 грані масштабуються по одній осі та середня область масштабується по обох осях. <h>
+ Питання 2: Що таке ANR-повідомлення в Android? 
+ <em><strong>ANR</strong></em> - це скорочення від 
+ <em><strong>"Додаток не відповідає"</strong></em> (Application Not Responding). Системи, що працюють на операційній системі Android, показують це діалогове вікно, якщо програма виконує надто ресурсомістке завдання в основній нитці (thread), і не відповідає протягом тривалого часу. 
+ <h2>Питання 3: Коли викликається метод onResume()?</h2>Метод 
+ <code class=" language-none">onResume()</code>- один із методів життєвого циклу активностей. Він викликається, коли активність перетворюється на передній план. Ви можете перевизначити цей метод у своїй активності, щоб виконувати код під час запуску, перезапуску активності або її переходу на передній план. Ось зрозуміла схема, що пояснює послідовність виконання різних методів зворотного виклику в Android, включаючи 
+ <code class=" language-none">onResume()</code>: 
+ <div class="row justify-content-center jr-image-wrap">
+  <div class="col-12 col-sm-10 col-md-8">
+   <img data-id="693a5081-8363-4f05-96fb-7bf9eb128c38" data-max-width="320" alt="7 часто задаваних питань та відповідей по Android для Java-розробників - 2" src="https://cdn.javarush.com/images/article/693a5081-8363-4f05-96fb-7bf9eb128c38/256.jpeg" style="width: 320px;">
+  </div>
+ </div>
+ <h2>Питання 4: У чому різниця між неявним (implicit) і явним (explicit) наміром?</h2>Під 
+ <em><strong>наміром</strong></em> або Intent переважно розуміють повідомлення, які передаються між компонентами (Activities, Services, Broadcast Receivers, Content Providers). Існує два типи намірів: 
+ <em><strong>неявні</strong></em> та 
+ <em><strong>явні</strong></em> . Давайте розберемося, у чому їх відмінності. 
+ <em><strong>1) Неявне:</strong></em> Про неявні наміри йдеться при виклику системних намірів за замовчуванням, таких як надсилання повідомлення електронної пошти, SMS, набір номера телефону, наприклад: 
+ <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token class-name"><span class="token class-name">Intent</span></span> sendIntent <span class="token operator"><span class="token operator">=</span></span> <span class="token keyword"><span class="token keyword">new</span></span> <span class="token class-name"><span class="token class-name">Intent</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+sendIntent<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">setAction</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">Intent</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>ACTION_SEND<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+sendIntent<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">putExtra</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">Intent</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>EXTRA_TEXT<span class="token punctuation"><span class="token punctuation">,</span></span> textMessage<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+sendIntent<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">setType</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"text/plain"</span></span><span class="token punctuation"><span class="token punctuation">)</span></span>
+<span class="token function"><span class="token function">startactivity</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>sendIntent<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span></code></pre>
+ <em><strong>2) Явний:</strong></em> Явний намір використовується для переходу від однієї активності до іншої, наприклад, від активності
+ <code class=" language-none">first</code>до активності
+ <code class=" language-none">second</code>: 
+ <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class="  language-java"><span class="token class-name"><span class="token class-name">Intent</span></span> intent <span class="token operator"><span class="token operator">=</span></span> <span class="token keyword"><span class="token keyword">new</span></span> <span class="token class-name"><span class="token class-name">Intent</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>first<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token keyword"><span class="token keyword">this</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> second<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token keyword"><span class="token keyword">class</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token function"><span class="token function">startactivity</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>intent<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span></code></pre> Більше дізнатися про явні та неявні наміри можна з книги 
+ <em><strong>Introduction to Android Development By John Sonmez.</strong></em>
+ <h2>Запитання 5: Що таке формат APK?</h2>Файл у форматі 
+ <em><strong>APK</strong></em> є стислим файлом 
+ <code class=" language-none">AndroidManifest.XML</code>з розширенням 
+ <code class=" language-none">.apk</code>. Він містить код програми (файли .dex), файли ресурсів та інші файли, стиснуті в єдиний файл. 
+ <h2>Запитання 6: Що таке віртуальна машина Dalvik?</h2>Подібно до того, як Java-програми виконуються на 
+ <em><strong>Oracle HotSpot JVM</strong></em> або 
+ <em><strong>Azul JVM</strong></em> , програми Android працюють на віртуальній машині 
+ <em><strong>Dalvik (DVM)</strong></em> . По суті, це аналог Java-машини, розроблений Google і оптимізована під. роботу з 
+ <em><strong>RISC-процесорами</strong></em> . 
+ <h2>Запитання 7: Як додаток Android виконується на мобільному пристрої під керуванням операційної системи Android?</h2>Оскільки код додатків Android найчастіше пишеться мовою Java, вони спочатку компілюються, а потім виконуються, але віртуальна машина, для якої генерується їхній байт-код, відрізняється від стандартної JVM. Для виконання програм Android використовується віртуальна машина Dalvik. 
+ <div class="row justify-content-center jr-image-wrap">
+  <div class="col-12 col-sm-10 col-md-8">
+   <img data-id="f2f1ddb6-f2a6-4dc6-b45c-8947d3a27933" data-max-width="400" alt="7 часто задаваних питань та відповідей по Android для Java-розробників - 3" src="https://cdn.javarush.com/images/article/f2f1ddb6-f2a6-4dc6-b45c-8947d3a27933/256.jpeg" style="width: 400px;">
+  </div>
+ </div>
+ <div class="table-container">
+  <table>
+   <tbody>
+    <tr>
+     <th>Що ще почитати?</th>
+    </tr>
+    <tr>
+     <td>
+      <p><a href="https://codegym.cc/groups/posts/449-chego-khotjat-ljudi-v-2018-m-pjatjh-potrebiteljhskikh-trendov-interesnihkh-aytishniku" target="_blank">Чого хочуть люди 2018-го? П'ять споживчих трендів, цікавих айтішнику</a></p>
+      <p><a href="https://codegym.cc/groups/posts/431-10-voprosov-po-abstraktnihm-klassam-i-interfeysam-s-sobesedovaniy-po-jazihku-java" target="_blank">10 питань щодо абстрактних класів та інтерфейсів із співбесід з Java</a></p></td>
+    </tr>
+   </tbody>
+  </table>
+ </div>
+</h>

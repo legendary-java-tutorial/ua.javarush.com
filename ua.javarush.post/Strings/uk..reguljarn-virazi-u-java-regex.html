@@ -1,0 +1,312 @@
+Регулярні вирази у Java (RegEx)
+<p>----------------------------------------</p>
+— тема, яку програмісти, навіть досвідчені, найчастіше відкладають потім. Однак більшості Java-розробників рано чи пізно доведеться зіткнутися з обробкою текстової інформації. Найчастіше - з операціями пошуку в тексті та редагуванням. Без р
+<p>----------------------------------------</p>
+<strong>Регулярні висловлювання</strong> — тема, яку програмісти, навіть досвідчені, найчастіше відкладають потім. Однак більшості Java-розробників рано чи пізно доведеться зіткнутися з обробкою текстової інформації. Найчастіше - з операціями пошуку в тексті та редагуванням. Без регулярних виразів продуктивний і компактний програмний код, пов'язаний із обробкою текстів, просто немислимий. Тож вистачить відкладати, розберемося з «регулярками» зараз. Це не таке вже й складне завдання.
+<h2>Що таке регулярне вираження RegEx?</h2>Насправді регулярне вираз (RegEx в Java) – це шаблон пошуку рядка в тексті. Java вихідним поданням цього шаблону завжди є рядок, тобто об'єкт класу String. Однак не будь-який рядок може бути скомпільований у регулярний вираз, а лише той, який відповідає правилам написання регулярного виразу – синтаксису, визначеному у специфікації мови. Для написання регулярного виразу використовуються буквені та цифрові символи, а також метасимволи – символи, що мають спеціальне значення у синтаксисі регулярних виразів. Наприклад: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class="  language-java"><span class="token class-name"><span class="token class-name">String</span></span> regex <span class="token operator"><span class="token operator">=</span></span> <span class="token string"><span class="token string">"java"</span></span><span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">// шаблон рядка "java";</span></span>
+<span class="token class-name"><span class="token class-name">String</span></span> regex <span class="token operator"><span class="token operator">=</span></span> <span class="token string"><span class="token string">"\\d{3}"</span></span><span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">// шаблон рядка із трьох цифрових символів;</span></span></code></pre>
+<h2>Створення регулярних виразів у Java</h2>Щоб створити RegEx в Java, потрібно зробити два простих кроки: 
+<ol>
+ <li>написати його у вигляді рядка з урахуванням синтаксису регулярних виразів;</li>
+ <li>скомпілювати цей рядок у регулярний вираз;</li>
+</ol>Робота з регулярними виразами у будь-якій Java-програмі починається зі створення об'єкта класу <code class=" language-none">Pattern</code>. Для цього необхідно викликати один із двох наявних у класі статичних методів <code class=" language-none">compile</code>. Перший метод приймає один аргумент – рядковий літерал регулярного виразу, а другий – плюс ще параметр, що включає режим порівняння шаблону з текстом: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token class-name"><span class="token class-name">Pattern</span></span> compile <span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">String</span></span> literal<span class="token punctuation"><span class="token punctuation">)</span></span>
+<span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token class-name"><span class="token class-name">Pattern</span></span> compile <span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">String</span></span> literal<span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token keyword"><span class="token keyword">int</span></span> flags<span class="token punctuation"><span class="token punctuation">)</span></span></code></pre><a href="https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html#CASE_INSENSITIVE" rel="nofollow" target="_blank">Список</a> можливих значень параметра <code class=" language-none">flags</code>визначено у класі <code class=" language-none">Pattern</code>та доступний нам як статичні змінні класу. Наприклад: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class="  language-java"><span class="token class-name"><span class="token class-name">Pattern</span></span> pattern <span class="token operator"><span class="token operator">=</span></span> <span class="token class-name"><span class="token class-name">Pattern</span></span><span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">compile</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"java"</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token class-name"><span class="token class-name">Pattern</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>CASE_INSENSITIVE<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span><span class="token comment"><span class="token comment">//Пошук збігів з шаблоном буде здійснюватися без урахування регістру символів.</span></span></code></pre> По суті, клас <code class=" language-none">Pattern</code>– це конструктор регулярних виразів. Під «капотом» метод <code class=" language-none">compile</code>викликає закритий конструктор класу <code class=" language-none">Pattern</code>створення скомпаборованного уявлення. Такий спосіб створення екземпляра шаблону реалізований з метою створення його у вигляді незмінного об'єкта. Під час створення проводиться синтаксична перевірка регулярного висловлювання. За наявності помилок у рядку – генерується виняток <code class=" language-none">PatternSyntaxException</code>. 
+<h2>Синтаксис регулярних виразів</h2>Синтаксис регулярних виразів ґрунтується на використанні символів <code class=" language-none">&lt;([{\^-=$!|]})?*+.&gt;</code>, які можна поєднувати з літерними символами. Залежно від ролі їх можна поділити на кілька груп: 
+<center>
+ <em>1. Метасимволи для пошуку збігів меж рядків або тексту</em>
+</center>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Метасимвол</th>
+    <th>Призначення</th>
+   </tr>
+   <tr>
+    <td>^</td>
+    <td>початок рядка</td>
+   </tr>
+   <tr>
+    <td>$</td>
+    <td>кінець рядка</td>
+   </tr>
+   <tr>
+    <td>\b</td>
+    <td>межа слова</td>
+   </tr>
+   <tr>
+    <td>\B</td>
+    <td>не межа слова</td>
+   </tr>
+   <tr>
+    <td>\A</td>
+    <td>початок введення</td>
+   </tr>
+   <tr>
+    <td>\G</td>
+    <td>кінець попереднього збігу</td>
+   </tr>
+   <tr>
+    <td>\Z</td>
+    <td>кінець введення</td>
+   </tr>
+   <tr>
+    <td>\z</td>
+    <td>кінець введення</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<center>
+ <em>2. Метасимволи для пошуку символьних класів</em>
+</center>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Метасимвол</th>
+    <th>Призначення</th>
+   </tr>
+   <tr>
+    <td>\d</td>
+    <td>цифровий символ</td>
+   </tr>
+   <tr>
+    <td>\D</td>
+    <td>нецифровий символ</td>
+   </tr>
+   <tr>
+    <td>\s</td>
+    <td>символ пропуску</td>
+   </tr>
+   <tr>
+    <td>\S</td>
+    <td>непробільний символ</td>
+   </tr>
+   <tr>
+    <td>\w</td>
+    <td>буквено-цифровий символ або знак підкреслення</td>
+   </tr>
+   <tr>
+    <td>\W</td>
+    <td>будь-який символ, окрім буквеного, цифрового або знак підкреслення</td>
+   </tr>
+   <tr>
+    <td>.</td>
+    <td>будь-який символ</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<center>
+ <em>3. Метасимволи для пошуку символів редагування тексту</em>
+</center>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Метасимвол</th>
+    <th>Призначення</th>
+   </tr>
+   <tr>
+    <td>\t</td>
+    <td>символ табуляції</td>
+   </tr>
+   <tr>
+    <td>\n</td>
+    <td>символ нового рядка</td>
+   </tr>
+   <tr>
+    <td>\r</td>
+    <td>символ повернення каретки</td>
+   </tr>
+   <tr>
+    <td>\f</td>
+    <td>перехід на нову сторінку</td>
+   </tr>
+   <tr>
+    <td>0085</td>
+    <td>символ наступного рядка</td>
+   </tr>
+   <tr>
+    <td>\u 2028</td>
+    <td>символ поділу рядків</td>
+   </tr>
+   <tr>
+    <td>\u 2029</td>
+    <td>символ поділу абзаців</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<center>
+ <em>4. Метасимволи для групування символів</em>
+</center>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Метасимвол</th>
+    <th>Призначення</th>
+   </tr>
+   <tr>
+    <td>[а Б В]</td>
+    <td>будь-який із перерахованих (а,б, або в)</td>
+   </tr>
+   <tr>
+    <td>[^ Абв]</td>
+    <td>будь-який, крім перерахованих (не а, б, в)</td>
+   </tr>
+   <tr>
+    <td>[a-zA-Z]</td>
+    <td>злиття діапазонів (латинські символи від a до z без урахування регістру)</td>
+   </tr>
+   <tr>
+    <td>[ad[mp]]</td>
+    <td>об'єднання символів (від a до d і від m до p)</td>
+   </tr>
+   <tr>
+    <td>[az&amp;&amp;[def]]</td>
+    <td>перетин символів (символи d, e, f)</td>
+   </tr>
+   <tr>
+    <td>[az&amp;&amp;[^bc]]</td>
+    <td>віднімання символів (символи a, dz)</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<center>
+ <em>5. Метасимволи для позначення кількості символів – квантифікатори. Квантифікатор завжди слідує після символу або групи символів.</em>
+</center>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Метасимвол</th>
+    <th>Призначення</th>
+   </tr>
+   <tr>
+    <td>?</td>
+    <td>один або відсутній</td>
+   </tr>
+   <tr>
+    <td>*</td>
+    <td>нуль або більше разів</td>
+   </tr>
+   <tr>
+    <td>+</td>
+    <td>один або більше разів</td>
+   </tr>
+   <tr>
+    <td>{n}</td>
+    <td>n раз</td>
+   </tr>
+   <tr>
+    <td>{n,}</td>
+    <td>n разів і більше</td>
+   </tr>
+   <tr>
+    <td>{n, m}</td>
+    <td>не менше n разів і не більше m разів</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<h2>Жадібний режим квантифікатора</h2>Особливістю квантифікаторів є можливість використання їх у різних режимах: жадібному, наджадібному та лінивому. <strong>Наджадібний режим</strong> включається додаванням символу « <code class=" language-none">+</code>» після квантифікатора, а лінивий – символу « <code class=" language-none">?</code>». Наприклад: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class="  language-java"><span class="token string"><span class="token string">"А.+а"</span></span> <span class="token comment"><span class="token comment">// жадібний режим</span></span>
+<span class="token string"><span class="token string">"А.++а"</span></span> <span class="token comment"><span class="token comment">// Над жадібний режим</span></span>
+<span class="token string"><span class="token string">"А.+?а"</span></span> <span class="token comment"><span class="token comment">// лінивий режим</span></span></code></pre> Спробуємо з прикладу цього шаблону розібратися у роботі квантифікаторів у різних режимах. За замовчуванням квантифікатор працює у жадібному режимі. Це означає, що він шукає максимально довгий збіг у рядку. В результаті виконання цього коду: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="token function"><span class="token function">main</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">String</span></span><span class="token punctuation"><span class="token punctuation">[</span></span><span class="token punctuation"><span class="token punctuation">]</span></span> args<span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+    <span class="token class-name"><span class="token class-name">String</span></span> text <span class="token operator"><span class="token operator">=</span></span> <span class="token string"><span class="token string">"Єгор Алла Олександр"</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+    <span class="token class-name"><span class="token class-name">Pattern</span></span> pattern <span class="token operator"><span class="token operator">=</span></span> <span class="token class-name"><span class="token class-name">Pattern</span></span><span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">compile</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"А.+а"</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+    <span class="token class-name"><span class="token class-name">Matcher</span></span> matcher <span class="token operator"><span class="token operator">=</span></span> pattern<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">matcher</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>text<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+    <span class="token keyword"><span class="token keyword">while</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span>matcher<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">find</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+        <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>text<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">substring</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>matcher<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">start</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> matcher<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">end</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+    <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre><strong>ми отримаємо такий висновок: <em>Алла Алекса</em></strong> Алгоритм пошуку за заданим шаблоном " <code class=" language-none">А.+а</code>", виконується в наступній послідовності: 
+<ol>
+ <li>
+  <p>У заданому шаблоні перший символ – це символ літери <code class=" language-none">А</code>. <code class=" language-none">Matcher</code>зіставляє його з кожним символом тексту, починаючи з нульової позиції. На нульовій позиції в тексті знаходиться символ <code class=" language-none">Е</code>, тому <code class=" language-none">Matcher</code>перебирає послідовно символи в тексті, доки не зустріне збіг з шаблоном. У прикладі це символ на позиції №5.</p><img data-id="025a11b5-cffb-4158-9838-a50ff1659893" data-max-width="850" alt="Регулярні вирази в Java - 2" src="https://cdn.javarush.com/images/article/025a11b5-cffb-4158-9838-a50ff1659893/800.jpeg" style="width: 850px;"></li>
+ <li>
+  <p>Після того, як знайдено збіг з першим символом шаблону, <code class=" language-none">Matcher</code>звіряє відповідність з другим символом шаблону. У нашому випадку це символ « <code class=" language-none">.</code>», який означає будь-який символ.</p><img data-id="d5995c0d-e88a-4627-845e-6cd3081289e0" data-max-width="850" alt="Регулярні вирази в Java - 3" src="https://cdn.javarush.com/images/article/d5995c0d-e88a-4627-845e-6cd3081289e0/800.jpeg" style="width: 850px;">
+  <p>На шостій позиції – символ літери <code class=" language-none">л</code>. Вочевидь, він відповідає шаблону «будь-який символ».</p></li>
+ <li>
+  <p><code class=" language-none">Matcher</code>переходить до перевірки наступного символу із шаблону. У нашому шаблоні він поставлений за допомогою квантифікатора « <code class=" language-none">.+</code>». Оскільки кількість повторень «будь-якого символу» у шаблоні – один і більше разів, <code class=" language-none">Matcher</code>бере по черзі наступний символ з рядка і перевіряє його на відповідність шаблону, доки буде виконуватися умова «будь-який символ», у нашому прикладі – до кінця рядка ( з поз. №7 - №18 тексту).</p><img data-id="2880ac59-56a2-42c9-b6d3-285241d3e3db" data-max-width="850" alt="Регулярні вирази в Java - 4" src="https://cdn.javarush.com/images/article/2880ac59-56a2-42c9-b6d3-285241d3e3db/800.jpeg" style="width: 850px;">
+  <p>Власне, <code class=" language-none">Matcher</code>, захоплює все рядок остаточно – у цьому таки виявляється його «жадібність».</p></li>
+ <li>
+  <p>Після того як <code class=" language-none">Matcher</code>дійшов до кінця тексту і закінчив перевірку для частини шаблону « <code class=" language-none">А.+</code>», Matcher починає перевірку для частини шаблону, що залишилася - символ літери <code class=" language-none">а</code>. Оскільки текст у прямому напрямку закінчився, перевірка відбувається у зворотному напрямку, починаючи з останнього символу:</p><img data-id="4edc0442-3476-4827-8b0a-f60944f030c9" data-max-width="850" alt="Регулярні вирази в Java - 5" src="https://cdn.javarush.com/images/article/4edc0442-3476-4827-8b0a-f60944f030c9/800.jpeg" style="width: 850px;"></li>
+ <li>
+  <p><code class=" language-none">Matcher</code>«Пам'ятає» кількість повторень у шаблоні « <code class=" language-none">.+</code>», при якому він дійшов до кінця тексту, тому він зменшує кількість повторень на одиницю і перевіряє відповідність шаблону тексту, доки не буде знайдено збіг: <img data-id="f7c55fca-83fb-4292-9485-fe9aa7449f50" data-max-width="850" alt="Регулярні вирази в Java - 6" src="https://cdn.javarush.com/images/article/f7c55fca-83fb-4292-9485-fe9aa7449f50/800.jpeg" style="width: 850px;"></p></li>
+</ol>
+<h2>Надмірний режим квантифікатора</h2>У наджадібному режимі робота матчера аналогічна механізму жадібного режиму. Відмінність у тому, що з захоплення тексту остаточно рядка пошук у зворотному напрямі немає. Тобто перші три етапи при наджадібному режимі будуть аналогічні жадібному режиму. Після захоплення всього рядка матчер додає залишок шаблону і порівнює із захопленим рядком. У нашому прикладі під час виконання методу main з шаблоном " <code class=" language-none">А.++а</code>" збігів не буде знайдено. <img data-id="43a0e49c-8e25-470c-bd80-1396334cb9a4" data-max-width="850" alt="Регулярні вирази в Java - 7" src="https://cdn.javarush.com/images/article/43a0e49c-8e25-470c-bd80-1396334cb9a4/800.jpeg" style="width: 850px;">
+<h2>Лінивий режим квантифікатора</h2>
+<ol>
+ <li>
+  <p>У цьому режимі на початковому етапі, як і в жадібному режимі, шукається збіг з першим символом шаблону:</p><img data-id="2e7f79db-6eba-464e-a3d0-f988ad46bd40" data-max-width="850" alt="Регулярні вирази в Java - 8" src="https://cdn.javarush.com/images/article/2e7f79db-6eba-464e-a3d0-f988ad46bd40/800.jpeg" style="width: 850px;"></li>
+ <li>
+  <p>Далі шукається збіг із наступним символом шаблону – будь-яким символом:</p><img data-id="e3046c84-473b-44d4-9873-a87e6fcb6a35" data-max-width="850" alt="Регулярні вирази в Java - 9" src="https://cdn.javarush.com/images/article/e3046c84-473b-44d4-9873-a87e6fcb6a35/800.jpeg" style="width: 850px;"></li>
+ <li>
+  <p>На відміну від жадібного режиму, в лінивому шукається найкоротший збіг у тексті, тому після знаходження збігу з другим символом шаблону, який заданий точкою та відповідає символу на позиції №6 тексту, перевірятиме відповідність тексту <code class=" language-none">Matcher</code>залишку шаблону – символу « <code class=" language-none">а</code>»</p><img data-id="b24fe49e-ab84-4884-be09-f0599628a10b" data-max-width="850" alt="Регулярні вирази в Java - 10" src="https://cdn.javarush.com/images/article/b24fe49e-ab84-4884-be09-f0599628a10b/800.jpeg" style="width: 850px;"></li>
+ <li>
+  <p>Оскільки збіг із шаблоном у тексті не знайдено (на позиції №7 у тексті знаходиться символ « <code class=" language-none">л</code>»), <code class=" language-none">Matcher</code>додає ще один «будь-який символ» у шаблоні, оскільки він заданий як один і більше разів, і знову порівнює шаблон з текстом на позиціях з №5 по №8:</p><img data-id="13543dd7-56bd-46d9-b466-d6e955b811e3" data-max-width="850" alt="Регулярні вирази в Java - 11" src="https://cdn.javarush.com/images/article/13543dd7-56bd-46d9-b466-d6e955b811e3/800.jpeg" style="width: 850px;"></li>
+ <li>
+  <p>У нашому випадку знайдено збіг, але кінець тексту ще не досягнуто. Тому з позиції №9 перевірка починається з пошуку першого символу шаблону за аналогічним алгоритмом і далі повторюється до закінчення тексту.</p><img data-id="d77ca7c4-9281-4750-9199-800aff1130b0" data-max-width="850" alt="Регулярні вирази в Java - 12" src="https://cdn.javarush.com/images/article/d77ca7c4-9281-4750-9199-800aff1130b0/800.jpeg" style="width: 850px;"></li>
+</ol>В результаті роботи методу <code class=" language-none">main</code>при використанні шаблону <code class=" language-none">А.+?а</code>ми отримаємо наступний результат: <em>Алла Алекса</em> Як видно з нашого прикладу, при використанні різних режимів квантифікатора для одного і того ж шаблону ми отримали різні результати. Тому необхідно враховувати цю особливість та вибирати потрібний режим залежно від бажаного результату під час пошуку. 
+<div class="email-subscription">
+ <iframe frameborder="0" src="https://secure.esputnik.com.ua/4Q0Ef6d2SOs" width="100%" height="200" scrolling="no" data-savepage-key="0-2"></iframe>
+</div>
+<h2>Екранування символів у регулярних виразах</h2>Оскільки регулярний вираз у Java, а точніше — його вихідне уявлення задається за допомогою рядкового літералу, необхідно враховувати правила специфікації Java, які стосуються рядкових літералів. Зокрема, символ зворотної косої риси « <code class=" language-none">\</code>» у рядкових літералах у вихідному коді Java інтерпретується як символ послідовності, що управляє, який попереджає компілятор, що наступний за ним символ — спеціальний і що його потрібно особливим чином інтерпретувати. Наприклад: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class="  language-java"><span class="token class-name"><span class="token class-name">String</span></span> s <span class="token operator"><span class="token operator">=</span></span> <span class="token string"><span class="token string">"The root directory is \nWindows"</span></span><span class="token punctuation"><span class="token punctuation">;</span></span><span class="token comment"><span class="token comment">//перенесення Windows на новий рядок</span></span>
+<span class="token class-name"><span class="token class-name">String</span></span> s <span class="token operator"><span class="token operator">=</span></span> <span class="token string"><span class="token string">"The root directory is \u00A7Windows"</span></span><span class="token punctuation"><span class="token punctuation">;</span></span><span class="token comment"><span class="token comment">//вставка символу параграфа перед Windows</span></span></code></pre> Тому в рядкових літералах, які описують регулярний вираз, і використовують символ « <code class=" language-none">\</code>» (наприклад, для метасимволів) <strong>його потрібно подвоювати</strong> , щоб компілятор байт-коду Java не інтерпретував його по-своєму. Наприклад: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class="  language-java"><span class="token class-name"><span class="token class-name">String</span></span> regex <span class="token operator"><span class="token operator">=</span></span> <span class="token string"><span class="token string">"\\s"</span></span><span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">// шаблон для пошуку символів пропуску</span></span>
+<span class="token class-name"><span class="token class-name">String</span></span> regex <span class="token operator"><span class="token operator">=</span></span> <span class="token string"><span class="token string">"\"Windows\""</span></span><span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">// шаблон для пошуку рядка "Windows"</span></span></code></pre> Подвійний символ зворотної косої риси також слід використовувати для екранування символів, які задіяні як спеціальні, якщо ми плануємо їх використовувати як «звичайні» символи. Наприклад: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class="  language-java"><span class="token class-name"><span class="token class-name">String</span></span> regex <span class="token operator"><span class="token operator">=</span></span> <span class="token string"><span class="token string">"How\\?"</span></span><span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">// шаблон пошуку рядка “How?”</span></span></code></pre>
+<h2>Методи класу Pattern</h2>У класі <code class=" language-none">Pattern</code>є й інші методи для роботи з регулярними виразами: <code class=" language-none"><strong>String pattern()</strong></code>- Повертає вихідне рядкове подання регулярного виразу, з якого був створений об'єкт <code class=" language-none">Pattern</code>: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class="  language-java"><span class="token class-name"><span class="token class-name">Pattern</span></span> pattern <span class="token operator"><span class="token operator">=</span></span> <span class="token class-name"><span class="token class-name">Pattern</span></span><span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">compile</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"abc"</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">Pattern</span></span><span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">pattern</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token comment"><span class="token comment">//"abc"</span></span></code></pre><code class=" language-none"><strong>static boolean matches(String regex, CharSequence input)</strong></code>– дозволяє перевірити регулярний вираз, переданий у параметрі regex на відповідність тексту, переданому у параметрі <code class=" language-none">input</code>. Повертає: <em>true</em> – якщо текст відповідає шаблону; <em>false</em> – інакше; Приклад: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class="  language-java"><span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">Pattern</span></span><span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">matches</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"А.+а"</span></span><span class="token punctuation"><span class="token punctuation">,</span></span><span class="token string"><span class="token string">"Алла"</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span><span class="token comment"><span class="token comment">//true</span></span>
+<span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">Pattern</span></span><span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">matches</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"А.+а"</span></span><span class="token punctuation"><span class="token punctuation">,</span></span><span class="token string"><span class="token string">"Єгор Алла Олександр"</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span><span class="token comment"><span class="token comment">//false</span></span></code></pre><code class=" language-none"><strong>int flags()</strong></code>– повертає значення параметра <code class=" language-none">flags</code>шаблону, які були встановлені під час його створення, або 0, якщо цей параметр не встановлено. Приклад: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token class-name"><span class="token class-name">Pattern</span></span> pattern <span class="token operator"><span class="token operator">=</span></span> <span class="token class-name"><span class="token class-name">Pattern</span></span><span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">compile</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"abc"</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>pattern<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">flags</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span><span class="token comment"><span class="token comment">// 0</span></span>
+<span class="token class-name"><span class="token class-name">Pattern</span></span> pattern <span class="token operator"><span class="token operator">=</span></span> <span class="token class-name"><span class="token class-name">Pattern</span></span><span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">compile</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"abc"</span></span><span class="token punctuation"><span class="token punctuation">,</span></span><span class="token class-name"><span class="token class-name">Pattern</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>CASE_INSENSITIVE<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>pattern<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">flags</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span><span class="token comment"><span class="token comment">// 2</span></span></code></pre><code class=" language-none"><strong>String[] split(CharSequence text, int limit)</strong></code>– розбиває текст, переданий як параметр масив елементів <code class=" language-none">String</code>. Параметр <code class=" language-none">limit</code>визначає граничну кількість збігів, які шукаються в тексті: 
+<ul>
+ <li>при <code class=" language-none">limit&gt;0</code>- виконується пошук <code class=" language-none">limit-1</code>збігів;</li>
+ <li>при <code class=" language-none">limit&lt;0</code>– виконується пошук усіх збігів у тексті</li>
+ <li>при <code class=" language-none">limit=0</code>– виконується пошук усіх збігів у тексті, у своїй порожні рядки наприкінці масиву відкидаються;</li>
+</ul>Приклад: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="token function"><span class="token function">main</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">String</span></span><span class="token punctuation"><span class="token punctuation">[</span></span><span class="token punctuation"><span class="token punctuation">]</span></span> args<span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+    <span class="token class-name"><span class="token class-name">String</span></span> text <span class="token operator"><span class="token operator">=</span></span> <span class="token string"><span class="token string">"Єгор Алла Анна"</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+    <span class="token class-name"><span class="token class-name">Pattern</span></span> pattern <span class="token operator"><span class="token operator">=</span></span> <span class="token class-name"><span class="token class-name">Pattern</span></span><span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">compile</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"\\s"</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+    <span class="token class-name"><span class="token class-name">String</span></span><span class="token punctuation"><span class="token punctuation">[</span></span><span class="token punctuation"><span class="token punctuation">]</span></span> strings <span class="token operator"><span class="token operator">=</span></span> pattern<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">split</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>text<span class="token punctuation"><span class="token punctuation">,</span></span><span class="token number"><span class="token number">2</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+    <span class="token keyword"><span class="token keyword">for</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">String</span></span> s <span class="token operator"><span class="token operator">:</span></span> strings<span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+        <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>s<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+    <span class="token punctuation"><span class="token punctuation">}</span></span>
+    <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"---------"</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+    <span class="token class-name"><span class="token class-name">String</span></span><span class="token punctuation"><span class="token punctuation">[</span></span><span class="token punctuation"><span class="token punctuation">]</span></span> strings1 <span class="token operator"><span class="token operator">=</span></span> pattern<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">split</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>text<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+    <span class="token keyword"><span class="token keyword">for</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">String</span></span> s <span class="token operator"><span class="token operator">:</span></span> strings1<span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+        <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>s<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+    <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre> Ще один метод класу для створення об'єкта <em>розглянемо</em> нижче <code class=" language-none">Matcher</code>. 
+<h2>Методи класу Matcher</h2><code class=" language-none">Matcher</code>є клас, з якого створюється об'єкт для пошуку збігів за шаблоном. <code class=" language-none">Matcher</code>- Це «пошуковик», «движок» регулярних виразів. Для пошуку йому треба дати дві речі: шаблон пошуку та «адресау», за якою шукати. Для створення об'єкта <code class=" language-none">Matcher</code>передбачений наступний метод у класі <code class=" language-none">Pattern</code>: <code class=" language-none"><strong>рublic Matcher matcher(CharSequence input)</strong></code> Як аргумент метод приймає послідовність символів, в якому буде здійснюватися пошук. Це об'єкти класів, що реалізують інтерфейс <code class=" language-none">CharSequence</code>. як аргумент можна передати як <code class=" language-none">String</code>, а й <code class=" language-none">StringBuffer</code>, <code class=" language-none">StringBuilder</code>, <code class=" language-none">Segment</code>і <code class=" language-none">CharBuffer</code>. Шаблоном для пошуку є об'єкт класу <code class=" language-none">Pattern</code>, на якому викликається метод <code class=" language-none">matcher</code>. Приклад створення матчера: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class="  language-java"><span class="token class-name"><span class="token class-name">Pattern</span></span> p <span class="token operator"><span class="token operator">=</span></span> <span class="token class-name"><span class="token class-name">Pattern</span></span><span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">compile</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"a*b"</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span><span class="token comment"><span class="token comment">// скомпілювали регулярне вираження на виставу</span></span>
+<span class="token class-name"><span class="token class-name">Matcher</span></span> m <span class="token operator"><span class="token operator">=</span></span> p<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">matcher</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"aaaaab"</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span><span class="token comment"><span class="token comment">//Створабо пошуковик у тексті “aaaaab” за шаблоном "a*b"</span></span></code></pre> Тепер за допомогою нашого «пошукача» ми можемо шукати збіги, дізнаватися про позицію збігу в тексті, замінювати текст за допомогою методів класу. Метод <code class=" language-none"><strong>boolean find()</strong></code>шукає черговий збіг у тексті із шаблоном. За допомогою цього методу та оператора циклу можна проводити аналіз усього тексту за подієвою моделлю (здійснювати необхідні операції при настанні події – знаходженні збігу в тексті). Наприклад, за допомогою методів цього класу <code class=" language-none"><strong>int start()</strong></code>можна <code class=" language-none"><strong>int end()</strong></code>визначати позиції збігу в тексті, а за допомогою методів <code class=" language-none"><strong>String replaceFirst(String replacement)</strong></code>і <code class=" language-none"><strong>String replaceAll(String replacement)</strong></code>замінювати в тексті збіги на інший текст replacement. Приклад: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="token function"><span class="token function">main</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">String</span></span><span class="token punctuation"><span class="token punctuation">[</span></span><span class="token punctuation"><span class="token punctuation">]</span></span> args<span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+    <span class="token class-name"><span class="token class-name">String</span></span> text <span class="token operator"><span class="token operator">=</span></span> <span class="token string"><span class="token string">"Єгор Алла Анна"</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+    <span class="token class-name"><span class="token class-name">Pattern</span></span> pattern <span class="token operator"><span class="token operator">=</span></span> <span class="token class-name"><span class="token class-name">Pattern</span></span><span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">compile</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"А.+?а"</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+    <span class="token class-name"><span class="token class-name">Matcher</span></span> matcher <span class="token operator"><span class="token operator">=</span></span> pattern<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">matcher</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>text<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+    <span class="token keyword"><span class="token keyword">while</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span>matcher<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">find</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+        <span class="token keyword"><span class="token keyword">int</span></span> start<span class="token operator"><span class="token operator">=</span></span>matcher<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">start</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+        <span class="token keyword"><span class="token keyword">int</span></span> end<span class="token operator"><span class="token operator">=</span></span>matcher<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">end</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+        <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"Знайдено збіг"</span></span> <span class="token operator"><span class="token operator">+</span></span> text<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">substring</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>start<span class="token punctuation"><span class="token punctuation">,</span></span>end<span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token operator"><span class="token operator">+</span></span> <span class="token string"><span class="token string">" с "</span></span><span class="token operator"><span class="token operator">+</span></span> start <span class="token operator"><span class="token operator">+</span></span> <span class="token string"><span class="token string">"за"</span></span> <span class="token operator"><span class="token operator">+</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span>end<span class="token operator"><span class="token operator">-</span></span><span class="token number"><span class="token number">1</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token operator"><span class="token operator">+</span></span> <span class="token string"><span class="token string">"позицію"</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+    <span class="token punctuation"><span class="token punctuation">}</span></span>
+    <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>matcher<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">replaceFirst</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"Іра"</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+    <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>matcher<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">replaceAll</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"Ольга"</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+    <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>text<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre> Висновок програми: <em>Знайдено збіг Алла з 5 по 8 позицію Знайдено збіг Анна з</em><code class=" language-none">replaceFirst</code> 10 по <code class=" language-none">replaceAll</code>13 <code class=" language-none">String</code>позицію шаблоном замінено на текст, переданий методом як аргумент. Причому метод <code class=" language-none">replaceFirst</code>замінює лише перший збіг, а <code class=" language-none">replaceAll</code>– всі збіги у тесті. Початковий текст залишається без змін. Використання інших методів класу <code class=" language-none">Matcher</code>, а також приклади регулярних виразів можна переглянути в цьому циклі <a href="https://codegym.cc/groups/posts/186-reguljarnihe-vihrazhenija-v-java-chastjh-3" target="_blank">статей</a> . Найбільш часті операції з регулярними виразами при роботі з текстом із класів <code class=" language-none">Pattern</code>та <code class=" language-none">Matcher</code>вбудовані в клас<code class=" language-none">String</code>. Це такі методи як <code class=" language-none">split</code>, <code class=" language-none">matches</code>, <code class=" language-none">replaceFirst</code>, <code class=" language-none">replaceAll</code>. Але насправді «під капотом» вони використовують класи <code class=" language-none">Pattern</code>та <code class=" language-none">Matcher</code>. Тому, якщо потрібно замінити текст або порівняти рядки в програмі без написання зайвого коду, використовуйте методи класу <code class=" language-none">String</code>. Якщо вам потрібні розширені можливості – згадайте про класи <code class=" language-none">Pattern</code>і <code class=" language-none">Matcher</code>. 
+<h2>Висновок</h2>Регулярний вираз описується в Java-програмі за допомогою рядків, які підходять під визначений правилами шаблон. При виконанні коду Java перекомпілює цей рядок на об'єкт клас <code class=" language-none">Pattern</code>і використовує об'єкт класу <code class=" language-none">Matcher</code>для пошуку відповідності в тексті. Як я вже казав на початку, регулярні висловлювання дуже часто відкладають на потім, вважаючи складною темою. Однак якщо розібратися з основами синтаксису, метасимволами, екрануванням та вивчити приклади регулярних виразів, вони виявляються набагато простішими, ніж здаються на перший погляд.

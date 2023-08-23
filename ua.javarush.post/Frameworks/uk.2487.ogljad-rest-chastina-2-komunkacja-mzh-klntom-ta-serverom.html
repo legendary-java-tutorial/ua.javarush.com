@@ -1,0 +1,128 @@
+Огляд REST. Частина 2: комунікація між клієнтом та сервером
+<p>----------------------------------------</p>
+У цьому розділі ми докладно розглянемо, як відбувається комунікація між клієнтом і сервером. Принагідно ми розкриватимемо нові терміни і даватимемо до них пояснення. Щоб все було (стало) зрозуміло, розбиратимемо клієнт-серверну комунікацію 
+<p>----------------------------------------</p>
+<a href="https://codegym.cc/groups/posts/2486-obzor-rest-chastjh-1-chto-takoe-rest" target="_blank">Частина 1: що таке REST</a> У цьому розділі ми докладно розглянемо, як відбувається комунікація між клієнтом і сервером. Принагідно ми розкриватимемо нові терміни і даватимемо до них пояснення. <img data-max-width="850" alt="Огляд REST.  Частина 2: комунікація між клієнтом та сервером - 1" src="https://cdn.javarush.com/images/article/e926dbe0-7183-49ba-8d3f-7d5a4c66a6a4/original.jpeg">Щоб все було (стало) зрозуміло, розбиратимемо клієнт-серверну комунікацію на прикладі деякого RESTful додатка. Припустимо, ми розробляємо веб-додаток, який здатний зберігати інформацію про клієнтів та їх замовлення. Тобто. наша система здатна маніпулювати деякими сутностями: створювати їх, редагувати, видаляти, видавати інформацію про них. Цими сутностями будуть: 
+<ul>
+ <li>clients - клієнти;</li>
+ <li>orders - замовлення клієнтів;</li>
+ <li>items – товари.</li>
+</ul>У REST архітектурі клієнти надсилають на сервер запити для отримання або модифікації даних, а сервери надсилають клієнтам відповіді на запити. 
+<h2>Запити</h2>Клієнтські запити практично завжди зроблені за протоколом HTTP. Загалом, HTTP запити складаються з кількох складових: 
+<ul>
+ <li>HTTP метод;</li>
+ <li>Заголовок;</li>
+ <li>URI;</li>
+ <li>тіло запиту.</li>
+</ul>Нижче ми розглянемо докладніше кожну складову. 
+<h2>URI та Ресурси</h2>Дані, які одержують чи змінюють клієнти за допомогою запитів, називають ресурсами. Основа клієнт-серверної взаємодії – маніпуляція над ресурсами. <span class="text-bold">Ресурси</span> в REST це все, чому можна дати ім'я. Це в якомусь сенсі як класи Java. У Java ми можемо створити клас для чого завгодно. Так і в REST - ресурсом може бути будь-що: користувач, документ, звіт, замовлення. Все це може бути абстракцією певної сутності, так і чимось конкретним, наприклад, файлом — картинкою, відео, анімацією, PDF файлом. У рамках нашого прикладу у нас є 3 ресурси: 
+<ul>
+ <li>clients - клієнти;</li>
+ <li>orders - замовлення клієнтів;</li>
+ <li>items – товари.</li>
+</ul>Клієнти відправляють запити на так звані ендпоінти, або кінцеві точки (end point). Якщо говорити дуже просто, <span class="text-bold">ендпоінт</span> - це щось на зразок адресаи в мережі. Якщо заглиблюватися в суть, можна сказати, що ендпоінт – це <span class="text-bold">URI</span>: послідовність символів, що ідентифікує абстрактний чи фізичний ресурс. Uniform Resource Identifier – уніфікований ідентифікатор ресурсу. Іноді кінцеву точку, або URI називають шляхом (path) – шляхом до ресурсу. У рамках цієї статті ми будемо використовувати термін URI. У кожного конкретного ресурсу має бути унікальний URI. Відповідальність за те, щоб у кожного ресурсу завжди був свій URI, лежить на плечах розробника сервера. У нашому прикладі розробники це ми, тому робитимемо це так, як уміємо. Подібно до того, як у реляційній базі даних часто прийнято первинним ключем задавати деякий числовий ID, у REST у кожного ресурсу є свій ID. Часто буває так, що ID ресурсу REST збігається з ID запису в базі даних, в якій зберігається інформація про даний ресурс. URI в REST прийнято починати з множини іменника, що описує деякий ресурс. Наприклад, зі слова clients. Далі через слеш вказують ID - ідентифікатор певного клієнта. Приклади: 
+<ul>
+ <li>/clients - URI всіх наявних клієнтів;</li>
+ <li>/clients/23 - URI конкретного клієнта, а саме клієнта з ID = 23;</li>
+ <li>/clients/4 - URI конкретного клієнта, саме клієнта з ID=4.</li>
+</ul>Але це ще не все. Ми можемо продовжити URI, додавши до нього замовлення: 
+<ul>
+ <li>/clients/4/orders - URI всіх замовлень клієнта №4;</li>
+ <li>/clients/1/orders/12 — URI замовлення №12 клієнта №1.</li>
+</ul>Якщо ми продовжимо цей ланцюжок і додамо ще й товари, отримаємо: 
+<ul>
+ <li>/clients/1/orders/12/items — URI списку всіх товарів у замовленні №12, зробленого клієнтом №1.</li>
+</ul>З рівнями вкладеності головне робити URI інтуїтивно зрозумілими. 
+<h2>HTTP метод</h2>Метод HTTP (англ. HTTP Method) — послідовність із будь-яких символів, крім керуючих та роздільників, яка вказує на основну операцію над ресурсом. Існує кілька загальноприйнятих методів HTTP. Перерахуємо ті з них, які найчастіше використовуються в RESTful сервісах: 
+<ul>
+ <li>GET — служить отримання інформації про конкретний ресурс (через ID) чи колекції ресурсів;</li>
+ <li>POST - служить для створення нового ресурсу;</li>
+ <li>PUT служить для зміни ресурсу (через ID);</li>
+ <li>DELETE — служить видалення ресурсу (через ID).</li>
+</ul>
+<h2>Заголовки</h2>У запитах, як і у відповідях, присутні HTTP заголовки. Вони надсилається додаткова інформація про запит (або відповіді). Заголовки є парою ключ-значення. Список найпоширеніших заголовків можеш почитати на сторінці у <a href="https://ru.wikipedia.org/wiki/%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA_%D0%B7%D0%B0%D0%B3%D0%BE%D0%BB%D0%BE%D0%B2%D0%BA%D0%BE%D0%B2_HTTP" rel="nofollow" target="_blank">Вікіпедії</a> . Стосовно REST клієнти часто можуть надсилати у запиті до сервера заголовок Accept. Він потрібний, щоб дати серверу зрозуміти, в якому форматі клієнт очікує отримати від нього відповідь. Різні варіанти форматів представлені у так званому списку MIME типів. <span class="text-bold">MIME</span>(англ. Multipurpose Internet Mail Extensions — багатоцільові розширення інтернет-пошти) — специфікація для кодування інформації та форматування повідомлень таким чином, щоб їх можна було пересилати інтернетом. Кожен MIME тип складається з двох частин, що поділяються слешем - з типу та підтипу. Приклади MIME-типів для різних видів файлів: 
+<ul>
+ <li>text - text/plain, text/css, text/html;</li>
+ <li>image - image/png, image/jpeg, image/gif;</li>
+ <li>audio - audio/wav, audio/mpeg;</li>
+ <li>video - video/mp4, video/ogg;</li>
+ <li>application - application/json, application/pdf, application/xml, application/octet-stream.</li>
+</ul>У запиту може бути заголовок: 
+<pre class="inline-block  language-java" tabindex="0"><code class="  language-java"><span class="token class-name"><span class="token class-name"></span></span><span class="text-bold"><span class="token class-name"><span class="token class-name">Accept</span></span><span class="token operator"><span class="token operator">:</span></span>application<span class="token operator"><span class="token operator">/</span></span>json</span></code></pre> Цей заголовок говорить серверу, що клієнт очікує отримати відповідь у форматі JSON. 
+<h2>Тіло запиту</h2>Повідомлення, що пересилається клієнтом на сервер. Є у запиту тіло чи ні, залежить від типу запиту HTTP. Наприклад, запити GET і DELETE зазвичай не містять жодного тіла запиту. А ось PUT і POST можуть містити: тут вся справа у функціональному призначенні типу запиту. Адже для отримання даних та видалення по id (який передається в URL) не потрібно надсилати на сервер додаткові дані. Для створення нового ресурсу (запит POST) потрібно цей ресурс передати. Так само як і для модифікації існуючого ресурсу. У REST для передачі запиту найчастіше використовують формати XML або JSON. Найчастіше зустрічається JSON формат. Припустимо, ми хочемо надіслати на сервер запит, а в ньому створити новий ресурс. Якщо ти не забув, як приклад ми розглядали програму, яка керує замовленнями клієнтів. Припустимо, ми хочемо створити нового клієнта. У нашому випадку ми зберігаємо наступну інформацію про клієнтів: Ім'я Email Номер телефону Тоді тілом такого запиту може бути наступний JSON: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token punctuation"><span class="token punctuation">{</span></span>
+  <span class="token string"><span class="token string">"name"</span></span> <span class="token operator"><span class="token operator">:</span></span> <span class="token string"><span class="token string">"Amigo"</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+  <span class="token string"><span class="token string">"email"</span></span> <span class="token operator"><span class="token operator">:</span></span> <span class="token string"><span class="token string">"amigo@jr.com"</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+  <span class="token string"><span class="token string">"phone"</span></span> <span class="token operator"><span class="token operator">:</span></span> <span class="token string"><span class="token string">"+7 (191) 746-43-23"</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre><a href="https://codegym.cc/welcome" target="_blank"><img id="click_banner1_articles" data-id="0cff97e5-1f19-462f-b0c5-bd70c4c951bd" data-max-width="1080" alt="Огляд REST.  Частина 2: комунікація між клієнтом та сервером - 2" src="https://cdn.javarush.com/images/article/0cff97e5-1f19-462f-b0c5-bd70c4c951bd/1080.jpeg" style="width: 1080px;"></a>
+<h2>Збираємо запити докупи</h2>Отже, ми розглянули з тобою, з чого може складатися клієнтський запит. Наведемо кілька прикладів запитів з описом 
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Запит</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" language-none" tabindex="0"><code class=" language-none">
+GET /clients/23
+Accept : application/json, application/xml</code></pre></td>
+    <td>Отримати інформацію про клієнта №23 у форматі json або xml</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" language-none" tabindex="0"><code class=" language-none">
+POST /clients
+{
+  "name" : "Amigo",
+  "email" : "amigo@jr.com",
+  "phone" : "+7 (191) 746-43-23"
+}</code></pre></td>
+    <td>Створити нового клієнта з полями: <br>
+      Ім'я Amigo <br>
+      Email amigo@jr.com <br>
+      Тел. - +7 (191) 746-43-23<br></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" language-none" tabindex="0"><code class=" language-none">
+PUT /clients/1
+{
+  "name" : "Ben",
+  "email" : "bigben@jr.com",
+  "phone" : "+380 (190) 346-42-13"
+}</code></pre></td>
+    <td>Редагувати клієнта №1 наступним чином: <br>
+      Ім'я Ben <br>
+      Email bigben@jr.com <br>
+      Тел. - +380 (190) 346-42-13</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" language-none" tabindex="0"><code class=" language-none">
+DELETE /clients/12/orders/6</code></pre></td>
+    <td>Видалити із системи замовлення №6 у клієнта №12</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<h2>Відповіді</h2>Скажемо кілька слів про відповіді сервера. Відповідь зазвичай складається з наступних частин: 
+<ul>
+ <li>код відповіді;</li>
+ <li>заголовки;</li>
+ <li>тіло відповіді.</li>
+</ul>Загалом заголовки відповідей мало чим відрізняються від заголовків запитів. До того ж деякі заголовки використовуються і у відповідях, і в запитах. З тілом відповіді теж, гадаю, все зрозуміло. У тілі часто повертається інформація, яку запитив клієнт. Може повертатись у тому ж форматі JSON інформація на GET запити. А ось остання частина трохи цікавіша. 
+<h2>Коди HTTP відповідей</h2>Розглянемо докладніше коди HTTP відповідей. Наведемо цитату з Вікіпедії: <span class="text-bold">Код стану HTTP</span> (англ. HTTP status code) - частина першого рядка відповіді сервера при запитах протоколу HTTP. Він є цілим числом з трьох десяткових цифр. Перша цифра вказує клас стану. За кодом відповіді зазвичай слідує відокремлена пробілом пояснювальна фраза англійською мовою, яка роз'яснює людині причину саме такої відповіді. Приклади: 
+<ul>
+ <li>201 Created;</li>
+ <li>401 Unauthorized;</li>
+ <li>507 Insufficient Storage.</li>
+</ul>Клієнт дізнається за кодом відповіді про результати його запиту та визначає, які дії йому робити далі. Коди відповідей поділяються на кілька груп: 
+<ul>
+ <li><span class="text-bold">1ХХ</span> - інформаційні;</li>
+ <li><span class="text-bold">2ХХ</span> - інформують про випадки успішного прийняття та обробки запиту клієнта;</li>
+ <li><span class="text-bold">3ХХ</span> - повідомляють клієнту, що для успішного виконання операції необхідно зробити інший запит, як правило, по іншому URI;</li>
+ <li><span class="text-bold">4ХХ</span> - помилка клієнта. Наприклад, неправильно складений запит або широко відомий код 404 Not Found, яка може виникнути, коли клієнт запитує неіснуючий ресурс;</li>
+ <li><span class="text-bold">5ХХ</span> - помилка сервера. Повертається клієнту у разі невдалого виконання операції з вини сервера.</li>
+</ul>Докладніше про всі коди можна почитати <a href="https://ru.wikipedia.org/wiki/%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA_%D0%BA%D0%BE%D0%B4%D0%BE%D0%B2_%D1%81%D0%BE%D1%81%D1%82%D0%BE%D1%8F%D0%BD%D0%B8%D1%8F_HTTP#%D0%9E%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5_%D0%BA%D0%BE%D0%B4%D0%BE%D0%B2" rel="nofollow" target="_blank">тут</a> . <a href="https://codegym.cc/groups/posts/2486-obzor-rest-chastjh-1-chto-takoe-rest" target="_blank">Частина 1: що таке REST </a> <a href="https://codegym.cc/groups/posts/2488-obzor-rest-chastjh-3-sozdanie-restful-servisa-na-spring-boot" target="_blank">Частина 3: створення RESTful сервісу на Spring Boot</a>

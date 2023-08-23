@@ -1,0 +1,157 @@
+Кава-брейк #124. Патер проектування Builder. Як працює серіалізація та десеріалізація в Java
+<p>----------------------------------------</p>
+Джерело: У цій статті ми дізнаємося, як проектувати та створювати об'єкти для класу, використовуючи патерн проектування . Паттерн призначений для створення об'єктів з використанням вкладеного загальнодоступного статичного класу, який має ті
+<p>----------------------------------------</p>
+<h2>Паттерн проектування Builder у Java</h2>Джерело: <a href="https://medium.com/javarevisited/builder-design-pattern-in-java-ce2893b7f901" rel="nofollow" target="_blank">Medium</a> У цій статті ми дізнаємося, як проектувати та створювати об'єкти для класу, використовуючи патерн проектування <span class="code">Builder</span> . <img data-max-width="800" data-id="340f3c27-a52b-4482-961a-40fe651c6351" alt="Кава-брейк #124.  Патер проектування Builder.  Як працює серіалізація та десеріалізація в Java - 1" src="https://cdn.javarush.com/images/article/340f3c27-a52b-4482-961a-40fe651c6351/800.jpeg" style="width: 800px;">
+<h3>Навіщо нам потрібний патерн проектування Builder?</h3>Паттерн <span class="code">Builder</span> призначений для створення об'єктів з використанням вкладеного загальнодоступного статичного класу, який має ті самі поля даних, що й зовнішній клас. Паттерн <span class="code">Builder</span> створабо для вирішення проблем, які були у патернах проектування <span class="code">Factory</span> та <span class="code">Abstract Factory</span> , коли об'єкт класу містить багато значень полів та/або даних. Перш ніж ми перейдемо до патерну <span class="code">Builder</span> , давайте подивимося, які саме проблеми виникають із патернами <span class="code">Factory</span> та <span class="code">Abstract Factory</span> для сценаріїв, де об'єкт має багато значень полів:
+<ol>
+ <li>
+  <p>Наявність дуже багатьох аргументів передачі з клієнтської програми до класу <span class="code">Factory</span> може призводити до виникнення помилок, оскільки у більшості випадків тип аргументів тут і той ж, а з боку клієнта важко підтримувати порядок аргументів.</p></li>
+ <li>
+  <p>Деякі параметри можуть бути необов'язковими, але в патерні <span class="code">Factory</span> ми змушені надсилати всі параметри, а необов'язкові параметри необхідно надсилати як <em>NULL</em> файли .</p></li>
+ <li>
+  <p>Якщо об'єкт "важкий" і зі складною розробкою, всі ці труднощі стануть частиною класів Factory, що часто призводить до плутанини.</p></li>
+</ol>Згадані вище проблеми можна вирішити, коли об'єкт має велику кількість параметрів. Для цього потрібно просто надати конструктору необхідні параметри, а потім різні <span class="code">setter</span> -методи для встановлення необов'язкових параметрів. Зверніть увагу, що проблема з цим способом полягає в тому, що стан об'єкта залишиться <span class="text-bold">непослідовним</span> (inconsistent), якщо всі атрибути чітко не встановлені. 
+<h3>Що таке патерн проектування Builder?</h3>Паттерн <span class="code">Builder</span> вирішує проблему з великою кількістю необов'язкових параметрів та непослідовних станів, надаючи спосіб покрокового створення об'єкта. Для цього використовується метод, що фактично повертає остаточний об'єкт. 
+<h3>Як реалізувати патерн проектування Builder Java?</h3>Якщо ми виконаємо наведені нижче кроки, то отримаємо поетапний процес створення об'єкта та його отримання:
+<ol>
+ <li>
+  <p>Створіть статичний вкладений клас ( <span class="code">static nested class</span> ) як клас <span class="code">Builder</span> , а потім скопіюйте всі поля із зовнішнього класу до класу <span class="code">Builder</span> . Ми повинні дотримуватися угоди про імена, тому якщо назва класу <span class="code">Person</span> , то клас <span class="code">Builder</span> повинен називатися як <span class="code">PersonBuilder</span> .</p></li>
+ <li>
+  <p>Клас <span class="code">Builder</span> повинен мати загальнодоступний конструктор з усіма необхідними полями як параметри.</p></li>
+ <li>
+  <p>Клас <span class="code">Builder</span> повинен мати методи встановлення необов'язкових параметрів, і він повинен повертати той самий об'єкт <span class="code">Builder</span> після установки необов'язкового поля.</p></li>
+ <li>
+  <p>Останнім кроком є ​​надання методу <span class="code">build()</span> у класі <span class="code">Builder</span> , який повертатиме об'єкт, необхідний для клієнтської програми. Для цього нам потрібно мати приватний конструктор в основному класі з класом <span class="code">Builder</span> як аргумент.</p></li>
+</ol>
+<h4>Приклад:</h4>Давайте розглянемо приклад, щоб отримати чітке уявлення про патерн проектування <span class="code">Builder</span> . 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Employee</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">private</span> <span class="token class-name">String</span> name<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> company<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">boolean</span> hasCar<span class="token punctuation">;</span><span class="token comment">//optional</span>
+    <span class="token keyword">private</span> <span class="token keyword">boolean</span> hasBike<span class="token punctuation">;</span><span class="token comment">//optional</span>
+
+    <span class="token keyword">private</span> <span class="token class-name">Employee</span><span class="token punctuation">(</span><span class="token class-name">EmployeeBuilder</span> employeeBuilder<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        name <span class="token operator">=</span> employeeBuilder<span class="token punctuation">.</span>name<span class="token punctuation">;</span>
+        company <span class="token operator">=</span> employeeBuilder<span class="token punctuation">.</span>company<span class="token punctuation">;</span>
+        hasCar <span class="token operator">=</span> employeeBuilder<span class="token punctuation">.</span>hasCar<span class="token punctuation">;</span>
+        hasBike <span class="token operator">=</span> employeeBuilder<span class="token punctuation">.</span>hasBike<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> name<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getCompany</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> company<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">isHasCar</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> hasCar<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">isHasBike</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> hasBike<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">EmployeeBuilder</span> <span class="token punctuation">{</span>
+        <span class="token keyword">private</span> <span class="token class-name">String</span> name<span class="token punctuation">;</span>
+        <span class="token keyword">private</span> <span class="token class-name">String</span> company<span class="token punctuation">;</span>
+        <span class="token keyword">private</span> <span class="token keyword">boolean</span> hasCar<span class="token punctuation">;</span><span class="token comment">//optional</span>
+        <span class="token keyword">private</span> <span class="token keyword">boolean</span> hasBike<span class="token punctuation">;</span><span class="token comment">//optional</span>
+
+        <span class="token comment">//constructor for required fields</span>
+        <span class="token keyword">public</span> <span class="token class-name">EmployeeBuilder</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">,</span> <span class="token class-name">String</span> company<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>company <span class="token operator">=</span> company<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token comment">//setter methods for optional fields</span>
+        <span class="token keyword">public</span> <span class="token class-name">EmployeeBuilder</span> <span class="token function">setHasCar</span><span class="token punctuation">(</span><span class="token keyword">boolean</span> hasCar<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>hasCar <span class="token operator">=</span> hasCar<span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">public</span> <span class="token class-name">EmployeeBuilder</span> <span class="token function">setHasBike</span><span class="token punctuation">(</span><span class="token keyword">boolean</span> hasBike<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>hasBike <span class="token operator">=</span> hasBike<span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token comment">//Build the Employee object</span>
+        <span class="token keyword">public</span> <span class="token class-name">Employee</span> <span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Employee</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">class</span> <span class="token class-name">TestBuilder</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">//Building the object of Employee thru the build() method provided in EmployeeBuilder class.</span>
+        <span class="token class-name">Employee</span> employee <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Employee<span class="token punctuation">.</span>EmployeeBuilder</span><span class="token punctuation">(</span><span class="token string">"Vikram"</span><span class="token punctuation">,</span> <span class="token string">"ABC"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setHasBike</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setHasBike</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Приклад шаблону <span class="code">Builder</span> : <a href="https://levelup.gitconnected.com/string-stringbuilder-and-stringbuffer-a-complete-guide-7029c1953f7e" rel="nofollow" target="_blank">java.lang.StringBuilder</a> і <a href="https://levelup.gitconnected.com/string-stringbuilder-and-stringbuffer-a-complete-guide-7029c1953f7e" rel="nofollow" target="_blank">java.lang.StringBuffer</a> використовували шаблон <span class="code">Builder</span> для побудови об'єктів. 
+<h2>Як працює серіалізація та десеріалізація в Java</h2>Джерело: <a href="https://medium.com/@yahayayusuf/serialization-and-deserialization-in-java-92031a62524b" rel="nofollow" target="_blank">Medium</a> Я перейшов на Java у січні цього року після стажування. До цього я переважно писав на PHP і трохи на JavaScript. Раніше мені не доводилося стикатися із серіалізацією, хоча насправді серіалізація існує і в PHP. Щоправда, Java вона використовується набагато частіше. Сьогодні я познайомлю вас, як працює серіалізація та десеріалізація в Java та розповім про кілька способів їх застосування. 
+<h3>Що таке серіалізація та десеріалізація</h3>Серіалізація — це перетворення об'єкта з класу на послідовність байтів на віртуальній машині Java (JVM) передачі на іншу віртуальну машину Java. Якщо віртуальна машина Java відтворює об'єкт з байтів, цей процес називається десеріалізацією. 
+<h3>Приклад серіалізації та десеріалізації</h3>
+<h4>Серіалізація</h4>Давайте створимо клас, об'єкт якого буде серіалізований: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token operator">*</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Person</span> <span class="token keyword">implements</span> <span class="token class-name">Serializable</span><span class="token punctuation">{</span>
+
+<span class="token keyword">int</span> id <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token class-name">String</span> name <span class="token operator">=</span> <span class="token string">"empty"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token keyword">int</span> identity<span class="token punctuation">,</span> <span class="token class-name">String</span> nomenclature<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+name <span class="token operator">=</span> nomenclature<span class="token punctuation">;</span>
+id <span class="token operator">=</span> identity<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Клас <span class="code">Person</span> реалізує <span class="code">Serializable</span> , щоб його об'єкт можна було серіалізувати/десеріалізувати. Клас <span class="code">Person</span> має два поля: ідентифікатор та ім'я, які змінюються від значення за умовчанням під час створення екземпляра класу. У пакет <span class="code">Java.io</span> були імпортовані інтерфейс <span class="code">Serializable</span> та інші класи, які у програмі. 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">FileNotFoundException</span><span class="token punctuation">,</span> <span class="token class-name">IOException</span> <span class="token punctuation">{</span>
+
+<span class="token class-name">String</span> filename <span class="token operator">=</span> <span class="token string">"filename here"</span><span class="token punctuation">;</span>
+<span class="token class-name">Person</span> person <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">"John"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// serialization</span>
+<span class="token class-name">ObjectOutputStream</span> out <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ObjectOutputStream</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">FileOutputStream</span><span class="token punctuation">(</span>filename<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">try</span> <span class="token punctuation">{</span>
+
+out<span class="token punctuation">.</span><span class="token function">writeObject</span><span class="token punctuation">(</span>person<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Success"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span> <span class="token keyword">catch</span><span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Unsuccessful"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">if</span><span class="token punctuation">(</span>out <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+out<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Як ви знаєте, основний метод запускає серіалізацію та виводить повідомлення про успішний результат, інакше друкується повідомлення про помилку. Для серіалізації об'єктів ми використовуємо <span class="code">ObjectOutputStream</span> і метод <span class="code">writeObject</span> . 
+<h4>Десеріалізація</h4>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">FileNotFoundException</span><span class="token punctuation">,</span> <span class="token class-name">IOException</span> <span class="token punctuation">{</span>
+
+<span class="token class-name">String</span> filename <span class="token operator">=</span> <span class="token string">"filename here"</span><span class="token punctuation">;</span>
+<span class="token class-name">Person</span> person <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">"John"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Deserialization</span>
+<span class="token class-name">ObjectInputStream</span> in <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ObjectInputStream</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span>filename<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">try</span> <span class="token punctuation">{</span>
+
+<span class="token class-name">Person</span> personObj <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">Person</span><span class="token punctuation">)</span>in<span class="token punctuation">.</span><span class="token function">readObject</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Person Id is "</span> <span class="token operator">+</span>personObj<span class="token punctuation">.</span>id <span class="token operator">+</span> <span class="token string">" while name is "</span> <span class="token operator">+</span> personObj<span class="token punctuation">.</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">if</span><span class="token punctuation">(</span>in <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+in<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Десеріалізація є зворотною дією по відношенню до серіалізації. Для відновлення об'єкта з послідовності байтів використовується <span class="code">ObjectInputStream</span> і метод <span class="code">readObject</span> . Зауважте, що для забезпечення доступу до полів у класі <span class="code">Person</span> об'єкт наведено до типу даних <span class="code">Person</span>. Об'єкт класу, який реалізує інтерфейс серіалізації, може бути сериализован. Тому будь-який клас, який посилається на клас, що реалізує інтерфейс серіалізації, має сам реалізовувати інтерфейс серіалізації, інакше буде видано виняток. Серіалізація не залежить від платформи, тобто потік байтів, що серіалізується, може десеріалізуватися іншою віртуальною машиною Java. Статичні та перехідні поля не серіалізуються, тому якщо у вас є поле, яке ви не хочете серіалізувати, зробіть його тимчасовим чи статичним. У разі статичного поля воно не серіалізується, тому що статичне поле належить класу, а чи не об'єкту. Через це перехідний стан запобігає серіалізації поля. Серіалізація застосовується в Hibernate, JPA та RMI. Також можна настроїти серіалізацію. Це називається користувальницькою серіалізацією.

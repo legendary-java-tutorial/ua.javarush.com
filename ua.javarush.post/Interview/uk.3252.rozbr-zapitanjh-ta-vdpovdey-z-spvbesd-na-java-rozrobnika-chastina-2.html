@@ -1,0 +1,173 @@
+Розбір запитань та відповідей із співбесід на Java-розробника. Частина 2
+<p>----------------------------------------</p>
+І знову всім привіт! Продовжуємо шукати відповіді на для Junior, Middle та Senior розробників. Запитання досить цікаві, і мені самому подобається їх розбирати: у такі моменти можна виявити прогалини в теоретичних знаннях, причому у найнеспо
+<p>----------------------------------------</p>
+І знову всім привіт! Продовжуємо шукати відповіді на <a href="https://dou.ua/lenta/articles/interview-questions-java-developer/" rel="nofollow" target="_blank">250+ питань</a> для Junior, Middle та Senior розробників. Запитання досить цікаві, і мені самому подобається їх розбирати: у такі моменти можна виявити прогалини в теоретичних знаннях, причому у найнесподіваніших місцях. <img data-max-width="800" data-id="bd30dc30-2338-428a-9dee-0a4c8ccacba8" alt="Розбір питань та відповідей на співбесіді.  Частина 2 - 1" src="https://cdn.javarush.com/images/article/bd30dc30-2338-428a-9dee-0a4c8ccacba8/800.jpeg" style="width: 800px;">З попередньою частиною можна ознайомитись <a href="https://codegym.cc/groups/posts/3243-razbor-voprosov-i-otvetov-na-sobesedovanii-chastjh-1" target="_blank">у цій статті</a> . Але перш ніж ми почнемо, я хочу нагадати, що:
+<ol>
+ <li>Питання, які перетинаються з <a href="https://codegym.cc/groups/posts/2590-top-50-java-core-voprosov-i-otvetov-na-sobesedovanii-chastjh-1" target="_blank">цією серією статей</a> , я пропускатиму, щоб зайвий раз не дублювати інформацію. Рекомендую прочитати ці матеріали, тому що там представлені найчастіші (популярні) питання для співбесід Java Core.</li>
+ <li>Питання на DOU представлені українською, але у мене тут буде все російською.</li>
+ <li>Відповіді можна було й розписати докладніше, але я не буду, тому що тоді відповідь на кожне запитання може затягнути цілу статтю. Та й так докладно вас на жодному соцзабезі не запитають.</li>
+</ol>За потребою залишатиму посилання, для більш глибокого вивчення. Полетіли!
+<h4>11. Назвіть усі методи класу Object</h4>Клас Object має 11 методів:
+<ul>
+ <li><span class="code">Class&lt;?&gt; getClass()</span> - Отримання класу поточного об'єкта;</li>
+ <li><span class="code">int hashCode()</span> — отримання хеш-коду поточного об'єкта;</li>
+ <li><span class="code">boolean equals (Object obj)</span> - Порівняння поточного об'єкта з іншим;</li>
+ <li><span class="code">Object clone()</span> — створення та повернення копії поточного об'єкта;</li>
+ <li><span class="code">String toString()</span> - Отримання рядкового подання об'єкта;</li>
+ <li><span class="code">void notify()</span> - пробудження одного потоку, що очікує на моніторі даного об'єкта (вибір рандомного потоку);</li>
+ <li><span class="code">void notifyAll()</span> — пробудження всіх потоків, що очікує моніторі даного об'єкта;</li>
+ <li><span class="code">void wait()</span> - перемикає поточний потік в режим очікування (заморожує його) на поточний монітор, працює тільки в synchronized блоці, поки який-небудь notify або notifyAll не розбудить потік;</li>
+ <li><span class="code">void wait(long timeout)</span> - також заморожує поточний потік на поточний монітор (на поточний synchronized), але вже з таймером виходу з цього стану (ну або знову ж таки: поки notify або notifyAll не розбудить);</li>
+ <li><span class="code">void wait (long timeout, int nanos)</span> - метод, аналогічний вищеописаному, але з більш точним таймерів виходу із заморозки;</li>
+ <li><span class="code">void finalize()</span> - перед видаленням цього об'єкта збирачем сміття викликається цей метод (наостанок). Він використовується для очищення ресурсів, що займаються.</li>
+</ul>Для коректного використання методів <span class="code">hashCode</span> , <span class="code">equals </span>, <span class="code">clone</span> , <span class="code">toString</span> , finalize їх необхідно перевизначати, враховуючи поточне завдання та обставини.
+<h4>12. У чому різниця між try-with-resources і try-catch-finally під час роботи з ресурсами?</h4>Як правило, при використанні <span class="code">try-catch-finally</span> блок final застосовували для закриття ресурсів. У Java 7 з'явився новий вид оператора <span class="code">try-with-resources</span> , аналог <span class="code">try-catch-finally</span> для звільнення ресурсів, але більш компактний і легкочитаний. Давайте пригадаємо, як виглядає <span class="code">try-catch-finally</span> : 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">String</span> text <span class="token operator">=</span> <span class="token string">"some text......"</span><span class="token punctuation">;</span>
+<span class="token class-name">BufferedWriter</span> bufferedWriter <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+<span class="token keyword">try</span> <span class="token punctuation">{</span>
+   bufferedWriter <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BufferedWriter</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">FileWriter</span><span class="token punctuation">(</span><span class="token string">"someFileName"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   bufferedWriter<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>text<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">IOException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+   <span class="token keyword">try</span> <span class="token punctuation">{</span>
+       bufferedWriter<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">IOException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> А тепер давайте перепишемо цей код, але з використанням <span class="code">try-with-resources</span> : 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">String</span> text <span class="token operator">=</span> <span class="token string">"some text......"</span><span class="token punctuation">;</span>
+<span class="token keyword">try</span><span class="token punctuation">(</span><span class="token class-name">BufferedWriter</span> bufferedWriter <span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">BufferedWriter</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">FileWriter</span><span class="token punctuation">(</span><span class="token string">"someFileName"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   bufferedWriter<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>text<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">IOException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre> Якось простіше стало, не знаходите? Крім спрощення, ще є кілька моментів:
+<ol>
+ <li>
+  <p>У <span class="code">try-with-resources</span> ресурси, оголошені в дужках (які будуть закриті) повинні імплементувати AutoCloseable інтерфейс і його єдиний метод — <span class="code">close()</span> .</p>
+  <p>Метод <span class="code">close</span> виконується у <span class="text-bold">неявному finally блоці</span> , інакше як програма зрозуміє, як саме цей закривати ресурс?</p>
+  <p>Але, швидше за все, ви рідко писатимете свої імплементації ресурсів та їх метод закриття.</p></li>
+ <li>
+  <p>Послідовність виконання блоків:</p>
+  <ol>
+   <li>Блок <span class="code">try</span> .</li>
+   <li>Неявний <span class="code">finally</span> .</li>
+   <li>Блок <span class="code">catch</span> , який ловить винятки у попередніх кроках.</li>
+   <li>Явний <span class="code">finally</span> .</li>
+  </ol>
+  <p></p>
+  <p>Як правило, винятки, які випали нижче за списком, перебивають ті, що випали вище.</p></li>
+</ol>Уявіть ситуацію, що при використанні <span class="code">try-catch-finally</span> у вас у <span class="code">try</span> падає виняток. Відповідно, відразу починає виконуватися певний блок <span class="code">catch</span> , в якому ви прописуєте інший виняток (наприклад, з повідомленням, яке детальніше описує помилку), і ви хочете, щоб метод прокидав цей виняток далі. Далі йде виконання блоку <span class="code">finally</span> , і в ньому теж падає виняток. Але вже інше. Яке з цих двох винятків у результаті викине цей спосіб? Виняток, що викинув блок <span class="code">finally</span> ! Але і тут є один момент з <span class="code">try-with-resources</span> . Тепер розглянемо поведінку <span class="code">try-with-resources</span>у цій самій ситуації. У нас падає виняток у блоці <span class="code">try</span> при спробі закриття ресурсів у методі <span class="code">close()</span> , тобто у неявному <span class="code">finally</span> . Яке ж із цих винятків відловить <span class="code">catch</span> ? Те, що викинув блок <span class="code">try</span> ! Виняток із неявного <span class="code">finally</span> (з методу <span class="code">close()</span> ) ігноруватиметься. Це ігнорування ще називають придушенням винятків.
+<h4>13. Що таке побітові операції?</h4><span class="text-bold">Побітові операції</span> - це операції над ланцюжками бітів, які включають логічні операції і побітові зрушення. <span class="text-bold">Логічні операції:</span>
+<ul>
+ <li>
+  <p>побітове <span class="text-bold">І</span> - порівнює бітові значення, і по ходу цього будь-який біт, встановлений в 0 (false), встановлює відповідний біт в результаті як 0. Тобто якщо в обох порівнюваних значеннях біт був 1 (true), в результуючому теж буде 1.</p>
+  <p>Позначається як - <span class="text-bold">AND</span> , <span class="text-bold">&amp;</span></p>
+  <p>Приклад: 10111101 &amp; 01100111 = 00100101</p></li>
+ <li>
+  <p>побітове <span class="text-bold">АБО</span> - операція, зворотна попередньої. Будь-який біт, встановлений в 1, встановлює аналогічний біт в результаті як 1. І, відповідно, якщо в обох порівнюваних значеннях біт був 0, в результуючому теж буде 0.</p>
+  <p>Позначається як - <span class="text-bold">OR</span> , <span class="text-bold">|</span></p>
+  <p>Приклад: 10100101 | 01100011 = 11100111</p></li>
+ <li>
+  <p>побітове <span class="text-bold">НЕ</span> - застосовується до одного значення, перевертає (інвертує) біти. Тобто, ті біти, що були 1, стануть 0; а ті, що були 0, стануть 1.</p>
+  <p>Позначається як - <span class="text-bold">NOT</span> , <span class="text-bold">~</span></p>
+  <p>Приклад: ~10100101 = 01011010</p></li>
+ <li><o>
+   побітове 
+   <span class="text-bold">виключне АБО</span> — порівнює бітові значення, і якщо в обох значеннях біт дорівнює 1, то результат буде 0, також якщо в обох значеннях біт 0, результат буде 0. Тобто, щоб результат дорівнював 1, потрібно, щоб тільки один з бітів дорівнював 1, а другий дорівнює 0.
+   <p></p>
+   <p>Позначається як <span class="text-bold">XOR</span> , <span class="text-bold">^</span></p>
+   <p>Приклад: 10100101 ^01100011 = 11000110</p>
+  </o></li>
+</ul><span class="text-bold">Побітові зрушення</span> - <span class="text-bold">&gt;&gt;</span> або <span class="text-bold">&lt;&lt;</span> зсувають біти значення у вказану сторону, на вказане число. Позиції, що звільнабося, заповнюються нулями. Наприклад:
+<ol>
+ <li>01100011 &gt;&gt; 4 = 00000110</li>
+ <li>01100011 &lt;&lt; 3 = 00011000</li>
+</ol>Також є виняток при зрушенні праворуч негативного числа. Як ви пам'ятаєте, перший біт відповідає за знак, і якщо цей біт дорівнює 1, число негативне. Якщо ви рухатимете негативне число, позиції, що звільнабося, будуть заповнюватися вже не нулями, а одиницями, тому що необхідно підтримувати знаковий біт. Наприклад: 10100010 &gt;&gt; 2 = 11101000 При цьому в Java існує додатковий оператор беззнакового зсуву вправо &gt;&gt;&gt; Даний оператор - аналог &gt;&gt;, при зрушенні яким позиції, що звільнабося, заповнюються 0, незалежно від того, негативне число або позитивне. Наприклад: 10100010 &gt;&gt;&gt; 2 = 00101000 Детальніше про побітові операції читаємо <a href="https://codegym.cc/groups/posts/1925-pobitovihe-operacii" target="_blank">ось тут</a> . <img data-max-width="512" data-id="9edb3020-ded1-4a63-b355-6a44424bf89f" alt="Розбір питань та відповідей на співбесіді.  Частина 2 - 2" src="https://cdn.javarush.com/images/article/9edb3020-ded1-4a63-b355-6a44424bf89f/512.jpeg" style="width: 512px;">Як приклади використання побітових зрушень у Java, ви можете навести метод <span class="code">hash()</span>у HashMap, який використовується для визначення спеціального внутрішнього хеш коду ключа: <img data-max-width="512" data-id="edeab2f0-4079-4959-af2d-5e57c3909774" alt="Розбір питань та відповідей на співбесіді.  Частина 2 - 3" src="https://cdn.javarush.com/images/article/edeab2f0-4079-4959-af2d-5e57c3909774/512.jpeg" style="width: 512px;">Цим метод дозволяє рівномірно розподіляти дані в HashMap, щоб мінімізувати кількість колізій.
+<h4>14. Об'єкти яких стандартних класів є immutable в Java?</h4><span class="text-bold">Immutable</span> — це об'єкт, який дозволяє змінювати свої початкові параметри. Можливо, він має методи, які повертають нові об'єкти даного типу з параметрами, які ви хотіли змінити. Деякі стандартні immutable об'єкти:
+<ul>
+ <li>безумовно, найвідоміший immutable об'єкт у Java - це String;</li>
+ <li>екземпляри класів-оберток, які обертають стандартні типи: Boolean, Character, Byte, Short, Integer, Long, Double, Float;</li>
+ <li>об'єкти, які зазвичай використовуються для особливо ВЕЛИКИХ чисел - BigInteger і BigDecimal;</li>
+ <li>об'єкт, який є одиницею у стектрейсах (наприклад, у стектрейсі винятків) StackTraceElement;</li>
+ <li>об'єкт класу File може змінювати файли, але при цьому сам по собі він незмінний;</li>
+ <li>UUID – який часто використовується як унікальний id елементів;</li>
+ <li>усі об'єкти класів пакету java.time;</li>
+ <li>Locale — використовується визначення географічного, політичного чи культурного регіону.</li>
+</ul>
+<h4>15. Які переваги є immutable object перед звичайними об'єктами?</h4>
+<ol>
+ <li>Такі об'єкти — <span class="text-bold">безпечні при використанні багатопоточного середовища</span> . Використовуючи їх, ви можете не турбуватися про те, що буде втрачено дані через стан гонки потоків. На відміну від роботи зі звичайними об'єктами: у такому разі вам доведеться дуже добре продумати та опрацювати механізми використання об'єкта в паралельному середовищі.</li>
+ <li>Immutable об'єкти є хорошими ключами в map, адже якщо використовувати об'єкт, що змінюється, а потім об'єкт змінить свій стан, при використанні HashMap може виникнути плутанина: об'єкт все ще буде присутній, і якщо використовувати containsKey() , то його можна і не <span class="code">знайти</span> .</li>
+ <li>Immutable об'єкти відмінно підходять для зберігання незмінних (константних) даних, які в жодному разі не повинні бути змінені під час роботи програми.</li>
+ <li>"Атомарність по відношенню до збою" - якщо immutable об'єкт викине виняток, то він все одно не залишиться в небажаному (зламаному) стані.</li>
+ <li>Ці класи прості в тестуванні.</li>
+ <li>Не потрібні такі додаткові механізми, як конструктор копіювання та реалізація клону.</li>
+</ol>
+<h3>Питання щодо ОВП</h3><img data-max-width="512" data-id="75980fe1-af72-4a33-8154-0fb7b1ce2b7c" alt="Розбір питань та відповідей на співбесіді.  Частина 2 - 4" src="https://cdn.javarush.com/images/article/75980fe1-af72-4a33-8154-0fb7b1ce2b7c/512.jpeg" style="width: 512px;">
+<h4>16. У чому переваги ОВП у цілому та порівняно з процедурним програмуванням?</h4>Отже, переваги ООП:
+<ol>
+ <li>Складні програми писати простіше, ніж процедурним програмуванням, так як у нас все розбито на маленькі модулі - об'єкти, які взаємодіють між собою - і в результаті програмування зводиться до взаємовідносин між об'єктами.</li>
+ <li>Програми, написані за допомогою ООП, набагато простіші у модифікації (при дотриманні концепцій проектування).</li>
+ <li>Оскільки дані та операції з них утворюють єдину сутність, де вони розмазуються у всьому додатку (що нерідко буває при процедурному програмуванні).</li>
+ <li>Інкапсуляція інформації захищає найкритичніші дані для роботи від користувача.</li>
+ <li>Можливе перевикористання одного і того ж коду, з різними даними, адже класи дозволяють створювати безліч об'єктів, кожен з яких має власні значення атрибутів.</li>
+ <li>Спадкування та поліморфізм також дозволяють перевикористовувати та розширювати вже існуючий код (замість дублювання схожого функціоналу).</li>
+ <li>Простіша розширюваність програми, ніж при процедурному підході.</li>
+ <li>Підхід ООП дає змогу абстрагуватися від деталей реалізації.</li>
+</ol>
+<h4>17. Розкажіть, які недоліки є у ОВП</h4>На жаль, і вони присутні:
+<ol>
+ <li>ООП вимагає великий обсяг теоретичних знань, який потрібно освоїти, перш ніж ви зможете щось написати.<img data-max-width="512" data-id="5f6c7019-9c2d-4587-b627-4fb602e65c68" alt="Розбір питань та відповідей на співбесіді.  Частина 2 - 5" src="https://cdn.javarush.com/images/article/5f6c7019-9c2d-4587-b627-4fb602e65c68/512.jpeg" style="width: 512px;"></li>
+ <li>Ідеї ​​ООП негаразд прості розуміння і застосування практично (треба бути у душі трохи філософом).</li>
+ <li>При застосуванні ОВП трохи знижується продуктивність функціонування ПЗ через складнішу організацію системи.</li>
+ <li>Для ОВП підходу потрібно більше пам'яті, оскільки все складається з класів, інтерфейсів, методів, які займають набагато більше пам'яті, ніж звичайні змінні.</li>
+ <li>Тимчасові витрати на початковий аналіз більші, ніж при процедурному.</li>
+</ol>
+<h4>18. Що таке статичний та динамічний поліморфізм</h4>Поліморфізм дає можливість об'єктам поводитися по-різному одного й того класу чи інтерфейсу. Існує два види поліморфізму, які ще відомі як <span class="text-bold">раніше</span> та <span class="text-bold">пізніше зв'язування</span> . <span class="text-bold">Статичний поліморфізм, або раніше зв'язування:</span>
+<ul>
+ <li>відбувається під час компіляції (на ранній стадії життєвого циклу програми);</li>
+ <li>вирішує, який спосіб виконувати під час компіляції;</li>
+ <li>навантаження методу - це приклад статичного поліморфізму;</li>
+ <li>до раннього зв'язування належать приватні, статичні та термінальні методи;</li>
+ <li>успадкування не бере участь у ранньому зв'язуванні;</li>
+ <li>у статичному поліморфізм беруть участь не конкретні об'єкти, а інформація про клас, тип якого представлений зліва від імені змінної.</li>
+</ul><span class="text-bold">Динамічний поліморфізм, або пізніше зв'язування:</span>
+<ul>
+ <li>відбувається під час виконання (під час роботи програми);</li>
+ <li>динамічний поліморфізм вирішує, яка саме реалізація буде у методу під час виконання;</li>
+ <li>перевизначення методу - приклад динамічного поліморфізму;</li>
+ <li>пізнє зв'язування - це призначення конкретного об'єкта, посилання його типу або суперкласу;</li>
+ <li>успадкування пов'язане з динамічним поліморфізмом.</li>
+</ul>Докладніше про відмінності раннього та пізнього зв'язування можна прочитати <a href="https://codegym.cc/groups/posts/439-razlichija-mezhdu-rannim-i-pozdnim-svjazihvaniem-v-java" target="_blank">ось у цій статті</a> .
+<h4>19. Дайте визначення принципу абстракції у ОВП</h4><span class="text-bold">Абстракція</span> в ОВП - це спосіб виділити набір значних показників об'єкта, виключивши незначні деталі. Тобто при проектуванні програми з ОВП підходом ви зосереджуєтеся на моделях загалом, без поглиблення деталі їх реалізації. У Java за абстракцію відповідають <a href="https://codegym.cc/groups/posts/1981-dlja-chego-v-java-nuzhnih-interfeysih" target="_blank">інтерфейси</a>. Наприклад, у вас є машина і це буде інтерфейс. А різні взаємодії з нею – наприклад, завести двигун, використовувати коробку передач – це функції, які ми використовуємо без заглиблення в деталі реалізації. Адже в той момент, коли ви ведете машину, ви не думаєте, як саме коробка передач виконує своє призначення, або як ключ заводить двигун, або яким чином кермо повертає колеса. І якщо навіть реалізацію однієї з цієї функціональності замінити (наприклад двигун), ви цього можете і не помітити. Вам це не важливо: ви не заглиблюєтесь у деталі реалізації. Вам важливо, щоб дія виконувалася. Власне, це є абстрагування від деталей реалізації. На цьому моменті ми сьогодні і зупинимося: продовження буде!<img data-max-width="512" data-id="e1f28b87-b6e7-425e-a1e9-64572dc81b52" alt="Розбір питань та відповідей на співбесіді.  Частина 2 - 6" src="https://cdn.javarush.com/images/article/e1f28b87-b6e7-425e-a1e9-64572dc81b52/512.jpeg" style="width: 512px;"><a href="https://codegym.cc/login/signup" target="_blank"><img id="click_banner1_articles" data-max-width="1080" data-id="5736eb4b-2b1c-4ab6-b4cc-b9e2d1cef628" alt="Розбір питань та відповідей на співбесіді.  Частина 2 - 7" src="https://cdn.javarush.com/images/article/5736eb4b-2b1c-4ab6-b4cc-b9e2d1cef628/1080.jpeg" style="width: 1080px;"></a>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Інші матеріали серії:</th>
+   </tr>
+   <tr>
+    <td>
+     <ul>
+      <li><a href="https://codegym.cc/groups/posts/3243-razbor-voprosov-i-otvetov-na-sobesedovanii-chastjh-1" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 1</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3273-razbor-voprosov-i-otvetov-s-sobesedovaniy-na-java-razrabotchika-chastjh-3" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 3</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3284-razbor-voprosov-i-otvetov-s-sobesedovaniy-na-java-razrabotchika-chastjh-4" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 4</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3296-razbor-voprosov-i-otvetov-s-sobesedovaniy-na-java-razrabotchika-chastjh-5" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 5</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3341-razbor-voprosov-i-otvetov-s-sobesedovaniy-na-java-razrabotchika-chastjh-6" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 6</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3386-razbor-voprosov-i-otvetov-s-sobesedovaniy-na-java-razrabotchika-chastjh-7" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 7</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3415-razbor-voprosov-i-otvetov-s-sobesedovaniy-na-java-razrabotchika-chastjh-8" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 8</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3434-razbor-voprosov-i-otvetov-s-sobesedovaniy-na-java-razrabotchika-chastjh-9" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 9</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3452-razbor-voprosov-i-otvetov-s-sobesedovaniy-na-java-razrabotchika-chastjh-10" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 10</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3464-razbor-voprosov-i-otvetov-s-sobesedovaniy-na-java-razrabotchika-chastjh-11" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 11</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3475-razbor-voprosov-i-otvetov-s-sobesedovaniy-na-java-razrabotchika-chastjh-12" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 12</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3507-razbor-voprosov-i-otvetov-s-sobesedovaniy-na-java-razrabotchika-chastjh-13" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 13</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3558-razbor-voprosov-i-otvetov-s-sobesedovaniy-na-java-razrabotchika-chastjh-14" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 14</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3592-razbor-voprosov-i-otvetov-s-sobesedovaniy-na-java-razrabotchika-chastjh-15" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 15</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3621-razbor-voprosov-i-otvetov-s-sobesedovaniy-na-java-razrabotchika-chastjh-16" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 16</a></li>
+     </ul></td>
+   </tr>
+  </tbody>
+ </table>
+</div>

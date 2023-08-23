@@ -1,0 +1,107 @@
+Відмінності між раннім та пізнім зв'язуванням у Java
+<p>----------------------------------------</p>
+Щоб з'ясувати, в чому полягає відмінність між і зв'язуванням в Java, потрібно спочатку зрозуміти, що таке саме . Зв'язування означає наявність зв'язку між посиланням та кодом. Наприклад, змінна, яку ви посилаєтеся, прив'язана до коду, у яко
+<p>----------------------------------------</p>
+Щоб з'ясувати, в чому полягає відмінність між <em><strong>раннім (статичним)</strong></em> і <em><strong>пізнім (динамічним)</strong></em> зв'язуванням в Java, потрібно спочатку зрозуміти, що таке саме <em><strong>зв'язування</strong></em> . Зв'язування означає наявність зв'язку між посиланням та кодом. Наприклад, змінна, яку ви посилаєтеся, прив'язана до коду, у якому вона визначена. Аналогічно, метод, що викликається, прив'язаний до місця в коді, де він визначений. 
+<div class="row justify-content-center jr-image-wrap">
+ <div class="col-12 col-sm-10 col-md-8">
+  <img data-id="6a19f140-e17f-4a4a-843f-4446ec8fd931" data-max-width="710" alt="Відмінності між раннім та пізнім зв'язуванням у Java - 1" src="https://cdn.javarush.com/images/article/6a19f140-e17f-4a4a-843f-4446ec8fd931/512.jpeg" style="width: 710px;">
+ </div>
+</div>Існує два типи зв'язування методів у мові Java: раніше зв'язування (його ще називають статичним) та пізніше (відповідно, динамічне)<em><strong> зв'язування</strong></em>. Виклик методу Java означає, що цей метод прив'язується до конкретного коду або в момент компіляції, або під час виконання, при запуску програми і створенні об'єктів. Можна зрозуміти з назви, статичне зв'язування має більш статичний характер, оскільки відбувається під час компіляції, тобто код «знає», який метод викликати після компіляції вихідного коду на Java у файли класів. А оскільки це стосується ранньої стадії життєвого циклу програми, то називається також раннім зв'язуванням (early binding). З іншого боку, динамічне зв'язування відбувається під час виконання після запуску програми віртуальною машиною Java. У цьому випадку те, який метод викликати визначається конкретним об'єктом, так що в момент компіляції інформація недоступна, адже об'єкти створюються під час виконання. 
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>Отже, <em><strong>фундаментальна відмінність між статичним і динамічним зв'язуванням Java</strong></em> полягає в тому, що перше відбувається рано, під час компіляції на основі типу посилальної змінної, а друге - пізніше, під час виконання, з використанням конкретних об'єктів.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>Давайте розглянемо ще кілька відмінностей, щоб краще розібратися з цим, а, крім того, можемо відповісти на це дуже популярне питання, яке ставлять на співбесідах з Java. 
+<h3>Раннє та пізнє зв'язування в Java</h3>Існує безліч відмінностей статичного та динамічного зв'язування у мові Java, але найважливіше – те, як їх використовує JVM. Чи ви коли-небудь замислювалися, яким чином JVM вирішує, який метод викликати, якщо в області видимості міститься більше одного методу з одним ім'ям? Якщо ви коли-небудь використовували перевантаження або перевизначення методів, то знаєте, що Java може мати кілька методів з одним ім'ям. У випадку Java віртуальна машина JVM використовує як статичне, так і динамічне зв'язування для вибору потрібного методу. 
+<h3>Приклад статичного та динамічного зв'язування в Java</h3>У цій програмі ви побачите, що прив'язка віртуальних методів не відбувається під час компіляції за допомогою статичного зв'язування, оскільки в цьому випадку викликався б метод із суперкласу, як відбувається зі статичними методами, які рано зв'язуються. Якщо буде викликаний метод підкласу, то для зв'язування функції використовувався конкретний об'єкт під час виконання, а, отже, для зв'язування віртуальних функцій використовується динамічне зв'язування. 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="token class-name"><span class="token class-name">Main</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+  <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="token function"><span class="token function">main</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">String</span></span><span class="token punctuation"><span class="token punctuation">[</span></span><span class="token punctuation"><span class="token punctuation">]</span></span> args<span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+    <span class="token comment"><span class="token comment">// Пример статического и динамического связывания в Java</span></span>
+    <span class="token class-name"><span class="token class-name">Insurance</span></span> current <span class="token operator"><span class="token operator">=</span></span> <span class="token keyword"><span class="token keyword">new</span></span> <span class="token class-name"><span class="token class-name">CarInsurance</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+    <span class="token comment"><span class="token comment">// Динамическое связывание на основе об'єкта</span></span>
+    <span class="token keyword"><span class="token keyword">int</span></span> premium <span class="token operator"><span class="token operator">=</span></span> current<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">premium</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+    <span class="token comment"><span class="token comment">// Статическое связывание на основе класса</span></span>
+    <span class="token class-name"><span class="token class-name">String</span></span> category <span class="token operator"><span class="token operator">=</span></span> current<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">category</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+    <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"premium : "</span></span> <span class="token operator"><span class="token operator">+</span></span> premium<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+    <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"category : "</span></span> <span class="token operator"><span class="token operator">+</span></span> category<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+  <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span>
+
+<span class="token keyword"><span class="token keyword">class</span></span> <span class="token class-name"><span class="token class-name">Insurance</span></span><span class="token punctuation"><span class="token punctuation">{</span></span>
+  <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token keyword"><span class="token keyword">final</span></span> <span class="token keyword"><span class="token keyword">int</span></span> LOW <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">100</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+  <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">int</span></span> <span class="token function"><span class="token function">premium</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">{</span></span>
+    <span class="token keyword"><span class="token keyword">return</span></span> LOW<span class="token punctuation"><span class="token punctuation">;</span></span>
+  <span class="token punctuation"><span class="token punctuation">}</span></span>
+
+  <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token class-name"><span class="token class-name">String</span></span> <span class="token function"><span class="token function">category</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">{</span></span>
+    <span class="token keyword"><span class="token keyword">return</span></span> <span class="token string"><span class="token string">"Insurance"</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+  <span class="token punctuation"><span class="token punctuation">}</span></span>
+
+<span class="token punctuation"><span class="token punctuation">}</span></span>
+
+<span class="token keyword"><span class="token keyword">class</span></span> <span class="token class-name"><span class="token class-name">CarInsurance</span></span> <span class="token keyword"><span class="token keyword">extends</span></span> <span class="token class-name"><span class="token class-name">Insurance</span></span><span class="token punctuation"><span class="token punctuation">{</span></span>
+  <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token keyword"><span class="token keyword">final</span></span> <span class="token keyword"><span class="token keyword">int</span></span> HIGH <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">200</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+  <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">int</span></span> <span class="token function"><span class="token function">premium</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">{</span></span>
+    <span class="token keyword"><span class="token keyword">return</span></span> HIGH<span class="token punctuation"><span class="token punctuation">;</span></span>
+  <span class="token punctuation"><span class="token punctuation">}</span></span>
+
+  <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token class-name"><span class="token class-name">String</span></span> <span class="token function"><span class="token function">category</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">{</span></span>
+    <span class="token keyword"><span class="token keyword">return</span></span> <span class="token string"><span class="token string">"Car Insurance"</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+  <span class="token punctuation"><span class="token punctuation">}</span></span>
+
+<span class="token punctuation"><span class="token punctuation">}</span></span>
+Результаты выполнения<span class="token operator"><span class="token operator">:</span></span>
+
+premium <span class="token operator"><span class="token operator">:</span></span> <span class="token number"><span class="token number">200</span></span>
+category <span class="token operator"><span class="token operator">:</span></span> <span class="token class-name"><span class="token class-name">Insurance</span></span></code></pre> Як бачите, виклик методу <code class=" language-none">premium()</code>призвів до виконання методу з підкласу, тоді як виклик методу <code class=" language-none">category()</code>призвів до виконання методу суперкласса. Це відбувається через те, що <code class=" language-none">premium()</code>– віртуальний метод, який дозволяється за допомогою пізнього зв'язування, тоді як <code class=" language-none">category()</code>– статичний метод, який дозволяється за допомогою статичного зв'язування під час компіляції на ім'я класу. 
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>Цікаво читати про Java? Вступайте до групи <a href="https://codegym.cc/groups/java-developer" target="_blank">Java Developer</a> !</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<h2>Відмінності між раннім та пізнім зв'язуванням у мові Java</h2>Тепер, коли ви розібралися і розумієте, як у мові Java зв'язуються виклики методів і як функціонує статичне та динамічне зв'язування, давайте ще раз перерахуємо ключові відмінності між раннім та пізнім зв'язуванням у мові Java: 
+<ol>
+ <li>Статичне зв'язування відбувається під час компіляції, динамічне – під час виконання.</li>
+ <br>
+ <li>Оскільки статичне зв'язування відбувається на ранній стадії життєвого циклу програми його називають раннім зв'язуванням. Аналогічно динамічне зв'язування називають також пізнім зв'язуванням, оскільки воно відбувається пізніше, під час роботи програми.</li>
+ <br>
+ <li>Статичне зв'язування використовується в мові Java для розв'язання перевантажених методів, в той час як динамічне зв'язування використовується в мові Java для вирішення перевизначених методів.</li>
+ <br>
+ <li>Аналогічно, приватні, статичні та термінальні методи дозволяються за допомогою статичного зв'язування, оскільки їх не можна перевизначати, а всі віртуальні методи дозволяються за допомогою динамічного зв'язування.</li>
+ <br>
+ <li>У разі статичного зв'язування використовуються не конкретні об'єкти, а інформація про тип, тобто виявлення потрібного методу використовується тип посилальної змінної. З іншого боку, при динамічному зв'язуванні для знаходження потрібного методу Java використовується конкретний об'єкт.</li>
+</ol>Ось непогана вправа, заснована на поняттях статичного та динамічного зв'язування у мові Java. Чи зможете ви відповісти на запитання:<strong> "Що буде виведено під час виконання наступної програми?"</strong>
+<div class="row justify-content-center jr-image-wrap">
+ <div class="col-12 col-sm-10 col-md-8">
+  <img data-id="4d97a10a-ab3f-46ad-b127-5d804bde20b1" data-max-width="710" alt="Відмінності між раннім та пізнім зв'язуванням у Java - 2" src="https://cdn.javarush.com/images/article/4d97a10a-ab3f-46ad-b127-5d804bde20b1/512.jpeg" style="width: 710px;">
+ </div>
+</div><strong>Що виведе ця програма? <code class=" language-none">Collection</code>, <code class=" language-none">Set</code>чи <code class=" language-none">HashSet</code>? </strong> Ось і все, що ми хотіли розповісти вам про різницю між <em><strong>раннім (статичним)</strong></em> і <em><strong>пізнім (динамічним)</strong></em> зв'язуванням у мові Java. Це одне з найкращих питань для телефонної співбесіди з мови Java, оскільки вона надає багато можливостей перевірки глибини знань кандидата. Завжди пам'ятайте, що <em><strong>приватні</strong></em> , <em><strong>статичні</strong></em> та <em><strong>final-методи</strong></em> пов'язуються за допомогою <em><strong>статичного зв'язування</strong></em> , а <em><strong>віртуальні – динамічного</strong></em> . Аналогічно, найкращий приклад статичного зв'язування – навантаження методів, а перевизначення – динамічного. <a href="http://www.java67.com/2016/08/difference-between-early-vs-late-binding-in-java.html" target="_blank">Джерело</a>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Що ще почитати?</th>
+   </tr>
+   <tr>
+    <td>
+     <p><a href="https://codegym.cc/groups/posts/436-prostoy-sposob-vnedrenija-zavisimostey" target="_blank">Простий спосіб застосування залежностей</a></p>
+     <p><a href="https://codegym.cc/groups/posts/416-ispoljhzovanie-java-arrayssort-dlja-ljubogo-spiska-obhhektov-" target="_blank">Використання Java Arrays.sort() для будь-якого списку об'єктів</a></p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>

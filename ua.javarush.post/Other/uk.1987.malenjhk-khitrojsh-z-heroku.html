@@ -1,0 +1,47 @@
+Маленькі хитрощі з Heroku
+<p>----------------------------------------</p>
+Уявімо ситуацію. Ви пройшли курс JavaRush, пройшли онлайн-стажування, і у вас красується перший проект на PaaS платформі . Ви розсилаєте резюме і починаєте ходити співбесідами. І ось на одному з них вас просять показати ваш проект (або його
+<p>----------------------------------------</p>
+Уявімо ситуацію. Ви пройшли курс CodeGym, пройшли онлайн-стажування, і у вас красується перший проект на PaaS платформі <a href="https://www.heroku.com/" target="_blank" rel="nofollow">Heroku</a> . Ви розсилаєте резюме і починаєте ходити співбесідами. І ось на одному з них вас просять показати ваш проект (або його захочуть швидко глянути ще до співбесіди, перейшовши за посиланням з резюме). Відкривається браузер, і починає дооолго вантажитися ваш сайт. Так, можна пояснити, що це безкоштовний Heroku, і він так працює, але враження зіпсоване. У причинах цієї поведінки та методах боротьби з нею ми і спробуємо розібратися в цій статті. 
+<div class="row justify-content-center jr-image-wrap">
+ <div class="col-12 col-sm-10 col-md-8">
+  <img data-id="f0c85ece-faa7-43c6-9fbe-d1288a1e56d5" data-max-width="710" alt="Маленькі хитрощі з Heroku - 1" src="https://cdn.javarush.com/images/article/f0c85ece-faa7-43c6-9fbe-d1288a1e56d5/512.jpeg" style="width: 710px;">
+ </div>
+</div>Почати варто з поняття <strong>dyno hours</strong> . Згідно з <a href="https://devcenter.heroku.com/articles/free-dyno-hours" target="_blank" rel="nofollow">документацією</a> , Dyno hours — це, по суті, час роботи вашого додатка/додатків, виражений у годинах/місяць. Відразу після реєстрації безкоштовного облікового запису вам дається 550 годин на місяць. Провівши нескладні калькуляції, отримуємо близько 17 години на день для однієї програми. Малувато буде. Тому прив'язуємо кредитну картку в <em>Account settings - Billing</em> і отримуємо ще 450 безкоштовних годинників (32 години на добу вже з головою). Цю проблему вирішабо. Є ще одна. У вищезгаданому документі зазначено також про <strong>"засинання" (dyno sleeping)</strong> програми за відсутності активності протягом 30 хвабон. На просторах інтернету зустрічається три основні підходи: 
+<ol>
+ <li>
+  <p><em>Регулярно (наприклад, раз на 5 хвабон) надсилати запити додатку зсередини самого додатка.</em></p>
+  <p>За допомогою JavaScript це буде виглядати так:</p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">var</span> http <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"http"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">setInterval</span><span class="token punctuation">(</span><span class="token function">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    http<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"http://&lt;your app name&gt;.herokuapp.com"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token number">300000</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// every 5 minutes (300000)</span></code></pre></li>
+ <li>
+  <p>Використовувати зовнішні сайти "пінгалки", які із заданою періодичністю перевірятимуть ваш сайт.</p>
+  <p>Прикладом таких сайтів є <a href="https://www.pingdom.com/" target="_blank" rel="nofollow">Pingdom</a> , <a href="http://uptimerobot.com/" target="_blank" rel="nofollow">Uptime Robot</a> , <a href="http://kaffeine.herokuapp.com/" target="_blank" rel="nofollow">Kaffeine</a> та інші. Принцип простий. Заходимо, реєструємось (якщо треба), вказуємо сайт та інтервал часу та застосовуємо налаштування.</p></li>
+ <li>
+  <p>Використати <a href="http://addons.heroku.com/newrelic" target="_blank" rel="nofollow">Heroku Newrelic addon</a> Цей плагін призначений для моніторингу та повідомлення про падіння сайту, але як корисний "побічний ефект" він не дасть заснути додатку. На цьому методі, як на самому, як на мене, красивому, я й зупинився. Опишу докладніше.</p>
+  <p>Щоб встановити addon, потрібно перейти за <a href="https://elements.heroku.com/addons/newrelic" target="_blank" rel="nofollow">цим</a> посиланням та натиснути кнопку <strong>"Install New Relic APM"</strong> . У вікні потрібно вибрати тарифний план і назву програми, до якої буде застосовано даний addon.</p>
+  <div class="row justify-content-center jr-image-wrap">
+   <div class="col-12 col-sm-10 col-md-8">
+    <img data-id="dc977485-514a-4775-942f-856f87c6f47d" data-max-width="910" alt="Маленькі хитрощі з Heroku - 2" src="https://cdn.javarush.com/images/article/dc977485-514a-4775-942f-856f87c6f47d/800.jpeg" style="width: 910px;">
+   </div>
+  </div>
+  <p>Після цього натиснути кнопку <strong>"Provision add-on"</strong> .</p>
+  <p>Після встановлення New Relic буде доступний на сторінці налаштування програми у списку встановлених аддонів.</p>
+  <div class="row justify-content-center jr-image-wrap">
+   <div class="col-12 col-sm-10 col-md-8">
+    <img data-id="5ef6f4b7-e3e3-4483-83c1-543b17d1860d" data-max-width="766" alt="Маленькі хитрощі з Heroku - 3" src="https://cdn.javarush.com/images/article/5ef6f4b7-e3e3-4483-83c1-543b17d1860d/512.jpeg" style="width: 766px;">
+   </div>
+  </div>
+  <p>Клацаємо на посилання та потрапляємо на сторінку налаштувань доповнення.</p>
+  <p>Переходимо на вкладку <strong>Synthetics</strong> і натискаємо кнопку Add new.</p>
+  <div class="row justify-content-center jr-image-wrap">
+   <div class="col-12 col-sm-10 col-md-8">
+    <img data-id="f378262d-f135-4b95-bcaa-3e4ff8e1d11a" data-max-width="1024" alt="Маленькі хитрощі з Heroku - 4" src="https://cdn.javarush.com/images/article/f378262d-f135-4b95-bcaa-3e4ff8e1d11a/1024.jpeg" style="width: 1024px;">
+   </div>
+  </div>
+  <p>У вікні в розділі <em>"Enter the details"</em> вказуємо довільну назву монітора та адресау сайту, який будемо моніторити. Вибираємо локацію, звідки сайт перевірятиметься в <em>"Select monitoring locations"</em> .</p>
+  <p>Періодичність перевірки вказуємо в "Set the shedule" (я ставив 15 хвабон) та email для повідомлень у "Get notified".</p>
+  <p>Після всіх налаштувань не забуваємо натиснути кнопку Create monitor.</p></li>
+</ol> Вуаля, монітор створений і тепер ваш <a href="http://chumak-calories.herokuapp.com/" target="_blank" rel="nofollow">додаток</a> буде працювати 24/7 і не підведе у найвідповідальніший момент :)

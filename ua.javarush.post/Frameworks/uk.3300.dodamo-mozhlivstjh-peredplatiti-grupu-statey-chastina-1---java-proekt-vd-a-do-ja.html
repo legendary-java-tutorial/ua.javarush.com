@@ -1,0 +1,499 @@
+Додаємо можливість передплатити групу статей. (Частина 1) - "Java-проект від А до Я"
+<p>----------------------------------------</p>
+Вітання! Сьогодні будемо додавати передплату на групу статей у JavaRush. Цьому відповідає на GitHub. Поясню: у JavaRush є розділ , а в ньому - статей. Ідея полягає в тому, щоб через телеграм-бота отримувати повідомлення про нову статтю з од
+<p>----------------------------------------</p>
+Вітання! Сьогодні будемо додавати передплату на групу статей у CodeGym. Цьому відповідає <a href="https://github.com/codegymcommunity/codegym-telegrambot/issues/5" rel="nofollow" target="_blank">issue JRTB-5</a> на GitHub. Поясню: у CodeGym є розділ <span class="text-bold">Статті</span> , а в ньому - <span class="text-bold">Групи</span> статей. Ідея полягає в тому, щоб через телеграм-бота отримувати повідомлення про нову статтю з однієї чи кількох груп.<img data-max-width="800" data-id="94aff4ce-e709-489e-8d4b-d4dc84e43ca0" alt="&quot;Java-проект від А до Я&quot;: Додаємо можливість підписатися на групу статей.  Частина 1 - 1" src="https://cdn.javarush.com/images/article/94aff4ce-e709-489e-8d4b-d4dc84e43ca0/800.jpeg" style="width: 800px;">
+<h2>Додаємо JRTB-5</h2>Скажімо, мені цікаві статті із групи <a href="https://codegym.cc/groups/stories" target="_blank">Історії успіху</a> . Тому я хочу підписатися на оновлення цієї групи та отримувати щоразу посилання на нову публікацію. В рамках реалізації цього завдання нам потрібно навчитися користуватися відкритим API для роботи з групами CodeGym. Саме до цього моменту така річ наспіла. Ось <a href="https://codegym.cc/swagger-ui.html" target="_blank">посилання на опис відкритого API</a> .
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>Друзі! Хочете відразу дізнаватися, коли вийде новий код проекту чи нова стаття? Приєднуйтесь до мого <a href="https://t.me/joinchat/SpqRPBFo_sM6qm05" rel="nofollow" target="_blank">каналу</a> . Там збираю свою статтю, думки та open-source розробку воєдино.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<h3>Що таке swagger? Зараз розберемося</h3>Про сваггера ми ще не говорабо. Для тих, хто не знає, коротко поясню: це місце, де можна відкрито подивитися на API якогось сервера і спробувати виконати якісь запити до нього. Зазвичай у сваггері згруповано можливі запити. У нашому випадку є три групи: <span class="text-bold">forum-question</span> , <span class="text-bold">group</span> , <span class="text-bold">post</span>. У кожній групі буде один і більше запитів із зазначенням усіх необхідних даних, щоб цей запит побудувати (тобто які додаткові параметри можна передати, що з ними робити, який http метод, і так далі). Раджу почитати і подивитися більше з цієї теми, тому це частина розробки, з якою зіткнеться майже кожен з вас. Щоб розібратися, дізнаємося, скільки груп є в CodeGym. Для цього розкриємо групу group-controller та виберемо Get запит <span class="text-bold">/api/1.0/rest/groups/count</span> . Він поверне нам кількість груп у CodeGym. Дивимося: <img data-max-width="1080" data-id="191287ca-c3c0-4682-ba9e-179c5e56d6c0" alt="&quot;Java-проект від А до Я&quot;: Додаємо можливість підписатися на групу статей.  Частина 1 - 2" src="https://cdn.javarush.com/images/article/191287ca-c3c0-4682-ba9e-179c5e56d6c0/1080.jpeg" style="width: 1080px;">На зображенні видно, що запит підтримує кілька параметрів (query, type, filter). Щоб спробувати цей запит на смак, потрібно знайти кнопку <span class="text-bold">Try it out</span> , після чого ці параметри можна буде налаштувати:<img data-max-width="1080" data-id="554ad8f1-89af-4cd9-b0ef-9b103b27c578" alt="&quot;Java-проект від А до Я&quot;: Додаємо можливість підписатися на групу статей.  Частина 1 - 3" src="https://cdn.javarush.com/images/article/554ad8f1-89af-4cd9-b0ef-9b103b27c578/1080.jpeg" style="width: 1080px;">Також там можна налаштувати і тип, і фільтр, і кверю (тут взагалі цікаво: це буде пошук за текстом у групі). Але поки що запустимо без будь-яких обмежень і подивимося, скільки всього груп у CodeGym. Для цього натисніть на Execute. Трохи нижче буде відповідь (в секції Server Response) на цей запит: <img data-max-width="1080" data-id="ead1a0ef-51de-4b33-adf4-537ba73e2451" alt="&quot;Java-проект від А до Я&quot;: Додаємо можливість підписатися на групу статей.  Частина 1 - 4" src="https://cdn.javarush.com/images/article/ead1a0ef-51de-4b33-adf4-537ba73e2451/1080.jpeg" style="width: 1080px;">Ми бачимо, що всього груп <span class="text-bold">30</span> , цей запит виконався за 95ms і є набір деяких хедерів у відповіді. Далі спробуємо налаштувати якісь параметри. Виберемо параметр type рівним значенню COMPANY і подивимося, як зміниться результат: <img data-max-width="1080" data-id="1e6daf9a-4b74-42d6-a69f-c8e8ab2a8b1b" alt="&quot;Java-проект від А до Я&quot;: Додаємо можливість підписатися на групу статей.  Частина 1 - 5" src="https://cdn.javarush.com/images/article/1e6daf9a-4b74-42d6-a69f-c8e8ab2a8b1b/1080.jpeg" style="width: 1080px;">4. Як це перевірити? Легко: можна піти на сайт, знайти секцію статті, вибрати всі групи і там додати відповідний фільтр ( <a href="https://codegym.cc/groups/all?type=COMPANY" target="_blank">https://codegym.cc/groups/all?type=COMPANY</a> ). І так, дійсно, їх всього 4. Хоча реально три :D<img data-max-width="800" data-id="196b0f07-8d2e-4981-93c6-84ff93063d07" alt="&quot;Java-проект від А до Я&quot;: Додаємо можливість підписатися на групу статей.  Частина 1 - 6" src="https://cdn.javarush.com/images/article/196b0f07-8d2e-4981-93c6-84ff93063d07/800.jpeg" style="width: 800px;">Поки що сходиться. До речі, якщо ми перевіримо університети, їх поки що немає. Заради інтересу подивіться, що буде, якщо поставити filter = MY у браузері, де ви залогінені в Javarush і не залогінені. Більше про сваггер — у <a href="https://habr.com/ru/post/434798/" rel="nofollow" target="_blank">цій статті на Хабрі</a> .
+<h2>Пишемо клієнта до Javarush API для груп</h2>Тепер на основі відкритого API напишемо Java клієнта, який вміє робити запити, отримувати відповіді та знає, які саме об'єкти будуть надходити. Об'єкти також візьмемо із сваггера, із секції <span class="text-bold">Models</span> (у самому низу сторінки). Створимо новий пакет і назвемо його codegymclient поряд з service, repository. У майбутньому ми це винесемо до окремої бібліотеки в рамках організації Javarush Community і будемо використовувати виключно як залежність.
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>Про створення Java клієнтів я вже писав у статті <a href="https://codegym.cc/groups/posts/2430-gayd-po-sozdaniju-klienta-dlja-skyscanner-api-i-ego-publikacii-v-jcenver-i-maven-central" target="_blank">“Гайд зі створення клієнта для Skyscanner API та його публікації у jCenter та Maven Central”</a> .</td>
+   </tr>
+  </tbody>
+ </table>
+</div>Насамперед потрібно додати Unitrest — бібліотеку для створення http запитів до CodeGym API: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token generics"><span class="token punctuation">&lt;</span>dependency<span class="token punctuation">&gt;</span></span>
+  <span class="token generics"><span class="token punctuation">&lt;</span>groupId<span class="token punctuation">&gt;</span></span>com<span class="token punctuation">.</span>konghq<span class="token operator">&lt;</span><span class="token operator">/</span>groupId<span class="token operator">&gt;</span>
+  <span class="token generics"><span class="token punctuation">&lt;</span>artifactId<span class="token punctuation">&gt;</span></span>unirest<span class="token operator">-</span>java<span class="token operator">&lt;</span><span class="token operator">/</span>artifactId<span class="token operator">&gt;</span>
+  <span class="token generics"><span class="token punctuation">&lt;</span>version<span class="token punctuation">&gt;</span></span>$<span class="token punctuation">{</span>unirest<span class="token punctuation">.</span>version<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>version<span class="token operator">&gt;</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>dependency<span class="token operator">&gt;</span></code></pre> І виносимо версію до блоку properties: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token generics"><span class="token punctuation">&lt;</span>unirest<span class="token punctuation">.</span>version<span class="token punctuation">&gt;</span></span><span class="token number">3.11</span><span class="token number">.01</span><span class="token operator">&lt;</span><span class="token operator">/</span>unirest<span class="token punctuation">.</span>version<span class="token operator">&gt;</span></code></pre> Коли з'явиться залежність, можна починати додавати код. Створимо клієнт для груп CodeGymGroupClient та реалізацію в клас CodeGymGroupClientImpl. Але спочатку потрібно створити DTO-шки (data transfer object) - тобто, класи, об'єкти яких будуть носити всі необхідні для клієнта дані. Всі моделі можна подивитися в сваггері, У самому низу є секція <span class="text-bold">Models</span> , в якій їх можна вважати. Ось як виглядає <span class="text-bold">GroupDiscussionInfo</span> у сваггері: <img data-max-width="1080" data-id="60954fa4-4164-49d0-83e1-927e6c5773e5" alt="&quot;Java-проект від А до Я&quot;: Додаємо можливість підписатися на групу статей.  Частина 1 - 7" src="https://cdn.javarush.com/images/article/60954fa4-4164-49d0-83e1-927e6c5773e5/1080.jpeg" style="width: 1080px;">У пакеті codegymclient створимо пакет <span class="text-bold">dto</span> , до якого додамо, на основі даних із сваггера, наступні класи:
+<ul>
+ <li>
+  <p><span class="code">MeGroupInfoStatus</span> :</p>
+  <p></p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+* Member group status.
+*/</span>
+<span class="token keyword">public</span> <span class="token keyword">enum</span> <span class="token class-name">MeGroupInfoStatus</span> <span class="token punctuation">{</span>
+   UNKNOWN<span class="token punctuation">,</span> CANDIDATE<span class="token punctuation">,</span> INVITEE<span class="token punctuation">,</span> MEMBER<span class="token punctuation">,</span> EDITOR<span class="token punctuation">,</span> MODERATOR<span class="token punctuation">,</span> ADMINISTRATOR<span class="token punctuation">,</span> BANNED
+<span class="token punctuation">}</span></code></pre>
+  <p></p></li>
+ <li>
+  <p><span class="code">MeGroupInfo</span> :</p>
+  <p></p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">lombok<span class="token punctuation">.</span></span><span class="token class-name">Data</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+* Group information related to authorized user. If there is no user - will be null.
+*/</span>
+<span class="token annotation punctuation">@Data</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MeGroupInfo</span> <span class="token punctuation">{</span>
+   <span class="token keyword">private</span> <span class="token class-name">MeGroupInfoStatus</span> status<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">Integer</span> userGroupId<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+  <p></p></li>
+ <li>
+  <p><span class="code">GroupInfoType</span> :</p>
+  <p></p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+* Group Info type;
+*/</span>
+<span class="token keyword">public</span> <span class="token keyword">enum</span> <span class="token class-name">GroupInfoType</span> <span class="token punctuation">{</span>
+   UNKNOWN<span class="token punctuation">,</span> CITY<span class="token punctuation">,</span> COMPANY<span class="token punctuation">,</span> COLLEGE<span class="token punctuation">,</span> TECH<span class="token punctuation">,</span> SPECIAL<span class="token punctuation">,</span> COUNTRY
+<span class="token punctuation">}</span></code></pre>
+  <p></p></li>
+ <li>
+  <p><span class="code">UserDiscussionInfo</span> :</p>
+  <p></p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">lombok<span class="token punctuation">.</span></span><span class="token class-name">Data</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+* DTO for User discussion info.
+*/</span>
+<span class="token annotation punctuation">@Data</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">UserDiscussionInfo</span> <span class="token punctuation">{</span>
+
+   <span class="token keyword">private</span> <span class="token class-name">Boolean</span> isBookmarked<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">Integer</span> lastTime<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">Integer</span> newCommentsCount<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+  <p></p></li>
+ <li>
+  <p><span class="code">GroupVisibilitysdtatus</span> :</p>
+  <p></p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+* Group Visibility status.
+*/</span>
+<span class="token keyword">public</span> <span class="token keyword">enum</span> <span class="token class-name">GroupVisibilityStatus</span> <span class="token punctuation">{</span>
+   UNKNOWN<span class="token punctuation">,</span> RESTRICTED<span class="token punctuation">,</span> PUBLIC<span class="token punctuation">,</span> PROTECTED<span class="token punctuation">,</span> PRIVATE<span class="token punctuation">,</span> DISABLED<span class="token punctuation">,</span> DELETED
+<span class="token punctuation">}</span></code></pre>
+  <p></p></li>
+ <li>
+  <p>Потім <span class="code">GroupInfo</span> :</p>
+  <p></p>
+  <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">lombok<span class="token punctuation">.</span></span><span class="token class-name">Data</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">lombok<span class="token punctuation">.</span></span><span class="token class-name">ToString</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+* Group Info DTO class.
+*/</span>
+<span class="token annotation punctuation">@Data</span>
+<span class="token annotation punctuation">@ToString</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">GroupInfo</span> <span class="token punctuation">{</span>
+
+   <span class="token keyword">private</span> <span class="token class-name">Integer</span> id<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> avatarUrl<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> createTime<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> description<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> key<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">Integer</span> levelToEditor<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">MeGroupInfo</span> meGroupInfo<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> pictureUrl<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> title<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">GroupInfoType</span> type<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">Integer</span> userCount<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">GroupVisibilityStatus</span> visibilityStatus<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+  <p></p></li>
+</ul>Оскільки <span class="code">GroupInfo</span> і <span class="code">GroupDiscussionInfo</span> майже повністю збігаються, зв'яжемо їх у наслідуванні — <span class="code">GroupDiscusionInfo</span> : 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">lombok<span class="token punctuation">.</span></span><span class="token class-name">Data</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">lombok<span class="token punctuation">.</span></span><span class="token class-name">EqualsAndHashCode</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">lombok<span class="token punctuation">.</span></span><span class="token class-name">ToString</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+* Group discussion info class.
+*/</span>
+<span class="token annotation punctuation">@EqualsAndHashCode</span><span class="token punctuation">(</span>callSuper <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
+<span class="token annotation punctuation">@Data</span>
+<span class="token annotation punctuation">@ToString</span><span class="token punctuation">(</span>callSuper <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">GroupDiscussionInfo</span> <span class="token keyword">extends</span> <span class="token class-name">GroupInfo</span> <span class="token punctuation">{</span>
+
+   <span class="token keyword">private</span> <span class="token class-name">UserDiscussionInfo</span> userDiscussionInfo<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">Integer</span> commentsCount<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre> Також нам знадобиться фільтр для запиту <span class="code">GroupFilter</span> : 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+* Filters for group requests.
+*/</span>
+<span class="token keyword">public</span> <span class="token keyword">enum</span> <span class="token class-name">GroupFilter</span> <span class="token punctuation">{</span>
+
+   UNKNOWN<span class="token punctuation">,</span> MY<span class="token punctuation">,</span> ALL
+<span class="token punctuation">}</span></code></pre> У запиті на отримання ID-шника видає GroupDiscussionInfo, а в запиті на колекцію груп можна отримати як GroupInfo, так і GroupDiscussionInfo. Оскільки запити можуть мати type, query, filter, offset і limit, створимо окремий клас <span class="code">GroupRequestArgs</span> і зробимо його класом-білдером (почитайте, що таке патерн builder): 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">lombok<span class="token punctuation">.</span></span><span class="token operator">*</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">HashMap</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Map</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token keyword">static</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Objects</span><span class="token punctuation">.</span>nonNull<span class="token punctuation">;</span>
+
+<span class="token comment">/**
+* Request arguments for group requests.
+*/</span>
+<span class="token annotation punctuation">@Builder</span>
+<span class="token annotation punctuation">@Getter</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">GroupRequestArgs</span> <span class="token punctuation">{</span>
+
+   <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">String</span> query<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">GroupInfoType</span> type<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">GroupFilter</span> filter<span class="token punctuation">;</span>
+
+   <span class="token comment">/**
+    * specified where to start getting groups
+    */</span>
+   <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">Integer</span> offset<span class="token punctuation">;</span>
+   <span class="token comment">/**
+    * Limited number of groups.
+    */</span>
+   <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">Integer</span> limit<span class="token punctuation">;</span>
+
+   <span class="token keyword">public</span> <span class="token class-name">Map</span><string, object=""> <span class="token function">populateQueries</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token class-name">Map</span><string, object=""> queries <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">nonNull</span><span class="token punctuation">(</span>query<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+           queries<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"query"</span><span class="token punctuation">,</span> query<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+       <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">nonNull</span><span class="token punctuation">(</span>type<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+           queries<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"type"</span><span class="token punctuation">,</span> type<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+       <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">nonNull</span><span class="token punctuation">(</span>filter<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+           queries<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"filter"</span><span class="token punctuation">,</span> filter<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+       <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">nonNull</span><span class="token punctuation">(</span>offset<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+           queries<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"offset"</span><span class="token punctuation">,</span> offset<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+       <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">nonNull</span><span class="token punctuation">(</span>limit<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+           queries<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"limit"</span><span class="token punctuation">,</span> limit<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+       <span class="token keyword">return</span> queries<span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</string,></string,></code></pre> Для пошуку кількості груп він дещо відрізняється. У ньому є лише query, type та filter. І начебто, не хочеться дублювати код. Разом з тим, якщо почати об'єднувати їх, виходить некрасиво в роботі з білдерами. Тому я вирішив їх розділити та зробити повторення коду. Ось як виглядає <span class="code">GroupCountRequestArgs</span> : 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">lombok<span class="token punctuation">.</span></span><span class="token class-name">Builder</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">lombok<span class="token punctuation">.</span></span><span class="token class-name">Getter</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">HashMap</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Map</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token keyword">static</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Objects</span><span class="token punctuation">.</span>nonNull<span class="token punctuation">;</span>
+
+<span class="token comment">/**
+* Request arguments for group count requests.
+*/</span>
+<span class="token annotation punctuation">@Builder</span>
+<span class="token annotation punctuation">@Getter</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">GroupsCountRequestArgs</span> <span class="token punctuation">{</span>
+   <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">String</span> query<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">GroupInfoType</span> type<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">GroupFilter</span> filter<span class="token punctuation">;</span>
+
+   <span class="token keyword">public</span> <span class="token class-name">Map</span><string, object=""> <span class="token function">populateQueries</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token class-name">Map</span><string, object=""> queries <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">nonNull</span><span class="token punctuation">(</span>query<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+           queries<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"query"</span><span class="token punctuation">,</span> query<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+       <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">nonNull</span><span class="token punctuation">(</span>type<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+           queries<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"type"</span><span class="token punctuation">,</span> type<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+       <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">nonNull</span><span class="token punctuation">(</span>filter<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+           queries<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"filter"</span><span class="token punctuation">,</span> filter<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+       <span class="token keyword">return</span> queries<span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</string,></string,></code></pre> Так, я не згадав, що в останніх двох класах є метод populateQueries, який підготує карту для створення запиту (побачте його далі). Грунтуючись на описаних вище класах, створимо інтерфейс для <span class="text-bold">CodeGymGroupClient</span> : 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto<span class="token punctuation">.</span></span><span class="token class-name">GroupDiscussionInfo</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto<span class="token punctuation">.</span></span><span class="token class-name">GroupInfo</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto<span class="token punctuation">.</span></span><span class="token class-name">GroupRequestArgs</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto<span class="token punctuation">.</span></span><span class="token class-name">GroupsCountRequestArgs</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">List</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * Client for Javarush Open API corresponds to Groups.
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">CodeGymGroupClient</span> <span class="token punctuation">{</span>
+
+    <span class="token comment">/**
+     * Get all the {@link GroupInfo} filtered by provided {@link GroupRequestArgs}.
+     *
+     * @param requestArgs provided {@link GroupRequestArgs}.
+     * @return the collection of the {@link GroupInfo} objects.
+     */</span>
+    <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">GroupInfo</span><span class="token punctuation">&gt;</span></span> <span class="token function">getGroupList</span><span class="token punctuation">(</span><span class="token class-name">GroupRequestArgs</span> requestArgs<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">/**
+     * Get all the {@link GroupDiscussionInfo} filtered by provided {@link GroupRequestArgs}.
+     *
+     * @param requestArgs provided {@link GroupRequestArgs}
+     * @return the collection of the {@link GroupDiscussionInfo} objects.
+     */</span>
+    <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">GroupDiscussionInfo</span><span class="token punctuation">&gt;</span></span> <span class="token function">getGroupDiscussionList</span><span class="token punctuation">(</span><span class="token class-name">GroupRequestArgs</span> requestArgs<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">/**
+     * Get count of groups filtered by provided {@link GroupRequestArgs}.
+     *
+     * @param countRequestArgs provided {@link GroupsCountRequestArgs}.
+     * @return the count of the groups.
+     */</span>
+    <span class="token class-name">Integer</span> <span class="token function">getGroupCount</span><span class="token punctuation">(</span><span class="token class-name">GroupsCountRequestArgs</span> countRequestArgs<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">/**
+     * Get {@link GroupDiscussionInfo} by provided ID.
+     *
+     * @param id provided ID.
+     * @return {@link GroupDiscussionInfo} object.
+     */</span>
+    <span class="token class-name">GroupDiscussionInfo</span> <span class="token function">getGroupById</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre> Два різні запити на випадок, коли ми хочемо отримати інформацію GroupInfo або GroupDiscussionInfo додав. В іншому ці запити тотожні, і різниця буде лише в тому, що в одному прапорі includeDiscussion буде true, а в іншому - false. Тому вийшло 4 методи, а не три. Тепер приступимо до реалізації: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto<span class="token punctuation">.</span></span><span class="token class-name">GroupDiscussionInfo</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto<span class="token punctuation">.</span></span><span class="token class-name">GroupInfo</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto<span class="token punctuation">.</span></span><span class="token class-name">GroupRequestArgs</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto<span class="token punctuation">.</span></span><span class="token class-name">GroupsCountRequestArgs</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">kong<span class="token punctuation">.</span>unirest<span class="token punctuation">.</span></span><span class="token class-name">GenericType</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">kong<span class="token punctuation">.</span>unirest<span class="token punctuation">.</span></span><span class="token class-name">Unirest</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>beans<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">Value</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>stereotype<span class="token punctuation">.</span></span><span class="token class-name">Component</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">List</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+* Implementation of the {@link CodeGymGroupClient} interface.
+*/</span>
+<span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CodeGymGroupClientImpl</span> <span class="token keyword">implements</span> <span class="token class-name">CodeGymGroupClient</span> <span class="token punctuation">{</span>
+
+   <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">String</span> codegymApiGroupPath<span class="token punctuation">;</span>
+
+   <span class="token keyword">public</span> <span class="token class-name">CodeGymGroupClientImpl</span><span class="token punctuation">(</span><span class="token annotation punctuation">@Value</span><span class="token punctuation">(</span><span class="token string">"${codegym.api.path}"</span><span class="token punctuation">)</span> <span class="token class-name">String</span> codegymApi<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">this</span><span class="token punctuation">.</span>codegymApiGroupPath <span class="token operator">=</span> codegymApi <span class="token operator">+</span> <span class="token string">"/groups"</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token annotation punctuation">@Override</span>
+   <span class="token keyword">public</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">GroupInfo</span><span class="token punctuation">&gt;</span></span> <span class="token function">getGroupList</span><span class="token punctuation">(</span><span class="token class-name">GroupRequestArgs</span> requestArgs<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">return</span> <span class="token class-name">Unirest</span><span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>codegymApiGroupPath<span class="token punctuation">)</span>
+               <span class="token punctuation">.</span><span class="token function">queryString</span><span class="token punctuation">(</span>requestArgs<span class="token punctuation">.</span><span class="token function">populateQueries</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+               <span class="token punctuation">.</span><span class="token function">asObject</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">GenericType</span><span class="token generics"><span class="token punctuation">&lt;</span>list<span class="token punctuation">&lt;</span><span class="token class-name">GroupInfo</span><span class="token punctuation">&gt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+               <span class="token punctuation">}</span><span class="token punctuation">)</span>
+               <span class="token punctuation">.</span><span class="token function">getBody</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token annotation punctuation">@Override</span>
+   <span class="token keyword">public</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">GroupDiscussionInfo</span><span class="token punctuation">&gt;</span></span> <span class="token function">getGroupDiscussionList</span><span class="token punctuation">(</span><span class="token class-name">GroupRequestArgs</span> requestArgs<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">return</span> <span class="token class-name">Unirest</span><span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>codegymApiGroupPath<span class="token punctuation">)</span>
+               <span class="token punctuation">.</span><span class="token function">queryString</span><span class="token punctuation">(</span>requestArgs<span class="token punctuation">.</span><span class="token function">populateQueries</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+               <span class="token punctuation">.</span><span class="token function">asObject</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">GenericType</span><span class="token generics"><span class="token punctuation">&lt;</span>list<span class="token punctuation">&lt;</span><span class="token class-name">GroupDiscussionInfo</span><span class="token punctuation">&gt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+               <span class="token punctuation">}</span><span class="token punctuation">)</span>
+               <span class="token punctuation">.</span><span class="token function">getBody</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token annotation punctuation">@Override</span>
+   <span class="token keyword">public</span> <span class="token class-name">Integer</span> <span class="token function">getGroupCount</span><span class="token punctuation">(</span><span class="token class-name">GroupsCountRequestArgs</span> countRequestArgs<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">return</span> <span class="token class-name">Integer</span><span class="token punctuation">.</span><span class="token function">valueOf</span><span class="token punctuation">(</span>
+               <span class="token class-name">Unirest</span><span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">"%s/count"</span><span class="token punctuation">,</span> codegymApiGroupPath<span class="token punctuation">)</span><span class="token punctuation">)</span>
+                       <span class="token punctuation">.</span><span class="token function">queryString</span><span class="token punctuation">(</span>countRequestArgs<span class="token punctuation">.</span><span class="token function">populateQueries</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                       <span class="token punctuation">.</span><span class="token function">asString</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                       <span class="token punctuation">.</span><span class="token function">getBody</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+       <span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token annotation punctuation">@Override</span>
+   <span class="token keyword">public</span> <span class="token class-name">GroupDiscussionInfo</span> <span class="token function">getGroupById</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">return</span> <span class="token class-name">Unirest</span><span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">"%s/group%s"</span><span class="token punctuation">,</span> codegymApiGroupPath<span class="token punctuation">,</span> id<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+               <span class="token punctuation">.</span><span class="token function">asObject</span><span class="token punctuation">(</span><span class="token class-name">GroupDiscussionInfo</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+               <span class="token punctuation">.</span><span class="token function">getBody</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+
+<span class="token punctuation">}</span></code></pre> Шлях до АПИшке я додаю в конструкторі, використовуючи вже знайому нам інструкцію Value. Вона має на увазі, що значення всередині інструкції відповідає полю у файлі з пропертями. Тому додамо до application.properties новий рядок: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java">codegym<span class="token punctuation">.</span>api<span class="token punctuation">.</span>path<span class="token operator">=</span>https<span class="token operator">:</span><span class="token operator">/</span><span class="token operator">/</span>codegym<span class="token punctuation">.</span>com<span class="token operator">/</span>api<span class="token operator">/</span><span class="token number">1.0</span><span class="token operator">/</span>rest</code></pre> Тепер це значення буде в одному місці для всіх клієнтів API, і якщо шлях до API зміниться, ми його швидко оновимо. Раніше я <s>забивав цвяхи мікроскопом,</s> отримував відповідь з http-запиту через Unirest, перекладав його в рядок і потім цей рядок парсив через Jackson… Це було страшно, нудно і вимагало багатьох додаткових речей. У цій <a href="https://github.com/romankh3/skyscanner-flight-api-client/blob/457dca2f16ba975b226683a742a50f40ccdb7100/src/main/java/com/github/romankh3/skyscannerflightapiclient/v1/UniRestUtil.java#L37" rel="nofollow" target="_blank">бібліотеці</a> можна побачити, як це виглядає. Як дійдуть руки — відрефактор все.
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>У кого буде бажання спробувати оновити цю бібліотеку — додати одержання об'єктів лише за допомогою інструментів бібліотеки unirest — пишіть у личку або як нове issue у самій бібліотеці. Вам це буде реальний досвід роботи, а мені не шкода. Проведу повноцінний code review та допоможу, якщо потрібно буде.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>Тепер питання: а чи працює наш код так, як ми очікуємо? Відповісти нескладно: потрібно просто написати тести для них. Як я вже неодноразово говорив, розробники повинні вміти писати тести. Тому, користуючись нашим Swagger UI, відправлятимемо запити, дивитися відповіді та підставлятимемо їх у тести як очікуваний результат. Ви могли відразу помітити, що кількість груп не статична і може змінюватись. І ви маєте рацію. Питання лише в тому, як часто ця кількість змінюється? Дуже рідко, тож у розрізі кількох місяців можна стверджувати, що це значення буде статичним. А якщо щось зміниться, оновимо випробування. Зустрічайте - CodeGymGroupClientTest: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto<span class="token punctuation">.</span></span><span class="token class-name">GroupDiscussionInfo</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto<span class="token punctuation">.</span></span><span class="token class-name">GroupInfo</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto<span class="token punctuation">.</span></span><span class="token class-name">GroupRequestArgs</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto<span class="token punctuation">.</span></span><span class="token class-name">GroupsCountRequestArgs</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>junit<span class="token punctuation">.</span>jupiter<span class="token punctuation">.</span>api<span class="token punctuation">.</span></span><span class="token class-name">Assertions</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>junit<span class="token punctuation">.</span>jupiter<span class="token punctuation">.</span>api<span class="token punctuation">.</span></span><span class="token class-name">DisplayName</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>junit<span class="token punctuation">.</span>jupiter<span class="token punctuation">.</span>api<span class="token punctuation">.</span></span><span class="token class-name">Test</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">List</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token keyword">static</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto<span class="token punctuation">.</span></span><span class="token class-name">GroupInfoType</span><span class="token punctuation">.</span>TECH<span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@DisplayName</span><span class="token punctuation">(</span><span class="token string">"Integration-level testing for CodeGymGroupClientImplTest"</span><span class="token punctuation">)</span>
+<span class="token keyword">class</span> <span class="token class-name">CodeGymGroupClientTest</span> <span class="token punctuation">{</span>
+
+   <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">CodeGymGroupClient</span> groupClient <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">CodeGymGroupClientImpl</span><span class="token punctuation">(</span><span class="token string">"https://codegym.cc/api/1.0/rest"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@Test</span>
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">shouldProperlyGetGroupsWithEmptyArgs</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token comment">//given</span>
+       <span class="token class-name">GroupRequestArgs</span> args <span class="token operator">=</span> <span class="token class-name">GroupRequestArgs</span><span class="token punctuation">.</span><span class="token function">builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+       <span class="token comment">//when</span>
+       <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">GroupInfo</span><span class="token punctuation">&gt;</span></span> groupList <span class="token operator">=</span> groupClient<span class="token punctuation">.</span><span class="token function">getGroupList</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+       <span class="token comment">//then</span>
+       <span class="token class-name">Assertions</span><span class="token punctuation">.</span><span class="token function">assertNotNull</span><span class="token punctuation">(</span>groupList<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token class-name">Assertions</span><span class="token punctuation">.</span><span class="token function">assertFalse</span><span class="token punctuation">(</span>groupList<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token annotation punctuation">@Test</span>
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">shouldProperlyGetWithOffSetAndLimit</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token comment">//given</span>
+       <span class="token class-name">GroupRequestArgs</span> args <span class="token operator">=</span> <span class="token class-name">GroupRequestArgs</span><span class="token punctuation">.</span><span class="token function">builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+               <span class="token punctuation">.</span><span class="token function">offset</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+               <span class="token punctuation">.</span><span class="token function">limit</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span>
+               <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+       <span class="token comment">//when</span>
+       <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">GroupInfo</span><span class="token punctuation">&gt;</span></span> groupList <span class="token operator">=</span> groupClient<span class="token punctuation">.</span><span class="token function">getGroupList</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+       <span class="token comment">//then</span>
+       <span class="token class-name">Assertions</span><span class="token punctuation">.</span><span class="token function">assertNotNull</span><span class="token punctuation">(</span>groupList<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token class-name">Assertions</span><span class="token punctuation">.</span><span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> groupList<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token annotation punctuation">@Test</span>
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">shouldProperlyGetGroupsDiscWithEmptyArgs</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token comment">//given</span>
+       <span class="token class-name">GroupRequestArgs</span> args <span class="token operator">=</span> <span class="token class-name">GroupRequestArgs</span><span class="token punctuation">.</span><span class="token function">builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+       <span class="token comment">//when</span>
+       <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">GroupDiscussionInfo</span><span class="token punctuation">&gt;</span></span> groupList <span class="token operator">=</span> groupClient<span class="token punctuation">.</span><span class="token function">getGroupDiscussionList</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+       <span class="token comment">//then</span>
+       <span class="token class-name">Assertions</span><span class="token punctuation">.</span><span class="token function">assertNotNull</span><span class="token punctuation">(</span>groupList<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token class-name">Assertions</span><span class="token punctuation">.</span><span class="token function">assertFalse</span><span class="token punctuation">(</span>groupList<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token annotation punctuation">@Test</span>
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">shouldProperlyGetGroupDiscWithOffSetAndLimit</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token comment">//given</span>
+       <span class="token class-name">GroupRequestArgs</span> args <span class="token operator">=</span> <span class="token class-name">GroupRequestArgs</span><span class="token punctuation">.</span><span class="token function">builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+               <span class="token punctuation">.</span><span class="token function">offset</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+               <span class="token punctuation">.</span><span class="token function">limit</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span>
+               <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+       <span class="token comment">//when</span>
+       <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">GroupDiscussionInfo</span><span class="token punctuation">&gt;</span></span> groupList <span class="token operator">=</span> groupClient<span class="token punctuation">.</span><span class="token function">getGroupDiscussionList</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+       <span class="token comment">//then</span>
+       <span class="token class-name">Assertions</span><span class="token punctuation">.</span><span class="token function">assertNotNull</span><span class="token punctuation">(</span>groupList<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token class-name">Assertions</span><span class="token punctuation">.</span><span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> groupList<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token annotation punctuation">@Test</span>
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">shouldProperlyGetGroupCount</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token comment">//given</span>
+       <span class="token class-name">GroupsCountRequestArgs</span> args <span class="token operator">=</span> <span class="token class-name">GroupsCountRequestArgs</span><span class="token punctuation">.</span><span class="token function">builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+       <span class="token comment">//when</span>
+       <span class="token class-name">Integer</span> groupCount <span class="token operator">=</span> groupClient<span class="token punctuation">.</span><span class="token function">getGroupCount</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+       <span class="token comment">//then</span>
+       <span class="token class-name">Assertions</span><span class="token punctuation">.</span><span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">,</span> groupCount<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token annotation punctuation">@Test</span>
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">shouldProperlyGetGroupTECHCount</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token comment">//given</span>
+       <span class="token class-name">GroupsCountRequestArgs</span> args <span class="token operator">=</span> <span class="token class-name">GroupsCountRequestArgs</span><span class="token punctuation">.</span><span class="token function">builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+               <span class="token punctuation">.</span><span class="token function">type</span><span class="token punctuation">(</span>TECH<span class="token punctuation">)</span>
+               <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+       <span class="token comment">//when</span>
+       <span class="token class-name">Integer</span> groupCount <span class="token operator">=</span> groupClient<span class="token punctuation">.</span><span class="token function">getGroupCount</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+       <span class="token comment">//then</span>
+       <span class="token class-name">Assertions</span><span class="token punctuation">.</span><span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">,</span> groupCount<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token annotation punctuation">@Test</span>
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">shouldProperlyGetGroupById</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token comment">//given</span>
+       <span class="token class-name">Integer</span> androidGroupId <span class="token operator">=</span> <span class="token number">16</span><span class="token punctuation">;</span>
+
+       <span class="token comment">//when</span>
+       <span class="token class-name">GroupDiscussionInfo</span> groupById <span class="token operator">=</span> groupClient<span class="token punctuation">.</span><span class="token function">getGroupById</span><span class="token punctuation">(</span>androidGroupId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+       <span class="token comment">//then</span>
+       <span class="token class-name">Assertions</span><span class="token punctuation">.</span><span class="token function">assertNotNull</span><span class="token punctuation">(</span>groupById<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token class-name">Assertions</span><span class="token punctuation">.</span><span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token number">16</span><span class="token punctuation">,</span> groupById<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token class-name">Assertions</span><span class="token punctuation">.</span><span class="token function">assertEquals</span><span class="token punctuation">(</span>TECH<span class="token punctuation">,</span> groupById<span class="token punctuation">.</span><span class="token function">getType</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token class-name">Assertions</span><span class="token punctuation">.</span><span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token string">"android"</span><span class="token punctuation">,</span> groupById<span class="token punctuation">.</span><span class="token function">getKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Тести написані в такому ж стилі, як раніше. Є по кілька тестів на кожен запит. Тестувати все не має сенсу, тому що я думаю, що цей АПІ і так уже відтестовано найкращим чином.
+<h2>Висновок</h2>У рамках цієї статті ми додали клієнта Java для груп до CodeGym API. Як то кажуть, вік живи — вік навчайся. Поки писав цього клієнта, скористався їхньою документацією і зручно використовував роботу з об'єктами, яку вони надають. Звертаю увагу на завдання, яке я запропонував. Кому цікаво — пишіть особистим повідомленням, я більш ніж впевнений, що це буде цікавий досвід. То була перша частина. У другій ми реалізуємо безпосередньо команду з додавання та (якщо вкладемося в одну статтю) додамо отримання списку груп, на яких користувач підписаний. Далі, хто має бажання і талант до написання текстів для бота, прошу написати мені в ЛЗ. Я не фахівець у цій справі, і будь-яка допомога мені буде дуже доречною. Оформимо все це як розробку в open source, буде цікаво! Ну і як завжди -<s>лайк, передплата, дзвіночок</s> , став зірку <a href="https://github.com/codegymcommunity/codegym-telegrambot" rel="nofollow" target="_blank">нашому проекту</a> , пиши коментарі та оцінюй статтю!
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Корисні посилання</th>
+   </tr>
+   <tr>
+    <td>
+     <ul>
+      <li><a href="https://codegym.cc/swagger-ui.html" target="_blank">CodeGym Open API</a></li>
+      <li><a href="https://habr.com/ru/post/434798/" rel="nofollow" target="_blank">Хабр: Сваггер</a></li>
+      <li>Гайд зі створення Джава клієнта: <a href="https://codegym.cc/groups/posts/2430-gayd-po-sozdaniju-klienta-dlja-skyscanner-api-i-ego-publikacii-v-jcenver-i-maven-central" target="_blank">частина 1</a> , <a href="https://codegym.cc/groups/posts/2431-gayd-po-sozdaniju-klienta-dlja-skyscanner-api-i-ego-publikacii-v-jcenver-i-maven-central-chastj" target="_blank">частина 2</a></li>
+     </ul></td>
+   </tr>
+  </tbody>
+ </table>
+</div><a href="https://codegym.cc/login/signup" target="_blank"><img id="click_banner1_articles" data-max-width="1080" data-id="5736eb4b-2b1c-4ab6-b4cc-b9e2d1cef628" alt="&quot;Java-проект від А до Я&quot;: Додаємо можливість підписатися на групу статей.  Частина 1 - 8" src="https://cdn.javarush.com/images/article/5736eb4b-2b1c-4ab6-b4cc-b9e2d1cef628/1080.jpeg" style="width: 1080px;"></a>
+<h4><a href="https://codegym.cc/groups/posts/2935-java-proekt-ot-a-do-ja-pishem-realjhnihy-proekt-dlja-portfolio#articles" target="_blank">Список всіх матеріалів серії на початку цієї статті.</a></h4>

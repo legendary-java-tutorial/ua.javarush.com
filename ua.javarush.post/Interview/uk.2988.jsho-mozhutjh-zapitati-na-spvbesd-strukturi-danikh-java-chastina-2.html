@@ -1,0 +1,157 @@
+Що можуть запитати на співбесіді: структури даних Java. Частина 2
+<p>----------------------------------------</p>
+Зараз говоримо про базу, яку має знати кожен Java developer. Про ті класичні знання, з яких все і починається. Сьогодні хотілося б торкнутися однієї з основних тем будь-якої співбесіди — . Отже, замість ходіння навкруги, ми почнемо. Ловіть 
+<p>----------------------------------------</p>
+<a href="https://codegym.cc/groups/posts/2985-chto-mogut-sprositjh-na-sobesedovanii-strukturih-dannihkh-v-java" target="_blank">ЧАСТИНА 1</a> Зараз говоримо про базу, яку має знати кожен Java developer. Про ті класичні знання, з яких все і починається. Сьогодні хотілося б торкнутися однієї з основних тем будь-якої співбесіди — <span class="text-bold">структури даних у Java</span> . Отже, замість ходіння навкруги, ми почнемо. Ловіть продовження списку питань, які можуть задати на цій темі на співбесіді.
+<h2>6. Розкажіть про List</h2><span class="text-bold">List</span> - це інтерфейс, що представляє впорядковану структуру об'єктів, яка називається списком. <img data-max-width="800" data-id="602875a2-2229-4492-ab82-950f4512f307" alt="Що можуть запитати на співбесіді: структури даних у Java - 5" src="https://cdn.javarush.com/images/article/602875a2-2229-4492-ab82-950f4512f307/800.jpeg" style="width: 800px;">"Фішка" цієї структури - те, що елементи, що містяться в <span class="text-bold">List</span> можна вставити, змінити або видалити за індексом, тобто внутрішньому ідентифікатору <span class="text-bold">List</span> . Інакше кажучи, індекс означає: «кілька елементів від початку списку». У першого елемента <span class="text-bold">List</span> індекс 0, у другого - 1, і таке інше. Таким чином, п'ятий елемент знаходиться на відстані чотирьох елементів з початку списку. Як говорилося вище, у списку важливий порядок додавання елементів. Тому структура даних і називається <em>списком</em> . Перерахуємо унікальні для цієї структури методи, спрямовані на роботу з елементами за індексом:
+<ul>
+ <li><span class="text-bold">get</span> - повертає елемент у зазначеній позиції (за значенням індексу),</li>
+ <li><span class="text-bold">remove</span> — видаляє елемент у цій позиції,</li>
+ <li><span class="text-bold">set</span> — замінює елемент у зазначеній позиції на вказаний у методі елемент.</li>
+</ul>Основні реалізації - <span class="text-bold">ArrayList</span> і <span class="text-bold">LinkedList</span> . Докладніше про них поговоримо трохи згодом. <span class="text-bold">Vector</span> — список, орієнтований на багатопотокове використання, тому в даному класі кожен метод синхронізовано. Але врахуйте, що якщо ви хочете убезпечити деякі дії зі списками, ви синхронізуватимете цілу послідовність операцій. А синхронізація окремих операцій і менш безпечна, і набагато повільніша. Звичайно, <span class="text-bold">Vector</span> також має накладні витрати на блокування, навіть якщо вам це блокування і не потрібне. Тому зараз цей клас вважається застарілим та не використовується. До речі: <span class="text-bold">ArrayList</span> є аналогом <span class="text-bold">Vector</span>, але не використовує блокування, тому використовується повсюдно. <span class="text-bold">Stack</span> - це підклас класу <span class="text-bold">Vector</span> з одним конструктором за замовчуванням і всіма методами класу <span class="text-bold">Vector</span> , а також кількома власними (про них ми поговоримо трохи нижче). Як приклад можна уявити процес у вигляді стопки папок з документами. Нагору стопки ви кладете по одній папці, і брати ці папки можна лише у зворотному порядку, починаючи з верхньої. Власне, це і є механізм типу <span class="text-bold">LIFO</span> , тобто <span class="text-bold">Last In First Out</span> , останній прийшов – першим пішов. Стек реалізує свої методи:
+<ul>
+ <li><span class="text-bold">push</span> – додає переданий елемент на вершину стека;</li>
+ <li><span class="text-bold">peek</span> - повертає елемент, що знаходиться на вершині стека;</li>
+ <li><span class="text-bold">pop</span> також повертає елемент, який знаходиться на вершині стека, але при цьому видаляє його;</li>
+ <li><span class="text-bold">empty</span> - перевіряє, чи порожній стек - <span class="text-bold"><em>true</em></span> , чи ні - <span class="text-bold"><em>false</em></span> ;</li>
+ <li><span class="text-bold">search</span> - Виконує пошук заданого елемента в стеку. Якщо елемент знайдено, повертається його порядковий номер щодо верхівки стека. Якщо елемент не знайдено, повертається значення -1.</li>
+</ul>В даний момент підклас <span class="text-bold">Stack</span> фактично не використовується в силу своєї простоти та негнучкості, але він може вам зустрітися. Наприклад, коли ви отримуєте деяку помилку, і в консолі бачите стек повідомлень про неї. Докладніше про стеку та черги можна почитати ось у <a href="https://codegym.cc/groups/posts/2321-strukturih-dannihkh--stek-i-ocheredjh" target="_blank">цій статті</a> .
+<h2>7. Розкажіть про Map</h2>Як сказано вище, <span class="text-bold">Map</span> - це колекція, що має окрему структуру інтерфейсів та їх реалізацій. Окрема вона тому, що значення не зберігаються по одному, а в парі "ключ - значення". <img data-max-width="800" data-id="7c97a86a-19af-4e12-9460-60a92782546f" alt="Що можуть запитати на співбесіді: структури даних у Java - 6" src="https://cdn.javarush.com/images/article/7c97a86a-19af-4e12-9460-60a92782546f/800.jpeg" style="width: 800px;">Основні методи <span class="text-bold">Map</span> :
+<ul>
+ <li><span class="text-bold">put(K key, V value)</span> - додавання елемента в Map;</li>
+ <li><span class="text-bold">get(Object key)</span> - пошук значення за ключем;</li>
+ <li><span class="text-bold">containsKey(Object key)</span> — перевірка Map наявність даного ключа;</li>
+ <li><span class="text-bold">containsValue(Object value)</span> - перевірка Map на наявність цього значення;</li>
+ <li><span class="text-bold">remove(Object key)</span> - видалення значення за його ключем.</li>
+</ul>Як ви бачите, більшість операцій працює за допомогою ключа. Як ключі, як правило, вибираються постійні об'єкти ( <span class="text-bold">immutable</span> ). Типовий приклад даного об'єкта - <a href="https://codegym.cc/groups/posts/2347-klass-string-v-java" target="_blank">String</a> . Основні реалізації <span class="text-bold">Map</span> :
+<ol>
+ <li><span class="text-bold">HashMap</span> – призначена для зберігання значень у довільному порядку, але дозволяє швидко шукати елементи картки. Дозволяє ставити ключ ключовим словом <span class="text-bold">null</span> , але з більше разу, т.к. пари з однаковими ключами записуються поверх одне одного. Головною умовою є унікальність ключів: значення можуть повторюватися (може бути кілька null значень).</li>
+ <li><span class="text-bold">LinkedHashMap</span> — аналог <span class="text-bold">HashMap</span> , який зберігає значення як додавання. Відповідно, як і <span class="text-bold">LinkedList</span> , у нього є <span class="text-bold">header</span> - голова двозв'язкового списку. При ініціалізації вказує на себе. 
+  <p>Також <span class="text-bold">LinkedHashMap</span> має <span class="text-bold">accessOrder</span> , який вказує, яким чином буде здійснюватися доступ до елементів під час використання ітератора. При <span class="text-bold">accessOrder <em>false</em></span> доступ буде здійснюватись у порядку вставки елементів. При значенні <span class="text-bold">true</span> елементи будуть у порядку останнього доступу (елемент, до якого було останнє звернення, буде поміщено в кінець).</p></li>
+ <li><span class="text-bold">TreeMap</span> - це <span class="text-bold">Map</span> , яка сортує елементи за значеннями ключа. Аналог <span class="text-bold">TreeSet</span> , але для пар з орієнтуванням на значення ключів. Для завдання правил сортування <span class="text-bold">TreeMap</span> ключі повинні реалізовувати інтерфейс <span class="text-bold">Comparable</span> . В іншому випадку повинен бути <span class="text-bold">Comparator</span> , орієнтований на ключі (той, який задається в конструктор <span class="text-bold">TreeMap</span> ), TreeSet - реалізований з об'єктом TreeMap всередині, в якому, власне, і відбувається вся магія. 
+  <p>Докладніше про сортування в TreeMap за допомогою червоно-чорних дерев можна почитати у статті <a href="https://codegym.cc/groups/posts/2584-osobennosti-treemap" target="_blank">про особливості TreeMap</a> .</p></li>
+ <li><span class="text-bold">Hashtable</span> - аналогічний <span class="text-bold">HashMap</span> , але не дозволяє зберігати <span class="text-bold">null</span> ні як ключі, ні як значення. Він ретельно синхронізований з погляду багатопоточності, що у свою чергу означає, що він безпечний з точки зору багатопоточності. Але дана реалізація застаріла та повільна, тому зараз ви і не зустрінете <span class="text-bold">Hashtable</span> у більш-менш нових проектах.</li>
+</ol>
+<h2>8. ArrayList vs LinkedList. Який краще використовувати?</h2>Це питання, мабуть, найпопулярніше за структурами даних і несе в собі деякі підводні камені. Перш ніж відповідати на нього, дізнаємося докладніше про ці структури даних. <span class="text-bold">ArrayList</span> реалізує інтерфейс <span class="text-bold">List</span> , працює за рахунок внутрішнього масиву, який розширюється при необхідності. Коли внутрішній масив повністю заповнюється, і при цьому потрібно вставити новий елемент створюється новий масив, з розміром (oldSize * 1,5) +1. Після цього всі дані зі старого масиву копіюються в новий новий елемент, старий же буде видалений <a href="https://codegym.cc/groups/posts/917-sborka-musora" target="_blank">збирачем сміття</a> . Метод <span class="code">add</span>додає елемент в останню порожню комірку масиву. Тобто, якщо у нас там вже є 3 елементи, він додасть наступний до 4-го осередку. Давайте пройдемося за продуктивністю базових методів:
+<ul>
+ <li><span class="code">get(int index)</span> - взяття елемента в масиві за індексом працює найшвидше за <span class="text-bold">O(1)</span> ;</li>
+ <li><span class="code">add(Object obj)</span> - якщо достатньо місця у внутрішньому масиві для нового елемента, то при звичайній вставці буде витрачено час <span class="code">O(1)</span> , так як додавання йде цілеспрямовано в останню комірку. 
+  <p>Якщо ж потрібно створювати новий масив і копіювати вміст, то час у нас буде прямо пропорційно кількості елементів в масиві <span class="text-bold">O(n)</span> ;</p></li>
+ <li><span class="code">remove(int index)</span> — при видаленні елемента, наприклад, з середини, ми отримаємо час O(n/2), оскільки потрібно буде пересувати елементи праворуч від нього однією комірку тому. Відповідно, якщо видалення з початку списку, то O(n), з кінця - O(1);</li>
+ <li><span class="code">add(int index, Object obj)</span> - ситуація, схожа з видаленням: при додаванні в середину нам потрібно буде пересунути елементи праворуч на одну комірку вперед, тому час - O(n/2). Зрозуміло, спочатку — O(n), з кінця — O(1);</li>
+ <li><span class="code">set(int index, Object obj)</span> - тут ситуація інша, тому що потрібно тільки знайти потрібний елемент і записати поверх нього, не пересуваючи інші, тому O(1).</li>
+</ul>Докладніше про <span class="text-bold">ArrayList</span> - у <a href="https://codegym.cc/groups/posts/klass-arraylist" target="_blank">цій статті</a> . <span class="text-bold">LinkedList</span> реалізує одночасно два інтерфейси - <span class="text-bold">List</span> і <span class="text-bold">Queue</span> , тому і володіє властивостями і способами, властивими обом структурам даних. Від List він узяв доступ до елемента за індексом, від Queue – наявність “голови” та “хвоста”. Усередині він реалізований як структура даних, що представляє двозв'язковий перелік. Тобто, кожен елемент має посилання на наступний і попередній, крім “хвоста” і “голови”.
+<ul>
+ <li><span class="code">get(int index)</span> — під час пошуку елемента, що у середині списку, починається перебір всіх елементів порядку, доки знайдено потрібний. За логікою пошук повинен займати <span class="text-bold">O(n/2)</span> , але LinkedList має ще й хвіст, тому перебір ведеться одночасно з двох сторін. Відповідно час зменшується до <span class="text-bold">O(n/4)</span> . 
+  <p>Якщо елемент буде недалеко від початку списку або кінця, то і час буде <span class="text-bold">O(1)</span> ;</p></li>
+ <li><span class="code">add(Object obj)</span> — при додаванні нового елемента, елемент-хвост додасть посилання на наступний елемент, а новий отримає посилання на цей попередній елемент і стане новим хвістом. Відповідно, час буде <span class="text-bold">O(1)</span> ;</li>
+ <li><span class="code">remove(int index)</span> - логіка, схожа з методом <span class="code">get(int index)</span> . Щоб видалити елемент із середини списку, його потрібно спочатку знайти. Це знову ж таки <span class="text-bold">O(n/4)</span> , тоді як саме видалення практично нічого не займає, тому що там тільки змінюються покажчик сусідніх об'єктів (вони починають посилатися один на одного). Якщо елемент на початку або наприкінці, то знову ж таки — <span class="text-bold">O(1)</span> ;</li>
+ <li><span class="code">add(int index, Object obj)</span> і <span class="code">set(int index, Object obj)</span> - у методів тимчасова складність буде ідентична <span class="code">get(int index)</span> , оскільки основний час займає пошук елемента. Тому для середини списку – <span class="text-bold">O(n/4)</span> , для початку – <span class="text-bold">O(1).</span></li>
+</ul>Більше про роботу з <span class="text-bold">LinkedList</span> розказано у <a href="https://codegym.cc/groups/posts/1938-linkedlist" target="_blank">цій статті</a> . Давайте все це розглянемо у таблиці:
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Операція</th>
+    <th>ArrayList</th>
+    <th>LinkedList</th>
+   </tr>
+   <tr>
+    <td><span class="text-bold">Взяття за індексом get(index)</span></td>
+    <td>O(1)</td>
+    <td>У середині O(n/4)</td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">Додати новий елемент add(obj)</span></td>
+    <td>
+     <p>O(1)</p>
+     <p>Якщо потрібно скопіювати масив — O(n)</p></td>
+    <td>O(1)</td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">Видалити елемент remove(int index)</span></td>
+    <td>
+     <p>З початку - O(n)</p>
+     <p>Із середини - O(n/2)</p>
+     <p>З кінця - O(1)</p></td>
+    <td>
+     <p>У середині - O(n/4)</p>
+     <p>Наприкінці або на початку - O(n)</p></td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">Додати елемент add(int index, Object obj)</span></td>
+    <td>
+     <p>На початок - O(n)</p>
+     <p>У середину - O(n/2)</p>
+     <p>В кінець - O(1)</p></td>
+    <td>
+     <p>У середині - O(n/4)</p>
+     <p>Наприкінці або на початку - O(n)</p></td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">Замінити елемент set(index, obj)</span></td>
+    <td>O(1)</td>
+    <td>
+     <p>У середині - O(n/4)</p>
+     <p>Наприкінці або на початку - O(n)</p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>Як ви вже напевно зрозуміли, однозначно відповісти на це питання не можна. Адже за різних ситуацій вони і працюють з різною швидкістю. Тому, коли вам ставлять подібне запитання, ви повинні відразу запитати, на що буде орієнтований цей список і які операції найчастіше проводитимуться. Вже відштовхуючись від цього, відповідати, але з поясненнями, чому саме так. Підіб'ємо ж невеликі підсумки за нашим порівнянням: <span class="text-bold">ArrayList:</span>
+<ul>
+ <li>найкращий вибір, якщо найчастіша операція - пошук елемента, перезапис елемента;</li>
+ <li>Найгірший вибір, якщо операція - вставка та видалення на початку-середині, тому що будуть проходити операції зсуву елементів праворуч.</li>
+</ul><span class="text-bold">LinkedList:</span>
+<ul>
+ <li>найкращий вибір, якщо нашою частою операцією є вставка та видалення на початку-середині;</li>
+ <li>Найгірший вибір, якщо найчастіша операція – пошук.</li>
+</ul>
+<h2>9. Як зберігаються елементи в HashMap?</h2>Колекція <span class="text-bold">HashMap</span> містить у собі внутрішній масив <span class="text-bold">Node [] table</span> , комірки якого ще називають <span class="text-bold">бакетами</span> (кошиками). <span class="text-bold">Node</span> містять у собі:
+<ul>
+ <li><span class="text-bold">key</span> - посилання на ключ,</li>
+ <li><span class="text-bold">value</span> - посилання на значення,</li>
+ <li><span class="text-bold">hash</span> - значення hash,</li>
+ <li><span class="text-bold">next</span> - посилання на наступний <span class="text-bold">Node</span> .</li>
+</ul>В одному осередку масиву <span class="text-bold">table[]</span> може бути посилання на об'єкт <span class="text-bold">Node</span> з посиланням на наступний елемент <span class="text-bold">Node</span> , а він може мати посилання на інший, і так далі ... У результаті, дані елементи <span class="text-bold">Node</span> можуть утворювати <span class="text-bold">список</span> , з елементами з посиланням на наступні. При цьому значення <span class="text-bold">hash</span> у елементів одного ланцюжка однакове. Після невеликого відступу давайте подивимося, як відбувається збереження елементів у <span class="text-bold">HashMap</span> :
+<ol>
+ <li>Ключ перевіряється на рівність <span class="text-bold">null</span> . Якщо він <span class="text-bold">null</span> , то key буде збережений в комірці <span class="text-bold">table[0]</span> , тому що хеш-код для null завжди дорівнює 0.</li>
+ <li>Якщо ключ не <span class="text-bold">null</span> , то об'єкт key викликає метод <span class="code">hashcode()</span> , який видасть його хеш-код. Цей хеш-код використовується для визначення осередку масиву, де зберігатиметься об'єкт Node.</li>
+ <li>Далі цей hashcode міститься у внутрішній метод <span class="code">hash()</span> , який обчислює hashcode, але вже в межах розміру масиву <span class="text-bold">table[]</span> .</li>
+ <li>Далі, залежно від значення hash, Node міститься в конкретну комірку в масиві <span class="text-bold">table []</span> .</li>
+ <li>Якщо ж комірка <span class="text-bold">table[]</span> , яка використовується для збереження поточного елемента <span class="text-bold">Node</span> не порожня, а вже має якийсь елемент, відбувається перебір елементів <span class="text-bold">Node</span> за значенням <span class="text-bold">next</span> , поки не буде досягнутий останній елемент. Тобто той, у якого поле <span class="text-bold">next</span> дорівнює <span class="text-bold">null</span> . 
+  <p>Під час даного перебору порівнюються ключ об'єкта <span class="text-bold">Node</span> , що охороняється , з ключами перебираються:</p>
+  <ul>
+   <li>якщо буде знайдено відповідність, то перебір закінчиться, і новий <span class="text-bold">Node</span> перезапише <span class="text-bold">Node</span> , в якому знайдено відповідність (перезапишеться тільки його поле <span class="text-bold">value</span> );</li>
+   <li>якщо відповідності ключів не знайдені, новий <span class="text-bold">Node</span> стане останнім у цьому списку, а попередній буде мати посилання <span class="text-bold">next</span> на нього.</li>
+  </ul>
+  <p></p></li>
+</ol>Часто на співбесідах з'являється питання: <span class="text-bold">що таке колізія</span> ? Ситуацію, як у осередку масиву <span class="text-bold">table[]</span> зберігається не один елемент, а ланцюжок із двох і більше, і називається <span class="text-bold">колізія</span> . У звичайних випадках, коли в одному осередку <span class="text-bold">table[]</span> зберігається лише один елемент, доступ до елементів <span class="text-bold">HashMap</span> має константну тимчасову складність <span class="text-bold">O(1)</span> . Але коли в комірці з потрібним елементом присутній ланцюжок елементів ( <span class="text-bold">колізія</span> ), то <span class="text-bold">O(n)</span> , тому що в такому разі час прямо пропорційно залежить від кількості елементів, що перебираються.
+<h2>10. Розкажіть про ітератора</h2>У схемі з відображенням ієрархії <span class="text-bold">Collection</span> вище за інтерфейс <span class="text-bold">Collection</span> був тим, з чого починалася вся ієрархія, але на практиці все не зовсім так. Collection успадковується від інтерфейсу з методом <span class="code">iterator()</span> , який повертає об'єкт, що реалізує інтерфейс <span class="text-bold">Iterator&lt;E&gt;</span> . Інтерфейс Iterator має вигляд: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Iterator</span> <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">E</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">{</span>
+
+    <span class="token class-name">E</span> <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">boolean</span> <span class="token function">hasNext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token function">remove</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre><span class="code">next()</span> - викликаючи цей метод, можна буде отримати наступний елемент. <span class="code">hasNext()</span> — дає можливість дізнатися, чи є наступний елемент, і чи не досягнуто кінця колекції. І коли елементи є, то <span class="code">hasNext()</span> поверне значення <span class="text-bold"><em>true</em></span> . Як правило, <span class="code">hasNext()</span> викликається перед методом <span class="code">next()</span> , тому що при досягненні кінця колекції <span class="code">next()</span> викидатиме виняток <span class="text-bold">NoSuchElementException</span> . <span class="code">remove()</span> — видаляє елемент, отриманий останнім викликом <span class="code">next()</span> . Призначенням Iterator є перебір елементів. Наприклад: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Set</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> values <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TreeSet</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  values<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+values<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+values<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+values<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+values<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+values<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+values<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+values<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token class-name">Iterator</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> iter <span class="token operator">=</span> values<span class="token punctuation">.</span><span class="token function">iterator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">while</span><span class="token punctuation">(</span>iter<span class="token punctuation">.</span><span class="token function">hasNext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+  <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>iter<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre> Власне цикл <span class="text-bold">for-each loop</span> і реалізований під капотом за допомогою ітератора. Докладніше про це можна почитати <a href="https://codegym.cc/groups/posts/1983-for-i-for-each-loop---skaz-o-tom-kak-ja-iterirovalsja-iterirovalsja-da-ne-vihiterirovalsja" target="_blank">тут</a> . <span class="text-bold">List</span> надає свою версію ітератора, але більш круту і наворочену - <span class="text-bold">ListIterator</span> . Цей інтерфейс розширює <span class="text-bold">Iterator</span> , і він має додаткові методы:
+<ul>
+ <li><span class="code">hasPrevious</span> поверне true, якщо колекції є попередній елемент, інакше — false;</li>
+ <li><span class="code">previous</span> повертає поточний елемент та переходить до попереднього; якщо такого немає, то викидається виняток NoSuchElementException;</li>
+ <li><span class="code">add</span> вставить переданий об'єкт перед елементом, який має бути повернутий наступним викликом <span class="code">next()</span> ;</li>
+ <li><span class="code">set</span> надає поточному елементу посилання на переданий об'єкт;</li>
+ <li><span class="code">NextIndex</span> повертає індекс наступного елемента. Якщо цього немає, то повертається розмір списку;</li>
+ <li><span class="code">previousIndex</span> повертає індекс попереднього елемента. Якщо такого немає, то вертається число -1.</li>
+</ul>Що ж, на цьому сьогодні у мене все. Я сподіваюся, що після прочитання цієї статті ви стали ще ближчими до заповітної мрії — стати розробником.<a href="https://codegym.cc/welcome" target="_blank"><img id="click_banner1_articles" data-max-width="1080" data-id="e2f93d4b-45ef-4c5b-827f-50c6f38bcfe8" alt="Що можуть запитати на співбесіді: структури даних Java.  Частина 2 - 3" src="https://cdn.javarush.com/images/article/e2f93d4b-45ef-4c5b-827f-50c6f38bcfe8/1080.jpeg" style="width: 1080px;"></a>

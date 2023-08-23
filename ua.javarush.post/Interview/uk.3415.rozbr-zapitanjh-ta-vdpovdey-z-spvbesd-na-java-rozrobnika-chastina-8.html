@@ -1,0 +1,184 @@
+Розбір запитань та відповідей із співбесід на Java-розробника. Частина 8
+<p>----------------------------------------</p>
+Практика чи теорія? Що важливіше? Багато хто скаже, що, звичайно, практика важливіша. Мовляв, практикуйтеся до упору і буде вам щастя. Смію з цим не погодитись. На співбесідах ніхто і не дізнається, наскільки ви круті у практиці. Вас будуть
+<p>----------------------------------------</p>
+Практика чи теорія? Що важливіше? Багато хто скаже, що, звичайно, практика важливіша. Мовляв, практикуйтеся до упору і буде вам щастя. Смію з цим не погодитись. <img data-max-width="512" data-id="3c9e5213-e7b7-440a-819d-5b0df012b5a4" alt="Розбір запитань та відповідей із співбесід на Java-розробника.  Частина 8 - 1" src="https://cdn.javarush.com/images/article/3c9e5213-e7b7-440a-819d-5b0df012b5a4/512.jpeg" style="width: 512px;">На співбесідах ніхто і не дізнається, наскільки ви круті у практиці. Вас будуть запитувати на весь зріст саме з теорії. І лише потім, коли ви пройдете всі кола співбесід та потрапите на проект, ви застосуєте ваші практичні скіли. Ви можете заперечити: іноді дають тестове завдання та практика таки потрібна. Не сперечаюся, їх іноді дають, але в тому й річ, що Іноді, а от теоретична співбесіда проходить ЗАВЖДИ. Відчуваєте різницю? Тому у вас має бути твердий теоретичний фундамент під ногами, зміцненням якого ми сьогодні й продовжуватимемо займатися. А саме – ми продовжимо розбір <a href="https://dou.ua/lenta/articles/interview-questions-java-developer/" rel="nofollow" target="_blank">питань</a>, які часто ставлять на співбесідах
+<h4>71. Що буде, якщо ми не перевизначатимемо метод toString() для Enum?</h4>Припустимо, у нас є наступне <span class="code">enum</span> : 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">enum</span> <span class="token class-name">Role</span> <span class="token punctuation">{</span>
+   STUDENT<span class="token punctuation">,</span>
+   TEACHER<span class="token punctuation">,</span>
+   DIRECTOR<span class="token punctuation">,</span>
+   SECURITY_GUARD<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre> Виведемо в консолі студента, викликавши в нього <span class="code">toString()</span> : 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">Role</span><span class="token punctuation">.</span>STUDENT<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> Результат у консолі: 
+<div class="terminal">
+ STUDENT
+</div> Тобто за умовчанням <span class="code">toString()</span> для <span class="code">enum</span> -а - назва константи.
+<h4>72. Чи можна вказувати конструктор усередині Enum?</h4>Так звичайно. Саме через конструктор і задаються значення внутрішніх змінних enum. Як приклад до попереднього <span class="code">enum</span> додамо два поля – <span class="code">ageFrom</span> та <span class="code">ageTo</span> – щоб позначити вікові рамки для кожної ролі: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">enum</span> <span class="token class-name">Role</span> <span class="token punctuation">{</span>
+   <span class="token function">STUDENT</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">18</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+   <span class="token function">TEACHER</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">,</span><span class="token number">60</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+   <span class="token function">DIRECTOR</span><span class="token punctuation">(</span><span class="token number">40</span><span class="token punctuation">,</span><span class="token number">70</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+   <span class="token function">SECURITY_GUARD</span><span class="token punctuation">(</span><span class="token number">18</span><span class="token punctuation">,</span><span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+   <span class="token keyword">int</span> ageFrom<span class="token punctuation">;</span>
+   <span class="token keyword">int</span> ageTo<span class="token punctuation">;</span>
+
+   <span class="token class-name">Role</span><span class="token punctuation">(</span><span class="token keyword">int</span> ageFrom<span class="token punctuation">,</span> <span class="token keyword">int</span> ageTo<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">this</span><span class="token punctuation">.</span>ageFrom <span class="token operator">=</span> ageFrom<span class="token punctuation">;</span>
+       <span class="token keyword">this</span><span class="token punctuation">.</span>ageTo <span class="token operator">=</span> ageTo<span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h4>73. У чому різниця між == та equals()?</h4>Це одне з найпоширеніших питань на співбесідах Java-розробника. Почнемо з того, що ми порівнюємо прості значення ( <span class="code">int</span> , <span class="code">char</span> , <span class="code">double</span> …), ми робимо це через <span class="code">==</span> , оскільки змінні містять конкретні значення і ми можемо їх порівняти. Та й примітивні змінні є повноцінними об'єктами — не успадковуються від <span class="code">Object</span> і мають метод <span class="code">equals()</span> . Коли ми говоримо про порівняння змінних, які посилаються на об'єкти, то <span class="code">==</span> буде порівнювати лише значення посилань — той самий об'єкт вони посилаються чи ні. І навіть якщо один об'єкт буде ідентичний іншому, порівняння через <span class="code">==</span> дасть негативний результат (<span class="text-bold"><em>false</em></span> ), адже це інший об'єкт. Як ви зрозуміли, для порівняння змінних змінних використовується метод<span class="code"> equals()</span> . Це один із стандартних методів класу<span class="code"> Object</span> , який потрібний для повноцінного порівняння об'єктів. Але відразу слід уточнити: для правильної роботи цього методу його потрібно перевизначити, написавши, як саме мають порівнюватися об'єкти цього класу. Якщо ви не перевизначите метод, за умовчанням він порівнюватиме об'єкти по<span class="code"> ==</span> . У<span class="text-bold"> IntelliJ IDEA</span> можна перевизначати його автоматично (засобами IDEA) -&gt;<span class="code"> alt + insert</span> , у вікні, що з'явилося, вибираємо<span class="code"> equals() and hashCode()</span>-&gt; вибираємо, які поля класу повинні брати участь -&gt; і вуаля, автоматична імплементація методів виконана. Ось приклад того, як виглядатиме автоматично згенерований метод <span class="code">equals</span> для найпростішого класу <span class="text-bold">Cat</span> з двома полями - <span class="code">int age</span> та <span class="code">String name</span> : 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@Override</span>
+<span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">equals</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">Object</span> o<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span> <span class="token operator">==</span> o<span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+   <span class="token keyword">if</span> <span class="token punctuation">(</span>o <span class="token operator">==</span> <span class="token keyword">null</span> <span class="token operator">||</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> o<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+   <span class="token keyword">final</span> <span class="token class-name">Cat</span> cat <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">Cat</span><span class="token punctuation">)</span> o<span class="token punctuation">;</span>
+   <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>age <span class="token operator">==</span> cat<span class="token punctuation">.</span>age <span class="token operator">&amp;&amp;</span>
+           <span class="token class-name">Objects</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>name<span class="token punctuation">,</span> cat<span class="token punctuation">.</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre> Якщо говорити про різницю <span class="code">==</span> і <span class="code">equals</span> для <span class="code">enum</span> -ів, її особливо немає. <img data-max-width="512" data-id="dd8bc05a-2f0d-4962-8340-adbce325d5ee" alt="Розбір запитань та відповідей із співбесід на Java-розробника.  Частина 8 - 2" src="https://cdn.javarush.com/images/article/dd8bc05a-2f0d-4962-8340-adbce325d5ee/512.jpeg" style="width: 512px;">Адже <span class="code">enum</span> зберігає константи, і навіть порівнюючи через <span class="code">==</span> аналогічні значення, ми отримуватимемо <span class="text-bold"><em>true</em></span> , оскільки посилання будуть завжди на ті самі об'єкти. Ну і при використанні <span class="code">equals</span> у нас також буде правильно відпрацьовувати функціонал, тим більше, якщо ви зайдете в тіло методу <span class="code">equals</span> для <span class="code">enum</span> -а, побачите, що в класі <span class="code">Enum</span> реалізація методу наступна: <img data-max-width="512" data-id="fbd47289-1d8d-4174-a218-bf41e3b21c15" alt="Розбір запитань та відповідей із співбесід на Java-розробника.  Частина 8 - 3" src="https://cdn.javarush.com/images/article/fbd47289-1d8d-4174-a218-bf41e3b21c15/512.jpeg" style="width: 512px;">Тобто всередині - добре добре порівняння за посиланнями! Підсумовуючи: для <span class="code">enum</span> порівняння і через <span class="code">==</span>, та через <span class="code">equals</span> коректне.<img data-max-width="512" data-id="03afea41-852b-43e3-9497-e15aab87af87" alt="Розбір запитань та відповідей із співбесід на Java-розробника.  Частина 8 - 4" src="https://cdn.javarush.com/images/article/03afea41-852b-43e3-9497-e15aab87af87/512.jpeg" style="width: 512px;">
+<h2>74. Що робить метод ordinal() у Enum?</h2>При виклику методу <span class="code">int ordinal()</span> на елементі <span class="code">enum</span> -а ми отримаємо порядковий номер із нуля цього значення у ряді перерахувань. Давайте використовуємо даний метод на одному елементі з попереднього розглянутого <span class="code">enum</span> - <span class="code">Role</span> : 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">Role</span><span class="token punctuation">.</span>DIRECTOR<span class="token punctuation">.</span><span class="token function">ordinal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> Відповідно, в консолі виведеться: 
+<div class="terminal">
+ 2
+</div>
+<h4>75. Чи можна використовувати Enum c TreeSet або TreeMap у Java?</h4>Використання <span class="code">enum</span> типів у <span class="code">TreeSet</span> та <span class="code">TreeMap</span> припустимо. І ми можемо написати: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">TreeSet</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Role</span><span class="token punctuation">&gt;</span></span> treeSet <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TreeSet</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+treeSet<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token class-name">Role</span><span class="token punctuation">.</span>SECURITY_GUARD<span class="token punctuation">)</span><span class="token punctuation">;</span>
+treeSet<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token class-name">Role</span><span class="token punctuation">.</span>DIRECTOR<span class="token punctuation">)</span><span class="token punctuation">;</span>
+treeSet<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token class-name">Role</span><span class="token punctuation">.</span>TEACHER<span class="token punctuation">)</span><span class="token punctuation">;</span>
+treeSet<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token class-name">Role</span><span class="token punctuation">.</span>STUDENT<span class="token punctuation">)</span><span class="token punctuation">;</span>
+treeSet<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token operator">::</span><span class="token function">println</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> І в консолі буде виведено: 
+<div class="terminal">
+ STUDENT TEACHER DIRECTOR SECURITY_GUARD
+</div> Ми дістали висновок за алфавітом. Справа в тому, що якщо ми використовуємо елементи <span class="code">enum</span> -а для значень <span class="code">TreeSet</span> або як ключі для <span class="code">TreeMap</span> , елементи сортуються за їх природним порядком (по порядку, в якому вони задані в <span class="code">enum</span> ). Розуміння цих особливостей допомагає нам писати код якісніше.<img data-max-width="512" data-id="ad6facf5-c4fa-4243-bec8-3154e39962aa" alt="Розбір запитань та відповідей із співбесід на Java-розробника.  Частина 8 - 5" src="https://cdn.javarush.com/images/article/ad6facf5-c4fa-4243-bec8-3154e39962aa/512.jpeg" style="width: 512px;">
+<h4>76. Як пов'язані методи ordinal() і compareTo() в Enum?</h4>Як було зазначено раніше, <span class="code">ordinal()</span> повертає порядковий номер значення у списку перерахувань. Також у розборі попереднього питання ви побачабо, що елементи перерахувань, потрапивши, наприклад, <span class="code">TreeSet</span> (відсортована безліч) приймають порядок, в якому вони оголошені в <span class="code">enum</span> . І як знаємо, <span class="code">TreeSet</span> і <span class="code">TreeMap</span> сортують елементи у вигляді виклику вони методу <span class="code">compareTo()</span> інтерфейсу <span class="code">Comparable</span> . З цього можна зробити припущення, що клас <span class="code">Enum</span> імплементує інтерфейс <span class="code">Comparable</span> , реалізуючи його метод <span class="code">compareTo()</span> , всередині якого використовується <span class="code">ordinal()</span>для завдання порядку сортування. Зайшовши в клас <span class="code">Enum</span> , бачимо підтвердження цього: <img data-max-width="512" data-id="cb072bbb-7029-4c7d-a023-4a5ca3713f28" alt="Розбір запитань та відповідей із співбесід на Java-розробника.  Частина 8 - 6" src="https://cdn.javarush.com/images/article/cb072bbb-7029-4c7d-a023-4a5ca3713f28/512.jpeg" style="width: 512px;">І тіло самого методу: <img data-max-width="512" data-id="bd80a553-7741-4ef9-b2c3-9b6b93affa64" alt="Розбір запитань та відповідей із співбесід на Java-розробника.  Частина 8 - 7" src="https://cdn.javarush.com/images/article/bd80a553-7741-4ef9-b2c3-9b6b93affa64/512.jpeg" style="width: 512px;">Метод <span class="code">ordinal()</span> тут не викликається. Натомість використовується змінна <span class="code">ordinal</span> — порядковий номер елемента у перерахуванні. Сам метод <span class="code">ordinal()</span> — <img data-max-width="256" data-id="19551399-798f-480b-a91e-00c554840ec2" alt="Розбір запитань та відповідей із співбесід на Java-розробника.  Частина 8 - 8" src="https://cdn.javarush.com/images/article/19551399-798f-480b-a91e-00c554840ec2/256.jpeg" style="width: 256px;">не більше ніж геттер для змінної <span class="code">ordinal</span> .
+<h4>77. Напишіть приклад EnumM</h4>У питаннях розглянутих вище я вже наводив приклади <span class="code">enum</span> -ів і не бачу сенсу дублювати код (наприклад, номер 72 про конструктор в enum).
+<h4>78. Чи можна використовувати Enum у switch case?</h4>Можна й треба! Оглядаючись на свою практику, зазначу, що одним із найчастіших місць застосування <span class="code">enum</span> є логічні конструкції типу <span class="code">switch</span> . У такому випадку ви можете передбачити всі можливі варіації <span class="code">case</span> , і після прописання логіки для всіх значень <span class="code">enum</span> -а використання оператора <span class="code">default</span> може навіть не знадобитися! Адже якщо ви використовуєте <span class="code">String</span> або числове значення, наприклад типу <span class="code">int</span> , вам може прийти не передбачене значення, що в свою чергу неможливо з використанням <span class="code">enum</span> -а. Як би виглядав <span class="code">switch</span> для розглянутого раніше прикладу: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">doSomething</span><span class="token punctuation">(</span><span class="token class-name">Role</span> role<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token keyword">switch</span> <span class="token punctuation">(</span>role<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">case</span> STUDENT<span class="token operator">:</span>
+           <span class="token comment">// некая логика для STUDENT</span>
+           <span class="token keyword">break</span><span class="token punctuation">;</span>
+       <span class="token keyword">case</span> TEACHER<span class="token operator">:</span>
+           <span class="token comment">// некая логика для TEACHER</span>
+           <span class="token keyword">break</span><span class="token punctuation">;</span>
+       <span class="token keyword">case</span> DIRECTOR<span class="token operator">:</span>
+           <span class="token comment">// некая логика для DIRECTOR</span>
+           <span class="token keyword">break</span><span class="token punctuation">;</span>
+       <span class="token keyword">case</span> SECURITY_GUARD<span class="token operator">:</span>
+           <span class="token comment">// некая логика для SECURITY_GUARD</span>
+           <span class="token keyword">break</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h4>79. Як отримати всі наявні значення в екземплярі Enum?</h4>Якщо потрібно отримати всі екземпляри перерахування, є метод <span class="code">values()</span> , який повертає масив усіх доступних значень певного <span class="code">enum</span> -а в природному порядку (у порядку завдання <span class="code">enum</span> ). Приклад: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">Role</span><span class="token punctuation">[</span><span class="token punctuation">]</span> roles <span class="token operator">=</span> <span class="token class-name">Role</span><span class="token punctuation">.</span><span class="token function">values</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">Role</span> role <span class="token operator">:</span> roles<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>role<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre> У консолі буде висновок: 
+<div class="terminal">
+ STUDENT TEACHER DIRECTOR SECURITY_GUARD
+</div>
+<h3>Stream API</h3>
+<h4>80. Що таке Stream в Java?</h4><span class="text-bold">Java Stream</span> - відносно новий спосіб взаємодії з потоком даних, який у свою чергу дозволяє зручніше і компактніше обробляти великі дані, а також розпаралелювати обробку даних між якоюсь кількістю потоків, що може дати приріст у продуктивності у функціоналі, що використовує. Більш глибоко цю тему двома словами не розповісти, тому я залишу <a href="https://codegym.cc/groups/posts/2203-stream-api" target="_blank">тут</a> посилання на статтю, яка вам може зануритися в цю тему.<img data-max-width="512" data-id="9d657924-451f-47f4-a7c4-a2faab285b38" alt="Розбір запитань та відповідей із співбесід на Java-розробника.  Частина 8 - 9" src="https://cdn.javarush.com/images/article/9d657924-451f-47f4-a7c4-a2faab285b38/512.jpeg" style="width: 512px;">
+<h4>81. Назвіть основні властивості транзакцій</h4>Тема називається — Stream API, але при цьому питання щодо транзакції. Хмм… Спершу давайте розберемося, що таке транзакція. <span class="text-bold">Транзакція</span> — це група послідовних операцій із базою даних, що є логічну одиницю роботи з даними. Транзакція може бути виконана або цілком і успішно, дотримуючись цілісності даних і незалежно від інших транзакцій, що паралельно йдуть, або не виконана взагалі, і тоді вона не має жодного ефекту. Отже, транзакції мають чотири основні властивості, які скорочено називають <span class="text-bold">ACID</span> . Давайте розберемо, як розшифровується кожна буква цього скорочення: <span class="text-bold">A - Atomicity - атомарність</span>— ця властивість гарантує, що жодна транзакція не буде зафіксована в системі частково. Будуть або виконані її підоперації, або виконано жодної ( <span class="text-bold">все або нічого</span> ). <span class="text-bold">С - Consistency - узгодженість</span> - властивість, що гарантує, що кожна успішна транзакція зафіксує лише допустимі результати. Тобто, це гарантія того, що при успішній транзакції будуть виконані всі правила, обмеження, які пред'являє система до конкретних даних, інакше транзакція не буде виконана і дані в системі повернуться до попереднього стану. <span class="text-bold">I - Isolation - ізольованість</span>— властивість, яка говорить про те, що під час виконання транзакції паралельні транзакції не повинні впливати на її результат. Ця властивість ресурсозатратна, тому зазвичай вона виконується частково, допускаючи певні рівні ізоляцій, які вирішують певні ізоляційні проблеми. Докладніше ми це обговоримо у наступному питанні. <img data-max-width="512" data-id="abf36b60-c5c3-401a-915d-303bf37d4a3e" alt="Розбір запитань та відповідей із співбесід на Java-розробника.  Частина 8 - 10" src="https://cdn.javarush.com/images/article/abf36b60-c5c3-401a-915d-303bf37d4a3e/512.jpeg" style="width: 512px;"><span class="text-bold">D – Durability – стійкість</span> – дана властивість гарантує, що якщо користувач отримав підтвердження від системи, що транзакція виконана, він може бути впевнений, що зроблені ним зміни не відміняться через будь-який збій. Тобто ви можете бути впевнені, що який-небудь збій операційної системи нічого не зробить з вашими даними, якщо ви вже отримали підтвердження успішного виконання вашої транзакції.
+<h4>82. Які рівні ізоляції транзакцій?</h4>Як я сказав раніше, забезпечення пункту ACID ізольованості – ресурсозатратний процес. Тому ця властивість виконується частково. Існують різні рівні ізольованості, і чим цей рівень вищий, тим це сильніший удар по продуктивності. Перед тим як перейти до рівнів ізоляцій транзакцій, нам потрібно розглянути різні <span class="text-bold">проблеми недостатньої ізольованості транзакцій</span> :
+<ul>
+ <li>
+  <p><span class="text-bold">фантомне читання</span> - при повторному виклику однієї і тієї ж вибірки (одного і того ж запиту) в рамках однієї транзакції отримані дані різняться, що відбувається через вставки даних іншою транзакцією;</p></li>
+ <li>
+  <p><span class="text-bold">неповторне читання</span> - при повторному виклику однієї і тієї ж вибірки (одного і того ж запиту) в рамках однієї транзакції отримані дані різняться, що відбувається через зміни (update) та видалення даних іншою транзакцією;</p></li>
+ <li>
+  <p><span class="text-bold">брудне читання</span> — процес читання даних, доданих чи змінених транзакцією, яка згодом підтвердиться (відкотиться), тобто. читання недійсних даних;</p></li>
+ <li>
+  <p><span class="text-bold">втрачене оновлення</span> - при одночасному зміні одних і тих же даних різними транзакціями втрачаються всі зміни, крім останнього (нагадує проблему "стан гонки" у багатопотоковому середовищі).</p></li>
+</ul>Рівні ізоляцій транзакцій таки характеризуються тим, від яких проблем ізольованості вони захищають. Розглянемо у вигляді таблиці рівні ізоляцій і те, від яких проблем вони захищають:
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Рівень ізоляції</th>
+    <th>Фантомне читання</th>
+    <th>Неповторне читання</th>
+    <th>Брудне читання</th>
+    <th>Втрачене оновлення</th>
+   </tr>
+   <tr>
+    <th>SERIALIZABLE</th>
+    <td>+</td>
+    <td>+</td>
+    <td>+</td>
+    <td>+</td>
+   </tr>
+   <tr>
+    <th>REPEATABLE READ</th>
+    <td>-</td>
+    <td>+</td>
+    <td>+</td>
+    <td>+</td>
+   </tr>
+   <tr>
+    <th>READ COMMITTED</th>
+    <td>-</td>
+    <td>-</td>
+    <td>+</td>
+    <td>+</td>
+   </tr>
+   <tr>
+    <th>READ UNCOMMITTED</th>
+    <td>-</td>
+    <td>-</td>
+    <td>-</td>
+    <td>+</td>
+   </tr>
+   <tr>
+    <th>NONE</th>
+    <td>-</td>
+    <td>-</td>
+    <td>-</td>
+    <td>-</td>
+   </tr>
+  </tbody>
+ </table>
+</div>І не забувайте зворотний бік медалі: чим більшим буде рівень ізоляції, тим довше відпрацьовуватимуть транзакції (при паралельному виконанні кількох транзакцій). Якщо виникло бажання глибше копнути цю тему, ось <a href="https://habr.com/ru/post/469415/" rel="nofollow" target="_blank">чудова стаття</a> , з якої можна розпочати.
+<h4>83. Яка різниця між Statement і PreparedStatement?</h4>І тут не дуже плавний перехід на особливості технології <span class="text-bold">JDBC</span> . Отже, спочатку давайте розберемося, що взагалі таке <span class="code">Statement</span> . Це об'єкт, який використовується для формування запитів SQL. У <span class="text-bold">JDBC</span> використовується три його види - <span class="code">Statement</span> , <span class="code">PreparedStatement</span> і <span class="code">CallableStatement</span> . <span class="code">CallableStatement</span> ми сьогодні розглядати не будемо: поговоримо про різницю між <span class="code">Statement</span> і <span class="code">PreparedStatement</span> .
+<ol>
+ <li>
+  <p><span class="code">Statement</span> використовується для виконання простих SQL запитів без вхідних параметрів, що динамічно вставляються. <span class="code">PrepareStatement</span> використовується з можливістю динамічної вставки вхідних параметрів.</p></li>
+ <li>
+  <p>Для завдання параметрів <span class="code">PreparedStatement</span> вхідні параметри в запиті прописуються як знаки питання, щоб замість них потім вставити деяке значення за допомогою різних сеттерів, таких як <span class="code">setDouble()</span> , <span class="code">setFloat()</span> , <span class="code">setInt()</span> , <span class="code">setTime()</span> …. У результаті ви не вставите в запит дані не типу.</p></li>
+ <li>
+  <p><span class="code">PreparedStatement</span> “перекомпільований” і використовує кешування, тому його виконання може відбуватися трохи швидше, ніж запит із об'єктів <span class="code">Statement</span> . Через війну SQL запити, які виконуються часто, з метою поліпшення продуктивності створюють як об'єктів <span class="code">PreparedStatement</span> .</p></li>
+ <li>
+  <p><span class="code">Statement</span> вразливий до SQL ін'єкцій, в той час як <span class="code">PreparedStatement</span> запобігає їм. Докладніше про усунення SQL ін'єкцій та інших best practices у безпеці Java читайте у <a href="https://codegym.cc/groups/posts/2713-bezopasnostjh-v-java-best-practices" target="_blank">цій статті</a> .</p></li>
+</ol>Якщо ви поклали початок у вивченні технології з'єднання Java програми з Базою даних - JDBC, раджу почати з <a href="https://codegym.cc/groups/posts/2172-jdbc-ili-s-chego-vsje-nachinaetsja" target="_blank">цієї статті</a> . Що ж, зараз ми сьогодні і зробимо зупинку.<img data-max-width="512" data-id="2425051e-6404-44ac-87bb-cce9ae85417c" alt="Розбір запитань та відповідей із співбесід на Java-розробника.  Частина 8 - 11" src="https://cdn.javarush.com/images/article/2425051e-6404-44ac-87bb-cce9ae85417c/512.jpeg" style="width: 512px;"><a href="https://codegym.cc/login/signup" target="_blank"><img id="click_banner1_articles" data-max-width="1080" data-id="5736eb4b-2b1c-4ab6-b4cc-b9e2d1cef628" alt="Розбір запитань та відповідей із співбесід на Java-розробника.  Частина 8 - 12" src="https://cdn.javarush.com/images/article/5736eb4b-2b1c-4ab6-b4cc-b9e2d1cef628/1080.jpeg" style="width: 1080px;"></a>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Інші матеріали серії:</th>
+   </tr>
+   <tr>
+    <td>
+     <ul>
+      <li><a href="https://codegym.cc/groups/posts/3243-razbor-voprosov-i-otvetov-na-sobesedovanii-chastjh-1" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 1</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3252-razbor-voprosov-i-otvetov-na-sobesedovanii-chastjh-2" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 2</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3273-razbor-voprosov-i-otvetov-s-sobesedovaniy-na-java-razrabotchika-chastjh-3" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 3</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3284-razbor-voprosov-i-otvetov-s-sobesedovaniy-na-java-razrabotchika-chastjh-4" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 4</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3296-razbor-voprosov-i-otvetov-s-sobesedovaniy-na-java-razrabotchika-chastjh-5" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 5</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3341-razbor-voprosov-i-otvetov-s-sobesedovaniy-na-java-razrabotchika-chastjh-6" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 6</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3386-razbor-voprosov-i-otvetov-s-sobesedovaniy-na-java-razrabotchika-chastjh-7" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 7</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3434-razbor-voprosov-i-otvetov-s-sobesedovaniy-na-java-razrabotchika-chastjh-9" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 9</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3452-razbor-voprosov-i-otvetov-s-sobesedovaniy-na-java-razrabotchika-chastjh-10" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 10</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3464-razbor-voprosov-i-otvetov-s-sobesedovaniy-na-java-razrabotchika-chastjh-11" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 11</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3475-razbor-voprosov-i-otvetov-s-sobesedovaniy-na-java-razrabotchika-chastjh-12" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 12</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3507-razbor-voprosov-i-otvetov-s-sobesedovaniy-na-java-razrabotchika-chastjh-13" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 13</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3558-razbor-voprosov-i-otvetov-s-sobesedovaniy-na-java-razrabotchika-chastjh-14" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 14</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3592-razbor-voprosov-i-otvetov-s-sobesedovaniy-na-java-razrabotchika-chastjh-15" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 15</a></li>
+      <li><a href="https://codegym.cc/groups/posts/3621-razbor-voprosov-i-otvetov-s-sobesedovaniy-na-java-razrabotchika-chastjh-16" target="_blank">Розбір запитань та відповідей із співбесід на Java-розробника. Частина 16</a></li>
+     </ul></td>
+   </tr>
+  </tbody>
+ </table>
+</div>

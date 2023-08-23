@@ -1,0 +1,199 @@
+Метод split у Java: ділимо рядок на частини
+<p>----------------------------------------</p>
+Давай поговоримо про метод : що він робить і навіщо потрібний. Неважко здогадатися, що він ділить рядок, але як це працює на практиці? Давай докладно розглянемо роботу методу та обговоримо деякі неочевидні деталі, а заразом дізнаємося, скіл
+<p>----------------------------------------</p>
+Давай поговоримо про метод <span class="code">String split</span> : що він робить і навіщо потрібний. Неважко здогадатися, що він ділить рядок, але як це працює на практиці? Давай докладно розглянемо роботу методу та обговоримо деякі неочевидні деталі, а заразом дізнаємося, скільки методів <span class="code">split</span> є в класі <span class="code">String</span> насправді. Погнали!
+<h2>Визначення та сигнатура для Java String.split</h2>Метод <span class="code">split</span> Java розділяє рядок на підрядки, використовуючи роздільник, який визначається за допомогою регулярного виразу. Наведемо сигнатуру методу та почнемо наше занурення: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token function">split</span><span class="token punctuation">(</span><span class="token class-name">String</span> regex<span class="token punctuation">)</span></code></pre> З сигнатури зрозумілі дві речі:
+<ol>
+ <li>Метод повертає масив рядків.</li>
+ <li>Метод приймає рядок <span class="code">regex</span> як параметр.</li>
+</ol>Розберемо кожну річ окремо у розрізі визначення, наведеного вище.
+<ol>
+ <li>Метод повертає масив рядків. 
+  <p>У визначенні є такі слова: "Метод <span class="code">split</span> Java розділяє рядок на підрядки". Дані підрядки збираються методом масив і є його повертається значення.</p></li>
+ <li>Метод приймає рядок <span class="code">regex</span> як параметр. 
+  <p>Знову ж таки, згадаємо визначення: "поділяє рядок на підрядки, використовуючи роздільник, який визначається за допомогою регулярного виразу". <span class="code">Regex,</span> що приймається, - це шаблон регулярного виразу, який застосовується до вихідного рядка і за збігами визначає в ньому символ (або комбінацію символів) роздільника.</p></li>
+</ol><img data-max-width="800" data-id="662c7118-10cf-489c-ab44-2d93a8db1076" alt="Метод split у Java: ділимо рядок на частини - 1" src="https://cdn.javarush.com/images/article/662c7118-10cf-489c-ab44-2d93a8db1076/800.jpeg" style="width: 800px;">
+<h2>Split на практиці</h2>Тепер ближчий до справи. Припустимо, що у нас є рядок зі словами. Наприклад, така: 
+<div class="terminal">
+ I love Java
+</div> Нам потрібно розбити рядок на слова. Ми бачимо, що в даному рядку слова розділені один від одного пробілами. Пробіл - ідеальний кандидат на роль роздільника в даному випадку. Так виглядає код розв'язання цієї задачі: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Main</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">String</span> str <span class="token operator">=</span> <span class="token string">"I love Java"</span><span class="token punctuation">;</span>
+        <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> words <span class="token operator">=</span> str<span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">String</span> word <span class="token operator">:</span> words<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>word<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Виведенням методу <span class="code">main</span> будуть наступні рядки: 
+<div class="terminal">
+ I love Java
+</div> Подивимося ще кілька прикладів того, як би відпрацював метод <span class="code">split</span> :
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>Рядок</td>
+    <td>Розділювач</td>
+    <td>Результат роботи методу</td>
+   </tr>
+   <tr>
+    <td><span class="text-green"><span class="text-bold">"I love Java"</span></span></td>
+    <td><span class="text-green"><span class="text-bold">" "</span></span> (символ пропуску)</td>
+    <td>{ <span class="text-green"><span class="text-bold">"I"</span></span> , <span class="text-green"><span class="text-bold">"love"</span></span> , <span class="text-green"><span class="text-bold">"Java"</span></span> }</td>
+   </tr>
+   <tr>
+    <td><span class="text-green"><span class="text-bold">"192.168.0.1:8080"</span></span></td>
+    <td><span class="text-green"><span class="text-bold">":"</span></span></td>
+    <td>{ <span class="text-green"><span class="text-bold">"192.168.0.1"</span></span> , <span class="text-green"><span class="text-bold">"8080"</span></span> }</td>
+   </tr>
+   <tr>
+    <td><span class="text-green"><span class="text-bold">"Червоний, помаранчевий, жовтий"</span></span></td>
+    <td><span class="text-green"><span class="text-bold">","</span></span></td>
+    <td>{ <span class="text-green"><span class="text-bold">"Червоний"</span></span> , <span class="text-green"><span class="text-bold">"помаранчевий"</span></span> , <span class="text-green"><span class="text-bold">"жовтий"</span></span> }</td>
+   </tr>
+   <tr>
+    <td><span class="text-green"><span class="text-bold">"Червоний, помаранчевий, жовтий"</span></span></td>
+    <td><span class="text-green"><span class="text-bold">","</span></span></td>
+    <td>{ <span class="text-green"><span class="text-bold">"Червоний"</span></span> , <span class="text-green"><span class="text-bold">"помаранчевий"</span></span> , <span class="text-green"><span class="text-bold">"жовтий"</span></span> }</td>
+   </tr>
+  </tbody>
+ </table>
+</div>Зверніть увагу на різницю між останніми двома рядками в таблиці вище. У передостанньому рядку роздільником виступає символ комою, тому рядок розбився в такий спосіб, що у деяких словах є провідні прогалини. В останньому рядку як роздільник ми використовували символ коми і символ пробілу. Тому в результуючому масиві не було рядків з провідними пробілами. Це просто маленька деталь, де демонструється, як важливо уважно підбирати правильний роздільник.
+<h2>Провідний роздільник</h2>Є ще один важливий аспект. Якщо вихідний рядок починається з роздільника, першим елементом результуючого масиву буде порожній рядок. На прикладі це буде виглядати так: Вихідний рядок: <span class="text-green"><span class="text-bold">" I love Java"</span></span> Розділювач: <span class="text-green"><span class="text-bold">" "</span></span> Результуючий масив: { <span class="text-green"><span class="text-bold">""</span></span> , <span class="text-green"><span class="text-bold">"I"</span></span> , <span class="text-green"><span class="text-bold">"love"</span></span> , <span class="text-green"><span class="text-bold">"Java"</span></span> } Але якщо вихідний рядок закінчується роздільником, а не починається, результат буде іншим: Вихідний рядок: <span class="text-green"><span class="text-bold">"I love Java"</span></span> Розділювач: <span class="text-green"><span class="text-bold">""</span></span> Результуючий масив: { <span class="text-green"><span class="text-bold">"I"</span></span> , <span class="text-green"><span class="text-bold">"love"</span></span> , <span class="text-green"><span class="text-bold">"Java"</span></span><span class="code"></span>із символом роздільника в кінці та/або початку вихідного рядка: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Main</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"I love Java"</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">print</span><span class="token punctuation">(</span><span class="token string">" I love Java"</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"I love Java "</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">print</span><span class="token punctuation">(</span><span class="token string">" I love Java "</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> arr<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span>arr<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Висновок методу <span class="code">main</span> буде таким: 
+<div class="terminal">
+ [I, love, Java] [, I, love, Java] [I, love, Java] [, I, love, Java]
+</div> Ще раз зверніть увагу: коли у вихідному рядку перший символ – це символ роздільника, у результаті в масиві першим елементом буде порожній рядок.
+<h2>Перевантажений побратим</h2>У класі <span class="code">String</span> є ще один метод <span class="code">split</span> із такою сигнатурою: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token function">split</span><span class="token punctuation">(</span><span class="token class-name">String</span> regex<span class="token punctuation">,</span> <span class="token keyword">int</span> limit<span class="token punctuation">)</span></code></pre> Цей метод має додатковий параметр <span class="code">limit</span> : він визначає, скільки разів шаблон <span class="code">regex</span> буде застосовуватися до вихідного рядка. Нижче пояснення:
+<h3>limit &gt; 0</h3>Застосовується <span class="code">ліміт</span> -1 раз. При цьому довжина масиву не перевищуватиме значення <span class="code">limit</span> . Останнім елементом масиву буде частина рядка, наступна за останнім знайденим роздільником. Приклад: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Main</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"I love Java"</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"I love Java"</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">/*
+         Висновок:
+         [I love Java]
+         [I, love Java]
+        */</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> arr<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span>arr<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h3>limit &lt; 0</h3>Шаблон для пошуку роздільника застосовується до рядка стільки разів, скільки можливо. Довжина підсумкового масиву може бути будь-якою. Приклад: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Main</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// Зверніть увагу на прогалину в кінці рядка</span>
+        <span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"I love Java "</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"I love Java "</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"I love Java "</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">12</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">/*
+         Висновок:
+        [I, love, Java, ]
+        [I, love, Java, ]
+        [I, love, Java, ]
+
+        Зверніть увагу: останній елемент масиву -
+        порожній рядок, що виник через прогалину
+        в кінці вихідного рядка.
+        */</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> arr<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span>arr<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h3>limit 0</h3>Як і у випадку з <span class="code">&lt;</span> 0, шаблон для пошуку роздільника застосовується до рядка стільки разів, скільки це можливо. Підсумковий масив може бути будь-якої довжини. Якщо останні елементи дорівнюють порожньому рядку, у підсумковому масиві вони будуть відкинуті. Приклад: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Main</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// Зверніть увагу на прогалину в кінці рядка</span>
+        <span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"I love Java "</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"I love Java "</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"I love Java "</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">/*
+         Висновок:
+        [I, love, Java]
+        [I, love, Java]
+        [I, love, Java]
+        Зверніть увагу на відсутність порожніх рядків наприкінці масивів
+        */</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> arr<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span>arr<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Якщо ми подивимося на реалізацію методу <span class="code">split</span> з одним аргументом, побачимо, що даний метод викликає свого перевантаженого побратима з другим аргументом, що дорівнює нулю: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token function">split</span><span class="token punctuation">(</span><span class="token class-name">String</span> regex<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token function">split</span><span class="token punctuation">(</span>regex<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h4>Різні приклади</h4>У робочій практиці іноді буває так, що ми маємо рядок, складений за певними правилами. Цей рядок може "приходити" в нашу програму звідки завгодно:
+<ul>
+ <li>із стороннього сервісу;</li>
+ <li>із запиту до нашого сервера;</li>
+ <li>із конфігураційного файлу;</li>
+ <li>і т.д.</li>
+</ul>Зазвичай, у такій ситуації програмісту відомі "правила гри". Скажімо, програміст знає, що має інформацію про користувача, яка зберігається за таким шаблоном: 
+<div class="terminal">
+ user_id|user_login|user_email
+</div> Наприклад візьмемо конкретні значення: 
+<div class="terminal">
+ 135|bender|bender@gmail.com
+</div> І ось перед програмістом стоїть завдання: написати метод, який надсилає електронний лист користувачеві. У його розпорядженні - інформація про користувача, записана у зазначеному вище форматі. Ну а підзавдання, яке ми продовжимо розбирати - вичленувати email-адресау із загальної інформації про користувача. Це один із прикладів, коли метод <span class="code">split</span> може виявитися корисним. Адже якщо ми поглянемо на шаблон, ми зрозуміємо: щоб вичленувати email-адресау користувача з усієї інформації, нам потрібно лише розділити рядок за допомогою методу <span class="code">split</span>. Тоді email-адресаа лежатиме в останньому елементі результуючого масиву. Наведемо приклад такого методу, який приймає рядок, що містить інформацію про користувача, і повертає email користувача. Для спрощення припустимо, що цей рядок завжди відповідає потрібному нам формату: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Main</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">String</span> userInfo <span class="token operator">=</span> <span class="token string">"135|bender|bender@gmail.com"</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token function">getUserEmail</span><span class="token punctuation">(</span>userInfo<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// Висновок: bender@gmail.com</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">static</span> <span class="token class-name">String</span> <span class="token function">getUserEmail</span><span class="token punctuation">(</span><span class="token class-name">String</span> userInfo<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> data <span class="token operator">=</span> userInfo<span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">"\\|"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> data<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">// або data[data.length - 1]</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Зверніть увагу на роздільник: <span class="text-green"><span class="text-bold">"\\" </span></span>. Так як у регулярних виразах "|" - це спеціальний символ, на якому пов'язана певна логіка, щоб використовувати його як звичайний (той, який ми хочемо знайти у вихідному рядку), потрібно екранувати цей символ за допомогою двох зворотних слішів. Розглянемо інший приклад. Допустимо, у нас є інформація про замовлення, яка записана приблизно в такому форматі: 
+<div class="terminal">
+ item_number_1,item_name_1,item_price_1;item_number_2,item_name_2,item_price_2;...;item_number_n,item_name_n,item_price_n
+</div> Ну чи візьмемо конкретні значення: 
+<div class="terminal">
+ 1,огірки,20.05;2,помідори,123.45;3,зайці,0.50
+</div> Перед нами постає завдання: розрахувати підсумкову вартість замовлення. Тут нам доведеться використовувати метод <span class="code">split</span> кілька разів. Першим кроком ми розділимо рядок через символ ";", на складові. Тоді в кожній такій частині ми матимемо інформацію про окремий товар, яку ми зможемо обробити надалі. А потім, у рамках кожного товару будемо розділяти інформацію за допомогою символу "," і брати з результуючого масиву елемент з певним індексом (у якому зберігається ціна), наводити її до числового вигляду та складати підсумкову вартість замовлення. Напишемо метод, який все це вважатиме: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Main</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">String</span> orderInfo <span class="token operator">=</span> <span class="token string">"1,огірки,20.05;2,помідори,123.45;3,зайці,0.50"</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token function">getTotalOrderAmount</span><span class="token punctuation">(</span>orderInfo<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// Висновок: 144.0</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">double</span> <span class="token function">getTotalOrderAmount</span><span class="token punctuation">(</span><span class="token class-name">String</span> orderInfo<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">double</span> totalAmount <span class="token operator">=</span> <span class="token number">0d</span><span class="token punctuation">;</span>
+        <span class="token keyword">final</span> <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> items <span class="token operator">=</span> orderInfo<span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">";"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">String</span> item <span class="token operator">:</span> items<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">final</span> <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> itemInfo <span class="token operator">=</span> item<span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">","</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            totalAmount <span class="token operator">+=</span> <span class="token class-name">Double</span><span class="token punctuation">.</span><span class="token function">parseDouble</span><span class="token punctuation">(</span>itemInfo<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">return</span> totalAmount<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Спробуй самостійно розібратися з тим, як працює цей метод. На основі даних прикладів можна сказати, що метод <span class="code">split</span> використовується тоді, коли ми маємо деяку інформацію в рядковому вигляді, з якої нам необхідно вичленувати якусь більш специфічну інформацію. <a href="https://codegym.cc/welcome" target="_blank"><img id="click_banner2_3_articles" data-max-width="1080" data-id="275debd9-d675-4a20-b568-e46da674d46f" alt="Метод split у Java: ділимо рядок на частини - 2" src="https://cdn.javarush.com/images/article/275debd9-d675-4a20-b568-e46da674d46f/1080.jpeg" style="width: 1080px;"></a>
+<h2>Підсумки</h2>Ми розглянули з тобою метод <span class="code">split</span> класу <span class="code">String</span> . Він потрібний для поділу рядка на складові за допомогою спеціального роздільника. Метод повертає масив рядків (складові частини рядка). Приймає регулярне вираз, за ​​яким знаходить символ(и) роздільника. Ми розглянули різні тонкощі роботи цього методу:
+<ul>
+ <li>провідний символ роздільника;</li>
+ <li>перевантажений побратим із двома аргументами.</li>
+</ul>Також спробували змоделювати деякі ситуації "з життя", в яких використовували метод<span class="code"> split</span> для вирішення нехай і вигаданих, але цілком реалістичних проблем.

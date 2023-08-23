@@ -1,0 +1,317 @@
+Додаємо клієнта до статей - "Java-проект від А до Я"
+<p>----------------------------------------</p>
+Всім привіт, дорогі друзі. Крок за кроком ми ближче до нашої мети — до виходу в MVP нашого проекту — JavaRush Telegram Bot. Як я вже говорив у минулій статті, залишилося лише 5 завдань. Сьогодні ми покриємо дві із них. Хочу повторити, що пр
+<p>----------------------------------------</p>
+Всім привіт, дорогі друзі. Крок за кроком ми ближче до нашої мети — до виходу в MVP нашого проекту — CodeGym Telegram Bot. Як я вже говорив у минулій статті, залишилося лише 5 завдань. Сьогодні ми покриємо дві із них. <img data-max-width="800" data-id="21512a00-39ce-4aba-9eec-cd668dd8509f" alt="&quot;Java-проект від А до Я&quot;: Додаємо клієнта до статей - 1" src="https://cdn.javarush.com/images/article/21512a00-39ce-4aba-9eec-cd668dd8509f/800.jpeg" style="width: 800px;">Хочу повторити, що проект на цьому не скінчиться. У мене є ще темрява ідей та видінь того, як має розвиватися цей проект, що в ньому можна додати нове, що зробити краще. Перед MVP зробимо ще окрему статтю на тему рефакторингу – тобто про покращення якості коду без зміни його функціональності. До того моменту буде видно весь проект і буде зрозуміло, що і де можна поліпшити. У нашому випадку ми будемо максимально захищені від того, щоби не зламати функціонал, тому що написано багато тестів. Також напишемо ретроспективу на тему того, що ми хотіли та що отримали у результаті. Це дуже корисна річ: подивимося, наскільки правильно бачився весь півроку тому. Мені, принаймні, дуже це цікаво. Якщо у когось буде бажання спробувати себе у ролі мануального тестувальника – пишіть, співпрацюємо. Зробимо цей проект краще разом! Отже, ось вони: два завдання, описані ще півроку тому:<a href="https://github.com/codegymcommunity/codegym-telegrambot/issues/8" rel="nofollow" target="_blank">JRTB-8</a> та <a href="https://github.com/codegymcommunity/codegym-telegrambot/issues/9" rel="nofollow" target="_blank">JRTB-9</a> . Почав я дивитися, що потрібно реалізувати за цими завданнями, і зрозумів, що у плані запуску команд уже все готове. Ось, можна подивитися в <span class="code">StartCommand</span> , метод <span class="code">execute</span> : 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@Override</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">execute</span><span class="token punctuation">(</span><span class="token class-name">Update</span> update<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token class-name">String</span> chatId <span class="token operator">=</span> update<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getChatId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+   telegramUserService<span class="token punctuation">.</span><span class="token function">findByChatId</span><span class="token punctuation">(</span>chatId<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">ifPresentOrElse</span><span class="token punctuation">(</span>
+           user <span class="token operator">-&gt;</span> <span class="token punctuation">{</span>
+               user<span class="token punctuation">.</span><span class="token function">setActive</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+               telegramUserService<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>user<span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token punctuation">}</span><span class="token punctuation">,</span>
+           <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-&gt;</span> <span class="token punctuation">{</span>
+               <span class="token class-name">TelegramUser</span> telegramUser <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TelegramUser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+               telegramUser<span class="token punctuation">.</span><span class="token function">setActive</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+               telegramUser<span class="token punctuation">.</span><span class="token function">setChatId</span><span class="token punctuation">(</span>chatId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+               telegramUserService<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>telegramUser<span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+   sendBotMessageService<span class="token punctuation">.</span><span class="token function">sendMessage</span><span class="token punctuation">(</span>chatId<span class="token punctuation">,</span> START_MESSAGE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre> Тут працює логіка, якщо в нашій базі вже є такий користувач по chatId, ми йому просто ставимо поле active = true. А якщо немає такого користувача – створюємо нового. Так само і для команди <span class="text-bold">/ stop</span> у <span class="code">StopCommand</span> : 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@Override</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">execute</span><span class="token punctuation">(</span><span class="token class-name">Update</span> update<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   telegramUserService<span class="token punctuation">.</span><span class="token function">findByChatId</span><span class="token punctuation">(</span>update<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getChatId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+           <span class="token punctuation">.</span><span class="token function">ifPresent</span><span class="token punctuation">(</span>it <span class="token operator">-&gt;</span> <span class="token punctuation">{</span>
+               it<span class="token punctuation">.</span><span class="token function">setActive</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+               telegramUserService<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>it<span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   sendBotMessageService<span class="token punctuation">.</span><span class="token function">sendMessage</span><span class="token punctuation">(</span>update<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getChatId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> STOP_MESSAGE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre> Видно, що під час виклику цієї команди для користувача ставлять лише поле active = false. І все: його підписки житимуть і чекатимуть свого часу, коли користувач знову вирішить активувати чат з ботом. І здавалося б, завдання вже зроблено і його можна закрити. Але не тут було. Найголовніше завдання — створити оповіщення про нові статті у передплаті. Ось саме там і буде повністю оновлено та зроблено ці завдання. Тобто поки ми не реалізували сповіщення про нові статті, не можна закрити. Тому займемося завданням JRTB-4 — створенням перевірки кожні 20 хвабон та оповіщення про нові статті. <em>Друзі! Хочете одразу дізнаватися, коли вийде новий код проекту? Коли виходить нова стаття? Приєднуйтесь до мого <a href="https://t.me/joinchat/SpqRPBFo_sM6qm05" rel="nofollow" target="_blank">каналу</a> . Там збираю свою статтю, свої думки, свою open-source розробку воєдино.</em>
+<h2>Реалізуємо JRTB-4</h2>Що нам потрібно зробити в рамках цього завдання:
+<ol>
+ <li>
+  <p>Створити джобу, яка буде періодично ходити до всіх груп, підписки на які є у нас БД, сортувати статті за датою публікації та перевіряти, чи збігається ID останньої публікації зі значенням у GroupSub. Якщо не збігається, то треба зрозуміти, скільки саме статей вийшло з останнього разу. Оновлюємо last_article_id у GroupSub7 до актуального стану.</p></li>
+ <li>
+  <p>Коли знайшли список статей, що вийшли, знаходимо всіх АКТИВНИХ користувачів для цих груп і пересилаємо їм повідомлення про нові статті.</p></li>
+</ol>Щоб це зробити, скористаємося такою річчю як Spring Scheduler. Це механізм у Spring Framework, з ним можна створювати завдання, які виконуватимуться у певний час. Чи то кожні 15-20-40 хвабон, чи щочетверга о 15:30 чи якийсь інший варіант. Їх ще називають калькою з англійської – джоба. Поки ми робитимемо це завдання, я навмисне залишаю один дефект у пошуку нових статей. Він досить рідкісний і виявився лише в ситуації, коли я тестував мануально роботу цього завдання. Щоб це зробити, потрібно написати клієнт з пошуку статей. Для цього скористаємося вже знайомим нам <a href="https://codegym.cc/swagger-ui.html#/" target="_blank">Swagger API</a> . Там є post-controller. Нас цікавить лише пошук колекції статей за певними фільтрами: 
+<div class="terminal">
+ /api/1.0/rest/posts Get posts by filters
+</div> Працюватимемо з цим запитом. Що нам у ньому потрібно? Отримати список статей, які належать до певної групи, при цьому вони мають бути відсортовані за датою публікації. Таким чином ми можемо взяти останні 15 статей і перевірити, чи не вийшли нові публікації, судячи з <span class="code">останньогоArticleId</span> з нашої бази даних. Якщо є, ми їх передамо далі для обробки та відправки вже користувачеві. Тому нам потрібно написати <span class="code">CodeGymPostClient</span> .
+<h2>Пишемо CodeGymPostClient</h2>Тут не намагатимемося охопити всі запити, які нам передали в API і створимо лише той, який нам потрібний. Роблячи це ми досягаємо відразу дві мети:
+<ol>
+ <li>
+  <p>Прискорюємо процес написання нашої програми.</p></li>
+ <li>
+  <p>Залишаємо таку роботу для тих, хто захоче допомогти нашій спільноті та вирішить спробувати себе у ролі розробника. Я зроблю для цього завдання, які можна буде виконати після MVP.</p></li>
+</ol>Тож на чому. Для запиту по секції <span class="text-bold">Models</span> у <span class="text-bold">Swagger UI</span> створимо наступні DTO:<img data-max-width="512" data-id="56f16689-26fc-4510-aa4a-c0a91d3c4224" alt="&quot;Java-проект від А до Я&quot;: Додаємо клієнта до статей - 2" src="https://cdn.javarush.com/images/article/56f16689-26fc-4510-aa4a-c0a91d3c4224/512.jpeg" style="width: 512px;">
+<h4>BaseUserInfo:</h4>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">lombok<span class="token punctuation">.</span></span><span class="token class-name">Data</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+* DTO, which represents base user information.
+*/</span>
+<span class="token annotation punctuation">@Data</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">BaseUserInfo</span> <span class="token punctuation">{</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> city<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> country<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> displayName<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">Integer</span> id<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> job<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> key<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">Integer</span> level<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> pictureUrl<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> position<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">UserPublicStatus</span> publicStatus<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> publicStatusMessage<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">Integer</span> rating<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">Integer</span> userId<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h4>Language:</h4>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+* DTO, which represents languages.
+*/</span>
+<span class="token keyword">public</span> <span class="token keyword">enum</span> <span class="token class-name">Language</span> <span class="token punctuation">{</span>
+   UNKNOWN<span class="token punctuation">,</span>
+   ENGLISH<span class="token punctuation">,</span>
+   GERMAN<span class="token punctuation">,</span>
+   SPANISH<span class="token punctuation">,</span>
+   HINDI<span class="token punctuation">,</span>
+   FRENCH<span class="token punctuation">,</span>
+   PORTUGUESE<span class="token punctuation">,</span>
+   POLISH<span class="token punctuation">,</span>
+   BENGALI<span class="token punctuation">,</span>
+   PUNJABI<span class="token punctuation">,</span>
+   CHINESE<span class="token punctuation">,</span>
+   ITALIAN<span class="token punctuation">,</span>
+   INDONESIAN<span class="token punctuation">,</span>
+   MARATHI<span class="token punctuation">,</span>
+   TAMIL<span class="token punctuation">,</span>
+   TELUGU<span class="token punctuation">,</span>
+   JAPANESE<span class="token punctuation">,</span>
+   KOREAN<span class="token punctuation">,</span>
+   URDU<span class="token punctuation">,</span>
+   TAIWANESE<span class="token punctuation">,</span>
+   NETHERLANDS<span class="token punctuation">,</span>
+   RUSSIAN<span class="token punctuation">,</span>
+   UKRAINIAN
+<span class="token punctuation">}</span></code></pre>
+<h4>LikesInfo:</h4>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+* DTO, which represents like's information.
+*/</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">LikesInfo</span> <span class="token punctuation">{</span>
+
+   <span class="token keyword">private</span> <span class="token class-name">Integer</span> count<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">LikeStatus</span> status<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h4>LikeStatus:</h4>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+* DTO, which represents like's status.
+*/</span>
+<span class="token keyword">public</span> <span class="token keyword">enum</span> <span class="token class-name">LikeStatus</span> <span class="token punctuation">{</span>
+
+   UNKNOWN<span class="token punctuation">,</span>
+   LIKE<span class="token punctuation">,</span>
+   HOT<span class="token punctuation">,</span>
+   FOLLOW<span class="token punctuation">,</span>
+   FAVORITE<span class="token punctuation">,</span>
+   SOLUTION<span class="token punctuation">,</span>
+   HELPFUL<span class="token punctuation">,</span>
+   ARTICLE<span class="token punctuation">,</span>
+   OSCAR<span class="token punctuation">,</span>
+   DISLIKE<span class="token punctuation">,</span>
+   WRONG<span class="token punctuation">,</span>
+   SPAM<span class="token punctuation">,</span>
+   ABUSE<span class="token punctuation">,</span>
+   FOUL<span class="token punctuation">,</span>
+   TROLLING<span class="token punctuation">,</span>
+   OFFTOPIC<span class="token punctuation">,</span>
+   DUPLICATE<span class="token punctuation">,</span>
+   DIRTY<span class="token punctuation">,</span>
+   OUTDATED<span class="token punctuation">,</span>
+   BORING<span class="token punctuation">,</span>
+   UNCLEAR<span class="token punctuation">,</span>
+   HARD<span class="token punctuation">,</span>
+   EASY<span class="token punctuation">,</span>
+   FAKE<span class="token punctuation">,</span>
+   SHAM<span class="token punctuation">,</span>
+   AWFUL
+<span class="token punctuation">}</span></code></pre>
+<h4>PostType:</h4>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+* DTO, which represents post types.
+*/</span>
+<span class="token keyword">public</span> <span class="token keyword">enum</span> <span class="token class-name">PostType</span> <span class="token punctuation">{</span>
+   UNKNOWN<span class="token punctuation">,</span> USUAL<span class="token punctuation">,</span> INNER_LINK<span class="token punctuation">,</span> OUTER_LINK
+<span class="token punctuation">}</span></code></pre>
+<h4>UserPublicStatus:</h4>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+* DTO, which represents user public status.
+*/</span>
+<span class="token keyword">public</span> <span class="token keyword">enum</span> <span class="token class-name">UserPublicStatus</span> <span class="token punctuation">{</span>
+   UNKNOWN<span class="token punctuation">,</span>
+   BEGINNER<span class="token punctuation">,</span>
+   ACTIVE<span class="token punctuation">,</span>
+   STRONG<span class="token punctuation">,</span>
+   GRADUATED<span class="token punctuation">,</span>
+   INTERNSHIP_IN_PROGRESS<span class="token punctuation">,</span>
+   INTERNSHIP_COMPLETED<span class="token punctuation">,</span>
+   RESUME_COMPLETED<span class="token punctuation">,</span>
+   LOOKING_FOR_JOB<span class="token punctuation">,</span>
+   HAVE_JOB<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token class-name">VisibilityStatus</span><span class="token operator">:</span>
+<span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+* DTO, which represents visibility status.
+*/</span>
+<span class="token keyword">public</span> <span class="token keyword">enum</span> <span class="token class-name">VisibilityStatus</span> <span class="token punctuation">{</span>
+   UNKNOWN<span class="token punctuation">,</span>
+   RESTRICTED<span class="token punctuation">,</span>
+   PUBLIC<span class="token punctuation">,</span>
+   PROTECTED<span class="token punctuation">,</span>
+   PRIVATE<span class="token punctuation">,</span>
+   DISABLED<span class="token punctuation">,</span>
+   DELETED
+<span class="token punctuation">}</span></code></pre> На основі всіх цих DTO напишемо основний клас для отримання статей:
+<h4>PostInfo:</h4>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">lombok<span class="token punctuation">.</span></span><span class="token class-name">Data</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+* DTO, which represents post information.
+*/</span>
+<span class="token annotation punctuation">@Data</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PostInfo</span> <span class="token punctuation">{</span>
+
+   <span class="token keyword">private</span> <span class="token class-name">BaseUserInfo</span> authorInfo<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">Integer</span> commentsCount<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> content<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">Long</span> createdTime<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> description<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">GroupInfo</span> groupInfo<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">Integer</span> id<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> key<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">Language</span> language<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">LikesInfo</span> likesInfo<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">GroupInfo</span> originalGroupInfo<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> pictureUrl<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">Double</span> rating<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">Integer</span> ratingCount<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">String</span> title<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">PostType</span> type<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">Long</span> updatedTime<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">UserDiscussionInfo</span> userDiscussionInfo<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">Integer</span> views<span class="token punctuation">;</span>
+   <span class="token keyword">private</span> <span class="token class-name">VisibilityStatus</span> visibilityStatus<span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span></code></pre> Тепер створимо інтерфейс для роботи та його реалізацію. Нам потрібен лише один метод для роботи зі статтями:
+<h4>CodeGymPostClient:</h4>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto<span class="token punctuation">.</span></span><span class="token class-name">PostInfo</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">List</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+* Client for Javarush Open API corresponds to Posts.
+*/</span>
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">CodeGymPostClient</span> <span class="token punctuation">{</span>
+
+   <span class="token comment">/**
+    * Find new posts since lastPostId in provided group.
+    *
+    * @param groupId provided group ID.
+    * @param lastPostId provided last post ID.
+    * @return the collection of the new {@link PostInfo}.
+    */</span>
+   <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">PostInfo</span><span class="token punctuation">&gt;</span></span> <span class="token function">findNewPosts</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> groupId<span class="token punctuation">,</span> <span class="token class-name">Integer</span> lastPostId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre><span class="code">findNewPosts</span> приймає два аргументи: ID групи та останній ID статті, яку бот вже надсилав. Тому передадуться всі ті статті, які вийшли пізніше за статтю з <span class="text-bold">lastPostId</span> . І його реалізація: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto<span class="token punctuation">.</span></span><span class="token class-name">PostInfo</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">kong<span class="token punctuation">.</span>unirest<span class="token punctuation">.</span></span><span class="token class-name">GenericType</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">kong<span class="token punctuation">.</span>unirest<span class="token punctuation">.</span></span><span class="token class-name">Unirest</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>beans<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">Value</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>stereotype<span class="token punctuation">.</span></span><span class="token class-name">Component</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">ArrayList</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">List</span><span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CodeGymPostClientImpl</span> <span class="token keyword">implements</span> <span class="token class-name">CodeGymPostClient</span> <span class="token punctuation">{</span>
+
+   <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">String</span> codegymApiPostPath<span class="token punctuation">;</span>
+
+   <span class="token keyword">public</span> <span class="token class-name">CodeGymPostClientImpl</span><span class="token punctuation">(</span><span class="token annotation punctuation">@Value</span><span class="token punctuation">(</span><span class="token string">"${codegym.api.path}"</span><span class="token punctuation">)</span> <span class="token class-name">String</span> codegymApi<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">this</span><span class="token punctuation">.</span>codegymApiPostPath <span class="token operator">=</span> codegymApi <span class="token operator">+</span> <span class="token string">"/posts"</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token annotation punctuation">@Override</span>
+   <span class="token keyword">public</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">PostInfo</span><span class="token punctuation">&gt;</span></span> <span class="token function">findNewPosts</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> groupId<span class="token punctuation">,</span> <span class="token class-name">Integer</span> lastPostId<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">PostInfo</span><span class="token punctuation">&gt;</span></span> lastPostsByGroup <span class="token operator">=</span> <span class="token class-name">Unirest</span><span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>codegymApiPostPath<span class="token punctuation">)</span>
+               <span class="token punctuation">.</span><span class="token function">queryString</span><span class="token punctuation">(</span><span class="token string">"order"</span><span class="token punctuation">,</span> <span class="token string">"NEW"</span><span class="token punctuation">)</span>
+               <span class="token punctuation">.</span><span class="token function">queryString</span><span class="token punctuation">(</span><span class="token string">"groupKid"</span><span class="token punctuation">,</span> groupId<span class="token punctuation">)</span>
+               <span class="token punctuation">.</span><span class="token function">queryString</span><span class="token punctuation">(</span><span class="token string">"limit"</span><span class="token punctuation">,</span> <span class="token number">15</span><span class="token punctuation">)</span>
+               <span class="token punctuation">.</span><span class="token function">asObject</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">GenericType</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">List</span><span class="token punctuation">&lt;</span><span class="token class-name">PostInfo</span><span class="token punctuation">&gt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+               <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getBody</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">PostInfo</span><span class="token punctuation">&gt;</span></span> newPosts <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">PostInfo</span> post <span class="token operator">:</span> lastPostsByGroup<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+           <span class="token keyword">if</span> <span class="token punctuation">(</span>lastPostId<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>post<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+               <span class="token keyword">return</span> newPosts<span class="token punctuation">;</span>
+           <span class="token punctuation">}</span>
+           newPosts<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>post<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+       <span class="token keyword">return</span> newPosts<span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> У запиті додаємо кілька фільтрів:
+<ul>
+ <li>order = NEW - щоб у списку були спочатку нові;</li>
+ <li>groupKid = groupId - пошук тільки за певними групами;</li>
+ <li>limit = 15 – обмежуємо кількість статей на запит. У нас періодичність 15-20 хвабон і ми очікуємо, що за цей час не буде написано більше, ніж 15(!).</li>
+</ul>Далі, коли ми знайшли статті, пробігаємо за списком та шукаємо нові. Алгоритм простий та наочний. Якщо є бажання його покращити – пишіть). Напишемо простий тест для цього клієнта: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span>dto<span class="token punctuation">.</span></span><span class="token class-name">PostInfo</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>junit<span class="token punctuation">.</span>jupiter<span class="token punctuation">.</span>api<span class="token punctuation">.</span></span><span class="token class-name">Assertions</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>junit<span class="token punctuation">.</span>jupiter<span class="token punctuation">.</span>api<span class="token punctuation">.</span></span><span class="token class-name">DisplayName</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>junit<span class="token punctuation">.</span>jupiter<span class="token punctuation">.</span>api<span class="token punctuation">.</span></span><span class="token class-name">Test</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">List</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token keyword">static</span> <span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>codegymcommunity<span class="token punctuation">.</span>jrtb<span class="token punctuation">.</span>codegymclient<span class="token punctuation">.</span></span><span class="token class-name">CodeGymGroupClientTest</span><span class="token punctuation">.</span>CODEGYM_API_PATH<span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@DisplayName</span><span class="token punctuation">(</span><span class="token string">"Integration-level testing for CodeGymPostClient"</span><span class="token punctuation">)</span>
+<span class="token keyword">class</span> <span class="token class-name">CodeGymPostClientTest</span> <span class="token punctuation">{</span>
+
+   <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">CodeGymPostClient</span> postClient <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">CodeGymPostClientImpl</span><span class="token punctuation">(</span>CODEGYM_API_PATH<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+   <span class="token annotation punctuation">@Test</span>
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">shouldProperlyGetNew15Posts</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token comment">//when</span>
+       <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">PostInfo</span><span class="token punctuation">&gt;</span></span> newPosts <span class="token operator">=</span> postClient<span class="token punctuation">.</span><span class="token function">findNewPosts</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">,</span> <span class="token number">2935</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+       <span class="token comment">//then</span>
+       <span class="token class-name">Assertions</span><span class="token punctuation">.</span><span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token number">15</span><span class="token punctuation">,</span> newPosts<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Це дуже простий тест, який перевіряє, чи взагалі є зв'язок з клієнтом чи ні. Він знаходить 15 нових статей у групі Java-проекти, тому що я йому передаю ID першої у цій групі статті, а їх уже більше 15… Їх уже 22! Я навіть не думав, що їх буде багато. Як я швидко це дізнався? Думаєте, пішов рахувати їх? Не-а) Я скористався свагером і подивився кількість статей з певної групи. До речі, так можна подивитися і в інших... А скільки всього статей у групі RANDOM?... зараз скажу: їх 1062! Серйозна кількість.
+<h2>Закінчення першої частини</h2>Тут ми додали роботу із клієнтом за статтями. Все вже робабо, цього разу, я думаю, все має пройти просто та швидко. У <a href="https://codegym.cc/groups/posts/3356-java-proekt-ot-a-do-ja-dobavljaem-spring-scheduler" target="_blank">наступній статті</a> будемо додавати Spring Scheduler і писати <span class="code">FindNewArticleService</span> . <em>Ну і як звичайно <s>лайк - передплата - дзвіночок</s> , став зірку <a href="https://github.com/codegymcommunity/codegym-telegrambot" rel="nofollow" target="_blank">нашому проекту</a> , пиши коментарі та оцінюй статтю! </em> Дякую всім за прочитання — до зустрічі!<a href="https://codegym.cc/login/signup" target="_blank"><img id="click_banner1_articles" data-max-width="1080" data-id="5736eb4b-2b1c-4ab6-b4cc-b9e2d1cef628" alt="&quot;Java-проект від А до Я&quot;: Додаємо клієнта до статей - 3" src="https://cdn.javarush.com/images/article/5736eb4b-2b1c-4ab6-b4cc-b9e2d1cef628/1080.jpeg" style="width: 1080px;"></a>
+<h4><a href="https://codegym.cc/groups/posts/2935-java-proekt-ot-a-do-ja-pishem-realjhnihy-proekt-dlja-portfolio#articles" target="_blank">Список всіх матеріалів серії на початку цієї статті.</a></h4>

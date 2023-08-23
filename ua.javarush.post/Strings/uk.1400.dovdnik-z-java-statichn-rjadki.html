@@ -1,0 +1,47 @@
+Довідник з java. Статичні рядки
+<p>----------------------------------------</p>
+Рядки в Джава описуються класом String і є статичними, тобто. у існуючому рядку не можна змінити символи та їх кількість. Крім стандартного створення оператором new, рядки можуть бути створені безпосередньо з рядкової літерали. При цьому, з
+<p>----------------------------------------</p>
+Рядки в Джава описуються класом String і є статичними, тобто. у існуючому рядку не можна змінити символи та їх кількість. Крім стандартного створення оператором new, рядки можуть бути створені безпосередньо з рядкової літерали. При цьому, з метою оптимізації, створені об'єкти таким чином додатково зберігаються в окремій області - рядковий пул. <code class=" language-none">String s1 = "d" // строка будет сохранена в пуле // строка не будет сохранена в пуле // будет уничтожена сборщиком мусора String s2 = new String("a");</code> Один із плюсів поділу рядків на статичні та динамічні - підвищення безпеки там, де рядки використовуються як аргументи (наприклад, відкриття баз даних, інтернет з'єднань, механізм завантаження класів). 
+<h4>операція +</h4> Для рядків доступна операція +, що дозволяє з'єднати кілька рядків до одного. Якщо один з операндів не рядок, він автоматично перетворюється на рядок. Для об'єктів з цією метою використовується метод toString. При кожній операції внутрішньо використовується об'єкт динамічного рядка StringBuilder або StringBuffer. Тому для збирання рядка з кількох однаково оптимальніше використовувати відразу один StringBuilder/StringBuffer. 
+<h4>виділення підрядка</h4> Є зауваження щодо методу substring - рядок, що повертається, використовує той же байтовий масив, що і вихідний. Наприклад, ви завантажабо рядок А з файлу 1мб. Щось там знайшли і виділабо в окремий рядок Б завдовжки 3 символи. Рядок Б насправді теж займає ті ж 1мб. <code class=" language-none">String s ="very .... long string from file"; // совместно использует ту же память что и s String sub1 = s.substring(2,4); // этот об'єкт использует отдельный массив на 4 символа String sub2 = new String(s.substring(2,4));</code>
+<h4>основні методи</h4>
+<ul>
+ <li><strong>compareTo</strong> (String anotherString) – лексиграфічне порівняння рядків;</li>
+ <li><strong>compareToIgnoreCase</strong> (String str) - лексиграфічне порівняння рядків без урахування регістру символів;</li>
+ <li><strong>regionMatches</strong> (boolean ignoreCase, int toffset, String other, int ooffset, int len) - тест на ідентичність ділянок рядків, можна вказати облік регістру символів;</li>
+ <li><strong>regionMatches</strong> (int toffset, String other, int ooffset, int len) - тест на ідентичність ділянок рядків;</li>
+ <li><strong>concat</strong> (String str) – повертає з'єднання двох рядків;</li>
+ <li><strong>contains</strong> (CharSequence s) - перевіряє, чи входить зазначена послідовність символів у рядок;</li>
+ <li><strong>endsWith</strong> (String suffix) - перевіряє чи завершується рядок зазначеним суфіксом;</li>
+ <li><strong>startsWith</strong> (String prefix) - перевіряє, чи починається рядок із зазначеного префікса;</li>
+ <li><strong>startsWith</strong> (String prefix, int toffset) - перевіряє, чи починається рядок у зазначеній позиції із зазначеного префікса;</li>
+ <li><strong>equals</strong> (Object anObject) - перевіряє чи ідентичний рядок зазначеному об'єкту;</li>
+ <li><strong>getBytes</strong> () - повертає байтове подання рядка;</li>
+ <li><strong>getChars</strong> (int srcBegin, int srcEnd, char[] dst, int dstBegin) - повертає символьне уявлення ділянки рядка;</li>
+ <li><strong>hashCode</strong> () - хеш код рядка;</li>
+ <li><strong>indexOf</strong> (int ch) - пошук першого входження символу в рядку;</li>
+ <li><strong>indexOf</strong> (int ch, int fromIndex) - пошук першого входження символу в рядку із зазначеної позиції;</li>
+ <li><strong>indexOf</strong> (String str) - пошук першого входження зазначеного підрядка;</li>
+ <li><strong>indexOf</strong> (String str, int fromIndex) - пошук першого входження зазначеного підрядка із зазначеної позиції;</li>
+ <li><strong>lastIndexOf</strong> (int ch) - пошук останнього входження символу;</li>
+ <li><strong>LastIndexOf</strong> (int ch, int fromIndex) - пошук останнього входження символу із зазначеної позиції;</li>
+ <li><strong>lastIndexOf</strong> (String str) - пошук останнього входження рядка;</li>
+ <li><strong>lastIndexOf</strong> (String str, int fromIndex) - пошук останнього входження рядка із зазначеної позиції;</li>
+ <li><strong>replace</strong> (char oldChar, char newChar) – заміна в рядку одного символу на інший;</li>
+ <li><strong>replace</strong> (CharSequence target, CharSequence replacement) - заміна одного підрядка іншим;</li>
+ <li><strong>substring</strong> (int beginIndex, int endIndex) - повернути підрядок як рядок;</li>
+ <li><strong>toLowerCase</strong> () - перетворити рядок на нижній регістр;</li>
+ <li><strong>toLowerCase</strong> (Locale locale) - перетворити рядок на нижній регістр, використовуючи зазначену локалізацію;</li>
+ <li><strong>toUpperCase()</strong> - перетворити рядок у верхній регістр;</li>
+ <li><strong>toUpperCase</strong> (Locale locale) - перетворити рядок у верхній регістр, використовуючи вказану локалізацію;</li>
+ <li><strong>trim()</strong> - відсікти на кінцях рядка порожні символи;</li>
+ <li><strong>valueOf(a)</strong> - статичні методи перетворення різних типів у рядок.</li>
+</ul> Методи пошуку повертають індекс входження або -1, якщо шукане не знайдено. Методи перетворення як replace не змінюють сам рядок, а повертають відповідний новий об'єкт рядка. <strong>Методи з регулярними виразами</strong> Рядки також мають ряд методів, що використовують <a href="http://darkraha.com/rus/java/api/jcls02.php" rel="nofollow">регулярні вирази</a> : 
+<ul>
+ <li><strong>matches</strong> (String regex) - чи задовольняє рядок зазначеного регулярного виразу;</li>
+ <li><strong>replaceAll</strong> (String regex, String rplс) - замінює всі входження рядків, що задовольняють регулярному виразу, зазначеним рядком;</li>
+ <li><strong>replaceFirst</strong> (String regex, String rplс) - замінює перше входження рядка, що задовольняє регулярному виразу, зазначеним рядком;</li>
+ <li><strong>split</strong> (String regex) – розбиває рядок на частини, межами розбиття є входження рядків, що задовольняють регулярному виразу;</li>
+ <li><strong>split</strong> (String regex, int limit) – аналогічно попередньому, але з обмеженням застосування регулярного виразу до рядка значенням limit. Якщо limit&gt;0, то і розмір масиву рядків, що повертається, не буде більше limit. Якщо limit&lt;=0, то регулярне вираз застосовується до рядка необмежену кількість разів.</li>
+</ul> Посилання на першоджерело: http://darkraha.com/ukr/java/lang/string/static_string.php

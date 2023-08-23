@@ -1,0 +1,188 @@
+Створення простого веб-додатку на сервлетах та jsp (частина 2)
+<p>----------------------------------------</p>
+Продовжую описувати процес створення веб-програми використовуючи сервлети, jsp, мавен і томкат. , якщо необхідно.
+<p>----------------------------------------</p>
+Продовжую описувати процес створення веб-програми використовуючи сервлети, jsp, мавен і томкат. <a href="http://info.codegym.cc/fatfaggy/2017/10/28/%D0%A1%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5-%D0%BF%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%B3%D0%BE-%D0%B2%D0%B5%D0%B1-%D0%BF%D1%80%D0%B8%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F-%D0%BD%D0%B0-%D1%81%D0%B5%D1%80%D0%B2%D0%BB%D0%B5%D1%82%D0%B0%D1%85-%D0%B8-jsp-%D1%87%D0%B0%D1%81%D1%82%D1%8C-1-.html">Початок статті</a> , якщо необхідно.<cut>
+ <h6>Створюємо сутності.</h6> Створимо в пакеті entities клас User, в якому створимо дві приватні змінні name і password. Створимо конструктори (за замовчуванням і такий, який приймав обидва значення), гетери/сеттери, перевизначимо метод toString() про всяк випадок, а також методи equals() і hashCode(). 
+ <code class=" language-none">public class User { private String name; private String password; public User() { } public User(String name, String password) { this.name = name; this.password = password; } public String getName() { return name; } public void setName(String name) { this.name = name; } public String getPassword() { return password; } public void setPassword(String password) { this.password = password; } @Override public String toString() { return "User{" + "name='" + name + '\'' + ", password='" + password + '\'' + '}'; } @Override public boolean equals(Object o) { if (this == o) return true; if (o == null || getClass() != o.getClass()) return false; User user = (User) o; if (name != null ? !name.equals(user.name) : user.name != null) return false; return password != null ? password.equals(user.password) : user.password == null; } @Override public int hashCode() { int result = name != null ? name.hashCode() : 0; result = 31 * result + (password != null ? password.hashCode() : 0); return result; } }</code> Тепер можемо приступити до створення списку користувачів, куди ми будемо додавати наших користувачів, і звідки їх забиратимемо для відображення. Але є проблема. Об'єкти наших сервлетів ми не створюємо, їх за нас створює томкат. Методи, які ми перевизначаємо у них – теж за нас уже визначено і додати параметр ми не можемо. Як же тоді створити загальний список, який було б видно в обох наших сервлетах? Якщо ми просто в кожному сервлет створимо свій об'єкт списку - то вийде, що додавати користувачів ми будемо в один список, а виводити список користувачів сервлет ListServlet - зовсім інший. Виходить, що нам потрібний такий об'єкт, який був би спільним для обох сервлетів. Якщо говорити узагальнено, то нам потрібний такий об'єкт, який був би спільним для всіх класів у нашій програмі; єдиний об'єкт всю програму. Сподіваюся, ви щось і чули про шаблони проектування. І можливо для когось це перша реальна необхідність використання шаблону
+ <a href="http://info.codegym.cc/translation/2013/09/14/%D0%A8%D0%B0%D0%B1%D0%BB%D0%BE%D0%BD-%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F-Singleton-%D0%BE%D0%B4%D0%B8%D0%BD%D0%BE%D1%87%D0%BA%D0%B0-%D0%BD%D0%B0%D0%B8%D0%B1%D0%BE%D0%BB%D0%B5%D0%B5-%D1%80%D0%B0%D1%86%D0%B8%D0%BE%D0%BD%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5-%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8-%D0%B2-%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B0%D1%85-.html">Singleton</a> у своїй програмі. Можете поплутатися і запиляти який-небудь крутий синглтон, з подвійними перевірками і синхронізаціями (так-так, у нас багатопотоковий додаток, так як сервлети томкат запускає в різних потоках), але я використовуватиму варіант з ранньою ініціалізацією, так як в даному випадку він цілком підходить. 
+ <h6>Створення моделі.</h6> Створимо тоді клас (і реалізуємо в ньому шаблон singleton) у пакеті model, та й назвемо теж цілком яскраво Model. Створимо в ньому приватний об'єкт списку користувачів, і зробимо два методи: один для того, щоб можна було додати користувача, а другий - нехай повертає список рядків (імен користувачів). Оскільки наш об'єкт користувача складається з імені та пароля - то паролі користувачів ми "світити" не хотіли б, тому і повертатимемо лише список їхніх імен. 
+ <code class=" language-none">public class Model { private static Model instance = new Model(); private List<user>
+   model; public static Model getInstance() { return instance; } private Model() { model = new ArrayList&lt;&gt;(); } public void add(User user) { model.add(user); } public List
+   <string>
+    list() { return model.stream() .map(User::getName) .collect(Collectors.toList()); } }
+   </string>
+  </user></code>
+ <h6>Небагато про mvc.</h6> Якщо вже ви чули про singleton, значить можливо чули і про інший шаблон проектування - MVC (model-view-controller, або російською модель-представлення-контролер, або прямий як і на англійському модель-в'ю-контролер). Його суть у тому, щоб відокремлювати бізнес-логіку від вистави. Тобто, відокремлювати код, який визначає 
+ <em>що робити</em> від коду, який визначає 
+ <em>як відображати</em>. View (подання або просто завірюхи) якраз і відповідає за те, в якому вигляді представляти якісь дані. У нашому випадку завірюхи - це наші jsp сторінки. Саме тому я їх і поклав у татко під назвою views. Модель – це власне самі дані, з якими працює програма. У нашому випадку, це користувачі (список користувачів). Ну а контролери - сполучна ланка між ними. Беруть дані з моделі і передають їх у завірюхи, чи отримують від томката якісь дані, обробляють їх і передають моделі. Бізнес-логіка (тобто що 
+ <em>робити</em> ) повинна бути описана в них, а не в моделі або у завірюсі. Таким чином, кожен займається своєю справою: 
+ <ul>
+  <li>модель зберігає дані</li>
+  <li>завірюхи малюють гарне представлення даних</li>
+  <li>контролери займаються обробкою даних</li>
+ </ul> Це дозволяє всім їм бути досить простими та підтримуваними. А не монструозним звалищем всього коду в одному класі. MVC підходить не тільки для веб-програмування, але все-таки в цій сфері він зустрічається дуже часто (якщо не завжди). У нашому випадку як контролери виступатимуть сервлети. Так це дуже поверховий і навіть грубий опис цього патерну, але ця стаття не про шаблони проектування, а про те, як зробити просте веб-додаток :) Хто хоче дізнатися більше - гугл знає 
+ <a href="https://www.google.com/search?q=mvc+pattern" rel="nofollow">все</a> ! :) Повернемося до наших в'юхів. 
+ <h6>Створюємо форму додавання користувача.</h6> Додамо у файл add.jsp форму, що складається з двох текстових інпутів (один звичайний, інший типу пароль) та кнопки для надсилання даних на сервер. 
+ <code class=" language-none">
+  <form method="post">
+   <label>Name: <input type="text" name="name" value=""><br></label> <label>Password: <input type="password" name="pass" value=""><br></label> <button type="submit">Submit</button>
+  </form></code> Тут у форми вказано атрибут method зі значенням post. Це говорить про те, що дані з цієї форми полетять на сервер у вигляді запиту POST. Атрибут action не вказаний, отже запит цей полетить за тією ж адресаою, якою ми перейшли на цю сторінку (/add). Таким чином, наш сервлет, який прив'язаний до цієї адресаи, при отриманні GET-запиту повертає цю jsp з формою додавання користувачів, а якщо отримає POST-запит - значить ця форма відправила туди свої дані (які ми в методі doPost() витягнемо з об'єкта запиту , обробимо та передамо в модель на збереження). Варто звернути увагу, що у інпутів тут вказано параметр name (для поля з ім'ям він має значення name, а для поля з паролем – pass). Це досить важливий момент. Так як щоб отримати з запиту (всередині сервлета вже) ці дані (ім'я та пароль, які будуть введені) - ми будемо використовувати саме ці name і pass. Але про це трохи згодом. Сама кнопка відправки даних у мене зроблена знову ж таки у вигляді button, а не інпутом, як це зазвичай прийнято. Не знаю, наскільки такий варіант універсальний, але у мене в хромі працює :) 
+ <h6>Обробка POST-запиту сервлетом.</h6> Повернемося до сервлета AddServlet. Ми вже знаємо, щоб наш сервлет умів "ловити" GET-запити - ми перевизначабо метод doGet() з класу HttpServlet. Щоб навчити наш сервлет ловити ще й POST-звапроси – ми перевизначаємо ще й метод doPost(). Він отримує аналогічні об'єкти запиту та відповіді від томкату, з якими ми і працюватимемо. Для початку витягнемо із запиту параметри name і pass, які відправила форма (якщо ви їх у формі назвали по-іншому - тоді саме ті назви і пишете). Після цього створимо об'єкт нашого користувача, використовуючи отримані дані. Потім отримаємо об'єкт моделі та додамо створеного користувача до моделі. 
+ <code class=" language-none">@Override protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException { String name = req.getParameter("name"); String password = req.getParameter("pass"); User user = new User(name, password); Model model = Model.getInstance(); model.add(user); }</code>
+ <h6>Передача даних у завірюху.</h6> Тепер перейдемо до сервлета ListServlet. У нас тут вже реалізований метод doGet(), який просто передає управління у завірюху list.jsp. Якщо у вас ще немає - зробіть за аналогією з таким же методом з сервлета AddServlet. Тепер було б непогано отримати з моделі список імен користувачів і передати їх у завірюху, яка їх там отримає і гарно відобразить. Для цього скористаємося знову ж таки об'єктом запиту, який ми отримали від томкату. До цього об'єкту ми можемо додати атрибут, давши йому якесь ім'я та й власне сам об'єкт, який би ми хотіли передати у завірюху. Завдяки тому, що при передачі процесу виконання з сервлета у завірюху ми передаємо туди ці ж об'єкти запиту та відповіді, що отримав сам сервлет, то і додавши наш список імен до об'єкта запиту, ми потім з цього об'єкта запиту у в'юсі зможемо наш список імен користувачів і отримати. З класом ListServlet ми закінчабо, тому наводжу код всього класу 
+ <code class=" language-none">package app.servlets; import app.model.Model; import javax.servlet.RequestDispatcher; import javax.servlet.ServletException; import javax.servlet.http.HttpServlet; import javax.servlet.http.HttpServletRequest; import javax.servlet.http.HttpServletResponse; import java.io.IOException; import java.util.List; public class ListServlet extends HttpServlet { @Override protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException { Model model = Model.getInstance(); List<string>
+   names = model.list(); req.setAttribute("userNames", names); RequestDispatcher requestDispatcher = req.getRequestDispatcher("views/list.jsp"); requestDispatcher.forward(req, resp); } }
+  </string></code>
+ <h6>Виконує java-код в jsp файлух.</h6> Тепер перейдіть до файлу list.jsp. Цей файл виконається лише коли ListServlet передасть процес виконання. Крім того, ми в тому сервлеті вже підготували список імен користувачів із моделі та передали сюди в об'єкті запиту. Маючи список імен, ми можемо пробігтися по ньому циклом for і вивести кожне ім'я. Як я вже говорив, jsp файли можуть виконувати java-код (в принципі, цим і відрізняються від статичних html сторінок). Для того, щоб виконати якийсь код, достатньо поставити в потрібному нам місці конструкцію. 
+ <code class=" language-none"> &lt;% // java код %&gt; </code> Усередині такої конструкції ми отримуємо доступ до кількох змінних: request - наш об'єкт запиту, який ми передали з сервлета, де він називався просто req responce - об'єкт відповіді, у сервлеті називався resp out - об'єкт типу JspWriter (успадковується від звичайного Writer), за допомогою якого можемо "писати" щось прямо в саму html сторінку. Запис out.println("Hello world!") дуже схожий на запис System.out.println("Hello world!"), але не варто їх плутати! out.println() "пише" в html сторінку, а System.out.println - у системний висновок. Якщо викликати всередині розділу з джава кодом jsp метод System.out.println() - то результати побачите в консолі томкату, а не на сторінці, як можна хотілося б :) Про інші доступні об'єкти всередині jsp можна пошукати 
+ <a href="https://www.google.com/search?q=JSP+Implicit+Objects" rel="nofollow">тут</a>. Використовуючи об'єкт request, ми можемо отримати список імен, який передавали з сервлета (ми прикріпабо відповідний атрибут до цього об'єкта), а використовуючи об'єкт out - можемо вивести ці імена. Зробимо це поки що просто у вигляді html списку: Якщо ж хочемо виводити список тільки в тому випадку, коли є користувачі, а інакше виводити попередження, що користувачів поки немає - можемо трохи переписати цю ділянку: 
+ <code class=" language-none">
+  <ul>
+   &lt;% List<string>
+    names = (List
+    <string>
+     ) request.getAttribute("userNames"); if (names != null &amp;&amp; !names.isEmpty()) { for (String s : names) { out.println("
+     <li>" + s + "</li>"); } } %&gt;
+    </string>
+   </string>
+  </ul></code>
+ <code class=" language-none">&lt;% List<string>
+   names = (List
+   <string>
+    ) request.getAttribute("userNames"); if (names != null &amp;&amp; !names.isEmpty()) { out.println("
+    <ui>
+     "); for (String s : names) { out.println("
+     <li>" + s + "</li>"); } out.println("
+    </ui>"); } else out.println("
+    <p>There are no users yet!</p>"); %&gt;
+   </string>
+  </string></code> Тепер, коли ми вміємо передавати дані з сервлетів у завірюхи – можемо трохи покращити наш AddServlet, щоб виводилося повідомлення про успішне додавання користувача. Для цього в методі doPost() після того, як додали нового користувача в модель - можемо додати ім'я цього користувача в атрибути об'єкта req і передати керування назад у завірюху add.jsp. А в ній вже зробити ділянку з джава кодом, де перевіряти чи є такий атрибут у запиті, і якщо так - виводити повідомлення, що користувач успішно доданий. Після цих змін повний код сервлету AddServlet виглядатиме приблизно так: 
+ <code class=" language-none">package app.servlets; import app.entities.User; import app.model.Model; import javax.servlet.RequestDispatcher; import javax.servlet.ServletException; import javax.servlet.http.HttpServlet; import javax.servlet.http.HttpServletRequest; import javax.servlet.http.HttpServletResponse; import java.io.IOException; public class AddServlet extends HttpServlet { @Override protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException { RequestDispatcher requestDispatcher = req.getRequestDispatcher("views/add.jsp"); requestDispatcher.forward(req, resp); } @Override protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException { String name = req.getParameter("name"); String password = req.getParameter("pass"); User user = new User(name, password); Model model = Model.getInstance(); model.add(user); req.setAttribute("userName", name); doGet(req, resp); } }</code> Тут наприкінці методу doPost() ми встановлюємо атрибут з ім'ям доданого в модель користувача, після чого викликаємо метод doGet(), який передаємо поточні запит і відповідь. А метод doGet() вже передає управління у завірюху, куди і відправляє об'єкт запиту з прикріпленим ім'ям доданого користувача як атрибут. Залишилося підправити саму add.jsp щоб вона виводила таке повідомлення, якщо є такий атрибут. Кінцевий варіант add.jsp Тіло сторінки складається з div-a з шапкою, після чого div-контейнер для контенту, в ньому перевірка чи існує атрибут з ім'ям користувача, потім div з формою додавання користувачів, ну і в кінці футер з кнопкою повернення на головну сторінку. Може здатися, що дуже багато div-ів, але ми їх потім використовуємо, коли додамо стилів :) Ну і кінцевий варіант list.jsp 
+ <code class=" language-none">&lt;%@ page contentType="text/html;charset=UTF-8" language="java" %&gt; 
+  <title>Add new user</title>
+  <div>
+   <h1>Super app!</h1>
+  </div>
+  <div>
+   &lt;% if (request.getAttribute("userName") != null) { out.println("
+   <p>User '" + request.getAttribute("userName") + "' added!</p>"); } %&gt; 
+   <div>
+    <div>
+     <h2>Add user</h2>
+    </div>
+    <form method="post">
+     <label>Name: <input type="text" name="name" value=""><br></label> <label>Password: <input type="password" name="pass" value=""><br></label> <button type="submit">Submit</button>
+    </form>
+   </div>
+  </div>
+  <div>
+   <button onclick="location.href='/'">Back to main</button>
+  </div></code>
+ <code class=" language-none">&lt;%@ page import="java.util.List" %&gt; &lt;%@ page contentType="text/html;charset=UTF-8" language="java" %&gt; 
+  <title>Users</title>
+  <div>
+   <h1>Super app!</h1>
+  </div>
+  <div>
+   <div>
+    <div>
+     <h2>Users</h2>
+    </div> &lt;% List<string>
+     names = (List
+     <string>
+      ) request.getAttribute("userNames"); if (names != null &amp;&amp; !names.isEmpty()) { out.println("
+      <ui>
+       "); for (String s : names) { out.println("
+       <li>" + s + "</li>"); } out.println("
+      </ui>"); } else out.println("
+      <p>There are no users yet!</p>"); %&gt;
+     </string>
+    </string>
+   </div>
+  </div>
+  <div>
+   <button onclick="location.href='/'">Back to main</button>
+  </div></code> Таким чином, ми маємо повністю робочий веб-додаток, який вміє зберігати і додавати користувачів, а також виводити список їх імен. Залишилося лише прикрасити... 
+ <h6>Додавання стилів. Використовуємо фреймворк W3.CSS.</h6> В даний момент наш додаток робочий, але абсолютно вирвіглазний :) Потрібно додати фон, кольори тексту та кнопок, стилізувати списки, зробити вирівнювання, додати відступів, загалом багато чого. Якщо писати стилі вручну – це може зайняти багато часу та нервів. Тому я пропоную скористатися CSS фреймворком 
+ <a href="https://www.w3schools.com/w3css/" rel="nofollow">W3.CSS</a> . У ньому вже є готові класи зі стилями, залишилося тільки розставити у потрібних місцях ті css класи, які ми хочемо застосувати в цих місцях. Для того щоб додати їх до себе на сторінки по-перше нам треба підключити файл зі стилями. Це можна зробити двома способами: 1. пройтися по наших сторінках та в розділі head вставити пряме посилання на файл зі стилями
+ <code class=" language-none">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"></code> Такий варіант підходить, якщо у вас є постійне підключення до інтернету. Тоді при відкритті ваших сторінок на локальному сервері стилі підтягнуться з інтернету. 2. Якщо ж ви хочете мати всі стилі у себе локально і не бути залежним від інтернет-з'єднання - можете просто 
+ <a href="https://www.w3schools.com/w3css/w3css_downloads.asp" rel="nofollow">завантажити</a> файл зі стилями і помістити його десь усередині папки web (наприклад web/styles/w3.css), після чого пройтися по всіх наших сторінках (index.html, add.jsp, list.jsp) і вписати всередині розділу head посилання на цей файл зі стилями 
+ <code class=" language-none">
+  <link rel="stylesheet" href="styles/w3.css"></code> Після цього просто пройтися тегами і підписувати їм ті стилі, які вам сподобаються. Я не зупинятимуся на цьому докладно, а відразу дам свої готові варіанти трьох моїх файлів з розставленими класами стилів. index.html add.jsp list.jsp 
+ <code class=" language-none">
+  <meta charset="UTF-8">
+  <title>Super app!</title>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <div class="w3-container w3-blue-grey w3-opacity w3-right-align">
+   <h1>Super app!</h1>
+  </div>
+  <div class="w3-container w3-center">
+   <div class="w3-bar w3-padding-large w3-padding-24">
+    <button class="w3-btn w3-hover-light-blue w3-round-large" onclick="location.href='/list'">List users</button> <button class="w3-btn w3-hover-green w3-round-large" onclick="location.href='/add'">Add user</button>
+   </div>
+  </div></code>
+ <code class=" language-none">&lt;%@ page contentType="text/html;charset=UTF-8" language="java" %&gt; 
+  <title>Add new user</title>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <div class="w3-container w3-blue-grey w3-opacity w3-right-align">
+   <h1>Super app!</h1>
+  </div>
+  <div class="w3-container w3-padding">
+   &lt;% if (request.getAttribute("userName") != null) { out.println("
+   <div class="\&quot;w3-panel" w3-green="" w3-display-container="" w3-card-4="" w3-round\="">
+    \n" + " <span onclick="\&quot;this.parentElement.style.display='none'\&quot;\n&quot;" +="" class="\&quot;w3-button" w3-margin-right="" w3-display-right="" w3-round-large="" w3-hover-green="" w3-border="" w3-border-green="" w3-hover-border-grey\="">×</span>\n" + " 
+    <h5>User '" + request.getAttribute("userName") + "' added!</h5>\n" + "
+   </div>"); } %&gt; 
+   <div class="w3-card-4">
+    <div class="w3-container w3-center w3-green">
+     <h2>Add user</h2>
+    </div>
+    <form method="post" class="w3-selection w3-light-grey w3-padding">
+     <label>Name: <input type="text" name="name" class="w3-input w3-animate-input w3-border w3-round-large" style="width: 30%" value=""><br></label> <label>Password: <input type="password" name="pass" class="w3-input w3-animate-input w3-border w3-round-large" style="width: 30%" value=""><br></label> <button type="submit" class="w3-btn w3-green w3-round-large w3-margin-bottom">Submit</button>
+    </form>
+   </div>
+  </div>
+  <div class="w3-container w3-grey w3-opacity w3-right-align w3-padding">
+   <button class="w3-btn w3-round-large" onclick="location.href='/'">Back to main</button>
+  </div></code>
+ <code class=" language-none">&lt;%@ page import="java.util.List" %&gt; &lt;%@ page contentType="text/html;charset=UTF-8" language="java" %&gt; 
+  <title>Users list</title>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <div class="w3-container w3-blue-grey w3-opacity w3-right-align">
+   <h1>Super app!</h1>
+  </div>
+  <div class="w3-container w3-center w3-margin-bottom w3-padding">
+   <div class="w3-card-4">
+    <div class="w3-container w3-light-blue">
+     <h2>Users</h2>
+    </div> &lt;% List<string>
+     names = (List
+     <string>
+      ) request.getAttribute("userNames"); if (names != null &amp;&amp; !names.isEmpty()) { out.println("
+      <ul class="\&quot;w3-ul\&quot;">
+       "); for (String s : names) { out.println("
+       <li class="\&quot;w3-hover-sand\&quot;">" + s + "</li>"); } out.println("
+      </ul>"); } else out.println("
+      <div class="\&quot;w3-panel" w3-red="" w3-display-container="" w3-card-4="" w3-round\="">
+       \n" + " <span onclick="\&quot;this.parentElement.style.display='none'\&quot;\n&quot;" +="" class="\&quot;w3-button" w3-margin-right="" w3-display-right="" w3-round-large="" w3-hover-red="" w3-border="" w3-border-red="" w3-hover-border-grey\="">×</span>\n" + " 
+       <h5>There are no users yet!</h5>\n" + "
+      </div>"); %&gt;
+     </string>
+    </string>
+   </div>
+  </div>
+  <div class="w3-container w3-grey w3-opacity w3-right-align w3-padding">
+   <button class="w3-btn w3-round-large" onclick="location.href='/'">Back to main</button>
+  </div></code> Ось і все :) Якщо у вас залишабося якісь питання або є якісь зауваження, або навпаки щось не виходить - залиште коментар. Ну і парочку скріншотів докладу що з цього вийшло. 
+ <img data-id="7e722540-67e5-48f2-921a-3761f037e26f" data-max-width="648" alt="Головна сторінка програми" src="https://cdn.javarush.com/images/article/7e722540-67e5-48f2-921a-3761f037e26f/512.jpeg" style="width: 648px;">
+ <img data-id="4448dc75-b0fe-451a-9360-4dc31dcf650d" data-max-width="740" alt="Вікно додавання користувача" src="https://cdn.javarush.com/images/article/4448dc75-b0fe-451a-9360-4dc31dcf650d/512.jpeg" style="width: 740px;">
+ <img data-id="d10f5296-8bce-4158-9790-864bcb0c2773" data-max-width="648" alt="список користувачів" src="https://cdn.javarush.com/images/article/d10f5296-8bce-4158-9790-864bcb0c2773/512.jpeg" style="width: 648px;"> І на останок. Якщо буде бажання попрактикуватися з цим проектом – можете спробувати: 
+ <ul>
+  <li>зробити сервлет та jsp для видалення користувача та ще пару для зміни/редагування існуючого користувача. Вийде справжній CrUD веб додаток :) на сервлетах))</li>
+  <li>замінити список (List<user>
+    ) працювати з базою даних, щоб додані користувачі не пропадали після перезапуску сервера :)
+   </user></li>
+ </ul> Успіхів!
+</cut>

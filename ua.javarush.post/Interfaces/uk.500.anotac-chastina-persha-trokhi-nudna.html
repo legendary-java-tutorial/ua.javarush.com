@@ -1,0 +1,61 @@
+Анотації. Частина перша, трохи нудна
+<p>----------------------------------------</p>
+Перша частина. Дуже коротко написав про інструкції з типом SOURCE і CLASS. Варто прочитати, щоб не загубитися в другій частині і щоб почати "не розуміти" трохи більше =) Тут точно буде мінімум одне слово, яке ви знаєте! Вперше я їх бачив у 
+<p>----------------------------------------</p>
+Перша частина. Дуже коротко написав про інструкції з типом SOURCE і CLASS. Варто прочитати, щоб не загубитися в другій частині і щоб почати "не розуміти" трохи більше =) Тут точно буде мінімум одне слово, яке ви знаєте! 
+<div class="row justify-content-center jr-image-wrap">
+ <div class="col-12 col-sm-10 col-md-8">
+  <img data-id="2dd39620-2c30-4e58-b776-6c716c843d38" data-max-width="700" alt="Анотації.  Частина перша, трохи нудна." src="https://cdn.javarush.com/images/article/2dd39620-2c30-4e58-b776-6c716c843d38/512.jpeg" style="width: 700px;">
+ </div>
+</div>Вперше я їх бачив у завданнях тут і якось не помічав. Ну, бовтається Override, її ж IDEA написала, отже, так треба. Згодом я зрозумів, що все набагато глибше. Поки вчишся, інструкції здаються чимось марним, але необхідним. Ти не знаєш, навіщо вони що роблять. Начебто прочитав пару статей, там розповіли «як чудово, що тепер у нас є анотації, все стало так просто». Але я не знав, як було раніше, і не розумів, що стало простіше. Тепер знаю та хочу розповісти небагато. <u>Є 3 типи анотацій (RetentionPolicy):</u>
+<ul>
+ <li><strong>SOURCE</strong> – інструкції для компілятора</li>
+ <li><strong>CLASS</strong> – дані з анотації будуть записані в байткод, але недоступні під час роботи. Пишуть, що в стандартній бібліотеці багато анотацій використовують цей вид і зараз його тримають через зворотну сумісність. Застосовується для дуже специфічних завдань.</li>
+ <li><a href="https://stackoverflow.com/questions/5971234/retentionpolicy-class-vs-runtime" target="_blank" rel="nofollow">Питання та відповідь на StackOverflow</a></li>
+ <li><strong>RUNTIME</strong> – найпопулярніші, що використовуються під час роботи коду.</li>
+</ul>Оскільки частина статті зайняла вступ, то я напишу тут про SOURCE та CLASS анотації. Ось які інструкція я зміг визначити (спасибі завдання 3607). Runtime я не пишу, їх надто багато і не тема статті. <strong>SOURCE:</strong>
+<ul>
+ <li>java/lang/annotation/Native.class;</li>
+ <li>java/lang/SuppressWarnings.class</li>
+ <li>javax/annotation/Generated.class</li>
+ <li>,java/lang/Override.class</li>
+</ul><strong>CLASS:</strong>
+<ul>
+ <li><a href="https://checkerframework.org/api/com/sun/istack/internal/Nullable.html" target="_blank" rel="nofollow">com/sun/istack/internal/Nullable.class</a></li>
+ <li><a href="https://checkerframework.org/api/com/sun/istack/internal/NotNull.html" target="_blank" rel="nofollow">com/sun/istack/internal/NotNull.class </a></li>
+ <li><a href="https://checkerframework.org/api/com/sun/istack/internal/Interned.html" target="_blank" rel="nofollow">com/sun/istack/internal/Interned.class</a></li>
+</ul>Я не знаю, навіщо потрібні інструкції з типом CLASS. Документацію на існуючі інструкції знайти не вдалося, тому думаю можна просто залишити цей багаж позаду. Але якщо знайдете, поділіться. SOURCE анотації: 
+<ol>
+ <li><em>Native</em> – змінна під цією інструкцією може посилатися на новий код;</li>
+ <br>
+ <li><em>SuppressWarnings</em> – пригнічує різні попередження компілятора;</li>
+ <br>
+ <li><em>Generated</em> – маркує вихідний код, який був згенерований;</li>
+ <br>
+ <li><em>Override</em> – перевіряє перевизначення методу.</li>
+</ol>Детальніше: 
+<div class="row justify-content-center jr-image-wrap">
+ <div class="col-12 col-sm-10 col-md-8">
+  <img data-id="a7a3532c-9d28-4b17-8a21-1541eddcfce8" data-max-width="600" alt="Анотації.  Частина перша, трохи нудна." src="https://cdn.javarush.com/images/article/a7a3532c-9d28-4b17-8a21-1541eddcfce8/512.jpeg" style="width: 600px;">
+ </div>
+</div><u><strong>Native</strong></u> ніколи не бачив і ніколи не користувався. Думаю досить рідкісна інструкція, т.к. користуються їй, якщо треба запустити код іншою «нативною» мовою. Я спробував знайти зрозумілу згадку про неї, але не вийшло. 
+<div class="row justify-content-center jr-image-wrap">
+ <div class="col-12 col-sm-10 col-md-8">
+  <img data-id="dd34db53-803d-4f80-a7f4-5a1d5150b3ac" data-max-width="600" alt="Анотації.  Частина перша, трохи нудна - 3" src="https://cdn.javarush.com/images/article/dd34db53-803d-4f80-a7f4-5a1d5150b3ac/512.jpeg" style="width: 600px;">
+ </div>
+</div><u><strong>SuppressWarnings</strong></u> — часто використовується як @SuppressWarnings("unchecked"). Використовується, щоб придушувати попередження, про які ви знаєте. Приклад вище пригнічує попередження про наведення неперевірених типів. Знову ж таки я зустрічав тільки в такому вигляді, використанні. 
+<div class="row justify-content-center jr-image-wrap">
+ <div class="col-12 col-sm-10 col-md-8">
+  <img data-id="89d0d966-8747-4c77-bb28-9bac18e7c03b" data-max-width="600" alt="Анотації.  Частина перша, трохи нудна." src="https://cdn.javarush.com/images/article/89d0d966-8747-4c77-bb28-9bac18e7c03b/512.jpeg" style="width: 600px;">
+ </div>
+</div><u><strong>Generated</strong></u> - зіткнувся зараз, коли за завданням доводиться генерувати класи із xsd файлів. Ці три інструкції досить специфічні і зараз вам, швидше за все, нецікаві. Опишу останню. 
+<div class="row justify-content-center jr-image-wrap">
+ <div class="col-12 col-sm-10 col-md-8">
+  <img data-id="bd83586b-4084-4358-a0a5-1e7459253392" data-max-width="600" alt="Анотації.  Частина перша, трохи нудна." src="https://cdn.javarush.com/images/article/bd83586b-4084-4358-a0a5-1e7459253392/512.jpeg" style="width: 600px;">
+ </div>
+</div><u><strong>Override</strong></u> - їй ви користуєтеся постійно і вона робить дуже корисну річ. При перевизначенні методу легко помаботися, якщо це не робить IDEA. Очеп'ятки або просто помилки, буває. Ця інструкція спостерігатиме, що метод у батьківському класі збігається з нашим (позначеним) методом. Це гарантує нам, що метод буде перевизначено, а не дописано. При рефакторинг коду, метод може бути видалений або змінений. Знову ж таки анотація вам вкаже на помилку. Без неї наш метод просто дописався б. 
+<div class="row justify-content-center jr-image-wrap">
+ <div class="col-12 col-sm-10 col-md-8">
+  <img data-id="e1f51ba3-2a48-4df9-955b-ec86b125a157" data-max-width="600" alt="Анотації.  Частина перша, трохи нудна." src="https://cdn.javarush.com/images/article/e1f51ba3-2a48-4df9-955b-ec86b125a157/512.jpeg" style="width: 600px;">
+ </div>
+</div>Нудно? Я сказав би так, з цієї статті мало що корисного можна винести. Майже все в ній (90%) розповідь про щось, чим ви не користуватиметеся, або будете, але дуже рідко. 10%, що залишабося, це привіт і опис анотації Override, яка на перший погляд марна. Ну, що ж гадаю, у другій частині статті буде цікавіше. Там буду RUNTIME анотації, а вони взаємодіють із кодом у реальному часі та творять чорну магію. <a href="https://codegym.cc/groups/posts/518-annotacii-chastjh-vtoraja-lombok" target="_blank" rel="nofollow">Анотації. Частина друга. Ломбок.</a>

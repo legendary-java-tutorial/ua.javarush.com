@@ -1,0 +1,189 @@
+RegEx: 20 коротких кроків для освоєння регулярних виразів. Частина 1
+<p>----------------------------------------</p>
+Оригінал цієї статті . Напевно, теорії багато не буває, і я наведу кілька посилань на докладніший матеріал щодо regex наприкінці статті. Але мені здалося, що починати вникати в таку тему як регулярні висловлювання буде набагато цікавіше, як
+<p>----------------------------------------</p>
+Оригінал цієї статті <a href="https://dev.to/awwsmm/20-small-steps-to-become-a-regex-master-mpc" target="_blank" rel="nofollow">тут</a> . Напевно, теорії багато не буває, і я наведу кілька посилань на докладніший матеріал щодо regex наприкінці статті. Але мені здалося, що починати вникати в таку тему як регулярні висловлювання буде набагато цікавіше, якщо є можливість займатися не тільки зубрінням, а й одразу закріплювати знання, виконуючи невеликі завдання під час навчання. <img data-max-width="800" data-id="f577e156-e0bd-46ae-84b7-11f57c6204c1" class="img-fluid" alt="RegEx: 20 коротких кроків для освоєння регулярних виразів.  Частина 1 - 1" src="https://cdn.javarush.com/images/article/f577e156-e0bd-46ae-84b7-11f57c6204c1/800.jpeg" style="width: 800px;">Мабуть, приступимо. Зазвичай противники використання регулярних виразів ('RegEx' або просто 'regex') у програмуванні наводять наступну цитату, що приписується Джеймі Завінські: " <strong>Деякі люди, стикаючись із проблемою, думають: "Я знаю, я використовуватиму регулярні висловлювання". Тепер у них дві проблеми”.</strong> Насправді використання регулярних виразів ще не є хорошою або поганою ідеєю. І це саме по собі не додасть проблем і не вирішить жодної з них. Це всього лише інструмент. І те, як ви його використовуєте (правильно чи неправильно), визначає, які результати ви побачите. Якщо ви спробуєте використовувати regex, наприклад, для створення HTML-парсера, то ви, швидше за все, <a href="https://www.cyberforum.ru/blogs/437401/blog4280.html" target="_blank" rel="nofollow">зазнаєте болю</a>. Але якщо ви хочете просто витягти, наприклад, тимчасові мітки з деяких рядків, у вас, ймовірно, буде все гаразд. Щоб полегшити освоєння регулярних виразів, я зібрав цей урок, який допоможе вам з нуля опанувати регулярні вирази всього за двадцять коротких кроків. Це керівництво здебільшого фокусується на основних поняттях регулярних виразів і заглиблюється у складніші теми лише за необхідності. 
+<h2>Крок 1: для чого потрібно використовувати регулярні вирази</h2><img data-max-width="512" data-id="773456e3-7996-4bbb-846e-b2e6dd0ae6e6" class="img-fluid" alt="RegEx: 20 коротких кроків для освоєння регулярних виразів.  Частина 1 - 2" src="https://cdn.javarush.com/images/article/773456e3-7996-4bbb-846e-b2e6dd0ae6e6/512.jpeg" style="width: 512px;">Регулярні вирази використовуються для пошуку збігів у тексті за заданими шаблонами (зразками). За допомогою regex ми можемо легко і просто витягувати <s>ізюм із кексу</s> слова з тексту, а також окремі літеральні (літеральні) та мета (спеціальні) символи та їх послідовності, що відповідають певним критеріям. Ось що говорить нам про них <a href="https://ru.wikipedia.org/wiki/%D0%A0%D0%B5%D0%B3%D1%83%D0%BB%D1%8F%D1%80%D0%BD%D1%8B%D0%B5_%D0%B2%D1%8B%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F" target="_blank" rel="nofollow">Вікіпедія:</a> <em>Регулярні вирази (англ. regular expressions) - формальна мова пошуку та здійснення маніпуляцій з підрядками в тексті, заснований на використанні метасимволів (символів-джокерів, англ. Wildcard characters). Для пошуку використовується рядок-зразок (англ. pattern, російською його часто називають "шаблоном", "маскою"), що складається з символів і метасимволів і задає правило пошуку. Для маніпуляцій з текстом додатково задається рядок заміни, який також може містити спеціальні символи. </em> Шаблон може бути таким же простим, як, наприклад, слово <code class=" language-none">dog</code>в цій пропозиції: 
+<pre>Quick brown fox jumps over lazy dog.</pre> Цей регулярний вираз виглядає так: 
+<pre>dog</pre> ... Досить легко, чи не так? Зразком може бути будь-яке слово, що містить букву <code class=" language-none">o</code>. Регулярний вираз для пошуку такого шаблону може виглядати так: 
+<pre>\w <span>*</span> o\w <span>*</span></pre> ( <a href="https://regex101.com/r/Mf9L3O/2" target="_blank" rel="nofollow">Випробувати цей регулярний вираз можна тут</a>), можна зауважити, що в міру ускладнення вимог до "відповідності", регулярне вираження також ускладнюється. Існують додаткові форми запису для вказівки груп символів і відповідності шаблонів, що повторюються, що я поясню нижче. Але як тільки ми знаходимо відповідність шаблону в якомусь тексті, то що ж ми можемо з ним робити? Сучасні движки регулярних виразів дозволяють витягувати символи або їх послідовності (підрядки) з тексту, або видаляти їх, або замінювати їх іншим текстом. Загалом, регулярні висловлювання використовуються для аналізу та маніпулювання текстом. Ми можемо витягти, наприклад, підрядки, які виглядають як IP-адресаи, а потім спробувати перевірити їх. Або ми можемо отримати імена та адресаи електронної пошти та зберегти їх у базі даних. Або використовувати регулярні вирази, щоб знайти конфіденційну інформацію (наприклад, номери паспортів або номери телефонів) в електронних листах і попередити користувача про те, що він може бути ризикованим. Regex справді універсальний інструмент, який легко вивчити, але важко освоїти: <strong>"Так само, як є різниця між хорошим виконанням музичного твору та створенням музики, є і різниця між знанням регулярних висловів та їх розумінням". </strong> <em>- Джеффрі Е. Ф. Фрідл, Освоєння регулярних виразів</em>
+<h2>Крок 2: квадратні дужки<code class=" language-none">[]</code></h2>Найпростіші регулярні вирази, які легко зрозуміти - це ті, які лише шукають відповідність по-символьно між шаблоном регулярного виразу і цільовим рядком. Давайте, наприклад, спробуємо знайти кота: <img data-max-width="512" data-id="7a4171fb-4cc7-4339-ae00-a4ba6db13f6d" class="img-fluid" alt="RegEx: 20 коротких кроків для освоєння регулярних виразів.  Частина 1 - 3" src="https://cdn.javarush.com/images/article/7a4171fb-4cc7-4339-ae00-a4ba6db13f6d/512.jpeg" style="width: 512px;">
+<pre>pattern: <span>cat</span>
+.
+matches:      <span>^^^</span>
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/4" target="_blank" rel="nofollow">Як це працює у справі - дивіться тут</a> ) <mark>NB!</mark> <em>Усі рішення представлені тут лише як варіанти рішень. У регулярних висловлюваннях, як й у програмуванні взагалі, можна вирішувати одні й самі завдання різними способами. </em> Однак, крім суворого по-символьного порівняння, ми також можемо вказати альтернативні збіги, використовуючи квадратні дужки: 
+<pre>pattern: <span>ca[rt]</span>
+.
+matches:      <span>^^^ ^^^</span>
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/5" target="_blank" rel="nofollow">Як це працює</a> ) Відкриваючі та закриваючі квадратні дужки повідомляють механізму регулярних виразів, що він повинен шукати будь-який із зазначених символів, але тільки один. Вищезгадане регулярне вираження не знайде, наприклад, слово <code class=" language-none">cart</code>цілком, а знайде тільки його частину: 
+<pre>pattern: <span>ca[rt]</span>
+string: кіт був вирізати, коли він ходить під карту.
+matches:      <span>^^^ ^^^</span>
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/6" target="_blank" rel="nofollow">Як це працює</a> ) Коли ви використовуєте квадратні дужки, ви вказуєте механізму регулярних виразів, щоб він шукав збігу лише з одним із символів, що містяться у дужках. Двигун знаходить символ <code class=" language-none">c</code>, потім символ <code class=" language-none">a</code>, але якщо наступний символ не <code class=" language-none">r</code>або <code class=" language-none">t</code>, це ще повний збіг. Якщо він знаходить <code class=" language-none">ca</code>, а потім або , <code class=" language-none">r</code>або <code class=" language-none">t</code>він зупиняється. Він не намагатиметься зіставити більше символів, тому що квадратні дужки вказують, що потрібно шукати лише один із символів, що містяться. Коли він знаходить <code class=" language-none">ca</code>, то наступним знаходить <code class=" language-none">r</code>у слові <code class=" language-none">cart</code>, і зупиняється, тому що він вже знайшов збіг послідовності <code class=" language-none">car</code>. 
+<h2>Завдання для тренування:</h2>Напишіть регулярний вираз, який знаходить усі 10 збігів із шаблонами <code class=" language-none">had</code>і <code class=" language-none">Had</code>в цьому уривку неперекладної гри слів на місцевому діалекті: 
+<pre>pattern:
+string: Jim, де Bill had had <span>"had"</span> , had had <span>"had had"</span> . <span>"Had had"</span> had been correct.
+matches:                  <span>^^^ ^^^ ^^^ ^^^ ^^^ ^^^ ^^^ ^^^ ^^^ ^^^</span>
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/7" target="_blank" rel="nofollow">Дивіться можливе рішення тут</a> ) А як щодо всіх назв тварин у наступному реченні? 
+<pre>pattern:
+string: Bat, cat, <span>and</span> rat walked in bar...
+matches:    <span>^^^ ^^^ ^^^</span>
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/8" target="_blank" rel="nofollow">Можливе рішення</a> ) Або ще простіше: знайдіть слова <code class=" language-none">bar</code>або <code class=" language-none">bat</code>: 
+<pre>pattern:
+string: Bat, cat, <span>and</span> rat walked in bar...
+matches:    <span>^^^ ^^^</span>
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/9" target="_blank" rel="nofollow">Можливе рішення</a> ) Ось ми вже й навчабося писати більш-менш складні регулярні висловлювання, і ми лише на кроці 2! Продовжуємо! 
+<h2>Крок 3: escape-послідовності</h2><img data-max-width="512" data-id="435e664f-6244-4666-8b7d-276fcc0c5ae3" class="img-fluid" alt="RegEx: 20 коротких кроків для освоєння регулярних виразів.  Частина 1 - 4" src="https://cdn.javarush.com/images/article/435e664f-6244-4666-8b7d-276fcc0c5ae3/512.jpeg" style="width: 512px;">На попередньому етапі ми дізналися про квадратні дужки <code class=" language-none">[]</code>і про те, як вони допомагають нам знайти альтернативні збіги за допомогою движка regex. А якщо ми хочемо знайти збіги у вигляді самих відкритих і закритих квадратних дужок <code class=" language-none">[]</code>? Коли ми хотіли знайти по-символьне збіг зі словом <code class=" language-none">cat</code>, ми надавали движку regex цю послідовність символів ( <code class=" language-none">cat</code>). Давайте спробуємо знайти квадратні дужки <code class=" language-none">[]</code>таким же способом: 
+<pre>pattern: <span>[]</span> 
+string: Ви не можете <span>match [] using regex! You will regret this!
+matches:</span> 
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/10" target="_blank" rel="nofollow">Дивимося що вийшло</a> ) Щось не спрацювало, однак... Це відбувається тому, що символи квадратної дужки працюють як спеціальні символи движка regex, які зазвичай використовуються для позначення чогось іншого, і не є буквальним шаблоном для пошуку їх самих. Як ми пам'ятаємо з кроку 2, вони використовуються для пошуку альтернативних збігів, щоб двигун regex міг знайти відповідності будь-якому з символів між ними. Якщо ви не помістите жодних символів між ними, це може призвести до помилки. Щоб знайти відповідність цим особливим символам, ми повинні екранувати їх, поставивши перед ними символ backslash<code class=" language-none">\</code>. Backslash (або зворотний слеш) це ще один спеціальний символ, який повідомляє движку regex, що треба шукати наступний символ буквально, а не використовувати його як метасимвол. Двигун regex шукатиме символи <code class=" language-none">[</code>і <code class=" language-none">]</code>буквально, тільки якщо їм <strong>обом</strong> передуватиме зворотний слеш: 
+<pre>pattern: <span>\[\]</span>
+string: Ви не можете match [] using regex! You will regret this!
+matches:                  <span>^^</span> 
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/11" target="_blank" rel="nofollow">Дивимося що вийшло цього разу</a> ) ОК, а якщо ми хочемо знайти сам зворотний слеш? Відповідь проста. Оскільки backslash <code class=" language-none">\</code>теж є спеціальним символом, його теж потрібно екранувати. Чим? Зворотним слешем же! 
+<pre>pattern: <span>\\</span>
+string: C:\Users\Tanja\Pictures\Dogs
+matches:    <span>^ ^ ^ ^</span>
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/12" target="_blank" rel="nofollow">Той самий приклад насправді</a> ) Тільки спеціальним символам повинен передувати backslash. Решта символів інтерпретуються буквально за умовчанням. Наприклад, регулярне вираз <code class=" language-none">t</code>буквально відповідає лише літері <code class=" language-none">t</code>в нижньому регістрі: 
+<pre>pattern: <span>t</span>
+string: tttt
+matches: <span>^ ^ ^ ^</span>
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/14" target="_blank" rel="nofollow">Приклад</a> ) Однак, така послідовність <code class=" language-none">\t</code>працює інакше. Вона є шаблоном для пошуку символу табуляції: 
+<pre>pattern: <span>\t</span>
+string: tttt
+matches:   <span>^ ^ ^</span>
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/13" target="_blank" rel="nofollow">Приклад</a> ) Деякі поширені escape-послідовності включають <code class=" language-none">\n</code>(розриви рядків у стилі UNIX) і <code class=" language-none">\r</code>(використовуються в розривах рядків у стилі Windows, <code class=" language-none">\r\n</code>). <code class=" language-none">\r</code>є символом "повернення каретки", а <code class=" language-none">\n</code>є символом "перекладу рядка", <a href="https://stackoverflow.com/q/3091524/2925434" target="_blank" rel="nofollow">обидва з яких були визначені разом зі стандартом ASCII, коли телетайпи ще перебували у повсюдному використанні. </a> Інші поширені escape-послідовності будуть розглянуті у цьому посібнику пізніше. 
+<h2>А поки що закріпимо матеріал парою нескладних завдань:</h2>Спробуйте написати регулярний вираз для пошуку... регулярного виразу ;) Результат повинен бути приблизно таким: 
+<pre>pattern:
+string: ...match this regex ` <span>\[\]</span> ` with a regex?
+matches:                       <span>^^^^</span>	
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/15" target="_blank" rel="nofollow">Рішення</a> ) Впоралися? Молодці! А тепер спробуйте створити regex для пошуку таких escape-послідовностей: 
+<pre>pattern:
+string: ` <span>\r`</span> , ` <span>\t`</span> , and ` <span>\n`</span> є all regex escape sequences.
+matches:   <span>^^ ^^ ^^</span>
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/16" target="_blank" rel="nofollow">Рішення</a> ) 
+<h2>Крок 4: шукаємо "any" (будь-який) символ за допомогою точки<code class=" language-none">.</code></h2><img data-max-width="512" data-id="ffc5a944-84f0-4c0a-9bf2-ea0d3edca059" class="img-fluid" alt="RegEx: 20 коротких кроків для освоєння регулярних виразів.  Частина 1 - 5" src="https://cdn.javarush.com/images/article/ffc5a944-84f0-4c0a-9bf2-ea0d3edca059/512.jpeg" style="width: 512px;">При написанні рішень для пошуку escape-послідовностей, які ми бачабо на попередньому кроці, ви, можливо, запитували себе: "Чи можу я зіставити символ зворотної косої риси, а потім будь-який інший символ, який слідує за ним?"... Звичайно можете! Є ще один спеціальний символ, який використовується для пошуку відповідності (майже) будь-якому символу – це символ точки (повної зупинки). Ось що він робить: 
+<pre>pattern: <span>.</span>
+string: I'm sorry, Dave. I'm afraid I can't do that.
+matches: <span>^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>	
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/17" target="_blank" rel="nofollow">Приклад</a> ) Якщо ви хочете порівняти тільки шаблони, які виглядають як escape-послідовності, ви можете зробити щось на зразок цього: 
+<pre>pattern: <span>\\. </span>
+string: Hi Walmart is my grandson є його name is " <span>\n \r \t</span> ".
+matches: <span>                                             ^^ ^^ ^^</span>	
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/18" target="_blank" rel="nofollow">Приклад</a> ) І, як і з усіма спеціальними символами, якщо ви хочете зіставити літерал <code class=" language-none">.</code>, то вам потрібно поставити перед ним символ <code class=" language-none">\</code>: 
+<pre>pattern: <span>\. </span>
+string: War is Peace <span>. </span>Freedom is Slavery <span>. </span>Ignorance is Strength <span>. </span>
+matches: <span>            ^ ^ ^</span>
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/19" target="_blank" rel="nofollow">Приклад</a> ) 
+<h2>Крок 5: діапазон символів</h2><img data-max-width="512" data-id="40e651ab-d0c3-4d5c-9826-d023a78891dc" class="img-fluid" alt="RegEx: 20 коротких кроків для освоєння регулярних виразів.  Частина 1 - 6" src="https://cdn.javarush.com/images/article/40e651ab-d0c3-4d5c-9826-d023a78891dc/512.jpeg" style="width: 512px;">Що, якщо вам потрібні не будь-які символи, а ви хочете знайти в тексті лише літери? Чи цифри? Чи голосні? Пошук за класами символів та їх діапазонами дозволить нам досягти цього. 
+<pre>` <span>\n`</span> , ` <span>\r`</span> , and ` <span>\t` </span><span>are</span> whitespace characters, ` <span>\. </span>`, ` <span>\\</span> ` and ` <span>\[</span> `are <span>not</span> .	
+</pre> Символи є "пробілами", <a href="https://en.wikipedia.org/wiki/Whitespace_character" target="_blank" rel="nofollow">якщо вони не створюють видимої позначки в тексті. </a> Пробіл " <code class=" language-none"> </code>" - це пробіл, розрив рядка чи табуляція. Припустимо, ми хочемо знайти escape-послідовності, що представляють лише пробельні символи <code class=" language-none">\n</code>, <code class=" language-none">\r</code>і <code class=" language-none">\t</code>у наведеному вище уривку, але не інші escape-послідовності. Як ми могли б це зробити? 
+<pre>pattern: <span>\\[nrt]</span> string 
+: ` <span>\n`</span> , ` <span>\r`</span> , and ` <span>\t` </span><span>є</span> whitespace characters, ` <span>\. </span>`, ` <span>\\</span> ` and ` <span>\[</span> `are <span>not</span> .
+matches:   <span>^^ ^^ ^^</span>	
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/20" target="_blank" rel="nofollow">Приклад</a> ) Це працює, але це не дуже елегантне рішення. Що, якщо нам потрібно буде зіставити escape-послідовність для символу " подача форми " , <code class=" language-none">\f</code>? (Цей символ використовується для позначення розривів сторінок у тексті.) 
+<pre>pattern: <span>\\[nrt]</span> 
+string: ` <span>\n`</span> , ` <span>\r`</span> , ` <span>\t`</span> , and ` <span>\f`</span> are <span>whitespace</span> characters, ` <span>\. </span>`, ` <span>\\</span> ` and ` <span>\[</span> `are <span>not</span> .
+matches:   <span>^^ ^^ ^^</span>	
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/38" target="_blank" rel="nofollow">Неробоче рішення</a> ) При такому підході нам потрібно окремо перераховувати кожну малу літеру, яку ми хочемо зіставити, у квадратних дужках. Простіший спосіб зробити це - використовувати діапазони символів для відповідності будь-якій малі літері: 
+<pre>pattern: <span>\\[az]</span> 
+string: ` <span>\n`</span> , ` <span>\r`</span> , ` <span>\t`</span> , and ` <span>\f`</span> є <span>whitespace</span> characters, ` <span>\. </span>`, ` <span>\\</span> ` and ` <span>\[</span> `are <span>not</span> .
+matches:   <span>^^ ^^ ^^ ^^</span>	
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/39" target="_blank" rel="nofollow">А так вже працює</a> ) Діапазони символів працюють так, як ви могли б очікувати з огляду на наведений вище приклад. Помістіть у квадратні дужки першу та останню літери, які ви хочете зіставити, з дефісом між ними. Наприклад, якщо ви хочете знайти тільки "комплекти" з backslash <code class=" language-none">\</code>і однієї літери від <code class=" language-none">a</code>до <code class=" language-none">m</code>, Ви можете зробити наступне: 
+<pre>pattern: <span>\\[am]</span> 
+string: ` <span>\n`</span> , ` <span>\r`</span> , ` <span>\t`</span> , and ` <span>\f`</span> are <span>whitespace</span> characters, ` <span>\. </span>`, ` <span>\\</span> ` and ` <span>\[</span> `are <span>not</span> .
+matches:   <span>                      ^^</span>	
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/40" target="_blank" rel="nofollow">Приклад</a> ) Якщо ви хочете порівняти кілька діапазонів, просто розмістіть їх впритул між квадратних дужок: 
+<pre>pattern: <span>\[[a-gq-z]</span> string 
+: ` <span>\n`</span> , ` <span>\r`</span> , ` <span>\t`</span> , and ` <span>\f` </span><span>є</span> whitespace characters, ` <span>\. </span>`, ` <span>\\</span> ` and ` <span>\[</span> `are <span>not</span> .
+matches:         <span>^^ ^^ ^^</span>	
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/41" target="_blank" rel="nofollow">Приклад</a> ) Інші загальні діапазони символів включають: <code class=" language-none">A-Z</code>і<code class=" language-none">0-9</code>
+<h2>Випробуємо їх на практиці, і вирішимо пару завдань:</h2>Шістнадцяткові числа можуть містити цифри <code class=" language-none">0-9</code>, а також літери <code class=" language-none">A-F</code>. При використанні їх для вказівки кольорів шістнадцяткові коди можуть містити не більше трьох символів. Створіть регулярний вираз, щоб знайти дійсні шістнадцяткові коди у списку нижче: 
+<pre>pattern:
+string: 1H8 <span>4E2 8FF</span> 0P1 T8B <span>776 42B</span> G12
+matches:      <span>^^^ ^^^ ^^^ ^^^</span>	
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/25" target="_blank" rel="nofollow">Рішення</a> ) Використовуючи діапазони символів, створіть регулярний вираз, який вибиратиме лише малі приголосні (не голосні літери, включаючи <code class=" language-none">y</code>) у пропозиції нижче: 
+<pre>pattern:
+. <span>_</span> _ <span>_</span> _ <span>_</span> _ <span>_</span> _ <span>_</span> _ <span>_</span> _ <span>_</span> _ <span>_</span> _ <span>_</span> _ <span>_</span> _ <span>_</span> _ <span>_</span> _ <span>_ </span> <span>_</span> _ <span>_</span> _
+matches:   <span>^ ^ ^^^ ^ ^^ ^ ^^ ^ ^ ^ ^^^ ^ ^ ^^^ ^ ^^</span>	
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/26" target="_blank" rel="nofollow">Рішення</a> ) 
+<h2>Крок 6: not, caret, циркумфлекс, знак вставки... символ<code class=" language-none">^</code></h2><img data-max-width="512" data-id="5b520c70-ca37-4a56-a456-6697709d2f65" class="img-fluid" alt="RegEx: 20 коротких кроків для освоєння регулярних виразів.  Частина 1 - 7" src="https://cdn.javarush.com/images/article/5b520c70-ca37-4a56-a456-6697709d2f65/512.jpeg" style="width: 512px;">Воістину, over 9000 імен цього символу :) Але, для простоти, мабуть зупинимося на "not". Моє рішення останнього завдання трохи довге. Потрібно було 17 символів, щоб сказати: "отримати весь алфавіт, крім голосних". Звичайно, є простіший спосіб зробити це. Знак "not" <code class=" language-none">^</code>дозволяє нам визначати символи та діапазони символів, які повинні <strong>не</strong> відповідати вказаним у шаблоні. Простіше рішення останнього завдання, наведеного вище, полягає в тому, щоб знайти символи, які не позначають голосні літери: 
+<pre>pattern: <span>[^aeiou]</span> 
+string:   <span>Th</span> e <span>w</span> a <span>lls</span> i <span>n th</span> e <span>m</span> a <span>ll</span> a <span>r</span> e <span>t</span> o <span>t</span> a <span>lly, t</span> o <span>t</span> a <span>lly </span> <span>t</span> a <span>ll. </span>
+matches: <span>^^ ^^ ^^^^ ^^^^ ^^ ^^^ ^ ^^ ^ ^^^^^^ ^ ^^^^^ ^^^</span>	
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/27" target="_blank" rel="nofollow">Приклад</a> ) Знак "not" <code class=" language-none">^</code>як крайній лівий символ у квадратних дужках <code class=" language-none">[]</code>вказує механізму регулярних виразів на збіг з одним (будь-яким) символом, якого немає у квадратних дужках. Це означає, що наведене вище регулярне вираження відповідає всім пробілам, точці <code class=" language-none">.</code>, коми <code class=" language-none">,</code>і великої <code class=" language-none">T</code>на початку пропозиції. Щоб виключити їх, ми можемо точно також помістити їх у квадратні дужки: 
+<pre>pattern: <span>[^aeiou .,T] </span><span>string</span>  
+: T <span>e</span> w <span>a </span><span>lls</span> i <span>n th</span> e <span>m</span> a <span>ll</span> a <span>r</span> e <span>t</span> o <span>t</span> a lly , <span>t</span> o <span>t</span> a <span>lly </span><span>t</span> a <span>ll</span> .<span></span><span></span><span></span><span></span> <span></span><span></span>
+matches:   <span>^ ^ ^^^ ^ ^^ ^ ^^ ^ ^ ^ ^^^ ^ ^ ^^^ ^ ^^</span>	
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/28" target="_blank" rel="nofollow">Приклад</a> ) <mark>Зверніть увагу</mark>, що в цьому випадку, нам не потрібно екранувати точку зворотним слешем, як ми робабо раніше, коли шукали її, не користуючись при цьому квадратними дужками. Багато спеціальних символів у квадратних дужках обробляються буквально, включаючи відкритий <code class=" language-none">[</code>- але не <code class=" language-none">]</code>символ дужки, що закриває (здогадуєтеся чому?). Символ зворотної косої межі <code class=" language-none">\</code>теж не трактується буквально. Якщо ви хочете порівняти літеральну (літеральну) зворотну косу межу <code class=" language-none">\</code>з використанням квадратних дужок, то ви повинні екранувати її, поставивши перед нею наступну зворотну косу межу <code class=" language-none">\\</code>. Така поведінка була призначена для того, щоб символи пробілів теж можна було розмістити у квадратних дужках для порівняння: 
+<pre>pattern: <span>[\t]</span>
+string: tttt
+matches:   <span>^ ^ ^</span>
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/29" target="_blank" rel="nofollow">Приклад</a> ) Знак "not" <code class=" language-none">^</code>також можна використовувати з діапазонами. Якби я хотів захопити тільки символи <code class=" language-none">a</code>, <code class=" language-none">b</code>, <code class=" language-none">c</code>, <code class=" language-none">x</code>, <code class=" language-none">y</code>і <code class=" language-none">z</code>, я міг би зробити наприклад так: 
+<pre>pattern: <span>[abcxyz]</span> 
+string:   <span>abc</span> defghijklmnopqrstuvw <span>xyz</span> 
+matches: <span>^^^ ^^^</span>
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/31" target="_blank" rel="nofollow">Приклад</a> ) ... або, я міг би вказати, що я хочу знайти будь-який символ, який знаходиться <strong>не</strong> між <code class=" language-none">d</code>і <code class=" language-none">w</code>: 
+<pre>pattern: <span>[^dw]</span> 
+string:   <span>abc</span> defghijklmnopqrstuvw <span>xyz</span> 
+matches: <span>^^^ ^^^</span>
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/32" target="_blank" rel="nofollow">Приклад</a> ) Однак,<mark>Будьте обережні</mark>з "не" <code class=" language-none">^</code>. Легко подумати "ну, я вказав <code class=" language-none">[^ b-f]</code>, тому я повинен отримати малий літеру <code class=" language-none">a</code>або щось після <code class=" language-none">f</code>. Це не той випадок. Цей регулярний вираз буде відповідати будь-якому символу, що не входить в цей діапазон, включаючи літери, цифри, розділові знаки і пробіли. 
+<pre>pattern: <span>[^dw]</span> 
+string:   <span>abc</span> defg h <span>. </span>i <span>,</span> j <span>-</span> klmnopqrstuvw <span>xyz</span> 
+matches: <span>^^^ ^ ^ ^ ^ ^^^</span>
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/33" target="_blank" rel="nofollow">Приклад</a> ) 
+<h2>Завдання для прокачування:</h2>Використовуйте знак "not" <code class=" language-none">^</code>у квадратних дужках, щоб зіставити всі слова нижче, які не закінчуються на <code class=" language-none">y</code>: 
+<pre>pattern:
+string: day <span>dog ​​hog</span> hay <span>bog</span> bay ray <span>rub</span> 
+матчі:      <span>^^^ ^^^ ^^^ ^^^</span>	
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/34" target="_blank" rel="nofollow">Рішення</a> ) Напишіть регулярний вираз, використовуючи діапазон і знак "not" <code class=" language-none">^</code>, щоб знайти всі роки між 1977 і 1982 (включно): 
+<pre>pattern:
+string: 1975 1976 <span>1977 1978 1979 1980 1981 1982</span> 1983 1984
+matches:            <span>^^^^ ^^^^ ^^^^ ^^^^ ^^^^ ^^^^</span></pre> ( <a href="https://regex101.com/r/Mf9L3O/35" target="_blank" rel="nofollow">Рішення</a> ) Напишіть регулярний вираз для пошуку всіх символів, які не є символом "not" <code class=" language-none">^</code>: 
+<pre>pattern:
+string:   <span>abc1</span> ^ <span>23*()</span> 
+matches: <span>^^^^ ^^^^^</span>	
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/36" target="_blank" rel="nofollow">Рішення</a> ) 
+<h2>Крок 7: класи символів</h2>Класи символів навіть простіші, ніж діапазони символів. Різні двигуни регулярних виразів мають різні доступні класи, тому тут я розповім тільки про основні. (Перевірте, яку версію regex ви використовуєте, тому що їх може бути більше - або вони можуть відрізнятися від показаних тут.) Класи символів працюють майже як діапазони, але при цьому ви не можете вказати значення 'start' та 'end': 
+<div class="table-container">
+ <table>
+  <thead>
+   <tr>
+    <th>клас</th>
+    <th>символи</th>
+   </tr>
+  </thead>
+  <tbody>
+   <tr>
+    <td><code class=" language-none">\d</code></td>
+    <td>"цифри"<code class=" language-none">[0-9]</code></td>
+   </tr>
+   <tr>
+    <td><code class=" language-none">\w</code></td>
+    <td>"символи слова"<code class=" language-none">[A-Za-z0-9_]</code></td>
+   </tr>
+   <tr>
+    <td><code class=" language-none">\s</code></td>
+    <td>"прогалини"<code class=" language-none">[ \t\r\n\f]</code></td>
+   </tr>
+  </tbody>
+ </table>
+</div> Клас символів <code class=" language-none">\w</code>"word" особливо корисний, оскільки цей набір символів часто потрібний для допустимих ідентифікаторів (імен змінних, функцій і т.д.) у різних мовах програмування. Ми можемо використовувати <code class=" language-none">\w</code>, щоб спростити регулярний вираз, який ми бачабо раніше: 
+<pre>pattern: <span>\\[az]</span> 
+string: ` <span>\n`</span> , ` <span>\r`</span> , ` <span>\t`</span> , and ` <span>\f`</span> є <span>whitespace</span> characters, ` <span>\. </span>`, ` <span>\\</span> ` and ` <span>\[</span> `are <span>not</span> .
+matches:   <span>^^ ^^ ^^ ^^</span>	
+</pre> Використовуючи <code class=" language-none">\w</code>ми можемо написати так: 
+<pre>pattern: <span>\\w</span> 
+string: ` <span>\n`</span> , ` <span>\r`</span> , ` <span>\t`</span> , and ` <span>\f`</span> are <span>whitespace</span> characters, ` <span>\. </span>`, ` <span>\\</span> ` and ` <span>\[</span> `are <span>not</span> .
+matches:   <span>^^ ^^ ^^ ^^</span>	
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/42" target="_blank" rel="nofollow">Приклад</a> ) 
+<h2>2 завдання для успіху:</h2>Як ми з вами знаємо, Java ідентифікатор (ім'я змінної, класу, функції і т.д.) може починатися тільки з літери <code class=" language-none">a</code>- <code class=" language-none">zA</code>- <code class=" language-none">Z</code>, знака долара <code class=" language-none">$</code>або підкреслення <code class=" language-none">_</code>. ( <em>підкреслення, звичайно поганий стиль, але компілятор пропускає, прим. перекладача</em> ). Решта символів має бути символами "word" <code class=" language-none">\w</code>. Використовуючи один або кілька класів символів, створіть регулярний вираз для пошуку допустимих ідентифікаторів Java серед наступних трисимвольних послідовностей: 
+<pre>pattern:
+string:   <span>__e $12</span> .x2 <span>foo Bar</span> 3mm
+matches: <span>^^^ ^^^ ^^^ ^^^</span>	
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/43" target="_blank" rel="nofollow">Рішення</a> ) Номери соціального страхування США (SSN) є 9-значними номерами у форматі XXX-XX-XXXX, де кожен X може бути будь-якою цифрою <code class=" language-none">[0-9]</code>. Використовуючи один або кілька класів символів, напишіть регулярний вираз, щоб знайти правильно відформатовані номери SSN у списку нижче: 
+<pre>pattern:
+string: 113-25=1902 <span>182-82-0192</span> H23-_3-9982 1I1-O0-E38B
+matches:              <span>^^^^^^^^^^^^</span>
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/44" target="_blank" rel="nofollow">Рішення</a> ) <a href="https://codegym.cc/groups/posts/2680-regex-20-korotkikh-shagov-dlja-osvoenija-reguljarnihkh-vihrazheniy-chastjh-2" target="_blank" rel="nofollow">RegEx: 20 коротких кроків для освоєння регулярних виразів. Частина 2. </a> <a href="https://codegym.cc/groups/posts/2681-20-korotkikh-shagov-dlja-osvoenija-reguljarnihkh-vihrazheniy-chastjh-3" target="_blank" rel="nofollow">20 коротких кроків освоєння регулярних виразів. Частина 3. </a> <a href="https://codegym.cc/groups/posts/2682-regex-20-korotkikh-shagov-dlja-osvoenija-reguljarnihkh-vihrazheniy-chastjh-4" target="_blank" rel="nofollow">RegEx: 20 коротких кроків для освоєння регулярних виразів. Частина 4</a>

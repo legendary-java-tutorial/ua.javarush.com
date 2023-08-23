@@ -1,0 +1,314 @@
+Форматуємо виведення чисел у Java
+<p>----------------------------------------</p>
+Всім привіт! Часто до наших методів приходять числа, які потрібно відобразити у якомусь особливому форматі. Начебто як дрібниця, але як би ви реалізували це завдання? Пропонуємо над цим сьогодні трохи поміркувати. Для початку, щоб з головою
+<p>----------------------------------------</p>
+Всім привіт! Часто до наших методів приходять числа, які потрібно відобразити у якомусь особливому форматі. Начебто як дрібниця, але як би ви реалізували це завдання? <img data-max-width="800" data-id="39a54a20-41b8-4bab-9d07-34673832c350" alt="Форматуємо виведення чисел у Java - 1" src="https://cdn.javarush.com/images/article/39a54a20-41b8-4bab-9d07-34673832c350/800.jpeg" style="width: 800px;">Пропонуємо над цим сьогодні трохи поміркувати. Для початку, щоб з головою поринути у форматування чисел у Java, давайте згадаємо метод <span class="code">format</span> класу <span class="code">String</span> : <span class="code">public static String format(String format, Object ... args)</span> - Повертає рядок, відформатований з рядка <span class="code">format</span> за допомогою інших аргументів <span class="code">args</span> . І одразу приклад: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">String</span> str <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">"Привіт %s! Як справи %s?"</span><span class="token punctuation">,</span> <span class="token string">"Саша"</span><span class="token punctuation">,</span> <span class="token string">"на роботі"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> У результаті ми отримаємо висновок у консолі: 
+<div class="terminal">
+ Привіт Саша! Як справи на роботі?
+</div>
+<h2>Методи printf та format</h2><span class="code">String.format()</span> — це не єдиний метод для форматування рядка. Його аналогами можуть бути <span class="code">System.out.printf()</span> і <span class="code">System.out.format(); </span>. Так, попередній код ми можемо замінити на: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Привіт %s! Як справи %s?"</span><span class="token punctuation">,</span> <span class="token string">"Саша"</span><span class="token punctuation">,</span> <span class="token string">"на роботі"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> або 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">"Привіт %s! Як справи %s?"</span><span class="token punctuation">,</span> <span class="token string">"Саша"</span><span class="token punctuation">,</span> <span class="token string">"на роботі"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> Висновок у консолі при цьому залишиться тим самим. Єдиною відмінністю служить лише те, що ці методи відразу виводять значення консолі, на відміну <span class="code">String.format()</span> . Але мені <span class="code">String.format()</span> подобається більше, тому що нам не завжди потрібно виводити результат у консолі, тому далі ми використовуватимемо саме цей спосіб. Повернімося до нашого прикладу. Що ми бачимо? А те, що в місця, де були символи - <span class="code">%s</span> , вставлені рядки - <span class="code">"Саша"</span> та <span class="code">"на роботі"</span>. Яким чином це може нам допомогти при розробці? Уявіть, що у вас є великий шаблонний текст, але в деяких місцях потрібно вставляти значення, які можуть бути різними і приходити в якості аргументів ззовні. Ось тут нам і знадобиться це форматування. Специфікатори формату починаються зі знака відсотка % і закінчуються символом, що вказує на тип аргументу, який потрібно відформатувати. І, як ви, напевно, зрозуміли, <span class="code">%s</span> використовується для вставки об'єктів — рядків. Але якщо ми спробуємо вставити, наприклад, <span class="code">double</span> в місце, де прописаний об'єкт рядка: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">String</span> str <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">"Привіт %s! Як справи %s?"</span><span class="token punctuation">,</span> <span class="token number">55.6</span><span class="token punctuation">,</span> <span class="token string">"на роботі"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> це також спрацює. <span class="code">double</span> буде приведено до рядка, і ми отримаємо: 
+<div class="terminal">
+ Привіт – 55.6! Як справи на роботі?
+</div> Крім рядків і чисел з плаваючою комою, у Java є й інші типи, чи не так? Тож давайте поглянемо на весь арсенал:
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th></th>
+    <th>Тип форматованого значення</th>
+    <th>приклад</th>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%s</span></td>
+    <td>Будь-який тип, який буде приведений до рядка</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">"Привіт %s!"</span><span class="token punctuation">,</span><span class="token string">"мир"</span><span class="token punctuation">)</span></code></pre> Результат:
+     <div class="terminal">
+      Привіт світ!
+     </div></td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%b</span></td>
+    <td>Будь-який тип, який буде приведений до <span class="code">boolean</span> : true – якщо значення не null, false – якщо null</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">"Привіт %b!"</span><span class="token punctuation">,</span><span class="token keyword">null</span><span class="token punctuation">)</span></code></pre> Результат:
+     <div class="terminal">
+      Привіт false
+     </div></td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%h</span></td>
+    <td>Можна передавати будь-який об'єкт, який буде приведений до шістнадцяткового рядка значення з методу <span class="code">hashCode ()</span></td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">"Привіт %h!"</span><span class="token punctuation">,</span><span class="token string">"мир"</span><span class="token punctuation">)</span></code></pre> Результат:
+     <div class="terminal">
+      Привіт 106C44!
+      <div></div>
+     </div></td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%c</span></td>
+    <td>Використовується для завдання символу Unicode ( <span class="text-bold">char</span> )</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">"Привіт м%cр!"</span><span class="token punctuation">,</span><span class="token string">'і'</span><span class="token punctuation">)</span></code></pre> Результат:
+     <div class="terminal">
+      Привіт світ!
+     </div></td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%d</span></td>
+    <td>Задається ціле число ( <span class="text-bold">int. byte, short, int, long, BigInteger</span> )</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">"Мені вже %d!"</span><span class="token punctuation">,</span><span class="token number">20</span><span class="token punctuation">)</span></code></pre> Результат:
+     <div class="terminal">
+      Мені вже 20!
+     </div></td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%f</span></td>
+    <td>Використовується для завдання числа з плаваючою комою</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">"Кількість ПІ дорівнює - %f!"</span><span class="token punctuation">,</span> <span class="token number">3.14159</span><span class="token punctuation">)</span></code></pre> Результат:
+     <div class="terminal">
+      Число ПІ дорівнює - 3,141590!
+     </div></td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%e</span></td>
+    <td>Числа з плаваючою комою в експоненційному поданні</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">"Кількість ПІ дорівнює - %e!"</span><span class="token punctuation">,</span> <span class="token number">3.14159</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> Результат:
+     <div class="terminal">
+      Число ПІ дорівнює - 3,141590e+00!
+     </div></td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%a</span></td>
+    <td>Числа з плаваючою комою будуть представлені у шістнадцятковому вигляді</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">"Кількість ПІ дорівнює - %a!"</span><span class="token punctuation">,</span> <span class="token number">3.14159</span><span class="token punctuation">)</span></code></pre> Результат:
+     <div class="terminal">
+      Число ПІ дорівнює - 0x1.921f9f01b866ep1!
+     </div></td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%x</span></td>
+    <td>Передається ціле число ( <span class="text-bold">int. byte, short, int, long, BigInteger</span> ), результатом форматування буде символ під цим номером у таблиці ASCII</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">"Мені вже %x!"</span><span class="token punctuation">,</span><span class="token number">25</span><span class="token punctuation">)</span></code></pre> Результат:
+     <div class="terminal">
+      Мені вже 19!
+     </div></td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%o</span></td>
+    <td>Приймається ціле число ( <span class="text-bold">int. byte, short, int, long, BigInteger</span> ), яке буде представлено у вигляді восьмеричного числа</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">"Мені вже %o!"</span><span class="token punctuation">,</span><span class="token number">25</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> Результат:
+     <div class="terminal">
+      Мені вже 31!
+     </div></td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%t</span></td>
+    <td>Префікс для перетворення дати та часу. Для форматування потрібні додаткові прапори</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">"Сьогодні %tA"</span><span class="token punctuation">,</span><span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre> Результат:
+     <div class="terminal">
+      Сьогодні субота
+     </div></td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%n</span></td>
+    <td>Розділювач рядків для конкретної платформи. Аналог \n</td>
+    <td>
+     <pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">" Привіт %n Привіт"</span><span class="token punctuation">)</span></code></pre> Результат:
+     <div class="terminal">
+      Привіт привіт
+     </div></td>
+   </tr>
+  </tbody>
+ </table>
+</div>Давайте використовуємо для <span class="code">double</span> більш відповідний формат: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">String</span> str <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">"Відстань від Києва до Одеси - %f. Не так уже й мало, чи не так?"</span><span class="token punctuation">,</span> <span class="token number">475.4d</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> Виведення в консоль: 
+<div class="terminal">
+ Відстань від Києва до Одеси – 475,400000. Не так уже й мало, чи не так?
+</div> Як ви вже зрозуміли, <span class="code">%f</span> буде більш відповідним специфікатором для чисел з плаваючою комою, які включають такі типи даних як <span class="code">double</span> і <span class="code">float</span> в Java. З цим специфікатором ми можемо форматувати число з плаваючою комою: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">String</span> str <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">"Відстань від Києва до Одеси - %.2f. Не так уже й мало, чи не так?"</span><span class="token punctuation">,</span> <span class="token number">475.4d</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> Вставка <span class="code">.2</span> в даний специфікатор обріже кількість знаків після коми до двох, і ми отримаємо висновок: 
+<div class="terminal">
+ Відстань від Києва до Одеси – 475,40. Не так уже й мало, чи не так?
+</div><span class="code">.2</span> - не єдина підналаштування специфікаторів. Комбінація даних підналаштувань називається <span class="text-bold">інструкцією</span> . <img data-max-width="512" data-id="088335ae-e68c-4e96-8b84-5a6bee89288f" alt="Форматуємо виведення чисел у Java - 2" src="https://cdn.javarush.com/images/article/088335ae-e68c-4e96-8b84-5a6bee89288f/512.jpeg" style="width: 512px;">Загальний вигляд <span class="text-bold">інструкції</span> такий: 
+<div class="terminal">
+ %[аргумент_індекс][прапори][ширина][.точність]специфікатор типу
+</div> А тепер розшифруємо все по порядку:
+<ul>
+ <li><span class="text-bold">[аргумент_індекс]</span> — ціле число, що вказує на позицію в списку аргументів. Наприклад, посилання перший аргумент 1$, посилання другий аргумент — 2$, тощо. Якщо ж позиція не була задана, аргументи повинні бути в тому ж порядку, що й посилання на них у форматі.</li>
+ <li><span class="text-bold">[Прапори]</span> — спеціальні символи для форматування. Наприклад:
+  <ul>
+   <li><span class="code">+</span> прапор, що означає, що якщо числове значення позитивне, воно має містити знак +</li>
+   <li><span class="code">-</span> означає вирівнювання результату з лівого краю</li>
+   <li><span class="code">,</span> встановлює роздільник тисяч у цілих чисел</li>
+  </ul></li>
+ <li><span class="text-bold">[Ширина]</span> — позитивне ціле десяткове число, що визначає мінімальну кількість символів, які будуть виведені. Якщо перед цим числом стоїть 0, то символи, що відсутні, будуть доповнені 0, якщо 0 ні, то пробілами.</li>
+ <li><span class="text-bold">[. Точність]</span> - невід'ємне ціле число з точкою перед ним. Як правило, використовується для обмеження кількості символів. Специфіка поведінки залежить від виду специфікатора.</li>
+</ul>Також хотілося б відзначити, що всі перелічені вище елементи інструкції не обов'язкові, і все буде працювати і без них. Як приклад використання підналаштувань уявімо, що нам потрібен специфічний висновок числа Пі: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">String</span> str <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">"%1$+09.5f"</span><span class="token punctuation">,</span> <span class="token number">3.1415926535897</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> І, відповідно, висновок у консолі: 
+<div class="terminal">
+ +03,14159
+</div> Начебто нескладно, так? Але коли йдеться про форматування числа, то не можна обійти стороною <span class="text-bold">DecimalFormat</span> . Давайте розберемося, що мають на увазі.
+<h2>DecimalFormat</h2><a href="https://docs.oracle.com/javase/8/docs/api/java/text/DecimalFormat.html" rel="nofollow" target="_blank">DecimalFormat</a> - клас для форматування будь-якого числа в Java, чи то ціле число, чи число з плаваючою комою. Коли відбувається створення об'єкта <span class="code">DecimalFormat</span> , прямо в конструкторі можна задати шаблон форматування чисел, що приходять. Як буде виглядати наш приклад з використанням <span class="code">DecimalFormat</span> : 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">DecimalFormat</span> dF <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DecimalFormat</span><span class="token punctuation">(</span> <span class="token string">"#.###"</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">double</span> value <span class="token operator">=</span> <span class="token number">72.224463</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>dF<span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> Висновок у консолі: 
+<div class="terminal">
+ 72,224
+</div> Рядок <span class="code">#.###</span> є шаблоном, який вказує, що ми форматуємо значення, що передається, до 3 десяткових знаків. Які ще є символи для шаблонів? Ось деякі з них:
+<ul>
+ <li><span class="code">#</span> - цифра, що ведуть нулі опускаються;</li>
+ <li><span class="code">0</span> — цифра завжди відображається, навіть якщо в номері менше цифр (у такому випадку відображається 0);</li>
+ <li><span class="code">. </span>- Знак десяткового роздільника;</li>
+ <li><span class="code">,</span> - Знак угруповання роздільників (наприклад, роздільник тисяч);</li>
+ <li><span class="code">; </span>- Поділяє формати;</li>
+ <li><span class="code">-</span> - Зазначає префікс негативного числа;</li>
+ <li><span class="code">%</span> - множить на 100 і показує число у відсотках;</li>
+ <li><span class="code">? </span>- множить на 1000 і показує число у проміле;</li>
+ <li><span class="code">E</span> – розділяє мантису та порядок для експоненційного формату.</li>
+</ul>Погляньмо на кілька прикладів: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">DecimalFormat</span><span class="token punctuation">(</span> <span class="token string">"###,###.##"</span> <span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token number">74554542.224463</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> Висновок у консолі: 
+<div class="terminal">
+ 74 554 542,22
+</div>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">DecimalFormat</span><span class="token punctuation">(</span> <span class="token string">"%###.##"</span> <span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token number">0.723456</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> Висновок у консолі: 
+<div class="terminal">
+ %72,35
+</div>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">DecimalFormat</span><span class="token punctuation">(</span> <span class="token string">"000.###"</span> <span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token number">42.224463</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> Висновок у консолі: 
+<div class="terminal">
+ 042,224
+</div> Не обов'язково створювати щоразу новий об'єкт <span class="code">DecimalFormat</span> , щоб задати новий шаблон. Досить використовувати його методи <span class="code">applyPattern</span> і <span class="code">applyLocalizedPattern</span> : 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">DecimalFormat</span> dF <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DecimalFormat</span><span class="token punctuation">(</span><span class="token string">"###.###"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+dF<span class="token punctuation">.</span><span class="token function">applyPattern</span><span class="token punctuation">(</span><span class="token string">"000000.000"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+dF<span class="token punctuation">.</span><span class="token function">applyLocalizedPattern</span><span class="token punctuation">(</span><span class="token string">"#,#00.0#"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> Коли ми говоримо про форматування числа з плаваючою комою, нас чимало цікавить округлення, чи не так? Так ось, при обрізанні числа зі знаками після коми, що виходять за заданий шаблон, <span class="code">DecimalFormat</span> округляє число у більшу сторону, якщо останнє число, що обрізається, більше 5. А якщо останнє обрізуване - 5? Адже в такому разі це число рівно посередині між найближчими цілими. <img data-max-width="512" data-id="7d0d4af9-f14c-4f48-8184-086f4ed2484c" alt="Форматуємо виведення чисел у Java - 3" src="https://cdn.javarush.com/images/article/7d0d4af9-f14c-4f48-8184-086f4ed2484c/512.jpeg" style="width: 512px;">У цьому випадку до уваги береться попереднє до нього число. Якщо попереднє число парне, округлення провадиться: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">DecimalFormat</span> dF <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DecimalFormat</span><span class="token punctuation">(</span><span class="token string">"##.###"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">String</span> result <span class="token operator">=</span> dF<span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token number">56.4595</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> Висновок у консолі: 
+<div class="terminal">
+ 56,459
+</div> Якщо непарне — не робиться: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">DecimalFormat</span> dF <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DecimalFormat</span><span class="token punctuation">(</span><span class="token string">"##.###"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">String</span> str <span class="token operator">=</span> dF<span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token number">56.4595</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> Висновок у консолі: 
+<div class="terminal">
+ 56,459
+</div> Різницею між форматуванням чисел з плаваючою комою з використанням <span class="code">String.format()</span> і <span class="code">DecimalFormat.format()</span> можна вважати те, що в першому випадку будуть присутні кінцеві нулі, навіть якщо немає дробової частини. Наприклад: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">String</span> firstStr <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">"%.4f"</span><span class="token punctuation">,</span> <span class="token number">9.00001273</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token punctuation">(</span>firstStr<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> Висновок у консолі: 
+<div class="terminal">
+ 9,0000
+</div>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java"><span class="token class-name">DecimalFormat</span> decimalFormat <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DecimalFormat</span><span class="token punctuation">(</span><span class="token string">"#.####"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">String</span> secondStr <span class="token operator">=</span> decimalFormat<span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token number">9.00001273</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token punctuation">(</span>secondStr<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> Висновок у консолі: 
+<div class="terminal">
+ 9
+</div> Як бачите, при форматуванні числа <span class="text-bold">9.00001273</span> з точністю до чотирьох десяткових розрядів метод <span class="code">format()</span> у класу <span class="code">String</span> виведе значення <span class="text-bold">9.0000</span> , при цьому у <span class="code">DecimalFormat</span> аналогічний метод <span class="code">format()</span> виведе <span class="text-bold">9</span> .
+<h2>BigDecimal та BigInteger</h2>Якщо ми торкнулися такої теми округлення чисел у Java, поговоримо і про те, як для таких операцій використовувати клас <span class="code">BigDecimal</span> . Цей клас орієнтований працювати з справді ВЕЛИКИМИ числами: йому максимальні значення <span class="code">double</span> і <span class="code">float</span> занадто малі. Цей клас має багато різних налаштувань для округлення числа з плаваючою комою, а також багато методів для арифметичних операцій. Він має схожий клас, але орієнтований працювати з ВЕЛИКИМИ цілими числами — <span class="code">BigInteger</span> . Докладніше про <span class="code">BigDecimal</span> та <span class="code">BigInteger</span> можна почитати в <a href="https://codegym.cc/groups/posts/2709-biginteger-i-bigdecimal" target="_blank">цій статті</a> .
+<h2>Форматування Date та Time</h2>Вище згадувалося, що за допомогою <span class="code">format()</span> класу <span class="code">String</span> можна ще й форматувати час і дату. <img data-max-width="512" data-id="982ae8bd-d9a0-4a69-a81d-682b381d1cb2" alt="Форматуємо виведення чисел у Java - 4" src="https://cdn.javarush.com/images/article/982ae8bd-d9a0-4a69-a81d-682b381d1cb2/512.jpeg" style="width: 512px;">Що ж, погляньмо, як це робиться. По-перше, хотілося б нагадати, що для дат використовується специфікатор формату <span class="code">%t</span> . По-друге, при форматуванні шаблону для кожного специфікатора формату для дат потрібні додаткові прапори форматування. Ось можливі прапори форматування для дат:
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Прапори</th>
+    <th>Опис</th>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%tB</span></td>
+    <td>Повна назва місяця, наприклад January, February і т.д.</td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%tb</span></td>
+    <td>Скорочену назву місяця, наприклад, Jan, Feb тощо.</td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%tA</span></td>
+    <td>Повна назва дня тижня, наприклад, Sunday, Monday</td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%ta</span></td>
+    <td>Скорочену назву дня тижня, наприклад, Sun, Mon тощо.</td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%tY</span></td>
+    <td>Рік у форматі 4 цифри, наприклад, від 0000 до 9999</td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%ty</span></td>
+    <td>Рік у форматі 2 цифри, наприклад, від 00 до 99</td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%tm</span></td>
+    <td>Місяць відформатовано з нуля на початку, наприклад, від 01 до 12</td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%tc</span></td>
+    <td>Дата та час у форматі %ta %tb %td %tT %tZ %tY, наприклад, Mon Feb 17 03:56:12 PST 2020</td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%tD</span></td>
+    <td>Дата у форматі %tm/%td/%ty</td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%td</span></td>
+    <td>День місяця у форматі двох цифр, наприклад, від 01 до 31</td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%te</span></td>
+    <td>День місяця у форматі без 0 на початку, наприклад, від 1 до 31</td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%tT</span></td>
+    <td>Час у 24-годинному форматі, наприклад, %tH:%tM:%tS</td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%tH</span></td>
+    <td>Година дня у 24-годинному форматі, від 00 до 23</td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%tI</span></td>
+    <td>Година дня для 12-годинного формату, наприклад, від 01 до 12</td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%tM</span></td>
+    <td>Хвабони за годину форматуються з нуля на початку, наприклад, від 00 до 59</td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%tS</span></td>
+    <td>Секунди за хвабону, що складаються з двох цифр, наприклад, від 00 до 59</td>
+   </tr>
+   <tr>
+    <td><span class="text-bold">%tZ</span></td>
+    <td>Абревіатура часового поясу, наприклад PST, UTC і т.д.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>Це скорочений список можливих прапорів форматування дат – їх дуже багато, на будь-який смак. Повний список їх як і можливих специфікаторів можна переглянути за <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Formatter.html#syntax" rel="nofollow" target="_blank">цим посиланням</a> . Давайте розглянемо, як користуватися цим. На цей раз використовуємо не <span class="code">String.format()</span> , а відразу <span class="code">System.out.printf()</span> .
+<h3>Приклад 1</h3>Крім того, поставимо мову результату, передавши її першим аргументом у спосіб: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">Date</span> date <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token class-name">Locale</span><span class="token punctuation">.</span>ENGLISH<span class="token punctuation">,</span><span class="token string">"%tB %te, %tY"</span><span class="token punctuation">,</span>date<span class="token punctuation">,</span>date<span class="token punctuation">,</span>date<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> Висновок у консолі: 
+<div class="terminal">
+ October 11, 2020
+</div> Без задання мови буде використана мова за умовчанням (наприклад, у мене вона російська).
+<h3>Приклад 2</h3>Давайте виведемо на екран більш повну дату: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">Date</span> date <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%td %tB %tY року %n%tH:%tM:%tS"</span><span class="token punctuation">,</span>date<span class="token punctuation">,</span>date<span class="token punctuation">,</span>date<span class="token punctuation">,</span>date<span class="token punctuation">,</span>date<span class="token punctuation">,</span>date<span class="token punctuation">,</span>date<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> І висновок у консолі: 
+<div class="terminal">
+ 11 жовтня 2020 13:43:22
+</div> Стільки разів передавати аргументом один і той самий об'єкт Date... Якось виглядає не дуже, чи не так? Давайте скористаємося внутрішньою підналаштуванням <span class="code">$</span> для вказівки аргументу, який ми хочемо використовувати: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%1$td %1$tB %1$tY року %n%1$tH:%1$tM:%1$tS"</span><span class="token punctuation">,</span>date<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> Висновок у консолі у нас і не зміниться. Є й інші не менш цікаві способи форматування дати. Про них і трохи докладніше про час і дату в Java можна почитати ось у цьому <a href="https://codegym.cc/groups/posts/1941-kak-ne-poterjatjhsja-vo-vremeni--datetime-i-calendar" target="_blank">матеріалі</a> . На цьому у мене на сьогодні все, дякую за увагу!<img data-max-width="512" data-id="f587099d-37a0-4506-a52a-ebf610399731" alt="Форматуємо виведення чисел у Java - 5" src="https://cdn.javarush.com/images/article/f587099d-37a0-4506-a52a-ebf610399731/512.jpeg" style="width: 512px;">

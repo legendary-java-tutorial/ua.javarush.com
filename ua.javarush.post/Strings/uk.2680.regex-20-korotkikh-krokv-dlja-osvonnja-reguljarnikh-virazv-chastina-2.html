@@ -1,0 +1,91 @@
+RegEx: 20 коротких кроків для освоєння регулярних виразів. Частина 2
+<p>----------------------------------------</p>
+Оригінал Минулої частини ми освоїли найпростіші регулярні висловлювання, і вже дечому навчилися. У цій частині ми вивчимо трохи більш складні конструкції, але, повірте, це буде не так важко, як могло б здатися. Отже, продовжимо! Досі нам бі
+<p>----------------------------------------</p>
+<a href="https://codegym.cc/groups/posts/2679-regex-20-korotkikh-shagov-dlja-osvoenija-reguljarnihkh-vihrazheniy-chastjh-1" target="_blank">RegEx: 20 коротких кроків для освоєння регулярних виразів. Частина 1</a> Оригінал <a href="https://dev.to/awwsmm/20-small-steps-to-become-a-regex-master-mpc" target="_blank" rel="nofollow">тут</a> Минулої частини ми освоїли найпростіші регулярні висловлювання, і вже дечому навчабося. У цій частині ми вивчимо трохи більш складні конструкції, але, повірте, це буде не так важко, як могло б здатися. <img data-max-width="800" data-id="9075531f-6e76-466d-a04b-485c0da2b270" class="img-fluid" alt="RegEx: 20 коротких кроків для освоєння регулярних виразів.  Частина 2 - 1" src="https://cdn.javarush.com/images/article/9075531f-6e76-466d-a04b-485c0da2b270/800.jpeg" style="width: 800px;">Отже, продовжимо! 
+<h2>Крок 8: зірочка <code class=" language-none">*</code>та знак "плюс"<code class=" language-none">+</code></h2><img data-max-width="512" data-id="7d74ba6f-5d7b-489f-b9fd-8b5f31d6ef27" class="img-fluid" alt="RegEx: 20 коротких кроків для освоєння регулярних виразів.  Частина 2 - 2" src="https://cdn.javarush.com/images/article/7d74ba6f-5d7b-489f-b9fd-8b5f31d6ef27/512.jpeg" style="width: 512px;">Досі нам більш-менш вдавалося зіставляти лише рядки заданої довжини. Але в останніх завданнях ми наблизабося до межі того, що ми можемо зробити за допомогою позначень, які ми бачабо й досі. Припустимо, наприклад, що ми не обмежені 3-символьними ідентифікаторами Java, а ми можемо мати ідентифікатори будь-якої довжини. Рішення, яке могло працювати в попередньому прикладі, не працюватиме в наступному прикладі: 
+<pre>pattern: <span>[a-zA-Z_$]\w\w</span> 
+string:   <span>__e $12</span> 3 3.2 fo <span>Bar</span> r <span>a23</span> mm ab x
+matches: <span>^^^ ^^^ ^^^ ^^^</span>  
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/48" target="_blank" rel="nofollow">Приклад</a> ) <mark>Зверніть увагу</mark>, що коли ідентифікатор дійсний, але довше 3 символів, порівнюються лише перші три символи. І коли ідентифікатор є дійсним, але містить менше 3 символів, то regex його взагалі не знаходить! Проблема в тому, що вирази в квадратних дужках <code class=" language-none">[]</code>відповідають одному символу, як і класи символів, такі як <code class=" language-none">\w</code>. Це означає, що будь-які збіги в наведеному вище регулярному виразі повинні бути рівно в три символи. Так що це не працює, як ми могли б сподіватися. Тут можуть допомогти спеціальні символи <code class=" language-none">*</code>та <code class=" language-none">+</code>. Це модифікатори, які можуть бути додані праворуч від будь-якого виразу, щоб шукати відповідності до цього виразу більше одного разу. Зірка Кліні (або "зірочка")<code class=" language-none">*</code>вкаже, що потрібно шукати відповідності попередньому токену будь-яку кількість разів, включаючи нуль разів. Знак "плюс" <code class=" language-none">+</code>вкаже, що потрібно шукати один чи кілька разів. Таким чином, вираз, який передує <code class=" language-none">+</code>, є обов'язковим (принаймні один раз), у той час як вираз, який передує <code class=" language-none">*</code>, є необов'язковим, але коли він з'являється, він може з'являтися будь-яку кількість разів. Тепер, з цим знанням ми можемо виправити наведений вище регулярний вираз: 
+<pre>pattern: <span>[a-zA-Z_$]\w*</span> 
+string:   <span>__e $123</span> 3.2 <span>fo Barr a23mm ab x</span> 
+матчі: <span>^^^ ^^^^ ^^ ^^^^ ^^^^^ ^^ ^</span> 
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/49" target="_blank" rel="nofollow">Приклад</a> ) Тепер ми зіставляємо дійсні ідентифікатори будь-якої довжини! Бінґо! Але що б сталося, якби ми в прикладі вище використовували <code class=" language-none">+</code>замість <code class=" language-none">*</code>? 
+<pre>pattern: <span>[a-zA-Z_$]\w+</span> 
+string:   <span>__e $123</span> 3.2 <span>fo Barr a23mm ab</span> x
+matches: <span>^^^ ^^^^ ^^ ^^^^ ^^^^^ ^^</span> 
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/50" target="_blank" rel="nofollow">Приклад</a> ) Ми пропустабо останній збіг <code class=" language-none">х</code>,. Це з тим, що це потрібно <code class=" language-none">+</code>зіставлення хоча б одного символу, але оскільки вираз у дужках <code class=" language-none">[]</code>, попереднє <code class=" language-none">\w+</code>, вже 'з'їло' символ <code class=" language-none">x</code>, то доступних символів більше залишилося, тому зіставлення зірвалася. Коли ми можемо використовувати <code class=" language-none">+</code>? Коли нам потрібно знайти хоча б один збіг, але не важливо, скільки разів повинен збігатися цей вислів. Наприклад, якщо ми хочемо знайти будь-які числа, що містять десяткову точку: 
+<pre>pattern: <span>\d*\.\d+</span> 
+string:   <span>0.011 .2</span> 42 <span>2.0 3.33 4.000</span> 5 6 <span>7.89012</span> 
+matches: <span>^^^^^ ^^ ^^^ ^^^^ ^^^^^ ^^^^^^^</span>  
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/51" target="_blank" rel="nofollow">Приклад</a> ) <mark>Зверніть увагу</mark>, Що зробивши числа зліва від десяткової точки необов'язковими, ми змогли знайти як 0.011 так і .2. Для цього нам потрібно було зіставити рівно одну десяткову точку за допомогою <code class=" language-none">\.</code>і щонайменше одну цифру праворуч від десяткової точки за допомогою <code class=" language-none">\d+</code>. Вищезгаданий регулярний вираз не буде відповідати числу, подібному <code class=" language-none">3.</code>, тому що для відповідності нам потрібно принаймні одна цифра праворуч від десяткової точки. 
+<h3>За традицією, вирішимо кілька простих завдань:</h3>Знайдіть усі англійські слова у уривку нижче. 
+<pre>pattern:
+string: 3 <span>plus</span> 3 <span>is six but</span> 4 <span>plus three is</span> 7
+matches:    <span>^^^^ ^^ ^^^ ^^^ ^^^^ ^^^^^ ^^</span> 
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/52" target="_blank" rel="nofollow">Рішення</a> ) Знайдіть усі позначення розмірів файлів у списку нижче. Розміри файлів будуть складатися з числа (з десятковою точкою або без неї), за яким слідують <code class=" language-none">KB</code>, <code class=" language-none">MB</code>, <code class=" language-none">GB</code>або <code class=" language-none">TB</code>: 
+<pre>pattern:
+string:   <span>11TB</span> 13 <span>14.4MB</span> 22HB <span>9.9GB</span> TB <span>0KB</span> 
+matches: <span>^^^^ ^^^^^^ ^^^^^ ^^^</span>  
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/53" target="_blank" rel="nofollow">Рішення</a> ) 
+<h2>Крок 9: "опційний" знак питання<code class=" language-none">?</code></h2><img data-max-width="512" data-id="c90a5cc1-ce15-4e6e-944e-4e78b8eacdc5" class="img-fluid" alt="RegEx: 20 коротких кроків для освоєння регулярних виразів.  Частина 2 - 3" src="https://cdn.javarush.com/images/article/c90a5cc1-ce15-4e6e-944e-4e78b8eacdc5/512.jpeg" style="width: 512px;">Ви вже написали regex для вирішення останнього завдання? Це спрацювало? Тепер спробуйте застосувати його тут: 
+<pre>pattern:
+string: 1..3KB 5...GB ..6TB
+matches:  
+</pre> Очевидно, що жодне з цих позначень не є допустимим розміром файлу, тому хороший регулярний вираз не повинен знаходити жодного з них. Рішення, яке я написав для вирішення останнього завдання, відповідає їм усім, принаймні частково: 
+<pre>pattern: <span>\d+\.*\d*[KMGT]B</span> 
+string:   <span>1..3KB </span> <span>5...GB</span> .. <span>6TB</span> 
+matches: <span>^^^^^^ ^^^^^^^ ^^^</span> 
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/55" target="_blank" rel="nofollow">Приклад</a> ) То в чому проблема? Насправді нам потрібно знайти тільки одну десяткову точку, якщо вона є. Але <code class=" language-none">*</code>допускає будь-яку кількість збігів, включаючи нуль. Чи є спосіб зіставляти лише нуль разів чи один раз? Але чи не більше одного разу? Звичайно є. "optional" <code class=" language-none">?</code>це модифікатор, який відповідає нулю або одному з попередніх символів, але не більше: 
+<pre>pattern: <span>\d+\.?\d*[KMGT]B</span> 
+string: 1.. <span>3KB</span> 5...GB .. <span>6TB</span> 
+matches:     <span>^^^ ^^^</span> 
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/56" target="_blank" rel="nofollow">Приклад</a> ) Ми тут підійшли до рішення, але це ще не зовсім те, що нам треба. Трохи згодом ми побачимо, як це виправити, за кілька кроків. 
+<h3>А поки що вирішимо таке завдання:</h3>У деяких мовах програмування (наприклад, Java) за деякими цілими числами та числами з плаваючою комою (точкою) можуть слідувати <code class=" language-none">l</code>/ <code class=" language-none">L</code>та <code class=" language-none">f</code>/ <code class=" language-none">F</code>, щоб вказати, що вони повинні розглядатися як long / float (відповідно), а не як звичайні int / double. Знайдіть усі дійсні "long" числа в рядку нижче: 
+<pre>pattern:
+string:   <span>13L</span> long <span>2l 19</span> L lL <span>0</span> 
+матчів: <span>^^^ ^^ ^^ ^</span> 
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/54" target="_blank" rel="nofollow">Рішення</a> ) 
+<h2>Крок 10: знак "or" (або)<code class=" language-none">|</code></h2><img data-max-width="512" data-id="73571237-f76d-43ce-8533-ec779301b65a" class="img-fluid" alt="RegEx: 20 коротких кроків для освоєння регулярних виразів.  Частина 2 - 4" src="https://cdn.javarush.com/images/article/73571237-f76d-43ce-8533-ec779301b65a/512.jpeg" style="width: 512px;">На кроці 8 у нас виникли деякі труднощі зі знаходженням різних типів чисел з плаваючою точкою: 
+<pre>pattern: <span>\d*\.\d+</span> 
+string:   <span>0.011 .2</span> 42 <span>2.0 3.33 4.000</span> 5 6 <span>7.89012</span> 
+matches: <span>^^^^^ ^^ ^^^ ^^^^ ^^^^^ ^^^^^^^</span>  
+</pre> Наведений вище шаблон зіставляє числа з десятковою точкою і щонайменше одну цифру праворуч від десяткової точки. Але що, якщо ми хочемо порівняти такі рядки, як <code class=" language-none">0.</code>? (Без цифр праворуч від десяткової точки.) Ми могли б написати такий регулярний вираз: 
+<pre>pattern: <span>\d*\.\d*</span> 
+string:   <span>0.011 .2</span> 42 <span>2.0 3.33 4.000</span> 5 6 <span>7.89012 0. . </span>
+matches: <span>^^^^^ ^^ ^^^ ^^^^ ^^^^^ ^^^^^^^ ^^ ^</span> 
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/56" target="_blank" rel="nofollow">Приклад</a> ) Це відповідає <code class=" language-none">0.</code>, але це також відповідає одиночній точці <code class=" language-none">.</code>, як ви можете бачити вище. Насправді те, що ми намагаємося зіставити, це два різні класи рядків: 
+<ol>
+ <li>числа з мінімум однією цифрою праворуч від десяткової точки</li>
+ <li>числа з хоча б однією цифрою зліва від десяткової точки</li>
+</ol>Напишемо 2 наступні, незалежні один від одного регулярні вирази: 
+<pre>pattern: <span>\d*\.\d+</span> 
+string:   <span>0.011 .2</span> 42 <span>2.0 3.33 4.000</span> 5 6 <span>7.89012</span> 0. .
+matches: <span>^^^^^ ^^ ^^^ ^^^^ ^^^^^ ^^^^^^^</span>  
+</pre>
+<pre>pattern: <span>\d+\.\d*</span> 
+string:   <span>0.011</span> .2 42 <span>2.0 3.33 4.000</span> 5 6 <span>7.89012 0.</span> .
+matches: <span>^^^^^ ^^^ ^^^^ ^^^^^ ^^^^^^^^ ^^</span> 
+</pre> Ми бачимо, що в жодному з цих випадків підрядки <code class=" language-none">42</code>, <code class=" language-none">5</code>або <code class=" language-none">6</code>не <code class=" language-none">.</code>знаходяться двигуном. Для отримання необхідного результату нам не завадило б об'єднати ці регулярки. Як ми можемо досягти цього? Знак "or" <code class=" language-none">|</code>дозволяє нам вказати у регулярному вираженні відразу кілька можливих послідовностей збігів. Подібно до того, як <code class=" language-none">[]</code>дозволяє нам вказувати альтернативні одиночні символи, за допомогою знака "or" <code class=" language-none">|</code>ми можемо вказувати альтернативні багатосимвольні вирази. Наприклад, якщо ми хочемо знайти "собаку" або "кішку", ми могли б написати якось так: 
+<pre>pattern: <span>\w\w\w</span> 
+string:   <span>Obviously</span> , a <span>dog</span> is a <span>better pet t</span> a n a <span>cat</span> .
+matches: <span>^^^^^^^^^^ ^^^ ^^^^^^ ^^^ ^^^ ^^^</span> 
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/57" target="_blank" rel="nofollow">Приклад</a> ) ... але це відповідає всім потрійним послідовностям символів класу "word". Але "dog" та "cat" навіть не мають спільних букв, тому і квадратні дужки не допоможуть нам тут. Ось найпростіший регулярний вираз, який ми могли б використати, він відповідає обом і лише цим двом словам: 
+<pre>pattern: <span>dog|cat</span> 
+string: Obviously, <span>dog</span> is better pet than a <span>cat</span> .
+matches:               <span>^^^ ^^^</span> 
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/58" target="_blank" rel="nofollow">Приклад</a> ) Механізм регулярних виразів спочатку намагається зіставити всю послідовність ліворуч від знака <code class=" language-none">|</code>, але якщо йому це не вдається, то потім він намагається зіставити послідовність праворуч від знака <code class=" language-none">|</code>. Декілька знаків <code class=" language-none">|</code>також можуть бути об'єднані в ланцюжки для відповідності більш ніж двом альтернативним послідовностям: 
+<pre>pattern: <span>dog|cat|pet</span> 
+string: Авжеж, a <span>dog</span> is better <span>pet</span> than a <span>cat</span> .
+matches:               <span>^^^ ^^^ ^^^</span> 
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/59" target="_blank" rel="nofollow">Приклад</a> ) 
+<h3>Тепер вирішимо чергову пару завдань, щоб краще засвоїти цей крок:</h3>Використовуйте знак <code class=" language-none">|</code>, щоб виправити десятковий регулярний вираз, вказаний вище, і отримати такий результат: 
+<pre>pattern:
+string:   <span>0.011 .2</span> 42 <span>2.0 3.33 4.000</span> 5 6 <span>7.89012 0.</span> .
+matches: <span>^^^^^ ^^ ^^^ ^^^^ ^^^^^ ^^^^^^^ ^^</span> 
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/60" target="_blank" rel="nofollow">Рішення</a> ) Використовуйте знак <code class=" language-none">|</code>, класи символів, " optional " <code class=" language-none">?</code>тощо., щоб створити одне регулярне вираз, відповідне як цілим числам, і числам з плаваючою комою (точкою), як обговорювалося у завданню наприкінці попереднього кроку (це завдання трохи складніше, так ;)) 
+<pre>pattern:
+string:   <span>42L 12</span> x <span>3.4f 6l 3.3 0F</span> LF <span>.2F 0.</span> 
+matches: <span>^^^ ^^ ^^^^ ^^ ^^^ ^^ ^^^ ^^</span>  
+</pre> ( <a href="https://regex101.com/r/Mf9L3O/61" target="_blank" rel="nofollow">Рішення</a> ) <a href="https://codegym.cc/groups/posts/2681-20-korotkikh-shagov-dlja-osvoenija-reguljarnihkh-vihrazheniy-chastjh-3" target="_blank">20 коротких кроків для освоєння регулярних виразів. Частина 3 </a> <a href="https://codegym.cc/groups/posts/2682-regex-20-korotkikh-shagov-dlja-osvoenija-reguljarnihkh-vihrazheniy-chastjh-4" target="_blank">RegEx: 20 коротких кроків для освоєння регулярних виразів. Частина 4</a>

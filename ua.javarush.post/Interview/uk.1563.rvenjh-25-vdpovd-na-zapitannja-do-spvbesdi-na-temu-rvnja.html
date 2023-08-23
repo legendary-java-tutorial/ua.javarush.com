@@ -1,0 +1,82 @@
+Рівень 25. Відповіді на запитання до співбесіди на тему рівня
+<p>----------------------------------------</p>
+Назвіть усі стани об'єкта Thread? NEW RUNNABLE BLOCKED WAITING TIMED_WAITING TERMINATED Які стани може перейти нитку, при вході в блок synchronized? RUNNABLE BLOCKED RUNNABLE, якщо блок коду, позначений synchronized, не зайнятий іншою нитко
+<p>----------------------------------------</p>
+<img data-id="c8d74bcb-483d-446b-9898-88ff8b9d2cea" data-max-width="850" alt="Рівень 25. Відповіді на запитання до співбесіди на тему рівня - 1" src="https://cdn.javarush.com/images/article/c8d74bcb-483d-446b-9898-88ff8b9d2cea/800.jpeg" style="width: 850px;">
+<ol>
+ <li>
+  <p><strong>Назвіть усі стани об'єкта <code class=" language-none">Thread</code>?</strong></p>
+  <ul>
+   <li>NEW</li>
+   <li>RUNNABLE</li>
+   <li>BLOCKED</li>
+   <li>WAITING</li>
+   <li>TIMED_WAITING</li>
+   <li>TERMINATED</li>
+  </ul></li>
+ <li>
+  <p><strong>Які стани може перейти нитку, при вході в блок <code class=" language-none">synchronized</code>?</strong></p>
+  <ul>
+   <li>RUNNABLE</li>
+   <li>BLOCKED</li>
+  </ul>
+  <p>RUNNABLE, якщо блок коду, позначений <code class=" language-none">synchronized</code>, не зайнятий іншою ниткою. Інакше наша нитка отримає стан BLOCKED і чекатиме на звільнення об'єкта-мютексу.</p></li>
+ <li><strong>Який стан перейде нитку, при виклику методу <code class=" language-none">wait()</code>?</strong>
+  <p></p>
+  <p>Виклик цього методу переводить нитку у стан WAITING. <br>
+    Метод <code class=" language-none">wait()</code>можна викликати лише всередині блоку <code class=" language-none">synchronized</code>у об'єкта-мютекса, який був «залочений (заблокований)» поточною ниткою, інакше метод викине виняток <em>IllegalMonitorStateException</em> .<br></p>
+  <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token class-name"><span class="token class-name">Object</span></span> monitor <span class="token operator"><span class="token operator">=</span></span> <span class="token function"><span class="token function">getMonitor</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token keyword"><span class="token keyword">synchronized</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>monitor<span class="token punctuation"><span class="token punctuation">)</span></span>
+<span class="token punctuation"><span class="token punctuation">{</span></span>
+ …
+ monitor<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">wait</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+ …
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre><br>
+   При викликі методу <code class=" language-none">wait()</code>, поточна нитка знімає блокування з об'єкта <code class=" language-none">monitor</code>, і переходить у стан WAITING, чекаючи на виклик методу <code class=" language-none">monitor.notify()</code>або <code class=" language-none">monitor.notifyAll()</code>іншою ниткою. Як тільки це станеться, нитка прокинеться і якщо монітор не зайнятий, то захопить його і продовжить роботу. <br>
+   Якщо монітор виявиться зайнятий іншою ниткою, поточна нитка перейде у стан BLOCKED.
+  <p></p></li>
+ <li>
+  <p><strong>Який стан перейде нитку, при виклику методу <code class=" language-none">wait(500)</code>?</strong></p> Виклик цього методу переводить нитку у стан TIMED_WAITING. <br>
+   За аналогією з методом <code class=" language-none">wait()</code>можна <code class=" language-none">wait(timeout)</code>викликати тільки всередині блоку <code class=" language-none">synchronized</code>у об'єкта-мютекса, який був «залочений (заблокований)» поточною ниткою.
+  <p></p>
+  <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token class-name"><span class="token class-name">Object</span></span> monitor <span class="token operator"><span class="token operator">=</span></span> <span class="token function"><span class="token function">getMonitor</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token keyword"><span class="token keyword">synchronized</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>monitor<span class="token punctuation"><span class="token punctuation">)</span></span>
+<span class="token punctuation"><span class="token punctuation">{</span></span>
+ …
+ monitor<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">wait</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token number"><span class="token number">500</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+ …
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre><br>
+  <p>При викликі методу <code class=" language-none">wait()</code>, нитка знімає блокування з об'єкта <code class=" language-none">monitor</code>, і засинає на 500 мілісекунд. Об'єкт <code class=" language-none">monitor</code>може бути захоплений іншою ниткою. <br>
+    Через 500 мілісекунд нитка прокинеться і якщо <code class=" language-none">monitor</code>не була зайнята, то захопить його і продовжить роботу. <br>
+    Якщо монітор виявиться зайнятий іншою ниткою, поточна нитка перейде у стан BLOCKED.</p>
+  <p><strong>Який стан перейде нитку, при виклику методу <code class=" language-none">notify()</code>?</strong></p>
+  <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token class-name"><span class="token class-name">Object</span></span> monitor <span class="token operator"><span class="token operator">=</span></span> <span class="token function"><span class="token function">getMonitor</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token keyword"><span class="token keyword">synchronized</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>monitor<span class="token punctuation"><span class="token punctuation">)</span></span>
+<span class="token punctuation"><span class="token punctuation">{</span></span>
+ …
+ monitor<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">wait</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+ …
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre><br>
+   Після того <code class=" language-none">monitor.wait()</code>, нитка перейде в стан WAITING. Метод <code class=" language-none">notify()</code>, викликаний іншою ниткою об'єкта <code class=" language-none">monitor</code>переведе нитку зі стану WAITING в стан RUNNABLE, якщо об'єкт monitor не буде захоплений іншою ниткою, інакше в стан BLOCKED.
+  <p></p></li>
+ <li>
+  <p><strong>Який стан перейде нитку, при виклику методу <code class=" language-none">notifyAll()</code>?</strong></p><code class=" language-none">notifyAll()</code>"пробудить" всі нитки. Одна з усіх "сплячих" (WAITING) ниток перейде в стан RUNNABLE, захопить монітор об'єкта, що використовується, і продовжить свою роботу. Інші виявляться в стані BLOCKED. Як тільки перша "прокинута" нитка відпустить монітор, на який всі інші очікують, її долю повторить наступна нитка (довільна нитка зі стану BLOCKED перейде в стан RUNNABLE). Це буде продовжуватися доти, доки всі "пробуджені" нитки не покинуть стану BLOCKED.
+  <p></p></li>
+ <li>
+  <p><strong>Три нитки в блоці synchronized викликали <code class=" language-none">wait()</code>об'єкт-мютекс. Який стан перейдуть ці нитки, якщо четверта нитка викличе <code class=" language-none">notifyAll()</code>?</strong></p> Дві з них перейдуть у стан BLOCKED, одна у стан RUNNABLE
+  <p></p></li>
+ <li>
+  <p><strong>Чим відрізняється <code class=" language-none">join(500)</code>від <code class=" language-none">wait(500)</code>?</strong></p> Незважаючи на те, що <code class=" language-none">join(500)</code>і <code class=" language-none">wait(500)</code>переведуть поточну нитку в стан TIMED_WAITING, між ними суттєві відмінності: <br><code class=" language-none">join(500)</code>викликається у нитки, <code class=" language-none">wait(500)</code>викликається всередині синхронізованого блоку об'єкта, по якому даний блок синхронізований. <br>
+   При виклику <code class=" language-none">join(500)</code>поточна нитка чекатиме 500 мілісекунд завершення нитки, метод якої <code class=" language-none">join()</code>був викликаний. <br>
+   При виклику <code class=" language-none">wait(500)</code>поточна нитка зніме блокування із синхронізованого об'єкта, і засинає на 500 мілісекунд. <br>
+   Через 500 мілісекунд в обох випадках нитки продовжать роботу.
+  <p></p></li>
+ <li>
+  <p><strong>Чим відрізняється <code class=" language-none">wait(500)</code>від <code class=" language-none">sleep(500)</code>?</strong></p><code class=" language-none">sleep(500)</code>викликається у нитки, <code class=" language-none">wait(500)</code>викликається всередині синхронізованого блоку об'єкта, яким даний блок синхронізований. <br>
+   При виклику <code class=" language-none">sleep(500)</code>поточна нитка чекатиме на 500 мілісекунд, потім продовжить свою роботу. <br>
+   При виклику <code class=" language-none">wait(500)</code>поточна нитка зніме блокування із синхронізованого об'єкта, і засинає на 500 мілісекунд.
+  <p></p></li>
+ <li>
+  <p><strong>Який стан перейде нитку при виклику методу <code class=" language-none">yield()</code>?</strong></p> При виклику методу <code class=" language-none">yield()</code>– нитка «пропускає свій хід» і java відразу перемикається на виконання наступної нитки. Нитка зі стану <code class=" language-none">running</code>перетворюється на стан <code class=" language-none">ready</code>. Стану running &amp; ready – це стан стану RUNNABLE.
+  <p></p></li>
+</ol><strong>PS</strong> Коментарі, доповнення, виправлення, зауваження – вітаються =)

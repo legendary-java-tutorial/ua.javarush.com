@@ -1,0 +1,537 @@
+Розділ "Ігри" на JavaRush: Корисна теорія
+<p>----------------------------------------</p>
+У на JavaRush ви знайдете захоплюючі проекти написання популярних комп'ютерних ігор. Бажаєте створити свою версію популярних «2048», «Сапера», «Змійки» та інших ігор? Це просто. Ми перетворили написання ігор на покроковий процес. Щоб спробу
+<p>----------------------------------------</p>
+У <strong>розділі «Ігри»</strong> на CodeGym ви знайдете захоплюючі проекти написання популярних комп'ютерних ігор. Бажаєте створити свою версію популярних «2048», «Сапера», «Змійки» та інших ігор? Це просто. Ми перетворабо написання ігор на покроковий процес. <img data-id="0e6312e8-a627-4aca-89f0-7e74817a0d78" data-max-width="710" alt="Розділ" src="https://cdn.javarush.com/images/article/0e6312e8-a627-4aca-89f0-7e74817a0d78/512.jpeg" style="width: 710px;">Щоб спробувати себе в ролі гейм-розробника, не обов'язково бути просунутим програмістом, але певний набір Java-знань все ж таки необхідний. Тут ви знайдете <strong>інформацію, яка буде корисною при написанні ігор</strong> . 
+<h2 id="Наследование">1. Спадкування</h2>Робота з ігровим двигуном CodeGym передбачає використання успадкування. Але що робити, якщо ви не знаєте, що таке? З одного боку, слід у цій темі розібратися: вона вивчається на<strong> 11 рівні</strong>. З іншого боку, двигун спеціально спроектували дуже простим, тому можна обійтися поверхневим знанням спадкування. Отже, що таке успадкування. Якщо дуже спростити, успадкування це зв'язок між двома класами. Один із них стає батьком, а другий – нащадком (класом-спадкоємцем). При цьому клас-батько може навіть не знати, що має класи-нащадки. Тобто. особливої ​​вигоди від наявності класів-спадкоємців не отримує. А ось класу-нащадок успадкування дає багато переваг. І головне з них — у тому, що всі змінні та методи класу-батька з'являються у класі-нащадці, начебто код класу-батька скопіювали у клас-нащадок. Це не зовсім так, але для спрощеного розуміння спадкування піде. Ось кілька прикладів, щоб краще зрозуміти наслідування. <strong>Приклад 1:</strong>найпростіше успадкування. 
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>
+     <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="text-user"><strong>Родитель</strong></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre></td>
+    <td rowspan="2"><strong>Клас <span class="text-green">Нащадок</span> успадкований від класу <span class="text-user">Батько</span> за допомогою ключового слова <span class="text-red">extends</span> .</strong></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="text-green"><strong>Потомок</strong></span> <span class="token keyword"><span class="token keyword"><span class="text-red"><strong>extends</strong></span></span></span> <span class="text-user"><strong>Родитель</strong></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div><strong>Приклад 2:</strong> використання змінних класу-батька. 
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>
+     <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="text-user"><strong>Родитель</strong></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+   <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">int</span></span> <span class="text-corporate"><strong>age</strong></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+   <span class="token keyword"><span class="token keyword">public</span></span> <span class="token class-name"><span class="token class-name">String</span></span> <span class="text-viola"><strong>name</strong></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre></td>
+    <td rowspan="2"><strong>Клас <span class="text-green">Нащадок</span> може використовувати змінні <span class="text-corporate">age</span> і <span class="text-viola">name</span> класу <span class="text-user">Батько</span> , ніби вони оголошені в ньому.</strong></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="text-green"><strong>Потомок</strong></span> <span class="token keyword"><span class="token keyword"><span class="text-red"><strong>extends</strong></span></span></span> <span class="text-user"><strong>Родитель</strong></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+   <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="token function"><span class="token function">printInfo</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+     <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="text-viola"><strong>name</strong></span><span class="token operator"><span class="token operator">+</span></span><span class="token string"><span class="token string">" "</span></span><span class="token operator"><span class="token operator">+</span></span><span class="text-corporate"><strong>age</strong></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+   <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div><strong>Приклад 3:</strong> використання методів класу-батька. 
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>
+     <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="text-user"><strong>Родитель</strong></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+   <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">int</span></span> <span class="text-corporate"><strong>age</strong></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+   <span class="token keyword"><span class="token keyword">public</span></span> <span class="token class-name"><span class="token class-name">String</span></span> <span class="text-viola"><strong>name</strong></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+   <span class="token keyword"><span class="token keyword">public</span></span> <span class="token function"><span class="token function"><span class="text-viola">getName</span></span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+      <span class="token keyword"><span class="token keyword">return</span></span> <span class="text-viola"><strong>name</strong></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+   <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre></td>
+    <td rowspan="2"><strong>Клас <span class="text-green">Нащадок</span> може використовувати змінні та методи класу <span class="text-user">Батько</span> начебто вони оголошені у ньому. У цьому прикладі ми використовуємо метод <span class="text-viola">getName</span> ().</strong></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="text-green"><strong>Потомок</strong></span> <span class="token keyword"><span class="token keyword"><span class="text-red"><strong>extends</strong></span></span></span> <span class="text-user"><strong>Родитель</strong></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+   <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="token function"><span class="token function">printInfo</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+     <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token function"><span class="token function"></span></span><span class="text-viola"><span class="token function"><span class="token function">getName</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span></span><span class="token punctuation"></span><span class="token operator"><span class="token punctuation"></span><span class="token operator">+</span></span><span class="token string"><span class="token string">" "</span></span><span class="token operator"><span class="token operator">+</span></span><span class="text-corporate"><strong>age</strong></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+   <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>Ось як виглядає клас <span class="text-green"><strong>Нащадок</strong></span> з погляду компілятора: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="text-green"><strong>Потомок</strong></span> <span class="token keyword"><span class="token keyword"><span class="text-red"><strong>extends</strong></span></span></span> <span class="text-user"><strong>Родитель</strong></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+   <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">int</span></span> age<span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">//  унаследованная переменная</span></span>
+   <span class="token keyword"><span class="token keyword">public</span></span> <span class="token class-name"><span class="token class-name">String</span></span> name<span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">//  унаследованная переменная</span></span>
+
+   <span class="token keyword"><span class="token keyword">public</span></span> <span class="token function"><span class="token function">getName</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span> <span class="token comment"><span class="token comment">//  унаследованный метод.</span></span>
+      <span class="token keyword"><span class="token keyword">return</span></span> name<span class="token punctuation"><span class="token punctuation">;</span></span>
+  <span class="token punctuation"><span class="token punctuation">}</span></span>
+   <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="token function"><span class="token function">printInfo</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+     <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token function"><span class="token function"></span></span><span class="text-viola"><span class="token function"><span class="token function">getName</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span></span><span class="token punctuation"></span><span class="token operator"><span class="token punctuation"></span><span class="token operator">+</span></span><span class="token string"><span class="token string">" "</span></span><span class="token operator"><span class="token operator">+</span></span><span class="text-corporate"><strong>age</strong></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+   <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre>
+<h2 id="Переопределение методов">2. Перевизначення методів</h2>Іноді бувають ситуації, що ми успадкували наш клас Нащадок від якогось дуже корисного нам класу Батька разом з усіма змінними та методами, але деякі методи працюють не зовсім так, як нам хочеться. Або зовсім не так, як нам не хочеться. Що робити у цій ситуації? Можемо перевизначити метод, який нам не сподобався. Робиться це дуже просто: у нашому класі Нащадки просто оголошуємо метод із такою самою сигнатурою (заголовком), що й метод класу Батька і пишемо у ньому наш код. <strong>Приклад 1:</strong> перевизначення методу. 
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>
+     <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="text-user"><strong>Родитель</strong></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+   <span class="token keyword"><span class="token keyword">public</span></span> <span class="token class-name"><span class="token class-name">String</span></span> <span class="text-viola"><strong>name</strong></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+   <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="text-viola">setName</span> <span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">String</span></span> nameNew<span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+       name <span class="token operator"><span class="token operator">=</span></span> nameNew<span class="token punctuation"><span class="token punctuation">;</span></span>
+  <span class="token punctuation"><span class="token punctuation">}</span></span>
+
+   <span class="token keyword"><span class="token keyword">public</span></span> <span class="token function"><span class="token function"><span class="text-viola">getName</span></span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+      <span class="token keyword"><span class="token keyword">return</span></span> <span class="text-viola"><strong>name</strong></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+  <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre></td>
+    <td rowspan="2"><strong>Метод printInfo() виведе на екран фразу <span class="text-green">"Luke, No!"</span></strong></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="text-green"><strong>Потомок</strong></span> <span class="token keyword"><span class="token keyword"><span class="text-ted"><strong>extends</strong></span></span></span> <span class="text-user"><strong>Родитель</strong></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+   <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="text-viola">setName</span> <span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">String</span></span> nameNew<span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+       <span class="text-viola"><strong>name</strong></span> <span class="token operator"><span class="token operator">=</span></span> nameNew <span class="token operator"><span class="token operator">+</span></span> <span class="token string"><span class="token string"><span class="text-green">",No!!!"</span></span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+  <span class="token punctuation"><span class="token punctuation">}</span></span>
+
+   <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="token function"><span class="token function">printInfo</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+      <span class="token function"><span class="token function"><span class="text-viola">setName</span></span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"Luke"</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+      <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span> <span class="token function"><span class="token function"></span></span><span class="text-viola"><span class="token function"><span class="token function"></span></span><strong><span class="token function"><span class="token function">getName</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span></strong><span class="token punctuation"></span></span><span class="token punctuation"></span><span class="token punctuation"><span class="token punctuation"></span><span class="token punctuation"></span><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+   <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>Ось як виглядає клас <span class="text-green"><strong>Нащадок</strong></span> з погляду компілятора: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword"><strong>public</strong></span></span> <span class="text-green"><strong>Потомок</strong></span> <span class="token keyword"><span class="token keyword"><span class="text-red"><strong>extends</strong></span></span></span> <span class="text-user"><strong>Родитель</strong></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+   <span class="token keyword"><span class="token keyword"></span></span><span style="color:grey"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token class-name"><span class="token class-name">String</span></span> name<span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">//  унаследованная переменная</span></span></span><span class="token comment"></span><span class="token comment"></span>
+
+   <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="text-viola">setName</span> <span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">String</span></span> nameNew<span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span> <span class="token comment"><span class="token comment">//  Переопределенный метод взамен унаследованного</span></span>
+
+       <span class="text-viola"><strong>name</strong></span> <span class="token operator"><span class="token operator">=</span></span> nameNew <span class="token operator"><span class="token operator">+</span></span> <span class="token string"><span class="token string"><span class="text-green">", No!!!"</span></span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+   <span class="token punctuation"><span class="token punctuation">}</span></span>
+   <span class="token keyword"><span class="token keyword"></span></span><span style="color:grey"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token function"><span class="token function">getName</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span> <span class="token comment"><span class="token comment">//  унаследованный метод.</span></span>
+
+      <span class="token keyword"><span class="token keyword">return</span></span> name<span class="token punctuation"><span class="token punctuation">;</span></span>
+   <span class="token punctuation"><span class="token punctuation">}</span></span></span><span class="token punctuation"></span><span class="token punctuation"></span>
+   <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="token function"><span class="token function">printInfo</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+     <span class="token function"><span class="token function"><span class="text-viola">setName</span></span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"Luke"</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+     <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token function"><span class="token function"></span></span><span class="text-viola"><span class="token function"><span class="token function">getName</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span></span><span class="token punctuation"></span><span class="token punctuation"><span class="token punctuation"></span><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+   <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre><strong>Приклад 2:</strong> трохи магії успадкування (та перевизначення методів). 
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>
+     <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="text-user"><strong>Родитель</strong></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+   <span class="token keyword"><span class="token keyword">public</span></span> <span class="token function"><span class="token function"><span class="text-viola">getName</span></span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+      <span class="token keyword"><span class="token keyword">return</span></span> <span class="token string"><span class="token string"><span class="text-green"><strong>"Luke"</strong></span></span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+  <span class="token punctuation"><span class="token punctuation">}</span></span>
+   <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="token function"><span class="token function">printInfo</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+     <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token function"><span class="token function"><span class="text-viola">getName</span></span></span><span class="token punctuation"><span class="token punctuation"></span></span><strong><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span></strong><span class="token punctuation"></span><span class="token punctuation"><span class="token punctuation"></span><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+   <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre></td>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="text-green"><strong>Потомок</strong></span> <span class="token keyword"><span class="token keyword"><span class="text-red"><strong>extends</strong></span></span></span> <span class="text-user"><strong>Родитель</strong></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+   <span class="token keyword"><span class="token keyword">public</span></span> <span class="token function"><span class="token function"><span class="text-viola">getName</span></span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+      <span class="token keyword"><span class="token keyword">return</span></span> <span class="token string"><span class="token string"><span class="text-green"><strong>"I'm your father, Luke"</strong></span></span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+  <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre></td>
+   </tr>
+  </tbody>
+ </table>
+</div>В даному прикладі: якщо в класі Нащадок не перевизначено метод <code class=" language-none">printInfo</code>(з класу Батька), при виклику цього методу об'єкт класу Нащадок буде викликаний його метод <code class=" language-none">getName()</code>, а не <code class=" language-none">getName()</code>класу Батька. 
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>
+     <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class="  language-java"><span class="text-user"><strong>Родитель</strong></span> parent <span class="token operator"><span class="token operator">=</span></span> <span class="token keyword"><span class="token keyword">new</span></span> <span class="text-user"><strong>Родитель</strong></span> <span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+parent<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">printnInfo</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span></code></pre></td>
+    <td>Цей код виведено на екран напис <span class="text-green"><strong>"Luke"</strong></span> .</td>
+   </tr>
+   <tr>
+    <td>
+     <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class="  language-java"><span class="text-green"><strong>Потомок</strong></span> child <span class="token operator"><span class="token operator">=</span></span> <span class="token keyword"><span class="token keyword">new</span></span> <span class="text-green"><strong>Потомок</strong></span> <span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+child<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">printnInfo</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span></code></pre></td>
+    <td>Цей код виведено на екран напис <span class="text-green"><strong>"I'm your father, Luke;" </strong></span>.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>Ось як виглядає клас <span class="text-green"><strong>Нащадок</strong></span> з погляду компілятора: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="text-green"><strong>Потомок</strong></span> <span class="token keyword"><span class="token keyword"><span class="text-red"><strong>extends</strong></span></span></span> <span class="text-user"><strong>Родитель</strong></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+   <span class="token keyword"><span class="token keyword">public</span></span> <span class="token function"><span class="token function"><span class="text-viola">getName</span></span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+      <span class="token keyword"><span class="token keyword">return</span></span> <span class="token string"><span class="token string"><span class="text-green"><strong>"I'm your father, Luke"</strong></span></span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+   <span class="token punctuation"><span class="token punctuation">}</span></span>
+   <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="token function"><span class="token function">printInfo</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+     <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token function"><span class="token function">getName</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+   <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre>
+<h2 id="Списки">3. Списки</h2>Якщо ви ще не познайомабося зі списками, то вам коротка інформація. Повну інформацію ви можете знайти на <strong>6-7 рівнях курсу CodeGym</strong> . <strong>Списки мають багато спільного з масивами:</strong>
+<ul>
+ <li>можуть зберігати багато даних певного типу;</li>
+ <li>дозволяють отримувати елементи за їх індексом/номером;</li>
+ <li>індекси елементів розпочинаються з 0.</li>
+</ul><strong>Переваги списків:</strong> На відміну від масивів списки можуть динамічно змінювати розмір. Відразу після створення список має розмір 0. У міру додавання елементів до списку його розмір збільшується. Приклад створення списку: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class="  language-java"><span class="token class-name"><span class="token class-name">ArrayList</span></span><span class="token generics"><span class="token punctuation"></span><span class="token generics"><span class="token punctuation"><span class="token punctuation">&lt;</span></span><span class="token class-name"><span class="token class-name">String</span></span><span class="token punctuation"><span class="token punctuation">&gt;</span></span></span><span class="token punctuation"></span></span> myList <span class="token operator"><span class="token operator">=</span></span> <span class="token keyword"><span class="token keyword">new</span></span> <span class="token class-name"><span class="token class-name">ArrayList</span></span><span class="token generics"><span class="token punctuation"></span><span class="token generics"><span class="token punctuation"><span class="token punctuation">&lt;</span></span><span class="token class-name"><span class="token class-name">String</span></span><span class="token punctuation"><span class="token punctuation">&gt;</span></span></span><span class="token punctuation"></span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">// создание нового списка типа ArrayList</span></span></code></pre> Значення у кутових дужках – це тип даних, які можуть зберігати список. Ось деякі методи для роботи зі списком: 
+<div class="table-container">
+ <table class="table table--striped">
+  <tbody>
+   <tr>
+    <th>Код</th>
+    <th>Короткий опис дій коду</th>
+   </tr>
+   <tr>
+    <td><code class=" language-none"><strong>ArrayList&lt;String&gt; list = new ArrayList&lt;String&gt;();</strong></code></td>
+    <td>Створення нового списку рядків</td>
+   </tr>
+   <tr>
+    <td><code class=" language-none"><strong>list.add("name");</strong></code></td>
+    <td>Додати елемент до кінця списку</td>
+   </tr>
+   <tr>
+    <td><code class=" language-none"><strong>list.add(0, "name");</strong></code></td>
+    <td>Додати елемент на початок списку</td>
+   </tr>
+   <tr>
+    <td><code class=" language-none"><strong>String name = list.get(5);</strong></code></td>
+    <td>Отримати елемент за його індексом</td>
+   </tr>
+   <tr>
+    <td><code class=" language-none"><strong>list.set(5, "new name");</strong></code></td>
+    <td>Змінити елемент за його індексом</td>
+   </tr>
+   <tr>
+    <td><code class=" language-none"><strong>int count = list.size();</strong></code></td>
+    <td>Отримати кількість елементів у списку</td>
+   </tr>
+   <tr>
+    <td><code class=" language-none"><strong>list.remove(4);</strong></code></td>
+    <td>Видалити елемент зі списку</td>
+   </tr>
+  </tbody>
+ </table>
+</div>Більше про списки можете дізнатися з цих статей: 
+<ol>
+ <li><a href="https://codegym.cc/groups/posts/1934-klass-arraylist" target="_blank">Клас ArrayList</a></li>
+ <li><a href="https://codegym.cc/groups/posts/1936-rabota-arraylist-v-kartinkakh--" target="_blank">Робота ArrayList в картинках</a></li>
+ <li><a href="https://codegym.cc/groups/posts/1935-udalenie-ehlementa-iz-spiska-arraylist" target="_blank">Видалення елемента зі списку ArrayList</a></li>
+</ol>
+<h2 id="Массивы">4. Масиви</h2>Що таке матриця? Матриця - не що інше як прямокутна таблиця, яка може бути заповнена даними. Інакше кажучи, це двовимірний масив. Як ви, напевно, знаєте, масиви Java є об'єктами. Стандартний одновимірний масив типу <code class=" language-none">int</code>виглядає так: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword"></span></span><strong><span class="token keyword"><span class="token keyword">int</span></span> <span class="token punctuation"><span class="token punctuation">[</span></span><span class="token punctuation"><span class="token punctuation">]</span></span> array <span class="token operator"><span class="token operator">=</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span><span class="token number"><span class="token number">12</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">32</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">43</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">54</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">15</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">36</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">67</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">28</span></span><span class="token punctuation"><span class="token punctuation">}</span></span><span class="token punctuation"><span class="token punctuation">;</span></span></strong><span class="token punctuation"></span></code></pre> Уявімо це візуально: 
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>0</th>
+    <th>1</th>
+    <th>2</th>
+    <th>3</th>
+    <th>4</th>
+    <th>5</th>
+    <th>6</th>
+    <th>7</th>
+   </tr>
+   <tr>
+    <td>12</td>
+    <td>32</td>
+    <td>43</td>
+    <td>54</td>
+    <td>15</td>
+    <td>36</td>
+    <td>67</td>
+    <td>28</td>
+   </tr>
+  </tbody>
+ </table>
+</div>Верхній рядок вказує адресаи осередків. Тобто щоб отримати число 67, потрібно звернутися до елемента масиву з індексом 6: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">int</span></span> number <span class="token operator"><span class="token operator">=</span></span> array<span class="token punctuation"><span class="token punctuation">[</span></span><span class="token number"><span class="token number">6</span></span><span class="token punctuation"><span class="token punctuation">]</span></span><span class="token punctuation"><span class="token punctuation">;</span></span></code></pre> Тут усе дуже просто. Двовимірний масив є масивом одновимірних масивів. Якщо ви про це чуєте вперше, зупиніться і уявіть це в голові. Двовимірний масив приблизно виглядає так: 
+<div class="table-container">
+ <table style="text-align:center;">
+  <tbody>
+   <tr>
+    <th>0</th>
+    <th rowspan="8"><span style="writing-mode: tb-rl; transform:rotate(180deg); font-size:20px;">Одновимірний масив</span></th>
+    <td>Одновимірний масив</td>
+   </tr>
+   <tr>
+    <th>1</th>
+    <td>Одновимірний масив</td>
+   </tr>
+   <tr>
+    <th>2</th>
+    <td>Одновимірний масив</td>
+   </tr>
+   <tr>
+    <th>3</th>
+    <td>Одновимірний масив</td>
+   </tr>
+   <tr>
+    <th>4</th>
+    <td>Одновимірний масив</td>
+   </tr>
+   <tr>
+    <th>5</th>
+    <td>Одновимірний масив</td>
+   </tr>
+   <tr>
+    <th>6</th>
+    <td>Одновимірний масив</td>
+   </tr>
+   <tr>
+    <th>7</th>
+    <td>Одновимірний масив</td>
+   </tr>
+  </tbody>
+ </table>
+</div>У коді: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">int</span></span> <span class="token punctuation"><span class="token punctuation">[</span></span><span class="token punctuation"><span class="token punctuation">]</span></span><span class="token punctuation"><span class="token punctuation">[</span></span><span class="token punctuation"><span class="token punctuation">]</span></span> matrix <span class="token operator"><span class="token operator">=</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+<span class="token punctuation"><span class="token punctuation"></span></span><div style="margin-left:230px;"><span class="token punctuation"><span class="token punctuation">{</span></span><span class="token number"><span class="token number">65</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">99</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">87</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">90</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">156</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">75</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">98</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">78</span></span><span class="token punctuation"><span class="token punctuation">}</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+<span class="token punctuation"><span class="token punctuation">{</span></span><span class="token number"><span class="token number">76</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">15</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">76</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">91</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">66</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">90</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">15</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">77</span></span><span class="token punctuation"><span class="token punctuation">}</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+<span class="token punctuation"><span class="token punctuation">{</span></span><span class="token number"><span class="token number">65</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">96</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">17</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">25</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">36</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">75</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">54</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">78</span></span><span class="token punctuation"><span class="token punctuation">}</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+<span class="token punctuation"><span class="token punctuation">{</span></span><span class="token number"><span class="token number">59</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">45</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">68</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">14</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">57</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">1</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">9</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">63</span></span><span class="token punctuation"><span class="token punctuation">}</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+<span class="token punctuation"><span class="token punctuation">{</span></span><span class="token number"><span class="token number">81</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">74</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">47</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">52</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">42</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">785</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">56</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">96</span></span><span class="token punctuation"><span class="token punctuation">}</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+<span class="token punctuation"><span class="token punctuation">{</span></span><span class="token number"><span class="token number">66</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">74</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">58</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">16</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">98</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">140</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">55</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">77</span></span><span class="token punctuation"><span class="token punctuation">}</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+<span class="token punctuation"><span class="token punctuation">{</span></span><span class="token number"><span class="token number">120</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">99</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">13</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">90</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">78</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">98</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">14</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">78</span></span><span class="token punctuation"><span class="token punctuation">}</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+<span class="token punctuation"><span class="token punctuation">{</span></span><span class="token number"><span class="token number">20</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">18</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">74</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">91</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">96</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">104</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">105</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">77</span></span><span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></div><span class="token punctuation"></span></code></pre>
+<div class="table-container">
+ <table style="text-align:center;" class="table table--striped">
+  <tbody>
+   <tr>
+    <th rowspan="2">0</th>
+    <th>0</th>
+    <th>1</th>
+    <th>2</th>
+    <th>3</th>
+    <th>4</th>
+    <th>5</th>
+    <th>6</th>
+    <th>7</th>
+   </tr>
+   <tr>
+    <td>65</td>
+    <td>99</td>
+    <td>87</td>
+    <td>90</td>
+    <td>156</td>
+    <td>75</td>
+    <td>98</td>
+    <td>78</td>
+   </tr>
+   <tr>
+    <th rowspan="2">1</th>
+    <td>0</td>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+    <td>4</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+   </tr>
+   <tr>
+    <td>76</td>
+    <td>15</td>
+    <td>76</td>
+    <td>91</td>
+    <td>66</td>
+    <td>90</td>
+    <td>15</td>
+    <td>77</td>
+   </tr>
+   <tr>
+    <th rowspan="2">2</th>
+    <td>0</td>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+    <td>4</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+   </tr>
+   <tr>
+    <td>65</td>
+    <td>96</td>
+    <td>17</td>
+    <td>25</td>
+    <td>36</td>
+    <td>75</td>
+    <td>54</td>
+    <td>78</td>
+   </tr>
+   <tr>
+    <th rowspan="2">3</th>
+    <td>0</td>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+    <td>4</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+   </tr>
+   <tr>
+    <td>59</td>
+    <td>45</td>
+    <td>68</td>
+    <td>14</td>
+    <td>57</td>
+    <td>1</td>
+    <td>9</td>
+    <td>63</td>
+   </tr>
+   <tr>
+    <th rowspan="2">4</th>
+    <td>0</td>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+    <td>4</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+   </tr>
+   <tr>
+    <td>81</td>
+    <td>74</td>
+    <td style="background-color:orange;">47</td>
+    <td>52</td>
+    <td>42</td>
+    <td>785</td>
+    <td>56</td>
+    <td>96</td>
+   </tr>
+   <tr>
+    <th rowspan="2">5</th>
+    <td>0</td>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+    <td>4</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+   </tr>
+   <tr>
+    <td>66</td>
+    <td>74</td>
+    <td>58</td>
+    <td>16</td>
+    <td>98</td>
+    <td>140</td>
+    <td>55</td>
+    <td>77</td>
+   </tr>
+   <tr>
+    <th rowspan="2">6</th>
+    <td>0</td>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+    <td>4</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+   </tr>
+   <tr>
+    <td>120</td>
+    <td>99</td>
+    <td>13</td>
+    <td>90</td>
+    <td>78</td>
+    <td>98</td>
+    <td>14</td>
+    <td>78</td>
+   </tr>
+   <tr>
+    <th rowspan="2">7</th>
+    <td>0</td>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+    <td>4</td>
+    <td>5</td>
+    <td>6</td>
+    <td>7</td>
+   </tr>
+   <tr>
+    <td>20</td>
+    <td>18</td>
+    <td>74</td>
+    <td>91</td>
+    <td>96</td>
+    <td>104</td>
+    <td>105</td>
+    <td>77</td>
+   </tr>
+  </tbody>
+ </table>
+</div>Щоб отримати значення 47, необхідно звернутися до елементу матриці на адресау [4][2]. 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">int</span></span> number <span class="token operator"><span class="token operator">=</span></span> matrix<span class="token punctuation"><span class="token punctuation">[</span></span><span class="token number"><span class="token number">4</span></span><span class="token punctuation"><span class="token punctuation">]</span></span><span class="token punctuation"><span class="token punctuation">[</span></span><span class="token number"><span class="token number">2</span></span><span class="token punctuation"><span class="token punctuation">]</span></span><span class="token punctuation"><span class="token punctuation">;</span></span></code></pre> Якщо ви помітабо, координати матриці відрізняються від класичної прямокутної системи координат (Декартова система координат). <strong>При зверненні до матриці спочатку ви вказуєте y, потім x</strong> , тоді як у математиці прийнято спочатку вказувати x (x, y). Можливо, ви запитуєте: «А чому б не перевернути матрицю у своїй уяві і не звертатися до елементів звичним шляхом через (x, y)? Від цього вміст матриці не зміниться». Так, нічого не зміниться. Але у світі програмування до матриць прийнято звертатися у формі "спочатку y, потім x". Це потрібно сприйняти як належне. Тепер давайте поговоримо про проектування матриці на наш двигун (клас <code class=" language-none">Game</code>). Як вам відомо, у двигуна є багато методів, які змінюють клітини ігрового поля за заданими координатами. Наприклад, метод<code class=" language-none"><strong>setCellValue(int x, int y, String value)</strong></code>. Він встановлює певну клітину з координатами (x, y) значення <code class=" language-none">value</code>. Як ви помітабо, цей метод спочатку приймає саме х, як у класичній системі координат. Аналогічним чином працюють інші методи движка. При розробці ігор часто буде з'являтися необхідність відтворювати стан матриці на екрані. Як це зробити? По-перше, у циклі потрібно перебрати всі елементи матриці. По-друге, для кожного з них викликати метод відображення з ІНВЕРТОВАНИМИ координатами. Приклад: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">private</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="token function"><span class="token function">drawScene</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+    <span class="token keyword"><span class="token keyword">for</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span><span class="token keyword"><span class="token keyword">int</span></span> i <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">0</span></span><span class="token punctuation"><span class="token punctuation">;</span></span> i <span class="token operator"><span class="token operator">&lt;</span></span> matrix<span class="token punctuation"><span class="token punctuation">.</span></span>length<span class="token punctuation"><span class="token punctuation">;</span></span> i<span class="token operator"><span class="token operator">++</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+        <span class="token keyword"><span class="token keyword">for</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span><span class="token keyword"><span class="token keyword">int</span></span> j <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">0</span></span><span class="token punctuation"><span class="token punctuation">;</span></span> j <span class="token operator"><span class="token operator">&lt;</span></span> matrix<span class="token punctuation"><span class="token punctuation">[</span></span>i<span class="token punctuation"><span class="token punctuation">]</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>length<span class="token punctuation"><span class="token punctuation">;</span></span> j<span class="token operator"><span class="token operator">++</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+            <span class="token function"><span class="token function">setCellValue</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>j<span class="token punctuation"><span class="token punctuation">,</span></span> i<span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token class-name"><span class="token class-name">String</span></span><span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">valueOf</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>matrix<span class="token punctuation"><span class="token punctuation">[</span></span>i<span class="token punctuation"><span class="token punctuation">]</span></span><span class="token punctuation"><span class="token punctuation">[</span></span>j<span class="token punctuation"><span class="token punctuation">]</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+        <span class="token punctuation"><span class="token punctuation">}</span></span>
+    <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre> Звісно, ​​інверсія працює у двох напрямках. Метод <code class=" language-none">setCellValue</code>можна передати (i, j), але при цьому з матриці взяти елемент [j][i]. Інверсія може здатися трохи складною, але про неї потрібно пам'ятати. І завжди, якщо виникають якісь проблеми, варто взяти папірець із ручкою, накреслити матрицю та відтворити, які процеси з нею відбуваються. 
+<h2 id="Случайные числа">5. Випадкові числа</h2><strong>Як працювати з генератором випадкових чисел? </strong> У класі <code class=" language-none">Game</code>визначено метод <code class=" language-none"><strong>getRandomNumber(int)</strong></code>. Під капотом він використовує клас <code class=" language-none">Random</code>із пакета java.util, але принцип роботи з генератором випадкових чисел від цього не змінюється. Як аргумент <code class=" language-none">getRandomNumber(int)</code>приймає ціле число. Це буде верхньою межею, яку може повернути генератор. Нижнім кордоном є 0. <mark>Важливо!</mark> Генератор НІКОЛИ не поверне верхнє граничне число. Наприклад, якщо викликати <code class=" language-none">getRandomNumber(3)</code>він може повернути 0, 1, 2. Як бачите, 3 він повернути не може. Таке використання генератора досить простим, але дуже ефективним у багатьох випадках. <strong>Вам потрібно отримати випадкове число в якихось межах:</strong> Уявіть, що вам потрібне якесь тризначне число (100..999). Як ви вже знаєте, мінімальне число, що повертається — 0. Значить, вам потрібно буде до нього додати 100. Але в такому випадку необхідно подбати про те, щоб не переступити верхній кордон. Щоб отримати 999 як максимальне випадкове значення, слід викликати метод<code class=" language-none">getRandomNumber(int)</code>з аргументом 1000. Але ми пам'ятаємо про подальше додавання 100: значить і верхню межу слід знизити на 100. Тобто код для отримання випадкового тризначного числа буде виглядати так: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword"></span></span><strong><span class="token keyword"><span class="token keyword">int</span></span> number <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">100</span></span> <span class="token operator"><span class="token operator">+</span></span> <span class="token function"><span class="token function">getRandomNumber</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token number"><span class="token number">900</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span></strong><span class="token punctuation"></span></code></pre> Але для спрощення подібної процедури в движку передбачений метод <code class=" language-none">getRandomNumber(int, int)</code>, який як перший аргумент приймає мінімальне для повернення число. Використовуючи цей метод, попередній приклад можна переписати: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">int</span></span> number <span class="token operator"><span class="token operator">=</span></span> <span class="token function"><span class="token function">getRandomNumber</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token number"><span class="token number">100</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">1000</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span></code></pre> Випадкові числа можуть використовуватись для отримання випадкового елемента масиву: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class="  language-java"><span class="token class-name"><span class="token class-name">String</span></span> <span class="token punctuation"><span class="token punctuation">[</span></span><span class="token punctuation"><span class="token punctuation">]</span></span> names <span class="token operator"><span class="token operator">=</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span><span class="token string"><span class="token string">"Андрій"</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token string"><span class="token string">"Валентин"</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token string"><span class="token string">"Сергей"</span></span><span class="token punctuation"><span class="token punctuation">}</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token class-name"><span class="token class-name">String</span></span> randomName <span class="token operator"><span class="token operator">=</span></span> names<span class="token punctuation"><span class="token punctuation">[</span></span><span class="token function"><span class="token function">getRandomNumber</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>names<span class="token punctuation"><span class="token punctuation">.</span></span>length<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">]</span></span></code></pre><strong>Виклик певних подій з певною ймовірністю. </strong> У людини ранок починається за можливими сценаріями: Проспів – 50%; Встав вчасно – 40%; Встав на годину раніше, ніж належить - 10%. Уявіть, що ви пишете емулятор ранку. Вам потрібно викликати події з певною ймовірністю. Для цього, знов-таки, треба скористатися генератором випадкових чисел. Реалізації можуть бути різні, але найпростіша повинна відбуватися за таким алгоритмом: 
+<ol>
+ <li>встановлюємо межі, у яких потрібно згенерувати число;</li>
+ <li>генеруємо випадкове число;</li>
+ <li>обробляємо отримане число.</li>
+</ol>Отже, у разі межею буде 10. Викличемо метод<code class=" language-none">getRandomNumber(10)</code>і проаналізуємо, що він може повернути. Повернути він може 10 цифр (від 0 до 9) і кожну однакову ймовірність — 10%. Тепер нам потрібно скомбінувати всі можливі результати та зіставити їх із нашими можливими подіями. Комбінацій може бути дуже багато, залежно від вашої фантазії, але найочевидніша звучить: «Якщо випадкове число лежить у межах [0..4] — виклик події «Проспав», якщо число в межах [5..8] — «Встав вчасно», і тільки якщо число 9, тоді «Встав на годину раніше, ніж належить». Все дуже просто: в межах [0..4] лежить 5 чисел, кожне з яких може повернутись з ймовірністю 10%, що у сумі і буде 50%; в межах [5..8] лежить 4 числа, та 9 — однина, яка утворюється з ймовірністю 10%. У коді вся ця хитромудра конструкція виглядає ще простіше: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">int</span></span> randomNumber <span class="token operator"><span class="token operator">=</span></span> <span class="token function"><span class="token function">getRandomNumber</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token number"><span class="token number">10</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token keyword"><span class="token keyword">if</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span>randomNumber <span class="token operator"><span class="token operator">&lt;</span></span> <span class="token number"><span class="token number">5</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+    <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"Проспал "</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span> <span class="token keyword"><span class="token keyword">else</span></span> <span class="token keyword"><span class="token keyword">if</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span>randomNumber <span class="token operator"><span class="token operator">&lt;</span></span> <span class="token number"><span class="token number">9</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+    <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"Встал вовремя "</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span> <span class="token keyword"><span class="token keyword">else</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+    <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"Встал на час раньше положенного "</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre> Взагалі варіантів застосування випадкових чисел може бути дуже багато. Все залежить лише від вашої фантазії. Але найефективніше їх застосовувати, якщо потрібно багаторазово отримувати якийсь результат. Тоді цей результат відрізнятиметься від попереднього. З якоюсь ймовірністю, звісно. На цьому все! Якщо ви хочете дізнатися про розділ "Ігри" більше, ось корисна документація, яка може допомогти. 
+<ul>
+ <li><a href="https://codegym.cc/groups/posts/2052-razdel-igrih-na-codegym-chastjh-1-populjarnihe-voprosih" target="_blank">Розділ "Ігри" на CodeGym: Популярні питання</a></li>
+ <li><a href="https://codegym.cc/groups/posts/2056-razdel-igrih-na-codegym-chastjh-3-obrabotka-sobihtiy" target="_blank">Розділ "Ігри" на CodeGym: Обробка подій</a></li>
+ <li><a href="https://codegym.cc/groups/posts/2055-razdel-igrih-na-codegym-chastjh-2-opisanie-igrovogo-dvizhka" target="_blank">Розділ "Ігри" на CodeGym: Ігровий двигун</a></li>
+</ul>

@@ -1,0 +1,152 @@
+Нова Java… Знову… Зустрічаємо Java 10
+<p>----------------------------------------</p>
+Це раніше розробники чекали на нову Java по кілька років, хто — з жахом, а хто і з надією. Часи змінилися, і нові версії JDK радуватимуть нас раз на півроку. Якщо вам поки що неясно, до чого це приведе, ознайомтеся з , а тут ми перерахуємо 
+<p>----------------------------------------</p>
+Це раніше розробники чекали на нову Java по кілька років, хто — з жахом, а хто і з надією. Часи змінабося, і нові версії JDK радуватимуть нас раз на півроку. Якщо вам поки що неясно, до чого це приведе, ознайомтеся з <a href="https://codegym.cc/groups/posts/541-bezvremennihy-konec-ehpokhi-jdk-8" target="_blank">думкою експерта</a> , а тут ми перерахуємо основні зміни в Java 10 - найновішої версії нашої з вами улюбленої мови. <img data-id="b4d3701f-93b2-4595-a4c0-a866e66c3844" data-max-width="850" alt="Нова Java… Знову… Зустрічаємо Java 10 - 1" src="https://cdn.javarush.com/images/article/b4d3701f-93b2-4595-a4c0-a866e66c3844/800.jpeg" style="width: 850px;">У квадратних дужках перед новою фічею вказаний номер JEP, тобто JDK Enchancement Proposal. JEP – це пропозиція щодо покращення OpenJDK, яку можуть затвердити, відкласти або відхаботи. Тобто, по суті, збірка JEP'ів є стратегією розвитку OpenJDK. 
+<h3>Важливі фічі Java 10</h3><a href="http://openjdk.java.net/jeps/286" target="_blank">[286] Local-Variable Type Inference</a> - пропозиція щодо введення в Java ключового слова var, що позбавляє необхідності вказувати тип локальної змінної явно. Тобто тепер ви можете не вказувати тип проініціалізованої змінної, а писати щось на кшталт: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">var</span></span> list <span class="token operator"><span class="token operator">=</span></span> <span class="token keyword"><span class="token keyword">new</span></span> <span class="token class-name"><span class="token class-name">ArrayList</span></span><span class="token generics"><span class="token punctuation"></span><span class="token generics"><span class="token punctuation"><span class="token punctuation">&lt;</span></span><span class="token class-name"><span class="token class-name">String</span></span><span class="token punctuation"><span class="token punctuation">&gt;</span></span></span><span class="token punctuation"></span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>  <span class="token comment"><span class="token comment">//перед нами ArrayList&lt;String&gt;</span></span>
+<span class="token keyword"><span class="token keyword">var</span></span> stream <span class="token operator"><span class="token operator">=</span></span> list<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">stream</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>          <span class="token comment"><span class="token comment">// перед нами Stream&lt;String&gt;</span></span></code></pre> Це усуває дублювання визначення типу ArrayList &lt;&gt;, яке нам довелося б використовувати раніше. Цікаво відзначити, що var не стає ключовим словом, а є типом, що зарезервований. Тобто ви можете використовувати var як ім'я змінної, метод або пакет. А ось назвати так клас ви не зможете (яка втрата!). <a href="http://openjdk.java.net/jeps/296" target="_blank">[296] Об'єднання «лісу» JDK в єдиний репозиторій</a> . У JDK 9 є вісім репозиторіїв - root, corba, hotspot, jaxp, jaxws, jdk, langtools, nashorn. У Java 10 весь цей ліс об'єднають у єдиний репозиторій, щоб з'явилася можливість виконувати атомарні коміти у взаємозалежних репозиторіях наборів змін. <a href="http://openjdk.java.net/jeps/304" target="_blank">[304] Garbage-Collector Interface</a>— це не інтерфейс, який може бути використаний розробниками для керування збиранням сміття. Натомість ми отримуємо чистий інтерфейс збирача сміття у вихідному коді JVM, що дозволяє швидко та легко інтегрувати альтернативні збирачі. Найбільше цього поліпшення зрадіють ті, хто мріяв додати в JVM свій власний збирач сміття. <a href="http://openjdk.java.net/jeps/307" target="_blank">[307] Parallel Full GC для збирача сміття G1</a> . У JDK 9 збирачем сміття за умовчанням став G1, тоді як раніше базовим збирачем був Parallel GC, який міг збирати сміття в кількох потоках. Тепер це зможе і G1, раніше він робив це в одному потоці, що іноді спричиняло складнощі. До речі, розробники зможуть налаштовувати кількість потоків за допомогою параметра - <code class=" language-none">XX:ParallelGCThreads.</code> <a href="http://openjdk.java.net/jeps/310" target="_blank">[310] Application Class-Data Sharing</a>— це напрацювання, прийняте у версії Java 10, пропонує покращити завантаження та відстеження, розширити існуючу функцію поділу класів (CDS), щоб дозволити класам додатків розміщуватись у загальному архіві. <em><strong>Class-Data Sharing</strong></em>або скорочено CDS працює з файлуми розширення *class. Ця функція дозволяє вибрати деяке підмножина класів, обробити та стиснути у спеціальний архів. Усе це зроблено задля економії пам'яті. Часто різні екземпляри JVM завантажують ті самі класи, що входять до стандартної бібліотеки. А CDS дозволяє всім цим екземплярам JVM спільно використовувати єдиний архів із поміщеними до нього класами. Це зменшує і час завантаження програм, і пам'ять, що використовується. Насправді CDS підвищує продуктивність запуску JVM та зменшує обсяг ресурсів, коли кілька JVM працюють на одній фізичній чи віртуальній машині, починаючи з п'ятої версії. Але раніше використання CDS обмежувалося лише завантажувачем bootstrap. Тепер розширена версія під назвою Application CDS дозволяє завантажувати спеціальні архіви з класами та іншим завантажувачам. <a href="http://openjdk.java.net/jeps/312" target="_blank">[312] Thread-Local Handshakes</a> - досить низькорівнева зміна всередині JVM, яка дозволить виконувати зворотний виклик потоками без виконання глобальної точки безпеки VM. Це дозволить без зайвих витрат зупиняти окремі потоки, а не всі одразу (або жодного). <a href="http://openjdk.java.net/jeps/313" target="_blank">[313] Remove the Native-Header Generation Tool (javah)</a> . Ще в Java 9 розробники мови почали активно прибирати непотрібні інструменти, і JEP 313 продовжує це добре. Інструмент javah генерує JNI-header'и, якщо код має native-методи. Корисно? Звичайно, але рідний компілятор javac, починаючи з JDK 8, сам вміє генерувати JNI-header'и. Так що від javah тепер вирішабо позбутися. До речі, зараз ведуться розробки проекту <a href="http://openjdk.java.net/projects/panama/" target="_blank">Panama</a> , який, зокрема, може замінити JNI. <a href="http://openjdk.java.net/jeps/314" target="_blank">[314] Additional Unicode Language-Tag Extensions</a> дана зміна покликана покращити клас java.util.Locale і пов'язані з ним API для реалізації додаткових розширень Unicode тегів мови BCP 47. Зокрема, тепер підтримуватимуться теги для типу валюти (cu), першого дня тижня (fw), перевизначення регіону (rg) та часового поясу (tz). <a href="http://openjdk.java.net/jeps/316" target="_blank">[316] Heap Allocation on Alternative Memory Devices</a> це нововведення допоможе тим, хто використовує інші, відмінні від DRAM, типи пам'яті. Оскільки технології постійно змінюються, то використання енергонезалежної пам'яті з тим самим інтерфейсом і подібними до DRAM характеристиками продуктивності — об'єктивна реальність на сьогоднішній день. Отже, JEP 316 дозволяє JVM розміщувати купу (heap) в інших типах пам'яті. <a href="http://openjdk.java.net/jeps/317" target="_blank">[317] Experimental Java-Based JIT Compiler</a> . Нещодавно було анонсовано проект Metropolis, в якому пропонується переписати більшу частину JVM на Java. Якщо ви не знали, поточна версія написана на C++. Ну а якщо ви вже в курсі, мабуть, у перший момент подібна ідея видасться вам дивною. Якщо JVM написана на Java, хіба вам не знадобиться JVM для запуску JVM? Така ось рекурсія, що нагадує про дзеркала навпроти один одного. Однак насправді все трохи інакше: якщо JVM написана на Java, це не означає, що ви повинні скомпілювати її в байт-коди. Насправді можна використовувати AOT-компіляцію, а потім JIT компілює код, оскільки він працює для підвищення продуктивності. 
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>
+     <p>Для компіляції Java коду зазвичай використовується такий інструмент, як javac. Він перетворює програму на Java на набір клас-файлів із байт-кодами. Далі JVM запускає ваш байт-код і її інтерпретатор перетворює в інструкції процесора. Окрім інтерпретатора, у JVM є і вбудований компілятор, і він також може створити інструкції для процесора з байт-коду. Це так звана runtime compilation, компіляція під час запуску. Зазвичай такий компіляції піддають той код, який найчастіше використовувати це покращує продуктивність.</p>
+     <p>Компілятор може виконувати дії по-різному: JIT-компіляція (just-in-time) - динамічна, безпосередньо під час виконання програми або AOT-компіляція (ahead-of-time) - перед виконанням.</p>
+     <p>AOT-компілятор jaotc з'явився в JDK 9. В даний час Hotspot JVM містить два JIT-компілятори, C1 (для швидкості) та C2 (для оптимізації).</p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>JEP 317 представляє проект досліджень Graal – компілятора для JDK. Це якийсь базис, який допоможе реалізувати Metropolis реальністю та дати можливість JVM відповідати (а краще – перевершити) за продуктивністю поточну версію, написану на C++. <a href="http://openjdk.java.net/jeps/319" target="_blank">[319] Root Certificates</a> – набір стандартних сертифікатів Certification Authority (CA) за замовчуванням у JDK. Тепер у збірках OpenJDK критичні компоненти безпеки, такі як TLS, працюватимуть за замовчуванням. Це корисне доповнення, швидше за все, стосується тих дій Oracle, які компанія робить, щоб гарантувати, що двійкові файли OpenJDK та двійкові файли Oracle JDK функціонально однакові. <a href="http://openjdk.java.net/jeps/322" target="_blank">[322] Time-Based Release Versioning</a>— у Java 10 Feature releases додаватимуться нові фічі, а в Update Releases — усуватися помилки. По суті, перед нами новий спосіб завдання форматів рядка версії JDK. Він усуває досить дивну ситуацію з JDK 9. Першим оновленням значився JDK 9.0.1, що цілком логічно. Друге оновлення – JDK 9.0.4, що нелогічно. Логіка полягає в тому, що в рамках схеми нумерації версій JDK 9 простір залишається між оновленнями у разі потреби екстреного, незапланованого оновлення. Оскільки оновлення не було необхідним, чому просто не назвати його JDK 9.0.2? А ось як виглядає новий формат версій Java: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class="  language-java"><span class="token punctuation"><span class="token punctuation">[</span></span><span class="token number"><span class="token number">1</span></span><span class="token operator"><span class="token operator">-</span></span><span class="token number"><span class="token number">9</span></span><span class="token punctuation"><span class="token punctuation">]</span></span><span class="token punctuation"><span class="token punctuation">[</span></span><span class="token number"><span class="token number">0</span></span><span class="token operator"><span class="token operator">-</span></span><span class="token number"><span class="token number">9</span></span><span class="token punctuation"><span class="token punctuation">]</span></span><span class="token operator"><span class="token operator">*</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>\<span class="token number"><span class="token number">.0</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token operator"><span class="token operator">*</span></span>\<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token punctuation"><span class="token punctuation">[</span></span><span class="token number"><span class="token number">1</span></span><span class="token operator"><span class="token operator">-</span></span><span class="token number"><span class="token number">9</span></span><span class="token punctuation"><span class="token punctuation">]</span></span><span class="token punctuation"><span class="token punctuation">[</span></span><span class="token number"><span class="token number">0</span></span><span class="token operator"><span class="token operator">-</span></span><span class="token number"><span class="token number">9</span></span><span class="token punctuation"><span class="token punctuation">]</span></span><span class="token operator"><span class="token operator">*</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token operator"><span class="token operator">*</span></span></code></pre>
+<h3>Нові API</h3>До стандартних бібліотек класів JDK 10 додано 73 доповнення. 
+<ul>
+ <li>
+  <p><strong>java.awt.Toolkit</strong></p>
+  <p><code class=" language-none">int getMenuShortcutKeyMaskEx ()</code>: визначає, який розширений ключ-модифікатор є відповідним ключем прискорювача меню ярликів.</p></li>
+ <li>
+  <p><strong>java.awt.geom.Path2D:</strong></p>
+  <p><code class=" language-none">void trimToSize ()</code>: Обрізає ємність цього екземпляра <code class=" language-none">Path2D</code>до його поточного розміру. Програма може використовувати цю операцію для мінімізації зберігання шляху. Той самий метод доданий у внутрішні класи <code class=" language-none">Path2D.Double</code>і <code class=" language-none">Path2D.Float</code>.</p></li>
+ <li>
+  <p><strong>java.io.ByteArrayOutputStream:</strong></p>
+  <p><code class=" language-none">String toString (Charset)</code>: перевантажений <code class=" language-none">toString</code>, перетворює вміст буфера рядок шляхом декодування байтів з використанням зазначеної кодування.</p></li>
+ <li>
+  <p><strong>java.io.PrintStream та lang.io.PrintWriter:</strong></p>
+  <p>Обидва ці класи отримали три нових конструктори, які приймають додатковий аргумент <code class=" language-none">charset</code>.</p></li>
+ <li>
+  <p><strong>java.io.Reader:</strong></p>
+  <p><code class=" language-none">long transferTo (Writer)</code>: зчитує всі символи з цього рідера та записує символи в заданий райтер у порядку, в якому вони читаються.</p></li>
+ <li>
+  <p><strong>java.lang.Runtime.Version:</strong></p>
+  <p>Чотири нові методи, які повертають ціле значення для нової версії (JEP 322) рядкових полів: <code class=" language-none">feature ()</code>, <code class=" language-none">interim ()</code>, <code class=" language-none">patch ()</code>і <code class=" language-none">update ()</code>.</p></li>
+ <li>
+  <p><strong>java.lang.StackWalker.StackFrame:</strong></p></li>
+ <li>
+  <p><strong>String getDescriptor():</strong></p>
+  <p>повертає дескриптор методу, представленого цим кадром стека, як визначено специфікацією віртуальної машини Java.</p></li>
+ <li>
+  <p><strong>String getMethodType ():</strong></p>
+  <p>повертає <code class=" language-none">MethodType</code>, що представляє типи параметрів, і тип значення, що повертається для методу, представленого фреймом стека.</p></li>
+ <li>
+  <p><strong>java.lang.invoke.MethodType:</strong></p>
+  <p>Class &lt;?&gt; LastParameterType(): повертає останній тип параметра цього типу методу. Якщо цей тип немає параметрів, замість нього повертається значення <code class=" language-none">sentinel void.class</code>.</p></li>
+ <li>
+  <p><strong>java.lang.management.RuntimeMXBean:</strong></p>
+  <p><code class=" language-none">long getPid ()</code>повертає <code class=" language-none">pid</code>запущену віртуальну машину Java.</p></li>
+ <li>
+  <p><strong>java.lang.management.ThreadMXBean:</strong></p>
+  <p><code class=" language-none">ThreadInfo [] dumpAllThreads (boolean, boolean, int):</code>повертає інформацію про потік для всіх потоків у реальному часі з трасуванням стека із зазначеною максимальною кількістю елементів та інформацією про синхронізацію.</p></li>
+ <li>
+  <p><strong>ThreadInfo [] getThreadInfo (long [], boolean, boolean, int):</strong></p>
+  <p>повертає інформацію про потік для кожного потоку, чия ідентифікація знаходиться у вхідному масиві, з трасуванням стека зазначеної максимальної кількості елементів та інформацією про синхронізацію.</p></li>
+ <li>
+  <p><strong>java.lang.reflect.MalformedParameterizedTypeException:</strong></p>
+  <p>додано новий конструктор, який приймає докладне повідомлення у вигляді рядка як параметр.</p></li>
+ <li>
+  <p><strong>java.net.URLDecoder та java.net.URLEncoder:</strong></p>
+  <p>обидва ці класи отримали нові перевантажені методи розкодування та кодування, які використовують <code class=" language-none">charset</code>як додатковий параметр.</p></li>
+ <li>
+  <p><strong>java.nio.channels.Channels:</strong></p>
+  <p>Два нових статичних перевантажених методи <code class=" language-none">newReader (ReadByteChannel, Charset)</code>і <code class=" language-none">newWriter (WriteByteChannel, Charset)</code>, які дозволяють використовувати <code class=" language-none">charset</code>.</p></li>
+ <li>
+  <p><strong>java.nio.file.FileStore:</strong></p>
+  <p><code class=" language-none">long getBlockSize ()</code>: повертає кількість байтів на блок цього сховища файлів.</p></li>
+ <li>
+  <p><strong>java.time.chrono:</strong></p>
+  <p>три класи в цьому пакеті, <code class=" language-none">HijrahEra</code>, <code class=" language-none">MiinguoEra</code>і <code class=" language-none">ThaiBuddhistEra</code>, отримали метод <code class=" language-none">String getDisplayName (TextStyle, Locale)</code>. Він повертає текстове ім'я, що використовується для ідентифікації епохи, що підходить для представлення користувачеві.</p></li>
+ <li>
+  <p><strong>java.time.format.DateTimeFormatter:</strong></p>
+  <p><code class=" language-none">localizedBy (Locale)</code>: повертає копію цього формату з локалізованими значеннями мови, календаря, регіону, десяткового стилю та/або часового поясу, які замінюють значення в цьому форматі.</p></li>
+ <li>
+  <p><strong>java.util:</strong></p>
+  <p><code class=" language-none">DoubleSummaryStatistics</code>, <code class=" language-none">IntSummaryStatistics</code>і <code class=" language-none">LongSummaryStatistics</code>отримали новий конструктор, який набуває чотирьох числових значень. Він створює непустий екземпляр із зазначеним лічильником, мінімумом, максимумом та сумою.</p>
+  <p></p></li>
+ <li>
+  <p><strong>java.util.List, java.util.Map та java.util.Set:</strong></p>
+  <p>кожен із цих інтерфейсів обзавівся новим статичним методом <code class=" language-none">copyOf (Collection)</code>. Вони повертають незмінні <code class=" language-none">List</code>, <code class=" language-none">Map</code>або <code class=" language-none">Set</code>містять елементи даної колекції, у своєму порядку ітерації.</p></li>
+ <li>
+  <p><strong>java.util.Optional, java.util.OptionalDouble, java.util.OptionalInt, java.util.OptionalLong:</strong></p>
+  <p>кожен із цих класів отримує новий метод <code class=" language-none">orElseThrow ()</code>, який сутнісно робить те саме, як і <code class=" language-none">get ()</code>, тобто якщо умова виконується, значення повертається. В іншому випадку генерується виняток <code class=" language-none">NoSuchElementException</code>.</p></li>
+ <li>
+  <p><strong>java.util.Formatter та java.util.Scanner:</strong></p>
+  <p>Обидва ці класи отримали три нових конструктори, які на вхід отримують <code class=" language-none">charset</code>на додаток до інших аргументів.</p></li>
+ <li>
+  <p><strong>java.util.Properties:</strong></p>
+  <p>Тут з'явився новий конструктор, який приймає аргумент <code class=" language-none">int</code>. Це створює порожній список властивостей без значень за замовчуванням і початковим розміром, що містить вказану кількість елементів без необхідності динамічної зміни розміру. Також з'явилася нова, перевантажена версія методу <code class=" language-none">replace</code>, яка приймає три параметри <code class=" language-none">Object</code>та повертає логічне значення.</p></li>
+ <li>
+  <p><strong>java.SplittableRandom:</strong></p>
+  <p><code class=" language-none">void nextBytes (byte [])</code>: заповнює наданий користувачем масив байтів з псевдовипадковими байтами, що генеруються.</p></li>
+ <li>
+  <p><strong>java.util.concurrent.FutureTask:</strong></p>
+  <p>додано метод <code class=" language-none">toString ()</code>, який повертає рядок, що ідентифікує <code class=" language-none">FutureTask</code>, а також стан завершення. Стан (у дужках) містить один із рядків: "Completed Normally" (нормальне завершення), "Completed Exceptionally" (завершення з винятком), "Cancelled" (скасовано) або "Not completed" (не завершено).</p></li>
+ <li>
+  <p><strong>java.util.concurrent.locks.StampedLock:</strong></p>
+  <p>нові методи <code class=" language-none">boolean isLockStamp (long)</code>, <code class=" language-none">boolean isOptimisticReadStamp (long)</code>, <code class=" language-none">boolean isReadLockStamp (long)</code>та <code class=" language-none">boolean isWriteLockStamp (long)</code>.</p></li>
+ <li>
+  <p><strong>java.jar.JarEntry:</strong></p>
+  <p><code class=" language-none">String getRealName ()</code>: повертає справжнє ім'я <code class=" language-none">JarEntry</code>цього Якщо <code class=" language-none">JarEntry</code>є записом мультирелізного jar-файлу, налаштованого для обробки, тоді ім'я, яке повертається цим методом, — ім'я шляху версії, яку представляє <code class=" language-none">JarEntry</code>. Інакше <code class=" language-none">JarEntry</code>повертає те саме ім'я, що і <code class=" language-none">ZipEntry.getName ()</code>.</p></li>
+ <li>
+  <p><strong>java.util.jar.JarFile:</strong></p>
+  <p><code class=" language-none">Stream &lt;JarEntry&gt; versionedStream ()</code>: повертає поток записів у файлі з версією jar. <code class=" language-none">getRealName</code>Подібно до методу <code class=" language-none">JarEntry</code>, пов'язаний з мультирелізними jar-файлуми.</p></li>
+ <li>
+  <p><strong>java.util.spi.LocaleNameProvider:</strong></p>
+  <p><code class=" language-none">getDisplayUnicodeExtensionKey (String, Locale)</code>: повертає локалізоване ім'я для цього <code class=" language-none">Unicode extension key</code>. <code class=" language-none">getDisplayUnicodeExtensionType (String, String, Locale)</code>: повертає локалізоване ім'я для цього <code class=" language-none">Unicode extension key</code>.</p></li>
+ <li>
+  <p><strong>java.util.stream.Collectors:</strong></p>
+  <p><code class=" language-none">toUnmodifiableList ()</code>, <code class=" language-none">toUnmodifiableSet ()</code>, <code class=" language-none">toUnmodifiableMap (Function, Function)</code>, <code class=" language-none">toUnmodifiableMap (Function, Function, BinaryOperator)</code>— ці чотири нових методи повертають колектори (Collectors), які накопичують вхідні елементи у відповідну колекцію, що не модифікується.</p></li>
+ <li>
+  <p><strong>java.lang.model.SourceVersion:</strong></p>
+  <p>тепер це поле RELEASE_10 для представлення JDK версії 10.</p></li>
+ <li>
+  <p><strong>java.lang.model.util.TypeKindVisitor6 та javax.lang.model.util.TypeKindVisitor9:</strong></p>
+  <p>щось зовсім зрозуміле:).</p></li>
+ <li>
+  <p><strong>R visitNoTypeAsModule (NoType, P):</strong></p>
+  <p>відвідує псевдо-тип <code class=" language-none">MODULE</code>.</p></li>
+ <li>
+  <p><strong>javax.remote.management.rmi.RMIConnectorServer:</strong></p>
+  <p>Цей клас було додано два поля: <code class=" language-none">CREDENTIALS_FILTER_PATTERN и SERIAL_FILTER_PATTERN</code>.</p></li>
+ <li>
+  <p><strong>javax.ButtonModel:</strong></p>
+  <p>Уявляєте, Swing досі оновлюється!</p></li>
+ <li>
+  <p><strong>ButtonGroup getGroup ():</strong></p>
+  <p>повертає групу, до якої належить кнопка. Зазвичай використовується з <code class=" language-none">radio buttons</code>, які є взаємовиключними у своїй групі.</p></li>
+ <li>
+  <p><strong>javax.plaf.basic.BasicMenuUI:</strong></p>
+  <p><code class=" language-none">Dimension getMinimumSize (JComponent)</code>: повертає мінімальний розмір зазначеного компонента, що підходить для зовнішнього вигляду.</p></li>
+</ul>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Що ще почитати?</th>
+   </tr>
+   <tr>
+    <td>
+     <p><a href="https://codegym.cc/groups/posts/479-chem-poraduet-novaja-versija-jdk" target="_blank">Чим порадує нова версія JDK</a></p>
+     <p><a href="https://codegym.cc/groups/posts/541-bezvremennihy-konec-ehpokhi-jdk-8" target="_blank">До чого призведе найчастіший випуск нових версій JDK</a></p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>

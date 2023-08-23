@@ -1,0 +1,158 @@
+Формати серіалізації в Java
+<p>----------------------------------------</p>
+Вітання! Давай поговоримо про серіалізацію в Java. Ти напевно пам'ятаєш, що лекції з серіалізації ми вже мали. Ось А ось Якщо ти вже не дуже добре пам'ятаєш, як працює серіалізація, навіщо вона потрібна, і які в Java є інструменти для неї, 
+<p>----------------------------------------</p>
+Вітання! Давай поговоримо про серіалізацію в Java. Ти напевно пам'ятаєш, що лекції з серіалізації ми вже мали. Ось <a href="https://codegym.cc/groups/posts/2022-serializacija-i-deserializacija-v-java" target="_blank">перша</a> А ось <a href="https://codegym.cc/groups/posts/2023-znakomstvo-s-interfeysom-externalizable" target="_blank">друга</a> Якщо ти вже не дуже добре пам'ятаєш, як працює серіалізація, навіщо вона потрібна, і які в Java є інструменти для неї, можеш пробігтися цими лекціями. Сьогоднішня лекція буде теоретичною, і в ній ми докладніше розглянемо формати серіалізації.<img data-id="7c808ca4-673f-4615-b65d-f214a5d7e70e" data-max-width="850" alt="Формати серіалізації в Java - 1" src="https://cdn.javarush.com/images/article/7c808ca4-673f-4615-b65d-f214a5d7e70e/800.jpeg" style="width: 850px;">Для початку згадаємо, що таке серіалізація. Серіалізація - це процес збереження стану об'єкта в послідовність байт. Десеріалізація - це процес відновлення об'єкта з цих байт. Java-об'єкт можна серіалізувати та передати по мережі (наприклад, на інший комп'ютер). Так ось, ця послідовність байт може бути представлена ​​в різних форматах. Тобі це знайоме із повсякденного використання комп'ютера. Наприклад, електронна книга (або простий текстовий документ), яку ти читаєш, може бути записана в купі різних форматів: 
+<ul>
+ <li>docx (формат Microsoft Word);</li>
+ <li>PDF (формат Adobe);</li>
+ <li>mobi (зазвичай використовується у пристроях Amazon Kindle);</li>
+ <li>та ще багато всього (ePub, djvu, fb2...).</li>
+</ul>Здавалося б, завдання одне й те саме: представити текст у людино-читаному вигляді. Але люди винайшли цілий розсип форматів. Навіть не вдаючись до подробиць їхньої роботи, ми можемо припустити, що зроблено це не так. Ймовірно, кожен з них має свої переваги та недоліки в порівнянні з рештою. Може, й формати серіалізації були створені за тим самим принципом? Що ж, гарне припущення, студенте! :) Так воно і є. Справа в тому, що передача даних на відстань - штука досить тонка, і в ній є багато факторів. Хто передає дані? Куди? Який об'єм? Як приймаюча сторона буде людина чи машина (тобто, чи мають дані бути human-readable)? Що за пристрій читатиме дані? Очевидно, що ситуації бувають різні. Одна річ, коли потрібно передати картинку розміром 500Кб з одного смартфона на інший. І зовсім інше, коли йдеться про 500 терабайт бізнес-даних, які потрібно стиснути максимально ефективно і при цьому передати максимально швидко. Давай же познайомимося з основними форматами серіалізації та розглянемо переваги та недоліки кожного з них! 
+<h2>JSON</h2>JavaScript Object Notation. З ним ти вже трохи знайомий! Ми говорабо про нього ось у <a href="https://codegym.cc/quests/lectures/questcollections.level03.lecture02" target="_blank">цій лекції</a> , а серіалізацію в JSON розглядали <a href="https://codegym.cc/quests/lectures/questcollections.level03.lecture03" target="_blank">ось тут</a> . Свою назву він одержав не просто так. Об'єкти Java, перетворені на JSON, дійсно виглядають так само, як об'єкти в мові JavaScript. Тобі зовсім не потрібно знати JavaScript, щоб зрозуміти зміст нашого об'єкта: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token punctuation"><span class="token punctuation">{</span></span>
+   <span class="token string"><span class="token string">"title"</span></span><span class="token operator"><span class="token operator">:</span></span> <span class="token string"><span class="token string">"Война и мир"</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+   <span class="token string"><span class="token string">"author"</span></span><span class="token operator"><span class="token operator">:</span></span> <span class="token string"><span class="token string">"Лев Толстой"</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+   <span class="token string"><span class="token string">"year"</span></span><span class="token operator"><span class="token operator">:</span></span> <span class="token number"><span class="token number">1869</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre> Не обов'язково передавати один об'єкт. JSON може містити і масив об'єктів: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token punctuation"><span class="token punctuation">[</span></span>
+ <span class="token punctuation"><span class="token punctuation">{</span></span>
+   <span class="token string"><span class="token string">"title"</span></span><span class="token operator"><span class="token operator">:</span></span> <span class="token string"><span class="token string">"Война и мир"</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+   <span class="token string"><span class="token string">"author"</span></span><span class="token operator"><span class="token operator">:</span></span> <span class="token string"><span class="token string">"Лев Толстой"</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+   <span class="token string"><span class="token string">"year"</span></span><span class="token operator"><span class="token operator">:</span></span> <span class="token number"><span class="token number">1869</span></span>
+ <span class="token punctuation"><span class="token punctuation">}</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+
+ <span class="token punctuation"><span class="token punctuation">{</span></span>
+   <span class="token string"><span class="token string">"title"</span></span><span class="token operator"><span class="token operator">:</span></span> <span class="token string"><span class="token string">"Бесы"</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+   <span class="token string"><span class="token string">"author"</span></span><span class="token operator"><span class="token operator">:</span></span> <span class="token string"><span class="token string">"Федор Достоевский"</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+   <span class="token string"><span class="token string">"year"</span></span><span class="token operator"><span class="token operator">:</span></span> <span class="token number"><span class="token number">1872</span></span>
+ <span class="token punctuation"><span class="token punctuation">}</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+
+ <span class="token punctuation"><span class="token punctuation">{</span></span>
+   <span class="token string"><span class="token string">"title"</span></span><span class="token operator"><span class="token operator">:</span></span> <span class="token string"><span class="token string">"Чайка"</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+   <span class="token string"><span class="token string">"author"</span></span><span class="token operator"><span class="token operator">:</span></span> <span class="token string"><span class="token string">"Антон Чехов"</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+   <span class="token string"><span class="token string">"year"</span></span><span class="token operator"><span class="token operator">:</span></span> <span class="token number"><span class="token number">1896</span></span>
+ <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">]</span></span></code></pre> Оскільки JSON є об'єктом JavaScript, він підтримує такі формати даних JavaScript: 
+<ul>
+ <li>рядки (string);</li>
+ <li>числа (number);</li>
+ <li>об'єкти (object);</li>
+ <li>масиви (array);</li>
+ <li>boolean-значення (true та false);</li>
+ <li>null.</li>
+</ul>Які ж переваги є у JSON? 
+<ol>
+ <li>
+  <p><strong>Human-readable («людяно-читаний») формат. </strong>Це очевидна перевага, якщо ваш кінцевий користувач — людина. Наприклад, на сервері зберігається база даних з розкладом авіаперельотів. Чоловік запитує дані з цієї бази за допомогою веб-програми, сидячи вдома за комп'ютером. Оскільки тобі потрібно надати дані у форматі, який він зможе зрозуміти, JSON буде чудовим рішенням.</p></li>
+ <li>
+  <p><strong>Простота. </strong>Можна сказати - елементарність :) Вище ми навели приклад двох JSON-файлів. І навіть якщо ти взагалі не чув про існування JavaScript (і особливо про його об'єкти), ти легко зрозумієш, що за об'єкти там описані. <br>
+    Вся документація JSON – це одна <a href="http://www.json.org/" rel="nofollow" target="_blank">веб-сторінка</a> з кількома картинками.</p></li>
+ <li>
+  <p><strong>Широка поширеність. </strong>JavaScript - домінуюча мова фронтенду, і він диктує свої умови. Використання JSON – необхідність. Тому величезна кількість веб-сервісів використовують JSON як формат обміну даними. Кожна сучасна IDE підтримує JSON-формат (зокрема Intellij IDEA). Для роботи з JSON написано купу бібліотек для всіх можливих мов програмування.</p></li>
+</ol>Наприклад, ти вже працював з бібліотекою Jackson у лекції, де ми вчабося серіалізувати Java-об'єкти у JSON. Але окрім Jackson є, наприклад, <a href="http://www.javenue.info/post/gson-json-api" rel="nofollow" target="_blank">GSON</a> – дуже зручна бібліотека від Google. 
+<h2>YAML</h2>На початку свого існування розшифровувався як Yet Another Markup Language - "ще одна мова розмітки". Тоді його позиціонували як конкурента XML. Зараз же, з часом, він розшифровується як "YAML Ain't Markup Language" ("YAML - не мова розмітки"). Що ж він із себе уявляє? Давай уявімо, що нам потрібно створити 3 класи персонажів для нашої комп'ютерної гри: Воїн, Маг і Злодій. Вони будуть такі характеристики: сила, спритність, витривалість, набір зброї. Ось як виглядатиме наш YAML-файл із описом класів: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java">classes<span class="token operator"><span class="token operator">:</span></span>
+ <span class="token keyword"><span class="token keyword">class</span></span><span class="token operator"><span class="token operator">-</span></span><span class="token number"><span class="token number">1</span></span><span class="token operator"><span class="token operator">:</span></span>
+   title<span class="token operator"><span class="token operator">:</span></span> <span class="token class-name"><span class="token class-name">Warrior</span></span>
+   power<span class="token operator"><span class="token operator">:</span></span> <span class="token number"><span class="token number">8</span></span>
+   agility<span class="token operator"><span class="token operator">:</span></span> <span class="token number"><span class="token number">4</span></span>
+   stamina<span class="token operator"><span class="token operator">:</span></span> <span class="token number"><span class="token number">7</span></span>
+   weapons<span class="token operator"><span class="token operator">:</span></span>
+     <span class="token operator"><span class="token operator">-</span></span> sword
+     <span class="token operator"><span class="token operator">-</span></span> spear
+
+ <span class="token keyword"><span class="token keyword">class</span></span><span class="token operator"><span class="token operator">-</span></span><span class="token number"><span class="token number">2</span></span><span class="token operator"><span class="token operator">:</span></span>
+   title<span class="token operator"><span class="token operator">:</span></span> <span class="token class-name"><span class="token class-name">Mage</span></span>
+   power<span class="token operator"><span class="token operator">:</span></span> <span class="token number"><span class="token number">5</span></span>
+   agility<span class="token operator"><span class="token operator">:</span></span> <span class="token number"><span class="token number">7</span></span>
+   stamina<span class="token operator"><span class="token operator">:</span></span> <span class="token number"><span class="token number">5</span></span>
+   weapons<span class="token operator"><span class="token operator">:</span></span>
+     <span class="token operator"><span class="token operator">-</span></span> magic staff
+
+ <span class="token keyword"><span class="token keyword">class</span></span><span class="token operator"><span class="token operator">-</span></span><span class="token number"><span class="token number">3</span></span><span class="token operator"><span class="token operator">:</span></span>
+   title<span class="token operator"><span class="token operator">:</span></span> <span class="token class-name"><span class="token class-name">Thief</span></span>
+   power<span class="token operator"><span class="token operator">:</span></span> <span class="token number"><span class="token number">6</span></span>
+   agility<span class="token operator"><span class="token operator">:</span></span> <span class="token number"><span class="token number">6</span></span>
+   stamina<span class="token operator"><span class="token operator">:</span></span> <span class="token number"><span class="token number">5</span></span>
+   weapons<span class="token operator"><span class="token operator">:</span></span>
+     <span class="token operator"><span class="token operator">-</span></span> dagger
+     <span class="token operator"><span class="token operator">-</span></span> poison</code></pre> YAML-файл має деревоподібну структуру: одні елементи вкладені інші. Вкладеністю ми можемо керувати за допомогою деякої кількості прогалин, яким позначаємо кожен рівень. Які ж переваги має YAML-формат? 
+<ol>
+ <li>
+  <p><strong>Human-readable. </strong>Знову ж таки, навіть побачивши yaml-файл без опису, ти легко зрозумієш, які об'єкти там описані. YAML наскільки добре читається людиною, що головна сторінка <a href="https://yaml.org/" rel="nofollow" target="_blank">yaml.org</a> це звичайний yaml-файл :)</p></li>
+ <li>
+  <p><strong>Компактність. </strong>Структура файлу формується за рахунок прогалин: немає необхідності використовувати дужки або лапки.</p></li>
+ <li>
+  <p><strong>Підтримка структур даних, «рідних» мов програмування. </strong>Величезна перевага YAML перед JSON та багатьма іншими форматами полягає в тому, що він підтримує різні структури даних. В тому числі:</p>
+  <ul>
+   <li>
+    <p>!!map <br>
+      Неупорядкований набір пар ключ: значення без можливості дублікатів;</p></li>
+   <li>
+    <p>!!omap <br>
+      Упорядкована послідовність пар ключ: значення без можливості дублікатів;</p></li>
+   <li>
+    <p>!!pairs: <br>
+      Упорядкована послідовність пар ключ: значення з можливістю дублікатів;</p></li>
+   <li>!!set <br>
+     Неупорядкована послідовність значень, які не рівні один одному;
+    <p></p></li>
+   <li>!!seq <br>
+     Послідовність довільних значень;
+    <p></p></li>
+  </ul>
+  <p>Деякі з цих структур знайомі тобі за Java! :) За рахунок цієї фічі у форматі YAML можна серіалізувати різні структури даних з мов програмування.</p></li>
+ <li>
+  <p><strong>Можливість використання anchor та alias</strong></p>
+  <p>Переклад слів "anchor" і "alias" - "якір" і "псевдонім". У принципі він досить точно описує суть цих термінів в YAML.</p>
+  <p>Вони дозволяють тобі ідентифікувати якийсь елемент у yaml-файлі і посилатися на нього в інших частинах цього файлу, якщо він зустрічається повторно. Anchor створюється за допомогою символу <code class=" language-none">&amp;</code>, а або за допомогою <code class=" language-none">*</code>.</p>
+  <p>Припустимо, у нас є файл із описом книг Льва Толстого. Щоб не писати ім'я автора щоразу вручну, ми просто створимо якір «leo» і посилатимемося на нього за допомогою аліасу, коли нам це буде потрібно:</p>
+  <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java">books<span class="token operator"><span class="token operator">:</span></span>
+ book<span class="token operator"><span class="token operator">-</span></span><span class="token number"><span class="token number">1</span></span><span class="token operator"><span class="token operator">:</span></span>
+   title<span class="token operator"><span class="token operator">:</span></span> <span class="token class-name"><span class="token class-name">War</span></span> and <span class="token class-name"><span class="token class-name">Peace</span></span>
+   author<span class="token operator"><span class="token operator">:</span></span> <span class="token operator"><span class="token operator">&amp;</span></span>leo <span class="token class-name"><span class="token class-name">Leo</span></span> <span class="token class-name"><span class="token class-name">Tolstoy</span></span>
+   year<span class="token operator"><span class="token operator">:</span></span> <span class="token number"><span class="token number">1869</span></span>
+
+ book<span class="token operator"><span class="token operator">-</span></span><span class="token number"><span class="token number">2</span></span><span class="token operator"><span class="token operator">:</span></span>
+   title<span class="token operator"><span class="token operator">:</span></span> <span class="token class-name"><span class="token class-name">Anna</span></span> <span class="token class-name"><span class="token class-name">Karenina</span></span>
+   author<span class="token operator"><span class="token operator">:</span></span> <span class="token operator"><span class="token operator">*</span></span>leo
+   year<span class="token operator"><span class="token operator">:</span></span> <span class="token number"><span class="token number">1873</span></span>
+
+ book<span class="token operator"><span class="token operator">-</span></span><span class="token number"><span class="token number">3</span></span><span class="token operator"><span class="token operator">:</span></span>
+   title<span class="token operator"><span class="token operator">:</span></span> <span class="token class-name"><span class="token class-name">Family</span></span> <span class="token class-name"><span class="token class-name">Happiness</span></span>
+   author<span class="token operator"><span class="token operator">:</span></span> <span class="token operator"><span class="token operator">*</span></span>leo
+   year<span class="token operator"><span class="token operator">:</span></span> <span class="token number"><span class="token number">1859</span></span></code></pre>
+  <p>Коли ми зчитуватимемо цей файл якимось парсером, на місці нашого аліасу в потрібних місцях буде підставлятися значення «Leo Tolstoy».</p></li>
+ <li><strong>У YAML можна вбудувати дані в інших форматах. </strong>Наприклад, JSON:
+  <p></p>
+  <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java">books<span class="token operator"><span class="token operator">:</span></span> <span class="token punctuation"><span class="token punctuation">[</span></span>
+        <span class="token punctuation"><span class="token punctuation">{</span></span>
+          <span class="token string"><span class="token string">"title"</span></span><span class="token operator"><span class="token operator">:</span></span> <span class="token string"><span class="token string">"War and Peace"</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+          <span class="token string"><span class="token string">"author"</span></span><span class="token operator"><span class="token operator">:</span></span> <span class="token string"><span class="token string">"Leo Tolstoy"</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+          <span class="token string"><span class="token string">"year"</span></span><span class="token operator"><span class="token operator">:</span></span> <span class="token number"><span class="token number">1869</span></span>
+        <span class="token punctuation"><span class="token punctuation">}</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+
+        <span class="token punctuation"><span class="token punctuation">{</span></span>
+          <span class="token string"><span class="token string">"title"</span></span><span class="token operator"><span class="token operator">:</span></span> <span class="token string"><span class="token string">"Anna Karenina"</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+          <span class="token string"><span class="token string">"author"</span></span><span class="token operator"><span class="token operator">:</span></span> <span class="token string"><span class="token string">"Leo Tolstoy"</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+          <span class="token string"><span class="token string">"year"</span></span><span class="token operator"><span class="token operator">:</span></span> <span class="token number"><span class="token number">1873</span></span>
+        <span class="token punctuation"><span class="token punctuation">}</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+
+        <span class="token punctuation"><span class="token punctuation">{</span></span>
+          <span class="token string"><span class="token string">"title"</span></span><span class="token operator"><span class="token operator">:</span></span> <span class="token string"><span class="token string">"Family Happiness"</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+          <span class="token string"><span class="token string">"author"</span></span><span class="token operator"><span class="token operator">:</span></span> <span class="token string"><span class="token string">"Leo Tolstoy"</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+          <span class="token string"><span class="token string">"year"</span></span><span class="token operator"><span class="token operator">:</span></span> <span class="token number"><span class="token number">1859</span></span>
+        <span class="token punctuation"><span class="token punctuation">}</span></span>
+      <span class="token punctuation"><span class="token punctuation">]</span></span></code></pre></li>
+</ol>
+<h2>Інші формати серіалізації</h2>
+<h3>XML</h3>Цей формат ґрунтується на так званому дереві тегів. 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token generics"><span class="token punctuation"></span><span class="token generics"><span class="token punctuation"><span class="token punctuation">&lt;</span></span>book<span class="token punctuation"><span class="token punctuation">&gt;</span></span></span><span class="token punctuation"></span></span>
+   <span class="token generics"><span class="token punctuation"></span><span class="token generics"><span class="token punctuation"><span class="token punctuation">&lt;</span></span>title<span class="token punctuation"><span class="token punctuation">&gt;</span></span></span><span class="token punctuation"></span></span><span class="token class-name"><span class="token class-name">Harry</span></span> <span class="token class-name"><span class="token class-name">Potter</span></span> and the <span class="token class-name"><span class="token class-name">Philosopher</span></span>’s <span class="token class-name"><span class="token class-name">Stone</span></span><span class="token operator"><span class="token operator">&lt;</span></span><span class="token operator"><span class="token operator">/</span></span>title<span class="token operator"><span class="token operator">&gt;</span></span>
+   <span class="token generics"><span class="token punctuation"></span><span class="token generics"><span class="token punctuation"><span class="token punctuation">&lt;</span></span>author<span class="token punctuation"><span class="token punctuation">&gt;</span></span></span><span class="token punctuation"></span></span><span class="token class-name"><span class="token class-name">J<span class="token punctuation"><span class="token punctuation">.</span></span> K<span class="token punctuation"><span class="token punctuation">.</span></span> Rowling</span></span><span class="token operator"><span class="token operator">&lt;</span></span><span class="token operator"><span class="token operator">/</span></span>author<span class="token operator"><span class="token operator">&gt;</span></span>
+   <span class="token generics"><span class="token punctuation"></span><span class="token generics"><span class="token punctuation"><span class="token punctuation">&lt;</span></span>year<span class="token punctuation"><span class="token punctuation">&gt;</span></span></span><span class="token punctuation"></span></span><span class="token number"><span class="token number">1997</span></span><span class="token operator"><span class="token operator">&lt;</span></span><span class="token operator"><span class="token operator">/</span></span>year<span class="token operator"><span class="token operator">&gt;</span></span>
+<span class="token operator"><span class="token operator">&lt;</span></span><span class="token operator"><span class="token operator">/</span></span>book<span class="token operator"><span class="token operator">&gt;</span></span></code></pre> Кожен елемент складається з тега, що відкриває і закриває (&lt;&gt; і &lt;/&gt;). Кожен елемент може мати вкладені елементи. XML — поширений формат, що не поступається JSON та YAML (якщо говорити про використання у реальних проектах). Про XML у нас є <a href="https://codegym.cc/groups/posts/2287-chto-takoe-xml" target="_blank">окрема лекція</a> . 
+<h3>BSON (binary JSON)</h3>Як і з його назви, дуже схожий на JSON, але <strong>не є human-readable</strong> і оперує даними в двійковому форматі. За рахунок цього він дуже зручний при зберіганні та передачі зображень та інших вкладень. Крім того, BSON підтримує деякі типи даних, недоступні у JSON. Наприклад, у BSON-файл можна записати дату (у форматі мілісекунд) або навіть шматок JavaScript коду. Популярна NoSQL база даних MongoDB зберігає інформацію саме у форматі BSON. 
+<h3>Position based protocol</h3>У деяких ситуаціях нам необхідно різко знизити кількість даних, що передаються (наприклад, якщо даних дуже багато і потрібно зменшити навантаження). У цій ситуації ми можемо використовувати <strong>position based protocol</strong> , тобто передавати значення параметрів без назв самих параметрів. 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class="  language-java"><span class="token string"><span class="token string">"Leo Tolstoy"</span></span> <span class="token operator"><span class="token operator">|</span></span> <span class="token string"><span class="token string">"Anna Karenina"</span></span> <span class="token operator"><span class="token operator">|</span></span> <span class="token number"><span class="token number">1873</span></span></code></pre> Дані в такому форматі займають менше місця, ніж повноцінний JSON файл. Звичайно, існують і інші формати серіалізації, але тобі зараз не потрібно знати їх усі :) Добре, якщо ти будеш знайомий з тими форматами, які зараз є промисловим стандартом при розробці додатків, і пам'ятатимеш їх переваги та відмінності один від одного. А наша лекція на цьому добігла кінця:) Не забудь вирішити пару завдань сьогодні! До нових зустрічей! :)

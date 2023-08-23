@@ -1,0 +1,185 @@
+Методи в Java
+<p>----------------------------------------</p>
+Існує один цікавий принцип, про який багато хто чув. Він називається "Поділяй і володарюй". Цей принцип використовується у багатьох сферах людського життя, наприклад, у політиці. Він означає поділ великої кількості різнорідних частин у держ
+<p>----------------------------------------</p>
+Існує один цікавий принцип, про який багато хто чув. Він називається "Поділяй і володарюй". Цей принцип використовується у багатьох сферах людського життя, наприклад, у політиці. Він означає поділ великої кількості різнорідних частин у державі, розпалювання та використання ворожнечі між цими частинами. Іншими словами: створити конфлікт між тими, хто потенційно створює загрозу владі. Але ми з вами програмісти, тому нас цікавить виключно технічне трактування цього принципу. А звучить вона так: “Принцип “Поділяй і владарюй” полягає у розбитті великого завдання на дрібніші доти, доки вони не стануть елементарними. Потім потрібно послідовно вирішити їх і поєднати все в одну цілу систему. Ця програма повинна вирішувати поставлене завдання” Тобто, ви просто розбиваєте велике завдання на дрібніші, вирішити які вам не становить проблем. А потім збираєте рішення в одне велике. Щоб дотримуватися цього простого і корисного принципу, Java-програмування використовують методи. <img data-max-width="800" data-id="630ad0a8-9c3d-4519-a5ec-65506fd274ae" alt="Методи в Java - 1" src="https://cdn.javarush.com/images/article/630ad0a8-9c3d-4519-a5ec-65506fd274ae/800.jpeg" style="width: 800px;">Наприклад, ми створюємо робота-боксера. Для нас важливо, щоб він добре рухався, проводив точні удари, а також стежив за ворогом у пошуках слабких місць. Буде незручно писати все це в одному методі <span class="code">main</span> , чи не так? Якщо ми опишемо все в одному методі, буде щось на зразок такого: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java">метод <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token comment">// Описание действий шага вперед</span>
+подача напряжения в отдельные модули<span class="token punctuation">;</span>
+поднятие ноги<span class="token punctuation">;</span>
+перевод в другую точку<span class="token punctuation">;</span>
+поставить ногу<span class="token punctuation">;</span>
+перенести вес на другую ногу<span class="token punctuation">;</span>
+если <span class="token punctuation">(</span>противникАтакует<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        	<span class="token comment">// Описание действий уклонения робота.</span>
+        	<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span> еслиНет <span class="token punctuation">{</span>
+        	<span class="token comment">// Описание действий обманного атакующего удара.</span>
+        	<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>
+<span class="token comment">// Описание действий шага назад</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span></code></pre> А якщо нам знадобиться використовувати крок уперед чи удар ще десь у програмі? Чи описувати всі дії знову? Не підходить. Занадто багато рядків, що повторюються, в яких легко заплутатися. Нам потрібно винести опис деталей дії окремий модуль, який виконуватиме крок робота. І ми можемо викликати метод одним рядком. Якось так: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java">метод шагВперед<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token comment">// Описание действий шага вперед</span>
+  	подача напряжения в отдельные модули<span class="token punctuation">;</span>
+  	поднятие ноги<span class="token punctuation">;</span>
+  	перевод в другую точку<span class="token punctuation">;</span>
+  	поставить ногу<span class="token punctuation">;</span>
+  	перенести вес на другую ногу<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+метод уклонение<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  	<span class="token comment">// Действия для уклонения</span>
+  	<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>
+
+метод обманныйАтакующийУдар<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  	<span class="token comment">// Действия для удара</span>
+  	<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>
+
+метод шагНазад<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  	<span class="token comment">// Действия для шага назад</span>
+  	<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>
+
+метод противникАтакует<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token comment">// Робот проверяет атакует ли противник</span>
+<span class="token punctuation">}</span>
+
+метод <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	шагВперед<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	если <span class="token punctuation">(</span>противникАтакует<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        	уклонение<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span> еслиНет <span class="token punctuation">{</span>
+  	  обманныйАтакующийУдар<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+	шагНазад<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre> Тепер ми маємо розділений функціонал робота, а також компактний і зрозумілий метод <span class="code">main()</span> . Інші методи також можна розділити на будь-який функціонал, наприклад, <span class="code">обманний атакуючий удар</span> можна розділити на методи <span class="code">обманного руху</span> , <span class="code">руху, ніг</span> , <span class="code">атаки</span> . І їх, у свою чергу, на простіші завдання, щоб у результаті отримати набір елементарних. Окей, а тепер напишемо все це красиво в такому вигляді, який прийме Java. 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">stepForward</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  	    <span class="token comment">// Многострочный код, описывающий</span>
+  	    <span class="token comment">// действия робота для выполнения шага</span>
+  	    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"The robot takes a step forward"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">evasion</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  	    <span class="token comment">// Действия для уклонения</span>
+  	    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Robot shy of impact"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">deceptiveAttackBlow</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  	    <span class="token comment">// Действия для удара</span>
+  	    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"The robot performs a deceptive strike"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">stepBack</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  	    <span class="token comment">// Действия для шага назад</span>
+  	    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"The robot takes a step backwards"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    	<span class="token function">stepForward</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    	<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">isEnemyAttacked</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        		<span class="token function">evasion</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    	<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+  	    	<span class="token function">deceptiveAttackBlow</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    	<span class="token punctuation">}</span>
+    	<span class="token function">stepBack</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">boolean</span> <span class="token function">isEnemyAttacked</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    	<span class="token comment">// Метод проверяет, атакует ли враг. Повертає логическое значення.</span>
+    	<span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre> Розумію, що вам може бути зараз цей код трохи незрозумілий, особливо деякі слова на зразок <span class="code">void</span> , <span class="code">return</span> і таке інше. Не поспішайте кидатися помідорами, зараз все поясню. Загальна думка парадигми "Поділяй і володарюй" вам має бути зрозумілою. У цьому нам допоможуть методи. Загальна структура оголошення методів така: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class=" language-java">модификатор_доступа возвращаемое_значення ім'я_метода<span class="token punctuation">(</span>принимаемые_параметры<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   	<span class="token comment">//Тело метода</span>
+<span class="token punctuation">}</span></code></pre>
+<h2>Модифікатор доступу</h2>Модифікатор доступу – це кілька ключових слів: <span class="code">public</span> , <span class="code">private</span> , <span class="code">package</span> . Ці слова вказують на область видимості методу. Я поясню просто: цим словом ви ніби ділитеся з іншими смакотою. Смакота - ваш метод. Якщо це <span class="code">private</span> , ви не ділитеся методом з іншими класами. Якщо <span class="code">package</span> ви ділитеся тільки з класами в рамках пакету (класи збираються в певні пакети, це ви дізнаєтеся далі). Ну а <span class="code">public</span> показує, що ви - сама доброта і ділитеся смакотою (методом) з усією програмою. Якось так. Через кілька рівнів ви набагато краще зрозумієте роль цих слів.
+<h2>Значення, що повертається</h2>Подивіться приклад вище: всі методи позначені ключовим словом <span class="code">void</span> , крім одного - <span class="code">isEnemyAttacked</span> , який повертає логічне значення <span class="code">boolean</span> . Якщо метод позначений як <span class="code">void</span> , він може нічого не повертати. Такий метод просто виконує набір дій та все. А тепер зверніть увагу на метод <span class="code">main</span> . Ті методи, які повертають <span class="code">void</span> , викликаються просто так, у тілі методу. А ось метод <span class="code">isEnemyAttacked</span> викликається в дужках оператора <span class="code">if</span>. Завдяки тому, що він повертає логічне значення ми отримуємо можливість не використовувати проміжну змінну, а вставляти його безпосередньо. Повернення значення відбувається за допомогою ключового слова <span class="code">return</span> . Якщо метод повертає тип <span class="code">int</span> ми можемо викликати метод з будь-якого виразу: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">getNumber</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+ 	    <span class="token keyword">return</span> <span class="token number">5</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    	<span class="token keyword">int</span> result <span class="token operator">=</span> <span class="token number">5</span> <span class="token operator">+</span> <span class="token number">6</span> <span class="token operator">+</span> <span class="token function">getNumber</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    	<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre> Висновок: 
+<div class="terminal">
+ 16
+</div> Метод <span class="code">getNumber</span> повертає значення типу <span class="code">int</span> тому ми можемо викликати його з виразу. Також метод може повертати будь-який тип, включаючи ті, що ви створабо самі. Якщо ви вказали тип значення, що повертається у методу, то ви повинні повернути що-небудь. Не можна написати так: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">findMaxNumber</span><span class="token punctuation">(</span><span class="token keyword">int</span> a<span class="token punctuation">,</span> <span class="token keyword">int</span> b<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+ 	<span class="token keyword">if</span><span class="token punctuation">(</span>a<span class="token operator">&gt;</span>b<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+ 	    <span class="token keyword">return</span> a<span class="token punctuation">;</span>
+ 	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Компілятор лаятиме вас, що при виконанні першої умови ви щось повертаєте, а при виконанні другої — ні.
+<h2>Передача параметрів</h2>У метод можна передавати параметри, що використовуються під час його роботи. Найпримітивніший приклад — підсумовування двох чисел. Але ж ми не примітивні, вірно? Візьмемо інший приклад, досить стереотипний. Припустимо, ми маємо метод <span class="code">chef()</span> — кухар. Ми можемо передати в блоці параметрів цей метод інгредієнти супу, і в результаті цей метод повертає нам суп. Ось так: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    	<span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> ingredients<span class="token punctuation">;</span>
+    	<span class="token comment">// Инициализация массива ингредиентов</span>
+    	<span class="token class-name">Soup</span> soup <span class="token operator">=</span> <span class="token function">chef</span><span class="token punctuation">(</span>ingredients<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">Soup</span> <span class="token function">chef</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> ingredients<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    	<span class="token class-name">Soup</span> soup <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Soup</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    	<span class="token comment">// Процесс варки супа</span>
+    	<span class="token keyword">return</span> soup<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre> (Припустимо, у нас є заздалегідь створений клас <span class="code">Soup</span> ) У головному методі ми створюємо масив інгредієнтів, а потім "віддаємо його кухареві" (передаємо в метод <span class="code">chef</span> ). "Кухар варить суп", а потім повертає його нам у вигляді об'єкта класу <span class="code">Soup</span> . Все дуже просто. У метод можна передавати будь-які параметри, примітивні типи, об'єкти, масиви тощо.
+<h3>Передача параметрів за посиланням та за значенням</h3>У мові програмування Java будь-які параметри передаються методом за своїм значенням. Однак для примітивних типів і об'єктів цей механізм різний. Якщо ви передасте в метод будь-який примітивний тип і зміните його, він не зміниться в основному методі. Ви просто віддали копію значення, а оригінальна змінна збереглася. Найпростіший приклад: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    	<span class="token keyword">int</span> x <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    	<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    	<span class="token function">getNumber</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    	<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">getNumber</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    	i <span class="token operator">=</span> i <span class="token operator">+</span> <span class="token number">100</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span></code></pre> Висновок: 
+<div class="terminal">
+ 1 1
+</div> Однак у випадку з об'єктами зміни зачіпають оригінальний об'єкт: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Program</span>
+<span class="token punctuation">{</span>
+	<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    	<span class="token class-name">WiseMan</span> wiseMan <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">WiseMan</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    	wiseMan<span class="token punctuation">.</span><span class="token function">setIq</span><span class="token punctuation">(</span><span class="token number">300</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    	<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>wiseMan<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    	<span class="token function">changeObject</span><span class="token punctuation">(</span>wiseMan<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    	<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>wiseMan<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">changeObject</span><span class="token punctuation">(</span><span class="token class-name">WiseMan</span> m<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    	m<span class="token punctuation">.</span><span class="token function">setIq</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">WiseMan</span> <span class="token punctuation">{</span>
+	<span class="token keyword">int</span> iq<span class="token punctuation">;</span>
+
+	<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setIq</span><span class="token punctuation">(</span><span class="token keyword">int</span> iq<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    	<span class="token keyword">this</span><span class="token punctuation">.</span>iq <span class="token operator">=</span> iq<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getIq</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    	<span class="token keyword">return</span> iq<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    	<span class="token keyword">return</span> <span class="token string">"Our wise man has an IQ "</span><span class="token operator">+</span>iq<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Висновок: 
+<div class="terminal">
+ Ваша людина має IR 300 Ваша людина має IR 100
+</div> У нас є клас <span class="code">WiseMan</span> (Мудрець), який має властивість <span class="code">iq</span> . І два методи, які керують значенням цього поля. У головному методі ми створюємо об'єкт <span class="code">wiseMan</span> , встановлюємо значення <span class="code">iq 300</span> . Потім ми передаємо метод <span class="code">changeObject</span> нашого мудреця з iq 300. Але в цьому методі він дурнішає. Ми встановлюємо значення <span class="code">iq</span> , що дорівнює 100. Потім у головному методі виводимо об'єкт. Видно, що в методі <span class="code">changeObject</span> ми маніпулюємо іншим мудрецем у змінній <span class="code">m</span> . Однак, ми змінюємо наш початковий об'єкт. Справа в тому, що об'єкт <span class="code">wiseMan</span> в головному методі і об'єкт <span class="code">m</span> , в методі<span class="code">changeObject</span> — той самий мудрець, а метод як параметр копіюється посилання об'єкт. Пам'ятайте про це, коли редагуватимете об'єкт в окремих методах.
+<h2>Насамкінець кілька слів про модифікатора static</h2>Взагалі кількома словами тут не обійтися, але я спробую. Звичайні методи, не позначені цим модифікатором, належать класу об'єкту. А <span class="code">static</span> -методи належать самому класу. Прості методи можна використовувати в окремих об'єктів. Подивіться клас <span class="code">WiseMan</span> з прикладу вище. Методи <span class="code">getIq</span> та <span class="code">setIq</span> у кожного мудреця будуть свої, адже рівень айкью у всіх різний. Якщо ми додамо в цей клас <span class="code">static</span> метод <span class="code">generateAWisePhrase</span> , то такий метод ми зможемо викликати без об'єкта: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class=" language-java"><span class="token class-name">WiseMan</span><span class="token punctuation">.</span><span class="token function">generateAWisePhrase</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> Загалом, цієї інформації поки що достатньо, адже про <span class="code">static</span> можна написати кілька лекцій. Дотримуйтесь кількох правил під час написання методу для підтримання порядку у своєму коді:
+<ul>
+ <li>Придумуйте своїм методам назви, що говорять, щоб було ясно, що вони роблять.</li>
+ <li>Намагайтеся не писати дуже довгих методів. Оптимальна довжина - 8-15 рядків.</li>
+ <li>Кількість параметрів методу має перевищувати 4-5.</li>
+ <li>Якщо у вашому коді двічі зустрічається схожий функціонал, подумайте: може варто узагальнити, винести його в окремий метод?</li>
+</ul>Ці способи допоможуть вам підвищити продуктивність вашої програми і, найголовніше, зроблять ваш код читальнішим.<a href="https://codegym.cc/login/signup" target="_blank"><img id="click_banner1_articles" data-max-width="1080" data-id="5736eb4b-2b1c-4ab6-b4cc-b9e2d1cef628" alt="Методи в Java - 2" src="https://cdn.javarush.com/images/article/5736eb4b-2b1c-4ab6-b4cc-b9e2d1cef628/1080.jpeg" style="width: 1080px;"></a>

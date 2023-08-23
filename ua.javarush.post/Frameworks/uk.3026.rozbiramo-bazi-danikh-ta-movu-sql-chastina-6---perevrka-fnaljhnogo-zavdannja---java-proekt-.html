@@ -1,0 +1,174 @@
+Розбираємо бази даних та мову SQL. (Частина 6 - Перевірка фінального завдання) - "Java-проект від А до Я"
+<p>----------------------------------------</p>
+Вітаю вас, дорогі читачі. Сьогодні розбиратимемо по поличках завдання з останньої статті з БД. Воно цікаве тим, що призначене для співбесіди на Middle. Тобто після цього завдання вже можна йти на співбесіду, і, як мінімум, частина з того, щ
+<p>----------------------------------------</p>
+<em>Стаття із серії про створення Java-проекту (посилання на інші матеріали – наприкінці). Її мета — аналіз ключових технологій, результат — написання телеграм-бота. У цій частині розбір фінального завдання з БД.</em><img data-max-width="800" data-id="5ad2e03c-1e5d-403b-8e52-f9f2112a191f" alt="&quot;Java-проект від А до Я&quot;: розбираємо бази даних та мову SQL.  Частина 6 - Перевірка фінального завдання - 1" src="https://cdn.javarush.com/images/article/5ad2e03c-1e5d-403b-8e52-f9f2112a191f/800.jpeg" style="width: 800px;">Вітаю вас, дорогі читачі. Сьогодні розбиратимемо по поличках завдання з останньої статті з БД. Воно цікаве тим, що призначене для співбесіди на Middle. Тобто після цього завдання вже можна йти на співбесіду, і, як мінімум, частина з того, що відноситься до реляційних БД, ви успішно пройдете. Я знаю, наскільки може бути потрібною ця стаття, і тому вкладу весь свій досвід, щоб зробити її корисною та цікавою. І якщо ви не заснете на середині статті, то це означатиме, що своєї мети я досяг. Не повторюватиму повністю завдання: цитуватиму його перед виконанням кожного завдання, підкреслюючи її курсивом. Я чекаю, що всі, хто читає цю статтю, пройде всі запити у себе в БД та отримає те саме. Це принесе максимальну користь справі. А я буду трохи щасливішим від думки,
+<h2>Завдання 1</h2><em>Написати SQL script створення таблиці 'Student' з полями: id (primary key), name, last_name, e_mail (unique). </em> Таке ми вже робабо, тож проблем не повинно бути. У скрипті потрібно вказати первинний ключ та унікальне поле, яке відрізняється від первинного. Спершу створимо нову БД для такої справи: <span class="text-bold">$CREATE DATABASE final_task; </span> І скористаємося цією БД: <span class="text-bold">$USE final_task; </span> Коли середовище налаштовано та підготовлено для виконання завдання, можемо записати наступний скрипт: <span class="text-bold">$ CREATE TABLE student (id INT AUTO_INCREMENT, name VARCHAR(40), last_name VARCHAR(50), email VARCHAR(100), PRIMARY KEY(id), UNIQUE (email ))); </span> Поки що нічого нового, порівняно з тим, що ми вже проходабо, немає. Якісь коментарі зайві, поїхали далі.
+<h2>Завдання 2-3</h2><em>Написати SQL script створення таблиці 'Book' із полями: id, title (id + title = primary key). Зв'язати 'Student' та 'Book' зв'язком 'Student' one-to-many 'Book'. </em> Сумісний дві задачі в одну, щоб було швидше і зручніше. Як додати окремий зовнішній ключ, я вже говорив у попередніх статтях. Щоб додати, треба згадати, як ми робимо зв'язки та за рахунок чого. Попередня стаття вам на допомогу, а потім ось скрипт: <span class="text-bold">$ CREATE TABLE book (id INT, title VARCHAR (100), student_id INT DEFAULT NULL, PRIMARY KEY (id, title), FOREIGN KEY (student_id) REFERENCES student (id)); </span> Ось таким нескладним чином ми додали складовий ключ до нашої таблиці <span class="text-bold">PRIMARY KEY (id, title)</span>Тепер ключем буде саме пара. Це означає, що може бути більше одного однакового значення поля id у таблиці. І так само і для title.
+<h2>Завдання 4</h2><em>Написати SQL script створення таблиці 'Teacher' із полями: id (primary key), name, last_name, e_mail (unique), subject. </em> Продовжуємо готувати нашу БД для запитів, створюємо таблицю вчителя: <span class="text-bold">$ CREATE TABLE teacher(id INT AUTO_INCREMENT, name VARCHAR(30), last_name VARCHAR(30), email VARCHAR(100), subject VARCHAR(40), PRIMARY UNIQUE (email)); </span> Поки що нескладно, так? Три завдання вже позаду!
+<h2>Завдання 5</h2><em>Зв'язати 'Student' і 'Teacher' зв'язком 'Student' many-to-many Teacher'. </em> Ось це вже цікавіше! Якраз говорабо про це минулого разу. Нагадаю, що необхідно, щоб цього досягти: потрібно створити проміжну таблицю, яка б зберігала пари “студент-учитель”. За її допомогою можна буде створити зв'язок багатьом. Тому створимо таблицю <span class="text-bold">students_x_techers</span> . Підхід до імені відкритий і може бути ще й таким: <span class="text-bold">student_teacher</span> . <span class="text-bold">$ CREATE TABLE students_x_teachers ( student_id INT NOT NULL, teacher_id INT NOT NULL, PRIMARY KEY (student_id, teacher_id), FOREIGN KEY (student_id) REFERENCES student(id), FOREIGN KEY (tea</span> Як видно, все зроблено чітко та складно. У нас складовий ключ для двох зовнішніх ключів: student_id і teacher_id. Для чого ще й зовнішній ключ? Для того, щоб ми були впевнені, що записи в таблицях студент і вчитель існують для пар.
+<h2>Завдання 6</h2><em>Вибрати 'Student', у яких у прізвищі є 'oro', наприклад, 'Sidorov', 'Voronovsky'. </em> Щоб нам було цікаво і наочно, я пропоную спочатку додати кількох студентів, щоб частина з них підходила для цього запиту, а частина — ні. Тому запишемо тих, хто <em>має</em> потрапити в результаті запиту: <span class="text-bold">$INSERT INTO student (name, last_name, email) VALUES ('Ivan', 'Sidorov', 'ivan.sidorov@gmail.com'); $ INSERT INTO student (name, last_name, email) VALUES ('Nikolay', 'Voronovsky', 'nikolay.voronovsky@gmail.com'); </span> І тих, хто потрапити не повинен: <span class="text-bold">$ INSERT INTO student (name, last_name, email) VALUES ('Roman', 'Fortny', 'roman.fortny@gmail.com'); $ INSERT INTO student (name, last_name, email) VALUES('Kostya',</span> Перевіримо результат, подивимося на список даних у таблиці студентів: <span class="text-bold">$SELECT * FROM student; </span> і отримаємо: <img data-max-width="800" data-id="24e70cd4-d161-4ba9-b370-f00b2b467e85" alt="&quot;Java-проект від А до Я&quot;: розбираємо бази даних та мову SQL.  Частина 6 - Перевірка фінального завдання - 2" src="https://cdn.javarush.com/images/article/24e70cd4-d161-4ba9-b370-f00b2b467e85/800.jpeg" style="width: 800px;">Всього чотири записи, два з них повинні підійти, а два – ні. Підготувавши всі дані до запиту, можемо зробити запит за завданням: <span class="text-bold">$ SELECT * FROM student WHERE last_name LIKE '%oro%'; </span><img data-max-width="800" data-id="600365c1-57da-4e60-87ca-a431736a8864" alt="&quot;Java-проект від А до Я&quot;: розбираємо бази даних та мову SQL.  Частина 6 - Перевірка фінального завдання - 3" src="https://cdn.javarush.com/images/article/600365c1-57da-4e60-87ca-a431736a8864/800.jpeg" style="width: 800px;">У результаті Іван та Микола пройшли за списком.
+<h2>Завдання 7</h2>Наступне завдання читаємо: <em>Вибрати з таблиці 'Student' всі прізвища ('last_name') та кількість їх повторень. Вважати, що у базі є однофамільці. Відсортувати за кількістю у порядку зменшення. Виглядати має так:
+ <div class="table-container">
+  <table>
+   <tbody>
+    <tr>
+     <th>last_name</th>
+     <th>quantity</th>
+    </tr>
+    <tr>
+     <td>Петроов</td>
+     <td>15</td>
+    </tr>
+    <tr>
+     <td>Ivanov</td>
+     <td>12</td>
+    </tr>
+    <tr>
+     <td>Sidorov</td>
+     <td>3</td>
+    </tr>
+   </tbody>
+  </table>
+ </div></em>Для наочності необхідно додати ще даних. Не мудруючи лукаво, додамо Петроових, Іванових і Сидорових, що спорідненості не знають ;) Пошту не вигадуватиму, просто виключимо її в нових записах. Виконаємо 12 разів наступну команду: <span class="text-bold">$ INSERT INTO student (name, last_name) VALUES ('Ivan', 'Ivanov'); </span> Додамо 15 Петроових: <span class="text-bold">$ INSERT INTO student (name, last_name) VALUES ('Petr', 'Petrov'); </span> І двох Сидорових (один уже є у нас))): <span class="text-bold">$ INSERT INTO student (name, last_name) VALUES ('Sidor', 'Sidorov'); </span> Наразі дані готові. Щоб отримати такі дані, потрібно зробити угруповання, щоб зробити угруповання, потрібно скористатися оператором Group By і робити це потрібно по полю last_name. Також можна помітити,<span class="text-bold">quantity</span> , і тут теж треба згадати, як робити аліаси в SQL: <span class="text-bold">$ SELECT last_name, COUNT(*) as quantity FROM student GROUP BY last_name ORDER BY COUNT(*) DESC; </span><img data-max-width="800" data-id="97de8bb9-cfde-4f55-bb80-caadb90a76fd" alt="&quot;Java-проект від А до Я&quot;: розбираємо бази даних та мову SQL.  Частина 6 - Перевірка фінального завдання - 4" src="https://cdn.javarush.com/images/article/97de8bb9-cfde-4f55-bb80-caadb90a76fd/800.jpeg" style="width: 800px;">Таки я перестарався з Петроовими - вийшло 16))
+<h2>Завдання 8</h2>Умова: <em>Вибрати з 'Student' топ 3 імен 'name', що найбільш повторюються. Відсортувати за кількістю у порядку зменшення. Виглядати має так:
+ <div class="table-container">
+  <table>
+   <tbody>
+    <tr>
+     <th>name</th>
+     <th>quantity</th>
+    </tr>
+    <tr>
+     <td>Олександр</td>
+     <td>27</td>
+    </tr>
+    <tr>
+     <td>Sergey</td>
+     <td>10</td>
+    </tr>
+    <tr>
+     <td>Peter</td>
+     <td>7</td>
+    </tr>
+   </tbody>
+  </table>
+ </div></em>О, для цієї справи ми вже маємо Іванів, Петроів і Сидорів. Тому додавати їх не потрібно. Сортувати ми теж вміємо. Єдине, що сьогодні ми не говорабо — як вибрати певну кількість записів. Це миготіло вже в попередніх розв'язках задач з БД. Хто не читав – прочитайте. Решта – відразу до справи: <span class="text-bold">$ SELECT name, COUNT(*) as quantity FROM student GROUP BY name ORDER BY COUNT(*) DESC LIMIT 3; </span><img data-max-width="800" data-id="180e1040-c50d-4579-8f9c-00d19273f716" alt="&quot;Java-проект від А до Я&quot;: розбираємо бази даних та мову SQL.  Частина 6 - Перевірка фінального завдання - 5" src="https://cdn.javarush.com/images/article/180e1040-c50d-4579-8f9c-00d19273f716/800.jpeg" style="width: 800px;">Як видно із запиту, якщо знати черговість операторів у запиті SELECT, жодних проблем із виконанням такого запиту не буде. І це завдання все ще нам по зубах. І тих знань, які були викладені раніше, цілком достатньо для вирішення цього завдання.
+<h2>Завдання 9</h2>Умова завдання: <em>Вибрати 'Student', у яких найбільша кількість 'Book' і пов'язаних з ним 'Teacher'. Відсортувати за кількістю у порядку зменшення. Виглядати має так:
+ <div class="table-container">
+  <table>
+   <tbody>
+    <tr>
+     <th>Teacher's last_name</th>
+     <th>Student's last_name</th>
+     <th>Book's quantity</th>
+    </tr>
+    <tr>
+     <td>Петроов</td>
+     <td>Sidorov</td>
+     <td>7</td>
+    </tr>
+    <tr>
+     <td>Ivanov</td>
+     <td>Smith</td>
+     <td>5</td>
+    </tr>
+    <tr>
+     <td>Петроов</td>
+     <td>Kankava</td>
+     <td>2</td>
+    </tr>
+   </tbody>
+  </table>
+ </div></em>Так, це завдання вже явно складніше попереднього, так? Не дивно: тут пахне джоїном… і навіть не одним) Спочатку нам потрібно зрозуміти, що робити… Видно, що Book's quantity потребує угруповання. Але чого? І чому групувати? У запиті фігурують три таблиці, угруповання, сортування. Зважаючи на те, що не показані записи, де немає книг, мається на увазі, що потрібно брати саме INNER JOIN. Для LEFT JOIN теж зробимо запит, щоби не було з цим проблем. І є кілька варіантів. Перше, що робимо, - з'єднуємо три таблиці в один запис. Далі групуємо по студенту та приєднуємо до нього ім'я вчителя. Що вибиратимемо? Прізвище вчителя, студента та кількість книг. Додамо дані для запиту:
+<ul>
+ <li>трьох учителів;</li>
+ <li>десять книг;</li>
+ <li>пов'язати двох студентів із трьома вчителями.</li>
+</ul>
+<h3>Три вчителі</h3><span class="text-bold">$ INSERT INTO teacher(last_name) VALUES ('Matvienko'); $ INSERT INTO teacher(last_name) VALUES ('Shevchenko'); $ INSERT INTO teacher(last_name) VALUES ('Vasilenko');</span>
+<h3>10 книг</h3>Візьму айдішники 1 та 2 студентів. До них прив'яжу книжки. Так як не поставабо AUTO_INCREMENT, то щоб не писати щоразу новий ID, потрібно зробити наступне: <span class="text-bold">$ ALTER TABLE book MODIFY id INT NOT NULL </span> Далі додамо книги для першого студента: <span class="text-bold">$INSERT INTO book (title, student_id) VALUES('book1', 1); $ INSERT INTO book (title, student_id) VALUES('book2', 1); $ INSERT INTO book (title, student_id) VALUES('book3', 1); $ INSERT INTO book (title, student_id) VALUES('book4', 1); $ INSERT INTO book (title, student_id) VALUES('book5', 1); $ INSERT INTO book (title, student_id) VALUES('book6', 1); </span> І книги для другого студента: <span class="text-bold">$ INSERT INTO book (title, student_id) VALUES('book7', 2); $ INSERT INTO book (title, student_id) VALUES('book8', 2); $ INSERT INTO book (title, student_id) VALUES('book9', 2); $ INSERT INTO book (title, student_id) VALUES('book10', 2);</span>
+<h3>Зв'язки вчитель-студент</h3>Для цієї справи додамо таблицю students_x_teachers: <span class="text-bold">$INSERT INTO students_x_teachers VALUES (1,1); $INSERT INTO students_x_teachers VALUES (1,2); $ INSERT INTO students_x_teachers VALUES (2,3);</span>
+<h3>Реалізуємо запит</h3>Робимо перший етап - зв'язуємо три таблиці в один запис: <span class="text-bold">$ SELECT * FROM teacher tch INNER JOIN students_x_teachers st_x_tch ON tch.id = st_x_tch.teacher_id b.student_id; </span><img data-max-width="800" data-id="4424b0dc-17ed-4ae5-b8d0-287958d77f94" alt="&quot;Java-проект від А до Я&quot;: розбираємо бази даних та мову SQL.  Частина 6 - Перевірка фінального завдання - 6" src="https://cdn.javarush.com/images/article/4424b0dc-17ed-4ae5-b8d0-287958d77f94/800.jpeg" style="width: 800px;">Записів, звісно, ​​ми ще немає, тим щонайменше, ми можемо побачити, що ми успішно вдалося з'єднати три таблиці. Тепер додаємо групування книг, сортування і ті поля, які нам потрібні: <span class="text-bold">$ SELECT tch.last_name, st.last_name, st.id, COUNT(*) as books JOIN students_x_teachers st_x_tch ON st.id = st_x_tch.student_id INNER JOIN teacher tch ON tch.id = st_x_tch.teacher_id GROUP BY st.id ORDER BY books DESC; </span>Але отримуємо помилку в SQL і таку відповідь: <span class="text-bold">Error Code: 1055. Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'final_task.tch.last_name' which is not functionally dependent on columns in GROUP BY clause Не можна взяти ці елементи тому, що є</span> зв'язок -багатьом між учителем та студентом. І справді: ми не можемо отримати лише одного вчителя до студента. Тож підемо іншим шляхом. Скористайтеся такою штукою, як View SQL. Ідея яка: ми створюємо окремо в'ю, яке є новою таблицею, вже з потрібним нам угрупованням. І до цієї таблиці ми додамо потрібні прізвища вчителів. Але враховуємо той факт, що може бути більше одного вчителя, тому записи повторюватимуться. Створюємо в'ю: <span class="text-bold">$ CREATE VIEW studentBooks як SELECT st.last_name,st.id,COUNT(*) as books FROM student st INNER JOIN book b ON st.id=b.student_id GROUP BY st.id ORDER BY books DESC; </span> Далі працюємо з цим в'ю як із простою таблицею, яка має три поля: student last_name, student_id і books count. По айдишнику студента можемо додати і вчителі через два джоїни: <span class="text-bold">$ SELECT tch.last_name як 'Teacher', sbw.last_name 'Student', sbw.books як 'Books' від studentbook sbw INNER JOIN teacher tch ON tch.id = stch.teacher_id; </span> І тепер буде результат: <img data-max-width="800" data-id="28652b7c-1d51-4fef-8210-49b230869466" alt="&quot;Java-проект від А до Я&quot;: розбираємо бази даних та мову SQL.  Частина 6 - Перевірка фінального завдання - 7" src="https://cdn.javarush.com/images/article/28652b7c-1d51-4fef-8210-49b230869466/800.jpeg" style="width: 800px;">Хух! Ось це запит, так?) Вийшло, як і припускали: у студента з id = 1 шість книг і два вчителі, а у студента з id = 2 - чотири книги і один вчитель.
+<h2>Завдання 10</h2>Умова: <em>Вибрати 'Teacher', у яких найбільша кількість 'Book' у всіх його 'Student'. Відсортувати за кількістю у порядку зменшення. Виглядати має так:
+ <div class="table-container">
+  <table>
+   <tbody>
+    <tr>
+     <th>Teacher's last_name</th>
+     <th>Book's quantity</th>
+    </tr>
+    <tr>
+     <td>Петроов</td>
+     <td>9</td>
+    </tr>
+    <tr>
+     <td>Ivanov</td>
+     <td>5</td>
+    </tr>
+   </tbody>
+  </table>
+ </div></em>Тут нам можна скористатися готовим запитом з попереднього завдання. Що нам потрібно змінити в ньому? У нас вже є ці дані, тільки потрібно додати ще одне угруповання та прибрати з даних на виведення імені студента. Але для початку додамо ще одного студента до вчителя, щоб результат був цікавішим. Для цього напишемо: <span class="text-bold">$INSERT INTO students_x_teachers VALUES (2, 1); </span> І сам запит: <span class="text-bold">$ SELECT tch.last_name як 'Teacher', SUM(sbw.books) як 'Books' від studentbook sbw INNER JOIN students_x_teachers stch ON sbw.id = stch.student_id INNER JOIN teacher tch . teacher_id GROUP BY tch.id; </span> В результаті отримаємо: <img data-max-width="800" data-id="192232c7-b258-46fa-b4a2-c61a2e2b86c1" alt="&quot;Java-проект від А до Я&quot;: розбираємо бази даних та мову SQL.  Частина 6 - Перевірка фінального завдання - 8" src="https://cdn.javarush.com/images/article/192232c7-b258-46fa-b4a2-c61a2e2b86c1/800.jpeg" style="width: 800px;">що у вчителя Василенка 10 книг, а у Шевченка — 6…)
+<h2>Завдання 11</h2>Умова: <em>Вибрати 'Teacher', у яких кількість 'Book' у всіх його 'Student' знаходиться між 7 і 11. Відсортувати за кількістю у порядку зменшення. Виглядати має так:
+ <div class="table-container">
+  <table>
+   <tbody>
+    <tr>
+     <th>Teacher's last_name</th>
+     <th>Book's quantity</th>
+    </tr>
+    <tr>
+     <td>Петроов</td>
+     <td>11</td>
+    </tr>
+    <tr>
+     <td>Sidorov</td>
+     <td>9</td>
+    </tr>
+    <tr>
+     <td>Ivanov</td>
+     <td>7</td>
+    </tr>
+   </tbody>
+  </table>
+ </div></em>Ось тут ми і будемо використовувати HAVING. Ми говорабо про нього. Запит буде такий самий, як і до цього, тільки потрібно ще додати умову, що кількість книг буде в певному діапазоні. А як я вже говорив у попередніх статтях, коли нам потрібно зробити фільтрацію під час угруповання та/або над агрегуючими функціями, потрібно використовувати <span class="text-bold">HAVING</span> : <span class="text-bold">$ SELECT tch.last_name 'Teacher' sbw INNER JOIN students_x_teachers stch ON sbw.id = stch.student_id INNER JOIN teacher tch ON tch.id = stch.teacher_id GROUP BY tch.id <em>HAVING SUM(sbw.books) &gt; 6 AND SUM </em></span> Я виділив частину, яку додав. І, власне, очікуваний результат: <img data-max-width="800" data-id="acfb5926-57ee-480e-80b6-629617919455" alt="&quot;Java-проект від А до Я&quot;: розбираємо бази даних та мову SQL.  Частина 6 - Перевірка фінального завдання - 9" src="https://cdn.javarush.com/images/article/acfb5926-57ee-480e-80b6-629617919455/800.jpeg" style="width: 800px;">Тільки Василенко пройшов цей тур))
+<h2>Завдання 12</h2>Умова: <em>Вивести всіх 'last_name' та 'name' всіх 'Teacher' та 'Student' з полем 'type' (student або teacher). Сортувати за алфавітом за 'last_name'. Виглядати має так:
+ <div class="table-container">
+  <table>
+   <tbody>
+    <tr>
+     <th>last_name</th>
+     <th>type</th>
+    </tr>
+    <tr>
+     <td>Ivanov</td>
+     <td>student</td>
+    </tr>
+    <tr>
+     <td>Kankava</td>
+     <td>teacher</td>
+    </tr>
+    <tr>
+     <td>Smith</td>
+     <td>student</td>
+    </tr>
+    <tr>
+     <td>Sidorov</td>
+     <td>teacher</td>
+    </tr>
+    <tr>
+     <td>Петроов</td>
+     <td>teacher</td>
+    </tr>
+   </tbody>
+  </table>
+ </div></em>Тобто потрібно нам об'єднати два висновки, і для цього якраз є UNION. Іншими словами, ми візьмемо записи від студентів і від вчителів і виведемо разом: <span class="text-bold">$ SELECT last_name, 'teacher' як тип від teacher UNION ALL select last_name, 'student' як тип from student ORDER BY last_name; </span><img data-max-width="800" data-id="459b38a8-35a3-4891-9f4e-3ae2ae2e7b5a" alt="&quot;Java-проект від А до Я&quot;: розбираємо бази даних та мову SQL.  Частина 6 - Перевірка фінального завдання - 10" src="https://cdn.javarush.com/images/article/459b38a8-35a3-4891-9f4e-3ae2ae2e7b5a/800.jpeg" style="width: 800px;">І там будуть і вчителі, і студенти. Здавалося б все просто, але це колись уже дивимося на результат. А так треба здогадатися до двох речей.
+<h2>Завдання 13</h2>Умова: <em>Додати до існуючої таблиці 'Student' колонку 'rate', в якій зберігатиметься курс, на якому студент зараз знаходиться (числове значення від 1 до 6). </em> <span class="text-bold">ALTER TABLE student ADD CONSTRAINT check_rate CHECK (rate &gt; 0 AND rate &lt; 7); </span> Тут ми робимо додавання поля через ALTER TABLE та CHECK щоб встановити обмеження на це поле з 1 до 6.
+<h2>Завдання 14</h2>Умова: <em>Цей пункт не є обов'язковим для виконання, але буде плюсом. Написати функцію, яка пройдеться по всіх 'Book' і виведе через кому все 'title'. </em> Тут потрібно просто видати в результаті запиту рядок, в якому будуть всі книги. Тут знову треба було гуглити. Є така функція - <span class="text-bold">GROUP_CONCAT</span> , за допомогою якої це робиться дуже просто: <span class="text-bold">$ SELECT GROUP_CONCAT(title) from book; </span><img data-max-width="800" data-id="349f492d-4b4a-4c8a-ae4a-3d9701865e60" alt="&quot;Java-проект від А до Я&quot;: розбираємо бази даних та мову SQL.  Частина 6 - Перевірка фінального завдання - 11" src="https://cdn.javarush.com/images/article/349f492d-4b4a-4c8a-ae4a-3d9701865e60/800.jpeg" style="width: 800px;">І все…)) Усі 14 завдань готові.<a href="https://codegym.cc/welcome" target="_blank"><img id="click_banner1_articles" data-max-width="1080" data-id="a27b7388-7969-4bc1-92e2-b779b65c64cf" alt="&quot;Java-проект від А до Я&quot;: розбираємо бази даних та мову SQL.  Частина 6 - Перевірка фінального завдання - 12" src="https://cdn.javarush.com/images/article/a27b7388-7969-4bc1-92e2-b779b65c64cf/1080.jpeg" style="width: 1080px;"></a>
+<h2>Висновки</h2>Ууххх… Це було непросто. Це було цікаво. Завдання того варті, я більш ніж впевнений. Поки робабо ці завдання, пройшлися багатьма речами, які раніше не були відомі:
+<ul>
+ <li>SQL VIEW</li>
+ <li>GROUP_CONCAT</li>
+ <li>UNION</li>
+</ul>і так далі. Дякую всім, у кого вистачило сил прочитати і повторити те, що я зробив. Хто знає, як зробити запити кращими — пишіть у коментарях, я обов'язково прочитаю їх) 
+<h4><a href="https://codegym.cc/groups/posts/2935-java-proekt-ot-a-do-ja-pishem-realjhnihy-proekt-dlja-portfolio#articles" target="_blank">Список всіх матеріалів серії на початку цієї статті.</a></h4>

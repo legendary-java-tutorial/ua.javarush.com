@@ -1,0 +1,139 @@
+Spring - це не страшно, коротше: Lombok
+<p>----------------------------------------</p>
+Трохи Вікіпедії: Ломбо́к (Lombok з індон. — «перець чилі») — острів у Малайському архіпелазі, у групі Малих Зондських островів, у складі Індонезії. Lombok названо популярну бібліотеку для мови програмування Java. Вибір назви пов'язаний з ти
+<p>----------------------------------------</p>
+<a href="https://codegym.cc/groups/posts/3092-spring-ehto-nestrashno" target="_blank" rel="nofollow"><strong>ЗМІСТ ЦИКЛУ СТАТТІВ</strong></a> Трохи Вікіпедії: Ломбо́к (Lombok з індон. — «перець чилі») — острів у Малайському архіпелазі, у групі Малих Зондських островів, у складі Індонезії. Lombok названо популярну бібліотеку для мови програмування Java. Вибір назви пов'язаний з тим, що острів Ломбок знаходиться не так далеко від острова Ява, а також, мабуть, значення його назви "перець чилі", оскільки бібліотека надає корисні "приправи" для мови. Краще й не скажеш, та й до чого слова, давайте подивимося його у справі: <a href="https://russianblogs.com/article/70181221668/" target="_blank" rel="nofollow"> Встановіть плагін. </a> До блоку &lt;dependencies&gt; pom файлу додаємо залежність: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token generics"><span class="token punctuation">&lt;</span>dependency<span class="token punctuation">&gt;</span></span>
+    <span class="token generics"><span class="token punctuation">&lt;</span>groupId<span class="token punctuation">&gt;</span></span>org<span class="token punctuation">.</span>projectlombok<span class="token operator">&lt;</span><span class="token operator">/</span>groupId<span class="token operator">&gt;</span>
+    <span class="token generics"><span class="token punctuation">&lt;</span>artifactId<span class="token punctuation">&gt;</span></span>lombok<span class="token operator">&lt;</span><span class="token operator">/</span>artifactId<span class="token operator">&gt;</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>dependency<span class="token operator">&gt;</span></code></pre> Понеслася: Відкрийте проект із минулої <a href="https://codegym.cc/groups/posts/3094-spring-ehto-nestrashno-ili-kak-napolnitjh-h2-bazu-dannihkh-i-nemnogo-hibernate" target="_blank" rel="nofollow">статті</a> , відкрийте <em>class FruitEntity</em> . 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">ru<span class="token punctuation">.</span>java<span class="token punctuation">.</span>rush<span class="token punctuation">.</span>entities</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>hibernate<span class="token punctuation">.</span>annotations<span class="token punctuation">.</span></span><span class="token class-name">GenericGenerator</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">javax<span class="token punctuation">.</span>persistence<span class="token punctuation">.</span></span><span class="token operator">*</span><span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@Entity</span>
+<span class="token annotation punctuation">@Table</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"fruit_table"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">FruitEntity</span> <span class="token punctuation">{</span>
+
+    <span class="token annotation punctuation">@Id</span>
+    <span class="token annotation punctuation">@Column</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"id_fruit"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@GenericGenerator</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"generator"</span><span class="token punctuation">,</span> strategy <span class="token operator">=</span> <span class="token string">"increment"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@GeneratedValue</span><span class="token punctuation">(</span>generator <span class="token operator">=</span> <span class="token string">"generator"</span><span class="token punctuation">)</span>
+    <span class="token keyword">private</span> <span class="token class-name">Integer</span> id<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Column</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"fruit_name"</span><span class="token punctuation">)</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> fruitName<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Column</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"provider_code"</span><span class="token punctuation">)</span>
+    <span class="token keyword">private</span> <span class="token class-name">Integer</span> providerCode<span class="token punctuation">;</span>
+
+<span class="token comment">//чтобы с классом можно было совершать манипуляции создается</span>
+<span class="token comment">//пустой конструктор, геттеры, сеттеры, конструктор и переопределяется метод toString()</span>
+
+<span class="token keyword">public</span> <span class="token class-name">FruitEntity</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+
+<span class="token punctuation">}</span>
+
+
+<span class="token keyword">public</span> <span class="token class-name">Integer</span> <span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> id<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token class-name">FruitEntity</span> <span class="token function">setId</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>id <span class="token operator">=</span> id<span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getFruitName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> fruitName<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token class-name">FruitEntity</span> <span class="token function">setFruitName</span><span class="token punctuation">(</span><span class="token class-name">String</span> fruitName<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>fruitName <span class="token operator">=</span> fruitName<span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token class-name">Integer</span> <span class="token function">getProviderCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> providerCode<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token class-name">FruitEntity</span> <span class="token function">setProviderCode</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> providerCode<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>providerCode <span class="token operator">=</span> providerCode<span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token annotation punctuation">@Override</span>
+<span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token string">"FruitEntity{"</span> <span class="token operator">+</span>
+            <span class="token string">"id="</span> <span class="token operator">+</span> id <span class="token operator">+</span>
+            <span class="token string">", fruitName='"</span> <span class="token operator">+</span> fruitName <span class="token operator">+</span> <span class="token string">'\''</span> <span class="token operator">+</span>
+            <span class="token string">", providerCode="</span> <span class="token operator">+</span> providerCode <span class="token operator">+</span>
+            <span class="token string">'}'</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre> Довгий, чи не так? Повісимо на клас інструкцію @Data від Ломбока і подивимося як скоротить код. 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">ru<span class="token punctuation">.</span>java<span class="token punctuation">.</span>rush<span class="token punctuation">.</span>entities</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">lombok<span class="token punctuation">.</span></span><span class="token class-name">Data</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>hibernate<span class="token punctuation">.</span>annotations<span class="token punctuation">.</span></span><span class="token class-name">GenericGenerator</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">javax<span class="token punctuation">.</span>persistence<span class="token punctuation">.</span></span><span class="token operator">*</span><span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@Data</span><span class="token comment">//анотація сгенирует при компиляции необходимый код</span>
+<span class="token annotation punctuation">@Entity</span>
+<span class="token annotation punctuation">@Table</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"fruit_table"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">FruitEntity</span> <span class="token punctuation">{</span>
+
+    <span class="token annotation punctuation">@Id</span>
+    <span class="token annotation punctuation">@Column</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"id_fruit"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@GenericGenerator</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"generator"</span><span class="token punctuation">,</span> strategy <span class="token operator">=</span> <span class="token string">"increment"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@GeneratedValue</span><span class="token punctuation">(</span>generator <span class="token operator">=</span> <span class="token string">"generator"</span><span class="token punctuation">)</span>
+    <span class="token keyword">private</span> <span class="token class-name">Integer</span> id<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Column</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"fruit_name"</span><span class="token punctuation">)</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> fruitName<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Column</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"provider_code"</span><span class="token punctuation">)</span>
+    <span class="token keyword">private</span> <span class="token class-name">Integer</span> providerCode<span class="token punctuation">;</span>
+
+<span class="token comment">//и все! Весь остальной код будет сгенирован Ломбоком</span></code></pre> Запустіть проект, перевірте, чи все працює. Тепер дивимося як за допомогою Lombok можна впроваджувати залежність. Відкриємо для прикладу <em>class FruitService</em> , повісимо на клас @RequiredArgsConstructor і видалимо конструктор із класу, він нам більше не потрібен. 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">ru<span class="token punctuation">.</span>java<span class="token punctuation">.</span>rush<span class="token punctuation">.</span>services</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">lombok<span class="token punctuation">.</span></span><span class="token class-name">RequiredArgsConstructor</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>stereotype<span class="token punctuation">.</span></span><span class="token class-name">Service</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">ru<span class="token punctuation">.</span>java<span class="token punctuation">.</span>rush<span class="token punctuation">.</span>entities<span class="token punctuation">.</span></span><span class="token class-name">FruitEntity</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">ru<span class="token punctuation">.</span>java<span class="token punctuation">.</span>rush<span class="token punctuation">.</span>repositories<span class="token punctuation">.</span></span><span class="token class-name">FruitRepository</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">List</span><span class="token punctuation">;</span>
+
+
+<span class="token annotation punctuation">@Service</span>
+<span class="token annotation punctuation">@RequiredArgsConstructor</span><span class="token comment">//анотація от Ломбок</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">FruitService</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">FruitRepository</span> fruitRepository<span class="token punctuation">;</span>
+
+<span class="token comment">//здесь когда то был конструктор</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">Optional</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">FruitEntity</span><span class="token punctuation">&gt;</span></span> <span class="token function">getById</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> fruitRepository<span class="token punctuation">.</span><span class="token function">findById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">delById</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        fruitRepository<span class="token punctuation">.</span><span class="token function">deleteById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">Boolean</span> <span class="token function">exist</span><span class="token punctuation">(</span><span class="token class-name">Example</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span> <span class="token keyword">extends</span> <span class="token class-name">FruitEntity</span><span class="token punctuation">&gt;</span></span> example<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> fruitRepository<span class="token punctuation">.</span><span class="token function">exists</span><span class="token punctuation">(</span>example<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">save</span><span class="token punctuation">(</span><span class="token class-name">FruitEntity</span> fruitEntity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        fruitRepository<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>fruitEntity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">FruitEntity</span><span class="token punctuation">&gt;</span></span> <span class="token function">getAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> fruitRepository<span class="token punctuation">.</span><span class="token function">findAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">saveAll</span><span class="token punctuation">(</span><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">FruitEntity</span><span class="token punctuation">&gt;</span></span> fruits<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        fruitRepository<span class="token punctuation">.</span><span class="token function">saveAll</span><span class="token punctuation">(</span>fruits<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span></code></pre> Тепер у такий же спосіб позбавтеся зайвого коду в класі InitiateUtils. Перевірте, що все працює. Під час цього проекту ми використовуємо ще кілька нових анотацій Ломбока. UPD: Хороший коментар від Denis Ryabchikov "Для entity краще не використовувати @Data, а замінювати її на @Setter і @Getter, тому що @Data також перевизначає toString() і hashCode(), і з хеш-кодом можуть виникнути проблеми , якщо entity буде мати колекції та зв'язки з іншими entity." В принципі і все, ось <a href="https://urvanov.ru/2015/09/22/project-lombok/" target="_blank" rel="nofollow">стаття з Ломбока</a> в ній подивіться опис анотацій: @Data, @Value, @RequiredArgsConstructor і @Builder. У цій <a href="https://www.baeldung.com/lombok-accessors" target="_blank" rel="nofollow">статті прочитайте про @ Accessors</a> , статтю англійською, але перекладач сторінки добре з цим впоратися, зрозуміти сенс можна. <a href="https://codegym.cc/groups/posts/3095-spring-ehto-ne-strashno-prodolzhaem-napolnjatjh-bd" target="_blank" rel="nofollow">У наступній статті продовжимо заповнювати базу.</a>

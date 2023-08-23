@@ -1,0 +1,98 @@
+Регулярні вирази у Java
+<p>----------------------------------------</p>
+Регулярне вираз це свого роду шаблон, який може бути застосований до тексту (String, Java). Java надає пакет для порівняння з регулярними виразами. Регулярні висловлювання дуже схожі на мову програмування Perl і дуже прості в освоєнні. Регу
+<p>----------------------------------------</p>
+<img data-id="5247f479-7e7a-4cd5-9ba4-d010a8aec8d8" data-max-width="570" alt="RegEx" src="https://cdn.javarush.com/images/article/5247f479-7e7a-4cd5-9ba4-d010a8aec8d8/512.jpeg" style="width: 570px;">Регулярне вираз це свого роду шаблон, який може бути застосований до тексту (String, Java). Java надає пакет <em>java.util.regex</em> для порівняння з регулярними виразами. Регулярні висловлювання дуже схожі на мову програмування Perl і дуже прості в освоєнні. Регулярне вираз чи відповідає тексту (його частини) чи ні. * Якщо регулярне вираз збігається з частиною тексту, ми можемо знайти ee. ** Якщо регулярний складовий вираз, то ми можемо легко з'ясувати, яка частина регулярного виразу збігається з якою частиною тексту. 
+<h2>Перший приклад</h2>Регулярний вираз " <code class=" language-none">[a-z] +</code>" відповідає всім малим літерам у тексті. <code class=" language-none">[a-z]</code>означає будь-який символ від <code class=" language-none">a</code>включно <code class=" language-none">z</code>, і <code class=" language-none">+</code>означає "один або більше" символів. Припустимо, що ми поставляємо рядок "code 2 learn java tutorial". Як це зробити в Java По-перше, ви повинні скласти шаблон: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">import</span></span> <span class="token namespace"><span class="token namespace">java<span class="token punctuation"><span class="token punctuation">.</span></span>util<span class="token punctuation"><span class="token punctuation">.</span></span>regex<span class="token punctuation"><span class="token punctuation">.</span></span></span><span class="token punctuation"></span></span><span class="token operator"><span class="token operator">*</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token class-name"><span class="token class-name">Pattern</span></span> p <span class="token operator"><span class="token operator">=</span></span> <span class="token class-name"><span class="token class-name">Pattern</span></span><span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">compile</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>“<span class="token punctuation"><span class="token punctuation">[</span></span>a<span class="token operator"><span class="token operator">-</span></span>z<span class="token punctuation"><span class="token punctuation">]</span></span><span class="token operator"><span class="token operator">+</span></span>”<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span></code></pre> Далі ви повинні створити <code class=" language-none">matcher</code>для тексту, надіславши повідомлення на схемі: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class="  language-java"><span class="token class-name"><span class="token class-name">Matcher</span></span> m <span class="token operator"><span class="token operator">=</span></span> p<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">matcher</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>“code <span class="token number"><span class="token number">2</span></span> learn java tutorial”<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span></code></pre><strong>ПРИМІТКА:</strong> Не <code class=" language-none">Pattern</code>мають <code class=" language-none">Matcher</code>конструкторів, ми створюємо їх за допомогою методів класу <code class=" language-none">Pattern</code>. <code class=" language-none"><strong>Pattern Class:</strong></code>Об'єкт класу становить уявлення регулярного висловлювання. Клас Pattern не передбачає жодних громадських конструкторів. Щоб створити шаблон, необхідно спочатку викликати один із публічних статичних методів, які потім повертають об'єкт класу <code class=" language-none">Pattern</code>. Ці методи приймають регулярне вираження як аргумент. <code class=" language-none"><strong>Matcher Class:</strong></code>Об'єкт "Шукач" є двигуном, який інтерпретує шаблон і виконує операції зіставлення із вхідним рядком. Як і <code class=" language-none">Pattern</code>клас, <code class=" language-none">Matcher</code>немає публічних конструкторів. Ви отримуєте об'єкт <code class=" language-none">Matcher</code>викликом методу <code class=" language-none">matcher</code>, на об'єкті класу<code class=" language-none">Pattern</code>. Після того як ми виконали ці кроки, і тепер у нас є екземпляр класу <code class=" language-none">Matcher m </code>,і тепер ми можемо перевірити, чи був знайдений шаблон чи ні, і якщо так, то в якій позиції, і т.д. <code class=" language-none">m.matches()</code>повертає true, якщо шаблон відповідає всьому рядку, інакше false. <code class=" language-none">m.lookingAt()</code>повертає true, якщо шаблон відповідає початку рядка, і false інакше. <code class=" language-none">m.find ()</code>повертає true, якщо шаблон збігається із будь-якою частиною тексту. 
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Що ще почитати:</th>
+   </tr>
+   <tr>
+    <td>
+     <p><a href="https://codegym.cc/groups/java-developer" target="_blank"><em><strong>Група Java Developer:</strong></em></a></p>
+     <ul>
+      <li>
+       <p><a href="https://codegym.cc/groups/posts/2013-reguljarnihe-vihrazhenija-v-java" target="_blank">Регулярні вирази у Java</a></p></li>
+     </ul></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<h2>Знаходимо збіг</h2>Після успішного зіставлення, <strong>m.start()</strong> поверне індекс першого символу, що збігся і <strong>m.end()</strong> поверне індекс останнього символу, що збігся, плюс один. Якщо було зроблено невдалу спробу і збіги не знайшлося, <code class=" language-none">m.start()</code>і <code class=" language-none">m.end()</code>кидатимуть<code class=" language-none">IllegalStateException</code>
+<ul>
+ <li>Це <code class=" language-none">RuntimeException</code>, так що вам не доведеться його ловити.</li>
+</ul> Може здатися дивним, що <code class=" language-none">m.end()</code>повертає індекс останнього символу плюс один, але це саме те, що потрібно більшості методів класу <code class=" language-none">String</code>. 
+<ul>
+ <li>Наприклад,<code class=" language-none">“Now is the time“.substring(m.start(), m.end())</code></li>
+</ul>поверне той самий рядок. Погляньмо на код: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">import</span></span> <span class="token namespace"><span class="token namespace">java<span class="token punctuation"><span class="token punctuation">.</span></span>util<span class="token punctuation"><span class="token punctuation">.</span></span>regex<span class="token punctuation"><span class="token punctuation">.</span></span></span><span class="token punctuation"></span></span><span class="token operator"><span class="token operator">*</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+<span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="token class-name"><span class="token class-name">RegexTest</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+    <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="token function"><span class="token function">main</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">String</span></span> args<span class="token punctuation"><span class="token punctuation">[</span></span><span class="token punctuation"><span class="token punctuation">]</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+        <span class="token class-name"><span class="token class-name">String</span></span> pattern <span class="token operator"><span class="token operator">=</span></span> <span class="token string"><span class="token string">"[a-z]+"</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+        <span class="token class-name"><span class="token class-name">String</span></span> text <span class="token operator"><span class="token operator">=</span></span> <span class="token string"><span class="token string">"code 2 learn java tutorial"</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+        <span class="token class-name"><span class="token class-name">Pattern</span></span> p <span class="token operator"><span class="token operator">=</span></span> <span class="token class-name"><span class="token class-name">Pattern</span></span><span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">compile</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>pattern<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+        <span class="token class-name"><span class="token class-name">Matcher</span></span> m <span class="token operator"><span class="token operator">=</span></span> p<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">matcher</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>text<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+        <span class="token keyword"><span class="token keyword">while</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>m<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">find</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+            <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">print</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>text<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">substring</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>m<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">start</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> m<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">end</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token operator"><span class="token operator">+</span></span> <span class="token string"><span class="token string">"*"</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+        <span class="token punctuation"><span class="token punctuation">}</span></span>
+    <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre>
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class="  language-java"><span class="token class-name"><span class="token class-name">Output</span></span><span class="token operator"><span class="token operator">:</span></span> code<span class="token operator"><span class="token operator">*</span></span>learn<span class="token operator"><span class="token operator">*</span></span>java<span class="token operator"><span class="token operator">*</span></span>tutorial<span class="token operator"><span class="token operator">*</span></span></code></pre>
+<h2>Додаткові методи</h2>Якщо є збіг, то: 
+<ul>
+ <li><code class=" language-none">m.replaceFirst(replacement)</code>повертає новий рядок, де перший підрядок, що збігся з шаблоном буде замінено на<code class=" language-none">replacement</code></li>
+ <li><code class=" language-none">m.replaceAll(replacement)</code>повертає новий рядок, де кожен підрядок, що збігся з шаблоном буде замінено</li>
+ <li><code class=" language-none">m.find(StartIndex)</code>знаходити таку відповідність, починаючи з зазначеного індексу</li>
+ <li><code class=" language-none">m.reset()</code>скидає шаблон</li>
+ <li><code class=" language-none">m.reset(NewText)</code>скидає шукач, і дає йому новий текст (можливо <code class=" language-none">String</code>, <code class=" language-none">StringBuffer</code>або <code class=" language-none">CharBuffer</code>)</li>
+</ul>
+<h2>Синтаксис регулярних виразів</h2>
+<ul>
+ <li><code class=" language-none">^</code>Відповідає початку рядка.</li>
+ <li><code class=" language-none">$</code>Відповідає кінцю рядка.</li>
+ <li><code class=" language-none">.</code>Відповідає будь-якому одиночному символу, окрім нового рядка. Використання опції m дозволяє йому відповідати новому рядку.</li>
+ <li><code class=" language-none">[...]</code>Відповідає будь-який одиночний символ у дужках.</li>
+ <li><code class=" language-none">[^ ...]</code>Відповідає будь-якому символу, не в дужках.</li>
+ <li><code class=" language-none">\A</code>Початок весь рядок.</li>
+ <li><code class=" language-none">\z</code>Кінець всього рядка.</li>
+ <li><code class=" language-none">\Z</code>Кінець всього рядка, окрім кінцевого термінатора лінії.</li>
+ <li><code class=" language-none">re*</code>Відповідає 0 або більше входжень попереднього виразу.</li>
+ <li><code class=" language-none">re+</code>Один або більше збігів попереднього виразу.</li>
+ <li><code class=" language-none">re?</code>Відповідає 0 або 1 місцезнаходження попереднього виразу.</li>
+ <li><code class=" language-none">re{n}</code>Відповідає рівно N Кількість входжень попереднього виразу.</li>
+ <li><code class=" language-none">re{n,}</code>Відповідає N або більше входжень попереднього виразу.</li>
+ <li><code class=" language-none">re{n, m}</code>Відповідає не менше n і не більше m входжень попереднього виразу.</li>
+ <li><code class=" language-none">a|b</code>Відповідає a або b.</li>
+ <li><code class=" language-none">(re)</code>Група регулярних виразів та пам'ятає знайдений текст.</li>
+ <li><code class=" language-none">(?: re)</code>Групи регулярних виразів, які не пам'ятають знайдений текст.</li>
+ <li><code class=" language-none">(?&gt; re)</code>Відповідає незалежному шаблону без повернення.</li>
+ <li><code class=" language-none">\w</code>Відповідає буквам та цифрам [a-zA-Z_0-9].</li>
+ <li><code class=" language-none">\W</code>Це не букви та не цифри.</li>
+ <li><code class=" language-none">\s</code>Відповідає пробілам. Еквівалентно [\t\n\r\f].</li>
+ <li><code class=" language-none">\S</code>Чи не пробілові символи.</li>
+ <li><code class=" language-none">\d</code>Відповідає цифрам. Еквівалентно [0-9].</li>
+ <li><code class=" language-none">\D</code>Відповідає не цифрам.</li>
+ <li><code class=" language-none">\G</code>Відповідає точки останнього збігу.</li>
+ <li><code class=" language-none">\n</code>Відповідає новому рядку.</li>
+ <li><code class=" language-none">\b</code>Збігається на межі слова.</li>
+ <li><code class=" language-none">\B</code>Збігається не межі слова.</li>
+ <li><code class=" language-none">\n, \t, etc.</code>Символи нового рядка, повернення каретки, вкладки тощо.</li>
+ <li><code class=" language-none">\Q</code>Цитата всі символи до \ E.</li>
+ <li><code class=" language-none">\E</code>Закінчується цитування розпочате з \Q.</li>
+</ul>
+<div>
+ <ul>
+  <li><a href="https://www.javacodegeeks.com/2012/02/regular-expressions-in-java-soft.html" rel="nofollow">Оригінал перекладу</a></li>
+  <li><a href="https://regexone.com/" rel="nofollow">Чудовий туторіал</a></li>
+  <li><a href="https://stackoverflow.com/questions/22937618/reference-what-does-this-regex-mean/22944075#22944075" rel="nofollow">Reference — What does this regex mean?</a></li>
+  <li><a href="https://regex101.com/" rel="nofollow">Візуалізатор для перевірки</a></li>
+  <li><a href="https://www.debuggex.com/" rel="nofollow">Відмінний дебаггер із візуалізацією</a></li>
+ </ul>
+</div>

@@ -1,0 +1,147 @@
+Java Core. Запитання до співбесіди, ч. 1
+<p>----------------------------------------</p>
+Для тих, хто вперше чує слово Java Core, це фундаментальні основи мови. З цими знаннями вже можна сміливо йти на стажування/інтернатуру. Наведені питання допоможуть вам освіжити знання перед співбесідою, або почерпнути щось нове. Для отрима
+<p>----------------------------------------</p>
+Для тих, хто вперше чує слово Java Core, це фундаментальні основи мови. З цими знаннями вже можна сміливо йти на стажування/інтернатуру. <img data-id="0b093b06-fd08-4a1e-ac64-27de5ce85159" data-max-width="850" alt="Java Core.  Запитання до співбесіди, ч. 1 - 1" src="https://cdn.javarush.com/images/article/0b093b06-fd08-4a1e-ac64-27de5ce85159/800.jpeg" style="width: 850px;">Наведені питання допоможуть вам освіжити знання перед співбесідою, або почерпнути щось нове. Для отримання практичних навичок займайтеся на <a href="https://codegym.cc/" target="_blank">CodeGym</a> . 
+<ol>
+ <li>
+  <p><strong>Як створити незмінний об'єкт у Java? Перерахуйте всі переваги</strong></p>
+  <p>Незмінний клас – це клас, стан якого може бути змінено після створення. Тут станом об'єкта по суті вважаються значення, що зберігаються в екземплярі класу, будь то примітивні типи або типи посилань.</p>
+  <p>Для того щоб зробити клас незмінним, необхідно виконати такі умови:</p>
+  <ol>
+   <li>Не надавайте сеттери або методи, які змінюють поля або об'єкти, що посилаються на поля. Сетери мають на увазі зміну стану об'єкта, а це те, чого ми хочемо тут уникнути.</li>
+   <li>Зробіть всі поля <code class=" language-none">final</code>та <code class=" language-none">private</code>. Поля, позначені <code class=" language-none">private</code>, будуть недоступними зовні класу, а позначення їх <code class=" language-none">final</code>гарантує, що ви не зміните їх випадково.</li>
+   <li>Не дозволяйте субкласам перевизначати методи. Найпростіший спосіб це зробити – оголосити клас як <code class=" language-none">final</code>. Фіналізовані класи Java не можуть бути перевизначені.</li>
+   <li>Завжди пам'ятайте, що ваші екземпляри змінних можуть бути змінюваними або незмінними. Визначте їх та повертайте нові об'єкти з скопійованим вмістом для всіх змінних об'єктів (посилальні типи). Змінні змінні (примітивні типи) можуть бути безпечно повернені без додаткових зусиль.</li>
+  </ol>
+  <p>Також, вам необхідно пам'ятати наступні переваги незмінних класів. Можливо, вони знадобляться вас на співбесіді. Незмінні класи:</p>
+  <ul>
+   <li>легко конструювати, тестувати та використовувати</li>
+   <li>автоматично потокобезпечні та не мають проблем синхронізації</li>
+   <li>не вимагають конструктора копіювання</li>
+   <li>дозволяють виконати «ліниву ініціалізацію» хешкода і кешувати значення, що повертається</li>
+   <li>не вимагають захищеного копіювання, коли використовуються як поле</li>
+   <li>роблять хороші <code class=" language-none">Map</code>ключі та <code class=" language-none">Set</code>елементи (ці об'єкти не повинні змінювати стан, коли знаходяться в колекції)</li>
+   <li>роблять свій клас постійним, одного разу створивши його, а він не потребує повторної перевірки</li>
+   <li>завжди мають «атомарність по відношенню до збою» (failure atomicity, термін застосував Джошуа Блох): якщо незмінний об'єкт кидає виняток, він ніколи не залишиться у небажаному чи невизначеному стані.</li>
+  </ul>
+  <p>Подивіться приклад, написаний у <a href="https://howtodoinjava.com/java/basics/how-to-make-a-java-class-immutable/" rel="nofollow" target="_blank">цьому пості</a> .</p></li>
+ <li>
+  <p><strong>У Java передача за значенням чи за посиланням?</strong></p>
+  <p>Java специфікація свідчить, що це Java передається за значенням. Немає такого поняття, як «передача за посиланням» Java. Ці умови пов'язані з викликом методів і передачі змінних, як параметрів методу. Добре, примітивні типи завжди передаються за значенням без будь-якої плутанини. Проте, концепція має бути зрозумілою у контексті параметра методу складних типів.</p>
+  <p>У Java, коли ми передає посилання складного типу як будь-який параметр методу, завжди адресаа пам'яті копіюється в нову змінну змінну крок за кроком. Подивіться на зображення:</p><img data-id="d2e6c1a0-7c9c-4b64-904c-f88dcfc77b09" data-max-width="570" alt="Java Core.  Запитання до співбесіди, ч. 1 - 2" src="https://cdn.javarush.com/images/article/d2e6c1a0-7c9c-4b64-904c-f88dcfc77b09/512.jpeg" style="width: 570px;">
+  <p>У наведеному прикладі, біти адресаи першого екземпляра копіюються інший посилальної змінної, в результаті чого обидві посилання вказують на одну ділянку пам'яті, де зберігається об'єкт. Пам'ятайте, що привласнивши друге посилання null, ви не надасте null першому посиланні. Але зміна стану об'єкта з однією змінною, що посилається, буде відображено і в іншому посиланні.</p>
+  <p>Подробиці дивіться <a href="https://stackoverflow.com/questions/40480/is-java-pass-by-reference-or-pass-by-value" rel="nofollow" target="_blank">тут</a> .</p></li>
+ <li>
+  <p><strong>Яке застосування блоку <code class=" language-none">finally</code>? Чи гарантує цей блок виконання свого коду? Коли <code class=" language-none">finally</code>блок не викликається?</strong></p>
+  <p>Блок <code class=" language-none">finally</code>завжди викликається, якщо <code class=" language-none">try</code>є блок. Це гарантує, що блок <code class=" language-none">finally</code>викликається навіть якщо трапляється несподіваний виняток. Але <code class=" language-none">finally</code>є більш корисним, ніж просто для обробки винятків – цей блок дозволяє виконати чищення коду, який випадково обійшов через <code class=" language-none">return</code>, <code class=" language-none">continue</code>або <code class=" language-none">break</code>. Розміщення коду, що очищає, в блок <code class=" language-none">finally</code>завжди є хорошою практикою, навіть коли не очікується жодних винятків.</p>
+  <p>Якщо віртуальна машина завершує роботу під час виконання блоку <code class=" language-none">try</code>або <code class=" language-none">catch</code>, тоді блок <code class=" language-none">finally</code>не буде виконано. Аналогічно, якщо нитка, виконуючи блок <code class=" language-none">try</code>або <code class=" language-none">catch</code>, буде перервана або вбита, блок <code class=" language-none">finally</code>не буде виконаний, навіть не дивлячись на те, що програма продовжує працювати.</p></li>
+ <li>
+  <p><strong>Чому існує два класи <code class=" language-none">Date</code>, один в <code class=" language-none">java.util package</code>інший в <code class=" language-none">java.sql</code>?</strong></p>
+  <p><code class=" language-none">java.util.Date</code>представляє дату та час, а <code class=" language-none">java.sql.Date</code>представляє лише дату. Доповненням <code class=" language-none">java.sql.Date</code>є клас <code class=" language-none">java.sql.Time</code>, який представляє тільки час.</p>
+  <p>Клас <code class=" language-none">java.sql.Date</code>є субкласом (розширенням) класу <code class=" language-none">java.util.Date</code>. Отже, що змінилося в <code class=" language-none">java.sql.Date</code>:</p>
+  <ul>
+   <li><code class=" language-none">toString()</code>формує інше уявлення рядка: yyyy-mm-dd</li>
+   <li>статичний метод <code class=" language-none">valueOf(String)</code>створює дату з рядка з вказаним вище поданням</li>
+   <li>виключені гетери та сеттери для годин, хвабон та секунд</li>
+  </ul>
+  <p>Клас <code class=" language-none">java.sql.Date</code>використовується в JDBC і призначений, щоб не мати складову часу, тобто години, хвабони, секунди та мілісекунди повинні бути нульовими… але це не є обов'язковим для класу.</p></li>
+ <li>
+  <p><strong>Поясніть маркери.</strong></p>
+  <p>Шаблон інтерфейсу-маркера – це шаблон проектування в комп'ютерних науках, який використовується мовами програмування, які <strong>надають інформацію про об'єкти під час виконання</strong> . Це <strong>надає спосіб асоціації метаданих класу, де мова не має явної підтримки таких метаданих</strong> . Java для цього використовуються інтерфейси без вказівки методів.</p>
+  <p>Хорошим прикладом застосування інтерфейсу-маркера Java є інтерфейс <code class=" language-none">Serializable</code>. Клас реалізує цей інтерфейс для вказівки, що його <code class=" language-none">transient</code>дані можуть бути записані в потік байтів або на файлову систему.</p>
+  <p><em>Головною проблемою</em> інтерфейсу-маркера є те, що інтерфейс визначає угоду для класів, що її реалізують, і ця угода успадковується всіма субкласами. Це означає, що ви не зможете "де-реалізувати" маркер. У наведеному прикладі, якщо ви створите субклас, який ви не хотіли б серіалізувати (можливо тому, що він перебуває в минущому (transient) стані), ви повинні вдатися до явного кидання <code class=" language-none">NotSerializableException</code>.</p></li>
+ <li>
+  <p><strong>Чому метод <code class=" language-none">main()</code>оголошено як <code class=" language-none">public static void</code>?</strong></p>
+  <p><em>Чому public? </em>Метод <code class=" language-none">main</code>має модифікатор доступу <code class=" language-none">public</code>, тому він може бути доступний скрізь і для будь-якого об'єкта, який захоче використовувати цей метод для запуску програми. Тут я не кажу, що JDK/JRE мають подібну нагоду, оскільки java.exe або javaw.exe (для windows) використовують Java Native Interface (JNI) виклик для запуску методу, тому вони можуть викликати його в будь-якому випадку, незалежно від модифікатора доступу .</p>
+  <p><em>Чому це? </em>Давайте припустимо, що ми метод <code class=" language-none">main</code>не статичний. Тепер для виклику будь-якого методу вам необхідний екземпляр класу. Правильно? Java дозволяє мати перевантажені конструктори, це ми всі знаємо. Тоді який із них має бути використаний, і звідки візьмуться параметри для перевантаженого конструктора?</p>
+  <p><em>Чому void? </em>Немає застосування для значення, що повертається у віртуальній машині, яка фактично викликає цей метод. Єдине, що програма захоче повідомити процесу, що викликав, - це нормальне або ненормальне завершення. Це вже можливо використовуючи <code class=" language-none">System.exit(int)</code>. Чи не нульове значення має на увазі ненормальне завершення, інакше все в порядку.</p></li>
+ <li>
+  <p><strong>У чому різниця між створенням рядка як <code class=" language-none">new()</code>і літералом (за допомогою подвійних лапок)?</strong></p>
+  <p>Коли ми створюємо рядок, використовуючи <code class=" language-none">new()</code>, вона створюється в хіпі і також додається в пул рядків, у той же час рядок, створений за допомогою літералу, створюється тільки в пулі рядків.</p>
+  <p>Вам необхідно ознайомитися з поняттям пула рядків глибше, щоб відповісти на це або подібні запитання. Моя порада - як слід вивчіть <a href="https://howtodoinjava.com/interview-questions/interview-stuff-about-string-class-in-java/" rel="nofollow" target="_blank">клас String і пул рядків</a> .</p>
+  <div class="table-container">
+   <table>
+    <tbody>
+     <tr>
+      <td>У нас у перекладах вже є гарна стаття про рядки та рядковий пул: <a href="https://codegym.cc/groups/posts/759-java-string-voprosih-k-sobesedovaniju-i-otvetih-na-nikh-ch1" target="_blank">Частина 1</a> , <a href="https://codegym.cc/groups/posts/760-java-string-voprosih-k-sobesedovaniju-i-otvetih-na-nikh-ch2" target="_blank">Частина 2</a> .</td>
+     </tr>
+    </tbody>
+   </table>
+  </div></li>
+ <li>
+  <p><strong>Як працює метод <code class=" language-none">substring()</code>класу <code class=" language-none">String</code>?</strong></p>
+  <p>Як і в інших мовах програмування, рядки Java є послідовністю символів. Цей клас більше схожий на службовий клас для роботи з цією послідовністю. Послідовність символів забезпечується наступною змінною:</p>
+  <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token comment"><span class="token comment">/** The value is used for character storage. */</span></span>
+<span class="token comment"><span class="token comment">/** Значение используется для хранения символов */</span></span>
+<span class="token keyword"><span class="token keyword">private</span></span> <span class="token keyword"><span class="token keyword">final</span></span> <span class="token keyword"><span class="token keyword">char</span></span> value<span class="token punctuation"><span class="token punctuation">[</span></span><span class="token punctuation"><span class="token punctuation">]</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+Для доступа к этому массиву в различных сценариях используются следующие переменные</code><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token comment"><span class="token comment">/** The offset is the first index of the storage that is used. */</span></span>
+<span class="token comment"><span class="token comment">/** Смещение – это первый индекс используемого хранабоща. */</span></span>
+<span class="token keyword"><span class="token keyword">private</span></span> <span class="token keyword"><span class="token keyword">final</span></span> <span class="token keyword"><span class="token keyword">int</span></span> offset<span class="token punctuation"><span class="token punctuation">;</span></span>
+
+<span class="token comment"><span class="token comment">/** The count is the number of characters in the String. */</span></span>
+<span class="token comment"><span class="token comment">/** Счет – это количество символов в строке. */</span></span>
+<span class="token keyword"><span class="token keyword">private</span></span> <span class="token keyword"><span class="token keyword">final</span></span> <span class="token keyword"><span class="token keyword">int</span></span> count<span class="token punctuation"><span class="token punctuation">;</span></span></code></pre>
+  <p>Щоразу, коли ми створюємо підрядок від існуючого екземпляра рядка, метод <code class=" language-none">substring()</code>лише встановлює нові значення змінних <code class=" language-none">offset</code>та <code class=" language-none">count</code>. Внутрішній масив символів не змінюється. Це можливе джерело витоку пам'яті, якщо метод <code class=" language-none">substring()</code>використовувати необережно:</p>
+  <p>Початкове значення <code class=" language-none">value[]</code>не змінюється. Тому якщо ви створите рядок довжиною 10000 символів і створите 100 підрядків з 5-10 символами в кожному, всі 101 об'єкти будуть містити один і той же символьний масив довжиною 10000 символів. Це без сумніву марнотратство пам'яті.</p>
+  <p>Цього можна уникнути, змінивши код таким чином:</p>
+  <p>замінити <code class=" language-none"><strong>original.substring(beginIndex)</strong></code>на <code class=" language-none"><strong>new String(original.substring(beginIndex))</strong></code>, де <code class=" language-none">original</code>– вихідний рядок.</p>
+  <div class="table-container">
+   <table>
+    <tbody>
+     <tr>
+      <td>Примітка перекладача: я не можу сказати до якої версії Java це застосовно, але на даний момент у Java 7 цей пункт статті не актуальний. Метод <code class=" language-none">substring()</code>викликає конструктор класу <code class=" language-none">new String(value, beginIndex, subLen)</code>, що у свою чергу звертається до методу <code class=" language-none">Arrays.copyOfRange(value, offset, offset+count)</code>. Це означає, що у нас буде щоразу нове значення змінної <code class=" language-none">value[]</code>, що містить наше нове кількість символів.</td>
+     </tr>
+    </tbody>
+   </table>
+  </div></li>
+ <li>
+  <p><strong>Поясніть роботу <code class=" language-none">HashMap</code>. Як вирішено проблему дублікатів?</strong></p>
+  <p>Більшість з вас, напевно, погодиться, що <code class=" language-none">HashMap</code>найбільш улюблена тема для дискусій на інтерв'ю в даний час. Якщо хтось попросить мене розповісти «Як працює <code class=" language-none">HashMap</code>?», я просто відповім: «За принципом хешування». Так просто, як це є.</p>
+  <p>Отже, хешування по суті є способом призначити унікальний код будь-якої змінної/об'єкта після застосування будь-якої формули/алгоритму до своїх властивостей.</p>
+  <p>Визначення картки ( <code class=" language-none">Map</code>) таке: «Об'єкт, який прив'язує ключі до значень». Дуже просто, правда? Отже, <code class=" language-none">HashMap</code>містить власний внутрішній клас <code class=" language-none">Entry</code>, який має вигляд:</p>
+  <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">static</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="token class-name"><span class="token class-name">Entry</span></span> <span class="token keyword"><span class="token keyword">implements</span></span> <span class="token class-name"><span class="token class-name">Map<span class="token punctuation"><span class="token punctuation">.</span></span>Entry</span></span>
+<span class="token punctuation"><span class="token punctuation">{</span></span>
+<span class="token keyword"><span class="token keyword">final</span></span> <span class="token class-name"><span class="token class-name">K</span></span> key<span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token class-name"><span class="token class-name">V</span></span> value<span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token class-name"><span class="token class-name">Entry</span></span> next<span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token keyword"><span class="token keyword">final</span></span> <span class="token keyword"><span class="token keyword">int</span></span> hash<span class="token punctuation"><span class="token punctuation">;</span></span>
+…<span class="token comment"><span class="token comment">//More code goes here</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre>
+  <p>Коли хтось намагається помістити пару ключ-значення в <code class=" language-none">HashMap</code>, відбувається таке:</p>
+  <ul>
+   <li>Насамперед об'єкт ключа перевіряється на <code class=" language-none">null</code>. Якщо ключ <code class=" language-none">null</code>, значення зберігається у позицію <code class=" language-none">table[0]</code>. Тому що хешкод <code class=" language-none">null</code>завжди 0.</li>
+   <li>Потім, наступним кроком обчислюється хеш значення викликаючи у змінної ключа свій метод <code class=" language-none">hashCode()</code>. Цей хеш використовується для обчислення індексу в масиві для зберігання об'єкта <code class=" language-none">Entry</code>. Розробники JDK чудово розуміли, що метод <code class=" language-none">hashCode()</code>може бути погано написаний і може повертати дуже велике чи дуже маленьке значення. Для вирішення цієї проблеми вони ввели інший <code class=" language-none">hash()</code>метод і передають хешкод об'єкту цьому методу для приведення цього значення до діапазону розміру індексу масиву.</li>
+   <li>Тепер викликається метод <code class=" language-none">indexFor(hash, table.length)</code>для обчислення точної позиції для зберігання об'єкта <code class=" language-none">Entry</code>.</li>
+   <li>Наразі головна частина. Як ми знаємо, два неоднакові об'єкти можуть мати однакове значення хешкода, як два різні об'єкти зберігатимуться в однаковому розташуванні в архіві [називається кошиком]?</li>
+  </ul>
+  <p>Відповідь – <code class=" language-none">LinkedList</code>. Якщо пам'ятаєте, клас <code class=" language-none">Entry</code>має властивість “next”. Ця властивість завжди вказує на наступний об'єкт у ланцюзі. Така поведінка дуже схожа на <code class=" language-none">LinkedList</code>.</p>
+  <p>Отже, у разі збігів хешкод, об'єкти Entry зберігаються у формі <code class=" language-none">LinkedList</code>. Коли об'єкт <code class=" language-none">Entry</code>необхідно розмістити на конкретному індексі, <code class=" language-none">HashMap</code>перевіряє, чи існує на цьому місці інший об'єкт <code class=" language-none">Entry</code>? Якщо там немає запису, наш об'єкт збережеться у цьому місці.</p>
+  <p>Якщо в нашому індексі вже знаходиться інший об'єкт, перевіряється його поле <code class=" language-none">next</code>. Якщо воно рівне <code class=" language-none">null</code>, наш об'єкт стає наступним вузлом в <code class=" language-none">LinkedList</code>. Якщо next не дорівнює <code class=" language-none">null</code>, ця процедура повторюється, доки знайдено поле <code class=" language-none">next</code>рівне <code class=" language-none">null</code>.</p>
+  <p>Що буде, якщо ми додамо інше значення ключа, що дорівнює доданому раніше? Логічно, що вона має замінити старе значення. Як це відбувається? Після визначення індексу позиції для об'єкта <code class=" language-none">Entry</code>, пробігаючи по <code class=" language-none">LinkedList</code>розташованому на нашому індексі, <code class=" language-none">HashMap</code>викликає метод <code class=" language-none">equals()</code>для значення ключа для кожного об'єкта <code class=" language-none">Entry</code>. Всі ці об'єкти <code class=" language-none">Entry</code>мають <code class=" language-none">LinkedList</code>однакове значення хешкода, але метод <code class=" language-none">equals()</code>перевірятиме на справжню рівність. Якщо ключ. <code class=" language-none">equals(k)</code>буде <em>true</em> , тоді обидва сприйматимуться як однаковий об'єкт. Це викликає заміну лише об'єкта-значення всередині об'єкта <code class=" language-none">Entry</code>.</p>
+  <p>У такий спосіб <code class=" language-none">HashMap</code>забезпечує унікальність ключів.</p></li>
+ <li>
+  <p><strong>Відмінності між інтерфейсами та абстрактними класами?</strong></p>
+  <p>Це дуже поширене питання, якщо ви проходите співбесіду з програмістом рівня junior. Найбільш значущі відмінності наведені нижче:</p>
+  <ul>
+   <li>В інтерфейсах Java змінні апріорі <code class=" language-none">final</code>. Абстрактні класи можуть містити не <code class=" language-none">final</code>змінні.</li>
+   <li>Інтерфейс Java беззастережно не може мати реалізації. Абстрактний клас може мати екземпляри методів, що реалізують базову поведінку.</li>
+   <li>Складові інтерфейсу повинні бути <code class=" language-none">public</code>. Анотація клас може мати модифікатори доступу на будь-який смак.</li>
+   <li>Інтерфейс має бути реалізований ключовим словом <code class=" language-none">implements</code>. Абстрактний клас має бути розширений за допомогою ключового слова <em>extends</em> .</li>
+   <li>Java клас може реалізовувати безліч інтерфейсів, але може успадковуватися тільки від одного абстрактного класу.</li>
+   <li>Інтерфейс повністю абстрактний і не може мати екземплярів. Абстрактний клас також може мати примірників класу, але може бути викликаний, якщо існує метод <code class=" language-none">main()</code>.</li>
+   <li>Абстрактний клас трохи швидше за інтерфейс, тому що інтерфейс передбачає пошук перед викликом будь-якого перевизначеного методу в Java. У більшості випадків це незначна відмінність, але якщо ви пишите критичний час додаток, вам необхідно врахувати і цей факт.</li>
+  </ul></li>
+ <div class="email-subscription">
+  <iframe frameborder="0" src="https://secure.esputnik.com.ua/4Q0Ef6d2SOs" width="100%" height="200" scrolling="no" data-savepage-key="0-2"></iframe>
+ </div>
+ <li>
+  <p><strong>Коли ви перевизначаєте методи <code class=" language-none">hashCode()</code>та <code class=" language-none">equals()</code>?</strong></p>
+  <p>Методи <code class=" language-none">hashCode()</code>і <code class=" language-none">equals()</code>визначені у класу <code class=" language-none">Object</code>, який є батьківським класом для всіх об'єктів Java. З цієї причини всі об'єкти Java успадковують базову реалізацію цих методів.</p>
+  <p>Метод <code class=" language-none">hashCode()</code>використовується для отримання унікального значення integer для цього об'єкта. Це значення використовується визначення розташування кошика, коли об'єкт необхідно зберігати у структурі даних на кшталт <code class=" language-none">HashTable</code>. За замовчуванням метод <code class=" language-none">hashCode()</code>повертає ціле чисельне подання адресаи пам'яті, де зберігається об'єкт.</p>
+  <p>Метод <code class=" language-none">equals()</code>, як передбачає назву, використовується для простої еквівалентності об'єктів. Базова реалізація методу полягає у перевірці посилань двох об'єктів для перевірки їхньої еквівалентності.</p>
+  <p>Зверніть увагу, що зазвичай необхідно перевизначати метод <code class=" language-none">hashCode()</code>щоразу, коли перевизначено метод <code class=" language-none">equals()</code>. Це необхідно для підтримки загальної угоди методу <code class=" language-none">hashCode</code>, в якому говориться, що рівні об'єкти повинні мати рівні хешкоди.</p>
+  <p>Метод equals() повинен визначати рівність відносин (він має бути зворотним, симетричним та транзитивним). На додаток, він повинен бути стійким (якщо об'єкт не змінювався, метод повинен повертати те саме значення). Крім того, <code class=" language-none">o.equals(null)</code>завжди має повертати <em>false</em> .</p>
+  <p><code class=" language-none">hashCode()</code>повинен бути також стійким (якщо об'єкт не змінювався за умовами методу <code class=" language-none">equals()</code>, він повинен продовжувати повертати те саме значення.</p>
+  <p>Відношення між двома методами таке: завжди, якщо <code class=" language-none">a.equals(b)</code>, тоді <code class=" language-none">a.hashCode()</code>має бути таким самим, як і <code class=" language-none">b.hashCode()</code>.</p></li>
+</ol><em>Удачі у навчанні!! </em> <em>Автор статті <a href="https://plus.google.com/+LokeshGupta" rel="nofollow" target="_blank">Lokesh Gupta </a></em> <em><a href="https://howtodoinjava.com/interview-questions/core-java-interview-questions-series-part-1/" rel="nofollow" target="_blank">Посилання</a></em> на інші частини: <a href="https://codegym.cc/groups/posts/764-java-core-voprosih-k-sobesedovaniju-ch-2" target="_blank">Java Core. Запитання до співбесіди, ч. 2 </a> <a href="https://codegym.cc/groups/posts/780-java-core-voprosih-k-sobesedovaniju-ch-3" target="_blank">Java Core. Запитання до співбесіди, ч. 3</a>

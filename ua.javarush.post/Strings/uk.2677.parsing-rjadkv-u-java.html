@@ -1,0 +1,30 @@
+Парсинг рядків у Java
+<p>----------------------------------------</p>
+Перед програмістами часто стоять завдання, вирішення яких не завжди очевидне. Одне з таких завдань – парсинг рядків. Він використовується під час читання даних з консолі, файлу та інших джерел. Більшість даних, що передаються через інтернет
+<p>----------------------------------------</p>
+Перед програмістами часто стоять завдання, вирішення яких не завжди очевидне. Одне з таких завдань – парсинг рядків. Він використовується під час читання даних з консолі, файлу та інших джерел. Більшість даних, що передаються через інтернет, теж знаходяться у рядковому вигляді. На жаль, робити математичні операції з рядками неможливо. Тому, кожному програмісту необхідно точно знати, як робити перетворення рядка в число Java. <img data-max-width="800" data-id="c713dc7a-f15f-4c41-b5cc-3e307f6b1665" class="img-fluid" alt="Парсинг рядків у Java - 1" src="https://cdn.javarush.com/images/article/c713dc7a-f15f-4c41-b5cc-3e307f6b1665/800.jpeg" style="width: 800px;">У рядках можуть бути різні числові типи: 
+<ul>
+ <li>byte;</li>
+ <li>short;</li>
+ <li>int;</li>
+ <li>long;</li>
+ <li>float;</li>
+ <li>double.</li>
+</ul>Для вилучення з рядка числового значення необхідного типу, потрібно скористатися його класом-обгорткою: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+byte a = Byte.parseByte("42");
+short b = Short.parseShort("42");
+int c = Integer.parseInt("42");
+long d = Long.parseLong("42");
+float e = Float.parseFloat("42.0");
+double f = Double.parseDouble("42.0");</code></pre> Не секрет, що найпопулярнішим типом даних є <code class=" language-none">int</code>, тому за частотою свого використання метод <code class=" language-none">parseInt</code>Java дихає в спину методу для виведення інформації на консоль <code class=" language-none">System.out.println()</code>. <a href="https://codegym.cc/welcome" target="_blank"><img id="click_banner1_articles" data-max-width="1024" data-id="f56cddb4-da86-4968-a2f3-918c2649ede7" class="img-fluid" alt="Парсинг рядків у Java - 2" src="https://cdn.javarush.com/images/article/f56cddb4-da86-4968-a2f3-918c2649ede7/1024.jpeg" style="width: 1024px;"></a>Але при використанні методу <code class=" language-none">Integer.parseInt()</code>потрібно пам'ятати про деякі нюанси: 
+<ol>
+ <li>
+  <p>Якщо метод передати рядок, яка є цілочисловим значенням, буде отримано помилку <code class=" language-none">java.lang.NumberFormatException</code>, яка буде повідомляти, що отриманий рядок перестав бути целочисленным значенням.</p></li>
+ <li>
+  <p><code class=" language-none">NumberFormatException</code>відбудеться і в тому випадку, якщо переданий рядок міститиме пробіл.</p></li>
+ <li>
+  <p><code class=" language-none">parseInt()</code>може працювати з негативними числами. Для цього рядок має починатися із символу “-”.</p></li>
+ <li>
+  <p><code class=" language-none">parseInt()</code>- не може розпарсувати рядок, якщо числове значення виходить за межі типи <code class=" language-none">int</code>(-2147483648.. 2147483647).</p></li>
+</ol>Враховуючи ці чотири простих нюанси, можна уникнути складних помилок у майбутньому, адже ширяти рядки програмістам доводиться дуже часто. І це чекає на кожного з нас!

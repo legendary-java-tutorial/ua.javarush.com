@@ -1,0 +1,22 @@
+ThreadGroup
+<p>----------------------------------------</p>
+Доброго дня та з новим роком! Допоможіть трохи дорозібратися з багатопоточністю, а саме ThreadGroup. Гуглил, читав, зрозумів основну суть: призначення – безпека, комплексне управління з допомогою організації угруповання. (джерело: ) (джерел
+<p>----------------------------------------</p>
+Доброго дня та з новим роком! Допоможіть трохи дорозібратися з багатопоточністю, а саме ThreadGroup. Гуглил, читав, зрозумів основну суть: призначення – безпека, комплексне управління з допомогою організації угруповання. 
+<blockquote>
+ Потоки поєднуються в групи потоків (thread groups) з міркувань поліпшення керованості та безпеки. Одна група потоків може належати до іншої групи, складаючи ієрархію з основною (системною) групою на верхньому рівні. Потоки, які стосуються групи, можуть управлятися одноразово – ви маєте право перервати роботу одночасно всіх потоків групи чи встановити їм єдине максимальне значення пріоритету виконання. Групи потоків можуть бути використані для визначення доменів безпеки. Потоки всередині групи зазвичай наділені можливостями взаємного впливу, що поширюється і потоки вкладених груп. Говорячи про "вплив", ми маємо на увазі, що виклик будь-якого методу здатний впливати на характеристики поведінки потоку, скажімо, змінювати його пріоритет або здійснювати переривання.
+</blockquote>(джерело: <a href="http://src-code.net/upravlenie-potokami-bezopasnost-i-threadgroup-java/" rel="nofollow">Тиц</a> ) 
+<blockquote>
+ Для того щоб окремий потік не міг почати зупиняти і переривати всі потоки поспіль, введено поняття групи. Потік може впливати лише на потоки, що знаходяться в одній з ним групі. Групу потоків представляє клас ThreadGroup. Така організація дозволяє захистити потоки від небажаної зовнішньої дії. Група потоків може містити інші групи, що дозволяє організувати всі потоки і групи в ієрархічне дерево, в якому кожен об'єкт ThreadGroup, крім кореневого, має батька.
+</blockquote>(джерело: <a href="http://www.intuit.ru/studies/courses/16/16/lecture/27129?page=5" rel="nofollow">Тиц</a> ) Прочитавши різні статті, вирішив написати маленький код, в якому б у мене не вийшло з одного потоку однієї групи перервати потоки іншої групи. І щось не вийшло: <strong>дає переривати(((</strong> Мій код: Чому виходить перервати? Ось висновок: <code class=" language-none">public class Test { public static ArrayList<thread>
+  threads = new ArrayList
+  <thread>
+   (); public static ArrayList
+   <threadgroup>
+    groups = new ArrayList
+    <threadgroup>
+     (); public static void main(String[] args) throws InterruptedException { final ThreadGroup group1 = new ThreadGroup("GROUP 1"); final ThreadGroup group2 = new ThreadGroup("GROUP 2"); final ThreadGroup group3 = new ThreadGroup("GROUP 3"); groups.add(group1); groups.add(group2); groups.add(group3); for (int i = 0; i &lt; groups.size(); i++) { for (int j = 1; j &lt; 5; j++) { Thread thread = new Thread(groups.get(i), "THREAD №" + j) { @Override public void run() { while (!isInterrupted()) { try { Thread.sleep(500); } catch (InterruptedException e) { System.out.println(getName() + " : " + getThreadGroup().getName() + " прервана"); } } } }; threads.add(thread); thread.start(); } } Thread thread = new Thread(group1, "THREAD №5") { @Override public void run() { group2.interrupt(); while (true); } }; thread.start(); threads.add(thread); for (Thread t : threads) System.out.println(t); } }
+    </threadgroup>
+   </threadgroup>
+  </thread>
+ </thread></code><code class=" language-none">Thread[THREAD №1,5,GROUP 1] Thread[THREAD №2,5,GROUP 1] Thread[THREAD №3,5,GROUP 1] Thread[THREAD №4,5,GROUP 1] Thread[THREAD №1,5,GROUP 2] Thread[THREAD №2,5,GROUP 2] Thread[THREAD №3,5,GROUP 2] Thread[THREAD №4,5,GROUP 2] Thread[THREAD №1,5,GROUP 3] Thread[THREAD №2,5,GROUP 3] Thread[THREAD №3,5,GROUP 3] Thread[THREAD №4,5,GROUP 3] Thread[THREAD №5,5,GROUP 1] THREAD №1 : GROUP 2 прервана THREAD №2 : GROUP 2 прервана THREAD №4 : GROUP 2 прервана THREAD №3 : GROUP 2 прервана</code>

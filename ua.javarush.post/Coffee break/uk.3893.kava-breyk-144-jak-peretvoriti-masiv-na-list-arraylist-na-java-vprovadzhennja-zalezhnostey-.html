@@ -1,0 +1,175 @@
+Кава-брейк #144. Як перетворити масив на List (ArrayList) на Java. Впровадження залежностей у Java
+<p>----------------------------------------</p>
+Джерело: Хоча масиви прості та зручні у використанні, вони мають безліч обмежень, наприклад, фіксований розмір. Це ускладнює додавання нового елемента на початку та перестановку елементів. Завдяки Collections Framework ми можемо реалізувати
+<p>----------------------------------------</p>
+<h2>Як перетворити масив на List (ArrayList) на Java</h2>Джерело: <a href="https://rrtutors.com/tutorials/how-do-i-convert-array-to-list-arraylist-in-java" rel="nofollow" target="_blank">Rrtutors </a> <em>Сьогодні ви дізнаєтеся про різні способи перетворення масиву в List (ArrayList) і ознайомитеся з прикладами коду в кожному з них. </em> <img data-max-width="800" data-id="8b8c174c-02aa-4af0-8468-31029daa5f6a" alt="Кава-брейк #144.  Як перетворити масив на List (ArrayList) на Java.  Впровадження залежностей у Java - 1" src="https://cdn.javarush.com/images/article/8b8c174c-02aa-4af0-8468-31029daa5f6a/800.jpeg" style="width: 800px;">Хоча масиви прості та зручні у використанні, вони мають безліч обмежень, наприклад, фіксований розмір. Це ускладнює додавання нового елемента на початку та перестановку елементів. Завдяки Collections Framework ми можемо реалізувати список (List), набір (Set) та чергу (Queue) у різний спосіб. Наприклад, використовуючи універсальний та гнучкий список масивів (ArrayList). При перетворенні масиву на Java можна використовувати три методи. Ці методи включають:
+<ol>
+ <li>Наївний чи метод грубої сабо (Brute Force Method).</li>
+ <li>Метод <span class="code">Arrays.asList()</span> .</li>
+ <li>Метод <span class="code">Collections.addAll()</span> .</li>
+</ol>
+<h2>Використання наївного методу чи методу грубої сабо</h2>У цьому методі список створюється з порожнього масиву, і кожен елемент масиву додається до нього один за одним. Метод працює після виконання наступних дій:
+<ul>
+ <li>Отримайте масив.</li>
+ <li>Створіть пустий список.</li>
+ <li>Переберіть елементи у масиві.</li>
+ <li>Тепер додайте кожен елемент масиву.</li>
+ <li>Поверніть повний перелік.</li>
+</ul>У цьому прикладі масив фруктів перетворюється на список фруктів: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">ArrayList</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Arrays</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">List</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">NaivemethodExample</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> <span class="token function">convertArrayToList</span><span class="token punctuation">(</span><span class="token class-name">T</span> array<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+    <span class="token punctuation">{</span>
+
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> list <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">T</span> t <span class="token operator">:</span> array<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+            list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">return</span> list<span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span> args<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+    <span class="token punctuation">{</span>
+
+        <span class="token class-name">String</span> array<span class="token punctuation">[</span><span class="token punctuation">]</span>
+
+            <span class="token operator">=</span> <span class="token punctuation">{</span> <span class="token string">"Mangoes"</span><span class="token punctuation">,</span> <span class="token string">"Oranges"</span><span class="token punctuation">,</span> <span class="token string">"berries"</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Array: "</span>
+
+                           <span class="token operator">+</span> <span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span>array<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> list <span class="token operator">=</span> <span class="token function">convertArrayToList</span><span class="token punctuation">(</span>array<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"List: "</span> <span class="token operator">+</span> list<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span></code></pre>
+<h3>Метод Arrays.asList()</h3>За допомогою методу <span class="code">Arrays.asList()</span> масив передається в конструктор List як параметр конструктора. Для перетворення масиву на список тут потрібно виконати такі кроки:
+<ul>
+ <li>Отримайте масив.</li>
+ <li>Створіть список, минаючи масив як параметр конструктора списку.</li>
+ <li>Поверніть повний перелік.</li>
+</ul>Ось приклад використання методу <span class="code">Arrays.asList()</span> для перетворення масиву фруктів у список: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">package</span> <span class="token namespace">asList</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Arrays</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">List</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> asListExample <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> <span class="token function">convertArrayToList</span><span class="token punctuation">(</span><span class="token class-name">T</span> array<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+    <span class="token punctuation">{</span>
+
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> list <span class="token operator">=</span> <span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span>array<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">return</span> list<span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span> args<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+    <span class="token punctuation">{</span>
+
+        <span class="token class-name">String</span> array<span class="token punctuation">[</span><span class="token punctuation">]</span>
+
+            <span class="token operator">=</span> <span class="token punctuation">{</span> <span class="token string">"Mangoes"</span><span class="token punctuation">,</span> <span class="token string">"Oranges"</span><span class="token punctuation">,</span> <span class="token string">"berries"</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Array: "</span>
+
+                          <span class="token operator">+</span> <span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span>array<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> list <span class="token operator">=</span> <span class="token function">convertArrayToList</span><span class="token punctuation">(</span>array<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"List: "</span> <span class="token operator">+</span> list<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span></code></pre>
+<h3>Метод Collections.addAll()</h3>Оскільки списки є частиною пакета Collection у Java, можна перетворити масив на список за допомогою методу <span class="code">Collections.addAll()</span> . Цей метод перетворює масив на список, використовуючи такі дії:
+<ul>
+ <li>Отримуємо масив.</li>
+ <li>Створюємо пустий список.</li>
+ <li>Перетворимо масив на список за допомогою методу <span class="code">collections.addAll()</span> .</li>
+ <li>Повертаємо список.</li>
+</ul>Приклад: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">ArrayList</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Arrays</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Collections</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">List</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> collectionsall <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> <span class="token function">convertArrayToList</span><span class="token punctuation">(</span><span class="token class-name">T</span> array<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+    <span class="token punctuation">{</span>
+
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> list <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">Collections</span><span class="token punctuation">.</span><span class="token function">addAll</span><span class="token punctuation">(</span>list<span class="token punctuation">,</span> array<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">return</span> list<span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span> args<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+    <span class="token punctuation">{</span>
+
+        <span class="token class-name">String</span> array<span class="token punctuation">[</span><span class="token punctuation">]</span>
+
+            <span class="token operator">=</span> <span class="token punctuation">{</span> <span class="token string">"peas"</span><span class="token punctuation">,</span> <span class="token string">"tomatoes"</span><span class="token punctuation">,</span> <span class="token string">"water melons"</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Array: "</span>
+
+                           <span class="token operator">+</span> <span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span>array<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> list <span class="token operator">=</span> <span class="token function">convertArrayToList</span><span class="token punctuation">(</span>array<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"List: "</span> <span class="token operator">+</span> list<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span></code></pre> Висновок: 
+<div class="terminal">
+ Array: [peas, tomatoes, melons water] List: [peas, tomatoes, melons water]
+</div>
+<h2>Впровадження залежностей у Java</h2>Джерело:<a href="https://medium.com/@brucetushabe/dependency-injection-in-java-a1ec07e37159" rel="nofollow" target="_blank"> Medium</a> <em> У цій публікації ви дізнаєтеся, що таке впровадження залежностей у Java, де воно застосовується і які переваги надає розробнику.</em> <img data-max-width="800" data-id="554c4159-876a-4a6e-b487-56a6cba79dbe" alt="Кава-брейк #144.  Як перетворити масив на List (ArrayList) на Java.  Впровадження залежностей у Java - 2" src="https://cdn.javarush.com/images/article/554c4159-876a-4a6e-b487-56a6cba79dbe/800.jpeg" style="width: 800px;">Використання залежностей (Dependency Injection, DI) — це процес надання зовнішньої залежності програмному компоненту. Використання залежностей спрямоване на поділ проблем створення об'єктів та їх використання. Принцип застосування передбачає, що об'єкт чи функція, які хочуть використовувати цей сервіс, не повинні знати, як його створювати. Натомість приймаючий "клієнт" (об'єкт чи функція) отримує свої залежності від зовнішнього коду ("інжектора"), про який він не знає. Ось наочний приклад. Коли клас X використовує деякі функції класу Y, ми говоримо, що клас X має залежність від класу Y. Використання залежностей дозволяє створювати залежні об'єкти поза класом і надає ці об'єкти класу різними способами. У разі створення і прив'язка залежних об'єктів винесені межі класу, що від них залежить.
+<ol>
+ <li>Клас обслуговування (Service Class), що надає послуги класу клієнта.</li>
+ <li>Клас клієнта (Client Class) – клас, який залежить від класу обслуговування.</li>
+ <li>Клас інжектора (Injector Class) - клас, який впроваджує об'єкт класу обслуговування клас клієнта.</li>
+</ol>
+<h3>Типи застосування залежностей</h3>Існує три типи впровадження залежностей:
+<ol>
+ <li><span class="text-bold">Використання конструктора</span> (Constructor Injection) - при впровадженні конструктора інжектор надає послугу (залежність) через конструктор клієнтського класу.</li>
+ <li><span class="text-bold">Використання сеттера</span> (Setter Injection) - у цьому типі застосування (також відомому як використання якості) інжектор надає залежність через загальнодоступну якість клієнтського класу.</li>
+ <li><span class="text-bold">Впровадження методу</span> (Method Injection) — у цьому типі застосування клієнтський клас реалізує інтерфейс, який оголошує метод(и) надання залежності. Інжектор використовує цей інтерфейс надання залежності клієнтському класу.</li>
+</ol>
+<h3>Переваги застосування залежностей</h3>Реалізація застосування залежностей дає нам такі переваги:
+<ul>
+ <li>Повторне використання коду.</li>
+ <li>Простота рефакторингу.</li>
+ <li>Простота тестування.</li>
+</ul>

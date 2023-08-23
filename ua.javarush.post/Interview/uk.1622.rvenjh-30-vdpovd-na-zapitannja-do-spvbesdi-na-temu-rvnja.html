@@ -1,0 +1,167 @@
+Рівень 30. Відповіді на запитання до співбесіди на тему рівня
+<p>----------------------------------------</p>
+Що таке NaN? NaN (англ. Not-a-Number) - один з особливих станів числа з плаваючою комою. Використовується в багатьох математичних бібліотеках та математичних співпроцесорах. Даний стан може виникнути в різних випадках, наприклад, коли попер
+<p>----------------------------------------</p>
+<img data-id="763f25d4-4ead-4029-8dca-a0c06cb75d82" data-max-width="850" alt="Рівень 30. Відповіді на запитання до співбесіди на тему рівня - 1" src="https://cdn.javarush.com/images/article/763f25d4-4ead-4029-8dca-a0c06cb75d82/800.jpeg" style="width: 850px;">
+<ol>
+ <li>
+  <p><strong>Що таке NaN?</strong></p>
+  <p><strong>NaN</strong> (англ. Not-a-Number) - один з особливих станів числа з плаваючою комою. Використовується в багатьох математичних бібліотеках та математичних співпроцесорах. Даний стан може виникнути в різних випадках, наприклад, коли попередня математична операція завершилася з невизначеним результатом, або якщо в комірку пам'яті потрапило число, що не задовольняє умовам.</p>
+  <p>Відповідно до IEEE 754, такий стан задається через установку показника ступеня в зарезервоване значення 11 ... 11, а мантиси - будь-що, крім 0 (зарезервоване значення для машинної нескінченності). Знак і мантиса можуть нести якусь додаткову інформацію: багато бібліотек «негативний» NaN виводять як NaN.</p>
+  <p>До операцій, що призводять до появи NaN як відповідь, відносяться:</p>
+  <ul>
+   <li>всі математичні операції, що містять NaN як один з операндів;</li>
+   <li>розподіл нуля на нуль;</li>
+   <li>розподіл нескінченності на нескінченність;</li>
+   <li>множення нуля на нескінченність;</li>
+   <li>складання нескінченності з нескінченністю протилежного знака;</li>
+   <li>обчислення квадратного кореня негативного числа [1];</li>
+   <li>логарифмування від'ємного числа.</li>
+  </ul>
+  <p>У деяких мовах програмування є «тихий» та «сигнальний» NaN: перша, потрапивши в будь-яку операцію, повертає NaN, друга — викликає аварійну ситуацію. Зазвичай "тихий" або "сигнальний" визначається старшим бітом мантиси.</p>
+  <p>NaN не дорівнює жодному іншому значенню (навіть самому собі [2]); відповідно, найпростіший метод перевірки результату NaN - це порівняння отриманої величини з самою собою.</p>
+  <p>Поведінка інших операцій порівняння залежить від мови. Одні мови дають брехню [3] (так що a &lt; b і b &gt; a по-різному поводяться з NaN), інші викидають аварію навіть для «тихого» NaN.</p>
+  <p>Будь-яка нетривіальна операція, яка приймає "тихий" NaN як аргумент, завжди повертає NaN незалежно від значення інших аргументів. Єдиними винятками цього правила є функції max і min, які повертають значення «другого» аргументу (відмінного від NaN). Тривіальні операції, які є тотожністю, обробляються особливо: наприклад, 1NaN дорівнює 1.</p></li>
+ <li>
+  <p><strong>Як отримати нескінченність у Java?</strong></p>
+  <p>У Java тип <code class=" language-none">double</code>має спеціальні значення для понять «плюс нескінченність» та «мінус нескінченність». Позитивне число, розділене на 0.0, дає плюс нескінченність, а негативне - мінус нескінченність. Цим поняттям відповідають спеціальні константи типу <code class=" language-none">Double</code>:</p>
+  <div class="table-container">
+   <table>
+    <tbody>
+     <tr>
+      <th>Код</th>
+      <th>Опис</th>
+     </tr>
+     <tr>
+      <td><code class=" language-none">public static final double POSITIVE_INFINITY = 1.0 / 0.0;</code></td>
+      <td>плюс нескінченність</td>
+     </tr>
+     <tr>
+      <td><code class=" language-none">public static final double NEGATIVE_INFINITY = -1.0 / 0.0;</code></td>
+      <td>мінус нескінченність</td>
+     </tr>
+    </tbody>
+   </table>
+  </div>
+  <ol>
+   <li>Рядок конвертуємо до числа, а в ній є літери. Відповідь - NaN</li>
+   <li>Нескінченність мінус нескінченність. Відповідь - NaN</li>
+   <li>Багато інших ситуацій, де у відповіді чекають число, а виходить невідомо що.</li>
+  </ol>
+  <p>Будь-яка операція, де є NaN, дає у результаті NaN.</p>
+  <div class="table-container">
+   <table>
+    <tbody>
+     <tr>
+      <th colspan="2">Дії з нескінченністю:</th>
+     </tr>
+     <tr>
+     </tr>
+     <tr>
+      <td>Вираз</td>
+      <td>Результат</td>
+     </tr>
+     <tr>
+      <td>n ÷ ±Infinity</td>
+      <td>0</td>
+     </tr>
+     <tr>
+      <td>±Infinity × ±Infinity</td>
+      <td>±Infinity</td>
+     </tr>
+     <tr>
+      <td>±(не нуль) ÷</td>
+      <td>±Infinity</td>
+     </tr>
+     <tr>
+      <td>Infinity + Infinity</td>
+      <td>Infinity</td>
+     </tr>
+     <tr>
+      <td>±0 ÷ ±0</td>
+      <td>NaN</td>
+     </tr>
+     <tr>
+      <td>Infinity - Infinity</td>
+      <td>NaN</td>
+     </tr>
+     <tr>
+      <td>±Infinity ÷ ±Infinity</td>
+      <td>NaN</td>
+     </tr>
+     <tr>
+      <td>±Infinity × 0</td>
+      <td>NaN</td>
+     </tr>
+    </tbody>
+   </table>
+  </div></li>
+ <li>
+  <p><strong>Як перевірити, що в результаті обчислення вийшла нескінченність?</strong></p>
+  <p>Є відповідь на <a href="http://stackoverflow.com/questions/12952024/how-to-implement-infinity-in-java" rel="nofollow" target="_blank">StackOverFlow</a> .</p>
+  <p>Все зводиться до висновку<code class=" language-none">System.out.println()</code></p></li>
+ <li>
+  <p><strong>Що таке бітова маска?</strong></p>
+  <p><strong>Бітова маска</strong> - це коли зберігається багато різних логічних значень (true / false) як одного цілого числа. У цьому кожному boolean-значенню відповідає певний біт.</p></li>
+ <li>
+  <p><strong>Де використовують бітові маски?</strong></p>
+  <p>Здебільшого там, де треба компактно зберігати багато інформації про об'єкти. Коли зберігаєш багато інформації про об'єкт, завжди набереться кілька десятків логічних змінних. Ось їх усіх зручно зберігати в одному числі. Саме зберігати. Т.к. користуватися ним у роботі не так вже й зручно.</p></li>
+ <li>
+  <p><strong>Як встановити біт в одиницю у бітовій масці?</strong></p>
+  <p>Спираючись на лекції, можна відповісти таким кодом:</p>
+  <p>Тут використовував метод <code class=" language-none">Integer.toBinaryString()</code>, щоб перевірити себе, а раптом)</p>
+  <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="token class-name"><span class="token class-name">BitMask</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+    <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="token function"><span class="token function">main</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">String</span></span><span class="token punctuation"><span class="token punctuation">[</span></span><span class="token punctuation"><span class="token punctuation">]</span></span> args<span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+        <span class="token keyword"><span class="token keyword">int</span></span> a <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">9</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+       a <span class="token operator"><span class="token operator">|=</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span><span class="token number"><span class="token number">1</span></span><span class="token operator"><span class="token operator">&lt;&lt;</span></span><span class="token number"><span class="token number">2</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">// установить в 1 бит 2</span></span>
+
+
+        <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">Integer</span></span><span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">toBinaryString</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>a<span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token operator"><span class="token operator">+</span></span> <span class="token string"><span class="token string">" "</span></span><span class="token operator"><span class="token operator">+</span></span> a<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+    <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre>
+  <p><strong>Висновок такий:</strong><br><br><code class=" language-none">1101 13</code></p></li>
+ <li>
+  <p><strong>Як встановити біт у нуль у бітовій масці?</strong></p>
+  <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="token class-name"><span class="token class-name">BitMask</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+<span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="token function"><span class="token function">main</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">String</span></span><span class="token punctuation"><span class="token punctuation">[</span></span><span class="token punctuation"><span class="token punctuation">]</span></span> args<span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+<span class="token keyword"><span class="token keyword">int</span></span> a <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">15</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+a <span class="token operator"><span class="token operator">&amp;=</span></span> <span class="token operator"><span class="token operator">~</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token number"><span class="token number">1</span></span><span class="token operator"><span class="token operator">&lt;&lt;</span></span><span class="token number"><span class="token number">2</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">// установить в 0 бит 2</span></span>
+<span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">Integer</span></span><span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">toBinaryString</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>a<span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token operator"><span class="token operator">+</span></span> <span class="token string"><span class="token string">" "</span></span><span class="token operator"><span class="token operator">+</span></span> a<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+    <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre>
+  <p><strong>Висновок:</strong><br><br><code class=" language-none">1011 11</code></p>
+  <p>Я взяв число 15, тому що на ньому наочно видно, куди встановлюється 0.</p></li>
+ <li>
+  <p><strong>Як одержати значення певного біта в бітовій масці?</strong></p>
+  <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="token class-name"><span class="token class-name">BitMask</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+<span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="token function"><span class="token function">main</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">String</span></span><span class="token punctuation"><span class="token punctuation">[</span></span><span class="token punctuation"><span class="token punctuation">]</span></span> args<span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+     <span class="token keyword"><span class="token keyword">int</span></span> a <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">15</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+     a <span class="token operator"><span class="token operator">&amp;=</span></span> <span class="token operator"><span class="token operator">~</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token number"><span class="token number">1</span></span><span class="token operator"><span class="token operator">&lt;&lt;</span></span><span class="token number"><span class="token number">2</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">// установить в 0 бит 2</span></span>
+
+     <span class="token keyword"><span class="token keyword">int</span></span> c <span class="token operator"><span class="token operator">=</span></span> a <span class="token operator"><span class="token operator">&amp;</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span><span class="token number"><span class="token number">1</span></span><span class="token operator"><span class="token operator">&lt;&lt;</span></span><span class="token number"><span class="token number">2</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">// узнаем про 2 бит</span></span>
+     <span class="token keyword"><span class="token keyword">int</span></span> d <span class="token operator"><span class="token operator">=</span></span> a <span class="token operator"><span class="token operator">&amp;</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span><span class="token number"><span class="token number">1</span></span><span class="token operator"><span class="token operator">&lt;&lt;</span></span><span class="token number"><span class="token number">3</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token comment"><span class="token comment">// узнаем про 3 бит</span></span>
+    <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">Integer</span></span><span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">toBinaryString</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>a<span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token operator"><span class="token operator">+</span></span> <span class="token string"><span class="token string">" "</span></span><span class="token operator"><span class="token operator">+</span></span> a <span class="token operator"><span class="token operator">+</span></span> <span class="token string"><span class="token string">" "</span></span> <span class="token operator"><span class="token operator">+</span></span> c <span class="token operator"><span class="token operator">+</span></span><span class="token string"><span class="token string">" "</span></span><span class="token operator"><span class="token operator">+</span></span> d<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+    <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre>
+  <p><strong>Висновок:</strong><br><br><code class=" language-none">1011 11 0 8</code></p>
+  <p>C 0 все відомо, на тому місці і справді 0. А змінна d повертає значення запитуваного біта (у десятій системі).</p></li>
+ <li>
+  <p><strong>Що таке ліниве обчислення виразу?</strong></p>
+  <p>Стаття: <a href="https://www.ibm.com/developerworks/ru/library/l-lazyprog/" rel="nofollow" target="_blank">Ледаче програмування та ліниві обчислення</a></p>
+  <p>Це ліниві обчислення (lazy evaluation). У лінивих обчисленнях жоден параметр не обчислюється, поки в ньому немає необхідності. Програми фактично починаються з кінця та працюють від кінця до початку. Програма обчислює, що має бути повернуто, і продовжує рух назад, щоб визначити, яке для цього потрібно. По суті, кожна функція викликається з promise'ами ​​для кожного параметра. Коли для обчислення необхідно значення, то виконується promise. Оскільки код виконується лише тоді, коли необхідно значення, це називається виклик за потребою (call-by-need). У традиційних мовах програмування замість promise'ів передаються значення, це називається виклик за значенням (call-by-value).</p>
+  <p>Технологія програмування "виклик за потребою" має низку переваг. Потоки імплементуються автоматично. Непотрібні значення ніколи не обчислюються. Однак, поведінка лінивих програм часто важко передбачити. У програмах типу "виклик за значенням" порядок обчислення досить передбачуваний, тому будь-які time-або sequence-based обчислення щодо легко імплементувати. У лінивих мовах, де спеціальні конструкції, наприклад, monads, необхідні описи явно впорядкованих подій, це набагато важче. Все це також робить зв'язок з іншими мовами важчим.</p>
+  <p>Існують мови програмування, наприклад, Haskell і Clean, які використовують ліниве програмування за умовчанням. Крім того, для деяких мов, таких як Scheme, ML та інші, існують ліниві версії.</p>
+  <p>Іноді, відкладаючи обчислення доти, доки знадобиться їх значення, можна оптимізувати швидкість виконання програми чи реструктурувати програму на більш зрозумілу форму. Незважаючи на свою цінність, методи лінивого програмування не надто широко використовуються або навіть не дуже відомі. Подумайте про те, щоб додати їх до вашого арсеналу.</p></li>
+ <li>
+  <p><strong>Чим відрізняється використання <code class=" language-none">&amp;&amp;</code>і <code class=" language-none">&amp;</code>для типу <code class=" language-none">boolean</code>?</strong></p>
+  <p><code class=" language-none">&amp;&amp;</code>- Це логічне «і». (У цьому випадку мають місце ледачі обчислення: деякі обчислення опускаються, коли результат і так зрозумілий)</p>
+  <p><code class=" language-none">&amp;</code>— це побітове «і» (Якщо застосувати цей оператор до змінних типу Boolean, то лінивих обчислень не відбуватиметься)</p></li>
+</ol>

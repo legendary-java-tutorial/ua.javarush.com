@@ -1,0 +1,92 @@
+Вступ до Jackson Framework
+<p>----------------------------------------</p>
+Холодної весняної ночі я нарешті перейшов на 33 рівень. Потираючи свої програмістські ручки, я вже готувався охопити всю сферу серіалізації, десеріалізації JSON, але, на жаль, нічого не зрозумів. Текст лекції не запам'ятався, а завдання вир
+<p>----------------------------------------</p>
+Холодної весняної ночі я нарешті перейшов на 33 рівень. Потираючи свої програмістські ручки, я вже готувався охопити всю сферу серіалізації, десеріалізації JSON, але, на жаль, нічого не зрозумів. Текст лекції не запам'ятався, а завдання вирішувалося якось інтуїтивно. У зв'язку з цим вирішив полізти в нетрі Jackson Framework і розібратися, що таке цей JSON. 
+<div class="row justify-content-center jr-image-wrap">
+ <div class="col-12 col-sm-10 col-md-8">
+  <img data-id="c468cc2e-468a-4946-bb31-455469b96782" data-max-width="710" alt="Jackson Framework" src="https://cdn.javarush.com/images/article/c468cc2e-468a-4946-bb31-455469b96782/512.jpeg" style="width: 710px;">
+ </div>
+</div> Всі свої знання постараюся викласти практико-орієнтовано та лаконічно у форматі шпаргалки (як для себе, так і для читачів). <strong>Подорож у Jackson Annotations. </strong> Перше, що ми зустрічаємо на шляху до JSON – це інструкція @JsonAutoDetect. На перший погляд легка інструкція, але з нею автору довелося розбиратися найдовше. Інструкція має 5 необхідних нам способів: 
+<ul>
+ <li><em>fieldVisibility</em> () - серіалізує поля тільки із зазначеним модифікатором доступу</li>
+ <li><em>getterVisibility()/setterVisibility()</em> - серіалізує поля, у яких геттер/сеттер має вказаний модифікатор доступу</li>
+ <li><em>isGetterVisibility()</em> - окрема реалізація для булевських гетерів</li>
+</ul><strong>Важливо розуміти, що методи діють диз'юнктивно. </strong>Тобто. якщо поле відповідає хоча б одному із зазначених в анотації параметрів, воно потрапить у JSON. Спробуйте відповісти, що виведе цей код, якщо ми створимо примірник, використовуючи конструктор без параметрів: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@JsonAutoDetect</span><span class="token punctuation">(</span>fieldVisibility <span class="token operator">=</span> <span class="token class-name">JsonAutoDetect<span class="token punctuation">.</span>Visibility</span><span class="token punctuation">.</span>PUBLIC_ONLY<span class="token punctuation">,</span>
+        getterVisibility        <span class="token operator">=</span> <span class="token class-name">JsonAutoDetect<span class="token punctuation">.</span>Visibility</span><span class="token punctuation">.</span>PUBLIC_ONLY<span class="token punctuation">,</span>
+        setterVisibility        <span class="token operator">=</span> <span class="token class-name">JsonAutoDetect<span class="token punctuation">.</span>Visibility</span><span class="token punctuation">.</span>PUBLIC_ONLY<span class="token punctuation">,</span>
+        isGetterVisibility      <span class="token operator">=</span> <span class="token class-name">JsonAutoDetect<span class="token punctuation">.</span>Visibility</span><span class="token punctuation">.</span>PROTECTED_AND_PUBLIC<span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HeadClass</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> name<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> properties<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token class-name">Queue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> queue<span class="token punctuation">;</span>
+    <span class="token keyword">protected</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> list<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">int</span> age<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">int</span> number<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">boolean</span> isHead<span class="token punctuation">;</span>
+
+    <span class="token keyword">protected</span> <span class="token class-name">HeadClass</span><span class="token punctuation">(</span><span class="token keyword">int</span> age<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">HeadClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+    <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> <span class="token function">getProperties</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> properties<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">protected</span> <span class="token keyword">boolean</span> <span class="token function">isHead</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> isHead<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">setProperties</span><span class="token punctuation">(</span><span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> properties<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>properties <span class="token operator">=</span> properties<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setAge</span><span class="token punctuation">(</span><span class="token keyword">int</span> age<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getAge</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> age<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> А якщо прибрати це GetterVisibility? Чотири перераховані методи конфігурували процес серіалізації. П'ятий у свою чергу регулює процес десеріалізації: 
+<ul>
+ <li><em>creatorVisibility()</em> - найскладніший метод розуміння. Він працює з конструкторами та з фабричними методами (методи, які створюють об'єкт при зверненні до них). Розглянемо приклад:</li>
+</ul>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token annotation punctuation">@JsonAutoDetect</span><span class="token punctuation">(</span>creatorVisibility <span class="token operator">=</span> <span class="token class-name">JsonAutoDetect<span class="token punctuation">.</span>Visibility</span><span class="token punctuation">.</span>PROTECTED_AND_PUBLIC<span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HeadClass</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> name<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> id<span class="token punctuation">;</span>
+
+    <span class="token class-name">HeadClass</span><span class="token punctuation">(</span><span class="token annotation punctuation">@JsonProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"name"</span><span class="token punctuation">)</span> <span class="token class-name">String</span> name<span class="token punctuation">,</span> <span class="token annotation punctuation">@JsonProperty</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"id"</span><span class="token punctuation">)</span> <span class="token keyword">int</span> id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>id <span class="token operator">=</span> id<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">protected</span> <span class="token class-name">HeadClass</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>id <span class="token operator">=</span> <span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">protected</span> <span class="token class-name">HeadClass</span><span class="token punctuation">(</span><span class="token keyword">int</span> id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>id <span class="token operator">=</span> id<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> <span class="token string">"Yes!"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> name<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setName</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+    <span class="token class-name">ObjectMapper</span> mapper <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ObjectMapper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">String</span> forDeserialize <span class="token operator">=</span> <span class="token string">"{\"name\":\"No!\",\"id\":123}"</span><span class="token punctuation">;</span>
+    <span class="token class-name">StringReader</span> reader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringReader</span><span class="token punctuation">(</span>forDeserialize<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token class-name">HeadClass</span> headClass1 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">HeadClass</span><span class="token punctuation">)</span> mapper<span class="token punctuation">.</span><span class="token function">readValue</span><span class="token punctuation">(</span>reader<span class="token punctuation">,</span> <span class="token class-name">HeadClass</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre><strong>Важливе зауваження щодо механізму десеріалізації! </strong>Коли ми намагаємося створити об'єкт із JSON, то буде здійснюватись пошук конструктора необхідного класу з таким же набором параметрів, що й у JSON об'єкті. У прикладі вище наш об'єкт JSON складається з двох параметрів: name, id. Вгадайте, якого конструктора він звернеться. І так, якщо ми скомпілюємо цей код, він випустить помилку, а чому? Тому що ми обмежабо видимість конструктора (видні тільки конструктори з модифікатором protected, public). Якщо ви видалите creatorVisibility, то він запрацює. Виникає питання. А що за @JsonProperty у конструкторі. Про це думаю розповісти у наступній частині статті. <strong>PS</strong>Панове, дуже хотілося б отримати хоч якийсь відгук про статтю. Цікаво, чи ця тема користується попитом і чи варто продовжувати, тому що тим дуже багато і всі вони дуже цікаві. Хотілося б розглянути такі анотації, як @JsonView, @JsonManagedReference, @JsonBackReference, @JsonUnwrapped і т.д. Дякую :)

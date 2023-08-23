@@ -1,0 +1,194 @@
+Приведення (перетворення) примітивних типів у Java
+<p>----------------------------------------</p>
+Вітання! Під час проходження JavaRush ти неодноразово стикався з примітивними типами. Ось короткий список того, що ми про них знаємо: Але, крім значень, типи відрізняються ще й розміром у пам'яті. займає більше, ніж . А - більше, ніж . Об'є
+<p>----------------------------------------</p>
+Вітання! Під час проходження CodeGym ти неодноразово стикався з примітивними типами. Ось короткий список того, що ми про них знаємо: 
+<ol>
+ <li>Вони не є об'єктами і є значенням, що зберігається в пам'яті</li>
+ <li>Примітивні типи бувають кількох видів: 
+  <ul>
+   <li>Цілі числа - <code class=" language-none">byte</code>, <code class=" language-none">short</code>, <code class=" language-none">int</code>,<code class=" language-none">long</code></li>
+   <li>Числа з плаваючою точкою (дрібні) - <code class=" language-none">float</code>і<code class=" language-none">double</code></li>
+   <li>Логічний -<code class=" language-none">boolean</code></li>
+   <li>Символьний (для позначення букв та цифр)<code class=" language-none">char</code></li>
+  </ul></li>
+ <li>Кожен має свій діапазон значень:</li>
+</ol>
+<div class="table-container">
+ <table>
+  <thead>
+   <tr>
+    <th>Примітивний тип</th>
+    <th>Розмір у пам'яті</th>
+    <th>Діапазон значень</th>
+   </tr>
+  </thead>
+  <tbody>
+   <tr>
+    <td>byte</td>
+    <td>8 біт</td>
+    <td>від -128 до 127</td>
+   </tr>
+   <tr>
+    <td>short</td>
+    <td>16 біт</td>
+    <td>до -32768 до 32767</td>
+   </tr>
+   <tr>
+    <td>char</td>
+    <td>16 біт</td>
+    <td>від 0 до 65536</td>
+   </tr>
+   <tr>
+    <td>int</td>
+    <td>32 біта</td>
+    <td>від -2147483648 до 2147483647</td>
+   </tr>
+   <tr>
+    <td>long</td>
+    <td>64 біта</td>
+    <td>від -9223372036854775808 до 9223372036854775807</td>
+   </tr>
+   <tr>
+    <td>float</td>
+    <td>32 біта</td>
+    <td>від (2 у ступені -149) до ((2-2 у ступені -23)*2 у ступені 127)</td>
+   </tr>
+   <tr>
+    <td>double</td>
+    <td>64 біта</td>
+    <td>від (-2 у ступені 63) до ((2 у ступені 63) - 1)</td>
+   </tr>
+   <tr>
+    <td>boolean</td>
+    <td>8 (при використанні в масивах), 32 (при використанні не в масивах)</td>
+    <td>true або false</td>
+   </tr>
+  </tbody>
+ </table>
+</div> Але, крім значень, типи відрізняються ще й розміром у пам'яті. <code class=" language-none">int</code>займає більше, ніж <code class=" language-none">byte</code>. А <code class=" language-none">long</code>- більше, ніж <code class=" language-none">short</code>. Об'єм займаної примітивами пам'яті можна порівняти з матрьошками: <img data-id="e50fb1f1-3ad8-4d84-96ba-e1ee8e3a0439" data-max-width="851" alt="Розширення та звуження примітивних типів - 2" src="https://cdn.javarush.com/images/article/e50fb1f1-3ad8-4d84-96ba-e1ee8e3a0439/800.jpeg" style="width: 851px;"> Усередині матрьошки є вільне місце. Чим більше матрьошка – тим більше місця. Всередину великої матрьошки <code class=" language-none">long</code>ми легко можемо покласти меншу за розміром <code class=" language-none">int</code>. Вона легко вміститься, і нічого робити додатково не потрібно. У Java під час роботи з примітивами це називається автоматичним перетворенням. Інакше його називають розширенням. Ось простий приклад розширення: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="token class-name"><span class="token class-name">Main</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+   <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="token function"><span class="token function">main</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">String</span></span><span class="token punctuation"><span class="token punctuation">[</span></span><span class="token punctuation"><span class="token punctuation">]</span></span> args<span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+       <span class="token keyword"><span class="token keyword">int</span></span> bigNumber <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">10000000</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+       <span class="token keyword"><span class="token keyword">byte</span></span> littleNumber <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">16</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+       bigNumber <span class="token operator"><span class="token operator">=</span></span> littleNumber<span class="token punctuation"><span class="token punctuation">;</span></span>
+       <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>bigNumber<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+   <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre> Тут ми привласнюємо значення <code class=" language-none">byte</code>змінну <code class=" language-none">int</code>. Привласнення пройшло успішно і без будь-яких проблем: значення, що зберігається в <code class=" language-none">byte</code>, займає менший обсяг у пам'яті, ніж "влазить" в <code class=" language-none">int</code>. "Маленька матрьошка" (значення <code class=" language-none">byte</code>) легко влазить у "велику матрьошку" (змінну <code class=" language-none">int</code>). Інша річ, коли ти намагаєшся зробити навпаки — покласти значення великого розміру в змінну, яка не розрахована на такі розміри. Зі справжніми матрьошками такий номер у принципі не пройде, а в Java — минеться, але з нюансами. Давай спробуємо покласти значення <code class=" language-none">int</code>в змінну <code class=" language-none">short</code>: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="token function"><span class="token function">main</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">String</span></span><span class="token punctuation"><span class="token punctuation">[</span></span><span class="token punctuation"><span class="token punctuation">]</span></span> args<span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+   <span class="token keyword"><span class="token keyword">int</span></span> bigNumber <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">10000000</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+   <span class="token keyword"><span class="token keyword">short</span></span> littleNumber <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">1000</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+   littleNumber <span class="token operator"><span class="token operator">=</span></span> bigNumber<span class="token punctuation"><span class="token punctuation">;</span></span><span class="token comment"><span class="token comment">//помилка!</span></span>
+   <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>bigNumber<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre> Помилка! Компілятор розуміє, що ти намагаєшся зробити щось нестандартне і засунути велику матрьошку ( <code class=" language-none">int</code>) всередину маленької ( <code class=" language-none">short</code>). Помилка компіляції у разі — попередження від компілятора: “ <em>Гей, ти точно впевнений, що це хочеш? </em>” Якщо ти певен, говориш про це компілятору: “ <em>Все ок, я знаю, що роблю! </em>” Цей процес називається явним перетворенням типів, або <strong>звуженням</strong> . Щоб зробити звуження, тобі необхідно вказати тип, до якого ти хочеш привести своє значення. Іншими словами, відповісти компілятору на його запитання: " <em>Ну і в яку з цих маленьких матрьошок ти хочеш засунути цю велику матрьошку?" </em>” У нашому випадку це буде виглядати так: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="token function"><span class="token function">main</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">String</span></span><span class="token punctuation"><span class="token punctuation">[</span></span><span class="token punctuation"><span class="token punctuation">]</span></span> args<span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+   <span class="token keyword"><span class="token keyword">int</span></span> bigNumber <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">10000000</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+   <span class="token keyword"><span class="token keyword">short</span></span> littleNumber <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">1000</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+   littleNumber <span class="token operator"><span class="token operator">=</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span><span class="token keyword"><span class="token keyword">short</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> bigNumber<span class="token punctuation"><span class="token punctuation">;</span></span>
+   <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>littleNumber<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre> Ми явно вказали, що хочемо помістити значення <code class=" language-none">int</code>у змінну <code class=" language-none">short</code>та беремо відповідальність на себе. Компілятор, бачачи явну вказівку більш вузький тип, проводить перетворення. Яким буде результат? <strong>Висновок: <em>-27008</em></strong> Трохи несподівано. Чому саме такий? Насправді, все просто. У нас було початкове значення - 10000000 Воно зберігалося в змінній <code class=" language-none">int</code>, яка займала 32 біти, і в двійковій формі воно виглядало так: <img data-id="17d2a1a1-34dc-4b5e-a556-1b3476d5b52c" data-max-width="710" alt="Розширення та звуження примітивних типів - 3" src="https://cdn.javarush.com/images/article/17d2a1a1-34dc-4b5e-a556-1b3476d5b52c/512.jpeg" style="width: 710px;"> Ми записуємо це значення в змінну <code class=" language-none">short</code>, але вона може зберігати лише 16 біт! Відповідно, лише перші 16 біт нашого числа будуть туди переміщені, решта — відкинуться. У результаті змінну <code class=" language-none">short</code>потрапить значення <img data-id="eb45b52c-56a0-4611-855b-a2cea5c8e902" data-max-width="710" alt="Розширення та звуження примітивних типів - 4" src="https://cdn.javarush.com/images/article/eb45b52c-56a0-4611-855b-a2cea5c8e902/512.jpeg" style="width: 710px;">Саме тому компілятор “просив підтвердження” у формі явного приведення до конкретного типу. По-перше, воно показує, що ти береш відповідальність за результат на себе, а по-друге, вказує компілятор скільки місця виділити при наведенні типів. Адже якби ми в останньому прикладі приводабо <code class=" language-none">int</code>до типу <code class=" language-none">byte</code>, а не до <code class=" language-none">short</code>, у розпорядженні було б тільки 8 біт, а не 16, і результат був би іншим. Для дробових типів ( <code class=" language-none">float</code>і <code class=" language-none">double</code>) звуження відбувається по-своєму. Якщо спробувати привести таке число до цілого типу, у нього буде відкинута дробова частина. 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="token function"><span class="token function">main</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">String</span></span><span class="token punctuation"><span class="token punctuation">[</span></span><span class="token punctuation"><span class="token punctuation">]</span></span> args<span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+   <span class="token keyword"><span class="token keyword">double</span></span> d <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">2.7</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+   <span class="token keyword"><span class="token keyword">long</span></span> x <span class="token operator"><span class="token operator">=</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span><span class="token keyword"><span class="token keyword">int</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> d<span class="token punctuation"><span class="token punctuation">;</span></span>
+   <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>x<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre><strong>Виведення в консоль: <em>2</em></strong>
+<h2>Тип даних char</h2>Ти вже знаєш, що тип char використовується для відображення окремих символів. 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="token function"><span class="token function">main</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">String</span></span><span class="token punctuation"><span class="token punctuation">[</span></span><span class="token punctuation"><span class="token punctuation">]</span></span> args<span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+   <span class="token keyword"><span class="token keyword">char</span></span> c <span class="token operator"><span class="token operator">=</span></span> <span class="token string"><span class="token string">'!'</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+   <span class="token keyword"><span class="token keyword">char</span></span> z <span class="token operator"><span class="token operator">=</span></span> <span class="token string"><span class="token string">'z'</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+   <span class="token keyword"><span class="token keyword">char</span></span> i <span class="token operator"><span class="token operator">=</span></span> <span class="token string"><span class="token string">'8'</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre> Але він має ряд особливостей, які важливо розуміти. Давай ще раз подивимося в таблицю з діапазонами значень: 
+<div class="table-container">
+ <table>
+  <thead>
+   <tr>
+    <th>Примітивний тип</th>
+    <th>Розмір у пам'яті</th>
+    <th>Діапазон значень</th>
+   </tr>
+  </thead>
+  <tbody>
+   <tr>
+    <td>byte</td>
+    <td>8 біт</td>
+    <td>від -128 до 127</td>
+   </tr>
+   <tr>
+    <td>short</td>
+    <td>16 біт</td>
+    <td>від -32768 до 32767</td>
+   </tr>
+   <tr>
+    <td>char</td>
+    <td>16 біт</td>
+    <td>від 0 до 65536</td>
+   </tr>
+   <tr>
+    <td>int</td>
+    <td>32 біта</td>
+    <td>від -2147483648 до 2147483647</td>
+   </tr>
+   <tr>
+    <td>long</td>
+    <td>64 біта</td>
+    <td>від -9223372036854775808 до 9223372036854775807</td>
+   </tr>
+   <tr>
+    <td>float</td>
+    <td>32 біта</td>
+    <td>від (2 у ступені -149) до ((2-2 у ступені -23)*2 у ступені 127)</td>
+   </tr>
+   <tr>
+    <td>double</td>
+    <td>64 біта</td>
+    <td>від (-2 у ступені 63) до ((2 у ступені 63)-1)</td>
+   </tr>
+   <tr>
+    <td>boolean</td>
+    <td>8 (при використанні в масивах), 32 (при використанні не в масивах)</td>
+    <td>true або false</td>
+   </tr>
+  </tbody>
+ </table>
+</div> Для типу <code class=" language-none">char</code>вказаний числовий діапазон від 0 до 65536. Але що це означає? Адже <code class=" language-none">char</code>— це не лише цифри, а й букви, розділові знаки… Справа в тому, що значення <code class=" language-none">char</code>зберігаються в Java у форматі Юнікоду. Ми вже стикалися з Юнікодом в одній із минулих лекцій. Ти, напевно, пам'ятаєш, що <strong>Unicode</strong> — це стандарт кодування символів, що включає знаки майже всіх письмових мов світу. Інакше кажучи, це список спеціальних кодів, у якому знайдеться код майже будь-якого символу з мови. Загальна таблиця Юнікод дуже велика, і, звичайно, її не потрібно вчити напам'ять. Ось, наприклад, її шматочок: <img data-id="2188f0cc-7b3b-4e7b-adc0-dad301bb96db" data-max-width="850" alt="Розширення та звуження примітивних типів - 5" src="https://cdn.javarush.com/images/article/2188f0cc-7b3b-4e7b-adc0-dad301bb96db/800.jpeg" style="width: 850px;"> Головне — розуміти принцип зберігання значень <code class=" language-none">char</code>і пам'ятати, що <strong>знаючи код конкретного символу</strong>завжди можна отримати його у програмі. Давай спробуємо це зробити з якимось випадковим числом: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="token function"><span class="token function">main</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">String</span></span><span class="token punctuation"><span class="token punctuation">[</span></span><span class="token punctuation"><span class="token punctuation">]</span></span> args<span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+   <span class="token keyword"><span class="token keyword">int</span></span> x <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">32816</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+   <span class="token keyword"><span class="token keyword">char</span></span> c <span class="token operator"><span class="token operator">=</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span><span class="token keyword"><span class="token keyword">char</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> x <span class="token punctuation"><span class="token punctuation">;</span></span>
+   <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>c<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre><strong>Висновок в консоль: 耰</strong> Саме в такому форматі Java зберігаються символи <code class=" language-none">char</code>. Кожному символу відповідає число - числовий код розміром 16 біт, або два байти. Юнікоду 32816 відповідає ієрогліф 耰. Зверни увагу на якийсь момент. У цьому прикладі ми використали змінну <strong><code class=" language-none">int</code></strong>. Вона займає в пам'яті <strong>32 біти</strong> , тоді як <strong><code class=" language-none">char</code></strong>- <strong>16</strong> . Тут ми вибрали <code class=" language-none">int</code>, тому що потрібне число 32816 знаходиться за межами діапазону <code class=" language-none">short</code>. Хоча розмір <code class=" language-none">char</code>, як і short, дорівнює 16 біт, але в діапазоні <code class=" language-none">char</code>немає негативних чисел, тому "позитивний" діапазон <code class=" language-none">char</code>вдвічі більше (65536 замість 32767 у <code class=" language-none">short</code>). Ми можемо використовувати<code class=" language-none">int</code>, Поки наш код вкладається в діапазон до 65536. Але якщо створити число <code class=" language-none">int &gt;65536</code>, воно займатиме більше 16 бітів. І при звуженні типів: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">char</span></span> c <span class="token operator"><span class="token operator">=</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span><span class="token keyword"><span class="token keyword">char</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> x<span class="token punctuation"><span class="token punctuation">;</span></span></code></pre> зайві біти будуть відкинуті, і результат буде несподіваним. 
+<h2>Особливості складання char і цілих чисел</h2>Давай розглянемо такий незвичайний приклад: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="token class-name"><span class="token class-name">Main</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+   <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="token function"><span class="token function">main</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">String</span></span><span class="token punctuation"><span class="token punctuation">[</span></span><span class="token punctuation"><span class="token punctuation">]</span></span> args<span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+      <span class="token keyword"><span class="token keyword">char</span></span> c <span class="token operator"><span class="token operator">=</span></span> <span class="token string"><span class="token string">'1'</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+      <span class="token keyword"><span class="token keyword">int</span></span> i <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">1</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+       <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>i<span class="token operator"><span class="token operator">+</span></span>c<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+   <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre><strong>Висновок у консоль: <em>50</em></strong> O_О Де логіка? 1+1, звідки взялося 50?! Ти вже знаєш, що значення <code class=" language-none">char</code>зберігаються в пам'яті як числа в діапазоні від 0 до 65536, що позначають юнікод нашого символу. <img data-id="b1d698bc-cdcd-4090-9d2c-d988b9555e8a" data-max-width="850" alt="Розширення та звуження примітивних типів - 6" src="https://cdn.javarush.com/images/article/b1d698bc-cdcd-4090-9d2c-d988b9555e8a/800.jpeg" style="width: 850px;"> Так ось. Коли ми виробляємо додавання <code class=" language-none">char</code>і якогось цілого типу, <code class=" language-none">char</code>перетворюється на число, яке відповідає йому в Юнікоді. Коли в нашому коді ми складали 1 і '1' — символ '1' перетворився на свій код, який дорівнює 49 (можеш перевірити в таблиці вище). Тому результат і дорівнював 50. Давай ще раз візьмемо для прикладу нашого старого друга —<strong>耰</strong>, і спробуємо скласти його з якимось числом. 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="token function"><span class="token function">main</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">String</span></span><span class="token punctuation"><span class="token punctuation">[</span></span><span class="token punctuation"><span class="token punctuation">]</span></span> args<span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+   <span class="token keyword"><span class="token keyword">char</span></span> c <span class="token operator"><span class="token operator">=</span></span> <span class="token string"><span class="token string">'耰'</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+   <span class="token keyword"><span class="token keyword">int</span></span> x <span class="token operator"><span class="token operator">=</span></span> <span class="token number"><span class="token number">200</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+   <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>c <span class="token operator"><span class="token operator">+</span></span> x<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre><strong>Висновок в консоль: <em>33016</em></strong> Ми вже з'ясували, що відповідає <strong>коду</strong> 32816. А при складанні цього числа і 200 ми отримуємо якраз наш результат — 33016 :) Механізм роботи, як бачиш, досить простий.

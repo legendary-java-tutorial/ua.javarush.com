@@ -1,0 +1,335 @@
+Структури даних: Двійкове дерево в Java
+<p>----------------------------------------</p>
+Привіт привіт! Важко бути потужним програмістом без базових знань. І тут мають на увазі як знання синтаксису рідної мови програмування, а й основ і концепцій програмування загалом. Одними з таких основ є алгоритми та структури даних. Як пра
+<p>----------------------------------------</p>
+Привіт привіт! Важко бути потужним програмістом без базових знань. І тут мають на увазі як знання синтаксису рідної мови програмування, а й основ і концепцій програмування загалом. Одними з таких основ є алгоритми та структури даних. Як правило, у цьому питанні хтось обізнаний більше, хтось менше, але є деяка база, яку повинні знати всі. Серед баз структур даних обов'язково варто розібратися з деревами двійкового пошуку. <img data-max-width="800" data-id="fab7b7d7-155b-4199-927d-62c1116ce8a9" alt="Структури даних: Двійкове дерево в Java - 1" src="https://cdn.javarush.com/images/article/fab7b7d7-155b-4199-927d-62c1116ce8a9/800.jpeg" style="width: 800px;">Власне, сьогодні ми розглянемо саму структуру з її особливостями та дізнаємося, як можна реалізувати <span class="text-bold">двійкове дерево Java</span> . Спочатку давайте розберемося, що таке двійкове дерево. <span class="text-bold">Двійкове дерево</span> - структура даних, в якій <span class="text-bold">кожен</span>вузол (батьківський) має трохи більше двох нащадків (правий і лівий спадкоємець). <img data-max-width="512" data-id="8030ee86-0c5a-4df7-826c-29d28520d806" alt="Структури даних: Двійкове дерево в Java - 2" src="https://cdn.javarush.com/images/article/8030ee86-0c5a-4df7-826c-29d28520d806/512.jpeg" style="width: 512px;">На практиці зазвичай використовуються два види двійкових дерев – <span class="text-bold">двійкове дерево пошуку</span> та <span class="text-bold"><a href="https://codegym.cc/groups/posts/3083-strukturih-dannihkh-piramida-dvoichnaja-kucha-v-java" target="_blank" rel="nofollow">піраміда</a></span> (купа). Сьогодні ми розглянемо двійкове пошукове дерево.
+<h2>Переваги двійкового дерева</h2>У чому полягає перевага зберігання даних у вигляді двійкового дерева пошуку? Уявіть, що ми маємо довідник на 100 сторінок, і нам потрібно знайти певну сторінку, на якій буде записано необхідні нам дані. Також ми знаємо за змістом, яка саме сторінка нам потрібна. Якщо ми йтимемо звичайним шляхом, доведеться перегортати поспіль по одній сторінці, поки не дістанемося до необхідної нам. Тобто ми переберемо від 1 до 100 сторінок, поки не опинимося на потрібному місці. Наприклад, якщо нам потрібна 77 сторінка, то ми матимемо 77 переборів. Якщо говорити про тимчасову складність, то це буде <span class="text-bold">О(N)</span> . Але ж це можна зробити більш ефективно? Давайте спробуємо зробити те саме, але вже за допомогою <span class="text-bold">двійкового пошуку</span> :
+<ol>
+ <li>Ділимо довідник на дві частини, перша - від 1 до 50, друга 51-100. Ми точно знаємо, в якій із цих частин наша сторінка: якщо знову ж таки брати 77 сторінку — у другій частині книги.</li>
+ <li>Далі розглядаємо другу частину і ділимо її на дві - від 51 до 75, від 76 до 100. У цьому випадку наша сторінка знову буде в другій половині, в проміжку 76-100.</li>
+ <li>Далі ділимо і цей проміжок на 2 і отримуємо 76-88 та 89-100. Сторінка входить у перший проміжок, тому другий відкидаємо.</li>
+ <li>Далі проміжки: 76-81 та 82-88, беремо перший.</li>
+ <li>76-78 та 79-81, беремо перший.</li>
+ <li>76 та 77-78, беремо другий.</li>
+ <li>77 та 78, беремо перший і отримуємо нашу сторінку - 77.</li>
+</ol>Замість 77 кроків нам знадобилося лише 7! Тимчасова складність цього пошуку буде <span class="text-bold">O(log(N))</span> .
+<h2>Правила побудови дерева двійкового пошуку</h2>Двійкове дерево пошуку будується за певними правилами:
+<ul>
+ <li>кожен вузол має трохи більше двох дітей;</li>
+ <li>кожне значення, менше значення вузла, стає лівою дитиною або дитиною лівої дитини;</li>
+ <li>кожне значення, більше чи рівне значенню вузла, стає правою дитиною чи дитиною правої дитини.</li>
+</ul>Наприклад, у нас є ряд із чисел від 1 до 10. Давайте подивимося, як виглядатиме дерево двійкового пошуку для цього ряду: <img data-max-width="512" data-id="ce643ead-8387-4c2a-bfa2-f14089ad98c3" alt="Структури даних: Двійкове дерево в Java - 3" src="https://cdn.javarush.com/images/article/ce643ead-8387-4c2a-bfa2-f14089ad98c3/512.jpeg" style="width: 512px;">Давайте подумаємо, чи дотримуються тут всі умови бінарного дерева:
+<ul>
+ <li>всі вузли мають не більше двох спадкоємців, перша умова дотримується;</li>
+ <li>якщо ми розглянемо наприклад вузол зі значенням 7(або будь-який інший), то побачимо, що всі значення елементів у лівому піддереві будуть меншими, у правому — більшими. А це означає, що умови 2 та 3 дотримані.</li>
+</ul>Розберемо, як відбуваються основні операції — вставка, видалення, пошук.
+<h2>Пошук елемента</h2>При пошуку елемента із заданим значенням ми починаємо з кореневого елемента:
+<ol>
+ <li>Якщо він дорівнює шуканому значенню, кореневий елемент і є шуканим, якщо ні - порівнюємо значення кореневого та шуканого.</li>
+ <li>Якщо потрібний елемент більший, ми переходимо до правого нащадка, якщо ні — до лівого.</li>
+ <li>Якщо елемент не знайдено, застосовуємо кроки 1 і 2, але вже до нащадка (правого або лівого) доти, доки елемент не буде знайдений.</li>
+</ol>Наприклад, у продемонстрованому вище дереві двійкового пошуку ми хочемо знайти елемент зі значенням 5:
+<ul>
+ <li>порівнюємо його з кореневим елементом, бачимо, що кореневий більше, тому ми переходимо до лівого нащадка, який має значення 3;</li>
+ <li>порівнюємо шуканий і елемент зі значенням 3, бачимо, що шуканий більше, тому нам потрібен правий нащадок елемента, що розглядається, а саме - елемент зі значенням 5;</li>
+ <li>порівнюємо цього нащадка з шуканим і бачимо, що значення рівні елемент знайдений.</li><img data-max-width="512" data-id="6ff96893-86bd-407c-9ccd-469d4b912ab8" alt="Структури даних: Двійкове дерево в Java - 4" src="https://cdn.javarush.com/images/article/6ff96893-86bd-407c-9ccd-469d4b912ab8/512.jpeg" style="width: 512px;">
+</ul>
+<h2>Вставка елемента</h2>Алгоритм вставки теж вельми простий:
+<ol>
+ <li>
+  <p>Порівнюємо новий із кореневим (якщо його немає — новий елемент і є кореневим).</p></li>
+ <li>
+  <p>Якщо новий елемент:</p>
+  <ul>
+   <li>менше, то переходимо до лівого спадкоємця, якщо його немає, новий елемент займає місце лівого спадкоємця, і алгоритм закінчено;</li>
+   <li>більше чи дорівнює кореневому, ми переходимо до правому спадкоємцю. І аналогічно, якщо даного елемента немає, новий елемент займе місце правого елемента і алгоритм закінчено.</li>
+  </ul>
+  <p></p></li>
+ <li>
+  <p>Для нового аналізованого елемента, який був правим або лівим з попереднього кроку, повторюємо кроки 1 і 2 до тих пір, поки елемент, що вставляється, не стане на своє місце.</p>
+  <p>Як приклад ми захочемо вставити в дерево, що розглядається вище, елемент зі значенням 11:</p>
+  <ul>
+   <li>порівнюємо з кореневим елементом 7 і бачимо, що кореневий менше, тому переходимо до правого спадкоємця;</li>
+   <li>наступний аналізований елемент має значення 9, що менше ніж новий 11 тому переходимо до правого спадкоємцю;</li>
+   <li>правий спадкоємець має значення 10, що знову ж таки менше, тому ми переходимо до першого елементу, а оскільки його немає, то новий елемент зі значенням 11 і стає на це місце.</li>
+  </ul>
+  <p></p><img data-max-width="512" data-id="ca7f4622-93b9-4522-aa48-3d172a5b9e8e" alt="Структури даних: Двійкове дерево в Java - 5" src="https://cdn.javarush.com/images/article/ca7f4622-93b9-4522-aa48-3d172a5b9e8e/512.jpeg" style="width: 512px;">
+  <center>
+   ↓
+  </center><img data-max-width="512" data-id="0d23a8f1-b8a1-49b2-86b7-7c1f8e2b6421" alt="Структури даних: Двійкове дерево в Java - 6" src="https://cdn.javarush.com/images/article/0d23a8f1-b8a1-49b2-86b7-7c1f8e2b6421/512.jpeg" style="width: 512px;"></li>
+</ol>
+<h2>Видалення елемента</h2>Мабуть, із усіх операцій із деревами двійкового пошуку, видалення – найскладніша. У першу чергу відбувається пошук елемента, що видаляється, після знаходження якого слідує етап, у якого можуть бути три варіації:
+<ol>
+ <li>
+  <p><span class="text-bold">Вузол, що видаляється, є листовим (не має нащадків).</span></p>
+  <p>Мабуть, найпростіший. Все зводиться до того, що ми просто відсікаємо від дерева, без зайвих маніпуляцій. Наприклад, з нашого дерева ми видаляємо вузол зі значенням 8:</p><img data-max-width="512" data-id="bdf36e4e-02d7-4390-a98b-966ae76ef7c7" alt="Структури даних: Двійкове дерево в Java - 7" src="https://cdn.javarush.com/images/article/bdf36e4e-02d7-4390-a98b-966ae76ef7c7/512.jpeg" style="width: 512px;">
+  <center>
+   ↓
+  </center><img data-max-width="512" data-id="880ff4e2-4051-4c6d-9da7-5e26cdc45acc" alt="Структури даних: Двійкове дерево в Java - 8" src="https://cdn.javarush.com/images/article/880ff4e2-4051-4c6d-9da7-5e26cdc45acc/512.jpeg" style="width: 512px;"></li>
+ <li>
+  <p><span class="text-bold">Вузол, що видаляється, має одного нащадка.</span></p>
+  <p>У такому разі ми видаляємо вибраний вузол, і на його місце ставимо його нащадка (по суті просто виріжемо вибраний вузол з ланцюжка). Як приклад видалимо з дерева вузол зі значенням 9:</p><img data-max-width="512" data-id="0dc0a85b-5313-42ac-83bb-3d9342311346" alt="Структури даних: Двійкове дерево в Java - 9" src="https://cdn.javarush.com/images/article/0dc0a85b-5313-42ac-83bb-3d9342311346/512.jpeg" style="width: 512px;">
+  <center>
+   ↓
+  </center><img data-max-width="512" data-id="7136283a-a7b8-406e-856b-1799222ce346" alt="Структури даних: Двійкове дерево в Java - 10" src="https://cdn.javarush.com/images/article/7136283a-a7b8-406e-856b-1799222ce346/512.jpeg" style="width: 512px;"></li>
+ <li>
+  <p><span class="text-bold">Вузол, що видаляється, має двох нащадків.</span></p>
+  <p>Найцікавіша частина. Адже якщо вузол, що видаляється, має відразу двох нащадків, не можна просто так замінити його одним з цих нащадків (особливо якщо у нащадка є власні нащадки).</p>
+  <p><span class="text-bold">Приклад:</span> у цьому дереві, який вузол повинен бути лівим нащадком вузла 3?</p>
+  <p>Якщо трохи замислитись, то стане очевидно, що це має бути вузол зі значенням 4. Ну а якщо дерево не буде таким простим? Якщо воно вміщуватиме сотні значень, чи так просто зрозуміти, хто буде наступником?</p>
+  <p>Зрозуміло, що ні. Тому тут потрібний свій невеликий алгоритм пошуку приймача:</p>
+  <ol>
+   <li>Спочатку ми повинні перейти до правого нащадка обраного вузла, значення якого має бути більшим за значення вузла.</li>
+   <li>Після цього ми переходимо до лівого нащадка правого нащадка (якщо такий існує), далі — до лівого нащадка лівого нащадка і т. д., прямуючи вниз ланцюгом лівих нащадків.</li>
+   <li>Відповідно, останній лівий нащадок на цьому шляху і буде наступником вихідного вузла.</li>
+  </ol>
+  <p></p>
+  <p>Давайте трохи узагальним цей невеликий алгоритм: у піддереві правого нащадка вихідного вузла всі вузли більше віддаленого, що можна зрозуміти з основних правил дерева двійкового пошуку. У цьому піддереві ми шукаємо найменше значення.</p>
+  <p>Іншими словами, ми шукаємо найменший вузол у наборі вузлів, більших за вихідний вузл. Цей найменший вузол серед великих і буде найбільш відповідним наступником.</p>
+  <p>Як виглядатиме дерево після видалення вузла зі значенням 3:</p><img data-max-width="512" data-id="bd373293-9542-416f-948f-8d647ca6f4ea" alt="Структури даних: Двійкове дерево в Java - 11" src="https://cdn.javarush.com/images/article/bd373293-9542-416f-948f-8d647ca6f4ea/512.jpeg" style="width: 512px;">
+  <center>
+   ↓
+  </center><img data-max-width="512" data-id="3ad40c4f-4f90-4d6a-a757-2822ca665f35" alt="Структури даних: Двійкове дерево в Java - 12" src="https://cdn.javarush.com/images/article/3ad40c4f-4f90-4d6a-a757-2822ca665f35/512.jpeg" style="width: 512px;"></li>
+</ol>А тепер настав час перейти від практики до теорії. Давайте поглянемо, яким чином можна відобразити цю структуру даних в Java. Клас одного вузла: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Node</span> <span class="token punctuation">{</span>
+   <span class="token keyword">private</span> <span class="token keyword">int</span> value<span class="token punctuation">;</span> <span class="token comment">// ключ узла</span>
+   <span class="token keyword">private</span> <span class="token class-name">Node</span> leftChild<span class="token punctuation">;</span> <span class="token comment">// Левый узел потомок</span>
+   <span class="token keyword">private</span> <span class="token class-name">Node</span> rightChild<span class="token punctuation">;</span> <span class="token comment">// Правый узел потомок</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printNode</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">// Вывод значения узла в консоль</span>
+       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">" Выбранный узел имеет значення :"</span> <span class="token operator">+</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setValue</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token keyword">int</span> value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">this</span><span class="token punctuation">.</span>value <span class="token operator">=</span> value<span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token keyword">public</span> <span class="token class-name">Node</span> <span class="token function">getLeftChild</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>leftChild<span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setLeftChild</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">Node</span> leftChild<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">this</span><span class="token punctuation">.</span>leftChild <span class="token operator">=</span> leftChild<span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token keyword">public</span> <span class="token class-name">Node</span> <span class="token function">getRightChild</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>rightChild<span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setRightChild</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">Node</span> rightChild<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">this</span><span class="token punctuation">.</span>rightChild <span class="token operator">=</span> rightChild<span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token annotation punctuation">@Override</span>
+   <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">return</span> <span class="token string">"Node{"</span> <span class="token operator">+</span>
+               <span class="token string">"value="</span> <span class="token operator">+</span> value <span class="token operator">+</span>
+               <span class="token string">", leftChild="</span> <span class="token operator">+</span> leftChild <span class="token operator">+</span>
+               <span class="token string">", rightChild="</span> <span class="token operator">+</span> rightChild <span class="token operator">+</span>
+               <span class="token string">'}'</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Нічого особливо складного: кожен елемент має посилання на лівого та правого нащадка. А тепер, мабуть, найважливіший клас – клас дерева: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">class</span> <span class="token class-name">Tree</span> <span class="token punctuation">{</span>
+   <span class="token keyword">private</span> <span class="token class-name">Node</span> rootNode<span class="token punctuation">;</span> <span class="token comment">// корневой узел</span>
+
+   <span class="token keyword">public</span> <span class="token class-name">Tree</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">// Пустое дерево</span>
+       rootNode <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token keyword">public</span> <span class="token class-name">Node</span> <span class="token function">findNodeByValue</span><span class="token punctuation">(</span><span class="token keyword">int</span> value<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">// поиск узла по значению</span>
+       <span class="token class-name">Node</span> currentNode <span class="token operator">=</span> rootNode<span class="token punctuation">;</span> <span class="token comment">// начинаем поиск с корневого узла</span>
+       <span class="token keyword">while</span> <span class="token punctuation">(</span>currentNode<span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> value<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">// поиск покуда не будет найден элемент або не будут перебраны все</span>
+           <span class="token keyword">if</span> <span class="token punctuation">(</span>value <span class="token operator">&lt;</span> currentNode<span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">// движение влево?</span>
+               currentNode <span class="token operator">=</span> currentNode<span class="token punctuation">.</span><span class="token function">getLeftChild</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span> <span class="token comment">//движение вправо</span>
+               currentNode <span class="token operator">=</span> currentNode<span class="token punctuation">.</span><span class="token function">getRightChild</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token punctuation">}</span>
+           <span class="token keyword">if</span> <span class="token punctuation">(</span>currentNode <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">// если потомка нет,</span>
+               <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span> <span class="token comment">// возвращаем null</span>
+           <span class="token punctuation">}</span>
+       <span class="token punctuation">}</span>
+       <span class="token keyword">return</span> currentNode<span class="token punctuation">;</span> <span class="token comment">// возвращаем найденный элемент</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">insertNode</span><span class="token punctuation">(</span><span class="token keyword">int</span> value<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">// метод вставки нового елемента</span>
+       <span class="token class-name">Node</span> newNode <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Node</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// создание нового узла</span>
+       newNode<span class="token punctuation">.</span><span class="token function">setValue</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// вставка данных</span>
+       <span class="token keyword">if</span> <span class="token punctuation">(</span>rootNode <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">// если корневой узел не существует</span>
+           rootNode <span class="token operator">=</span> newNode<span class="token punctuation">;</span><span class="token comment">// то новый элемент и есть корневой узел</span>
+       <span class="token punctuation">}</span>
+       <span class="token keyword">else</span> <span class="token punctuation">{</span> <span class="token comment">// корневой узел занят</span>
+           <span class="token class-name">Node</span> currentNode <span class="token operator">=</span> rootNode<span class="token punctuation">;</span> <span class="token comment">// начинаем с корневого узла</span>
+           <span class="token class-name">Node</span> parentNode<span class="token punctuation">;</span>
+           <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token comment">// мы имеем внутренний выход из цикла</span>
+           <span class="token punctuation">{</span>
+               parentNode <span class="token operator">=</span> currentNode<span class="token punctuation">;</span>
+               <span class="token keyword">if</span><span class="token punctuation">(</span>value <span class="token operator">==</span> currentNode<span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>   <span class="token comment">// если такой элемент в дереве уже есть, не сохраняем его</span>
+                    <span class="token keyword">return</span><span class="token punctuation">;</span>    <span class="token comment">// просто выходим из метода</span>
+                <span class="token punctuation">}</span>
+                <span class="token keyword">else</span>  <span class="token keyword">if</span> <span class="token punctuation">(</span>value <span class="token operator">&lt;</span> currentNode<span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>   <span class="token comment">// движение влево?</span>
+                   currentNode <span class="token operator">=</span> currentNode<span class="token punctuation">.</span><span class="token function">getLeftChild</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                   <span class="token keyword">if</span> <span class="token punctuation">(</span>currentNode <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">{</span> <span class="token comment">// если был достигнут конец цепочки,</span>
+                       parentNode<span class="token punctuation">.</span><span class="token function">setLeftChild</span><span class="token punctuation">(</span>newNode<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//  то вставить слева и выйти из методы</span>
+                       <span class="token keyword">return</span><span class="token punctuation">;</span>
+                   <span class="token punctuation">}</span>
+               <span class="token punctuation">}</span>
+               <span class="token keyword">else</span> <span class="token punctuation">{</span> <span class="token comment">// Или направо?</span>
+                   currentNode <span class="token operator">=</span> currentNode<span class="token punctuation">.</span><span class="token function">getRightChild</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                   <span class="token keyword">if</span> <span class="token punctuation">(</span>currentNode <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">// если был достигнут конец цепочки,</span>
+                       parentNode<span class="token punctuation">.</span><span class="token function">setRightChild</span><span class="token punctuation">(</span>newNode<span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">//то вставить справа</span>
+                       <span class="token keyword">return</span><span class="token punctuation">;</span> <span class="token comment">// и выйти</span>
+                   <span class="token punctuation">}</span>
+               <span class="token punctuation">}</span>
+           <span class="token punctuation">}</span>
+       <span class="token punctuation">}</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">deleteNode</span><span class="token punctuation">(</span><span class="token keyword">int</span> value<span class="token punctuation">)</span> <span class="token comment">// Удаление узла с заданным ключом</span>
+   <span class="token punctuation">{</span>
+       <span class="token class-name">Node</span> currentNode <span class="token operator">=</span> rootNode<span class="token punctuation">;</span>
+       <span class="token class-name">Node</span> parentNode <span class="token operator">=</span> rootNode<span class="token punctuation">;</span>
+       <span class="token keyword">boolean</span> isLeftChild <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+       <span class="token keyword">while</span> <span class="token punctuation">(</span>currentNode<span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> value<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">// начинаем поиск узла</span>
+           parentNode <span class="token operator">=</span> currentNode<span class="token punctuation">;</span>
+           <span class="token keyword">if</span> <span class="token punctuation">(</span>value <span class="token operator">&lt;</span> currentNode<span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">// Определяем, нужно ли движение влево?</span>
+               isLeftChild <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+               currentNode <span class="token operator">=</span> currentNode<span class="token punctuation">.</span><span class="token function">getLeftChild</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token punctuation">}</span>
+           <span class="token keyword">else</span> <span class="token punctuation">{</span> <span class="token comment">// або движение вправо?</span>
+               isLeftChild <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+               currentNode <span class="token operator">=</span> currentNode<span class="token punctuation">.</span><span class="token function">getRightChild</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token punctuation">}</span>
+           <span class="token keyword">if</span> <span class="token punctuation">(</span>currentNode <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+               <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span> <span class="token comment">// yзел не найден</span>
+       <span class="token punctuation">}</span>
+
+       <span class="token keyword">if</span> <span class="token punctuation">(</span>currentNode<span class="token punctuation">.</span><span class="token function">getLeftChild</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token keyword">null</span> <span class="token operator">&amp;&amp;</span> currentNode<span class="token punctuation">.</span><span class="token function">getRightChild</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">// узел просто удаляется, если не имеет потомков</span>
+           <span class="token keyword">if</span> <span class="token punctuation">(</span>currentNode <span class="token operator">==</span> rootNode<span class="token punctuation">)</span> <span class="token comment">// если узел - корень, то дерево очищается</span>
+               rootNode <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+           <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>isLeftChild<span class="token punctuation">)</span>
+               parentNode<span class="token punctuation">.</span><span class="token function">setLeftChild</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// если нет - узел отсоединяется, от родителя</span>
+           <span class="token keyword">else</span>
+               parentNode<span class="token punctuation">.</span><span class="token function">setRightChild</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+       <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>currentNode<span class="token punctuation">.</span><span class="token function">getRightChild</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">// узел заменяется левым поддеревом, если правого потомка нет</span>
+           <span class="token keyword">if</span> <span class="token punctuation">(</span>currentNode <span class="token operator">==</span> rootNode<span class="token punctuation">)</span>
+               rootNode <span class="token operator">=</span> currentNode<span class="token punctuation">.</span><span class="token function">getLeftChild</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>isLeftChild<span class="token punctuation">)</span>
+               parentNode<span class="token punctuation">.</span><span class="token function">setLeftChild</span><span class="token punctuation">(</span>currentNode<span class="token punctuation">.</span><span class="token function">getLeftChild</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token keyword">else</span>
+               parentNode<span class="token punctuation">.</span><span class="token function">setRightChild</span><span class="token punctuation">(</span>currentNode<span class="token punctuation">.</span><span class="token function">getLeftChild</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+       <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>currentNode<span class="token punctuation">.</span><span class="token function">getLeftChild</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">// узел заменяется правым поддеревом, если левого потомка нет</span>
+           <span class="token keyword">if</span> <span class="token punctuation">(</span>currentNode <span class="token operator">==</span> rootNode<span class="token punctuation">)</span>
+               rootNode <span class="token operator">=</span> currentNode<span class="token punctuation">.</span><span class="token function">getRightChild</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>isLeftChild<span class="token punctuation">)</span>
+               parentNode<span class="token punctuation">.</span><span class="token function">setLeftChild</span><span class="token punctuation">(</span>currentNode<span class="token punctuation">.</span><span class="token function">getRightChild</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token keyword">else</span>
+               parentNode<span class="token punctuation">.</span><span class="token function">setRightChild</span><span class="token punctuation">(</span>currentNode<span class="token punctuation">.</span><span class="token function">getRightChild</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+       <span class="token keyword">else</span> <span class="token punctuation">{</span> <span class="token comment">// если есть два потомка, узел заменяется преемником</span>
+           <span class="token class-name">Node</span> heir <span class="token operator">=</span> <span class="token function">receiveHeir</span><span class="token punctuation">(</span>currentNode<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">// поиск преемника для удаляемого узла</span>
+           <span class="token keyword">if</span> <span class="token punctuation">(</span>currentNode <span class="token operator">==</span> rootNode<span class="token punctuation">)</span>
+               rootNode <span class="token operator">=</span> heir<span class="token punctuation">;</span>
+           <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>isLeftChild<span class="token punctuation">)</span>
+               parentNode<span class="token punctuation">.</span><span class="token function">setLeftChild</span><span class="token punctuation">(</span>heir<span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token keyword">else</span>
+               parentNode<span class="token punctuation">.</span><span class="token function">setRightChild</span><span class="token punctuation">(</span>heir<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+       <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span> <span class="token comment">// элемент успешно удалён</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token comment">// метод возвращает узел со следующим значенням после передаваемого аргументом.</span>
+   <span class="token comment">// для этого он сначала переходим к правому потомку, а затем</span>
+   <span class="token comment">// отслеживаем цепочку левых потомков этого узла.</span>
+   <span class="token keyword">private</span> <span class="token class-name">Node</span> <span class="token function">receiveHeir</span><span class="token punctuation">(</span><span class="token class-name">Node</span> node<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token class-name">Node</span> parentNode <span class="token operator">=</span> node<span class="token punctuation">;</span>
+       <span class="token class-name">Node</span> heirNode <span class="token operator">=</span> node<span class="token punctuation">;</span>
+       <span class="token class-name">Node</span> currentNode <span class="token operator">=</span> node<span class="token punctuation">.</span><span class="token function">getRightChild</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Переход к правому потомку</span>
+       <span class="token keyword">while</span> <span class="token punctuation">(</span>currentNode <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token comment">// Пока остаются левые потомки</span>
+       <span class="token punctuation">{</span>
+           parentNode <span class="token operator">=</span> heirNode<span class="token punctuation">;</span><span class="token comment">// потомка задаём як текущий узел</span>
+           heirNode <span class="token operator">=</span> currentNode<span class="token punctuation">;</span>
+           currentNode <span class="token operator">=</span> currentNode<span class="token punctuation">.</span><span class="token function">getLeftChild</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// переход к левому потомку</span>
+       <span class="token punctuation">}</span>
+       <span class="token comment">// Если преемник не является</span>
+       <span class="token keyword">if</span> <span class="token punctuation">(</span>heirNode <span class="token operator">!=</span> node<span class="token punctuation">.</span><span class="token function">getRightChild</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">// правым потомком,</span>
+       <span class="token punctuation">{</span> <span class="token comment">// создать связи между узлами</span>
+           parentNode<span class="token punctuation">.</span><span class="token function">setLeftChild</span><span class="token punctuation">(</span>heirNode<span class="token punctuation">.</span><span class="token function">getRightChild</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+           heirNode<span class="token punctuation">.</span><span class="token function">setRightChild</span><span class="token punctuation">(</span>node<span class="token punctuation">.</span><span class="token function">getRightChild</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+       <span class="token keyword">return</span> heirNode<span class="token punctuation">;</span><span class="token comment">// возвращаем приемника</span>
+   <span class="token punctuation">}</span>
+
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printTree</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">// метод для вывода дерева в консоль</span>
+       <span class="token class-name">Stack</span> globalStack <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Stack</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// общий стек для значений дерева</span>
+       globalStack<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>rootNode<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token keyword">int</span> gaps <span class="token operator">=</span> <span class="token number">32</span><span class="token punctuation">;</span> <span class="token comment">// начальное значення расстояния между елементами</span>
+       <span class="token keyword">boolean</span> isRowEmpty <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+       <span class="token class-name">String</span> separator <span class="token operator">=</span> <span class="token string">"-----------------------------------------------------------------"</span><span class="token punctuation">;</span>
+       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>separator<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">// черта для указания начала нового дерева</span>
+       <span class="token keyword">while</span> <span class="token punctuation">(</span>isRowEmpty <span class="token operator">==</span> <span class="token boolean">false</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+           <span class="token class-name">Stack</span> localStack <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Stack</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// локальный стек для задания потомков елемента</span>
+           isRowEmpty <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+
+           <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> j <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> j <span class="token operator">&lt;</span> gaps<span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span>
+               <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">' '</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token keyword">while</span> <span class="token punctuation">(</span>globalStack<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token boolean">false</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">// покуда в общем стеке есть элементы</span>
+               <span class="token class-name">Node</span> temp <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">Node</span><span class="token punctuation">)</span> globalStack<span class="token punctuation">.</span><span class="token function">pop</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// берем следующий, при этом удаляя его из стека</span>
+               <span class="token keyword">if</span> <span class="token punctuation">(</span>temp <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                   <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>temp<span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// выводим его значення в консоли</span>
+                   localStack<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>temp<span class="token punctuation">.</span><span class="token function">getLeftChild</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// соохраняем в локальный стек, наследники текущего елемента</span>
+                   localStack<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>temp<span class="token punctuation">.</span><span class="token function">getRightChild</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                   <span class="token keyword">if</span> <span class="token punctuation">(</span>temp<span class="token punctuation">.</span><span class="token function">getLeftChild</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token operator">||</span>
+                           temp<span class="token punctuation">.</span><span class="token function">getRightChild</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+                       isRowEmpty <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+               <span class="token punctuation">}</span>
+               <span class="token keyword">else</span> <span class="token punctuation">{</span>
+                   <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"__"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">// - если элемент пустой</span>
+                   localStack<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                   localStack<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+               <span class="token punctuation">}</span>
+               <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> j <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> j <span class="token operator">&lt;</span> gaps <span class="token operator">*</span> <span class="token number">2</span> <span class="token operator">-</span> <span class="token number">2</span><span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span>
+                   <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">' '</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+           <span class="token punctuation">}</span>
+           <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+           gaps <span class="token operator">/=</span> <span class="token number">2</span><span class="token punctuation">;</span><span class="token comment">// при переходе на следующий уровень расстояние между елементами каждый раз уменьшается</span>
+           <span class="token keyword">while</span> <span class="token punctuation">(</span>localStack<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token boolean">false</span><span class="token punctuation">)</span>
+               globalStack<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>localStack<span class="token punctuation">.</span><span class="token function">pop</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// перемещаем все элементы из локального стека в глобальный</span>
+       <span class="token punctuation">}</span>
+       <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>separator<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">// подводим черту</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Знову ж таки, нічого особливо складного. Існують операції для дерева двійкового пошуку, описані раніше, плюс метод для відображення дерева в консолі. Ну а тепер поглянемо на дерево у дії: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Application</span> <span class="token punctuation">{</span>
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token class-name">Tree</span> tree <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Tree</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token comment">// вставляем узлы в дерево:</span>
+       tree<span class="token punctuation">.</span><span class="token function">insertNode</span><span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       tree<span class="token punctuation">.</span><span class="token function">insertNode</span><span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       tree<span class="token punctuation">.</span><span class="token function">insertNode</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       tree<span class="token punctuation">.</span><span class="token function">insertNode</span><span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       tree<span class="token punctuation">.</span><span class="token function">insertNode</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       tree<span class="token punctuation">.</span><span class="token function">insertNode</span><span class="token punctuation">(</span><span class="token number">9</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       tree<span class="token punctuation">.</span><span class="token function">insertNode</span><span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       tree<span class="token punctuation">.</span><span class="token function">insertNode</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       tree<span class="token punctuation">.</span><span class="token function">insertNode</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       tree<span class="token punctuation">.</span><span class="token function">insertNode</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       tree<span class="token punctuation">.</span><span class="token function">insertNode</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token comment">// отображение дерева:</span>
+       tree<span class="token punctuation">.</span><span class="token function">printTree</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+       <span class="token comment">// удаляем один узел и выводим оставшееся дерево в консоли</span>
+       tree<span class="token punctuation">.</span><span class="token function">deleteNode</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       tree<span class="token punctuation">.</span><span class="token function">printTree</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+       <span class="token comment">// находим узел по значению и выводим его в консоли</span>
+       <span class="token class-name">Node</span> foundNode <span class="token operator">=</span> tree<span class="token punctuation">.</span><span class="token function">findNodeByValue</span><span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       foundNode<span class="token punctuation">.</span><span class="token function">printNode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Операції пошуку/вставки/видалення в дереві двійкового пошуку мають тимчасову складність <span class="text-bold">O(log(N))</span> . Але це у кращому випадку. Взагалі, тимчасова складність операцій варіюється від <span class="text-bold">O(log(N))</span> до <span class="text-bold">O(N)</span> . Це від ступеня виродженості дерева.
+<h4>Що таке вироджене дерево?</h4>Це дерево, в якому елементи потрапляли при додаванні до позиції крайнього лівого вузла (найменше число) або крайнього більшого вузла (найбільші). Це може статися, якщо, наприклад, все ліве дерево порожнє на кожному рівні, є тільки праві дерева, і в такому випадку дерево вироджується до списку (що йде праворуч). Так, саме так вироджене дерево фактично стає однозв'язним списком, в якому кожен елемент знає лише про подальше за ним. У такому разі всі операції з цієї структури наближаються до тимчасової складності <span class="text-bold">O(N)</span> .
+<h4>У якому разі дерево може стати виродженим?</h4>Наприклад, якщо додавати список відсортованих елементів. Якщо список відсортований за зростанням, то коренем буде перший, відповідно найменший. Наступний після нього займе позицію правого нащадка. А той, який потрапить після, буде більшим за другий і займе позицію його правого наступника, і так далі… Якщо ж список буде за спаданням, то буде те саме, але вже з крайніми лівими елементами. Щоб уникнути цього, можна після отримання ряду елементів просто перемішати їх. Тоді сортованість зникне, і числа буде більш-менш рівномірно розкидані по дереву. <img data-max-width="512" data-id="01ec9a9a-5e6d-4f2e-901b-60bebc56e676" alt="Структури даних: Двійкове дерево в Java - 13" src="https://cdn.javarush.com/images/article/01ec9a9a-5e6d-4f2e-901b-60bebc56e676/512.jpeg" style="width: 512px;">На цьому у мене сьогодні все, дякую за приділену увагу!<a href="https://codegym.cc/welcome" target="_blank" rel="nofollow"><img data-max-width="1080" data-id="5736eb4b-2b1c-4ab6-b4cc-b9e2d1cef628" alt="Структури даних: Двійкове дерево в Java - 14" src="https://cdn.javarush.com/images/article/5736eb4b-2b1c-4ab6-b4cc-b9e2d1cef628/1080.jpeg" style="width: 1080px;"></a>

@@ -1,0 +1,323 @@
+Json схема: навіщо і кому вона потрібна
+<p>----------------------------------------</p>
+Привіт, мандрівнику. Сьогодні я хочу розповісти тобі про невелику магію. Ти, мабуть, уже чув про json. Це така універсальна мова: її розуміє машина і легко читає людина. Ось типовий приклад json повідомлення: Адже зручно так спілкуватися, п
+<p>----------------------------------------</p>
+Привіт, мандрівнику. Сьогодні я хочу розповісти тобі про невелику магію. Ти, мабуть, уже чув про json. Це така універсальна мова: її розуміє машина і легко читає людина. Ось типовий приклад json повідомлення: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token punctuation">{</span>
+   <span class="token string">"помещение"</span><span class="token operator">:</span><span class="token punctuation">{</span>
+      <span class="token string">"название"</span><span class="token operator">:</span><span class="token string">"избушка"</span><span class="token punctuation">,</span>
+      <span class="token string">"разумна"</span><span class="token operator">:</span><span class="token boolean">true</span>
+   <span class="token punctuation">}</span><span class="token punctuation">,</span>
+   <span class="token string">"основание"</span><span class="token operator">:</span><span class="token punctuation">{</span>
+      <span class="token string">"тип"</span><span class="token operator">:</span><span class="token string">"курьи ноги"</span><span class="token punctuation">,</span>
+      <span class="token string">"количество"</span><span class="token operator">:</span><span class="token number">2</span>
+   <span class="token punctuation">}</span><span class="token punctuation">,</span>
+   <span class="token string">"проживающие"</span><span class="token operator">:</span><span class="token punctuation">[</span>
+      <span class="token punctuation">{</span>
+         <span class="token string">"ім'я"</span><span class="token operator">:</span><span class="token string">"Баба Яга"</span><span class="token punctuation">,</span>
+         <span class="token string">"профиль"</span><span class="token operator">:</span><span class="token string">"ведьма"</span>
+      <span class="token punctuation">}</span>
+   <span class="token punctuation">]</span><span class="token punctuation">,</span>
+   <span class="token string">"местоположение"</span><span class="token operator">:</span><span class="token punctuation">{</span>
+      <span class="token string">"адреса"</span><span class="token operator">:</span><span class="token string">"граница леса"</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre> Адже зручно так спілкуватися, правда? Якщо ти не знав, що таке json, тепер знаєш. Як це використовувати в коді java? Json став універсальним форматом. Розшифровується він як JavaScript Object Notation, але вже давно вийшов за межі JavaScript і використовується майже скрізь. У java є кілька бібліотек, які спрощують роботу з json. Ось найвідоміші: 
+<ul>
+ <li><a href="https://github.com/google/gson" target="_blank" rel="nofollow">gson</a></li>
+ <li><a href="https://github.com/FasterXML/jackson" target="_blank" rel="nofollow">Jackson</a></li>
+</ul> Я використовуватиму другу. Там їх 2 версії <em>codehaus</em> і <em>fasterxml</em> , відмінностей у них не помічав, тому тут можете використовувати будь-яку. Ось такий шматок коду: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class=" language-java"><span class="token class-name">ObjectMapper</span> mapper <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ObjectMapper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">return</span> mapper<span class="token punctuation">.</span><span class="token function">readValue</span><span class="token punctuation">(</span><span class="token string">"сюда json"</span><span class="token punctuation">,</span> <span class="token string">"сюда класс"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre> допоможе перевести json на об'єкт. І ми наближаємося до найголовнішого. Написання класу для цього json. Можна це робити руками, створити структуру приблизно таку: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span><span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span>fairytale<span class="token punctuation">.</span></span>Base</span><span class="token punctuation">.</span>java<span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span>
+
+<span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>fairytale</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>fasterxml<span class="token punctuation">.</span>jackson<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">JsonInclude</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>fasterxml<span class="token punctuation">.</span>jackson<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">JsonProperty</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>fasterxml<span class="token punctuation">.</span>jackson<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">JsonPropertyOrder</span><span class="token punctuation">;</span>
+
+
+<span class="token annotation punctuation">@JsonInclude</span><span class="token punctuation">(</span><span class="token class-name">JsonInclude<span class="token punctuation">.</span>Include</span><span class="token punctuation">.</span>NON_NULL<span class="token punctuation">)</span>
+<span class="token annotation punctuation">@JsonPropertyOrder</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+<span class="token string">"type"</span><span class="token punctuation">,</span>
+<span class="token string">"quantity"</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Base</span> <span class="token punctuation">{</span>
+
+<span class="token annotation punctuation">@JsonProperty</span><span class="token punctuation">(</span><span class="token string">"type"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token class-name">String</span> type <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
+<span class="token annotation punctuation">@JsonProperty</span><span class="token punctuation">(</span><span class="token string">"quantity"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">int</span> quantity <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+<span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span><span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span>fairytale<span class="token punctuation">.</span></span>Hut</span><span class="token punctuation">.</span>java<span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span>
+
+<span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>fairytale</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">ArrayList</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">List</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>fasterxml<span class="token punctuation">.</span>jackson<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">JsonInclude</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>fasterxml<span class="token punctuation">.</span>jackson<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">JsonProperty</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>fasterxml<span class="token punctuation">.</span>jackson<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">JsonPropertyOrder</span><span class="token punctuation">;</span>
+
+
+<span class="token annotation punctuation">@JsonInclude</span><span class="token punctuation">(</span><span class="token class-name">JsonInclude<span class="token punctuation">.</span>Include</span><span class="token punctuation">.</span>NON_NULL<span class="token punctuation">)</span>
+<span class="token annotation punctuation">@JsonPropertyOrder</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+<span class="token string">"room"</span><span class="token punctuation">,</span>
+<span class="token string">"base"</span><span class="token punctuation">,</span>
+<span class="token string">"residents"</span><span class="token punctuation">,</span>
+<span class="token string">"location"</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Hut</span> <span class="token punctuation">{</span>
+
+<span class="token annotation punctuation">@JsonProperty</span><span class="token punctuation">(</span><span class="token string">"room"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token class-name">Room</span> room<span class="token punctuation">;</span>
+<span class="token annotation punctuation">@JsonProperty</span><span class="token punctuation">(</span><span class="token string">"base"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token class-name">Base</span> base<span class="token punctuation">;</span>
+<span class="token annotation punctuation">@JsonProperty</span><span class="token punctuation">(</span><span class="token string">"residents"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Resident</span><span class="token punctuation">&gt;</span></span> residents <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Resident</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token annotation punctuation">@JsonProperty</span><span class="token punctuation">(</span><span class="token string">"location"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token class-name">Location</span> location<span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+<span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span><span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span>fairytale<span class="token punctuation">.</span></span>Location</span><span class="token punctuation">.</span>java<span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span>
+
+<span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>fairytale</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>fasterxml<span class="token punctuation">.</span>jackson<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">JsonInclude</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>fasterxml<span class="token punctuation">.</span>jackson<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">JsonProperty</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>fasterxml<span class="token punctuation">.</span>jackson<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">JsonPropertyOrder</span><span class="token punctuation">;</span>
+
+
+<span class="token annotation punctuation">@JsonInclude</span><span class="token punctuation">(</span><span class="token class-name">JsonInclude<span class="token punctuation">.</span>Include</span><span class="token punctuation">.</span>NON_NULL<span class="token punctuation">)</span>
+<span class="token annotation punctuation">@JsonPropertyOrder</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+<span class="token string">"address"</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Location</span> <span class="token punctuation">{</span>
+
+<span class="token annotation punctuation">@JsonProperty</span><span class="token punctuation">(</span><span class="token string">"address"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token class-name">String</span> address <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+<span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span><span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span>fairytale<span class="token punctuation">.</span></span>Resident</span><span class="token punctuation">.</span>java<span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span>
+
+<span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>fairytale</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>fasterxml<span class="token punctuation">.</span>jackson<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">JsonInclude</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>fasterxml<span class="token punctuation">.</span>jackson<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">JsonProperty</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>fasterxml<span class="token punctuation">.</span>jackson<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">JsonPropertyOrder</span><span class="token punctuation">;</span>
+
+
+<span class="token annotation punctuation">@JsonInclude</span><span class="token punctuation">(</span><span class="token class-name">JsonInclude<span class="token punctuation">.</span>Include</span><span class="token punctuation">.</span>NON_NULL<span class="token punctuation">)</span>
+<span class="token annotation punctuation">@JsonPropertyOrder</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+<span class="token string">"name"</span><span class="token punctuation">,</span>
+<span class="token string">"profile"</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Resident</span> <span class="token punctuation">{</span>
+
+<span class="token annotation punctuation">@JsonProperty</span><span class="token punctuation">(</span><span class="token string">"name"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token class-name">String</span> name <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
+<span class="token annotation punctuation">@JsonProperty</span><span class="token punctuation">(</span><span class="token string">"profile"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token class-name">String</span> profile <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+<span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span><span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span>fairytale<span class="token punctuation">.</span></span>Room</span><span class="token punctuation">.</span>java<span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span>
+
+<span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>fairytale</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>fasterxml<span class="token punctuation">.</span>jackson<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">JsonInclude</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>fasterxml<span class="token punctuation">.</span>jackson<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">JsonProperty</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>fasterxml<span class="token punctuation">.</span>jackson<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">JsonPropertyOrder</span><span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@JsonInclude</span><span class="token punctuation">(</span><span class="token class-name">JsonInclude<span class="token punctuation">.</span>Include</span><span class="token punctuation">.</span>NON_NULL<span class="token punctuation">)</span>
+<span class="token annotation punctuation">@JsonPropertyOrder</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+<span class="token string">"name"</span><span class="token punctuation">,</span>
+<span class="token string">"reasonable"</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Room</span> <span class="token punctuation">{</span>
+
+<span class="token annotation punctuation">@JsonProperty</span><span class="token punctuation">(</span><span class="token string">"name"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token class-name">String</span> name <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
+<span class="token annotation punctuation">@JsonProperty</span><span class="token punctuation">(</span><span class="token string">"reasonable"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">boolean</span> reasonable <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span></code></pre> Я спеціально опустив гетери, сетери, конструктори та інші атрибути pojo, інакше ти втомився б промотувати =) А тепер подивись сюди: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token punctuation">{</span>
+  <span class="token string">"definitions"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token string">"$schema"</span><span class="token operator">:</span> <span class="token string">"http://json-schema.org/draft-07/schema#"</span><span class="token punctuation">,</span>
+  <span class="token string">"$id"</span><span class="token operator">:</span> <span class="token string">"http://example.com/root.json"</span><span class="token punctuation">,</span>
+  <span class="token string">"type"</span><span class="token operator">:</span> <span class="token string">"object"</span><span class="token punctuation">,</span>
+  <span class="token string">"title"</span><span class="token operator">:</span> <span class="token string">"The Root Schema"</span><span class="token punctuation">,</span>
+  <span class="token string">"required"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">"room"</span><span class="token punctuation">,</span>
+    <span class="token string">"base"</span><span class="token punctuation">,</span>
+    <span class="token string">"residents"</span><span class="token punctuation">,</span>
+    <span class="token string">"location"</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token string">"properties"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token string">"room"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token string">"$id"</span><span class="token operator">:</span> <span class="token string">"#/properties/room"</span><span class="token punctuation">,</span>
+      <span class="token string">"type"</span><span class="token operator">:</span> <span class="token string">"object"</span><span class="token punctuation">,</span>
+      <span class="token string">"title"</span><span class="token operator">:</span> <span class="token string">"The Room Schema"</span><span class="token punctuation">,</span>
+      <span class="token string">"required"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token string">"name"</span><span class="token punctuation">,</span>
+        <span class="token string">"reasonable"</span>
+      <span class="token punctuation">]</span><span class="token punctuation">,</span>
+      <span class="token string">"properties"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token string">"name"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+          <span class="token string">"$id"</span><span class="token operator">:</span> <span class="token string">"#/properties/room/properties/name"</span><span class="token punctuation">,</span>
+          <span class="token string">"type"</span><span class="token operator">:</span> <span class="token string">"string"</span><span class="token punctuation">,</span>
+          <span class="token string">"title"</span><span class="token operator">:</span> <span class="token string">"The Name Schema"</span><span class="token punctuation">,</span>
+          <span class="token string">"default"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
+          <span class="token string">"examples"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+            <span class="token string">"избушка"</span>
+          <span class="token punctuation">]</span><span class="token punctuation">,</span>
+          <span class="token string">"pattern"</span><span class="token operator">:</span> <span class="token string">"^(.*)$"</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token string">"reasonable"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+          <span class="token string">"$id"</span><span class="token operator">:</span> <span class="token string">"#/properties/room/properties/reasonable"</span><span class="token punctuation">,</span>
+          <span class="token string">"type"</span><span class="token operator">:</span> <span class="token string">"boolean"</span><span class="token punctuation">,</span>
+          <span class="token string">"title"</span><span class="token operator">:</span> <span class="token string">"The Reasonable Schema"</span><span class="token punctuation">,</span>
+          <span class="token string">"default"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+          <span class="token string">"examples"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+            <span class="token boolean">true</span>
+          <span class="token punctuation">]</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+	<span class="token string">"additionalProperties"</span><span class="token operator">:</span> <span class="token boolean">false</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token string">"base"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token string">"$id"</span><span class="token operator">:</span> <span class="token string">"#/properties/base"</span><span class="token punctuation">,</span>
+      <span class="token string">"type"</span><span class="token operator">:</span> <span class="token string">"object"</span><span class="token punctuation">,</span>
+      <span class="token string">"title"</span><span class="token operator">:</span> <span class="token string">"The Base Schema"</span><span class="token punctuation">,</span>
+      <span class="token string">"required"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token string">"type"</span><span class="token punctuation">,</span>
+        <span class="token string">"quantity"</span>
+      <span class="token punctuation">]</span><span class="token punctuation">,</span>
+      <span class="token string">"properties"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token string">"type"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+          <span class="token string">"$id"</span><span class="token operator">:</span> <span class="token string">"#/properties/base/properties/type"</span><span class="token punctuation">,</span>
+          <span class="token string">"type"</span><span class="token operator">:</span> <span class="token string">"string"</span><span class="token punctuation">,</span>
+          <span class="token string">"title"</span><span class="token operator">:</span> <span class="token string">"The Type Schema"</span><span class="token punctuation">,</span>
+          <span class="token string">"default"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
+          <span class="token string">"examples"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+            <span class="token string">"курьи ноги"</span>
+          <span class="token punctuation">]</span><span class="token punctuation">,</span>
+          <span class="token string">"pattern"</span><span class="token operator">:</span> <span class="token string">"^(.*)$"</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token string">"quantity"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+          <span class="token string">"$id"</span><span class="token operator">:</span> <span class="token string">"#/properties/base/properties/quantity"</span><span class="token punctuation">,</span>
+          <span class="token string">"type"</span><span class="token operator">:</span> <span class="token string">"integer"</span><span class="token punctuation">,</span>
+          <span class="token string">"title"</span><span class="token operator">:</span> <span class="token string">"The Quantity Schema"</span><span class="token punctuation">,</span>
+          <span class="token string">"default"</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+          <span class="token string">"examples"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+            <span class="token number">2</span>
+          <span class="token punctuation">]</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+	<span class="token string">"additionalProperties"</span><span class="token operator">:</span> <span class="token boolean">false</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token string">"residents"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token string">"$id"</span><span class="token operator">:</span> <span class="token string">"#/properties/residents"</span><span class="token punctuation">,</span>
+      <span class="token string">"type"</span><span class="token operator">:</span> <span class="token string">"array"</span><span class="token punctuation">,</span>
+      <span class="token string">"title"</span><span class="token operator">:</span> <span class="token string">"The Residents Schema"</span><span class="token punctuation">,</span>
+      <span class="token string">"items"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token string">"$id"</span><span class="token operator">:</span> <span class="token string">"#/properties/residents/items"</span><span class="token punctuation">,</span>
+        <span class="token string">"type"</span><span class="token operator">:</span> <span class="token string">"object"</span><span class="token punctuation">,</span>
+        <span class="token string">"title"</span><span class="token operator">:</span> <span class="token string">"The Items Schema"</span><span class="token punctuation">,</span>
+        <span class="token string">"required"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+          <span class="token string">"name"</span><span class="token punctuation">,</span>
+          <span class="token string">"profile"</span>
+        <span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token string">"properties"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+          <span class="token string">"name"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token string">"$id"</span><span class="token operator">:</span> <span class="token string">"#/properties/residents/items/properties/name"</span><span class="token punctuation">,</span>
+            <span class="token string">"type"</span><span class="token operator">:</span> <span class="token string">"string"</span><span class="token punctuation">,</span>
+            <span class="token string">"title"</span><span class="token operator">:</span> <span class="token string">"The Name Schema"</span><span class="token punctuation">,</span>
+            <span class="token string">"default"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
+            <span class="token string">"examples"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+              <span class="token string">"Баба Яга"</span>
+            <span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token string">"pattern"</span><span class="token operator">:</span> <span class="token string">"^(.*)$"</span>
+          <span class="token punctuation">}</span><span class="token punctuation">,</span>
+          <span class="token string">"profile"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token string">"$id"</span><span class="token operator">:</span> <span class="token string">"#/properties/residents/items/properties/profile"</span><span class="token punctuation">,</span>
+            <span class="token string">"type"</span><span class="token operator">:</span> <span class="token string">"string"</span><span class="token punctuation">,</span>
+            <span class="token string">"title"</span><span class="token operator">:</span> <span class="token string">"The Profile Schema"</span><span class="token punctuation">,</span>
+            <span class="token string">"default"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
+            <span class="token string">"examples"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+              <span class="token string">"ведьма"</span>
+            <span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token string">"pattern"</span><span class="token operator">:</span> <span class="token string">"^(.*)$"</span>
+          <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+	    <span class="token string">"additionalProperties"</span><span class="token operator">:</span> <span class="token boolean">false</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token string">"location"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token string">"$id"</span><span class="token operator">:</span> <span class="token string">"#/properties/location"</span><span class="token punctuation">,</span>
+      <span class="token string">"type"</span><span class="token operator">:</span> <span class="token string">"object"</span><span class="token punctuation">,</span>
+      <span class="token string">"title"</span><span class="token operator">:</span> <span class="token string">"The Location Schema"</span><span class="token punctuation">,</span>
+      <span class="token string">"required"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token string">"address"</span>
+      <span class="token punctuation">]</span><span class="token punctuation">,</span>
+      <span class="token string">"properties"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token string">"address"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+          <span class="token string">"$id"</span><span class="token operator">:</span> <span class="token string">"#/properties/location/properties/address"</span><span class="token punctuation">,</span>
+          <span class="token string">"type"</span><span class="token operator">:</span> <span class="token string">"string"</span><span class="token punctuation">,</span>
+          <span class="token string">"title"</span><span class="token operator">:</span> <span class="token string">"The Address Schema"</span><span class="token punctuation">,</span>
+          <span class="token string">"default"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
+          <span class="token string">"examples"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+            <span class="token string">"граница леса"</span>
+          <span class="token punctuation">]</span><span class="token punctuation">,</span>
+          <span class="token string">"pattern"</span><span class="token operator">:</span> <span class="token string">"^(.*)$"</span><span class="token punctuation">,</span>
+		  <span class="token string">"additionalProperties"</span><span class="token operator">:</span> <span class="token boolean">false</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+	<span class="token string">"additionalProperties"</span><span class="token operator">:</span> <span class="token boolean">false</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+	<span class="token string">"additionalProperties"</span><span class="token operator">:</span> <span class="token boolean">false</span>
+<span class="token punctuation">}</span></code></pre> Це json схема структури вище. Тепер настав час пояснити, навіщо вона тобі. Вона позбавить необхідності писати класи і підтримувати їх. Є такий хороший проект <a href="http://www.jsonschema2pojo.org/" target="_blank" rel="nofollow">jsonschema2pojo</a> . Він пропонує плагіни для збирачів проекту (мавен, грейдл), які напишуть ці класи для тебе під час збирання. Наведу приклад із мого проекту: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token generics"><span class="token punctuation">&lt;</span>plugin<span class="token punctuation">&gt;</span></span>
+    <span class="token generics"><span class="token punctuation">&lt;</span>groupId<span class="token punctuation">&gt;</span></span>org<span class="token punctuation">.</span>jsonschema2pojo<span class="token operator">&lt;</span><span class="token operator">/</span>groupId<span class="token operator">&gt;</span>
+    <span class="token generics"><span class="token punctuation">&lt;</span>artifactId<span class="token punctuation">&gt;</span></span>jsonschema2pojo<span class="token operator">-</span>maven<span class="token operator">-</span>plugin<span class="token operator">&lt;</span><span class="token operator">/</span>artifactId<span class="token operator">&gt;</span>
+    <span class="token generics"><span class="token punctuation">&lt;</span>version<span class="token punctuation">&gt;</span></span><span class="token number">0.4</span><span class="token number">.37</span><span class="token operator">&lt;</span><span class="token operator">/</span>version<span class="token operator">&gt;</span>
+
+    <span class="token generics"><span class="token punctuation">&lt;</span>executions<span class="token punctuation">&gt;</span></span>
+        <span class="token generics"><span class="token punctuation">&lt;</span>execution<span class="token punctuation">&gt;</span></span>
+            <span class="token generics"><span class="token punctuation">&lt;</span>id<span class="token punctuation">&gt;</span></span>jsonschema2opjo<span class="token operator">&lt;</span><span class="token operator">/</span>id<span class="token operator">&gt;</span>
+            <span class="token generics"><span class="token punctuation">&lt;</span>configuration<span class="token punctuation">&gt;</span></span>
+                <span class="token generics"><span class="token punctuation">&lt;</span>sourceDirectory<span class="token punctuation">&gt;</span></span>$<span class="token punctuation">{</span>project<span class="token punctuation">.</span>basedir<span class="token punctuation">}</span><span class="token operator">/</span>src<span class="token operator">/</span>main<span class="token operator">/</span>resources<span class="token operator">/</span>json<span class="token operator">-</span>schema<span class="token operator">/</span><span class="token operator">&lt;</span><span class="token operator">/</span>sourceDirectory<span class="token operator">&gt;</span>
+                <span class="token generics"><span class="token punctuation">&lt;</span>targetPackage<span class="token punctuation">&gt;</span></span>tester<span class="token punctuation">.</span>model<span class="token operator">&lt;</span><span class="token operator">/</span>targetPackage<span class="token operator">&gt;</span>
+                <span class="token generics"><span class="token punctuation">&lt;</span>outputDirectory<span class="token punctuation">&gt;</span></span>$<span class="token punctuation">{</span>project<span class="token punctuation">.</span>basedir<span class="token punctuation">}</span><span class="token operator">/</span>target<span class="token operator">/</span>generated<span class="token operator">-</span>sources<span class="token operator">/</span>jsonschema<span class="token operator">/</span><span class="token operator">&lt;</span><span class="token operator">/</span>outputDirectory<span class="token operator">&gt;</span>
+                <span class="token generics"><span class="token punctuation">&lt;</span>useCommonsLang3<span class="token punctuation">&gt;</span></span><span class="token boolean">true</span><span class="token operator">&lt;</span><span class="token operator">/</span>useCommonsLang3<span class="token operator">&gt;</span>
+                <span class="token generics"><span class="token punctuation">&lt;</span>includeConstructors<span class="token punctuation">&gt;</span></span><span class="token boolean">true</span><span class="token operator">&lt;</span><span class="token operator">/</span>includeConstructors<span class="token operator">&gt;</span>
+                <span class="token generics"><span class="token punctuation">&lt;</span>generateBuilders<span class="token punctuation">&gt;</span></span><span class="token boolean">true</span><span class="token operator">&lt;</span><span class="token operator">/</span>generateBuilders<span class="token operator">&gt;</span>
+                <span class="token generics"><span class="token punctuation">&lt;</span>includeToString<span class="token punctuation">&gt;</span></span><span class="token boolean">true</span><span class="token operator">&lt;</span><span class="token operator">/</span>includeToString<span class="token operator">&gt;</span>
+                <span class="token generics"><span class="token punctuation">&lt;</span>usePrimitives<span class="token punctuation">&gt;</span></span><span class="token boolean">true</span><span class="token operator">&lt;</span><span class="token operator">/</span>usePrimitives<span class="token operator">&gt;</span>
+            <span class="token operator">&lt;</span><span class="token operator">/</span>configuration<span class="token operator">&gt;</span>
+            <span class="token generics"><span class="token punctuation">&lt;</span>goals<span class="token punctuation">&gt;</span></span>
+                <span class="token generics"><span class="token punctuation">&lt;</span>goal<span class="token punctuation">&gt;</span></span>generate<span class="token operator">&lt;</span><span class="token operator">/</span>goal<span class="token operator">&gt;</span>
+            <span class="token operator">&lt;</span><span class="token operator">/</span>goals<span class="token operator">&gt;</span>
+            <span class="token generics"><span class="token punctuation">&lt;</span>phase<span class="token punctuation">&gt;</span></span>generate<span class="token operator">-</span>sources<span class="token operator">&lt;</span><span class="token operator">/</span>phase<span class="token operator">&gt;</span>
+        <span class="token operator">&lt;</span><span class="token operator">/</span>execution<span class="token operator">&gt;</span>
+    <span class="token operator">&lt;</span><span class="token operator">/</span>executions<span class="token operator">&gt;</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>plugin<span class="token operator">&gt;</span></code></pre> Це його налаштування. Найцікавіше тут: 
+<pre class=" line-numbers language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span><code class=" language-java"><span class="token generics"><span class="token punctuation">&lt;</span>useCommonsLang3<span class="token punctuation">&gt;</span></span><span class="token boolean">true</span><span class="token operator">&lt;</span><span class="token operator">/</span>useCommonsLang3<span class="token operator">&gt;</span>
+<span class="token generics"><span class="token punctuation">&lt;</span>includeConstructors<span class="token punctuation">&gt;</span></span><span class="token boolean">true</span><span class="token operator">&lt;</span><span class="token operator">/</span>includeConstructors<span class="token operator">&gt;</span>
+<span class="token generics"><span class="token punctuation">&lt;</span>generateBuilders<span class="token punctuation">&gt;</span></span><span class="token boolean">true</span><span class="token operator">&lt;</span><span class="token operator">/</span>generateBuilders<span class="token operator">&gt;</span>
+<span class="token generics"><span class="token punctuation">&lt;</span>includeToString<span class="token punctuation">&gt;</span></span><span class="token boolean">true</span><span class="token operator">&lt;</span><span class="token operator">/</span>includeToString<span class="token operator">&gt;</span>
+<span class="token generics"><span class="token punctuation">&lt;</span>usePrimitives<span class="token punctuation">&gt;</span></span><span class="token boolean">true</span><span class="token operator">&lt;</span><span class="token operator">/</span>usePrimitives<span class="token operator">&gt;</span></code></pre> Це вказівка, як писати клас: <em>useCommonsLang3</em> – використовувати бібліотеку CommonsLang3 <em>includeConstructors</em> – напише конструктор <em>generateBuilders</em> – вбудує патерн білдер <em>includeToString</em> – додасть toString <em>usePrimitives</em> – вказівку використовувати примітиви Чим це краще за самописний код? 
+<ol>
+ <li>
+  <p>Ви можете кастомізувати класи одним рядком. Наприклад, треба додати суфікс Pojo до кожного класу. Достатньо додати &lt;classNameSuffix&gt;Pojo&lt;/classNameSuffix&gt; збирати проект і готово. Інакше довелося міняти імена кожному клас руками.</p>
+  <p>Цих параметрів дуже багато, про всіх варто почитати у <a href="https://joelittlejohn.github.io/jsonschema2pojo/site/0.5.1/generate-mojo.html" target="_blank" rel="nofollow">доках</a></p></li>
+ <li>
+  <p>Якщо твій проект має споживача, набагато простіше буде віддати йому json схеми, а не java класи. Як я вже казав, схеми універсальні і споживач просто згенерує pojo своєю мовою.</p></li>
+ <li>
+  <p>Вони набагато менші. Приклад зверху містить багато не завжди потрібної інформації, скажімо, патерни та приклади. Але якщо повернути їх у java код, він також сильно зросте. І не забудь про шаблонний код, який у схемах вказується парою налаштувань у плагіні, а в коді його треба писати самому. Так, я знаю про ломбок, тут альтернатива.</p></li>
+ <li>
+  <p>Ніякої логіки у pojo. Коли ваші класи самописні, хтось може спокуситись і додати зручний йому метод. У схемі json метод додати не можна, як і в згенерований клас.</p></li>
+</ol> Напевно, на цьому все. 
+<h2>Висновок:</h2>Я намагався донести, що json схема дуже хороший формат взаємодії між проектами. Якось я з ним зустрівся на одному проекті, і він запал мені в серці. Я використовую їх майже всюди. Так, це не завжди зручно, адже, щоб подивитися вихідники, треба збирати проект. Але це pojo, отже, логіки там бути не може, зі схемами і не буде. PS.. я іноді поясню погано, так що ось відео з гарною доповіддю: <a href="https://www.youtube.com/watch?v=9mF0zFW7cDQ&amp;index=8&amp;list=PLsVTVVvrKX9t7a0_KpweUSfEt7XeRDzM-" target="_blank" rel="nofollow">Кирило Меркушев — Кодогенерація як спосіб вирішення проблем автоматизатора.</a>

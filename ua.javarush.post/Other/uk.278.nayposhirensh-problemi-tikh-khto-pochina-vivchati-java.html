@@ -1,0 +1,72 @@
+Найпоширеніші проблеми тих, хто починає вивчати Java
+<p>----------------------------------------</p>
+новачок. Ви в процесі вивчення квесту Java Syntax, причому ближче до його початкових рівнів. Ви тільки почали вивчати Java. Вас засинає термінами, як із рогу достатку. Ви грузнете в тоннах технічної інформації, і часом плутаєтеся в трьох со
+<p>----------------------------------------</p>
+<strong><em>Рівень необхідних знань розуміння статті:</em></strong> новачок. Ви в процесі вивчення квесту Java Syntax, причому ближче до його початкових рівнів. <img data-id="f7d15e78-3e55-4c72-8351-5ffe9cbc38eb" data-max-width="850" alt="Найпоширеніші проблеми тих, хто починає вивчати Java - 1" src="https://cdn.javarush.com/images/article/f7d15e78-3e55-4c72-8351-5ffe9cbc38eb/800.jpeg" style="width: 850px;">Ви тільки почали вивчати Java. Вас засинає термінами, як із рогу достатку. Ви грузнете в тоннах технічної інформації, і часом плутаєтеся в трьох соснах. Повірте, раз ви вже вплуталися в програмування, ТАК БУДЕ ЗАВЖДИ (в цей момент зловісний сміх звучить за кадром, а тихий голос, обірваний на півслові, шепоче «Біжи… рятуйся, поки не пізно…»). Помилки будуть переслідувати вас до кінця програмістського життя, навіть якщо ви найкращий розробник. Однак це зовсім не таке страшно, як звучить. 
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>Якщо ви тільки почали навчання на CodeGym, то, швидше за все, вже стикалися з порушеними в статті проблемами. У будь-якому випадку, ми були б раді коментарям з описами проблем, які виникали у вас у перші місяці вивчення Java.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<h2>Проблема нульового рівня: плутанина з оператором порівняння (==) та оператором присвоєння (=).</h2>Це дуже часто проблема тих, хто переходить з інших мов програмування. Та й взагалі, ми з молодших класів звикли, що <code class=" language-none">(=)</code>це знак рівності. Простий трюк, який можна використовувати для запам'ятовування, такий: якщо ви знаєте, що вас цікавить тільки одне із значень (ви призначаєте одне одному), ви використовуєте одиночний знак « », інакше, якщо ви дбаєте про всі <code class=" language-none">=</code>змінні та значення (ви їх порівнюєте ) вам потрібний подвійний знак « <code class=" language-none">==</code>». 
+<h2>Проблема: використання оператора порівняння (==) для перевірки еквівалентності рядків</h2><strong>Що робити:</strong> пам'ятайте, <strong>ніякі об'єкти Java не можна перевіряти на еквівалентність за допомогою<code class=" language-none">(==)</code></strong> , оскільки цей оператор призначений для перевірки рівності типових типів. 
+<div class="row justify-content-center jr-image-wrap">
+ <div class="col-12 col-sm-10 col-md-8">
+  <img data-id="eef0475c-4152-4f29-a0c8-06bc53d349a3" data-max-width="710" alt="Найпоширеніші проблеми тих, хто починає вивчати Java - 2" src="https://cdn.javarush.com/images/article/eef0475c-4152-4f29-a0c8-06bc53d349a3/512.jpeg" style="width: 710px;">
+ </div>
+</div>Для об'єктів потрібно використовувати метод <code class=" language-none">.equals()</code>. А <code class=" language-none">String</code>в мові Java - не що інше, як об'єкт (причому <code class=" language-none">immutable</code>). 
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>Об'єкт, позначений як <code class=" language-none">Immutable</code> такий об'єкт, стан якого після створення неможливо змінити. У <strong>Java</strong> це означає, що всі поля екземпляра у класу відзначені як <code class=" language-none">final</code>і є примітивами (або <code class=" language-none">immutable</code>).</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<h2>Проблема: конкатенація рядків у циклі</h2>Не намагайтеся повторити це самостійно! При кожній конкатенації рядків створюється новий об'єкт <code class=" language-none">String</code>(як ми з'ясували вище, рядки <code class=" language-none">immutable</code>, тобто незмінні). У якийсь момент ви зіткнетеся з нестачею пам'яті або програма почне вимагати надто багато часу для виконання. <strong>Рішення. </strong>Використовуйте <code class=" language-none">StringBuilder</code>замість <code class=" language-none">String</code>конкатенації вмісту в циклі. Клас <code class=" language-none">StringBuilder</code>використовується в тому випадку, коли потрібно зробити багато змін у рядку символів. І такі рядки, на відміну <code class=" language-none">String</code>, не є <code class=" language-none">immutable</code>. 
+<h2>Проблема: NullPointerException</h2>Цей вид винятків виникає, коли ми намагаємося використати порожній покажчик <code class=" language-none">null</code>, тоді як насправді нам потрібний реальний об'єкт. 
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <td>Усі примітивні типи мають значення за замовчуванням. Так, у <code class=" language-none">int</code>це <code class=" language-none">0</code>, а у <code class=" language-none">boolean</code>- <code class=" language-none">false</code>. Значення за умовчанням будь-яких типів посилань, тобто, об'єктів, дорівнює <code class=" language-none">null</code>. Не об'єкт і тип, це спеціальне значення. Яке, насправді, означає «тут нічого немає».</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<div class="row justify-content-center jr-image-wrap">
+ <div class="col-12 col-sm-10 col-md-8">
+  <img data-id="20b9d5de-82cc-43b5-b65c-fe422657374d" data-max-width="710" alt="Найпоширеніші проблеми тих, хто починає вивчати Java - 3" src="https://cdn.javarush.com/images/article/20b9d5de-82cc-43b5-b65c-fe422657374d/512.jpeg" style="width: 710px;">
+ </div>
+</div><strong>Що робити:</strong> якщо ваш код складено так, що в якийсь момент ваш об'єкт може прийняти значення <code class=" language-none">null</code>, вам потрібно додати «перевірку на <code class=" language-none">null</code>», особливо якщо ви створюєте об'єкт не самостійно. Також запам'ятайте, що краще повертати порожні колекції, ніж набір <code class=" language-none">null</code>'ів. Також було б непогано додати валідацію для геттерів та сеттерів. 
+<h2>Проблема: чомусь не працює цикл if/while/for</h2>
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">if</span></span> <span class="token punctuation"><span class="token punctuation">(</span></span>something<span class="token punctuation"><span class="token punctuation">.</span></span>equals <span class="token punctuation"><span class="token punctuation">(</span></span>«что<span class="token operator"><span class="token operator">-</span></span>то еще»<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span><span class="token comment"><span class="token comment">// &lt;---- корень зла!!!</span></span>
+     <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span>println <span class="token punctuation"><span class="token punctuation">(</span></span>«Почему я не работаю<span class="token operator"><span class="token operator">?</span></span><span class="token operator"><span class="token operator">?</span></span><span class="token operator"><span class="token operator">?</span></span>»<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre> Що тут не таке? Все просто: зайва точка з комою, вона зіпсувала кров сотням тисяч Java-програмістів-початківців. Ну не потрібна вона після <code class=" language-none">if ()</code>. З погляду мови, такий синтаксис цілком припустимий, тому компілятор не лаятиметься на нього. Але він завершує умовний оператор, і код усередині блоку <code class=" language-none">{}</code>ніколи не виконає умову вище. 
+<div class="row justify-content-center jr-image-wrap">
+ <div class="col-12 col-sm-10 col-md-8">
+  <img data-id="a7245468-0bb2-4104-90b9-34f4ed28b209" data-max-width="710" alt="Найпоширеніші проблеми тих, хто починає вивчати Java - 4" src="https://cdn.javarush.com/images/article/a7245468-0bb2-4104-90b9-34f4ed28b209/512.jpeg" style="width: 710px;">
+ </div>
+</div><strong>Рішення:</strong> Пам'ятайте про логіку конструкції. Знак « <code class=" language-none">;</code>» означає кінець якогось блоку, а в нас тут все тільки починається. 
+<h2>Проблема: спроба отримати доступ до нестатичних змінних членів зі статичних методів (таких, як main)</h2><strong>Рішення</strong> . Ця проблема пов'язана з розумінням самого поняття <code class=" language-none">static</code>. Якщо метод позначений цим словом, це означає, що нам не потрібно створювати екземпляр класу для виклику основного методу. Отже, рішення — добре розібратися зі «статиками», зрозуміти їхню сутність. 
+<h2>Проблема: спроба перевинайти колесо, розробляючи вже існуючі бібліотеки та інструменти</h2><strong>Рішення. </strong>Насправді це не така вже й проблема. Для новачка це більше схоже на корисну вправу. Тим не менш, якщо ви хочете зосередитися на результаті, наприклад, створити зручну базу даних абонентів, то пошук абонента в телефонній книзі для вас – лише один із результатів роботи вашої програми. У такому разі не варто писати алгоритм бінарного пошуку. Скористайтеся вже існуючим (запевняємо, хтось уже написав його до вас і у стандартних бібліотеках є). Отже, вивчайте стандартні бібліотеки Java в документації Oracle. Вчіться гуглити, звикайте читати Stack Overflow і ставте питання на <a href="https://codegym.cc/help" target="_blank">help CodeGym</a> ! …Зрозуміло, це далеко не всі проблеми новачків. Опишіть свої коментарі! <em><strong>Вам цікаво читати статті, пов'язані з Java? Вступайте до групи</strong></em> <a href="https://codegym.cc/groups/java-developer" target="_blank"><em><strong>Java Develope</strong></em> r</a>. <em><strong>Тут багато цікавого.</strong></em>
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Що ще почитати:</th>
+   </tr>
+   <tr>
+    <td>
+     <p><a href="https://codegym.cc/groups/posts/274-open-source-proektih-chto-ehto-takoe-i-pochemu-vih-dolzhnih-statjh-chastjhju-open-source-soobjsh" target="_blank">Open source проекти: що це таке і чому ви повинні стати частиною open source спільноти</a></p>
+     <p><a href="https://codegym.cc/groups/posts/244-vopros-otvet-kak-v-java-praviljhno-konvertirovatjh-string-v-int--" target="_blank">Питання-відповідь: як у Java правильно конвертувати String в int?</a></p>
+     <p><a href="https://codegym.cc/groups/posts/258-stoit-li-uchitjh-java-v-2017-godu-otvechaet-kodi-veber-" target="_blank">Чи варто навчати Java у 2017 році? Відповідає Коді Вебер</a></p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>

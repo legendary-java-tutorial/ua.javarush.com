@@ -1,0 +1,436 @@
+Частина 2. Структура СУБД, таблиці та типи даних
+<p>----------------------------------------</p>
+Ми продовжуємо створювати наш простенький емулятор біржі. Ось що ми зробимо: Ці дві частини вийшли більш об'ємними, оскільки нам необхідно ознайомитися з основами SQL та організацією СУБД зсередини та навести аналогії з Java. Щоб не втомлюв
+<p>----------------------------------------</p>
+<em><strong><a href="https://codegym.cc/groups/posts/1952-vvedenie-v-sql" target="_blank">Перша частина</a></strong></em>
+<div class="row justify-content-center jr-image-wrap">
+ <div class="col-12 col-sm-10 col-md-8">
+  <img data-id="d116f10d-8657-474a-87f7-abf56ed59e70" data-max-width="710" alt="Частина 2. Структура СУБД, таблиці та типи даних - 1" src="https://cdn.javarush.com/images/article/d116f10d-8657-474a-87f7-abf56ed59e70/512.jpeg" style="width: 710px;">
+ </div>
+</div>Ми продовжуємо створювати наш простенький емулятор біржі. Ось що ми зробимо: 
+<ul>
+ <li>Створимо схему організації бази даних.</li>
+ <li>Розпишемо що, як і де зберігається.</li>
+ <li>Дізнаємось, як дані пов'язані один з одним.</li>
+ <li>Почнемо вивчати основи SQL з прикладу команди створення таблиці SQL <strong>CREATE TABLE</strong> , Data Definition Language ( <strong>DDL</strong> ) мови SQL.</li>
+ <li>Продовжимо писати Java-програму. Основні функції СУБД у частині java.sql по створенню нашої бази даних реалізуємо програмно, використовуючи JDBC та триланкову (3-tier) архітектуру.</li>
+</ul> Ці дві частини вийшли більш об'ємними, оскільки нам необхідно ознайомитися з основами SQL та організацією СУБД зсередини та навести аналогії з Java. Щоб не втомлювати листинг коду, в кінці наведені посилання на відповідний commit github-репозиторія з програмою. 
+<h2>Дизайн СУБД</h2>
+<h3>Опис програми</h3>Ви вже чули про те, що організація зберігання даних є невід'ємною частиною програмування. Нагадаю, мета нашої програми – найпростіша емуляція біржі: 
+<ul>
+ <li>Існують акції, вартість яких може змінюватись протягом торговельного дня за заданими правилами;</li>
+ <li>є трейдери із початковим капіталом;</li>
+ <li>трейдери можуть купувати та продавати акції, відповідно до свого алгоритму.</li>
+</ul> Біржа працює <strong>тиками</strong> – фіксованими періодами часу (у нашому випадку – 1 хв). Протягом тику може змінитися курс акції, далі відбутися купівля або продаж акцій трейдером. 
+<h3>Структура даних емуляції біржі</h3>Назвемо окремі сутності біржі моделями. Щоб уникнути помилок округлення, з фінансовими сумами працюватимемо через клас <code class=" language-none"><strong>BigDecimal</strong></code>(подробиці можна дізнатися за посиланням наприкінці статті). Розпишемо структуру кожної моделі докладніше: <strong>Акція:</strong>
+<div class="table-container">
+ <table>
+  <thead>
+   <tr>
+    <th>Атрибут</th>
+    <th>Тип</th>
+    <th>Опис</th>
+   </tr>
+  </thead>
+  <tbody>
+   <tr>
+    <td><code class=" language-none">name</code></td>
+    <td><em>Srting</em></td>
+    <td>Найменування</td>
+   </tr>
+   <tr>
+    <td><code class=" language-none">changeProbability</code></td>
+    <td><em>int</em></td>
+    <td>Імовірність зміни курсу у відсотках на кожному тику</td>
+   </tr>
+   <tr>
+    <td><code class=" language-none">startPrice</code></td>
+    <td><em>BigDecimal</em></td>
+    <td>Початкова вартість</td>
+   </tr>
+   <tr>
+    <td><code class=" language-none">delta</code></td>
+    <td><em>int</em></td>
+    <td>Максимальна величина у відсотках, на яку може змінитись поточна вартість</td>
+   </tr>
+  </tbody>
+ </table>
+</div><strong>Курс акції:</strong>
+<div class="table-container">
+ <table>
+  <thead>
+   <tr>
+    <th>Атрибут</th>
+    <th>Тип</th>
+    <th>Опис</th>
+   </tr>
+  </thead>
+  <tbody>
+   <tr>
+    <td><code class=" language-none">operDate</code></td>
+    <td><em>LocalDateTime</em></td>
+    <td>Час (тік) виставлення курсу</td>
+   </tr>
+   <tr>
+    <td><code class=" language-none">share</code></td>
+    <td><em>Акція</em></td>
+    <td>Посилання на акцію</td>
+   </tr>
+   <tr>
+    <td><code class=" language-none">rate</code></td>
+    <td><em>BigDecimal</em></td>
+    <td>Курс акції</td>
+   </tr>
+  </tbody>
+ </table>
+</div><strong>Трейдер:</strong>
+<div class="table-container">
+ <table>
+  <thead>
+   <tr>
+    <th>Атрибут</th>
+    <th>Тип</th>
+    <th>Опис</th>
+   </tr>
+  </thead>
+  <tbody>
+   <tr>
+    <td><code class=" language-none">name</code></td>
+    <td><em>String</em></td>
+    <td>Час (тік) виставлення курсу</td>
+   </tr>
+   <tr>
+    <td><code class=" language-none">sfreqTick</code></td>
+    <td><em>int</em></td>
+    <td>Частота здійснення операцій. Задана періодом, в тиках, через який трейдер здійснює операції</td>
+   </tr>
+   <tr>
+    <td><code class=" language-none">cash</code></td>
+    <td><em>BigDecimal</em></td>
+    <td>Сума грошей, крім акцій</td>
+   </tr>
+   <tr>
+    <td><code class=" language-none">traidingMethod</code></td>
+    <td><em>int</em></td>
+    <td>Алгоритм, що використовується трейдером. Задамо його числом-константою, реалізація алгоритму буде (у наступних частинах) Java-код</td>
+   </tr>
+   <tr>
+    <td><code class=" language-none">changeProbability</code></td>
+    <td><em>int</em></td>
+    <td>Ймовірність виконання операції у відсотках</td>
+   </tr>
+   <tr>
+    <td><code class=" language-none">about</code></td>
+    <td><em>String</em></td>
+    <td>Імовірність зміни курсу, у відсотках, на кожному тику</td>
+   </tr>
+  </tbody>
+ </table>
+</div><strong>Дії трейдерів:</strong>
+<div class="table-container">
+ <table>
+  <thead>
+   <tr>
+    <th>Атрибут</th>
+    <th>Тип</th>
+    <th>Опис</th>
+   </tr>
+  </thead>
+  <tbody>
+   <tr>
+    <td><code class=" language-none">operation</code></td>
+    <td><em>int</em></td>
+    <td>Тип операції (купівля чи продаж)</td>
+   </tr>
+   <tr>
+    <td><code class=" language-none">traider</code></td>
+    <td><em>Трейдер</em></td>
+    <td>Посилання на трейдера</td>
+   </tr>
+   <tr>
+    <td><code class=" language-none">shareRate</code></td>
+    <td><em>Курс акції</em></td>
+    <td>Посилання на курс акції (відповідно на саму акцію, її курс та час його виставлення)</td>
+   </tr>
+   <tr>
+    <td><code class=" language-none">amount</code></td>
+    <td><em>Long</em></td>
+    <td>Кількість акцій, що беруть участь в операції</td>
+   </tr>
+  </tbody>
+ </table>
+</div> Для забезпечення унікальності кожної моделі додамо атрибут <code class=" language-none">id</code>типу <strong>long</strong> . Цей атрибут буде <em><strong>унікальним</strong></em> у межах екземплярів моделі і однозначно його визначатиме. Атрибути, які посилаються інші моделі (трейдер, акція, курс акції), можуть використовувати цей <code class=" language-none">id</code>для однозначного визначення відповідної моделі. Відразу спадає на думку, що ми могли б використовувати <code class=" language-none">Map&lt;Long, Object&gt;</code> для зберігання подібних даних, де <code class=" language-none">Object</code>– відповідна модель. Однак спробуйте реалізувати це в коді за таких умов: 
+<ul>
+ <li>обсяг даних значно перевищує обсяг доступної оперативної пам'яті;</li>
+ <li>доступ до даних передбачається із десятка різних місць;</li>
+ <li>необхідна можливість одночасного модифікування та читання даних;</li>
+ <li>необхідно забезпечити правила формування та цілісності даних;</li>
+</ul> …і ви зіткнетеся із завданнями, що вимагають належної кваліфікації та часу на реалізацію. Не варто винаходити велосипед. Багато чого вже продумано та написано за нас. Тож ми будемо використовувати те, що вже перевірено роками. 
+<h3>Зберігання даних у Java</h3>Розглянемо акцію. У Java ми створабо для цієї моделі певний клас <code class=" language-none">Share</code>з полями <code class=" language-none">name</code>, <code class=" language-none">changeProbability</code>, <code class=" language-none">startPrice</code>, <code class=" language-none">delta</code>. А безліч акцій зберігали як <code class=" language-none"><strong>Map&lt;Long, Share&gt;</strong></code>, де ключем є унікальний ідентифікатор кожної акції. 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="token class-name"><span class="token class-name">Share</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+    <span class="token keyword"><span class="token keyword">private</span></span> <span class="token class-name"><span class="token class-name">String</span></span> name<span class="token punctuation"><span class="token punctuation">;</span></span>
+    <span class="token keyword"><span class="token keyword">private</span></span> <span class="token class-name"><span class="token class-name">BigDecimal</span></span> startPrice<span class="token punctuation"><span class="token punctuation">;</span></span>
+    <span class="token keyword"><span class="token keyword">private</span></span> <span class="token keyword"><span class="token keyword">int</span></span> changeProbability<span class="token punctuation"><span class="token punctuation">;</span></span>
+    <span class="token keyword"><span class="token keyword">private</span></span> <span class="token keyword"><span class="token keyword">int</span></span> delta<span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token class-name"><span class="token class-name">Map</span></span><span class="token generics"><span class="token punctuation"></span><span class="token generics"><span class="token punctuation"><span class="token punctuation">&lt;</span></span><span class="token class-name"><span class="token class-name">Long</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token class-name"><span class="token class-name">Share</span></span><span class="token punctuation"><span class="token punctuation">&gt;</span></span></span><span class="token punctuation"></span></span> shares <span class="token operator"><span class="token operator">=</span></span> <span class="token keyword"><span class="token keyword">new</span></span> <span class="token class-name"><span class="token class-name">HashMap</span></span><span class="token generics"><span class="token punctuation"></span><span class="token generics"><span class="token punctuation"><span class="token punctuation">&lt;</span></span><span class="token punctuation"><span class="token punctuation">&gt;</span></span></span><span class="token punctuation"></span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+shares<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">put</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token number"><span class="token number">1L</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token keyword"><span class="token keyword">new</span></span> <span class="token class-name"><span class="token class-name">Share</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"ibm"</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token class-name"><span class="token class-name">BigDecimal</span></span><span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">valueOf</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token number"><span class="token number">20.0</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">15</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">10</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+shares<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">put</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token number"><span class="token number">2L</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token keyword"><span class="token keyword">new</span></span> <span class="token class-name"><span class="token class-name">Share</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"apple"</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token class-name"><span class="token class-name">BigDecimal</span></span><span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">valueOf</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token number"><span class="token number">14.0</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">25</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">15</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+shares<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">put</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token number"><span class="token number">3L</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token keyword"><span class="token keyword">new</span></span> <span class="token class-name"><span class="token class-name">Share</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"google"</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token class-name"><span class="token class-name">BigDecimal</span></span><span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">valueOf</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token number"><span class="token number">12.0</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">20</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">8</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token punctuation"><span class="token punctuation">.</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>
+shares<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">put</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token number"><span class="token number">50L</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token keyword"><span class="token keyword">new</span></span> <span class="token class-name"><span class="token class-name">Share</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"microsoft"</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token class-name"><span class="token class-name">BigDecimal</span></span><span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">valueOf</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token number"><span class="token number">17.5</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">,</span></span> <span class="token number"><span class="token number">10</span></span><span class="token punctuation"><span class="token punctuation">,</span></span><span class="token number"><span class="token number">4</span></span> <span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span></code></pre> Для доступу до потрібної акції з ідентифікатора застосовуємо метод <code class=" language-none">shares.get(id)</code>. Для завдання знаходження на ім'я акції або ціні, ми б перебирали в циклі всі записи в пошуках потрібної і так далі. Але ми підемо іншим шляхом, і зберігатимемо значення в СУБД. 
+<h3>Зберігання даних у СУБД</h3>Сформулюємо початкове зведення правил зберігання даних для СУБД: 
+<ul>
+ <li>Дані в СУБД організовані таблиці ( <strong>TABLE</strong> ), що становлять набір записів.</li>
+ <li>Усі записи мають однакові набори полів. Вони задаються під час створення таблиці.</li>
+ <li>Для поля можна встановити значення за замовчуванням ( <strong>DEFAULT</strong> ).</li>
+ <li>Для таблиці можна виставити обмеження ( <strong>CONSTRAINT</strong> ), що описують вимоги до її даних, щоб забезпечити їх цілісність. Це можна зробити на етапі створення таблиці ( <strong>CREATE TABLE</strong> ) або додати пізніше ( <strong>ALTER TABLE … ADD CONSTRAINT</strong> ).</li>
+ <li>Найбільш поширені <strong>CONSTRAINT</strong> : 
+  <ul>
+   <li>Первинний ключ PRIMARY (Id у нашому випадку).</li>
+   <li>Унікальне значення є поле <strong>UNIQUE</strong> (VIN для таблиці автотранспорту).</li>
+   <li>Перевірка поля <strong>CHECK</strong> (значення відсотків не може перевищувати 100). Одне з приватних обмежень на полі – <strong>NOT NULL</strong> або <strong>NULL</strong> , що забороняє/дозволяє зберігати NULL у полі таблиці.</li>
+   <li>Посилання на сторонню таблицю <strong>FOREIGN KEY</strong> (посилання на акцію у таблиці курсів акцій).</li>
+   <li>Індекс <strong>INDEX</strong> (індексування поля для прискорення пошуку значень щодо нього).</li>
+   <li>Виконання модифікації запису ( <strong>INSERT</strong> , <strong>UPDATE</strong> ) не відбудеться, якщо значення її полів суперечать обмеженням (CONSTRAINT).</li>
+  </ul></li>
+ <li>Кожна таблиця може мати ключове поле (або кілька), за якою можна однозначно визначити запис. Таке поле (або поля, якщо вони формують складовий ключ) утворює первинний ключ таблиці – <strong>PRIMARY KEY</strong> . 
+  <ul>
+   <li>Первинний ключ забезпечує унікальність запису таблиці, у ньому створюється індекс, що дає швидкий доступ за значенням ключа до всієї записи.</li>
+   <li>Наявність первинного ключа значно полегшує створення посилань між таблицями. Далі ми будемо використовувати штучний первинний ключ: для першого запису <code class=" language-none">id = 1</code>кожен наступний запис буде вставлятися в таблицю зі збільшеним на одиницю значенням id. Такий ключ часто називають <em>AutoIncrement</em> або <em>AutoIdentity</em> .</li>
+  </ul></li>
+</ul> Власне, таблиця акцій: <img data-id="ac0a412f-89bb-452d-83f7-cf347519f086" data-max-width="850" alt="Частина 2. Структура СУБД, таблиці та типи даних - 2" src="https://cdn.javarush.com/images/article/ac0a412f-89bb-452d-83f7-cf347519f086/800.jpeg" style="width: 850px;"> Чи можна в такому разі використовувати як ключ ім'я акції? За великим рахунком - так, тільки ось є можливість, що якась компанія випускає різні акції і називає їх тільки своєю назвою. У такому разі, унікальності вже не буде. Насправді штучний первинний ключ використовують досить часто. Погодьтеся, використання ПІБ як унікальний ключ у таблиці, що містить записи по людях, не забезпечить унікальності. Як і використання комбінації ПІБ та дати народження. 
+<h2>Типи даних у СУБД</h2>Як і в будь-якій іншій мові програмування SQL існує типізація даних. Наведемо найпоширеніші типи даних SQL: <strong>Цілі типи</strong>
+<div class="table-container">
+ <tboby>
+ </tboby>
+ <table>
+  <thead>
+   <tr>
+    <th>SQL-тип</th>
+    <th>SQL-синоніми</th>
+    <th>Відповідність у Java</th>
+    <th>Опис</th>
+   </tr>
+  </thead>
+  <tbody>
+   <tr>
+    <td>INT</td>
+    <td>INT4, INTEGER</td>
+    <td>java.lang.Integer</td>
+    <td>4-байтове ціле, -2147483648 … 2147483647</td>
+   </tr>
+   <tr>
+    <td>BOOLEAN</td>
+    <td>BOOL, BIT</td>
+    <td>java.lang.Boolean</td>
+    <td>True, False</td>
+   </tr>
+   <tr>
+    <td>TINYINT</td>
+    <td></td>
+    <td>java.lang.Byte</td>
+    <td>1-байтове ціле, -128 … 127</td>
+   </tr>
+   <tr>
+    <td>SMALLINT</td>
+    <td>INT2</td>
+    <td>java.lang.Short</td>
+    <td>2-байтове ціле, -32768 … 32767</td>
+   </tr>
+   <tr>
+    <td>BIGINT</td>
+    <td>INT8</td>
+    <td>java.lang.Long</td>
+    <td>8-байтове ціле, -9223372036854775808 … 9223372036854775807</td>
+   </tr>
+   <tr>
+    <td>AUTO_INCREMENT</td>
+    <td>INCREMENT</td>
+    <td>java.lang.Long</td>
+    <td>Інкрементальний лічильник, унікальний для таблиці. Якщо в неї вставляють нове значення, він збільшується на одиницю. Сгенеровані значення ніколи не повторюються.</td>
+   </tr>
+  </tbody>
+ </table>
+</div><strong>Речові</strong>
+<div class="table-container">
+ <table>
+  <thead>
+   <tr>
+    <th>SQL-тип</th>
+    <th>SQL-синоніми</th>
+    <th>Відповідність у Java</th>
+    <th>Опис</th>
+   </tr>
+  </thead>
+  <tbody>
+   <tr>
+    <td>DECIMAL(N,M)</td>
+    <td>DEC, NUMBER</td>
+    <td>java.math.BigDecimal</td>
+    <td>Десятковий дріб з фіксованою точністю (N цифр цілої частини та M — дробовий). В основному призначені для роботи із фінансовими даними.</td>
+   </tr>
+   <tr>
+    <td>DOUBLE</td>
+    <td>FLOAT8</td>
+    <td>java.lang.Double</td>
+    <td>Речова кількість подвійний точності (8 байт).</td>
+   </tr>
+   <tr>
+    <td>REAL</td>
+    <td>FLOAT4</td>
+    <td>java.lang.Real</td>
+    <td>Речова кількість одинарної точності (4 байти).</td>
+   </tr>
+  </tbody>
+ </table>
+</div><strong>Рядкові</strong>
+<div class="table-container">
+ <table>
+  <thead>
+   <tr>
+    <th>SQL-тип</th>
+    <th>SQL-синоніми</th>
+    <th>Відповідність у Java</th>
+    <th>Опис</th>
+   </tr>
+  </thead>
+  <tbody>
+   <tr>
+    <td>VARCHAR(N)</td>
+    <td>NVARCHAR</td>
+    <td>java.lang.String</td>
+    <td>Рядок у форматі UNICODE довжини N. Довжина обмежена значенням 2147483647 Повністю завантажує вміст рядка в пам'ять.</td>
+   </tr>
+  </tbody>
+ </table>
+</div><strong>дата та час</strong>
+<div class="table-container">
+ <table>
+  <thead>
+   <tr>
+    <th>SQL-тип</th>
+    <th>SQL-синоніми</th>
+    <th>Відповідність у Java</th>
+    <th>Опис</th>
+   </tr>
+  </thead>
+  <tbody>
+   <tr>
+    <td>TIME</td>
+    <td></td>
+    <td>java.time.LocalTime, java.sql.Time</td>
+    <td>Зберігання часу (до наносекунд), при конвертації в DATETIME, як дата виставляється 1 січня 1970 року.</td>
+   </tr>
+   <tr>
+    <td>DATE</td>
+    <td></td>
+    <td>java.time.LocalDate, java.sql.Timestamp</td>
+    <td>Зберігання дат у форматі yyyy-mm-dd, час виставляється як 00:00</td>
+   </tr>
+   <tr>
+    <td>DATETIME</td>
+    <td>TIMESTAMP</td>
+    <td>java.time.LocalDateTime, java.sql.Timestamp</td>
+    <td>Зберігання дати + часу (без урахування тимчасових зон).</td>
+   </tr>
+  </tbody>
+ </table>
+</div><strong>Зберігання великих обсягів даних</strong>
+<div class="table-container">
+ <table>
+  <thead>
+   <tr>
+    <th>SQL-тип</th>
+    <th>Відповідність у Java</th>
+    <th>Опис</th>
+   </tr>
+  </thead>
+  <tbody>
+   <tr>
+    <td>BLOB</td>
+    <td>java.io.InputStream, java.sql.Blob</td>
+    <td>Зберігання двійкових даних (малюнок, файлів...).</td>
+   </tr>
+   <tr>
+    <td>CLOB</td>
+    <td>java.io.Reader, java.sql.Clob</td>
+    <td>Зберігання великих текстових даних (книг, статей...), на відміну від VARCHAR, завантажує дані в пам'ять порціями.</td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<h3>Стиль написання коду в SQL</h3>Для багатьох мов існують рекомендації щодо оформлення коду. Зазвичай такі документи містять правила іменування змінних, констант, методів та інших мовних структур. Так, для Python існує PEP8, для <em>Java – Oracle Code Conventions for Java</em> . Для SQL створено кілька різних склепінь, які дещо відрізняються один від одного. Незважаючи на це, слід виробити звичку дотримуватися правил оформлення коду, особливо якщо ви працюєте в команді. Правила можуть бути, наприклад, наступними (зрозуміло, ви можете розробити для себе інший набір правил, головне дотримуйтесь їх надалі): 
+<ul>
+ <li>Ключові та зарезервовані слова, у тому числі команди та оператори, потрібно писати великими літерами: CREATE TABLE, CONSTRAINT…</li>
+ <li>Імена таблиць, полів та інших об'єктів не повинні збігатися з ключовими словами мови SQL (див. посилання наприкінці статті), але можуть містити їх у собі.</li>
+ <li>Імена таблиць мають відображати їх призначення. Вони записуються малими літерами. Слова у найменуванні відокремлені одне від одного підкресленнями. Слово в кінці має бути у <strong>множині</strong> : traiders (трейдери), share_rates (курс акцій).</li>
+ <li>Імена полів таблиць повинні відображати їхнє призначення. Їх потрібно записувати малими літерами, слова в найменуванні потрібно оформляти в стилі <em>Camel Case</em> , а слово в кінці потрібно використовувати в <strong>однині</strong> : name (найменування), share_rates (курс акцій).</li>
+ <li>Поля штучних ключів повинні мати слово id.</li>
+ <li>Імена CONSTRAINT повинні відповідати правилам іменування таблиць. Також вони повинні включати поля і таблиці, що беруть участь у них, починатися зі змістового префікса: check_ (перевірка значення поля), pk_ (первинний ключ), fk_ (зовнішній ключ), uniq_ (унікальність поля), idx_ (індекс). Приклад: pk_traider_share_actions_id (первинний ключ з поля id для таблиці traider_share_actions).</li>
+ <li>І так далі, в міру вивчення SQL перелік правил буде поповнюватися/змінюватися.</li>
+</ul>
+<h3>Проектування СУБД</h3>Безпосередньо перед створенням СУБД її необхідно спроектувати. Кінцева схема містить таблиці, набір полів, CONSTRAINT, ключі, умови за промовчанням для полів, зв'язок між таблицями та інші сутності БД. В інтернеті можна знайти багато безкоштовних online/offline дизайнерів для проектування невеликих СУБД. Спробуйте вбити в пошукову систему щось на кшталт “Database designer free”. Такі додатки мають корисні додаткові властивості: 
+<ul>
+ <li>Вміють генерувати SQL-команди до створення СУБД.</li>
+ <li>Візуально відображаються параметри на діаграмі.</li>
+ <li>Дозволяють переміщати таблиці для кращої візуалізації.</li>
+ <li>Показують на діаграмі ключі, індекси, зв'язки, значення за промовчанням тощо.</li>
+ <li>Можуть віддалено зберігати схему СУБД.</li>
+</ul> Наприклад, <a href="https://dbdiffo.com/" rel="nofollow" target="_blank">dbdiffo.com</a> виділяє ключі, показує міткою NN непусті поля та AI(AutoIncrement) – лічильники: 
+<div class="row justify-content-center jr-image-wrap">
+ <div class="col-12 col-sm-10 col-md-8">
+  <img data-id="0cc9f541-5e0b-41e6-8ff4-0041c338631d" data-max-width="600" alt="Частина 2. Структура СУБД, таблиці та типи даних - 3" src="https://cdn.javarush.com/images/article/0cc9f541-5e0b-41e6-8ff4-0041c338631d/512.jpeg" style="width: 600px;">
+ </div>
+</div>
+<h3>Створення таблиць у СУБД</h3>Отже, ми маємо схему. Тепер перейдемо безпосередньо до створення таблиць (CREATE TABLE). Для цього нам бажано мати попередні дані: 
+<ul>
+ <li>ім'я таблиці</li>
+ <li>імена та тип полів</li>
+ <li>обмеження (CONSTRAINTS) на поля</li>
+ <li>значення за промовчанням для полів (за наявності)</li>
+ <li>первинний ключ (PRIMARY KEY) за наявності</li>
+ <li>зв'язок між таблицями (FOREIGN KEY)</li>
+</ul> Не будемо вивчати детально всі опції команди CREATE TABLE, розглянемо основи SQL на прикладі створення таблиці для трейдерів: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java">CREATE <span class="token class-name"><span class="token class-name">TABLE</span></span> <span class="token function"><span class="token function">traiders</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>
+	id BIGINT AUTO_INCREMENT <span class="token class-name"><span class="token class-name">PRIMARY</span></span> KEY<span class="token punctuation"><span class="token punctuation">,</span></span>
+	name <span class="token function"><span class="token function">VARCHAR</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token number"><span class="token number">255</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token class-name"><span class="token class-name">NOT</span></span> NULL<span class="token punctuation"><span class="token punctuation">,</span></span>
+	freqTiсk INTEGER <span class="token class-name"><span class="token class-name">NOT</span></span> NULL<span class="token punctuation"><span class="token punctuation">,</span></span>
+	cash  <span class="token function"><span class="token function">DECIMAL</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token number"><span class="token number">15</span></span><span class="token punctuation"><span class="token punctuation">,</span></span><span class="token number"><span class="token number">2</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> NOT NULL <span class="token class-name"><span class="token class-name">DEFAULT</span></span> <span class="token number"><span class="token number">1000</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+	tradingMethod INTEGER <span class="token class-name"><span class="token class-name">NOT</span></span> NULL<span class="token punctuation"><span class="token punctuation">,</span></span>
+	changeProbability INTEGER NOT NULL <span class="token class-name"><span class="token class-name">DEFAULT</span></span> <span class="token number"><span class="token number">50</span></span><span class="token punctuation"><span class="token punctuation">,</span></span>
+	about <span class="token function"><span class="token function">VARCHAR</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token number"><span class="token number">255</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> NULL
+<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+ALTER TABLE traiders ADD CONSTRAINT check_traiders_tradingMethod
+	<span class="token function"><span class="token function">CHECK</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>tradingMethod IN <span class="token punctuation"><span class="token punctuation">(</span></span><span class="token number"><span class="token number">1</span></span><span class="token punctuation"><span class="token punctuation">,</span></span><span class="token number"><span class="token number">2</span></span><span class="token punctuation"><span class="token punctuation">,</span></span><span class="token number"><span class="token number">3</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+ALTER TABLE traiders ADD CONSTRAINT check_traiders_changeProbability
+	<span class="token function"><span class="token function">CHECK</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>changeProbability <span class="token operator"><span class="token operator">&lt;=</span></span> <span class="token number"><span class="token number">100</span></span> AND changeProbability <span class="token operator"><span class="token operator">&gt;</span></span> <span class="token number"><span class="token number">0</span></span><span class="token punctuation"><span class="token punctuation">)</span></span></code></pre> Розберемо докладніше: 
+<ul>
+ <li><code class=" language-none"><strong>CREATE TABLE traiders</strong></code>(опис полів) — створення таблиці із зазначеним ім'ям, в описі поля розділяються комою. Будь-яка команда завершується крапкою з комою.</li>
+ <li>Опис поля починається з його імені, далі слідує тип, CONSTRAINT і значення за замовчуванням.</li>
+ <li><code class=" language-none"><strong>id BIGINT AUTO_INCREMENT PRIMARY KEY</strong></code>– поле id цілого типу – це первинний ключ та інкрементний лічильник (для кожного нового запису для поля id генеруватиметься значення на одиницю більше раніше створеного для цієї таблиці).</li>
+ <li><code class=" language-none"><strong>cash DECIMAL(15,2) NOT NULL DEFAULT 1000</strong></code>– поле cash, десятковий дріб, 15 цифрами до коми та дві після (фінансові дані, наприклад, долари та центи). Не може приймати значення NULL. Якщо значення не встановлено, воно отримає значення 1000.</li>
+ <li><code class=" language-none"><strong>about VARCHAR(255) NULL</strong></code>– поле about, рядок до 255 символів завдовжки, може набувати порожніх значень.</li>
+</ul> Зауважимо, що частину <strong>CONSTRAINT</strong> -умов ми можемо поставити після створення таблиці. Розглянемо конструкцію для модифікації структури таблиці та її полів: <strong>ALTER TABLE ім'я_таблиці ADD CONSTRAINT ім'я_обмеження CHECK(умова)</strong> на прикладах: 
+<ul>
+ <li><code class=" language-none"><strong>CHECK(tradingMethod IN (1,2,3))</strong></code>– поле tradingMethod може набувати лише значення 1,2,3</li>
+ <li><code class=" language-none"><strong>CHECK(changeProbability &lt;= 100 AND changeProbability &gt; 0)</strong></code>– поле changeProbability може приймати цілі значення в діапазоні від 1 до 100</li>
+</ul>
+<h3>Зв'язки між таблицями</h3>Для аналізу опису зв'язків між таблицями подивимося створення share_rates: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java">CREATE <span class="token class-name"><span class="token class-name">TABLE</span></span> <span class="token function"><span class="token function">share_rates</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>
+	id BIGINT AUTO_INCREMENT <span class="token class-name"><span class="token class-name">PRIMARY</span></span> KEY<span class="token punctuation"><span class="token punctuation">,</span></span>
+	operDate datetime <span class="token class-name"><span class="token class-name">NOT</span></span> NULL<span class="token punctuation"><span class="token punctuation">,</span></span>
+	share BIGINT <span class="token class-name"><span class="token class-name">NOT</span></span> NULL<span class="token punctuation"><span class="token punctuation">,</span></span>
+	rate <span class="token function"><span class="token function">DECIMAL</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token number"><span class="token number">15</span></span><span class="token punctuation"><span class="token punctuation">,</span></span><span class="token number"><span class="token number">2</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token class-name"><span class="token class-name">NOT</span></span> NULL
+<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+ALTER TABLE share_rates ADD <span class="token class-name"><span class="token class-name">FOREIGN</span></span> KEY <span class="token punctuation"><span class="token punctuation">(</span></span>share<span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token class-name"><span class="token class-name">REFERENCES</span></span> <span class="token function"><span class="token function">shares</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>id<span class="token punctuation"><span class="token punctuation">)</span></span></code></pre>
+<div class="row justify-content-center jr-image-wrap">
+ <div class="col-12 col-sm-10 col-md-8">
+  <img data-id="bfc4b676-1342-4cc0-af1d-efa2ddf57354" data-max-width="600" alt="Частина 2. Структура СУБД, таблиці та типи даних - 4" src="https://cdn.javarush.com/images/article/bfc4b676-1342-4cc0-af1d-efa2ddf57354/512.jpeg" style="width: 600px;">
+ </div>
+</div> Посилання на значення іншої таблиці можна задати наступним чином: <code class=" language-none"><strong>ALTER TABLE</strong></code>таблиця_з_якою_посилаємося <code class=" language-none"><strong>ADD FOREIGN KEY</strong></code>(поле_яке_посилається) <code class=" language-none"><strong>REFERENCES</strong></code>таблиця_на_яку_посилаємося(поле_на_яке_посилаємося) Нехай у <strong>shares</strong> ми маємо записи по акціях, наприклад, для id50 і 50 . шансом зміни 4%. Для таблиці <strong>share_rates</strong> ми отримуємо три основні властивості: 
+<ul>
+ <li>Нам достатньо зберігати в полі share тільки значення ключа id з таблиці shares, щоб по ньому отримати інформацію, що залишилася (назва і так далі) з таблиці акцій.</li>
+ <li>Ми не можемо створити курс для неіснуючої акції. Вставити в поле share неіснуюче значення (для якого немає запису в таблиці shares із цим id) не можна, тому що не буде відповідності між таблицями.</li>
+ <li>Ми не можемо видалити в shares запис акції, для якого задано курси в share_rates.</li>
+</ul>Останні два пункти служать для забезпечення цілісності даних, що зберігаються. Створення таблиць SQL нашої емуляції та приклади SQL запитів ви можете переглянути в реалізації Java методів відповідних класів за посиланням на github-репозиторій наприкінці статті. <em><strong><a href="https://codegym.cc/groups/posts/1971-chastjh-3-sozdaem-skelet-nashey-bazih-pervihe-sql-komandih-na-primerakh-javasql" target="_blank">Третя частина</a></strong></em>

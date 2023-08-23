@@ -1,0 +1,193 @@
+Початок роботи з Git: докладний гайд для новачків
+<p>----------------------------------------</p>
+Привіт тобі, майбутній Senior Software Engineer. Сьогодні поговоримо про систему контролю версій, а саме про Git (читається як ГІТ, а не ДЖІТ, як могло б здатися з граматики англійської мови). Так-так, я знаю, що є ще й Mercurial, SVN… Але 
+<p>----------------------------------------</p>
+<h2>Замість вступу</h2>Привіт тобі, майбутній Senior Software Engineer. <img data-max-width="800" data-id="a1d39060-a02e-4a92-9e18-1fe27245ef4f" class="img-fluid" alt="Початок роботи з Git: детальний гайд для новачків." src="https://cdn.javarush.com/images/article/a1d39060-a02e-4a92-9e18-1fe27245ef4f/800.jpeg" style="width: 800px;">Сьогодні поговоримо про систему контролю версій, а саме про Git (читається як ГІТ, а не ДЖІТ, як могло б здатися з граматики англійської мови). Так-так, я знаю, що є ще й Mercurial, SVN… Але будемо відвертими: їхній час уже минув, і витрачати ваш дорогоцінний час на них не збираюся. Щоб ви розуміли важливість знання гіта в наш час, скажу так: без знання/розуміння цього робити вам у програмуванні нічого. Але краса в тому, що для постійної роботи не потрібно пам'ятати всі команди та можливості. Потрібно знати набір команд, які допоможуть розуміти, що відбувається. 
+<h2>Основи Git</h2>Git це розподілена система контролю версій нашого коду. Для чого вона нам? Для розподілених команд потрібна система управління роботи. Потрібно, щоб відстежувати зміни, які відбуваються з часом. Тобто, крок за кроком ми бачимо, які файли змінабося і як. Особливо це важливо, коли аналізуєш, що було зроблено в рамках одного завдання: це дає можливість повертатись назад. Уявімо ситуацію: був працюючий код, все в ньому було добре, але ми вирішабо щось покращити, там підправити, там підправити. Все нічого, але таке покращення поламало половину функціоналу, унеможливило роботу. І що далі? Без Гіта треба було б годинами сидіти і згадувати, як усе було спочатку. А так ми просто відкочуємось на коміт назад — і все. Або що робити, якщо є два розробники, які роблять одночасно свої зміни у коді? Без Гіта це виглядає так: вони скопіювали код із оригіналу, зробабо що потрібно. Настає момент, і обидва хочуть додати свої зміни до головної папки. І що робити в цій ситуації?.. Я навіть не беруся оцінити час, щоб зробити цю роботу. Таких проблем зовсім не буде, якщо користуватися Гітом. 
+<h2>Установка Git</h2>Встановимо гіт на комп'ютер. Я розумію, що всі різні OS, тому постараюся описати для кількох випадків. 
+<h3>Установка для Windows</h3>Як завжди, потрібно завантажити exe файл і запустити його. Тут все просто: тиснемо на <a href="https://git-scm.com/downloads" rel="nofollow" target="_blank">перше посилання гугла</a> , встановлюємо і все. Для роботи будемо використовувати bash консоль, яку вони надають. Щоб працювати у віндоусі, потрібно запустити Git Bash. Ось як він виглядає в меню запуску: <img data-max-width="800" data-id="7f9c3203-5ae5-46fd-b500-42b3979c2eaf" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків." src="https://cdn.javarush.com/images/article/7f9c3203-5ae5-46fd-b500-42b3979c2eaf/800.jpeg" style="width: 800px;">І це вже консоль, в якій можна працювати. Щоб не переходити щоразу в папку з проектом, щоб там відкрити гіт, можна в папці правою кнопкою миші відкрити консоль із потрібним нам шляхом: <img data-max-width="1024" data-id="52ad1966-4e34-4e47-ba78-8ce1ff395d18" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків." src="https://cdn.javarush.com/images/article/52ad1966-4e34-4e47-ba78-8ce1ff395d18/1024.jpeg" style="width: 1024px;">
+<h3>Установка для Linux</h3>Зазвичай git вже встановлений і є в дистрибутивах лінуксу, тому що це інструмент, спочатку написаний для розробки лінуксу ядра. Але бувають ситуації, коли його нема. Щоб перевірити це, необхідно відкрити термінал і прописати: git --version. Якщо буде зрозуміла відповідь, нічого встановлювати не потрібно. Відкриваємо термінал та встановлюємо. Я працюю на Ubuntu, тому можу сказати, що писати для неї: sudo apt-get install git. І все: тепер у будь-якому терміналі можна користуватися гітом. 
+<h3>Встановлення на macOS</h3>Тут також спочатку потрібно перевірити, чи є вже гіт (дивися вище, як на лінуксі). Якщо все ж таки ні, найпростіший шлях — це завантажити <a href="https://sourceforge.net/projects/git-osx-installer/files/" rel="nofollow" target="_blank">звідси</a> останню версію. Якщо встановлений XCode, то гіт вже точно буде автоматично встановлений. 
+<h3>Налаштування гіта</h3>Гіта має налаштування користувача, від якого йтиме робота. Це розумна і необхідна річ, оскільки коли створюється комміт, гіт бере саме цю інформацію для поля Author. Щоб налаштувати ім'я користувача та пароль для всіх проектів, потрібно прописати такі команди: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git config --global user.name ”Ivan Ivanov”
+git config --global user.email ivan.ivanov@gmail.com</code></pre> Якщо є необхідність для конкретного проекту поміняти автора (для особистого проекту, наприклад), можна прибрати --global, і так вийде: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git config user.name ”Ivan Ivanov”
+git config user.email ivan.ivanov@gmail.com</code></pre>
+<h3>Трохи теорії…</h3>Щоб бути в темі, бажано додати до свого звернення кілька нових слів і дій… А то говорити нема про що. Звичайно це якийсь жаргон і калька з англійської, тому я додаватиму значення англійською. Які слова та дії? 
+<ul>
+ <li>гіт репозиторій (git repository);</li>
+ <li>коміт (commit);</li>
+ <li>гілка (branch);</li>
+ <li>смерджити (merge);</li>
+ <li>конфлікти (conflicts);</li>
+ <li>спулити (pull);</li>
+ <li>запушити (push);</li>
+ <li>як ігнорувати якісь файли (.gitignore)</li>
+</ul>І так далі. 
+<h3>Стану в Гіт</h3>У Гіта є кілька станів, які потрібно зрозуміти та запам'ятати: 
+<ul>
+ <li>невідслідковується (untracked);</li>
+ <li>змінене (modified);</li>
+ <li>підготовлений (staged);</li>
+ <li>закомічене (committed).</li>
+</ul>
+<h4>Як це розуміти?</h4>Це стани, в яких знаходяться файли нашого коду. Тобто їхній життєвий шлях зазвичай виглядає так: 
+<ol>
+ <li>Файл, який створений і не доданий до репозиторію, буде в змозі untracked.</li>
+ <li>Робимо зміни у файлух, які вже додані в гіт репозиторій – перебувають у стані modified.</li>
+ <li>З тих файлів, які ми змінабо, вибираємо тільки ті (або всі), які нам потрібні (наприклад, скомпільовані класи нам не потрібні), і ці класи зі змінами потрапляють у стан staged.</li>
+ <li>З заготовлених файлів зі стану staged створюється коміт і перетворюється на гіт репозиторій. Після цього staged стан – порожній. А ось modified ще може щось утримувати.</li>
+</ol>Виглядає це так (картиночка з офіційної доки, так що можна вірити)): <img data-max-width="800" data-id="6136c12e-46b4-4fda-820c-3287237c48ab" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків." src="https://cdn.javarush.com/images/article/6136c12e-46b4-4fda-820c-3287237c48ab/800.jpeg" style="width: 800px;">
+<h3>Що таке коміт</h3>Коміт - це основний об'єкт в управлінні контролю версій. Він містить усі зміни під час цього комміту. Комміти пов'язані між собою як однозв'язковий список. А саме: Є перший коміт. Коли створюється другий коміт, він (другий) знає, що йде після першого. І в такий спосіб можна відстежити інформацію. Також комміт має ще свою інформацію, так звані метадані: 
+<ul>
+ <li>унікальний ідентифікатор комміту, яким можна його знайти;</li>
+ <li>ім'я автора комміту, який створив його;</li>
+ <li>дата створення комміту;</li>
+ <li>коментар, який визначає, що було зроблено під час цього комміту.</li>
+</ul>Ось як це виглядає: <img data-max-width="512" data-id="f0a1025b-2f0c-4e65-b9bc-641db79a7704" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків." src="https://cdn.javarush.com/images/article/f0a1025b-2f0c-4e65-b9bc-641db79a7704/512.jpeg" style="width: 512px;">
+<h2>Що таке гілка</h2><img data-max-width="512" data-id="29945159-3a11-47a9-ae00-c762a4f5d6fb" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків." src="https://cdn.javarush.com/images/article/29945159-3a11-47a9-ae00-c762a4f5d6fb/512.jpeg" style="width: 512px;">Гілка – це покажчик якогось комміту. Так як коміт знає, який коміт був до нього, коли гілка вказує на якийсь коміт, до неї належать і всі попередні. Виходячи з цього можна сказати, що гілок, що вказують на той самий коміт, може бути скільки завгодно багато. Робота відбувається у гілках, тому коли створюється новий коміт, гілка переносить свій покажчик більш новий комміт. 
+<h2>Початок роботи з Гітом</h2>Можна працювати і лише з локальним репозиторієм, і з віддаленим. Для відпрацювання необхідних команд можна скористатися лише локальним репозиторієм. Він зберігає всю інформацію лише локально у проекті в папці .git. Якщо говорити про віддалений, то вся інформація зберігається десь на віддаленому сервері: локально зберігається лише копія проекту, зміни якої можна запустити (git push) у віддалений репозиторій. Тут і далі обговорюватимемо роботу з гітом у консолі. Звичайно, можна користуватися якимись графічними рішеннями (наприклад, Intellij IDEA), але спершу потрібно розібратися, які команди відбуваються і що вони означають. 
+<div class="email-subscription">
+ <iframe frameborder="0" src="https://secure.esputnik.com.ua/4Q0Ef6d2SOs" width="100%" height="200" scrolling="no" data-savepage-key="0-2"></iframe>
+</div>
+<h3>Робота з гітом у локальному репозиторії</h3>Далі я пропоную вам зробити всі ті кроки, які зробив я, коли читатимете статтю. Це покращить ваше розуміння та засвоєння матеріалу. Так що приємного апетиту:) Щоб створити локальний репозиторій, потрібно написати: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git init</code></pre><img data-max-width="800" data-id="5dbf6234-0ea6-40a8-9d37-ce14609d53b4" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків." src="https://cdn.javarush.com/images/article/5dbf6234-0ea6-40a8-9d37-ce14609d53b4/800.jpeg" style="width: 800px;">Після цього буде створено папку .git у тому місці, де знаходиться консоль. .git - це папка, яка зберігає всю інформацію про гіт репозиторії. Її видаляти не потрібно ;) Далі, додаються файли в цей проект, і їхній стан стає Untracked. Щоб подивитися, який статус роботи на даний момент пишемо: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git status</code></pre><img data-max-width="800" data-id="348071fa-ccab-4a0c-ae94-6f9f0e6fa671" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків." src="https://cdn.javarush.com/images/article/348071fa-ccab-4a0c-ae94-6f9f0e6fa671/800.jpeg" style="width: 800px;">Ми знаходимося в master гілці, і поки ми не перейдемо в іншу, то все й залишиться. Таким чином видно, які файли змінені, але ще не додані до стану staged. Щоб додати їх до стану staged, потрібно написати git add. Тут може бути кілька варіантів, наприклад: 
+<ul>
+ <li>git add -A - додати всі файли зі стану в staged;</li>
+ <li>git add. — додати всі файли з цієї папки та всі внутрішні. По суті те саме, що й попереднє;</li>
+ <li>git add &lt;ім'я файлу&gt; — додає лише конкретний файл. Тут можна скористатися регулярними виразами, щоб додавати за якимось шаблоном. Наприклад, git add *.java: це означає, що потрібно додати лише файли з розширенням java.</li>
+</ul>Зрозуміло, що перші два варіанти прості, а ось із додаванням буде цікавіше, тому пишемо: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git add *.txt</code></pre> Щоб перевірити статус, використовуємо вже відому нам команду: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git status</code></pre><img data-max-width="800" data-id="948c12dc-8227-48d0-8bd3-2ac9ed8be271" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків." src="https://cdn.javarush.com/images/article/948c12dc-8227-48d0-8bd3-2ac9ed8be271/800.jpeg" style="width: 800px;">Звідси видно, що регулярне вираз відпрацювало вірно, і тепер test_resource.txt знаходиться в стані staged. І, нарешті, останній етап (при локальному репозиторії, з віддаленим буде ще один); 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git commit -m “all txt files were added to the project”</code></pre><img data-max-width="800" data-id="5159fcca-3b1c-4308-b1e4-854c1d480385" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 10" src="https://cdn.javarush.com/images/article/5159fcca-3b1c-4308-b1e4-854c1d480385/800.jpeg" style="width: 800px;">Далі є чудова команда, щоб подивитися на історію коммітів у гілці. Скористаємося нею: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git log</code></pre><img data-max-width="800" data-id="b869b551-e804-4ac1-b199-6f16684be943" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 11" src="https://cdn.javarush.com/images/article/b869b551-e804-4ac1-b199-6f16684be943/800.jpeg" style="width: 800px;">Тут уже видно, що з'явився наш перший коміт із текстом, який ми передали. Дуже важливо зрозуміти, що текст, який ми передаємо, має максимально точно визначати те, що було зроблено за цей коміт. Це в майбутньому допомагатиме багато разів. Допитливий читач, який ще не заснув, може сказати: а що сталося із файлом GitTest.java? Зараз дізнаємося, використовуємо для цього: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git status</code></pre><img data-max-width="800" data-id="00e768e8-6568-42d8-9d03-437c71028b50" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 12" src="https://cdn.javarush.com/images/article/00e768e8-6568-42d8-9d03-437c71028b50/800.jpeg" style="width: 800px;">Як бачимо, він так і залишився в змозі untracked і чекає свого часу. А може, ми зовсім не хочемо його додавати в проект? Буває й таке. Далі, щоб стало цікавіше, спробуємо змінити текстовий файл test_resource.txt. Додамо туди якийсь текст і перевіримо стан: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git status</code></pre><img data-max-width="800" data-id="3abb8e35-ebfd-4480-b26e-fc8f19322b36" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 13" src="https://cdn.javarush.com/images/article/3abb8e35-ebfd-4480-b26e-fc8f19322b36/800.jpeg" style="width: 800px;">Тут добре видно різницю між двома станами — untracked і modified. GitTest.java знаходиться в стані untracked, а test_resource.txt знаходиться в modified. Тепер, коли вже є файли в стані modified, ми можемо подивитися на зміни, які були зроблені над ними. Зробити це можна за допомогою команди: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git diff</code></pre><img data-max-width="800" data-id="1f3506ae-1746-4ee9-b346-c992be73bb63" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 14" src="https://cdn.javarush.com/images/article/1f3506ae-1746-4ee9-b346-c992be73bb63/800.jpeg" style="width: 800px;">Тобто тут добре видно, що я додав до нашого текстового файлу hello world! Додаємо зміни в текстовому файлі та комітімо: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git add test_resource.txt
+git commit -m “added hello word! to test_resource.txt”</code></pre> Щоб подивитися на всі комміти, пишемо: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git log</code></pre><img data-max-width="800" data-id="12d64adf-c2ae-4d62-ab36-df174fdab5b8" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 15" src="https://cdn.javarush.com/images/article/12d64adf-c2ae-4d62-ab36-df174fdab5b8/800.jpeg" style="width: 800px;">Як бачимо, вже є два коміти. Так само додаємо і GitTest.java. Тепер без коментарів, просто команди: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git add GitTest.java
+git commit -m “added GitTest.java”
+git status</code></pre><img data-max-width="800" data-id="e5e89bbd-baa2-43cc-bace-cbb24e030c7a" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 16" src="https://cdn.javarush.com/images/article/e5e89bbd-baa2-43cc-bace-cbb24e030c7a/800.jpeg" style="width: 800px;">
+<h3>Робота з .gitignore</h3>Ясно, що ми хочемо зберігати лише вихідний код і нічого іншого у репозиторії. А що ще може бути? Як мінімум, скомпіловані класи та/або файли, які створюють середовища розробки. Щоб гіт їх ігнорував, є спеціальний файл, який потрібно створити. Робимо це: створюємо файл у корені проекту під назвою .gitignore, і в цьому файлі кожен рядок буде шаблоном для ігнорування. У цьому прикладі гіт ігнор виглядатиме так: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+```
+*.class
+target/
+*.iml
+.idea/
+```</code></pre> Дивимося тепер: 
+<ul>
+ <li>перший рядок – це ігнорування всіх файлів з розширенням .class;</li>
+ <li>другий рядок – це ігнорування папки target та всього, що вона містить;</li>
+ <li>третій рядок – це ігнорування всіх файлів з розширенням .iml;</li>
+ <li>четвертий рядок – це ігнорування папки .idea.</li>
+</ul>Спробуємо з прикладу. Щоб подивитися, як це працює, додамо скомпільований клас GitTest.class в проект і подивимося статус проекту: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git status</code></pre><img data-max-width="800" data-id="78f2e2ef-72df-41ed-9f16-6aeb16be9c92" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 17" src="https://cdn.javarush.com/images/article/78f2e2ef-72df-41ed-9f16-6aeb16be9c92/800.jpeg" style="width: 800px;">Ясно, що ми не хочемо випадково (якщо використовувати git add -A) додати скомпільований клас в проект. Для цього створюємо .gitignore файл і додаємо все, що описувалося раніше: <img data-max-width="1024" data-id="cb845a33-8843-4ee9-8842-545e11a8436b" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 18" src="https://cdn.javarush.com/images/article/cb845a33-8843-4ee9-8842-545e11a8436b/1024.jpeg" style="width: 1024px;">Тепер додамо новим комітом гіт ігнор у проект: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git add .gitignore
+git commit -m “added .gitignore file”</code></pre> І тепер момент істини: у нас є в untracked стані скомпільований клас GitTest.class, який ми не хотіли додавати в гіт репозиторій. Ось тут і повинен заробити гіт ігнор: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git status</code></pre><img data-max-width="800" data-id="d094337b-01dc-43a6-8326-c0ba309d0df7" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 19" src="https://cdn.javarush.com/images/article/d094337b-01dc-43a6-8326-c0ba309d0df7/800.jpeg" style="width: 800px;">Все чисто) Гіт ігнору +1) 
+<h3>Робота з гілками та іже з ним</h3>Зрозуміло, працювати в одній гілці незручно одному і неможливо, коли в команді більше однієї людини. І тому існує розгалуження. Як я вже казав, гілка – це просто рухливий покажчик на комміти. У цій частині розглянемо роботу в різних гілках: як смердити зміни однієї гілки в іншу, які можуть виникнути конфлікти та багато іншого. Щоб подивитися список усіх гілок у репозиторії та зрозуміти, на якій перебуваєш, потрібно написати: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git branch -a</code></pre><img data-max-width="800" data-id="3a5ccec8-3fe1-4b6c-b19f-2e66280f4fc6" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 20" src="https://cdn.javarush.com/images/article/3a5ccec8-3fe1-4b6c-b19f-2e66280f4fc6/800.jpeg" style="width: 800px;">Видно, що у нас тільки одна гілка master, і зірочка перед нею каже, що ми на ній. До речі, щоб дізнатися, на якій гілці ми знаходимося, можна скористатися і перевіркою статусу (git status). Далі є кілька варіантів створення гілок (може їх і більше, я використовую ці): 
+<ul>
+ <li>створити нову гілку на основі тієї, на якій перебуваємо (99% випадків);</li>
+ <li>створити гілку з урахуванням конкретного комміту (1%).</li>
+</ul>
+<h4>Створюємо гілку на основі конкретного комміту</h4>Спиратимемося на унікальний ідентифікатор коміту. Щоб знайти його, напишемо: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git log</code></pre><img data-max-width="800" data-id="6f312f65-a820-4faf-a218-686182020e32" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 21" src="https://cdn.javarush.com/images/article/6f312f65-a820-4faf-a218-686182020e32/800.jpeg" style="width: 800px;">Я виділив коміт із коментарем “added hello world…”. У нього унікальний ідентифікатор - "6c44e53d06228f888f2f454d3cb8c1c976dd73f8". Я хочу створити гілку development з цього комміту. Для цього напишу: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git checkout -b development 6c44e53d06228f888f2f454d3cb8c1c976dd73f8</code></pre> Створюється гілка, в якій будуть лише перші два коміти з гілки master. Щоб перевірити це, ми спершу переконаємося, що перейшли в іншу гілку і подивимося на кількість комітів: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git status
+git log</code></pre><img data-max-width="800" data-id="32e2010a-16e6-4342-a082-c5181a876dfd" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 22" src="https://cdn.javarush.com/images/article/32e2010a-16e6-4342-a082-c5181a876dfd/800.jpeg" style="width: 800px;">І справді: вийшло, що у нас два коміти. До речі, цікавий момент: у цій гілці ще немає файлу .gitignore, тому наш скомпільований файл (GitTest.class) тепер підсвічується в untracked стані. Тепер можемо ще раз провести ревізію наших гілок, написавши: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git branch -a</code></pre><img data-max-width="800" data-id="b0fa2136-26d5-4c09-867a-9faebdc3be8e" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 23" src="https://cdn.javarush.com/images/article/b0fa2136-26d5-4c09-867a-9faebdc3be8e/800.jpeg" style="width: 800px;">Видно, що є дві гілки – master та development – ​​і зараз стоїмо на development. 
+<h4>Створюємо гілку на основі поточної</h4>Другий спосіб створення гілки – створення на основі іншої. Я хочу створити гілку на основі master гілки, тому потрібно спершу перейти на неї, а вже наступним кроком створити нову. Дивимося: 
+<ul>
+ <li>git checkout master – переходимо на гілку master;</li>
+ <li>git status - перевіряємо, чи точно на майстрі.</li>
+</ul><img data-max-width="800" data-id="fc59d1e4-d887-4b07-add7-0a1ed53ede8b" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 24" src="https://cdn.javarush.com/images/article/fc59d1e4-d887-4b07-add7-0a1ed53ede8b/800.jpeg" style="width: 800px;">Ось тут видно, що ми перейшли на master гілку, тут вже працює гіт ігнор, і скомпільований клас уже не світиться як untracked. Тепер створюємо нову гілку на основі master гілки: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git checkout -b feature/update-txt-files</code></pre><img data-max-width="800" data-id="19d396fc-af1c-4d3f-8deb-2dbba09dfaf2" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 25" src="https://cdn.javarush.com/images/article/19d396fc-af1c-4d3f-8deb-2dbba09dfaf2/800.jpeg" style="width: 800px;">Якщо є сумніви, що ця гілка буде не такою самою, як і master, можна це легко перевірити, написавши git log і подивитися на всі комміти. Там їх має бути чотири. 
+<h3>Резолвім конфлікти</h3>Перш ніж розібратися з тим, що таке конфлікт, слід поговорити про злиття (смерджування) однієї гілки в іншу. Ось таким малюнком можна показати процес, коли одну гілку мерджають в іншу: <img data-max-width="512" data-id="5be87984-024c-43ab-be88-a3cdf3331692" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 26" src="https://cdn.javarush.com/images/article/5be87984-024c-43ab-be88-a3cdf3331692/512.jpeg" style="width: 512px;">Тобто є головна гілка. Від неї в якийсь момент створюють другорядну, в якій відбуваються зміни. Як тільки робота зроблена, потрібно злити одну гілку в іншу. Я не описуватиму різні особливості: я хочу донести в рамках цієї статті лише розуміння, а вже деталі дізнаєтеся самі, якщо буде потрібно. Так ось, на нашому прикладі ми створабо гілку feature/update-txt-files. Як написано в імені гілки – оновимо текст. <img data-max-width="800" data-id="47a002ed-bea0-4be5-b60c-f9c822c5c834" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 27" src="https://cdn.javarush.com/images/article/47a002ed-bea0-4be5-b60c-f9c822c5c834/800.jpeg" style="width: 800px;">Тепер потрібно створити під цю справу новий коміт: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git add *.txt 
+git commit -m “updated txt files”
+git log</code></pre><img data-max-width="800" data-id="99af1950-f2b6-4792-8fe7-4ad7442dd8fc" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 28" src="https://cdn.javarush.com/images/article/99af1950-f2b6-4792-8fe7-4ad7442dd8fc/800.jpeg" style="width: 800px;">Тепер, якщо ми хочемо смердити feature/update-txt-files гілку в master, потрібно перейти в master і написати git merge feature/update-txt-files: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git checkout master
+git merge feature/update-txt-files
+git log</code></pre><img data-max-width="800" data-id="96f5d6f1-3d22-4597-b85b-b8af900b2e35" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 29" src="https://cdn.javarush.com/images/article/96f5d6f1-3d22-4597-b85b-b8af900b2e35/800.jpeg" style="width: 800px;">Як результат – тепер і в майстер гілці є комміт, який був доданий у feature/update-txt-files. Ця функціональність додана, тому можна видалити фіче (feature) гілку. Для цього напишемо: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git branch -D feature/update-txt-files</code></pre> Поки що зрозуміло, так? Ускладнюємо ситуацію: тепер припустимо, що знову потрібно змінити файл txt. Але тепер ще й у майстрі цей файл буде змінено також. Тобто він паралельно змінюватиметься, і гіт не зможе зрозуміти що потрібно робити в ситуації, коли ми захочемо смердити в master гілку новий код. Поїхали! Створюємо нову гілку на основі master, робимо зміни до text_resource.txt і створюємо коміт під цю справу: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git checkout -b feature/add-header
+... делаем изменения в файле</code></pre><img data-max-width="800" data-id="0a9176d6-8054-4655-b90a-315e215aa56f" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 30" src="https://cdn.javarush.com/images/article/0a9176d6-8054-4655-b90a-315e215aa56f/800.jpeg" style="width: 800px;">
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git add *.txt
+git commit -m “added header to txt”</code></pre><img data-max-width="800" data-id="2635b663-7fd8-4d22-947b-df8c50777840" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 31" src="https://cdn.javarush.com/images/article/2635b663-7fd8-4d22-947b-df8c50777840/800.jpeg" style="width: 800px;">Переходимо на master гілку і також оновлюємо цей текстовий файл у тому ж рядку, що і фіче гілка: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git checkout master
+… обновабо test_resource.txt</code></pre><img data-max-width="800" data-id="ac84fa61-0381-48e0-bf5c-1dcf633b779f" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 32" src="https://cdn.javarush.com/images/article/ac84fa61-0381-48e0-bf5c-1dcf633b779f/800.jpeg" style="width: 800px;">
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git add test_resource.txt
+git commit -m “added master header to txt”</code></pre> І тепер найцікавіший момент: потрібно смердити зміни з feature/add-header гілки в master. Ми знаходимося в майстер гілці, тому потрібно тільки написати: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git merge feature/add-header</code></pre> Але ми отримаємо результат із конфліктом у файлі test_resource.txt: <img data-max-width="800" data-id="233f6738-b599-4f22-8552-2d39813d6dd8" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 33" src="https://cdn.javarush.com/images/article/233f6738-b599-4f22-8552-2d39813d6dd8/800.jpeg" style="width: 800px;">І тут ми можемо бачити, що гіт не зміг самостійно вирішити, як смерджити цей код і каже, що потрібно спочатку розрізнити конфлікт, а вже потім зробити коміт. Ок, відкриваємо в текстовому редакторі файл, у якому конфлікт, і бачимо: <img data-max-width="800" data-id="efa04c3b-e279-4f6f-8f05-c3d2318d8ff2" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 34" src="https://cdn.javarush.com/images/article/efa04c3b-e279-4f6f-8f05-c3d2318d8ff2/800.jpeg" style="width: 800px;">Щоб зрозуміти, що тут зробив гіт, потрібно згадати, що ми писали, і порівняти: 
+<ol>
+ <li>між “&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD” та “=======” знаходяться зміни майстер, які були в цьому рядку в майстер гілці.</li>
+ <li>між “=======” та “&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/add-header” знаходяться зміни, які були у feature/add-header гілці.</li>
+</ol>Таким чином гіт показує, що тут він не зміг зрозуміти, як злити воєдино цей файл, розділив цю ділянку на дві частини з різних гілок і запропонував вирішити нам самим. Добре, твердою волею вирішую прибрати все, залишити тільки слово header: <img data-max-width="800" data-id="c167e2b2-1cb1-4d19-862e-80ee06a7b6b4" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 35" src="https://cdn.javarush.com/images/article/c167e2b2-1cb1-4d19-862e-80ee06a7b6b4/800.jpeg" style="width: 800px;">Подивимося на статус змін, опис буде дещо іншим. Буде не modified стан, а Unmerged. Так що сміливо можна було додати п'ятий стан… Але я думаю, що це зайве, подивимося: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git status</code></pre><img data-max-width="800" data-id="4416b14b-0e87-4877-b098-702624219f04" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 36" src="https://cdn.javarush.com/images/article/4416b14b-0e87-4877-b098-702624219f04/800.jpeg" style="width: 800px;">Переконалися, що то інший випадок, незвичайний. Продовжуємо: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git add *.txt</code></pre><img data-max-width="800" data-id="99a41e85-fb52-429a-86c3-65ad32dd54aa" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 37" src="https://cdn.javarush.com/images/article/99a41e85-fb52-429a-86c3-65ad32dd54aa/800.jpeg" style="width: 800px;">В описі можна помітити, що пропонують написати лише git commit. Слухаємо та пишемо: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git commit</code></pre><img data-max-width="800" data-id="c07c9f20-993a-42ed-91d6-91fbf8f37646" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 38" src="https://cdn.javarush.com/images/article/c07c9f20-993a-42ed-91d6-91fbf8f37646/800.jpeg" style="width: 800px;">І все: у такий спосіб ми зробабо це — розрізнабо конфлікт у консолі. Звичайно, в середовищах розробки можна це зробити трохи простіше, наприклад, Intellij IDEA все налаштовано так добре, що можна виконувати всі необхідні дії в ній. Але середовище розробки робить багато чого під капотом, і ми часто не розуміємо, що саме там сталося. А коли немає розуміння, то можуть виникнути й проблеми. 
+<h2>Робота з віддаленими репозиторіями</h2>Останній крок – розібратися ще з кількома командами, які потрібні для роботи з віддаленим репозиторієм. Як я вже казав, віддалений репозиторій — це місце, де зберігається репозиторій і звідки можна його клонувати. Які бувають видалені репозиторії? Прикладів темрява: 
+<ul>
+ <li>
+  <p><a href="https://github.com/" rel="nofollow" target="_blank">GitHub</a> - це найбільше сховище для репозиторіїв та спільної розробки. Я вже описував його у попередніх статтях. <br>
+    Підписуйтесь на <a href="https://github.com/romankh3" rel="nofollow" target="_blank">мій аккаунт</a> . Я часто виставляю там свої напрацювання у тих сферах, які вивчаю під час роботи.</p></li>
+ <li>
+  <p><a href="https://about.gitlab.com/" rel="nofollow" target="_blank">GitLab</a> — веб-інструмент життєвого циклу <a href="https://ru.wikipedia.org/wiki/DevOps" rel="nofollow" target="_blank">DevOps</a> з <a href="https://ru.wikipedia.org/wiki/%D0%9E%D1%82%D0%BA%D1%80%D1%8B%D1%82%D0%BE%D0%B5_%D0%9F%D0%9E" rel="nofollow" target="_blank">відкритим вихідним кодом</a> , що представляє систему управління <a href="https://ru.wikipedia.org/wiki/%D0%A0%D0%B5%D0%BF%D0%BE%D0%B7%D0%B8%D1%82%D0%BE%D1%80%D0%B8%D0%B9" rel="nofollow" target="_blank">репозиторіями</a> коду для <a href="https://ru.wikipedia.org/wiki/Git" rel="nofollow" target="_blank">Git</a> з власної вікі, <a href="https://ru.wikipedia.org/wiki/%D0%A1%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0_%D0%BE%D1%82%D1%81%D0%BB%D0%B5%D0%B6%D0%B8%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F_%D0%BE%D1%88%D0%B8%D0%B1%D0%BE%D0%BA" rel="nofollow" target="_blank">системою відстеження помилок</a> , CI/CD пайплайн та іншими функціями. <br>
+    Після новини про те, що Microsoft купила GitHub, деякі розробники продублювали свої напрацювання у GitLab.</p></li>
+ <li>
+  <p>BitBucket — веб-сервіс для хостингу проектів та їхньої спільної розробки, заснований на системі контролю версій Mercurial та Git. У свій час мав велику перевагу перед GitHub у тому, що у нього були безкоштовні приватні репозиторії. Минулого року GitHub також відкрив цю можливість всім безкоштовно.</p></li>
+ <li>
+  <p>І так далі…</p></li>
+</ul>Перше, що потрібно зробити у роботі з віддаленим репозиторієм, — клонувати проект собі у локальний. Для цієї справи я експортував проект, який ми робабо локально, і тепер кожен може його клонувати, написавши: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">git clone <a href="https://github.com/romankh3/git-demo" rel="nofollow" target="_blank">https://github.com/romankh3/git-demo</a></code></pre> Наразі локально є повна копія проекту. Щоб бути впевненим, що локально знаходиться остання копія проекту, потрібно, як кажуть, спулити дані, написавши: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git pull</code></pre><img data-max-width="800" data-id="782b84b1-e001-4849-be0b-c319133afca0" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 39" src="https://cdn.javarush.com/images/article/782b84b1-e001-4849-be0b-c319133afca0/800.jpeg" style="width: 800px;">У нашому випадку зараз нічого не змінилося віддалено, тому й відповідь Already up to date. Але якщо я внесу якісь зміни у віддаленому репозиторії, локальний оновиться після того, як ми їх спулимо. І, нарешті, остання команда запустити дані на віддалений репозиторій. Коли ми локально щось зробабо і хочемо передати це на віддалений репозиторій, потрібно спочатку створити новий коміт локально. Для цього додамо в наш текстовий файл ще щось: <img data-max-width="800" data-id="5598fa4d-3058-4994-b17d-63c6b5710076" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 40" src="https://cdn.javarush.com/images/article/5598fa4d-3058-4994-b17d-63c6b5710076/800.jpeg" style="width: 800px;">Тепер вже звичайна для нас річ - створюємо коміт під цю справу: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git add test_resource.txt
+git commit -m “prepated txt for pushing”</code></pre> І тепер команда, щоб відправити це на віддалений репозиторій: 
+<pre class=" language-none" tabindex="0"><code class=" language-none">
+git push</code></pre><img data-max-width="800" data-id="46c49cfa-afb0-4b3a-b95f-7506a199a189" class="img-fluid" alt="Початок роботи з Git: докладний гайд для новачків - 41" src="https://cdn.javarush.com/images/article/46c49cfa-afb0-4b3a-b95f-7506a199a189/800.jpeg" style="width: 800px;">Ось і все, що я хотів розповісти. Дякую за увагу. Підписуйтесь на <a href="https://github.com/romankh3" rel="nofollow" target="_blank">мій обліковий запис на GitHub</a> , в якому я викладаю різні прикольні проекти-приклади з того, що я вивчаю та використовую на роботі. 
+<h2>Корисні посилання</h2>
+<ul>
+ <li>Офіційна <a href="https://bit.ly/3eUqoaa" rel="nofollow" target="_blank">дока на гіт, є російською</a> . Рекомендую як довідковий посібник.</li>
+ <li><a href="https://bit.ly/2SfBCMY" rel="nofollow" target="_blank">Git</a></li>
+</ul>

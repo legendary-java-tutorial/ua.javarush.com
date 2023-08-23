@@ -1,0 +1,88 @@
+Коментарі в Java: не все так просто
+<p>----------------------------------------</p>
+— здавалося б, що може бути простіше і чого тут цілу статтю писати. Але тут не так просто. Як казав мій начальник, код може писати кожен, а от хороший коментар написати складно. Більшість курсів з вивчення мови розпочинається з традиційного
+<p>----------------------------------------</p>
+<h2>Вступ</h2><strong>Коментарі</strong> — здавалося б, що може бути простіше і чого тут цілу статтю писати. Але тут не так просто. Як казав мій начальник, код може писати кожен, а от хороший коментар написати складно. <img data-max-width="800" data-id="c0dc40c9-4f7e-4dee-a67c-676dedab1375" alt="Коментарі в Java: не все так просто - 1" src="https://cdn.javarush.com/images/article/c0dc40c9-4f7e-4dee-a67c-676dedab1375/800.jpeg" style="width: 800px;">Більшість курсів з вивчення мови розпочинається з традиційного Hello World. Навіть у <a href="https://docs.oracle.com/javase/tutorial/" target="_blank" rel="nofollow">Oracle Tutorials</a> у розділі "Getting Started" ми починаємо з <a href="https://docs.oracle.com/javase/tutorial/getStarted/cupojava/index.html" target="_blank" rel="nofollow">The "Hello World!" Application</a> . І з перших рядків коду ми бачимо їх - Java коментарі. Їх важливість також підкреслюється тим, що в такому важливому документі, як Java Code Convention коментарям відводиться окремий розділ: <a href="http://www.oracle.com/technetwork/java/javase/documentation/codeconventions-141999.html#385" target="_blank" rel="nofollow">Comments</a> . Як свідчить документація, коментарі в Java поділяються на два типи: 
+<ul>
+ <li>коментар реалізації (або коментар коду);</li>
+ <li>документуючий коментар.</li>
+</ul>Коментарі коду використовуються для опису окремих рядків/блоків, а коментарі для документування використовуються, щоб описати специфікацію коду (його інтерфейс), що не залежить від його реалізації. Java коментарі ігноруються компілятором, т.к. вони несуть сенс для розробника, а чи не для користувача. Тому можна зменшити розмір класів, що компілюються. 
+<h2>Коментарі Java коду</h2>З назви зрозуміло, що цей коментар відноситься до коду і повинен відображати його особливості. Коментарі коду бувають: 
+<ul>
+ <li>
+  <p>Рядкові (тобто описуються в один рядок)</p>
+  <p></p>
+  <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class="  language-java"><span class="token comment"><span class="token comment">// Строчный комментарий</span></span>
+<span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"Hello, World!"</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span></code></pre></li>
+ <br>
+ <li>
+  <p>Блокові (тобто описуються цілим блоком, тому що не містяться в один рядок)</p>
+  <pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token comment"><span class="token comment">/*
+ * Блочный комментарий
+ */</span></span>
+<span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"Hello"</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span></code></pre></li>
+</ul> Цікавою особливістю блокового коментаря є те, що якщо ми почнемо його з « <strong>/*-</strong> » (тобто додамо після астериску мінус), то текст цього блокового коментаря відформатовано не буде. Цікаво, але за допомогою певних коментарів можна надати деяким підказки IDE. Наприклад, за допомогою малих коментарів <strong>//@formatter:on</strong> та <strong>//@formatter:off</strong> в IDE Eclipse можна вимкнути форматування для ділянок коду. Використати коментарі потрібно розмірено і лише там, де це потрібно. Наприклад, можна прочитати статтю на цю тему: <a href="https://habr.com/post/178653/" target="_blank" rel="nofollow">"Не пишіть коментарі до коду!" </a>. Є відмінна книга " <strong>Чистий код: створення, аналіз та рефакторинг</strong>", яку написав Роберт Мартін. У ній є окремий розділ "Коментарі". Як епіграф до цього розділу - не менш відмінна цитата: "Не коментуйте поганий код - перепишіть його" від Браяна У. Кернігана і П. Дж. Плауера. даним розділом можна ознайомитися на <a href="https://books.google.ru/books?id=2zjECwAAQBAJ&amp;printsec=frontcover&amp;hl=ru#v=onepage&amp;q&amp;f=false" target="_blank" rel="nofollow">Google Books</a> Загальний зміст можна висловити в одній його цитаті: 
+<blockquote>
+ Щоразу, коли ви пишіть коментар, скривтеся і відчуєте свою невдачу»
+</blockquote> Зрозуміло, що немає абсолютної істини і іноді коментарі необхідні. Але завжди є варіанти і з зайвими коментарями потрібно боротися. У цьому ж розділі згадуються незвичайні коментарі, TODO: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span><code class="  language-java"><span class="token comment"><span class="token comment">// TODO: Добавить World</span></span>
+<span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token string"><span class="token string">"Hello, "</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span></code></pre> Сенс у тому, що вони можуть особливим чином оброблятися в IDE. Наприклад, в IDEA вони збираються на окремій вкладці, де їх можна переглянути: 
+<div class="row justify-content-center jr-image-wrap">
+ <div class="col-12 col-sm-10 col-md-8">
+  <img data-id="0bc0f45f-9caa-4fbc-a5d1-81281dfab931" data-max-width="700" alt="Коментарі в Java: не все так просто - 2" src="https://cdn.javarush.com/images/article/0bc0f45f-9caa-4fbc-a5d1-81281dfab931/512.jpeg" style="width: 700px;">
+ </div>
+</div>І невеликий puzzler з коментарем: Рядок «http://google.com» є коректним рядком усередині методу, т.к. http тут - це насправді мітка, а далі - коментар. Найчастіше багато коментарів можуть стати із коментарів коду коментарем для документування, про які поговоримо далі. 
+<h2>Коментарі для документування</h2>Коментарі документації описують загальнодоступний API. <strong>API</strong> – це програмний інтерфейс програми, тобто ті класи та методи, які доступні іншим розробникам для виконання будь-яких дій. Якщо коротко, то ці коментарі повинні пояснювати, навіщо створено той чи інший клас і пакет і що робить той чи інший метод. Також можна за необхідності описувати поля класу. Саме те, що оформлено як JavaDoc, ми і бачимо в підказках наших IDE. Наприклад: 
+<div class="row justify-content-center jr-image-wrap">
+ <div class="col-12 col-sm-10 col-md-8">
+  <img data-id="4b07fdcb-8557-47b7-b3b9-3740def4ae49" data-max-width="700" alt="Коментарі в Java: не все так просто - 3" src="https://cdn.javarush.com/images/article/4b07fdcb-8557-47b7-b3b9-3740def4ae49/512.jpeg" style="width: 700px;">
+ </div>
+</div>Якщо ми перейдемо в цей метод, то побачимо, звідки взявся цей текст: 
+<div class="row justify-content-center jr-image-wrap">
+ <div class="col-12 col-sm-10 col-md-8">
+  <img data-id="a0a7a88c-9824-4a7d-b71f-4bfc06451173" data-max-width="700" alt="Коментарі в Java: не все так просто - 4" src="https://cdn.javarush.com/images/article/a0a7a88c-9824-4a7d-b71f-4bfc06451173/512.jpeg" style="width: 700px;">
+ </div>
+</div>Те, як правильно оформлювати JavaDoc знову ж таки дивимося в Java Code Convention: <a href="http://www.oracle.com/technetwork/java/javase/documentation/codeconventions-141999.html#385" target="_blank" rel="nofollow">Code Convention</a> . Вони чимось схожі на блокові коментарі, але замість одного астериску (не Астерікса) використовується два. Приклад JavaDoc був наведений вище. Описувати всі можливості немає сенсу, оскільки про це вже написано в офіційній документації Oracle. Тому все необхідне дивимося в офіційній документації <a href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javadoc.html" target="_blank" rel="nofollow">JavaDoc</a> , розділ "Tag Descriptions". Oracle має навіть окремий tutorial на цю тему: <a href="http://www.oracle.com/technetwork/java/javase/tech/index-137868.html" target="_blank" rel="nofollow">How to Write Doc Comments for the Javadoc Tool</a> . Підказки в IDE - це добре, але насправді вони не просто так doc. На основі цих JavaDoc коментарів генерується документація. Для цього є спеціальна утиліта <strong>javadoc</strong>. Як бачимо, у тому Tutorial про це й йдеться. Опис того, як ним користуватися, є на офіційному сайті Oracle для <a href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javadoc.html" target="_blank" rel="nofollow">JavaDoc</a> . Щоб побачити, як це виглядає, можна створити в каталозі підкаталог з назвою пакета, наприклад: <em>test</em> . У ньому створити простенький клас із коментарями. Наприклад: 
+<pre class=" line-numbers  language-java" tabindex="0"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><code class="  language-java"><span class="token keyword"><span class="token keyword">package</span></span> <span class="token namespace"><span class="token namespace">test</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+<span class="token comment"><span class="token comment">/**
+ * This is a JavaDoc class comment
+ */</span></span>
+<span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">class</span></span> <span class="token class-name"><span class="token class-name">JavaDocTest</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+
+  <span class="token comment"><span class="token comment">/**
+   * This is a JavaDoc public field comment
+   */</span></span>
+  <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token keyword"><span class="token keyword">final</span></span> <span class="token class-name"><span class="token class-name">String</span></span> HELLO_MESSAGE <span class="token operator"><span class="token operator">=</span></span> <span class="token string"><span class="token string">"Hello, World!"</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+
+  <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="token function"><span class="token function">main</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token class-name"><span class="token class-name">String</span></span><span class="token punctuation"><span class="token punctuation">.</span></span><span class="token punctuation"><span class="token punctuation">.</span></span><span class="token punctuation"><span class="token punctuation">.</span></span> args<span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+    <span class="token class-name"><span class="token class-name">JavaDocTest</span></span><span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">greetings</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+  <span class="token punctuation"><span class="token punctuation">}</span></span>
+
+  <span class="token comment"><span class="token comment">/**
+   * This is a JavaDoc public method comment
+   */</span></span>
+  <span class="token keyword"><span class="token keyword">public</span></span> <span class="token keyword"><span class="token keyword">static</span></span> <span class="token keyword"><span class="token keyword">void</span></span> <span class="token function"><span class="token function">greetings</span></span><span class="token punctuation"><span class="token punctuation">(</span></span><span class="token punctuation"><span class="token punctuation">)</span></span> <span class="token punctuation"><span class="token punctuation">{</span></span>
+    <span class="token class-name"><span class="token class-name">System</span></span><span class="token punctuation"><span class="token punctuation">.</span></span>out<span class="token punctuation"><span class="token punctuation">.</span></span><span class="token function"><span class="token function">println</span></span><span class="token punctuation"><span class="token punctuation">(</span></span>HELLO_MESSAGE<span class="token punctuation"><span class="token punctuation">)</span></span><span class="token punctuation"><span class="token punctuation">;</span></span>
+  <span class="token punctuation"><span class="token punctuation">}</span></span>
+<span class="token punctuation"><span class="token punctuation">}</span></span></code></pre> Після цього можна виконати наступну команду з каталогу, який містить наш каталог із пакетом: <code class=" language-none">javadoc -d ./test test</code> Після цього ми побачимо процес створення документації. 
+<div class="row justify-content-center jr-image-wrap">
+ <div class="col-12 col-sm-10 col-md-8">
+  <img data-id="47aa8f54-f411-466e-b986-235dbd3df412" data-max-width="700" alt="Коментарі в Java: не все так просто - 5" src="https://cdn.javarush.com/images/article/47aa8f54-f411-466e-b986-235dbd3df412/512.jpeg" style="width: 700px;">
+ </div>
+</div>І потім можемо відкрити index.html, щоб побачити згенерований документ. Ви часто зможете побачити, коли виставляють документацію API. Наприклад, <a href="https://docs.spring.io/spring/docs/current/javadoc-api/" target="_blank" rel="nofollow">Spring Framework API</a> . 
+<h2>Висновок</h2>Як ми бачимо, здавалося б, така проста штука як коментарі насправді виявляється набагато складнішою. Тому, якщо коментарям виділити деякий час і за ними стежити, ваш код буде кращим і ви як програміст будете ціннішими. #Viacheslav 
+<div class="table-container">
+ <table>
+  <tbody>
+   <tr>
+    <th>Що ще почитати:</th>
+   </tr>
+   <tr>
+    <td>
+     <p><a href="https://codegym.cc/groups/posts/1378-kommentarii-v-jazihke-java" target="_blank">Коментарі в мові Java</a></p>
+     <p><a href="https://codegym.cc/groups/posts/2704-kommentarii-v-jazihke-java" target="_blank">Коментарі в мові Java</a></p></td>
+   </tr>
+  </tbody>
+ </table>
+</div>
