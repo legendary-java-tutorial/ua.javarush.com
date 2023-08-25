@@ -1,0 +1,218 @@
+﻿Кодування
+<p>----------------------------------------</p>
+Вісімкове кодування. До речі, про кодування.&nbsp;Як вам відомо, у повсякденному житті ми використовуємо десяткову систему числення: всі наші числа складаються з 10 цифр: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9. Оскільки цифр 10, то й система називається десятковою. Одначе програмісти — великі вигадники, тому придумали різні
+<p>----------------------------------------</p>
+<h2>1. Вісімкове кодування</h2>
+<p>До речі, про кодування. Як вам відомо, у повсякденному житті ми використовуємо <strong>десяткову систему числення</strong>: всі наші числа складаються з 10 цифр: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9. Оскільки цифр 10, то й система називається десятковою.</p>
+<p>Одначе програмісти — великі вигадники, тому придумали різні кодування з іншою кількістю цифр. Наприклад, 64, 16, 8 і 2.</p>
+<p>З кодуванням на основі 8 цифр було найпростіше: вони просто відкинули цифри 8 і 9 і отримали вісімкове кодування (<strong>вісімкову систему числення</strong>).</p>
+<p>І тепер ви можете задавати числові літерали у вісімковій системі. Звичайно, якщо це вам потрібно. Це простіше, ніж здається. <span class="text-orange">Просто слід написати перед числом цифру 0.</span></p>
+<p>Тобто <span class="text-green">будь-який цілочисловий літерал, який починається з 0, у Java вважається вісімковим.</span></p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітки</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int x = 015; </code></pre>
+        </td>
+        <td>х дорівнює 13: 1*8+5</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int x = 025; </code></pre>
+        </td>
+        <td>х дорівнює 21: 2*8+5</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int x = 0123; </code></pre>
+        </td>
+        <td>х дорівнює 83: 1*64+2*8+3 == 1*8<sup>2</sup>+2*8<sup>1</sup>+3*8<sup>0</sup></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int x = 078;</code></pre>
+        </td>
+        <td><span class="text-red">Не скомпілюється: цифри 8 у вісімковому кодуванні немає.</span></td>
+    </tr>
+    </tbody>
+</table>
+<p>Навряд чи вам знадобляться вісімкові числа в коді, проте слід знати, що це таке. <span class="text-orange">Адже вам доведеться читати код, написаний іншими.</span> А як ми вже казали, програмісти — великі вигадники.</p>
+<p>Ну й пам'ятайте, що не можна просто так писати 0 попереду числа.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task09.task0905"></div>
+<hr>
+<h2>2. Двійкове кодування</h2>
+<p>Двійкове кодування — це ще цікавіше. Якщо у вісімковій системі залишилися тільки цифри 0–7, то у двійковій — тільки цифри 0 і 1. Навіщо ж потрібне таке кодування?</p>
+<p>Це пов'язане з будовою комп'ютера. Усе в комп'ютері працює на електриці, і, як виявилося, найефективніший спосіб щось у ньому зберігати й передавати — це використовувати два стани: немає струму (нуль) і є струм (одиниця).</p>
+<p>Оце і є основою популярності двійкового кодування.</p>
+<p>Проте в Java воно використовується не так вже й часто: <span class="text-green">Java вважається мовою високого рівня, повністю незалежною від заліза, на якому працює. </span>Справді, чи вам не все одно, в якому вигляді зберігаються й обробляються дані в комп'ютері?</p>
+<p>Однак за минулі десятиліття програмісти полюбили двійкове кодування (і кодування на його основі), тому в Java є оператори, які під час роботи враховують двійкову форму числа. Та й точність дійсних чисел залежить від їх подання у двійковому кодуванні.</p>
+<p>Взагалі, краще знати про це кодування, ніж не знати.</p>
+<p>Так само, як і у випадку з літералами у вісімковій системі, у Java є спосіб задавати літерали у двійковій формі, тобто лише за допомогою символів 0 і 1. Для того щоб <span class="term">Java-компілятор</span> зрозумів, що в коді записано числовий літерал у двійковій формі, а не просто десяткове число, що складається з нулів і одиниць, до всіх двійкових літералів додається префікс <span class="text-red"><strong>0</strong><strong>b</strong></span> (b від слова binary).</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітки</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><strong>int x = <span class="text-red">0b</span>100; </strong></code></pre>
+        </td>
+        <td>х дорівнює 4: 1*4+0*2+0</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><strong>int</strong> <strong>x = <span class="text-red">0b</span>1111;</strong> </code></pre>
+        </td>
+        <td>х дорівнює 15: 1*8+1*4+1*2+1</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><strong>int x = <span class="text-red">0b</span>1111000111; </strong></code></pre>
+        </td>
+        <td>х дорівнює 967: 1*2<sup>9</sup>+1*2<sup>8</sup>+1*2<sup>7</sup>+1*2<sup>6</sup>+0*2<sup>5</sup>+0*2<sup>4</sup>+0*2<sup>3</sup>+1*2<sup>2</sup>+1*2+1;</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><strong>int x = <span class="text-red">0b</span>12000;</strong></code></pre>
+        </td>
+        <td><span class="text-red">Не скомпілюється: цифри 2 у двійковому кодуванні немає.</span></td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task09.task0906"></div>
+<hr>
+<h2>3. Шістнадцяткове кодування</h2>
+<p>Крім вісімкової та двійкової системи, літерали можна записувати також у шістнадцятковій системі. Це дуже популярне кодування.</p>
+<p>Річ у тім, що, хоча двійковий запис максимально наближений до реального виду зберігання чисел, працювати з таким числом надто складно: мільйон буде містити не 7 цифр, а 20.</p>
+<p>Тому програмісти придумали шістнадцяткову систему. Адже 16 — це 2<sup>4</sup>, тому одній шістнадцятковій цифрі відповідає рівно 4 біти. Отже кожні 4 біти тепер можна записати однією шістнадцятковою цифрою.</p>
+<p>У шістнадцяткого кодування теж є свій унікальний префікс — <strong>0</strong><strong>x</strong>. Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Десяткове число</th>
+        <th>Двійковий запис</th>
+        <th>Шістнадцятковий запис</th>
+    </tr>
+    <tr>
+        <td><strong>17</strong></td>
+        <td><strong>0b<span class="text-green">0001<span class="text-orange">0001</span></span></strong></td>
+        <td><strong>0x11</span></strong></td>
+    </tr>
+    <tr>
+        <td><strong>4</strong><strong>1</strong></td>
+        <td><strong>0b<span class="text-green">0010<span class="text-orange"><strong>1</strong><strong>00</strong><strong>1</strong></span></span></strong></td>
+        <td><strong>0x29</span></strong></td>
+    </tr>
+    <tr>
+        <td><strong>85</strong></td>
+        <td><strong>0b<span class="text-green">0101</span><span class="text-orange">0101</span></strong></td>
+        <td><strong>0x55</span></strong></td>
+    </tr>
+    <tr>
+        <td><strong>256</strong></td>
+        <td><strong>0b<span class="text-red">1<span class="text-green">0000</span></span><span class="text-orange">0000</span></strong></td>
+        <td><strong>0x100</span></strong></td>
+    </tr>
+    </tbody>
+</table>
+<p>Гаразд, скажете ви, зрозуміло, як отримати вісімкову систему: ми просто викинули цифри 8 і 9, але де взяти 6 відсутніх цифр для шістнадцяткової системи? Хотілося б їх побачити!</p>
+<p>Тут все досить просто. Замість 6 відсутніх цифр взяли 6 перших літер латинського алфавіту: <strong><span class="text-red">A</span></strong> (10), <strong><span class="text-red">B</span></strong> (11), <strong><span class="text-red">C</span></strong> (12), <strong><span class="text-red">D</span></strong> (13), <span class="text-red"><strong>E</strong> </span>(14), <span class="text-red"><strong>F</strong> </span>(15).</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Шістнадцятковий запис</th>
+        <th>Двійковий запис</th>
+        <th>Десяткове число</th>
+    </tr>
+    <tr>
+        <td><strong>0x1</span></strong></td>
+        <td><strong>0b<span class="text-green">0000</span><span class="text-orange">0001</span></strong></td>
+        <td>1</td>
+    </tr>
+    <tr>
+        <td><strong>0x9</span></strong></td>
+        <td><strong>0b<span class="text-green">0000</span><span class="text-orange">1001</span></strong></td>
+        <td>9</td>
+    </tr>
+    <tr>
+        <td><strong>0x<span class="text-orange">A</span></strong></td>
+        <td><strong>0b<span class="text-green">0000</span><span class="text-orange">1010</span></strong></td>
+        <td>10</td>
+    </tr>
+    <tr>
+        <td><strong>0x<span class="text-orange">B</span></strong></td>
+        <td><strong>0b<span class="text-green">0000</span><span class="text-orange">1011</span></strong></td>
+        <td>11</td>
+    </tr>
+    <tr>
+        <td><strong>0x<span class="text-orange">C</span></strong></td>
+        <td><strong>0b<span class="text-green">0000</span><span class="text-orange">1100</span></strong></td>
+        <td>12</td>
+    </tr>
+    <tr>
+        <td><strong>0x<span class="text-orange">D</span></strong></td>
+        <td><strong>0b<span class="text-green">0000</span><span class="text-orange">1101</span></strong></td>
+        <td>13</td>
+    </tr>
+    <tr>
+        <td><strong>0x<span class="text-orange">E</span></strong></td>
+        <td><strong>0b<span class="text-green">0000</span><span class="text-orange">1110</span></strong></td>
+        <td>14</td>
+    </tr>
+    <tr>
+        <td><strong>0x<span class="text-orange">F</span></strong></td>
+        <td><strong>0b<span class="text-green">0000</span><span class="text-orange">1111</span></strong></td>
+        <td>15</td>
+    </tr>
+    <tr>
+        <td><strong>0x<span class="text-green">1</span><span class="text-orange">F</span></strong></td>
+        <td><strong>0b<span class="text-green">0001</span><span class="text-orange">1111</span></strong></td>
+        <td>31</td>
+    </tr>
+    <tr>
+        <td><strong>0x<span class="text-green">A</span><span class="text-orange">F</span></strong></td>
+        <td><strong>0b<span class="text-green">1010</span><span class="text-orange">1111</span></strong></td>
+        <td>175</td>
+    </tr>
+    <tr>
+        <td><strong>0x<span class="text-green">F</span><span class="text-orange">F</span></strong></td>
+        <td><strong>0b<span class="text-green">1111</span><span class="text-orange">1111</span></strong></td>
+        <td>255</td>
+    </tr>
+    <tr>
+        <td><strong>0x<span class="text-red">F</span><span class="text-green">F</span><span class="text-orange">F</span></strong></td>
+        <td><strong>0b<span class="text-red">1111</span><span class="text-green">1111</span><span class="text-orange">1111</span></strong></td>
+        <td>4095</td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task09.task0907"></div>
+<hr>
+<h2>4. Як перевести число з шістнадцяткової системи в іншу</h2>
+<p>Перевести число з шістнадцяткової системи в десяткову дуже просто. Припустімо, у вас є число <strong>0</strong><strong>x<span class="text-viola">A</span><span class="text-user"><span class="text-red">F<span class="text-green">C</span></span></span><span class="text-orange">F</span></strong>. Скільки це буде в десятковій системі?</p>
+<p>По-перше, у нас позиційна система числення, отже, кожен розряд збільшує значення цифри в 16 разів:</p>
+<p><strong><span class="text-viola">A</span>*<span class="text-user">16</span><sup><span class="text-viola">3 </span></sup>+ <span class="text-red">F</span>*<span class="text-user">16</span><sup><span class="text-viola">2</span></sup><sup> </sup>+ <span class="text-green">C</span>*<span class="text-user">16</span><sup><span class="text-viola">1</span></sup><sup> </sup>+ <span class="text-orange">F</span></strong></p>
+<p>Символу А відповідає число 10, символу C — число 12, символу F — число 15. Отримуємо:</p>
+<p><strong><span class="text-viola">10</span>*<span class="text-user">16</span><sup><span class="text-viola">3</span></sup><sup> </sup>+ <span class="text-red">15</span>*<span class="text-user">16</span><sup><span class="text-viola">2 </span></sup>+ <span class="text-green">12</span>*<span class="text-user">16</span><sup><span class="text-viola">1</span></sup><sup> </sup>+ <span class="text-orange">15</span></strong></p>
+<p>Піднесемо 16 до степеня й отримаємо:</p>
+<p><strong><span class="text-viola">10</span>*<span class="text-user">4096 </span>+ <span class="text-red">15</span>*<span class="text-user">256</span> + <span class="text-green">12</span>*<span class="text-user">16</span> + <span class="text-orange">15</span></strong></p>
+<p>Усе підсумуємо й отримаємо:</p>
+<p><strong><span class="text-user">45007</span></strong></p>
+<p>Отепер ви знатимете, як це число зберігається в пам'яті:</p>
+<p><strong>0x<span class="text-viola">A</span><span class="text-red">F</span><span class="text-green">C</span><span class="text-orange">F</span></strong></p>
+<p>А зараз перетворімо його на двійкове число. У двійковій системі воно записується так:</p>
+<p><strong>0b<span class="text-viola">1010</span><span class="text-red">1111</span><span class="text-green">1100</span><span class="text-orange">1111</span></strong></p>
+<p>Кожним чотирьом бітам відповідає один символ шістнадцяткового кодування. Дуже зручно. Без усяких множень і піднесення до степеня.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task09.task0908"></div>

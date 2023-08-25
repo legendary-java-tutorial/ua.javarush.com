@@ -1,0 +1,314 @@
+﻿Особливості роботи з дійсними числами
+<p>----------------------------------------</p>
+Округлення дійсних чисел. Ми вже раніше зазначали, що коли змінній типу int присвоюється дійсне число, воно завжди округлюється до меншого цілого — дробова частина просто відкидається. Однак легко уявити ситуацію, коли дробове число потрібно округлити просто до найближчого або навіть
+<p>----------------------------------------</p>
+<h2>1. Округлення дійсних чисел</h2>
+<p>Ми вже раніше обговорювали, що коли змінній типу <code>int</code> присвоюється дійсне число, воно завжди округлюється до меншого цілого — дробова частина просто відкидається.</p>
+<p>Однак легко уявити ситуацію, коли дробове число потрібно округлити просто до найближчого або навіть до більшого цілого. Що ж робити в такій ситуації?</p>
+<p>Для цього та багатьох інших подібних випадків у мові Java є клас <code>Math</code>, який містить методи <code>round()</code>, <code>ceil()</code> і <code>floor()</code>.</p>
+<hr>
+<p><strong>Метод <code>Math.round()</code></strong></p>
+<p>Метод <code>Math.round()</code> округляє число до найближчого цілого:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code>long <span class="code text-green">x</span> = Math.round(<span class="code text-user">дійсне_число</span>)</code></pre>
+</div>
+<p>Але, як то кажуть, є нюанс: результатом використання цього методу буде цілочисловий тип <code>long</code> (а не <code>int</code>). Адже дійсні числа можуть бути дуже великими, тому розробники Java вирішили використовувати найдовший цілочисловий тип, який є в Java — <code>long</code>.</p>
+<p>Ось чому для присвоєння результату змінній типу <code>int</code> програміст повинен явно вказати компілятору, що він згоден із можливою втратою даних (якщо раптом число не вміститься в тип <code>int</code>).</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code>int <span class="code text-green">x</span> = <span class="text-red">(int)</span> Math.round(<span class="code text-user">дійсне_число</span>)</code></pre>
+</div>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="70%">Команда</th>
+        <th class="text-center">Результат</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="code text-green">x</span> = <span class="text-red">(int)</span> Math.round(<span class="code text-user">4.1</span>);</code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code>4</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="code text-green">x</span> = <span class="text-red">(int)</span> Math.round(<span class="code text-user">4.5</span>);</code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code>5</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="code text-green">x</span> = <span class="text-red">(int)</span> Math.round(<span class="code text-user">4.9</span>);</code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code>5</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Метод <code>Math.ceil()</code></strong></p>
+<p>Метод <code>Math.ceil()</code> округлює число вгору (до <span class="text-bold">більшого</span> цілого). Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="70%">Команда</th>
+        <th class="text-center">Результат</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="code text-green">x</span> = <span class="text-red">(int)</span> Math.ceil(<span class="code text-user">4.1</span>);</code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code>5</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="code text-green">x</span> = <span class="text-red">(int)</span> Math.ceil(<span class="code text-user">4.5</span>);</code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code>5</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="code text-green">x</span> = <span class="text-red">(int)</span> Math.ceil(<span class="code text-user">4.9</span>);</code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code>5</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Метод <code>Math.floor()</code></strong></p>
+<p>Метод <code>Math.floor()</code> округлює число вниз (до <span class="text-bold">меншого</span> цілого). Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="70%">Команда</th>
+        <th class="text-center">Результат</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="code text-green">x</span> = <span class="text-red">(int)</span> Math.floor(<span class="code text-user">4.1</span>);</code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code>4</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="code text-green">x</span> = <span class="text-red">(int)</span> Math.floor(<span class="code text-user">4.5</span>);</code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code>4</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="code text-green">x</span> = <span class="text-red">(int)</span> Math.floor(<span class="code text-user">4.9</span>);</code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code>4</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Натомість для округлення числа до <span class="text-bold">меншого</span> цілого простіше використовувати звичайний оператор приведення типу — <code>(int)</code>:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="70%">Команда</th>
+        <th class="text-center">Результат</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="code text-green">x</span> = <span class="text-red">(int)</span> <span class="code text-user">4.9</span></code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code>4</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Якщо вам складно запам'ятати ці команди, у пригоді стане невеличкий урок англійської:</p>
+<ul>
+    <li><code>Math</code> — математика</li>
+    <li><code>Round</code> — круглий/округлювати</li>
+    <li><code>Ceiling</code> — стеля</li>
+    <li><code>Floor</code> — підлога</li>
+</ul>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task04.task0417"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task04.task0418"></div>
+<hr>
+<h2>2. Будова чисел із рухомою крапкою</h2>
+<p>Тип <code>double</code> може зберігати значення від <code>-1.7*10<sup class="text-user">308</sup></code> до <code>+1.7*10<sup class="text-user">308</sup></code>. Такий широчезний діапазон значень (порівняно з типом <code>int</code>) пояснюється тим, що будова типу <code>double</code> (і типу <code>float</code>) суттєво відрізняється від будови цілих типів. Кожна змінна типу <code>double</code> містить два числа: перше має назву <span class="term"><span class="text-red">«мантиса»</span></span>, а друге — <span class="term"><span class="text-user">«степінь»</span></span>.</p>
+<p>Припустімо, ми маємо число <code>123456789</code> і зберегли його в змінній типу <code>double</code>. Це число буде перетворено у форму <code>1.<span class="text-red">23456789</span>*10<sup class="text-user">8</sup></code>, і в змінній типу <code>double</code> зберігатимуться два числа — <code><span class="text-red">23456789</span></code> і <code><span class="text-user">8</span></code>. Червоним виділено «значущу частину числа» (манти́су), синім — степінь.</p>
+<p>Завдяки такому підходу можна зберігати і дуже великі, і дуже малі числа. Однак оскільки розмір числа обмежений 8 байтами (64 бітами) і частина бітів використовується для зберігання <span class="term"><span class="text-user">степеня</span></span> (а також знака числа та знака степеня), максимальна довжина <span class="term"><span class="text-red">мантиси</span></span> становить <span class="text-bold">15 цифр</span>.</p>
+<p>Це дуже <span class="text-bold">спрощений</span> опис будови дійсних чисел. Детальнішій опис див. <a href="https://javarush.com/groups/posts/2136-ustroystvo-vejshestvennihkh-chisel">тут</a>.</p>
+<hr>
+<h2>3. Втрата точності під час операцій із дійсними числами</h2>
+<p>Виконуючи різні дії з дійсними числами, слід мати на увазі, що <span class="term text-user">дійсні числа</span> <span class="text-bold">не є точними</span>. Завжди є <span class="term text-red">похибки округлення</span>, <span class="term text-red">похибки перетворення</span> чисел з десяткової системи у двійкову, а найчастішою проблемою є <span class="term text-red">втрата точності</span> під час додавання/віднімання чисел надто різних розмірностей.</p>
+<p>Для новачків у програмуванні остання ситуація є найменш очікуваною.</p>
+<p>Якщо від числа <code>10<sup>9</sup></code> відняти <code>1/10<sup>9</sup></code>, ми знову ж таки отримаємо <code>10<sup>9</sup></code>.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Віднімання чисел надто різних розмірностей</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code class="text-right"> 1<span class="text-orange">000000000</span>.<span class="text-orange">000000</span>000;
+<sup>-</sup>         0.000000<span class="text-gray">001</span>;
+ 1<span class="text-orange">000000000</span>.<span class="text-orange">000000</span>000;</code></pre>
+        </td>
+        <td>Друге число <span class="text-bold">надто мале</span>, і його значуща частина ігнорується (виділено сірим). Помаранчевим виділено <span class="text-orange">15 значущих цифр</span>.</td>
+    </tr>
+    </tbody>
+</table>
+<p>Ну що сказати? Програмування — це не математика.</p>
+<hr>
+<h2>4. Небезпека порівняння дійсних чисел</h2>
+<p>Ще одна небезпека чатує на програмістів під час порівняння дійсних чисел. Оскільки під час операцій із цими числами можуть накопичуватися похибки округлення, то можливі такі ситуації, коли дійсні числа мали б бути рівними між собою, однак вони не рівні. І навпаки: числа мають бути нерівними, а вони рівні.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="47%">Команда</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span>double</span> <span class="code text-green">a</span> = <span class="code text-user">1000000000.0</span>;
+<span>double</span> <span class="code text-green">b</span> = <span class="code text-user">0.000000001</span>;
+<span>double</span> <span class="code text-green">c</span> = <span class="code text-green">a</span> - <span class="code text-green">b</span>;</code></pre>
+        </td>
+        <td>
+            Змінна <code class="text-green">a</code>&nbsp;матиме значення <code>1000000000.0</code><br/> Змінна <code class="text-green">c</code>&nbsp;матиме значення <code>1000000000.0</code><br/> (число у змінній <code class="text-green">b</code>&nbsp;надто мале)
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>У наведеному вище прикладі <code class="text-green">а</code> і <code class="text-green">с</code> мають бути нерівними, однак вони рівні.</p>
+<p>Або розглянемо інший приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="47%">Команда</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span>double</span> <span class="code text-green">a</span> = 1.<span class="text-orange">000000000000000</span><span class="text-gray">01</span>;
+<span>double</span> <span class="code text-green">b</span> = 1.<span class="text-orange">000000000000000</span><span class="text-gray">02</span>;</code></pre>
+        </td>
+        <td>
+            Змінна <code class="text-green">a</code>&nbsp;матиме значення <code>1.0</code><br/> Змінна <code class="text-green">b</code>&nbsp;матиме значення <code>1.0</code>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<h2 id="strictfp-story">5. Цікавий факт про слово <code>strictfp</code></h2>
+<p>У Java є спеціальне ключове слово <code>strictfp</code> (<span class="term"><strong>strict</strong> <strong>f</strong>loating <strong>p</strong>oint</span>), якого немає в інших мовах програмування. А знаєте, навіщо воно потрібне? Воно <span class="text-red">погіршує</span> точність операцій із дійсними числами. Послухайте історію про те, як воно виникло.</p>
+<div class="lesson-speech-bubble lesson-speech-bubble--left">
+    <div class="lesson-speech-bubble__container">
+        <div class="lesson-speech-bubble__name">Створювачі Java:</div>
+        <div class="lesson-speech-bubble__message">
+            Ми прагнемо, щоб Java була суперпопулярною і щоб програми на Java виконувалися на якомога більшій кількості пристроїв. Тому ми прописали в специфікації Java-машини, що на пристроях усіх типів усі програми мають виконуватись <strong>однаково</strong>!
+        </div>
+    </div>
+</div>
+
+<div class="lesson-speech-bubble lesson-speech-bubble--right">
+    <div class="lesson-speech-bubble__container">
+        <div class="lesson-speech-bubble__name">Створювачі процесора Intel:</div>
+        <div class="lesson-speech-bubble__message">
+            Хлопці, ми поліпшили наші процесори, і тепер усі дійсні числа в процесорі будуть представлені не вісьмома, а десятьма байтами. Більше байтів — більше значущих цифр. А що це означає? Правильно: тепер ваші наукові розрахунки стануть ще точнішими!
+        </div>
+    </div>
+</div>
+
+<div class="lesson-speech-bubble lesson-speech-bubble--right">
+    <div class="lesson-speech-bubble__container">
+        <div class="lesson-speech-bubble__name">Вчені й усі, хто займається надточними розрахунками:</div>
+        <div class="lesson-speech-bubble__message">
+            Круто! Молодці. Чудова новина.
+        </div>
+    </div>
+</div>
+
+<div class="lesson-speech-bubble lesson-speech-bubble--left">
+    <div class="lesson-speech-bubble__container">
+        <div class="lesson-speech-bubble__name">Створювачі Java:</div>
+        <div class="lesson-speech-bubble__message">
+            Ні-ні-ні, хлопці. Адже ми сказали: всі Java-програми мають виконуватись <strong>однаково на всіх пристроях</strong>. Примусово вимикаємо можливість використання 10-байтових дійсних чисел у процесорах Intel.
+        </div>
+    </div>
+</div>
+
+<div class="lesson-speech-bubble lesson-speech-bubble--left">
+    <div class="lesson-speech-bubble__container">
+        <div class="lesson-speech-bubble__message">
+            От тепер усе знову супер! Не дякуйте.
+        </div>
+    </div>
+</div>
+
+<div class="lesson-speech-bubble lesson-speech-bubble--right">
+    <div class="lesson-speech-bubble__container">
+        <div class="lesson-speech-bubble__name">Вчені й усі, хто займається надточними розрахунками:</div>
+        <div class="lesson-speech-bubble__message">
+            Та чи ви там зовсім береги поплутали? Нумо мерщій поверніть усе як було!
+        </div>
+    </div>
+</div>
+
+<div class="lesson-speech-bubble lesson-speech-bubble--left">
+    <div class="lesson-speech-bubble__container">
+        <div class="lesson-speech-bubble__name">Створювачі Java:</div>
+        <div class="lesson-speech-bubble__message">
+            Хлопці, це ж заради вашої користі! Лише уявіть: усі Java-програми виконуються <strong>однаково на всіх пристроях</strong>. Це ж круто!
+        </div>
+    </div>
+</div>
+
+<div class="lesson-speech-bubble lesson-speech-bubble--right">
+    <div class="lesson-speech-bubble__container">
+        <div class="lesson-speech-bubble__name">Вчені й усі, хто займається надточними розрахунками:</div>
+        <div class="lesson-speech-bubble__message">
+            Ні. Зовсім не круто. Швиденько поверніть усе назад! Або ми вашу Java знаєте куди вам запхнемо?
+        </div>
+    </div>
+</div>
+
+<div class="lesson-speech-bubble lesson-speech-bubble--left">
+    <div class="lesson-speech-bubble__container">
+        <div class="lesson-speech-bubble__name">Створювачі Java:</div>
+        <div class="lesson-speech-bubble__message">
+            Гм. Чом же ви одразу не сказали? Авжеж, повернемо.
+        </div>
+    </div>
+</div>
+
+<div class="lesson-speech-bubble lesson-speech-bubble--left">
+    <div class="lesson-speech-bubble__container">
+        <div class="lesson-speech-bubble__message">
+            Повернули можливість користуватися всіма фічами крутих процесорів.
+        </div>
+    </div>
+</div>
+
+<div class="lesson-speech-bubble lesson-speech-bubble--left">
+    <div class="lesson-speech-bubble__container">
+        <div class="lesson-speech-bubble__message">
+            До речі, ми спеціально додали в мову слово <code>strictfp</code>: якщо написати його перед ім’ям функції, всі операції з дійсними числами в цій функції будуть <span class="text-red">виконуватися однаково погано на всіх пристроях</span>!
+        </div>
+    </div>
+</div>

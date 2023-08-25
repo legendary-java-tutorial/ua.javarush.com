@@ -1,0 +1,413 @@
+﻿Порівняння об'єктів
+<p>----------------------------------------</p>
+Порівняння об'єктів у Java. Об'єкти в Java можна порівнювати як за посиланням, так і за значенням. Порівняння посилань Якщо дві змінні вказують на один і той самий об'єкт у пам'яті, то посилання, що зберігаються в цих змінних, — однакові. Якщо порівняти такі змінні за допомогою оператора порівняння ==, то
+<p>----------------------------------------</p>
+<h2>1. Порівняння об'єктів у Java</h2>
+<p>Об'єкти в Java можна порівнювати як за посиланням, так і за значенням.</p>
+<p><strong>Порівняння посилань</strong></p>
+<p>Якщо дві змінні вказують на один і той самий об'єкт у пам'яті, то посилання, що зберігаються в цих змінних, — однакові (рівні). Якщо порівняти такі змінні за допомогою оператора порівняння <code>==</code>, отримаємо true, і це логічно. Тут усе просто.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Integer a = 5;
+Integer b = a;
+System.out.println(a == b);</code></pre>
+        </td>
+        <td>
+                <pre><code>
+
+<span class="text-green">true</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Порівняння за значенням</strong></p>
+<p>Однак часто трапляються ситуації, коли дві змінні посилаються на два різні, але ідентичні за змістом об'єкти. Приміром, на два рядки, що містять однаковий текст, але знаходяться в різних об'єктах.</p>
+<p>Для визначення ідентичності різних об'єктів потрібно використовувати метод <code>equals()</code>. Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String a = new String("Привіт");
+String b = new String("Привіт");
+System.out.println(a == b);
+System.out.println(a.<strong>equals</strong>(b));</code></pre>
+        </td>
+        <td>
+                <pre><code>
+
+<span class="text-red">false</span>
+<span class="text-green">true</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Метод <code>equals</code> є не лише у класу <code>String</code> — він є <strong>взагалі у всіх класів.</strong></p>
+<p>Навіть у тих, які ви ще тільки будете писати. І от чому.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task10.task1009"></div>
+<hr>
+<h2>2. Клас <code>Object</code></h2>
+<p>Усі класи в Java вважаються успадкованими від класу <code>Object</code>. Це автори мови Java так придумали.</p>
+<p>А якщо якийсь клас успадковано від класу <code>Object</code>, у цьому класі-спадкоємцеві з'являються всі методи класу <code>Object</code>. Це і є головним ефектом успадкування.</p>
+<p>Інакше кажучи, кожен клас, навіть якщо це не написано в його коді, має всі методи, які має клас <code>Object</code>.</p>
+<p>А серед цих методів є такі, що стосуються порівняння об'єктів. Це метод <code>equals()</code> і метод <code>hashCode()</code>.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Як буде насправді:</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>class Person
+{
+   String name;
+   int age;
+}</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>class Person <span class="text-invisible">extends Object</span>
+{
+   String name;
+   int age;
+
+   <span class="text-invisible">public boolean equals(Object obj)
+   {
+      return this == obj;
+   }
+
+   public int hashCode()
+   {
+      return адреса_об'єкта_в_пам'яті;         //це реалізація за замовчуванням, але можлива й інша.
+   }</span>
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>У прикладі вище ми створили простий клас <code>Person</code> з параметрами name і age без жодного методу. Проте, оскільки всі класи вважаються успадкованими від класу <code>Object</code>, у класу <code>Person</code> приховано з'явилися два методи:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Метод</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>boolean equals(Object obj)</code></pre>
+        </td>
+        <td>Порівнює поточний об'єкт і переданий об'єкт</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int hashCode()</code></pre>
+        </td>
+        <td>Повертає hash-code поточного об'єкта</td>
+    </tr>
+    </tbody>
+</table>
+<p>Отже, методи <code>equals</code> є абсолютно в усіх об'єктів і можна порівнювати між собою об'єкти різних типів, і це все чудово компілюватиметься й працюватиме.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-viola">Integer</span> a = 5;
+<span class="text-viola">String</span> s = "Привіт";
+System.out.println(a.<span class="text-red">equals</span>(s));
+System.out.println(s.<span class="text-red">equals</span>(a));</code></pre>
+        </td>
+        <td>
+                <pre><code>
+
+<span class="text-red">false</span>
+<span class="text-red">false</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-viola">Object</span> a = new <span class="text-viola">Integer</span>(5);
+<span class="text-viola">Object</span> b = new <span class="text-viola">Integer</span>(5);
+System.out.println(a.<span class="text-red">equals</span>(b)) ;</code></pre>
+        </td>
+        <td>
+                <pre><code>
+
+<span class="text-green">true</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<h2>3. Метод <code>equals()</code></h2>
+<p>Успадкований від класу <code>Object</code> метод <code>equals()</code> містить найпростіший алгоритм порівняння поточного й переданого об'єктів — він просто порівнює їхні посилання.</p>
+<p>Той самий ефект ви отримаєте, якщо просто порівняєте змінні класу <code>Person</code> замість виклику методу <code>equals()</code>. Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Person a = new Person();
+a.name = "Ганнуся";
+
+Person b = new Person();
+b.name = "Ганнуся";
+
+System.out.println(a == b);
+System.out.println(a.equals(b));</code></pre>
+        </td>
+        <td>
+                <pre><code>
+
+
+
+
+
+<span class="text-red">false</span>
+<span class="text-red">false</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Метод <code>equals</code> просто порівнює всередині себе посилання <code>a</code> і <code>b</code>.</p>
+<p>Однак у класі <code>String</code> порівняння працює інакше. Чому?</p>
+<p>Тому що розробники класу <code>String</code> написали власну реалізацію методу <code>equals()</code>.</p>
+<p><strong>Реалізація методу <code>equals()</code></strong></p>
+<p>Спробуймо написати свою реалізацію методу equals у класі <code>Person</code>. Розгляньмо 4 основні випадки.</p>
+<div class="lesson-note lesson-note--important">
+    <div class="lesson-note__container">
+        <div class="lesson-note__head">Важливо!</div>
+        <div class="lesson-note__content">
+            Незалежно від того, для якого класу перевизначається метод <code>equals</code>, він завжди отримує параметр типу <code>Object</code>
+        </div>
+    </div>
+</div>
+<p><strong>Сценарій 1</strong>: у метод <code>equals</code> передано той самий об'єкт, для якого було викликано метод <code>equals</code>. Якщо посилання поточного й переданого об'єктів рівні, слід повернути <code>true</code>. Об'єкт збігається сам із собою.</p>
+<p>Відповідний код матиме такий вигляд:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public boolean equals(Object obj)
+<span>{
+</span>   if (this == <span class="text-user">obj</span>)
+    return true;
+
+   <span class="text-invisible">решта коду методу equals</span>
+}</code></pre>
+        </td>
+        <td><br/><br/>Порівнюємо посилання</td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Сценарій 2</strong>: у метод <code>equals</code> передано посилання <code>null</code> — порівнювати немає з чим. Об'єкт, для якого викликано метод <code>equals</code>, — точно не null, значить, у цьому разі слід повернути <code>false</code>.</p>
+<p>Відповідний код матиме такий вигляд:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public boolean equals(Object obj)
+{
+   if (<span class="text-orange">this</span> == <span class="text-user">obj</span>)
+      return <span class="text-green">true</span>;
+
+   if (<span class="text-user">obj</span> == null)
+      return <span class="text-red">false</span>;
+
+   <span class="text-invisible">решта коду методу equals</span>
+}</code></pre>
+        </td>
+        <td><br/><br/>Порівнюємо посилання <br/><br/><br/>Переданий об'єкт — <code>null</code>?</td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Сценарій 3</strong>: у метод <code>equals</code> передано посилання на об'єкт, який взагалі не належить до класу <code>Person</code>. Чи дорівнює об'єкт класу <code>Person</code> об'єкту класу не-<code>Person</code>? Це вже вирішує сам розробник класу <code>Person</code> — як схоче, так і зробить.</p>
+<p>Але зазвичай об'єкти вважаються рівними тоді, коли вони належать до одного класу. Отож якщо в наш метод equals передано об'єкт не класу <code>Person</code>, ми завжди повертатимемо <code>false</code>. А як перевірити тип об'єкта? Правильно: за допомогою оператора <code>instanceof</code>.</p>
+<p>Отакий вигляд матиме наш новий код:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public boolean equals(Object <span class="text-user">obj</span>)
+{
+   if (<span class="text-orange">this</span> == <span class="text-user">obj)</span>
+      return <span class="text-green">true</span>;
+
+   if (<span class="text-user">obj</span> == null)
+      return <span class="text-red">false</span>;
+
+   if ( !(<span class="text-user">obj</span> instanceof <span class="text-viola">Person</span>) )
+      return <span class="text-red">false</span>;
+
+   <span class="text-invisible">решта коду методу equals</span>
+}</code></pre>
+        </td>
+        <td>
+            <br/><br/>Порівнюємо посилання <br/><br/><br/>Переданий об'єкт — <code>null</code>? <br/><br/><br/>Якщо тип переданого об'єкта не <code>Person</code></td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<h2>4. Порівняння двох об'єктів <code>Person</code></h2>
+<p>Що ми отримали в результаті? Якщо ми дійшли до кінця методу, значить, маємо об'єкт типу <code>Person</code> і посилання не <code>null</code>. Тоді перетворюємо наш об'єкт на тип <code>Person</code> і будемо порівнювати вміст обох об'єктів. Це і є наш <strong>сценарій номер 4.</strong></p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public boolean equals(Object obj)
+{
+   if (<span class="text-orange">this</span> == <span class="text-user">obj</span>)
+      return <span class="text-green">true</span>;
+
+   if (<span class="text-user">obj</span> == null)
+      return <span class="text-red">false</span>;
+
+   if ( !(<span class="text-user">obj</span> instanceof <span class="text-viola">Person</span>) )
+      return <span class="text-red">false</span>;
+
+   <span class="text-viola">Person</span> person = (<span class="text-viola">Person</span>) <span class="text-user">obj</span>;
+
+   <span class="text-invisible">решта коду методу equals</span>
+}</code></pre>
+        </td>
+        <td>
+            <br/><br/>Порівнюємо посилання <br/><br/><br/>Переданий об'єкт — <code>null</code>? <br/><br/><br/>Якщо тип переданого об'єкта не <code>Person</code> <br/><br/><br/>Операція перетворення типу
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>А як порівнювати два об'єкти типу <code>Person</code>? Вони рівні, якщо в них однакові імена (<code>name</code>) і вік (<code>age</code>). Остаточний вигляд коду буде таким:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public boolean equals(Object obj)
+{
+   if (<span class="text-orange">this</span> == <span class="text-user">obj</span>)
+      return <span class="text-green">true</span>;
+
+   if (<span class="text-user">obj</span> == null)
+      return <span class="text-red">false</span>;
+
+   if ( !(<span class="text-user">obj</span> instanceof <span class="text-viola">Person</span>) )
+      return <span class="text-red">false</span>;
+
+   <span class="text-viola">Person</span> <span class="text-user">person</span> = (<span class="text-viola">Person</span>) <span class="text-user">obj</span>;
+
+   return <span class="text-orange">this</span>.name == <span class="text-user">person</span>.name <span class="text-red">&amp;&amp;</span> <span class="text-orange">this</span>.age == <span class="text-user">person</span>.age;
+}</code></pre>
+        </td>
+        <td>
+            <br/><br/>Порівнюємо посилання <br/><br/><br/>Переданий об'єкт — <code>null</code>? <br/><br/><br/>Якщо тип переданого об'єкта не <code>Person</code> <br/><br/><br/>Операція перетворення типу
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Але й це ще не все.</strong></p>
+<p>По-перше, поле name має тип <code>String</code>, а значить, поля name треба порівнювати за допомогою виклику методу <code>equals</code>.</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-orange">this</span>.name.<span class="text-red">equals</span>(<span class="text-user">person</span>.name)</code></pre>
+</div>
+<p>По-друге, поле <code>name</code> запросто може дорівнювати <code>null</code>: тоді викликати метод <code>equals</code> для нього не можна. Потрібна додаткова перевірка на <code>null</code>:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-orange">this.</span>name != null &amp;&amp; <span class="text-orange">this</span>.name.<span class="text-red">equals</span>(<span class="text-user">person</span>.name)</code></pre>
+</div>
+<p>Однак якщо name дорівнює <code>null</code> в обох об'єктів <code>Person</code>, то імена все-таки однакові.</p>
+<p>Код четвертого сценарію може мати, приміром, такий вигляд:</p>
+<table>
+    <tbody>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-viola">Person</span> <span class="text-user">person</span> = (<span class="text-viola">Person</span>) obj;
+
+if (<span class="text-orange">this</span>.age != <span class="text-user">person</span>.age)
+   return <span class="text-red">false</span>;
+
+if (<span class="text-orange">this</span>.name == null)
+   return <span class="text-user">person</span>.name == null;
+
+return <span class="text-orange">this</span>.name.<span class="text-red">equals</span>(<span class="text-user">person</span>.name);</code></pre>
+        </td>
+        <td>
+            <br/><br/>Якщо вік неоднаковий, <br/>одразу <code>return false</code> <br/><br/>Якщо <code>this.name</code> дорівнює <code>null</code>, немає сенсу порівнювати за допомогою <code>equals</code>. Тут друге поле <code>name</code> або дорівнює <code>null</code>, або ні. <br/><br/>Порівнюємо два поля name за допомогою <code>equals</code>.
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task10.task1010"></div>
+<hr>
+<h2>5. Метод <code>hashCode()</code></h2>
+<p>Окрім методу <code>equals</code>, що виконує детальне порівняння всіх полів обох об'єктів, є ще один метод, який можна використовувати для неточного, але дуже швидкого порівняння, — <code>hashCode()</code>.</p>
+<p>Уявіть, що ви сортуєте в алфавітному порядку список із тисяч слів, і вам треба постійно попарно порівнювати слова. А слова довгі, складаються з багатьох літер. Загалом таке порівняння виконуватиметься дуже довго.</p>
+<p>Натомість його можна пришвидшити. Припустімо, слова починаються з різних літер: відразу зрозуміло, що вони різні. А якщо вони починаються з однієї й тієї самої літери, тоді гарантій немає: надалі слова можуть виявитися як однаковими, так і різними.</p>
+<p>Метод <code>hashCode()</code> працює за схожим принципом. Якщо його викликати для об'єкта, то метод поверне <strong>певне</strong> число — аналог першої літери в слові. Це число має такі властивості:</p>
+<ul>
+    <li>В однакових об'єктів завжди однакові hash-code</li>
+    <li>У різних об'єктів можуть бути однакові hash-code, а можуть бути різні</li>
+    <li>Якщо в об'єктів різні hash-code, об'єкти точно різні</li>
+</ul>
+<p>Для кращого розуміння перепишемо ці властивості стосовно до слів:</p>
+<ul>
+    <li>В однакових слів завжди однакові перші літери</li>
+    <li>У різних слів можуть бути однакові перші літери, а можуть бути різні</li>
+    <li>Якщо у слів різні перші літери, слова точно різні</li>
+</ul>
+<p>Остання властивість і використовується для прискореного порівняння об'єктів:</p>
+<p>Спочатку обчислюються hash-code двох об'єктів. Якщо ці hash-code різні, то об'єкти точно різні, і порівнювати їх далі не потрібно.</p>
+<p>А от якщо hash-code однакові, доведеться все ж таки порівнювати об'єкти за допомогою методу equals.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task10.task1011"></div>
+<hr>
+<h2>6. Контракти в коді</h2>
+<p>Вищеописану поведінку мають реалізовувати всі класи в Java. Перевірити правильність порівняння об'єктів на рівні компіляції неможливо.</p>
+<p>Усі Java-програмісти домовилися, що якщо вони пишуть свою реалізацію методу equals() замість стандартної (з класу <code>Object</code>), то також обов'язково мають написати свою реалізацію методу <code>hashCode()</code>, щоб озвучені вище правила зберігалися.</p>
+<p>Така домовленість називається <strong>контрактом</strong>.</p>
+<p>Якщо ви додаєте у свій клас реалізацію тільки одного методу <code>equals()</code> або тільки <code>hashCode()</code>, ви грубо порушуєте контракт (порушуєте домовленість). Так робити не можна.</p>
+<p>Якщо інші програмісти використовуватимуть ваш код, він може працювати неправильно. Ба більше, ви теж будете використовувати код, який працює на основі вищезазначених контрактів.</p>
+<div class="lesson-note lesson-note--important">
+    <div class="lesson-note__container">
+        <div class="lesson-note__head">Важливо!</div>
+        <div class="lesson-note__content">
+            <p>Усі колекції в Java під час пошуку елемента всередині колекції спершу порівнюють hash-code об'єктів, а тільки потім викликають для порівняння метод <code>equals</code>.</p>
+        </div>
+    </div>
+</div>
+<p>Отже, якщо ви напишете свій клас, а в ньому нову функцію <code>equals</code>, але не напишете метод <code>hashCode()</code> або реалізуєте його з помилками, колекції можуть неправильно працювати з вашими об'єктами.</p>
+<p>Наприклад, ви додали об'єкт у список, потім шукаєте його за допомогою методу <code>contains()</code>, а колекція ваш об'єкт не знаходить.</p>

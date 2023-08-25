@@ -1,0 +1,274 @@
+Queue
+<p>----------------------------------------</p>
+У багатьох людей слово «черга» викликає дуже мало приємних асоціацій. Але сьогодні ми говоримо про інші черги — в Java. Чергою в Java вважається все, що успадковує інтерфейс Queue, який зі свого боку розширює Collection...
+<p>----------------------------------------</p>
+<p>У багатьох людей слово «черга» викликає дуже мало приємних асоціацій. Але сьогодні ми говоримо про інші черги — в Java.
+    Чергою в Java вважається все, що успадковує інтерфейс <span class="text-neon"><span
+            class="text-bold"><em>Queue</em></span></span>, який зі свого боку розширює <span class="text-neon"><span
+            class="text-bold">Collection</span></span>. Це означає, що з чергами можна працювати, як із колекціями.</p>
+
+    <p>Черги в Java працюють за двома принципами: <span class="text-bold">FIFO</span> і <span class="text-bold">LIFO</span>.</p>
+
+    <p><span class="text-bold">FIFO</span> — First In First Out, принцип звичайної черги (звичайно, якщо немає тих, кому потрібно «тільки запитати»), у якому перший
+    елемент потрапляє у чергу і першим виходить із неї.</p>
+
+    <p><span class="text-bold">LIFO</span> — Last In First Out, принцип стека, у якому останній елемент, доданий до черги, першим вийде із неї. Наприклад, як з
+    колодою карт: ти братимеш всі карти зверху по одній, щоб дійти до кінця.</p>
+
+    <p>Ієрархія <span class="text-neon"><span class="text-bold"><em>Queue</em></span></span> в Java виглядає так:</p>
+
+    <img data-max-width="512" data-id="51eccf50-9b03-4a72-a818-9901359aaf3d" src="https://cdn.javarush.com/images/article/51eccf50-9b03-4a72-a818-9901359aaf3d/original.png" alt="">
+
+    <p>Тут видно, що у <span class="text-neon"><span class="text-bold"><em>Queue</em></span></span> має 3 класи реалізації: <span class="code"><span class="text-green">LinkedList</span></span>, <span class="code"><span class="text-green">ArrayDeque</span></span> і <span class="code"><span class="text-green">PriorityQueue</span></span>. <span class="code"><span class="text-green">LinkedList</span></span> і <span class="code"><span class="text-green">ArrayDeque</span></span> успадковує безпосередньо не від <span class="text-neon"><span class="text-bold"><em>Queue</em></span></span>, а від <span class="text-neon"><span class="text-bold"><em>Deque</em></span></span>. </p>
+
+    <p><span class="text-neon"><span class="text-bold"><em>Deque</em></span></span> — це інтерфейс, який додали у 6 версії Java. Він містить низку корисних для черг методів і дає можливість черзі
+    функціонувати як двобічна черга. Тобто працювати за принципом FIFO <span class="text-bold">FIFO</span> або <span class="text-bold">LIFO</span>. </p>
+
+    Одним із двох спадкоємців <span class="text-neon"><span class="text-bold"><em>Deque</em></span></span> є <span
+        class="code"><span class="text-green">ArrayDeque</span></span>. Він підтримує двобічну структуру даних черги, що дає
+    можливість вставляти та видаляти елементи з обох боків. Також він – динамічний масив, який може автоматично збільшувати
+    свій розмір.
+
+    <p>Є ще клас <span class="code"><span class="text-green">PriorityQueue</span></span>, прямий спадкоємець <span
+        class="text-neon"><span class="text-bold"><em>Queue</em></span></span>: принцип його роботи відрізняється від
+    спадкоємців <span class="text-neon"><span class="text-bold"><em>Dequeue</em></span></span>.</p>
+
+    <p><span class="code"><span class="text-green">PriorityQueue</span></span> — це черга з пріоритетом, яка за замовчуванням
+    розміщує елементи згідно з природним порядком сортування. Для сортування тут використовується <span
+        class="text-neon"><span class="text-bold"><em>Comparable</em></span></span> та <span class="text-neon"><span
+            class="text-bold"><em>Comparator</em></span></span>. Принцип тут такий самий, як і з <span class="code"><span
+            class="text-green">TreeSet</span></span> або <span class="code"><span class="text-green">TreeMap</span></span> —
+    класів, які дотримуються інтерфейсу <span class="text-neon"><span class="text-bold"><em>Comparable</em></span></span> і
+    мають свій порядок сортування.</p>
+
+    <pre class='language-java line-numbers'><code>
+PriorityQueue&lt;String&gt; priorityQueue = new PriorityQueue&lt;&gt;(Comparator.comparingInt(String::length));
+
+priorityQueue.add("Andrew");
+priorityQueue.add("John");
+priorityQueue.add("Rob");
+
+while (!priorityQueue.isEmpty()) {
+   System.out.println(priorityQueue.remove());
+}
+</code></pre>
+
+    <p>Запустивши цей приклад у консолі, ти отримаєш:</p>
+
+    <div class="terminal">Rob<br />
+John<br />
+Andrew</div>
+
+    <p>Оскільки ми працюємо з чергами, а не зі звичайними колекціями, ми повинні видалити елемент зі списку. Використовуємо цю
+    конструкцію:</p>
+
+    <pre class='language-java line-numbers'><code>
+while (!priorityQueue.isEmpty()) {
+            System.out.println(priorityQueue.remove());
+}
+</code></pre>
+
+    <p>Інтерфейс <span class="text-neon"><span class="text-bold"><em>Deque</em></span></span> успадковує методи <span
+        class="text-neon"><span class="text-bold"><em>Queue</em></span></span> і додає низку своїх цікавих методів:</p>
+
+    <table>
+        <tbody>
+            <tr>
+                <td><span class="code text-orange">void addFirst(Е obj)</span></td>
+                <td>Додає елемент <span class="code">obj</span> на початок черги
+</td>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">void addLast(Е obj)</span></td>
+                <td>Додає елемент <span class="code">obj</span> у кінець черги
+</td>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">Е getFirst() </span></td>
+                <td>Повертає перший елемент із черги
+</td>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">Е getLast()</span></td>
+                <td>Повертає останній елемент із черги
+</td>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">boolean offerFirst(Е obj)</span></td>
+                <td>Додає елемент <span class="code">obj</span> на початок черги та повертає <span class="text-bold">true</span>, якщо
+                елемент доданий, інакше поверне <span class="text-bold">false</span>
+</td>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">boolean offerLast(E obj) </span></td>
+                <td>Додає елемент <span class="code">obj</span> в кінець черги та повертає <span class="text-bold">true</span>, якщо елемент
+                доданий, інакше поверне <span class="text-bold">false</span>
+</td>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">Е рор() </span></td>
+                <td>Витягує перший елемент із черги та видаляє його
+</td>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">void push(Е obj)</span></td>
+                <td>Додає елемент <span class="code">obj</span> на початок черги
+</td>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">Е peekFirst() </span></td>
+                <td>Повертає (але не видаляє) перший елемент із черги
+</td>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">Е peekLast()</span></td>
+                <td>Повертає (але не видаляє) останній елемент із черги
+</td>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">Е pollFirst()</span></td>
+                <td>Повертає та видаляє перший елемент із черги, поверне <span class="text-bold">null</span>, якщо немає елементів
+</td>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">Е pollLast()</span></td>
+                <td>Повертає та видаляє останній елемент із черги, поверне <span class="text-bold">null</span>, якщо немає елементів
+</td>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">Е removeLast()</span></td>
+                <td>Повертає та видаляє перший елемент черги, створить виняток, якщо немає елементів
+</td>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">Е removeFirst() </span></td>
+                <td>Повертає та видаляє останній елемент черги, створить виняток, якщо немає елементів
+</td>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">boolean removeFirstOccurrence(Object obj)  </span></td>                                    
+                <td>Видаляє перше входження <span class="code">obj</span> з черги
+</td>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">boolean removeLastOccurrence(Object obj)</span></td>
+                <td>Видаляє останнє входження <span class="code">obj</span> з черги</td>
+            </tr>
+            <tr>
+        </tbody>
+    </table>
+
+
+    <p>Давай тепер розглянемо кілька із них на практиці.</p>
+
+    <p>Додамо спочатку елемент у чергу:</p>
+
+    <pre class='language-java line-numbers'><code>
+Deque&lt;String&gt; deque = new ArrayDeque&lt;&gt;();
+
+        deque.add("Apple"); // Додає елемент Apple у кінець черги
+        deque.addFirst("Orange"); // Додає елемент Orange на початок черги
+        deque.addLast("Pineapple"); // Додає елемент Pineapple у кінець черги
+  
+        System.out.println(deque);
+    </code></pre>
+
+    <div class="terminal">[Orange, Apple, Pineapple]</div>
+
+    <p>Тепер отримаємо значення з черги:</p>
+
+    <pre class='language-java line-numbers'><code>
+	Deque&lt;String&gt; deque = new ArrayDeque&lt;&gt;();
+
+	deque.add("Apple"); 
+        deque.addFirst("Orange"); 
+        deque.addLast("Pineapple"); 
+
+         
+        System.out.println("The First element is: "+ deque.getFirst());
+                          
+        System.out.println("The Last element is: " + deque.getLast());
+                          
+    }
+    </code></pre>
+
+    <p>Цей код виведе в консолі перший та останній елемент черги.</p>
+
+    <div class="terminal">The First element is: Orange<br />
+The Last element is: Pineapple</div>
+
+    <p></p>
+
+    <pre class='language-java line-numbers'><code>
+         Deque&lt;String&gt; deque = new ArrayDeque&lt;&gt;();
+
+        deque.add("Apple"); 
+        deque.addFirst("Orange"); 
+        deque.addLast("Pineapple"); 
+        deque.add("Lemon");
+
+System.out.println(deque.pop()); // витягне та видалить верхній елемент черги
+System.out.println(deque.poll()); // витягне та видалить верхній елемент черги
+
+System.out.println(deque);
+    </code></pre>
+
+    <p>Запустивши цей код, отримаємо:</p>
+
+    <div class="terminal">Orange<br />
+Apple<br />
+<br >
+[Pineapple, Lemon]</div>
+
+    <p>Різниця між методами <span class="code text-orange">pop()</span> і <span class="code text-orange">poll()</span> у тому,
+    що <span class="code text-orange">pop()</span> викликає виняток <span class="text-red"><span
+            class="text-bold">NoSuchElementException</span></span> за порожнього списку, а <span
+        class="code text-orange">poll()</span> поверне null.</p>
+
+    <p>Тепер розглянемо методи <span class="code text-orange">pollFirst()</span> і <span
+        class="code text-orange">pollLast()</span>.</p>
+
+    <pre class='language-java line-numbers'><code>
+Deque&lt;String&gt; deque = new ArrayDeque&lt;&gt;();
+
+        deque.add("Apple"); 
+        deque.addFirst("Orange"); 
+        deque.addLast("Pineapple"); 
+        deque.add("Lemon");
+
+System.out.println(deque.pollFirst()); // витягне та видалить перший елемент черги
+System.out.println(deque.pollLast()); // витягне та видалить останній елемент черги.
+System.out.println(deque);
+    </code></pre>
+
+    <div class="terminal">Orange<br />
+Lemon<br />
+[Apple, PineApple]</div>
+
+    <p>Обидва методи повертають і видаляють значення з черги.</p>
+
+    <p>Приклад використання методів <span class="code text-orange">peekFirst()</span> i <span class="code text-orange">peekLast()</span>:</p>
+
+    <pre class='language-java line-numbers'><code>
+Deque&lt;String&gt; friends = new ArrayDeque&lt;&gt;();
+
+friends.add("John");
+friends.add("Rob");
+friends.add("Greg");
+friends.add("Max");
+friends.add("Oliver");
+
+System.out.println("The first element is: " + friends.peekFirst());
+System.out.println("The first element is: " + friends.peekLast());
+
+System.out.println(friends);
+    </code></pre>
+
+    <div class="terminal">The first element is: John<br />
+The first element is: Oliver<br />
+[John, Rob, Greg, Max, Oliver]</div>
+
+    <p>Обидва методи повертають перший/останній елемент із черги і не видаляють їх. Якщо черга порожня, буде повернено <span class="text-bold">null</span>.</p>
+
+    <p>Загалом якось так, сьогодні ми навчилися працювати з чергами в Java. Тепер ти знатимеш, як їх використовувати на
+    практиці.</p>

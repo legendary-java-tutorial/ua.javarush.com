@@ -1,0 +1,90 @@
+﻿Завантаження класів
+<p>----------------------------------------</p>
+Ми вже пояснювали, що класи — це складні типи даних. А тепер трохи поговоримо про обробку класів Java-машиною: у Java все є об'єктом, навіть клас. Клас — це об'єкт. Цікаво? Тоді йдемо далі. Завантаження класу в пам'ять Насправді під час завантаження
+<p>----------------------------------------</p>
+<p>Ми вже пояснювали, що класи — це складні типи даних. А тепер трохи поговоримо про обробку класів Java-машиною: у Java все є об'єктом, навіть клас. <strong>Клас — це об'єкт</strong>. Цікаво? Тоді йдемо далі.</p>
+<p><strong>Завантаження класу в пам'ять</strong></p>
+<p>Насправді під час завантаження класу в пам'ять створюються три спеціальних «об'єкти»:</p>
+<img data-max-width="1024" data-id="8e69ff84-9321-4dd5-b1fa-58aed7719044" src="https://cdn.javarush.com/images/article/8e69ff84-9321-4dd5-b1fa-58aed7719044/1024.jpeg" alt="">
+<p>Короткий опис малюнка</p>
+<p><strong>Жовтий прямокутник:</strong></p>
+<p>Файл із кодом має розширення імені «.class» і зберігається на диску. Він містить інформацію про клас, його поля й методи, а також код методів, скомпільований у байт-код.</p>
+<p><strong>Помаранчевий прямокутник:</strong></p>
+<p>Завантажуючи клас у пам'ять, Java-машина компілює його байт-код у машинний код із урахуванням характеристик комп'ютера — типу процесора й операційної системи. Доступ до цього машинного коду має тільки Java-машина: програмісти доступу до нього не мають.</p>
+<p><strong>Зелений прямокутник:</strong></p>
+<p>Java-машина створює певний «об'єкт», який містить усі статичні змінні й методи класу. Доступ до цього «об'єкта» здійснюється за іменем класу.</p>
+<p>Наприклад, коли ви пишете <code>java.lang.<span class="text-neon">Math</span>.<span class="text-green">PI</span></code>, ви звертаєтеся до статичної змінної <code>PI</code>, що міститься в класі <code>java.lang.Math</code>. Саме цей клас <code>java.lang.Math</code> і показано на зеленому прямокутнику. І саме в ньому зберігається статична змінна <code>PI</code>.</p>
+<p><strong>Синій прямокутник:</strong></p>
+<p>Коли Java-машина завантажує код класу в пам'ять, вона створює спеціальний об'єкт типу <code>java.lang.Class</code>, в якому зберігається інформація про завантажений клас: його ім'я, імена методів, імена й типи полів тощо.</p>
+<p>Назва «Class» може дещо збивати з пантелику. Логічніше було б назвати цей об'єкт ClassInfo: він лише зберігає певну інформацію про завантажений клас.</p>
+<p>Отримати об'єкт класу можна для будь-якого типу за допомогою такої команди:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present"><code><span class="text-neon">Class</span> <span class="code text-user">ім'я</span> = <span class="text-viola">Ім'яКласу</span>.<span class="text-red">class</span>;</code></pre>
+</div>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class=""><code><span class="text-neon">Class</span> <span class="code text-user">a</span> = <span class="text-viola">String</span>.<span class="text-red">class</span>;</code></pre>
+        </td>
+        <td>Отримуємо об'єкт типу <code><span class="text-neon">Class</span></code> з інформацією про клас <code><span class="text-viola">String</span></code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code><span class="text-neon">Class</span> <span class="code text-user">b</span> = <span class="text-viola">Object.</span><span class="text-red">class</span>;</code></pre>
+        </td>
+        <td>Отримуємо об'єкт типу <code><span class="text-neon">Class</span></code> з інформацією про клас <code><span class="text-viola">Object</span></code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code><span class="text-neon">Class</span> <span class="code text-user">c</span> = <span class="text-viola">Integer</span>.<span class="text-red">class</span>;</code></pre>
+        </td>
+        <td>Отримуємо об'єкт типу <code><span class="text-neon">Class</span></code> з інформацією про клас <code><span class="text-viola">Integer</span></code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code><span class="text-neon">Class</span> <span class="code text-user">d</span> = <span class="text-viola">int</span>.<span class="text-red">class</span>;</code></pre>
+        </td>
+        <td>Отримуємо об'єкт типу <code><span class="text-neon">Class</span></code> з інформацією про тип <code><span class="text-viola">int</span></code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code><span class="text-neon">Class</span> <span class="code text-user">e</span> = <span class="text-viola">void</span>.<span class="text-red">class</span>;</code></pre>
+        </td>
+        <td>Отримуємо об'єкт типу <code><span class="text-neon">Class</span></code> з інформацією про тип <code><span class="text-viola">void</span></code></td>
+    </tr>
+    </tbody>
+</table>
+<p>Посилання на об'єкт з описом класу можна також отримати для об'єкта: для цього кожен об'єкт має метод <code>getClass()</code>, успадкований від класу <code>Object</code>.</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-neon">Class</span> a = "Привіт".<span class="text-red">getClass</span>();</code></pre>
+        </td>
+        <td>Той самий об'єкт, що й <code>String.class</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-neon">Class</span> b = new Integer().<span class="text-red">getClass</span>();</code></pre>
+        </td>
+        <td>Той самий об'єкт, що й <code>Integer.class</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-neon">Class</span> c = Boolean.TRUE.<span class="text-red">getClass</span>();</code></pre>
+        </td>
+        <td>Той самий об'єкт, що й <code>Boolean.class</code></td>
+    </tr>
+    </tbody>
+</table>

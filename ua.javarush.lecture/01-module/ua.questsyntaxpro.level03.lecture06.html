@@ -1,0 +1,163 @@
+﻿Порівняння рядків за змістом
+<p>----------------------------------------</p>
+Порівняння рядків. Це все чудово. Але ж ви бачите, що рядки s1 і s2 фактично однакові — вони містять однаковий текст. Як сказати програмі, щоб вона порівнювала рядки, дивлячись не на адреси об'єктів String, а на вміст цих об'єктів? Для цього в Java тип String має спеціальний
+<p>----------------------------------------</p>
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="fea73f72-714e-4131-891b-d46f1f23a8ab" data-max-width="1024" src="https://cdn.javarush.com/images/article/fea73f72-714e-4131-891b-d46f1f23a8ab/original.png" alt=""/>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<h2>1. Порівняння рядків</h2>
+<p>Це все чудово. Але ж ви бачите, що рядки <code>s1</code> і <code>s2</code> фактично однакові — вони містять однаковий текст. Як сказати програмі, щоб вона порівнювала рядки, дивлячись не на адреси об'єктів <code>String</code>, а на вміст цих об'єктів?</p>
+<p>Для цього в Java тип <code>String</code> має спеціальний метод — <code>equals</code>. Викликають його в такий спосіб:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-green">рядок1</span>.equals(<span class="text-green">рядок2</span>)</code></pre>
+    <div class="lesson-example-caption">Порівняння двох рядків</div>
+</div>
+<p>Цей метод повертає <code>true</code> (істина), якщо рядки однакові, і <code>false</code> (хибність), якщо вони різні.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="50%">Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="text-red">s1</span> = <span class="text-green">"Привіт"</span>;
+String <span class="text-red">s2</span> = <span class="text-green">"ПРИВІТ"</span>;
+String <span class="text-red">s3</span> = <span class="text-red">s1</span>.toUpperCase();
+
+System.out.println(<span class="text-red">s1</span>.equals(<span class="text-red">s2</span>));
+System.out.println(<span class="text-red">s1</span>.equals(<span class="text-red">s3</span>));
+System.out.println(<span class="text-red">s2</span>.equals(<span class="text-red">s3</span>));</code></pre>
+        </td>
+        <td><pre><code><span class="text-muted">// Привіт</span>
+<span class="text-muted">// ПРИВІТ</span>
+<span class="text-muted">// ПРИВІТ</span>
+
+<span class="text-red">false</span> <span class="text-muted">// різні</span>
+<span class="text-red">false</span> <span class="text-muted">// різні</span>
+<span class="text-green">true</span>  <span class="text-muted">// однакові, хоча адреси різні</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Інші приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-green">"Привіт"</span>.equals(<span class="text-green">"ПРИВІТ"</span>)</code></pre>
+        </td>
+        <td><code><span class="text-red">false</span></code></td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="text-red">s</span> = <span class="text-green">"Привіт"</span>;
+<span class="text-green">"Привіт"</span>.equals(<span class="text-red">s</span>);</code></pre>
+        </td>
+        <td><code><span class="text-green">true</span></code></td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="text-red">s </span>= <span class="text-green">"При"</span>;
+<span class="text-green">"Привіт"</span>.equals(<span class="text-red">s</span> + <span class="text-green">"віт"</span>);</code></pre>
+        </td>
+        <td><code><span class="text-green">true</span></code></td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="text-red">s </span>= <span class="text-green">"П"</span>;
+(<span class="text-red">s</span> + <span class="text-green">"ривіт"</span>).equals(<span class="text-red">s</span> + <span class="text-green">"ривіт"</span>);</code></pre>
+        </td>
+        <td><code><span class="text-green">true</span></code></td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task03.task0312"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task03.task0313"></div>
+<hr>
+<h2>2. Порівняння рядків без урахування регістру</h2>
+<p>В останньому прикладі ви побачили, що порівняння <code><span class="text-green">"Привіт"</span>.equals(<span class="text-green">"ПРИВІТ"</span>)</code> дає <code>false</code>. Дійсно, рядки ж не рівні. Хоча…</p>
+<p>Рядки, звісно, не рівні, але ж у них написано одне й те саме, тільки розмір (регістр) літер різний. Чи можна їх якось так порівняти, щоб розмір літер при цьому не враховувався? Ну щоб <code><span class="text-green">"Привіт"</span>.equals(<span class="text-green">"ПРИВІТ"</span>)</code> дало <code>true</code>?</p>
+<p>І відповідь на це запитання — так. У Java тип <code>String</code> має ще один спеціальний метод — <code>equalsIgnoreCase</code>. Викликають його в такий спосіб:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-green">рядок1</span>.equalsIgnoreCase(<span class="text-green">рядок2</span>)</code></pre>
+</div>
+<p>Назва методу перекладається як <span class="term">порівняти, ігноруючи регістр</span>. У назві методу є дві вертикальні лінії: перша — це <code>L</code> маленька, а друга — це <code>i</code>, тільки велика. Не переплутайте.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="65%">Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="lecture-code language-java line-numbers"><code>String <span class="text-red">s1</span> = <span class="text-green">"Привіт"</span>;
+String <span class="text-red">s2</span> = <span class="text-green">"ПРИВІТ"</span>;
+String <span class="text-red">s3</span> = <span class="text-red">s1</span>.toUpperCase();
+
+System.out.println(<span class="text-red">s1</span>.equalsIgnoreCase(<span class="text-red">s2</span>));
+System.out.println(<span class="text-red">s1</span>.equalsIgnoreCase(<span class="text-red">s3</span>));
+System.out.println(<span class="text-red">s2</span>.equalsIgnoreCase(<span class="text-red">s3</span>));  </code></pre>
+        </td>
+        <td>
+                <pre><code><span class="text-muted">// Привіт</span>
+<span class="text-muted">// ПРИВІТ</span>
+<span class="text-muted">// ПРИВІТ</span>
+
+<span class="text-green">true</span>
+<span class="text-green">true</span>
+<span class="text-green">true</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task03.task0314"></div>
+<hr>
+<h2>3. Приклад порівняння рядків</h2>
+<p>Наведемо лише один простий приклад: потрібно ввести з клавіатури два рядки й визначити, однакові вони чи ні. Отак виглядатиме цей код:</p>
+<pre class="language-java"><code>Scanner <span class="text-orange">console</span> = new Scanner(System.in);
+String <span class="text-red">a</span> = <span class="text-orange">console</span>.nextLine();
+String <span class="text-red">b</span> = <span class="text-orange">console</span>.nextLine();
+String <span class="text-red">result</span> = <span class="text-red">a</span>.equals(<span class="text-red">b</span>) ? <span class="text-green">"Однакові<span class="text-green">"</span></span> : <span class="text-green">"Різні"</span>;
+System.out.println(<span class="text-red">result</span>);</code></pre>
+<hr>
+<h2>4. Цікавий нюанс порівняння рядків</h2>
+<p>Є один важливий нюанс, про який вам слід знати.</p>
+<p>Якщо <span class="term">Java-компілятор</span> у вашому коді (саме в коді) знайде кілька однакових рядків, для економії пам'яті він створить для них тільки один об'єкт.</p>
+<pre class="language-java"><code>String <span class="text-user">text</span> = <span class="text-green">"Це дуже важливе повідомлення"</span>;
+String <span class="text-orange">message</span> = <span class="text-green">"Це дуже важливе повідомлення"</span>;</code></pre>
+<p>От що в підсумку буде в пам'яті:</p>
+<img data-max-width="1024" data-id="f237cde7-afd5-4d7a-88ae-d80b146bffd1" src="https://cdn.javarush.com/images/article/f237cde7-afd5-4d7a-88ae-d80b146bffd1/1024.jpeg" alt="">
+<p>І якщо в цьому випадку ви порівняєте між собою <code>text == message</code>, то отримаєте <code>true</code>. Отож не дивуйтеся.</p>
+<p>А якщо вам раптом конче потрібно, щоб посилання були різні, можна написати отак:</p>
+<pre class="language-java"><code>String <span class="text-red">text</span> = <span class="text-green">"Це дуже важливе повідомлення"</span>;
+String <span class="text-red">message</span> = new String (<span class="text-green">"Це дуже важливе повідомлення"</span>);</code></pre>
+<p>Або так:</p>
+<pre class="language-java"><code>String <span class="text-red">text</span> = <span class="text-green">"Це дуже важливе повідомлення"</span>;
+String <span class="text-red">message</span> = new String (<span class="text-red">text</span>);</code></pre>
+<p>В обох цих випадках змінні <code>text</code> і <code>message</code> вказують на різні об'єкти, що містять однаковий текст.</p>
+
+<hr>
+
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="8efd10fe-b13d-4439-aace-760fb213f1a1" data-max-width="1024" src="https://cdn.javarush.com/images/article/8efd10fe-b13d-4439-aace-760fb213f1a1/original.png" alt=""/>
+        </div>
+    </div>
+</div>

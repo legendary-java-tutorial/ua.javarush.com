@@ -1,0 +1,161 @@
+﻿Лайфхаки: як писати код краще та швидше
+<p>----------------------------------------</p>
+Вирази й команди. Усі команди в Java поділяються на дві категорії: команди (Statement) і вирази (Expression). Про команду зазвичай говорять, що вона виконується, а про вираз — що він обчислюється. Проте це не головне. Основна відмінність між командою та виразом полягає в тому, що вираз має
+<p>----------------------------------------</p>
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="10fe4404-0c47-4699-8be7-c6ab418d5c8d" data-max-width="1024" src="https://cdn.javarush.com/images/article/10fe4404-0c47-4699-8be7-c6ab418d5c8d/original.png" alt=""/>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<h2>1. Вирази й команди</h2>
+<p>Усі команди в Java поділяються на дві категорії: <span class="term text-yellow">команди</span> (<span class="term">Statement</span>) і <span class="term text-viola">вирази</span> (<span class="term">Expression</span>). Про команду зазвичай говорять, що вона <span class="term text-yellow">виконується</span>, а про вираз — що він <span class="term text-viola">обчислюється</span>. Проте це не головне.</p>
+<p>Основна відмінність між командою та виразом полягає в тому, що вираз має <span class="term">результат обчислення</span>. І цей результат, по-перше, має тип, а по-друге, його можна присвоїти якомусь об'єкту або використати в якомусь іншому виразі.</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="50%">Код</th>
+        <th>Примітки</th>
+    </tr>
+    <tr>
+        <td>
+            <code class="text-yellow">int x;</code>
+        </td>
+        <td>Команда</td>
+    </tr>
+    <tr>
+        <td>
+            <code class="text-viola">(a &lt; 10)</code>
+        </td>
+        <td>Вираз, тип <code>boolean</code></td>
+    </tr>
+    <tr>
+        <td>
+            <code class="text-viola">i++;</code>
+        </td>
+        <td>Вираз, тип збігається з типом змінної <code>i</code></td>
+    </tr>
+    <tr>
+        <td>
+            <code class="text-viola">x = 5;</code>
+        </td>
+        <td>Вираз, тип збігається з типом змінної <code>x</code></td>
+    </tr>
+    </tbody>
+</table>
+<p>І що це нам дає?</p>
+<p>По-перше, ми можемо скористатися тим фактом, що дуже багато команд насправді є виразами (мають результат обчислення). Наприклад, такий код працюватиме:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="50%">Код</th>
+        <th>Примітки</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int x, y, z;
+x = y = z = 1;</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>int x, y, z;
+x = (y = (z = 1));</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>По-друге, ми можемо ігнорувати результат обчислення виразу, якщо хочемо.</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="50%">Код</th>
+        <th>Код, в якому ми ігноруємо результат:</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-green">x</span> = scanner.<span class="text-red">nextInt</span>();</code></pre>
+            <pre class="language-java"><code>boolean <span class="text-green">m</span> = (5 &lt; 10);</code></pre>
+        </td>
+        <td>
+            <pre class="language-java"><code>scanner.<span class="text-red">nextInt</span>();</code></pre>
+            <pre class="language-java"><code>(5 &lt; 10);</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Ігнорувати результат обчислення виразу потрібно, наприклад, у тих випадках, коли вираз, окрім результату, робить ще щось корисне, і ця дія для нас важлива, а власне результат — ні.</p>
+<hr>
+<h2>2. Тернарний оператор</h2>
+<img data-max-width="1024" data-id="5b620834-9895-424d-a1dc-fb4c4f59be36" src="https://cdn.javarush.com/images/article/5b620834-9895-424d-a1dc-fb4c4f59be36/1024.jpeg" alt="">
+<p>Цей лайфхак уже цікавіший за попередній. У Java є спеціальний <span class="term">тернарний</span> (потрійний) <span class="term">оператор</span>. Він чимось схожий на скорочений запис оператора <code>if–else</code>:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="code text-red">Умова</span> <span class="code">?</span> <span class="code text-user">Вираз1</span> <span class="code">:</span> <span class="code text-green">Вираз2</span>;</code></pre>
+    <div class="lesson-example-caption"></div>
+</div>
+<p>Якщо <span class="term text-red">умова</span> істинна, то виконується <span class="term text-user">вираз1</span>, інакше — <span class="term text-green">вираз2</span>. Після умови стоїть <span class="term">знак&nbsp;питання</span>, а два вирази розділені <span class="term">двокрапкою</span>.</p>
+<p>Основна відмінність <span class="term">тернарного оператора</span> від оператора <code>if-else</code> полягає в тому, що тернарний оператор є виразом, отже, його результат можна чому-небудь присвоїти.</p>
+<p>Наприклад, ми хочемо обчислити мінімум серед двох чисел. З використанням тернарного оператора цей код матиме такий вигляд:</p>
+<div class="lesson-example lesson-example--center">
+        <pre class="lecture-code lecture-code--present language-java"><code>int <span class="text-red">a</span> = 2;
+int <span class="text-green">b</span> = 3;
+int min = <span class="text-red">a</span> &lt; <span class="text-green">b</span> ?  <span class="text-red">a</span> : <span class="text-green">b</span>;</code></pre>
+</div>
+<p>Або, припустімо, вам потрібно присвоїти змінній різні значення залежно від якоїсь умови. Як це зробити?</p>
+<p>Варіант перший — скористатися оператором <code>if-else</code>:</p>
+<div class="lesson-example lesson-example--center">
+        <pre class="lecture-code lecture-code--present language-java"><code>int <span class="text-red">age</span> = 25;
+int <span class="text-viola">money</span>;
+if (<span class="text-red">age</span> &gt; 30)
+   <span class="text-viola">money</span> = 100;
+else
+   <span class="text-viola">money</span> = 50;</code></pre>
+</div>
+<p>Варіант другий — використати <span class="term">тернарний оператор</span>, тобто скорочений запис оператора <code>if-else</code>:</p>
+<div class="lesson-example lesson-example--center">
+        <pre class="lecture-code lecture-code--present language-java"><code>int <span class="text-red">age</span> = 25;
+int <span class="text-viola">money</span> = <span class="text-red">age</span> &gt; 30 ? <span class="text-user">100 </span>: <span class="text-green">50</span>;</code></pre>
+</div>
+<p>Так що ж краще використати: оператор <code>if-else</code> чи <span class="term">тернарний оператор</span>? З погляду швидкості виконання особливої різниці немає. Тут швидше питання читомості коду. І це дуже важливий момент: код має не лише правильно працювати, а й легко читатися іншими програмістами.</p>
+<p>Найпростіший критерій може бути таким: якщо <span class="text-green">код уміщується в одному рядку</span> — використовуйте <span class="term">тернарний оператор</span>, якщо одного рядка <span class="text-viola">замало</span> — краще скористатися <code><span>if-else</span></code>.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task03.task0309"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task03.task0310"></div>
+<hr>
+<h2>3. Порівняння дійсних чисел</h2>
+<p>Раніше ми вже говорили, що просто так порівнювати дійсні числа не можна: у процесі роботи з ними завжди можуть виникати несподівані ефекти через те, що частина значущих цифр відкидається.</p>
+<p>Отож існує перевірений часом підхід. Якщо два дійсних числа відрізняються на дуже мале значення, їх можна вважати рівними. Приклад:</p>
+<pre class="language-java"><code>double <span class="text-green">a</span> = 1.000001;
+double <span class="text-green">b </span>= 1.000002;
+if ( (<span class="text-green">b</span> - <span class="text-green">a</span>) &lt; 0.0001 )
+   System.out.println(<span class="text-green">"Числа рівні"</span>);
+else
+   System.out.println(<span class="text-green">"Числа не рівні"</span>);</code></pre>
+<p>Але це ще не все: різниця чисел цілком може виявитися від'ємним числом. Отже, для того, щоб такий підхід працював, потрібно порівнювати не просто різницю чисел, а модуль різниці чисел: <code>|a-b|</code></p>
+<p>У Java є спеціальний метод для обчислення модуля числа — <code>Math.abs()</code>:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span>int</span> <span class="text-viola">m</span><span> = <span class="text-red">Math</span></span><span>.<span class="text-viola">abs</span></span><span>(<span class="text-user">значення</span>);</span></code></pre>
+</div>
+<p>Тому виправлений варіант наведеного вище прикладу матиме ось такий вигляд:</p>
+<pre class="language-java"><code>double <span class="text-green">a</span> = 1.000001;
+double <span class="text-green">b</span> = 1.000002;
+
+if ( <span><span class="text-red">Math</span></span><span>.<span class="text-viola">abs</span></span>(<span class="text-green">b</span> - <span class="text-green">a</span>) &lt; 0.0001 )
+   System.out.println(<span class="text-green">"Числа рівні"</span>);
+else
+   System.out.println(<span class="text-green">"Числа не рівні"</span>);</code></pre>
+
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task03.task0311"></div>
+<hr>
+
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="038b25e8-f3cd-4209-a1d7-cf4e7ca49a8f" data-max-width="1024" src="https://cdn.javarush.com/images/article/038b25e8-f3cd-4209-a1d7-cf4e7ca49a8f/original.png" alt=""/>
+        </div>
+    </div>
+</div>

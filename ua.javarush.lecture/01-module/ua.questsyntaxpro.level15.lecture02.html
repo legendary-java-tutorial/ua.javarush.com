@@ -1,0 +1,89 @@
+﻿Ланцюжки потоків
+<p>----------------------------------------</p>
+Клас InputStreamReader. Ще однією цікавою особливістю потоків є можливість об'єднувати кілька потоків у ланцюжки. Потік може читати дані не тільки із джерела даних, в якому вони зберігаються, але також з іншого потоку. Це дуже потужний механізм у Java, який дав змогу конструювати складні
+<p>----------------------------------------</p>
+<h2>1. Клас <code>InputStreamReader</code></h2>
+<p>Ще однією цікавою особливістю потоків є можливість об'єднувати кілька потоків у <strong>ланцюжки. Потік може читати дані</strong> не тільки із джерела даних, в якому вони зберігаються, але також з <strong>іншого потоку</strong>.</p>
+<p>Це дуже потужний механізм у Java, який дав змогу конструювати складні сценарії читання даних, поєднуючи різні потоки. Ця схема має приблизно такий вигляд:</p>
+<img data-max-width="1024" data-id="e8219130-65f7-4ac1-b690-99de9019fead" src="https://cdn.javarush.com/images/article/e8219130-65f7-4ac1-b690-99de9019fead/1024.jpeg" alt="">
+<p>Коли програма читає дані з потоку даних, він своєю чергою читає їх зі свого джерела даних: з іншого потоку даних або, наприклад, із файлу.</p>
+<p>Кожен потік даних не просто читає та віддає дані, а водночас може перетворювати їх або виконувати з ними різні операції. Наочним прикладом такого «проміжного потоку» даних є клас <code>InputStreamReader</code>.</p>
+<p>Ми вже знаємо клас із назвою <code>FileReader</code> — це <code>Reader</code>, який читає дані з файлу. А звідки читає дані клас <code>InputStreamReader</code>? Правильно: з потоку <code>InputStream</code>.</p>
+<p>Щоб створити об'єкт типу <code>InputStreamReader</code>, у нього потрібно передати об'єкт типу <code>InputStream</code> або об'єкт його класу-спадкоємця. Приклад:</p>
+<pre class="language-java"><code>String <span class="code text-green">src</span> = "c:\\projects\\log.txt";
+<span class="text-viola">FileInputStream</span> <span class="code text-user">input</span> = new <span class="text-viola">FileInputStream</span>(<span class="code text-green">src</span>);
+<span class="text-neon">InputStreamReader</span> <span class="code text-orange">reader</span> = new <span class="text-neon">InputStreamReader</span>(<span class="code text-user">input</span>);</code></pre>
+<p>Клас <code>InputStreamReader</code> має всі методи, які має клас <code>Reader</code>, і працюють вони так само.</p>
+<p>Основна відмінність класу <code>InputStreamReader</code> і, скажімо, класу <code>FileReader</code> — це джерело, звідки вони читають дані: <code>FileReader</code> читає дані з файлу (тому він і називається <code>FileReader</code>), а <code>InputStreamReader</code> читає дані з потоку <code>InputStream</code>.</p>
+<p><span class="text-green">Коли ви читаєте символ з об'єкта <code><span class="text-green">FileReader</span></code> за допомогою методу <code><span class="text-green">read()</span></code>, він своєю чергою читає з файлу на диску два байти й повертає їх вам як <code><span class="text-green">char</span></code>.</span></p>
+<p><span class="text-viola">Коли ви читаєте символ з об'єкта <code><span class="text-viola">InputStreamReader</span></code> за допомогою методу <code><span class="text-viola">read()</span></code>, він своєю чергою читає два байти з переданого в нього об'єкта <code><span class="text-viola">FileInputStream</span></code>, який своєю чергою читає дані з файлу. </span>У підсумку маємо <strong>ланцюжок викликів</strong> методів <code>read()</code>.</p>
+<hr>
+<h2>2. Клас <code>BufferedReader</code></h2>
+<p>Є ще один цікавий клас, який ви, ймовірно, будете часто використовувати — <code>BufferedReader</code>. Це теж «проміжний потік», який читає дані з іншого потоку.</p>
+<p>Клас <code>BufferedReader</code>, як випливає з його назви, є класом-спадкоємцем класу <code>Reader</code> і дає змогу читати <span class="text-green">символи</span>. Однак найцікавіше те, що джерелом даних для нього теж є <span class="text-viola">потік, з якого можна читати символи</span>, — потік-спадкоємець класу <code>Reader</code>.</p>
+<p>У чому ж сенс? На відміну від <code>Inputstreamreader</code>, клас <code>BufferedReader</code> не перетворює байти на символи: він взагалі нічого не перетворює. Натомість він <span class="term">буферизує дані</span>.</p>
+<img data-max-width="800" data-id="bffa01b4-f52e-4815-ac80-4ee46df1dc75" src="https://cdn.javarush.com/images/article/bffa01b4-f52e-4815-ac80-4ee46df1dc75/800.jpeg" alt="">
+<p>Коли програма читає з об'єкта <code>BufferedReader</code> один символ, він читає зі свого потоку-джерела відразу великий масив символів і зберігає їх у своєму внутрішньому буфері.</p>
+<p>Під час читання наступного символу з об'єкта <code>BufferedReader</code> цей символ можна просто взяти з цього внутрішнього масиву-буфера, не звертаючись до потоку-джерела даних. І тільки тоді, коли буде прочитано всі символи в буфері, він знову прочитає великий масив символів.</p>
+<p>А ще клас <code>BufferedReader</code> має дуже корисний метод <code>String readLine()</code>, який дає змогу читати дані з потоку-джерела відразу рядками. За допомогою цього методу можна, наприклад, прочитати якийсь файл і вивести його вміст на екран рядок за рядком. Приклад:</p>
+<p>Ми спеціально навели код у компактному форматі, щоб показати, як це зручно. Цей код можна також написати детальніше.</p>
+<table>
+    <tbody>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="code text-green">src</span> = "c:\\projects\\log.txt";
+
+try(<span class="text-viola">FileReader</span> <span class="code text-user">in</span> = new <span class="text-viola">FileReader</span>(<span class="code text-green">src</span>);
+<span class="text-neon">BufferedReader</span> <span class="code text-orange">reader</span> = new <span class="text-neon">BufferedReader</span>(<span class="code text-user">in</span>))
+{
+   while (<span class="code text-orange">reader</span>.<span class="text-red">ready</span>())
+   {
+      String <span class="code text-green">line</span> = <span class="code text-orange">reader</span>.<span class="text-red">readLine</span>();
+      System.out.println(<span class="code text-green">line</span>);
+   }
+}</code></pre>
+        </td>
+        <td><br/><br/>Створюємо об'єкт <code>FileReader</code>, джерело даних — файл<br/> Створюємо об'єкт <code>BufferedReader</code>, джерело даних — об'єкт <code>FileReader</code><br/> Доки в reader є дані<br/><br/> Прочитати один рядок<br/> Вивести рядок на екран</td>
+    </tr>
+    </tbody>
+</table>
+<div class="lesson-note lesson-note--important">
+    <div class="lesson-note__container">
+        <div class="lesson-note__head">Важливий момент:</div>
+        <div class="lesson-note__content">
+            <p>Якщо ви з'єднали кілька потоків у ланцюжок, метод <code>close()</code> досить викликати тільки у одного з них: він викличе його у свого джерела даних і т. д., доки не буде закрито останній потік даних.</p>
+        </div>
+    </div>
+</div>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task15.task1507"></div>
+<hr>
+<h2>3. Читання з консолі</h2>
+<p>Ще один цікавий факт: клас <code>Scanner</code> — це, власне, вхідний проміжний потік даних, який читає їх з іншого потоку даних — <code>System.in</code>.</p>
+<p>Наведемо два способи читання рядка з консолі:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Клас Scanner</th>
+        <th>Класи BufferedReader і InputStreamReader</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-user">InputStream</span> <span class="code text-orange">stream</span> = <span class="text-neon">System</span>.<span class="text-green">in</span>;
+<span class="text-neon">Scanner</span> <span class="code text-user">console</span> = new <span class="text-neon">Scanner</span>(<span class="code text-orange">stream</span>);
+String <span class="code text-green">line</span> = <span class="code text-user">console</span>.<span class="text-red">nextLine</span>();</code></pre>
+        </td>
+        <td>
+                <pre class="language-java"><code><span class="text-user">InputStream</span> <span class="code text-orange">stream</span> = <span class="text-neon">System</span>.<span class="text-green">in</span>;
+<span class="text-neon">InputStreamReader</span> <span class="code text-brown">reader</span> = new <span class="text-neon">InputStreamReader</span>(<span class="code text-orange">stream</span>);
+<span class="text-viola">BufferedReader</span> <span class="code text-user">buff</span> = new <span class="text-viola">BufferedReader</span>(<span class="code text-brown">reader</span>);
+String <span class="code text-green">line</span> = <span class="code text-user">buff</span>.<span class="text-red">readLine</span>();</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Виявляється, наш знаменитий <code><span class="text-neon">System</span>.<span class="text-green">in</span></code> — це статична змінна <code><span class="text-green">in</span></code> класу <code><span class="text-neon">System</span></code>. Її тип — <code><span class="text-user">InputStream</span></code>, а ім'я — <code><span class="text-green">in</span></code>.</p>
+<p>Тож ви працюєте з потоками даних і будуєте з них ланцюжки практично із самого початку вивчення Java на JavaRush. А відтепер ви зможете це робити більш осмислено.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task15.task1508"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task15.task1509"></div>

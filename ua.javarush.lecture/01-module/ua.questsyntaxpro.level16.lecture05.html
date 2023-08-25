@@ -1,0 +1,258 @@
+﻿Корисні нюанси для роботи з DateTime API
+<p>----------------------------------------</p>
+Клас LocalDateTime. Клас LocalDateTime поєднує в собі можливості класів LocalDate і LocalTime — він зберігає і дату, і час. Його об'єкти теж незмінювані, а його методи також аналогічні методам класів LocalDate і LocalTime. Отримання поточного моменту: дата й час Тут усе в межах очікувань
+<p>----------------------------------------</p>
+<h2>1. Клас <code>LocalDateTime</code></h2>
+<p>Клас <code><span class="text-neon">LocalDateTime</span></code> поєднує в собі можливості класів <code><span class="text-neon">LocalDate</span></code> і <code><span class="text-neon">LocalTime</span></code>: він зберігає і дату, і час. Його об'єкти теж незмінювані, а його методи також аналогічні методам класів <code><span class="text-neon">LocalDate</span></code> і <code><span class="text-neon">LocalTime</span></code>.</p>
+<p><strong>Отримання поточного моменту: дата й час</strong></p>
+<p>Тут усе в межах очікувань: теж використовується метод <code><span class="text-red">now</span>()</code>. Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">LocalDateTime</span> <span class="code text-user">time</span> = <span class="text-neon">LocalDateTime</span>.<span class="text-red">now</span>();
+System.out.println("Зараз = " + <span class="code text-user">time</span>);</code></pre>
+        </td>
+        <td><pre><code>
+Зараз = <span class="text-red">2019-02-22</span>T<span class="text-red">09:49:19</span>.275039200</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Під час виведення на екран дата й час розділяються літерою <code>T</code>.</p>
+<p><strong>Отримання певного моменту: дата й час</strong></p>
+<p>Як можна очікувати, усе аналогічно класам <code><span class="text-neon">LocalDate</span></code> і <code><span class="text-neon">LocalTime</span></code> — використовується метод <code><span class="text-red">of</span>()</code>:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm language-java"><code>… = <span class="text-neon">LocalDateTime</span>.<span class="text-red">of</span>(<span class="text-user">рік</span>, <span class="text-user">місяць</span>, <span class="text-user">день</span>, <span class="text-user">години</span>, <span class="text-user">хвилини</span>, <span class="text-user">секунди</span>);</code></pre>
+</div>
+<p>Спочатку йдуть параметри, що задають дату, у тих самих форматах, що й у класі <code><span class="text-neon">LocalDate</span></code>. Потім ідуть параметри, що задають час, у тих самих форматах, що й у класі <code><span class="text-neon">LocalTime</span></code>. Нижче наведено список усіх варіацій методу <code><span class="text-red">of</span>()</code>:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Методи</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>of (int <span class="text-user">year</span>, int <span class="text-user">month</span>, int <span class="text-user">day</span>, int <span class="text-green">hour</span>, int <span class="text-green">minute</span>)</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>of (int <span class="text-user">year</span>, int <span class="text-user">month</span>, int <span class="text-user">day</span>, int <span class="text-green">hour</span>, int <span class="text-green">minute</span>, int <span class="text-green">second</span>)</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>of (int <span class="text-user">year</span>, int <span class="text-user">month</span>, int <span class="text-user">day</span>, int <span class="text-green">hour</span>, int <span class="text-green">minute</span>, int <span class="text-green">second</span>, int <span class="text-green">nano</span>)</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>of (int <span class="text-user">year</span>, Month <span class="text-user">month</span>, int <span class="text-user">day</span>, int <span class="text-green">hour</span>, int <span class="text-green">minute</span>)</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>of (int <span class="text-user">year</span>, Month <span class="text-user">month</span>, int <span class="text-user">day</span>, int <span class="text-green">hour</span>, int <span class="text-green">minute</span>, int <span class="text-green">second</span>)</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>of (int <span class="text-user">year</span>, Month <span class="text-user">month</span>, int <span class="text-user">day</span>, int <span class="text-green">hour</span>, int <span class="text-green">minute</span>, int <span class="text-green">second</span>, int <span class="text-green">nano</span>)</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>of (LocalDate <span class="text-user">date</span>, LocalTime <span class="text-green">time</span>)</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Можна задати дату явно або за допомогою об'єктів <code><span class="text-neon">LocalDate</span></code> і <code><span class="text-neon">LocalTime</span></code>:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>LocalDate <span class="code text-user">date</span> = LocalDate.now();
+LocalTime <span class="code text-green">time</span> = LocalTime.now();
+LocalDateTime <span class="code text-orange">current</span> = LocalDateTime.of(<span class="code text-user">date</span>, <span class="code text-green">time</span>);
+System.out.println("Зараз = " + <span class="code text-orange">current</span>);
+
+LocalDateTime <span class="code text-orange">date</span> = LocalDateTime.<span class="text-red">of</span>(<span class="text-user">2019, Month.MAY</span>, <span class="text-user">15</span>, <span class="text-green">12</span>, <span class="text-green">15</span>, <span class="text-green">00</span>);
+System.out.println("Зараз = " + <span class="code text-orange">date</span>);</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+                <pre><code>Зараз = <span class="text-user">2019-02-22</span>T<span class="text-green">10:05:38</span>.465675100
+Зараз = <span class="text-user">2019-05-15</span>T<span class="text-green">12:15</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Клас <code><span class="text-neon">LocalDateTime</span></code> має методи отримання фрагмента дати та/або часу. Вони абсолютно аналогічні методам класів <code><span class="text-neon">LocalDate</span></code> і <code><span class="text-neon">LocalTime</span></code>. Дублювати їх тут ми не будемо.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task16.task1612"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task16.task1613"></div>
+<hr>
+<h2>2. Клас <code>Instant</code></h2>
+<p>Крім того, розробники Java не забули про вподобання старої школи.</p>
+<p>У Date Time API додали клас Instant для роботи з часом, пов'язаним із процесами всередині комп'ютерів. Замість годин, хвилин і секунд, він оперує <strong>секундами, мілісекундами й наносекундами.</strong></p>
+<p>Цей клас зберігає в собі два поля:</p>
+<ul>
+    <li><strong>кількість секунд</strong>, які минули з 1 січня 1970 року</li>
+    <li><strong>кількість наносекунд</strong></li>
+</ul>
+<p>Клас створено для розробників? Так. Тому він знову рахує час в Unix-time: від початку 1970 року.</p>
+<p>Можна навіть сказати, що клас <code><span class="text-viola">Instant</span></code>&nbsp;— це спрощена версія класу <code>Date</code>: залишили тільки те, що потрібно програмістам.</p>
+<p>Отримати об'єкт <code><span class="text-viola">Instant</span></code> можна так само, як об'єкт <code><span class="text-neon">LocalTime</span></code>:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-viola">Instant</span> <span class="code text-user">timestamp</span> = <span class="text-viola">Instant</span>.<span class="text-user">now</span>();</code></pre>
+</div>
+<p>де <code class="text-user">timestamp</code>&nbsp;— це змінна класу <code><span class="text-viola">Instant</span></code>, а <code><span class="text-viola">Instant</span>.<span class="text-user">now</span>()</code> — виклик статичного методу <code><span class="text-user">now</span>()</code> для класу <code><span class="text-viola">Instant</span></code>.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-viola">Instant</span> <span class="code text-user">timestamp</span> = <span class="text-viola">Instant</span>.<span class="text-red">now</span>();
+System.out.println(<span class="code text-user">timestamp</span>);</code></pre>
+        </td>
+        <td><pre><code>
+2019-02-22T08:42:42.234945300Z</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Також можна створити новий об'єкт за допомогою різновидів методу <code>of()</code>, якщо передати в нього час, який минув з 1 січня 1970 року:</p>
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">ofEpochMilli</span>(long milliseconds)</code></pre>
+        </td>
+        <td>Потрібно передати кількість мілісекунд</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">ofEpochSecond</span>(long seconds)</code></pre>
+        </td>
+        <td>Потрібно передати кількість секунд</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">ofEpochSecond</span>(long seconds, long nanos)</code></pre>
+        </td>
+        <td>Потрібно передати секунди й наносекунди</td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Методи об'єктів <code>Instant</code></strong></p>
+<p>Клас Instant має два методи, що повертають його значення:</p>
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <pre class="language-java"><code>long <span class="text-red">getEpochSecond</span>()</code></pre>
+        </td>
+        <td>Кількість секунд, які минули з 1 січня 1970 року</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">getNano</span>()</code></pre>
+        </td>
+        <td>Наносекунди</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>long <span class="text-red">toEpochMilli</span>()</code></pre>
+        </td>
+        <td>Кількість мілісекунд, які минули з 1 січня 1970 року</td>
+    </tr>
+    </tbody>
+</table>
+<p>А ще є методи, здатні створювати нові об'єкти <code>Instant</code> на основі вже наявного:</p>
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Instant <span class="text-red">plusSeconds</span>(long)</code></pre>
+        </td>
+        <td>Додає секунди до поточного моменту часу</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Instant <span class="text-red">plusMillis</span>(long)</code></pre>
+        </td>
+        <td>Додає мілісекунди</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Instant <span class="text-red">plusNanos</span>(long)</code></pre>
+        </td>
+        <td>Додає наносекунди</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Instant <span class="text-red">minusSeconds</span>(long)</code></pre>
+        </td>
+        <td>Віднімає секунди</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Instant <span class="text-red">minusMillis</span>(long)</code></pre>
+        </td>
+        <td>Віднімає мілісекунди</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Instant <span class="text-red">minusNanos</span>(long)</code></pre>
+        </td>
+        <td>Віднімає наносекунди</td>
+    </tr>
+    </tbody>
+</table>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-viola">Instant</span> <span class="code text-user">timestamp</span> = <span class="text-viola">Instant</span>.now();
+System.out.println(<span class="code text-user">timestamp</span>);
+
+long <span class="code text-orange">n</span> = <span class="code text-user">timestamp</span>.<span class="text-red">toEpochMilli</span>();
+Instant <span class="code text-green">time</span> = Instant.<span class="text-red">ofEpochMilli</span>(<span class="code text-orange">n</span>);
+System.out.println(<span class="code text-green">time</span>);</code></pre>
+        </td>
+        <td>
+                <pre><code>
+2019-02-22T09:01:20.535344Z
+
+
+
+2019-02-22T09:01:20.535Z</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task16.task1614"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task16.task1615"></div>

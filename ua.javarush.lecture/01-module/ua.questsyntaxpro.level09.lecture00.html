@@ -1,0 +1,355 @@
+﻿Літерали в Java
+<p>----------------------------------------</p>
+Літерали цілих чисел. А зараз нова цікава тема — літерали. Дані, внесені безпосередньо в код програми, називають літералами. Тут буде йтися не про будь-які дані, а про значення примітивних типів і типу String. Наприклад, є такий код: Код Літерали int a = 5; int b = a + 10; String
+<p>----------------------------------------</p>
+<h2>1. Літерали цілих чисел</h2>
+<p>А зараз нова цікава тема — літерали. Дані, внесені безпосередньо в код програми, називають <span class="term">літералами</span>. Тут буде йтися не про будь-які дані, а про значення примітивних типів і типу <code>String</code>.</p>
+<p>Наприклад, є такий код:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="50%">Код</th>
+        <th>Літерали</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int a = 5;
+int b = a + 10;
+String s = "Sum=" + (a + b);</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>5
+10
+"Sum="</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><span class="term">Літерали</span> в цьому коді — це число <code><span class="text-user">5</span></code>, число <code><span class="text-user">10</span></code> і рядок <code><span class="text-green">Sum=</span></code>.</p>
+<p>У мові Java все, включно з літералами, має тип. Всі цілочислові літерали (цілі числа) в коді мають тип <code>int</code>. Тип int є стандартним типом цілих чисел у Java.</p>
+<p>Тому, якщо ви у своєму коді вирішите присвоїти цілочисловий літерал змінній типу <code>byte</code> або <code>short</code>, проблем не буде. Потрібно тільки, щоб значення літерала було в межах діапазону доступних значень типу змінної.</p>
+<p>Компілятор у Java досить розумний, щоб зрозуміти, що змінній типу <code>byte</code> можна присвоїти цілочисловий літерал 100, тому жодної проблеми не виникне.</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-green">int a = 300;</span></code></pre>
+        </td>
+        <td>Буде нормально скомпільовано.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-green">byte a = 100; </span></code></pre>
+        </td>
+        <td>Буде нормально скомпільовано.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">byte a </span>= 300; </code></pre>
+        </td>
+        <td>Буде помилка компіляції: максимальне значення типу <code>byte</code> дорівнює <code>127</code>.</td>
+    </tr>
+    </tbody>
+</table>
+<p>У коді можна також використовувати літерали типу <code>long</code>. Для цього в кінці цілого числа слід написати латинську літеру L або l.</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-green">long a =<span class="text-green"> 3000000000L; </span></span></code></pre>
+        </td>
+        <td>Буде нормально скомпільовано.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">long a =</span> <span class="text-red">3000000000; </span></code></pre>
+        </td>
+        <td>Помилка компіляції: 3 мільярди — завелике число для літерала типу int.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">int a = 30<span class="text-red">00000000L; </span></span></code></pre>
+        </td>
+        <td>Помилка компіляції: літерал має тип long, а змінна — тип int. До того ж число 3 мільярди перевищує максимальне значення типу int.</td>
+    </tr>
+    </tbody>
+</table>
+<p>Ви, мабуть, звернули увагу, як складно читати великі числа довжиною 10 і більше знаків. Не відразу зрозумієш, що написано в коді: 3 мільярди чи 30. <span class="text-orange">Щоб покращити прочитність коду (а це важливо!), у Java дозволено вставляти в числові літерали символи підкреслення (на значення числа вони не впливають).</span></p>
+<p>Попередній приклад можна переписати з використанням символів підкреслення, і він стане зрозумілішим:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-green">long a =</span> <span class="text-green">3_000_000_000L; </span></code></pre>
+        </td>
+        <td>Буде нормально скомпільовано.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">long a =</span> <span class="text-red">3_000_000_000; </span></code></pre>
+        </td>
+        <td>Помилка компіляції: 3 мільярди — завелике число для літерала типу int.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">int a =</span> <span class="text-red">3_000_000_000L; </span></code></pre>
+        </td>
+        <td>Помилка компіляції: літерал має тип long, а змінна — тип int. До того ж число 3 мільярди перевищує максимальне значення типу int.</td>
+    </tr>
+    </tbody>
+</table>
+<p>Використання коми в числових літералах не допускається, тому що кома використовується з іншою метою. Наприклад, для відокремлення один від одного аргументів під час виклику методу.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task09.task0901"></div>
+<hr>
+<h2>2. Літерали дійсних чисел</h2>
+<p>У коді можна задавати не тільки цілочислові літерали, а й літерали з рухомою крапкою (дійсні числа).</p>
+<p>Власне, правило дуже просте: якщо в коді є число з крапкою, то це число — літерал з рухомою крапкою. І не просто літерал, а літерал типу <code>double</code>.</p>
+<p><span class="text-orange">Можна також створювати літерали типу float, але такі літерали мають закінчуватися літерою F або f.</span></p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-green">double a =</span> <span class="text-green">100.0; </span></code></pre>
+        </td>
+        <td>Буде нормально скомпільовано.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-green">double a = <span class="text-green">100.;</span></span></code></pre>
+        </td>
+        <td>Буде нормально скомпільовано.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-green">double a = <span class="text-green">.0;</span></span></code></pre>
+        </td>
+        <td>Буде нормально скомпільовано.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-green">float a =<span class="text-green"> 100.0f; </span></span></code></pre>
+        </td>
+        <td>Буде нормально скомпільовано.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">float a = <span class="text-red">100.0; </span></span></code></pre>
+        </td>
+        <td>Буде помилка компіляції: змінна має тип float, а літерал — тип double.</td>
+    </tr>
+    </tbody>
+</table>
+<p>До речі, можна дуже легко перетворити цілочисловий літерал на літерал типу float або double: для цього слід просто дописати до нього суфікс F (для <code>float</code>) або D (для <code>double</code>). Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-green">double a = 100D;</span> </code></pre>
+        </td>
+        <td>Буде нормально скомпільовано.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-green">float a = 100F; </span></code></pre>
+        </td>
+        <td>Буде нормально скомпільовано.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">int a = 300D; </span></code></pre>
+        </td>
+        <td>Буде помилка компіляції: змінна має тип <code>int</code>, а літерал — тип <code>double</code>.</td>
+    </tr>
+    </tbody>
+</table>
+<p>Для літералів з рухомою крапкою можна також використовувати «<strong>наукову форму запису</strong>»: крім значущої частини цього числа, вказується також степінь десяти. Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Літерал</th>
+        <th>Математичний запис</th>
+        <th>Значення</th>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>1.23<span class="text-red">E</span>2</code></pre>
+        </td>
+        <td>
+            <pre><code>1.23 * 10<sup>2</sup></code></pre>
+        </td>
+        <td>
+            <pre><code>123.0</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>1.23<span class="text-red">E</span>3</code></pre>
+        </td>
+        <td>
+            <pre><code>1.23 * 10<sup>3</sup></code></pre>
+        </td>
+        <td>
+            <pre><code>1230.0</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>1.23<span class="text-red">E</span>-6</code></pre>
+        </td>
+        <td>
+            <pre><code>1.23 * 10<sup>-6</sup></code></pre>
+        </td>
+        <td>
+            <pre><code>0.00000123</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>1<span class="text-red">E</span>6</code></pre>
+        </td>
+        <td>
+            <pre><code>1.0 * 10<sup>6</sup></code></pre>
+        </td>
+        <td>
+            <pre><code>1000000.0</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>1<span class="text-red">E</span>-10</code></pre>
+        </td>
+        <td>
+            <pre><code>1.0 * 10<sup>-10</sup></code></pre>
+        </td>
+        <td>
+            <pre><code>0.0000000001</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task09.task0902"></div>
+<hr>
+<h2>3. Літерали рядків</h2>
+<p>У коді також можна задавати цілі рядки тексту. Щоб компілятор вважав рядок саме даними (рядком тексту), а не частиною коду, весь рядок з обох сторін беруть у подвійні лапки.</p>
+<p>Якщо в одному рядку коду є кілька подвійних лапок, вони обробляються попарно. Перша подвійна лапка позначає початок літерала, наступна — кінець літерала. Наступна за нею позначає початок наступного літерала, а наступна за нею — кінець цього літерала і т. д.</p>
+<p>Кожен такий літерал має тип <code>String</code>.</p>
+<p>Приклади</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>"+" + "+" + "+" + "+" + "+"</code></pre>
+        </td>
+        <td>У рядку 5 літералів, кожен з яких складається з одного символу&nbsp;<code><span class="text-green">+</span></code>.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>""</code></pre>
+        </td>
+        <td>Цей літерал — порожній рядок, тобто рядок, де немає символів.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>"2+3" + "-5"</code></pre>
+        </td>
+        <td>Тут два літерали. Результатом буде рядок <code><span class="text-green">2+3-5</span></code>, а не число.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>"return" + ";"</code></pre>
+        </td>
+        <td>Тут також два літерали, оператора return тут немає.</td>
+    </tr>
+    </tbody>
+</table>
+<p>Якщо рядковий літерал надто довгий, його можна розбити на кілька рядків і склеїти оператором «плюс»:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String s = "Віють вітри, віють буйні, "
+         + "Аж дерева гнуться. "
+         + "О, як моє болить серце, "
+         + "А сльози не ллються.";</code></pre>
+        </td>
+        <td>Якщо вивести ці рядки на екран, увесь текст буде виведено як один рядок!</td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task09.task0903"></div>
+<hr>
+<h2>4. Літерали символів</h2>
+<p>У коді можна задавати не лише рядкові літерали, а й літерали з окремих символів. Тут ідеться не про рядок, що містить один символ, а про літерали типу <code>char</code>.</p>
+<p>На відміну від рядків, символьні літерали беруть в <span class="term">одинарні лапки</span>. Між одинарними лапками обов'язково має бути символ, і тільки один. Не може бути одинарних лапок, між якими нічого немає.</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-green">'A'</span></code></pre>
+        </td>
+        <td>Літерал типу char, містить латинську літеру A.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><strong><span class="text-green"><strong>'</strong><strong>@</strong><strong>'</strong></span></strong><strong> </strong></code></pre>
+        </td>
+        <td>Літерал типу char, містить символ @</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><strong><span class="text-green"><strong>'</strong><strong>本</strong><strong>'</strong></span></strong><strong> </strong></code></pre>
+        </td>
+        <td>Літерал типу char, містить японський ієрогліф — так теж можна.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-green">'<strong>\u</strong>1f3a'</span></code></pre>
+        </td>
+        <td>Літерал типу char, містить символ у кодуванні Unicode, який задано його номером.</td>
+    </tr>
+    </tbody>
+</table>
+<p>В останньому прикладі задано символ у кодуванні Unicode за допомогою спеціального запису: спочатку вказано префікс <code><span class="text-green">\u</span></code>, потім 4 шістнадцяткових символи. Докладніше про це ми розповімо в наступних лекціях.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task09.task0904"></div>
+<hr>
+<jr-widget-youtube videoid="FpjJU56jZKI"></jr-widget-youtube>

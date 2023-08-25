@@ -1,0 +1,110 @@
+Нюанси роботи умовного оператора
+<p>----------------------------------------</p>
+Послідовність if-ів. Іноді у програмі потрібно зробити багато різних дій залежно від значення якоїсь змінної або від значення якогось виразу.
+<p>----------------------------------------</p>
+<h2>1. Послідовність <code>if</code>-ів</h2>
+<p>Іноді у програмі потрібно зробити багато різних дій залежно від значення якоїсь змінної або від значення якогось виразу.</p>
+<p>Припустимо, завдання виглядає так:</p>
+<ul>
+    <li>Якщо температура вище <code>20</code> градусів — одягнути сорочку</li>
+    <li>Якщо температура вище <code>10</code> градусів і менше (або дорівнює) 20 — одягнути светр</li>
+    <li>Якщо температура вище <code>0</code> градусів і менше (або дорівнює) 10 — одягнути плащ</li>
+    <li>Якщо температура нижче <code>0</code> градусів — одягнути пальто.</li>
+</ul>
+<p>Як це можна представити у коді:</p>
+<pre class="language-java"><code>int <span class="code text-orange">temperature</span> = <span class="code text-user">9</span>;
+
+if (<span class="code text-orange">temperature</span> &gt; <span class="code text-user">20</span>) {
+   System.out.println(<span class="text-green">"одягнути сорочку"</span>);
+} else { // тут температура менше (або дорівнює) 20
+   if (<span class="code text-orange">temperature</span> &gt; <span class="code text-user">10</span>) {
+      System.out.println(<span class="text-green">"одягнути светр"</span>);
+   } else { // тут температура менше (або дорівнює) 10
+      if (<span class="code text-orange">temperature</span> &gt; <span class="code text-user">0</span>) {
+         System.out.println(<span class="text-green">"одягнути плащ"</span>);
+      } else // тут температура менше 0
+         System.out.println(<span class="text-green">"одягнути пальто"</span>);
+   }
+}</code></pre>
+<p>Оператори <code>if-else</code> <strong>можна вкладати один в одного</strong>, і у такий спосіб реалізовувати в програмі достатньо складну логіку.</p>
+<p>Хоча зазвичай таку конструкцію програмісти записують трохи інакше:</p>
+<pre class="language-java"><code>int <span class="code text-orange">temperature</span> = <span class="code text-user">9</span>;
+
+if (<span class="code text-orange">temperature</span> &gt; <span class="code text-user">20</span>) {
+   System.out.println(<span class="text-green">"одягнути сорочку"</span>);
+} <span class="code text-red">else if</span> (<span class="code text-orange">temperature</span> &gt; <span class="code text-user">10</span>) { // тут температура менше (або дорівнює) 20
+   System.out.println(<span class="text-green">"одягнути светр"</span>);
+} <span class="code text-red">else if</span> (temperature &gt; <span class="code text-user">0</span>) { // тут температура менше (або дорівнює) 10
+   System.out.println(<span class="text-green">"одягнути плащ"</span>);
+} else { // тут температура менше 0
+   System.out.println(<span class="text-green">"одягнути пальто"</span>);
+}</code></pre>
+<p>Два наведені приклади еквівалентні, але другий простіший із погляду сприйняття.</p>
+<hr>
+<h2>2. Нюанси <code>else</code></h2>
+<div class="lesson-note lesson-note--important">
+    <div class="lesson-note__container">
+        <div class="lesson-note__head">
+            Важливий момент:
+        </div>
+        <div class="lesson-note__content">
+            <p>Якщо у конструкції <code>if-else</code> не розставлені фігурні дужки, <code>else</code> належить до попереднього
+            (найближчого до нього) <code>if</code>-у.</p>
+        </div>
+    </div>
+</div>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Наш код</th>
+        <th>Як він працюватиме</th>
+    </tr>
+    <tr>
+        <td class="vertical-baseline">
+<pre class="language-java"><code>int <span class="code text-orange">age</span> = <span class="code text-user">65</span>;
+
+if (<span class="code text-orange">age</span> &lt; <span class="code text-user">60</span>)
+   if (<span class="code text-orange">age</span> &gt; <span class="code text-user">20</span>)
+      System.out.println(<span class="text-green">"Треба працювати"</span>);
+else
+   System.out.println(<span class="text-green">"Можна не працювати"</span>);</code></pre>
+        </td>
+        <td class="vertical-baseline">
+<pre class="language-java"><code>int <span class="code text-orange">age</span> = <span class="code text-user">65</span>;
+
+if (<span class="code text-orange">age</span> &lt; <span class="code text-user">60</span>) {
+   <span class="code text-red">if</span> (<span class="code text-orange">age</span> &gt; <span class="code text-user">20</span>)
+     System.out.println(<span class="text-green">"Треба працювати"</span>);
+   <span class="code text-red">else</span>
+     System.out.println(<span class="text-green">"Можна не працювати"</span>);
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Якщо дивитися на код у лівій частині, здається, що на екрані буде виведено напис «Можна не працювати». Однак, це не так.
+Насправді <code>else</code> і команда «Можна не працювати» належать до другого (найближчого) <code>if</code> -у.</p>
+<p>У коді праворуч червоним виділені пов’язані <code class="text-red">if</code> і <code class="text-red">else</code>. Також
+спеціально розставлені дужки, які однозначно показують порядок виконання дій. Напис Можна не працювати ніколи не
+виводиться на екран, якщо <code class="text-orange">age</code> більше за <code class="text-user">60</code>.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task03.task0303"></div>
+<hr>
+<h2>3. Приклад використання оператора <span class="text-nowrap"><code>if-else</code></span></h2>
+<p>Оскільки ми так добре розібрали оператор <code>if-else</code>, наведемо приклад:</p>
+<div class="lesson-example">
+        <pre class="language-java"><code>import java.util.Scanner;
+public class Solution {
+   public static void main(String[] args) {
+     Scanner <span class="code text-orange">console</span> = new Scanner(<span class="text-viola">System.in</span>);  // створюємо об’єкт Scanner
+     int <span class="text-green">a</span> = <span class="code text-orange">console</span>.<span class="text-red">nextInt</span>();  // читаємо з клавіатури перше число
+     int <span class="text-green">b</span> = <span class="code text-orange">console</span>.<span class="text-red">nextInt</span>();  // читаємо з клавіатури друге число
+     if (<span class="text-green">a</span> &lt; <span class="text-green">b</span>)                   // якщо a менше b
+       System.out.println(<span class="text-green">a</span>);     // виводимо на екран a
+     else                         // інакше
+       System.out.println(<span class="text-green">b</span>);     // виводимо на екран b
+   }
+}</code></pre>
+    <div class="lesson-example-caption">Виведення на екран мінімального із двох чисел.</div>
+</div>

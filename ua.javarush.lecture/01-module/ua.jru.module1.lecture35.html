@@ -1,0 +1,193 @@
+BufferedWriter
+<p>----------------------------------------</p>
+Дуже часто у програмах є вимога швидко писати дані у файл чи інші джерела. І в таких випадках постає питання: що використати, який клас обрати?
+<p>----------------------------------------</p>
+<p>Дуже часто у програмах є вимога швидко писати дані у файл чи інші джерела. І в таких випадках постає питання: що
+використати, який клас обрати? Сьогодні ми познайомимося з одним із придатних “кандидатів” на цю роль – класом <span class="code"><span class="text-green">BufferedWriter</span></span>.</p>
+
+<h2>Для чого потрібен BufferedWriter</h2>
+
+<p>BufferedWriter</span></span> – це клас, який записує буферизовані символи в потік. Він дозволяє знизити кількість даних, звернених до фізичного носія.
+Тобто замість того, щоб щоразу писати окремий символ, він записує ці дані в буфер, а потім записує всі ці символи в
+джерело.</p>
+
+<p>Це значно збільшує швидкість запису даних. За замовчуванням розмір буфера дорівнює 8192 символи, але цей показник можна
+змінити, вказавши новий розмір у конструкторі:</p>
+
+<pre class='language-java line-numbers'><code>
+BufferedWriter(Writter in, int sz)
+</code></pre>
+
+<p>Тут перший аргумент конструктора – це потік, приймач, у якому буде відбуватися запис. А значення <span
+    class="code">sz</span> – це як раз визначення нового розміру буфера.</p>
+
+<p>Також в Java є ще клас <span class="code"><span class="text-green">BufferedReader</span></span>: він використовується
+для буферизованого читання даних.</p>
+
+<p>Власне, що це таке – буфер? Давай розбиратися на прикладі із життя. Буфер — це як кошик чи візок у супермаркеті. Замість
+того, щоб йти брати товар, нести на касу, оплачувати, покласти в багажник автомобіля і потім знову повертатися за іншим,
+ми можемо взяти візок, покласти все, що нам потрібно, та сплатити на касі. Саме так і працює буфер: він збере твої дані
+і потім все візьме та запише замість того, щоб писати кожен фрагмент окремо.</p>
+
+<h2>Конструктори та методи класу BufferedWriter</h2>
+
+<p>Тепер давай докладніше розберемо клас <span class="code"><span class="text-green">BufferedWriter</span></span>. Для створення об’єкта є два конструктори:</p>
+
+<pre class='language-java line-numbers'><code>
+public BufferedWriter(Writer out) 
+public BufferedWriter(Writer out, int sz)
+</code></pre>
+
+<p>Де <span class="code">out</span> в обох конструкторах – це джерело для запису, а <span class="code">sz</span>, як вже зазначалося, – це розмір буфера.</p>
+
+<p>Також у класу <span class="code"><span class="text-green">BufferedWriter</span></span> є низка методів. Частину з них сьогодні розглянемо докладніше:</p>
+
+<table>
+<tbody>
+<tr>
+<td><span class="code text-orange">write(char[] array)</span></td>
+<td>Запише масив <span class="text-orange">char</span> в буфер</td>
+</tr>
+<tr>
+<td><span class="code text-orange">write(String s, int off, int len)</span></td>
+<td>Запише частину рядка в буфер</td>
+</tr>
+<tr>
+<td><span class="code text-orange">append(char c)</span></td>
+<td>Запише символ у буфер</td>
+</tr>
+<tr>
+<td><span class="code text-orange">append(CharSequence csq, int start, int end)</span></td>
+<td>Запише частину масиву в буфер</td>
+</tr>
+<tr>
+<td><span class="code text-orange">newLine()</span></td>
+<td>Розділяє рядок</td>
+</tr>
+<tr>
+<td><span class="code text-orange">flush()</span></td>
+<td>скидає потік</td>
+</tr>
+</tbody>
+</table>
+
+<p>Напишемо програму, яка буде записувати нам значення у файл. Як об’єкт <mark class="green">Writer</mark> у конструктор
+передамо <mark class="green">FileWriter</mark>. Він використовується для запису текстових файлів і має кілька
+конструкторів для ініціалізації об’єктів:</p>
+
+<div class="terminal">FileWriter(File file)<br />
+FileWriter(File file, boolean append)<br />
+FileWriter(FileDescriptor fd)<br />
+FileWriter(String fileName)<br />
+FileWriter(String fileName, boolean append)</div>
+
+<p>Для нашого прикладу використаємо конструктор, який приймає ім’я файлу:</p>
+
+<pre class='language-java line-numbers'><code>
+try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("file.txt"))){
+	
+	String message = "Привіт Аміго! Це дуже важливе повідомлення!";
+	bufferedWriter.write(message);
+	bufferedWritter.flush();
+}
+catch(IOException ex){
+System.out.println(ex.getMessage());
+ }
+</code></pre>
+
+<p>Наш код, використовуючи метод write, запише повідомлення <span class="code">str</span> у файл <span
+    class="text-bold">file.txt</span>.</p>
+
+<p>Є інші методи для запису:</p>
+
+<ul>
+<li><p><span class="code text-orange">write(char[] array</span>) – приймає та записує масив <span class="text-orange">char</span>-ів;</p></li>
+
+<li><p><span class="code text-orange">write(String s, int off, int len)</span> – приймає рядок <span class="code">s</span>, <span class="code">off</span> – індекс символу рядка, з якого розпочнеться запис, та <span class="code">len</span> – довжина рядка (підрядка), який буде записано.</p></li>
+</ul>
+
+<pre class='language-java line-numbers'><code>
+try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("file.txt"))){
+	String message = "Привіт, Аміго! Це дуже важливе повідомлення!";
+	bufferedWriter.write(message, 0, 12);
+ 	bufferedWriter.flush();
+
+}catch(IOException ex){
+System.out.println(ex.getMessage());
+}
+</code></pre>
+
+<p>Цей код запише у файл: "Привіт, Аміг", тому що ми вказали записувати починаючи з 0 індексу 12 символів.</p>
+
+<p>У нашому коді ще є <a href="https://javarush.com/quests/lectures/ua.questsyntaxpro.level15.lecture00" target="_blank">try-with resources</a>:</p>
+
+<pre class='language-java line-numbers'><code>
+try(BufferedWriter bufferedWritter = new BufferedWriter(new FileWriter("file.txt"))) 
+</code></pre>
+
+Це означає, що для мого об’єкта <mark class="green">bufferedWriter</mark> метод <span
+    class="code text-orange">close()</span> викликається автоматично, оскільки він реалізує інтерфейс <span
+    class="text-neon"><span class="text-bold"><em>AutoCloseable</em></span></span>.
+
+<p>Метод <span class="code text-orange">flush()</span> у коді використовується для очищення вихідного потоку та запису всіх
+буферизованих байтів. Без виклику цього методу запис може не відбутися, оскільки він вказує, що потрібно очистити буфер
+і записати байти з нього.</p>
+
+<p>Також у класі <span class="code"><span class="text-green">BufferedWriter</span></span> є такий метод, як <span
+    class="code text-orange">newLine()</span>, який додаватиме новий рядок до нашого повідомлення:</p>
+
+<pre class='language-java line-numbers'><code>
+try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("file.txt"))) {
+        String message = "Привіт, Аміго! Це дуже важливе повідомлення!";
+        bufferedWriter.write(message, 0, 14);
+        bufferedWriter.newLine();
+        bufferedWriter.write(message, 15, 27);
+    } catch (IOException ex) {
+        System.out.println(ex.getMessage());
+    }
+</code></pre>
+
+<h2>У файлі ми отримаємо:</h2>
+
+<div class="terminal">Привіт, Аміго!<br />
+Це дуже важливе повідомлення!</div>
+
+<p>Сигнатура методу <span class="code text-orange">append()</span> виглядає так:</p>
+
+<pre class='language-java line-numbers'><code>
+public Writer append(CharSequence csq, int start, int end)
+</code></pre>
+
+<p>Використовується для додавання <span class="code">csq</span>. Тут <span class="code">start</span> – це індекс першого
+символу, а <span class="code">end</span> – це індекс останнього символу рядка (підрядка), який потрібно вставити,
+причому останній символ не буде вставлений.</p>
+
+<pre class='language-java line-numbers'><code>
+try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("file.txt"))) {
+    String message = "Привіт Аміго! Це дуже важливе повідомлення!";
+    bufferedWriter.append(message, 0, 7);
+    bufferedWriter.flush();
+} catch (IOException ex) {
+    System.out.println(ex.getMessage());
+}
+</code></pre>
+
+<p>Запустивши цей код, ти отримаєш:</p>
+
+<div class="terminal">Привіт</div>
+
+<p>Тобто за допомогою методу <span class="code text-orange">append</span> ти вказуєш, яку частину рядка додати в буфер.</p>
+
+<p>Якщо розглянути докладніше різницю між <span class="code text-orange">write()</span> і <span
+    class="code text-orange">append()</span>, то, в принципі, вони обидва виконують одне й те саме завдання: записують
+значення.</p>
+
+<p>Але все ж таки різниця полягає в тому, що метод <span class="code text-orange">append</span> новий і приймає в аргумент
+<span class="text-orange">CharSequence</span>, а оскільки <span class="text-orange">String</span> — це реалізація <span
+    class="text-orange">CharSequence</span>, то в append можна покласти і <span class="text-orange">String</span>, і
+<span class="code"><span class="text-green">StringBuilder</span></span>, і <span class="code"><span
+        class="text-green">StringBuffer</span></span>. Ну а в метод <span class="code text-orange">write()</span> можна
+тільки <span class="text-orange">String</span>.</p>
+
+<p>Ось і все! Сьогодні ми ознайомилися з буфером, із тим, як здійснювати буферизований запис у файл, а також із методами,
+якими ти можеш користуватися для цього.</p>

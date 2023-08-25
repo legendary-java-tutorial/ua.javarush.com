@@ -1,0 +1,86 @@
+﻿Приклади використання циклу while
+<p>----------------------------------------</p>
+Підрахунок суми чисел із використанням циклу while. Спробуймо програму, яка вводить числа з клавіатури (доки користувач уводить щось подібне до чисел) і виводить на екран їх суму. Ось який вигляд матиме код цієї програми (наведено тільки код всередині методу main). Код Пояснення
+<p>----------------------------------------</p>
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="ae2fe48e-2a94-4ea1-8fa7-b9b54a56e80e" data-max-width="1024" src="https://cdn.javarush.com/images/article/ae2fe48e-2a94-4ea1-8fa7-b9b54a56e80e/original.png" alt=""/>
+        </div>
+        <div class="lesson-carousel__item">
+            <img data-id="e8dabe4f-2896-4914-9ce3-7aca59d52438" data-max-width="1024" src="https://cdn.javarush.com/images/article/e8dabe4f-2896-4914-9ce3-7aca59d52438/original.png" alt=""/>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<h2>1. Підрахунок суми чисел із використанням циклу <code>while</code></h2>
+<p>Спробуймо написати програму, яка вводить числа з клавіатури (доки користувач уводить щось подібне до чисел) і виводить на екран їх суму. Ось який вигляд матиме код цієї програми (наведено тільки код всередині методу <code>main</code>).</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Scanner <span class="code text-viola">console</span> = new Scanner(System.in);
+int <span class="code text-red">sum</span> = 0;
+while (<span class="code text-viola">console</span>.hasNextInt())
+{
+&nbsp; &nbsp;int <span class="code text-green">x</span> = <span class="code text-viola">console</span>.nextInt();
+&nbsp;  <span class="code text-red">sum</span> = <span class="code text-red">sum</span> + <span class="code text-green">x</span>;
+}
+System.out.println(<span class="code text-red">sum</span>);&nbsp;</code></pre>
+        </td>
+        <td>Створюємо об'єкт <code class="text-viola">Scanner</code> для читання даних з консолі.<br/> У змінний <code class="text-red">sum</code> будемо зберігати суму чисел.<br/> Доки з консолі вводять цілі числа,<br/> <br/> зчитуємо чергове число в змінну <code class="text-green">x</code>.<br/> Додаємо <code class="text-green">x</code> до суми чисел (змінна <code class="text-red">sum</code>).<br/><br/> Виводимо отриману суму на екран.</td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<h2>2. Визначення найбільшого із введених чисел із використанням циклу <code>while</code></h2>
+<p>Друга програма теж вводить числа з клавіатури (доки користувач уводить щось подібне до чисел), але на екран виводить найбільше із введених чисел. Ось який вигляд матиме код цієї програми (наведено тільки код всередині методу <code>main</code>).</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Scanner <span class="code text-viola">console</span> = new Scanner(System.in);
+int <span class="code text-red">max</span> = 0;
+while (<span class="code text-viola">console</span>.hasNextInt())
+{
+&nbsp; &nbsp;int <span class="code text-user">x</span> = <span class="code text-viola">console</span>.nextInt();
+&nbsp; &nbsp;if (<span class="code text-user">x</span> &gt; <span class="code text-red">max</span>)
+     <span class="code text-red">max</span> = <span class="code text-user">x</span>;
+}
+System.out.println(<span class="code text-red">max</span>);&nbsp;</code></pre>
+        </td>
+        <td>Створюємо об'єкт <code class="text-viola">Scanner</code> для читання даних з консолі.<br/> У змінній <code class="text-red">max</code> будемо зберігати максимальне число.<br/> Доки з консолі вводять цілі числа,<br/> <br/> зчитуємо чергове число в змінну <code class="text-user">x</code>.<br/> Порівнюємо <code class="text-user">x</code> і <code class="text-red">max</code>. Якщо <code class="text-user">x</code> більше від <code class="text-red">max</code>,<br/> оновлюємо максимальне число.<br/><br/> Виводимо визначене найбільше число на екран.</td>
+    </tr>
+    </tbody>
+</table>
+<p>Тут є цікавий момент: якщо всі числа, введені з клавіатури, будуть від'ємними, програма виведе на екран число <code>0</code>. Що, по суті, неправильно.</p>
+<p>Тому початкове значення змінної <code>max</code> має бути якомога меншим.</p>
+<p><span class="text-bold">Варіант 1: </span></p>
+<p>Присвоїти цій змінній значення <code>-2000000000</code> (мінус два мільярди). Це вже досить непогано.</p>
+<p><span class="text-bold">Варіант 2: </span></p>
+<p>Присвоїти цій змінній найменше значення типу <code>int</code>. Для цього є спеціальна константа: <code>Integer.MIN_VALUE</code>;</p>
+<p><span class="text-bold">Варіант 3:</span></p>
+<p>Ще краще — ініціалізувати змінну <code>max</code> першим уведеним числом. Цей варіант —найкращий. Однак це можна зробити тільки тоді, коли за умовою задачі користувач має ввести хоча б одне число.</p>
+
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task04.task0409"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task04.task0408"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task04.task0410"></div>
+
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="e4037090-008b-4434-9a5d-b190f0b1abf0" data-max-width="1024" src="https://cdn.javarush.com/images/article/e4037090-008b-4434-9a5d-b190f0b1abf0/original.png" alt=""/>
+        </div>
+    </div>
+</div>
+<hr>

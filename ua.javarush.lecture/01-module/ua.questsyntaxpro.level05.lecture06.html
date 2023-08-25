@@ -1,0 +1,231 @@
+﻿Допоміжний клас Arrays
+<p>----------------------------------------</p>
+Клас Arrays. Як ми вже говорили раніше, масиви — дуже корисна й часто використовувана річ у програмуванні. Створивши мову Java, її автори невдовзі помітили, що Java-програмісти часто пишуть один і той самий код, коли працюють з масивами. Наприклад: «скопіювати частину масиву в інший масив», «заповнити всі
+<p>----------------------------------------</p>
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="d96465e4-3376-489e-92fc-18f5a12cebe2" data-max-width="1024" src="https://cdn.javarush.com/images/article/d96465e4-3376-489e-92fc-18f5a12cebe2/original.png" alt=""/>
+        </div>
+        <div class="lesson-carousel__item">
+            <img data-id="a95a081f-d30d-4fdf-b1c0-14a9971a631d" data-max-width="1024" src="https://cdn.javarush.com/images/article/a95a081f-d30d-4fdf-b1c0-14a9971a631d/original.png" alt=""/>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<h2>1. Клас <code>Arrays</code></h2>
+<p>Як ми вже говорили раніше, масиви — дуже корисна й часто використовувана річ у програмуванні.</p>
+<p>Створивши мову Java, її автори невдовзі помітили, що Java-програмісти часто пишуть один і той самий код, коли працюють з масивами. Наприклад: «скопіювати частину масиву в інший масив», «заповнити всі комірки масиву однаковими значеннями», «вивести на екран вміст масиву так, щоб його було зручно читати» тощо.</p>
+<p>Тому вони зробили спеціальний клас — <code>Arrays</code> (повне ім'я <code>java.util.Arrays</code>), в який помістили найпопулярніші дії під час роботи з масивами.</p>
+<p>У ньому дуже багато методів на всі випадки життя, але спершу ми розглянемо тільки 10 із них — найпростіші та часто використовувані.</p>
+<hr>
+<h2>2. Метод <code>Arrays.toString()</code></h2>
+<p>Перший метод, який ми розглянемо, називається <code>Arrays.toString()</code>. Але спочатку трохи передісторії.</p>
+<p>У кожного масиву в Java є метод <code>toString()</code>, який повертає «текстове подання масиву». Отримати текстове подання масиву можна за допомогою такої конструкції:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code>String <span class="text-green">str</span> = <span class="text-red">ім'я</span>.toString();</code></pre>
+</div>
+<p>де <code><span class="text-red">ім'я</span></code> — це ім'я змінної-масиву, а <code><span class="text-green">str</span></code> — це ім'я змінної, в якій збережеться рядкове подання масиву.</p>
+<p>Однак якщо ви спробуєте вивести масив на екран за допомогою методу <code>System.out.println(<span class="text-red">ім'я</span>)</code>, найімовірніше, побачите щось на кшталт:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present"><code class="text-center"><span class="text-red">I</span>@<span class="text-user">37afeb11</span></code></pre>
+</div>
+<p>Перша літера <code><span class="text-red">I</span></code> означає, що це масив типу <code>int</code>, а <span class="text-user">символи</span> після <code>@</code> — адресу масиву в пам'яті. З одного боку, змінна-масив саме цю інформацію і зберігає, а з іншого — ми очікували на краще, правда ж?</p>
+<p>Хотілося б побачити значення, записані в масиві! І от для того, щоб побачити саме значення масиву, і придумали метод <code>Arrays.toString()</code>. Викликають його в такий спосіб:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code>String <span class="text-green">str</span> = <span class="text-red">Arrays</span>.<span class="text-viola">toString</span>(<span class="text-neon">ім'я</span>);</code></pre>
+</div>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <td>
+<pre class="language-java"><code>int[] <span class="text-neon">array</span> = {1, 2, 3};
+String <span class="text-green">str</span> = <span class="text-red">Arrays</span>.<span class="text-viola">toString</span>(<span class="text-neon">array</span>);</code></pre>
+        </td>
+        <td>Змінна <code><span class="text-green">str</span></code> буде містити значення рядкового типу:
+            <pre><code><span class="text-muted">"</span>[1, 2, 3]<span class="text-muted">"</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int[] <span class="text-neon">array</span> = {};
+String <span class="text-green">str</span> = <span class="text-red">Arrays</span>.<span class="text-viola">toString</span>(<span class="text-neon">array</span>);</code></pre>
+        </td>
+        <td>Змінна <code><span class="text-green">str</span></code> буде містити значення рядкового типу:
+            <pre><code><span class="text-muted">"</span>[]<span class="text-muted">"</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String[] <span class="text-neon">array</span> = {<span class="text-green">"Привіт", "Як", "Справи"</span>};
+String <span class="text-green">str</span> = <span class="text-red">Arrays</span>.<span class="text-viola">toString</span>(<span class="text-neon">array</span>);</code></pre>
+        </td>
+        <td>Змінна <code><span class="text-green">str</span></code> буде містити значення рядкового типу:
+            <pre><code><span class="text-muted">"</span>[Привіт, Як, Справи]<span class="text-muted">"</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task05.task0513"></div>
+<hr>
+<h2>3. Метод <code>Arrays.deepToString()</code></h2>
+<p>Але якщо ви за допомогою методу <code>Arrays.toString()</code> спробуєте перетворити на рядок (вивести на екран) двовимірний масив, побачите щось знайоме:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present"><code>[<span class="text-red">I</span>@<span class="text-user">37afeb11</span>, <span class="text-red">I</span>@<span class="text-user">37afeb21</span>, <span class="text-red">I</span>@<span class="text-user">37afeb31</span>]</code></pre>
+</div>
+<p>Уся річ у тім, що в комірках двовимірного масиву зберігаються посилання на одновимірні масиви. А як одновимірні масиви перетворюються на рядки? Саме так, як ви бачите вище.</p>
+<p>І що ж робити? Як нам отримати правильне відображення двовимірного масиву?</p>
+<p>Для цього клас <code>Arrays</code> має ще один спеціальний метод — <code>deepToString()</code>. Викликають його в такий спосіб:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code>String <span class="text-green">str</span> = <span class="text-red">Arrays</span>.<span class="text-viola">deepToString</span>(<span class="text-neon">ім'я</span>);</code></pre>
+</div>
+<p>У цей метод можна передати двовимірний, одновимірний, тривимірний і взагалі масив будь-якої розмірності, і ми завжди бачитимемо елементи масиву.<br/> <strong>Зверніть увагу:</strong> метод <code>Arrays.deepToString()</code> не працює з одновимірними масивами примітивів (наприклад, <code>int[]</code>).</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <td>
+<pre class="language-java"><code>Integer[] <span class="text-neon">array</span> = {1, 2, 3};
+String <span class="text-green">str</span> = <span class="text-red">Arrays</span>.<span class="text-viola">deepToString</span>(<span class="text-neon">array</span>);</code></pre>
+        </td>
+        <td>Змінна <code><span class="text-green">str</span></code> буде містити значення рядкового типу:
+            <pre><code><span class="text-muted">"</span>[1, 2, 3]<span class="text-muted">"</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int[][] <span class="text-neon">array</span> = { {1, 1}, {2, 2}, {3, 3} };
+String <span class="text-green">str</span> = <span class="text-red">Arrays</span>.<span class="text-viola">deepToString</span>(<span class="text-neon">array</span>);</code></pre>
+        </td>
+        <td>Змінна <code><span class="text-green">str</span></code> буде містити значення рядкового типу:
+            <pre><code><span class="text-muted">"</span>[[1, 1], [2, 2], [3, 3]]<span class="text-muted">"</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int[][][] <span class="text-neon">array</span> = { {{1, 2, 3}, {1}}, {{}} };
+String <span class="text-green">str</span> = <span class="text-red">Arrays</span>.<span class="text-viola">deepToString</span>(<span class="text-neon">array</span>);
+</code></pre>
+        </td>
+        <td>Змінна <code><span class="text-green">str</span></code> буде містити значення рядкового типу:
+            <pre><code><span class="text-muted">"</span>[[[1, 2, 3], [1]], [[]]]<span class="text-muted">"</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task05.task0514"></div>
+<hr>
+<h2>4. Метод <code>Arrays.equals()</code></h2>
+<p>З виведенням масивів на екран ми розібралися, а як бути з порівнянням масивів?</p>
+<p>Для порівняння рядків у нас були методи <code>equals</code> та <code>equalsIgnoreCase</code>, а які є методи для подібних операцій з масивами?</p>
+<p>Добра новина: для масивів є метод <code>equals</code>, і погана новина — він не порівнює вмісту масивів. Метод <code class="token function">equals</code> для масивів робить те саме, що й оператор <code>==</code> — порівнює посилання. </p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <td>
+<pre class="language-java"><code>int[] <span class="text-red">x1</span> = {1, 2, 3};
+int[] <span class="text-red">x2</span> = {1, 2, 3};
+boolean b = <span class="text-red">x1</span> == <span class="text-red">x2</span>;</code></pre>
+        </td>
+        <td><br/><br/><code><span class="text-red">false</span></code> (посилання неоднакові)</td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int[] <span class="text-red">x1</span> = {1, 2, 3};
+int[] <span class="text-red">x2</span> = {1, 2, 3};
+<span class="text-red">x1</span>.equals(<span class="text-red">x2</span>);</code></pre>
+        </td>
+        <td>Метод <code class="token function">equals</code> для масивів просто порівнює посилання двох масивів.<br/><br/> <code><span class="text-red">false</span></code> (посилання неоднакові)</td>
+    </tr>
+    </tbody>
+</table>
+<p>І що ж робити? Як порівняти масиви за вмістом?</p>
+<p>І знову нам на порятунок приходить клас <code>Arrays</code>, а точніше, його метод <code>Arrays.equals()</code>. Викликають його в такий спосіб:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-red">Arrays</span>.<span class="text-viola">equals</span>(<span class="text-green">ім'я1</span>, <span class="text-neon">ім'я2</span>)</code></pre>
+</div>
+<p>Метод повертає <code>true</code> (істина), якщо масиви мають однакову довжину, а їхні елементи рівні, інакше повертає <code>false</code> (хибність).</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <td>
+<pre class="language-java"><code>int[] <span class="text-green">x1</span> = {1, 2, 3};
+int[] <span class="text-neon">x2</span> = {1, 2, 3};
+<span class="text-green">x1</span>.equals(<span class="text-neon">x2</span>);</code></pre>
+        </td>
+        <td>Метод <code class="token function">equals</code> для масивів просто порівнює посилання двох масивів.<br/><br/> <code><span class="text-red">false</span></code> (посилання неоднакові)</td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int[] <span class="text-green">x1</span> = {1, 2, 3};
+int[] <span class="text-neon">x2</span> = {1, 2, 3};
+<span class="text-red">Arrays</span>.<span class="text-viola">equals</span>(<span class="text-green">x1</span>, <span class="text-neon">x2</span>);</code></pre>
+        </td>
+        <td><br/><br/><code><span class="text-green">true</span></code> (вміст масивів однаковий)</td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int[] <span class="text-green">x1</span> = {1, 2, 3};
+int[] <span class="text-neon">x2</span> = {1, 2, 3, 4};
+<span class="text-red">Arrays</span>.<span class="text-viola">equals</span>(<span class="text-green">x1</span>, <span class="text-neon">x2</span>);</code></pre>
+        </td>
+        <td><br/><br/><code><span class="text-red">false</span></code> (вміст масивів різний)</td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<h2>5. Метод <code>Arrays.deepEquals()</code></h2>
+<p>І як ви вже, напевно, здогадуєтеся, метод <code>Arrays.equals</code> для двовимірних масивів працюватиме неправильно: він працює з двовимірним масивом як з одновимірним, елементи якого — адреси одновимірних масивів.</p>
+<p>Ось чому для правильного порівняння багатовимірних масивів (<code>n=1, 2, 3, …</code>) придумали метод <code>Arrays.deepEquals()</code>. Викликають його в такий спосіб:</p>
+<div class="lesson-example">
+    <pre class="language-java"><code><span class="text-red">Arrays</span>.<span class="text-viola">deepEquals</span>(<span class="text-green">ім'я1</span>, <span class="text-neon">ім'я2</span>)</code></pre>
+</div>
+<p>Метод повертає <code><span class="text-green">true</span></code> <span class="text-green">(істина)</span>, якщо масиви мають однакову довжину, а їхні елементи рівні, інакше повертає <code><span class="text-red">false</span></code> <span class="text-red">(хибність)</span>. Якщо елементи всередині масиву — теж масиви, для їх порівняння використовують метод <code>Arrays.deepEquals() </code> і т. д.</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <td>
+                <pre class="language-java"><code>int[][] <span class="text-green">x1</span> = {{1, 2, 3}, {4, 5, 6}};
+int[][] <span class="text-neon">x2</span> = {{1, 2, 3}, {4, 5, 6}};
+<span class="text-green">x1</span>.equals(<span class="text-neon">x2</span>);</code></pre>
+        </td>
+        <td>Метод <code class="token function">equals</code> для масивів просто порівнює посилання двох масивів.<br/><br/> <code><span class="text-red">false</span></code> (посилання неоднакові)</td>
+    </tr>
+    <tr>
+        <td>
+                <pre class="language-java"><code>int[][] <span class="text-green">x1</span> = {{1, 2, 3}, {4, 5, 6}};
+int[][] <span class="text-neon">x2</span> = {{1, 2, 3}, {4, 5, 6}};
+<span class="text-red">Arrays</span>.<span class="text-viola">equals</span>(<span class="text-green">x1</span>, <span class="text-neon">x2</span>);</code></pre>
+        </td>
+        <td>Метод <code>Arrays.equals</code> порівняє <code><span class="text-green">x1</span></code> і <code><span class="text-neon">x2</span></code> як одновимірні масиви, що зберігають посилання. А посилання в них зберігаються різні.<br/> <code><span class="text-red">false</span></code> (вміст масивів неоднаковий)</td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int[][] <span class="text-green">x1</span> = {{1, 2, 3}, {4, 5, 6}};
+int[][] <span class="text-neon">x2</span> = {{1, 2, 3}, {4, 5, 6}};
+<span class="text-red">Arrays</span>.<span class="text-viola">deepEquals</span>(<span class="text-green">x1</span>, <span class="text-neon">x2</span>);</code></pre>
+        </td>
+        <td><br/><br/><code><span class="text-green">true</span></code> (вміст масивів однаковий)</td>
+    </tr>
+    </tbody>
+</table>
+
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task05.task0515"></div>
+<hr>
+
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="e33f63b0-dc18-4ec8-a171-9e610afa9056" data-max-width="1024" src="https://cdn.javarush.com/images/article/e33f63b0-dc18-4ec8-a171-9e610afa9056/original.png" alt=""/>
+        </div>
+    </div>
+</div>

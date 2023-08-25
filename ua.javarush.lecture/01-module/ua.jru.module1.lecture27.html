@@ -1,0 +1,96 @@
+Enum Singleton
+<p>----------------------------------------</p>
+Нещодавно ми з тобою розбиралися, що таке Singleton, як його реалізувати в Java і для чого він потрібен. Але що якщо я тобі розповім, що Java вже має свій синглтон із коробки? Цікаво? Тоді давай розбиратися...
+<p>----------------------------------------</p>
+<p>Нещодавно ми з тобою розбиралися, <a href="https://javarush.com/quests/lectures/ua.jru.module1.lecture26" target="_blank">що
+        таке Singleton</a>, як його реалізувати в Java і для чого він потрібен. Але що якщо я тобі розповім, що Java вже має
+    свій синглтон із коробки? Цікаво? Тоді давай розбиратися.</p>
+
+    <p>Мабуть, ти вже знаєш про <a href="https://javarush.com/groups/posts/4037-kak-ispoljhzovatjh-klass-enum"
+        target="_blank">клас enum</a>. Він має особливість, про яку тобі варто знати. Справа в тому, що <span
+        class="code"><span class="text-green">enum</span></span> є реалізацією синглтона. Такий варіант майже аналогічний
+    підходу із <span class="code">public</span> полем.</p>
+
+    <h4>Singelton enum:</h4>
+
+    <pre class='language-java line-numbers'><code>
+public enum Device {   
+    PRINTER	
+} 
+    </code></pre>
+
+    <h4>Public variable singleton:</h4>
+
+    <pre class='language-java line-numbers'><code>
+public class Printer {   
+    public static final Printer PRINTER = new Printer();   
+    private Printer() {
+    }
+//…
+}
+    </code></pre>
+ 
+    <p>У випадку з публічним полем варіант із <span class="code"><span class="text-green">enum</span></span> компактніший — не
+    потрібно писати свою реалізацію. І що найважливіше — у єнамів немає проблем із серіалізацією.</p>
+
+    <p>Серіалізація тут працює не так, як для звичайних об’єктів: серіалізується лише значення імені єнаму. У разі
+    десеріалізації метод використовується із десеріалізованим ім’ям, щоб отримати екземпляр. Також <span class="code"><span
+            class="text-green">enum</span></span> дозволяє захистити себе від <span class="text-bold">рефлексивних
+        атак</span>.</p>
+
+    <table>
+        <tbody>
+            <tr>
+                <td>Більше про Reflection ти дізнаєшся з лекцій другого модуля, в темі <span class="text-bold">Reflection API</span>.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>Java представляє заборону на інстанціювання єнамів, і це закодовано в реалізації методу <span
+        class="code text-orange">newInstance</span> класу <span class="code"><span
+            class="text-green">Constructor</span></span>, який часто викликається під час створення об’єктів через
+    рефлексію.</p>
+  
+    <p><span class="text-bold">Частина коду з</span> <span class="code text-orange">Constructor.newInstance</span> <span class="text-bold">для</span> <span class="code"><span class="text-green">enum</span></span>: </p>
+
+    <pre class='language-java line-numbers'><code>
+if ((clazz.getModifiers() & Modifier.ENUM) != 0)
+    throw new IllegalArgumentException("Cannot reflectively create enum objects");
+    </code></pre>
+ 
+    <p><span class="text-bold">Серед мінусів створення Singleton через</span> <span class="code"><span class="text-green">enum</span></span> <span class="text-bold">варто назвати</span></p>
+
+    <ul>
+        <li><p>Відсутність лінивої ініціалізації, оскільки об’єкт створюється одразу, і не можна зробити відкладену ініціалізацію.</p></li>
+        <li><p>Неможливо розширювати інші класи. Тобто використовувати <span class="code"><span class="text-green">enum</span></span>
+        як Singleton у випадках, коли потрібно успадковуватись від іншого класу, не вийде. У таких випадках потрібно звертатися
+        до вже знайомих для нас варіантів реалізації через статичний метод чи публічну змінну.</p></li>
+        <li><p>Використовуючи <span class="code"><span class="text-green">enum</span></span> як синглтон, ти можеш використовувати
+        тільки одне поле в enum класі.</p></li>
+    </ul>
+  
+    <pre class='language-java line-numbers'><code>
+public enum Device extends Electricity { 
+    PRINTER 
+}
+    </code></pre>
+ 
+    <p>Такий код видасть нам помилку компіляції:</p>
+
+    <div class="terminal">No extends clause allowed for enum</div>
+
+    <p>Але якщо нам потрібно реалізувати інтерфейс, немає проблем: <span class="code"><span
+            class="text-green">enum</span></span>-и можуть імплементувати інтерфейси:</p>
+
+    <pre class='language-java line-numbers'><code>
+public enum Device implements Electricity { 
+    PRINTER 
+}
+    </code></pre>
+ 
+    <p>Якщо тобі не потрібно використовувати успадкування, краще використовувати реалізацію Singleton через <span
+        class="code"><span class="text-green">enum</span></span>. Так радимо робити не лише ми, а й <a
+        href="https://sites.google.com/site/io/effective-java-reloaded" target="_blank">сам Джошуа Блох</a>.</p>
+
+    Використання такої реалізації дає тобі зручність, компактність, серіалізацію із коробки, захист від рефлексивних атак та
+    унікальність, а це те, що потрібно для гарного Синглтона!

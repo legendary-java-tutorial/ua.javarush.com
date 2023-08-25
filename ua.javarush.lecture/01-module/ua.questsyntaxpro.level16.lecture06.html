@@ -1,0 +1,269 @@
+﻿Часові пояси
+<p>----------------------------------------</p>
+Клас ZoneDateTime. Є ще один дуже цікавий клас у Date Time API. Це клас ZoneDateTime. Його основне призначення — комфортна робота з датами в різних часових поясах. LocalDate чудово підходить для опису дат, як-от дня народження: мій день народження — 15 березня, незалежно від того,
+<p>----------------------------------------</p>
+<h2>1. Клас <code>ZonedDateTime</code></h2>
+<p>Є ще один дуже цікавий клас у Date Time API — клас <code>ZonedDateTime</code>. Його основне призначення — зручна робота з датами в різних часових поясах.</p>
+<p><code>LocalDate</code> чудово підходить для опису дат, як-от дня народження: мій день народження — 15 березня, незалежно від того, де я перебуваю. Це приклад дати.</p>
+<p><code>LocalTime</code> чудово підходить для опису часу, наприклад, будильника: я завів будильник на 5 ранку, і не має значення, де я перебуваю. 5 ранку — це 5 ранку. Це приклад роботи з часом.</p>
+<p>А тепер припустімо, що ми пишемо програму, яка бронює авіаквитки. Літаки злітають і сідають за місцевим часом, літак летить протягом фіксованого часу, але часові пояси змінюються.</p>
+<p><strong>Часові зони</strong></p>
+<p>До речі, з часовими зонами (часовими поясами) у світі — справжній безлад. Ба більше, якщо ви думаєте, що часових поясів 24, ви дуже помиляєтеся.</p>
+<p>Наприклад, час в Індії відрізняється від часу за Гринвічем на 5 із половиною годин: <code>GMT+5:30</code>. Одні країни переходять на літній час, інші — ні. Причому різні країни переходять на літній час за різними графіками.</p>
+<p>А деякі країни міняють закони і скасовують перехід на літній час або знову вводять, або знову скасовують.</p>
+<p>Загалом, у світі є часові зони, і всередині кожної зони — свій час. Час у різних зонах у певні періоди року може збігатися, а в інші періоди відрізнятися. Назви зон зазвичай походять від назв великих міст, які в них розташовані: <code>Europe/Monaco</code>, <code>Asia/Singapore</code>, хоча є й винятки — <code>US/Pacific</code>.</p>
+<p><span class="text-viola">Усього на даний момент офіційно відомо 599 часових зон. Вдумайтеся. 599. Це зовсім не 24. Ласкаво просимо в глобальний світ!</span></p>
+<p>Для зберігання часової зони в Java використовується клас <code>ZoneId</code> із пакету <code>java.time</code>.</p>
+<p>До речі, цей клас має статичний метод <code><span class="text-red">getAvailableZoneIds</span>()</code>, який повертає множину всіх відомих на поточний момент часових зон. Щоб отримати список усіх зон, слід написати такий код:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран (частина)</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>for (String s: <span class="text-neon">ZoneId</span>.<span class="text-red">getAvailableZoneIds</span>())
+   System.out.println(s);</code></pre>
+        </td>
+        <td>
+                <pre><code>Asia/Aden
+America/Cuiaba
+Etc/GMT+9
+Etc/GMT+8</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Щоб отримати об'єкт <code>ZoneId</code> за його іменем, слід скористатися статичним методом <code><span class="text-red">of</span>()</code>;</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-neon">ZoneId</span> zone = <span class="text-neon">ZoneId</span>.<span class="text-red">of</span>(<span class="text-green">"Africa/Cairo"</span>);</code></pre>
+        </td>
+        <td>
+            <pre><code>Каїр</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task16.task1616"></div>
+<hr>
+<h2>2. Створення об'єкта <code>ZonedDateTime</code></h2>
+<p>Під час створення об'єкта <code>ZonedDateTime</code> потрібно викликати для нього статичний метод <code>now()</code> й передати в нього об'єкт <code>ZoneId</code>.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">ZoneId</span> <span class="text-user">zone</span> = <span class="text-neon">ZoneId</span>.<span class="text-red">of</span>(<span class="text-user">"Africa/Cairo"</span>);
+<span class="text-orange">ZonedDateTime</span> <span class="text-viola">time</span> = <span class="text-orange">ZonedDateTime</span>.now(<span class="text-user">zone</span>);
+System.out.println(<span class="text-viola">time</span>);</code></pre>
+        </td>
+        <td><pre><code>
+
+2019-02-22T11:37:58.074816+02:00[Africa/Cairo]</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Якщо в метод <code>now()</code> не передати об'єкт <code>ZoneId</code> (а так можна), часову зону буде визначено автоматично: на основі настройок комп'ютера, на якому виконується програма.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-orange">ZonedDateTime</span> <span class="text-viola">time</span> = <span class="text-orange">ZonedDateTime</span>.now();
+<span>System.out.println(<span class="text-viola">time</span>);</span></code></pre>
+        </td>
+        <td><pre><code>
+2019-02-22T13:39:05.70842+02:00[Europe/Helsinki]</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Перетворення глобальної дати на локальну</strong></p>
+<p>Однією з цікавих особливостей <code>ZonedDateTime</code> є можливість його перетворення на локальні дату й час. Приклад:</p>
+<pre class="language-java"><code><span class="text-neon">ZoneId</span> <span class="text-user">zone</span> = <span class="text-neon">ZoneId</span>.<span class="text-red">of</span>("Africa/Cairo");
+ZonedDateTime <span class="text-orange">cairoTime</span> = ZonedDateTime.now(<span class="text-user">zone</span>);
+
+<span class="text-neon">LocalDate</span> localDate = <span class="text-orange">cairoTime</span>.<span class="text-red">toLocalDate</span>();
+<span class="text-neon">LocalTime</span> localTime = <span class="text-orange">cairoTime</span>.<span class="text-red">toLocalTime</span>();
+<span class="text-neon">LocalDateTime</span> localDateTime = <span class="text-orange">cairoTime</span>.<span class="text-red">toLocalDateTime</span>();</code></pre>
+<hr>
+<h2>3. Робота з часом</h2>
+<p>Як і клас <code><span class="text-neon">LocalDateTime</span></code>, клас <code>ZonedDateTime</code> має багато способів (методів) отримання окремих фрагментів дати й часу. Наводимо список цих методів:</p>
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int getYear()</code></pre>
+        </td>
+        <td>Повертає рік із конкретної дати</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Month <span class="text-red">getMonth</span>()</code></pre>
+        </td>
+        <td>Повертає місяць дати: одну зі спеціальних констант <code>JANUARY, FEBRUARY, …;</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">getMonthValue</span>()</code></pre>
+        </td>
+        <td>Повертає номер місяця з дати. Січень == 1</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">getDayOfMonth</span>()</code></pre>
+        </td>
+        <td>Повертає номер дня в місяці</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>DayOfWeek <span class="text-red">getDayOfWeek</span>()</code></pre>
+        </td>
+        <td>Повертає день тижня: одну зі спеціальних констант <code>MONDAY, TUESDAY, …;</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">getDayOfYear</span>()</code></pre>
+        </td>
+        <td>Повертає номер дня в році</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">getHour</span>()</code></pre>
+        </td>
+        <td>Повертає години</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">getMinute</span>()</code></pre>
+        </td>
+        <td>Повертає хвилини</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">getSecond</span>()</code></pre>
+        </td>
+        <td>Повертає секунди</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">getNano</span>()</code></pre>
+        </td>
+        <td>Повертає наносекунди</td>
+    </tr>
+    </tbody>
+</table>
+<p>Усі методи повністю аналогічні методам <code><span class="text-neon">LocalDateTime</span></code>. І, звичайно, клас <code>ZonedDateTime</code> має методи, що дають змогу працювати з датою й часом. Причому об'єкт, для якого викликають методи, не змінюється — натомість методи повертають новий об'єкт <code>ZonedDateTime</code>:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Методи</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">plusYears</span>(int)</code></pre>
+        </td>
+        <td>Додає роки до дати</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">plusMonths</span>(int)</code></pre>
+        </td>
+        <td>Додає місяці до дати</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">plusDays</span>(int)</code></pre>
+        </td>
+        <td>Додає дні до дати</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">plusHours</span>(int)</code></pre>
+        </td>
+        <td>Додає години</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">plusMinute</span><span class="text-red">s</span>(int)</code></pre>
+        </td>
+        <td>Додає хвилини</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">plusSeconds</span>(int)</code></pre>
+        </td>
+        <td>Додає секунди</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">plusNanos</span>(int)</code></pre>
+        </td>
+        <td>Додає наносекунди</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">minusYears</span>(int)</code></pre>
+        </td>
+        <td>Віднімає роки від дати</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">minusMonths</span>(int)</code></pre>
+        </td>
+        <td>Віднімає місяці від дати</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">minusDays</span>(int)</code></pre>
+        </td>
+        <td>Віднімає дні від дати</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">minusHours</span>(int)</code></pre>
+        </td>
+        <td>Віднімає години</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">minusMinutes</span>(int)</code></pre>
+        </td>
+        <td>Віднімає хвилини</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">minusSeconds</span>(int)</code></pre>
+        </td>
+        <td>Віднімає секунди</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">minusNanos</span>(int)</code></pre>
+        </td>
+        <td>Віднімає наносекунди</td>
+    </tr>
+    </tbody>
+</table>
+<p>Приклади не наводимо: на нашу думку, тут і без того все зрозуміло за аналогією до щойно розглянутих класів.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task16.task1617"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task16.task1618"></div>

@@ -1,0 +1,176 @@
+Вираз switch | switch expression
+<p>----------------------------------------</p>
+Напевно, тобі доводилося використовувати в коді з великою кількістю умов або if-else, або switch. Але ця альтернатива має недоліки у використанні: у народі switch навіть прозвали «антипатерном»...
+<p>----------------------------------------</p>
+<p>Напевно, тобі доводилося використовувати в коді з великою кількістю умов або <span class="text-viola">if-else</span>,
+або <span class="text-viola">switch</span>. Але ця альтернатива має недоліки у використанні: у народі <span
+    class="text-viola">switch</span> навіть прозвали «антипатерном».</p>
+
+<table>
+<tbody>
+<tr>
+<td>Що це таке? Антипатерн — це шаблон поганого коду, поганого вирішення проблеми. У програмуванні намагаються уникати
+використання їх у коді, оскільки вони погіршують якість коду.</td>
+</tr>
+</tbody>
+</table>
+
+<p>Але є і гарна новина: із виходом нових версій Java багато що змінилося в систаксисі мови, і одна зі змін торкнулася саме
+<span class="text-viola">switch</span>. Цікаво? Тоді давай розбиратися.</p>
+
+<p>Спочатку варто уточнити, чому <span class="text-viola">switch</span> — це антипатерн. Розглянемо наступний код:</p>
+
+<pre class='language-java line-numbers'><code>
+switch (condition) {
+    case "DECEMBER":
+        seasonNumber = 1;
+        break;
+    case "JANUARY":
+        seasonNumber = 1;
+        break;
+    case "FEBRUARY":
+        seasonNumber = 1;
+        break;
+    default:
+        seasonNumber = 0;
+}
+</code></pre>
+
+<p>Поки не зовсім зрозуміло, чому це "антипатерн", це правда. </p>
+
+<p>Але що, якщо ми додамо ще <span class="text-viola">case</span> блоки, і код виглядатиме ось так:</p>
+
+<pre class='language-java line-numbers'><code>
+switch (condition) {
+    case "DECEMBER":
+        seasonNumber = 1;
+        break;
+    case "JANUARY":
+        seasonNumber = 1;
+        break;
+    case "FEBRUARY":
+        seasonNumber = 1;
+        break;
+    case “MARCH”:
+        seasonNumber = 2;
+        break;
+    case “APRIL”:
+        seasonNumber = 2;
+        break;
+    case “MAY”:
+        seasonNumber = 2;
+        break;
+    default:
+        seasonNumber = 0;
+}
+</code></pre>
+
+<p>Додамо ще кілька рядків, і код стане довшим. А потім можна додати ще і ще рядків, і ніхто нам не завадить це зробити.</p>
+
+<p>У цьому і є головна проблема: створивши спочатку маленький і компактний <span class="text-viola">switch</span>, ми далі
+додаємо до нього більше і більше коду, що в результаті займає все більше місця, ніж є у нас на екрані, і стає незручним
+для читання та підтримки.</p>
+
+<h2>Різниця між switch statement та switch expression</h2>
+
+<p>В Java 14 вийшов новий switch, поліпшений. Тепер це вже не <span class="text-viola">switch statement</span>, а <span
+    class="text-viola">switch expression</span>.</p>
+
+<p>Ти спитаєш, у чому різниця? У тому, що statement – це інструкція у коді, яка робить певний набір операцій, а expression
+– це фрагмент коду, який робить певне обчислення та повертає результат.</p>
+
+<p>Тобто тепер результат роботи <span class="text-viola">switch</span> ти можеш зберегти в змінну.</p>
+
+<p>Давай нарешті подивимося, як виглядає новий <span class="text-viola">switch</span>: </p>
+
+<pre class='language-java line-numbers'><code>
+var result = switch(month) {
+     case DECEMBER, JANUARY, FEBRUARY -&gt; 1;
+     case MARCH, APRIL, MAY -&gt; 2;
+    case JUNE, JULY, AUGUST -&gt; 3;
+    case SEPTEMBER, OCTOBER, NOVEMBER -&gt; 4;
+    default -&gt; 0; 
+};
+</code></pre>
+
+<p>Перше, що впадає в око, — це компактність. Тепер код, який раніше займав більшу частину екрана, займає кілька рядків і
+виглядає набагато читабельнішим.</p>
+
+<h2>Оператор -&gt;</h2>
+
+<p>Також варто звернути увагу на оператор <span class="text-viola">-&gt;</span> — arrow operator. Він може бути тобі
+знайомий, якщо ти маєш досвід використання Лямбда-виразів.</p>
+
+<p>Тобто тепер ти можеш писати <span class="text-viola">switch</span> у стилі Лямбда, і це виглядає круто. Використання
+стрілки (arrow оператора) говорить про те, що тепер компілятор не буде йти до наступного <span
+    class="text-viola">case</span> виразу (якщо у нас немає <span class="text-viola">break</span> або <span
+    class="text-viola">return</span> у цьому <span class="text-viola">case</span> блоці), а поверне тобі значення, яке
+буде праворуч від стрілки.</p>
+
+<p>Ти також можеш написати код, який не буде виразом і нічого не буде повертати, а просто виконуватиме певні дії:</p>
+
+<pre class='language-java line-numbers'><code>
+switch(condition) {
+    case TRUE, FALSE -&gt; System.out.println("True/false");
+  
+    default -&gt; System.out.println("Another");
+}
+</code></pre>
+
+<p>Зверни увагу, що тепер <span class="text-viola">switch</span> без оператора <span class="text-viola">break</span>. Його прибрали в Java 13 і замінили словом <span class="text-user"><span class="text-bold">yield</span></span>.</p>
+
+<h2>Що таке yield, і де його можна використовувати</h2>
+
+<p>Коли <span class="text-viola">switch</span> складається з одного рядка, arrow <span class="text-viola">-&gt;</span> сам
+поверне це значення. Але що робити, якщо у нас не один, а кілька рядків коду? Arrow у таких випадках не поверне
+значення, тому що рядків не один, а кілька.</p>
+
+<p>Може, використовувати <span class="text-viola">return</span>? Він слугує в Java для того, щоб повертати значення. Але,
+на жаль, ні: <span class="text-viola">return</span> зі світчем не працює. То що ж використовувати? Раніше був <span
+    class="text-viola">break</span>, але в Java 13 його прибрали. Зате з’явилося <span class="text-user">
+    <span class="text-bold">yield</span></span> — нове ключове слово, яке допоможе тобі повернути значення зі світча,
+аналог <span class="text-viola">return</span> у методах.</p>
+
+<pre class='language-java line-numbers'><code>
+var result = switch(condition) {
+//…
+case "Hi" -&gt; "greeting"
+//…
+};  
+</code></pre>
+
+<p>Цей код містить один рядок, і <span class="text-viola">-&gt;</span> оператор сам поверне тобі значення “greeting”.</p>
+
+<p>Але у випадках, коли у нас блок коду:</p>
+
+<pre class='language-java line-numbers'><code>
+var result = switch(condition) {
+//…
+case "Hi" -&gt; {
+// Твій код
+Тут потрібно повернути "greeting"
+	}
+};  
+</code></pre>
+
+<p>Тобі допоможе повернути значення саме <span class="text-user"><span class="text-bold">yield</span></span>:</p>
+
+<pre class='language-java line-numbers'><code>
+var result = switch(condition) {
+//…
+case "Hi" -&gt; {
+// Твій код
+ yield "greeting";
+
+	}
+};
+</code></pre>  
+
+<p><span class="text-user"><span class="text-bold">yield</span></span> доданий в Java 13 для випадків, коли в case блоку у нас більше ніж один рядок коду, і потрібно повернути результат.</p>
+
+<p>Тобі, напевно, вже хочеться спробувати на практиці новий <span class="text-viola">switch</span>, але пам’ятай, що для
+цього тобі потрібна Java 14+ версії. З більш раніми версіями <span class="text-viola">switch</span> буде доступний
+тільки у разі зазначення прапора “--enable-preview” під час запуску, оскільки до версії 14 він був у режимі preview і не
+був повноцінною частиною версії мови.</p>
+
+<jr-widget-youtube videoid="g28NL4GpY4I"></jr-widget-youtube>

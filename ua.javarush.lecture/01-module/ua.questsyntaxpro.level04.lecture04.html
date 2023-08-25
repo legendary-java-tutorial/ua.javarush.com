@@ -1,0 +1,130 @@
+﻿Приклади використання циклу for
+<p>----------------------------------------</p>
+Підрахунок кількості введених рядків за допомогою циклу for. Спробуймо написати програму, яка вводить з клавіатури 10 рядків і виводить на екран кількість рядків із числами. Приклад: Код Пояснення Scanner console = new Scanner(System.in); int count = 0; for (int i = 0; i &lt; 10; i++) { &amp;
+<p>----------------------------------------</p>
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="6b850fee-f34c-4395-b0c9-75c59f214118" data-max-width="1024" src="https://cdn.javarush.com/images/article/6b850fee-f34c-4395-b0c9-75c59f214118/original.png" alt=""/>
+        </div>
+        <div class="lesson-carousel__item">
+            <img data-id="935168ec-d651-43e1-a9cf-5a5efcb227fa" data-max-width="1024" src="https://cdn.javarush.com/images/article/935168ec-d651-43e1-a9cf-5a5efcb227fa/original.png" alt=""/>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<h2>1. Підрахунок кількості введених рядків за допомогою циклу <code>for</code></h2>
+<p>Спробуймо написати програму, яка вводить з клавіатури <code>10</code> рядків і виводить на екран кількість рядків із числами. Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Scanner <span class="text-viola">console</span> = new Scanner(System.in);
+int <span class="text-green">count</span> = 0;
+for (int i = 0; i &lt; 10; i++)
+{
+&nbsp; &nbsp;if (<span class="text-viola">console</span>.hasNextInt())
+      <span class="text-green">count</span>++;
+   <span class="text-viola">console</span>.nextLine();
+}
+<span>System.out.println(<span class="text-green">count</span>);</span></code></pre>
+        </td>
+        <td>
+                <pre class="language-java">Створюємо об'єкт <code>Scanner</code> для читання даних з консолі.
+У змінний <code>count</code> будемо зберігати кількість уведених чисел.
+Цикл від 0 до 10 (не включаючи 10).
+
+Якщо з консолі введено число,
+збільшуємо змінну count на одиницю.
+Читаємо рядок з консолі, але ніде його не зберігаємо.
+
+Виводимо отриману суму (кількість чисел) на екран.</pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div class="lesson-note lesson-note--important">
+    <div class="lesson-note__container">
+        <div class="lesson-note__head">Примітка</div>
+        <div class="lesson-note__content">
+            <p>Якщо рядок складається з декількох слів, розділених пробілами, і перше з них — число, метод <code>hasNextInt()</code> поверне значення <code>true</code>, навіть коли інші слова не будуть числами. Тому наша програма правильно працюватиме, тільки якщо кожен рядок містить не більше одного «слова».</p>
+        </div>
+    </div>
+</div>
+<hr>
+<h2>2. Обчислення факторіала за допомогою циклу <code>for</code></h2>
+<p>Спробуймо написати програму, яка нічого не вводить, а, скажімо, щось обчислює. Що-небудь складне. Наприклад, факторіал числа <code>10</code>.</p>
+<p>Факторіал числа <code>n</code> (позначається <code>n!</code>) — це добуток ряду чисел: <code>1*2*3*4*5*..*n</code>;</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="text-green">f</span> = 1;
+for (int <span class="text-red">i</span> = 1; <span class="text-red">i</span> &lt;= 10; <span class="text-red">i</span>++)
+&nbsp;  <span class="text-green">f</span> = <span class="text-green">f</span> * <span class="text-red">i</span>;
+System.out.println(<span class="text-green">f</span>);</code></pre>
+        </td>
+        <td>
+                <pre class="language-java">У змінній <code><span class="text-green">f</span></code> будемо зберігати добуток чисел.
+Цикл від 1 до 10 (включно).
+Множимо f на чергове число (результат зберігаємо у f).
+Виводимо отриманий добуток на екран.</pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Початкове значення <code>f = 1</code>, тому що ми множимо <code>f</code> на числа. Якби змінна <code>f</code> мала початкове значення <code>0</code>, добуток усіх чисел на <code>0</code> дорівнював би <code>0</code>.</p>
+<hr>
+<h2>3. Малюємо на екрані за допомогою циклу <code>for</code></h2>
+<p>Спробуймо написати програму, яка малює на екрані трикутник: у першому рядку виводить <code>10</code> зірочок, у другому — <code>9</code> зірочок, потім <code>8</code> і т. д.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>for (int <span class="text-green">i</span> = 0; <span class="text-green">i</span> &lt; 10; <span class="text-green">i</span>++)
+{
+&nbsp; &nbsp;int <span class="text-red">starCount</span> = 10 - <span class="text-green">i</span>;
+&nbsp; &nbsp;for (int <span class="text-neon">j</span> = 0; <span class="text-neon">j</span> &lt; <span class="text-red">starCount</span>; <span class="text-neon">j</span>++)
+&nbsp; &nbsp;&nbsp; &nbsp;System.out.print("*");
+&nbsp; &nbsp;System.out.println();
+}</code></pre>
+        </td>
+        <td>
+                <pre class="language-java">Цикл по рядках (загалом має бути <code>10</code> рядків).
+
+Обчислюємо, скільки зірочок має бути в рядку.
+Цикл по зірочках
+(кількість виведених зірочок дорівнює starCount).
+Додаємо команду переведення курсора на наступний рядок, щоб рядки не злиплися.</pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>У нашій програмі має бути два вкладених цикли — внутрішній цикл, який має виводити відповідну кількість зірочок у рядку,</p>
+<p>і зовнішній цикл, який переводить виведення на наступний рядок.</p>
+
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task04.task0413"></div>
+<hr>
+
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="9822c7db-17c9-4d4f-a0d6-ddd5fd661434" data-max-width="1024" src="https://cdn.javarush.com/images/article/9822c7db-17c9-4d4f-a0d6-ddd5fd661434/original.png" alt=""/>
+        </div>
+    </div>
+</div>

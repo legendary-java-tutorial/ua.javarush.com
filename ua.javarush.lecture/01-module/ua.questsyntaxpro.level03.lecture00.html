@@ -1,0 +1,226 @@
+﻿Умовний оператор
+<p>----------------------------------------</p>
+Оператор if-else. Від програм було б мало толку, якби вони робили абсолютно одне й те саме незалежно від зміни зовнішніх обставин. Потрібно, щоб програма вміла підлаштовуватися під різні ситуації та виконувати одні дії в одних випадках, а інші — в інших. У Java це реалізовано за допомогою
+<p>----------------------------------------</p>
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="3380dab9-64c2-4e54-a76a-aa6cd4dea470" data-max-width="1024" src="https://cdn.javarush.com/images/article/3380dab9-64c2-4e54-a76a-aa6cd4dea470/original.png" alt=""/>
+        </div>
+        <div class="lesson-carousel__item">
+            <img data-id="e8f27e48-7442-45ef-8d53-fa7306386116" data-max-width="1024" src="https://cdn.javarush.com/images/article/e8f27e48-7442-45ef-8d53-fa7306386116/original.png" alt=""/>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<h2>1. Оператор <code>if-else</code></h2>
+<p>Від програм було б мало користі, якби вони робили абсолютно одне й те саме незалежно від зміни зовнішніх обставин. Потрібно, щоб програма вміла підлаштовуватися під різні ситуації та виконувати одні дії в одних випадках, а інші — в інших.</p>
+<p>У Java це реалізовано за допомогою <span class="term">умовного оператора</span> — спеціального ключового слова, яке дає змогу виконувати різні блоки команд залежно від правдивості умови.</p>
+<p>Умовний оператор складається з трьох частин: <span class="term text-red">умови</span>, <span class="term text-green">команди 1</span> і <span class="term text-user">команди 2</span>. Якщо <span class="term text-red">умова</span> правдива (істинна), виконується <span class="term text-green">команда 1</span>, інакше — <span class="term text-user">команда 2</span>. Команди ніколи не виконуються одночасно. Загальний вигляд цього оператора такий:</p>
+<div class="lesson-example lesson-example--center">
+<pre class="lecture-code lecture-code--present language-java"><code><span class="code">if</span> (<span class="code text-red">умова</span>)
+   <span class="code text-green">команда1</span>;
+<span class="code">else</span>
+   <span class="code text-user">команда2</span>;</code></pre>
+    <div class="lesson-example-caption">Умовний оператор <code>if-else</code></div>
+</div>
+<p><code>if</code> перекладається як «якщо», а <code>else</code> — як «інакше». Людською мовою це можна записати так:</p>
+<div class="lesson-example lesson-example--center">
+<pre class="lecture-code lecture-code--present language-java"><code><span class="code">Якщо</span> <span class="code text-red">умова</span> істинна, то
+   виконати <span class="code text-green">команда1</span>;
+<span class="code">інакше</span>
+   виконати <span class="code text-user">команда2</span>;</code></pre>
+    <div class="lesson-example-caption">Умовний оператор <code>if-else</code> людською мовою</div>
+</div>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int age = 17;
+if (<span class="code text-red">age &lt; 18</span>)
+   <span class="code text-green">System.out.println("Ви ще дитина")</span>;
+else
+   <span class="code text-user">System.out.println("Ви вже дорослий")</span>;</code></pre>
+        </td>
+        <td>На екран буде виведено напис:<br/>
+            <pre><code>Ви ще дитина</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int temperature = 5;
+if (<span class="code text-red">temperature &lt; 0</span>)
+   <span class="code text-green">System.out.println("На вулиці мороз")</span>;
+else
+   <span class="code text-user">System.out.println("Тепло")</span>;</code></pre>
+        </td>
+        <td>На екран буде виведено напис:<br/>
+            <pre><code>Тепло</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int age = 18;
+if (<span class="code text-red">age == 18</span>)
+   <span class="code text-green">System.out.println("З'явіться до військкомату")</span>;
+else
+   <span class="code text-user">System.out.println("Все одно з'явіться")</span>;</code></pre>
+        </td>
+        <td>На екран буде виведено напис:<br/>
+            <pre><code>З'явіться до військкомату</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task03.task0301"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task03.task0302"></div>
+<hr>
+<h2>2. Блок команд</h2>
+<p>Якщо ви хочете, щоб у разі виконання (або невиконання) умови ваша програма виконала кілька команд, їх можна об'єднати в <span class="term text-green">блок команд</span>.</p>
+<p>Щоб об'єднати команди в блок, потрібно «загорнути» їх у <span class="term text-viola">фігурні дужки</span>. Отак це виглядає в загальному випадку:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="code text-viola">{</span>
+   <span class="code text-green">команда1</span>;
+   <span class="code text-green">команда2</span>;
+   <span class="code text-green">команда3</span>;
+<span class="code text-viola">}</span></code></pre>
+
+</div>
+<p>Команд у блоці може бути скільки завгодно. І навіть нуль.</p>
+<p>Приклади поєднання оператора <span class="term">if-else</span> і блоку команд:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="60%">Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int age = 17;
+if (<span class="code text-red">age &lt; 18</span>)
+{
+   <span class="code text-green">System.out.println("Ти ще дитина")</span>;
+   <span class="code text-green">System.out.println("Не сперечайся з дорослими")</span>;
+}
+else
+{
+   <span class="code text-user">System.out.println("Ви вже дорослий")</span>;
+   <span class="code text-user">System.out.println("Отака молодь пішла")</span>;
+}</code></pre>
+        </td>
+        <td>На екран буде виведено напис:<br/>
+            <pre><code>Ти ще дитина
+Не сперечайся з дорослими</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int temperature = 5;
+if (<span class="code text-red">temperature &lt; 0</span>)
+{
+   <span class="code text-green">System.out.println("На вулиці мороз")</span>;
+   <span class="code text-green">System.out.println("Шапку надінь")</span>;
+}
+else
+   <span class="code text-user">System.out.println("Тепло")</span>;</code></pre>
+        </td>
+        <td>На екран буде виведено напис:<br/>
+            <pre><code>Тепло</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int age = 21;
+if (<span class="code text-red">age == 18</span>)
+   <span class="code text-green">System.out.println("З'явіться до військкомату")</span>;
+else
+{
+}</code></pre>
+        </td>
+        <td>Буде виконано порожній блок команд.<br/>На екран не виведеться <span class="term">нічого</span>.</td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<h2>3. Скорочена форма оператора <code>if</code></h2>
+<p>Трапляються випадки, коли якусь команду або команди потрібно <span class="term"><span class="text-green">виконати</span>, <span class="text-viola">якщо</span> <span class="text-red">умова істинна</span></span>, а якщо вона хибна, то <span class="term">нічого робити не треба</span>.</p>
+<p>Наприклад, ми можемо створити команду <code><span class="text-viola">Якщо</span> <span class="text-red">приїхав автобус номер 62</span>, <span class="text-green">зайти в нього</span></code>, а на відсутність автобуса жодним чином не реагувати. У Java за такого розвитку подій можна використовувати скорочену форму оператора <code class="text-viola">if</code> — без блоку <code>else</code>.</p>
+<p>Інакше кажучи, якщо команду (-и) потрібно виконувати лише в разі, коли <strong>умова істинна</strong>, і немає команд, які потрібно виконувати, коли умова хибна, потрібно використовувати скорочений запис оператора <code class="text-viola">if</code> — без блоку <code>else</code>. Скорочений запис має такий вигляд:</p>
+<div class="lesson-example lesson-example--center">
+<pre class="lecture-code lecture-code--present language-java"><code><span class="code text-viola">if</span> (<span class="code text-red">умова</span>)
+   <span class="code text-green">команда1</span>;</code></pre>
+    <div class="lesson-example-caption">Умовний оператор <code>if</code></div>
+</div>
+<p>Нижче наведено три еквівалентні записи:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="60%">Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int age = 18;
+<span class="code text-viola">if</span> (<span class="code text-red">age == 18</span>)
+{
+   <span class="code text-green">System.out.println("З'явіться до військкомату")</span>;
+}
+else
+{
+}</code></pre>
+        </td>
+        <td>На екран буде виведено напис:<br/>
+            <pre><code>З'явіться до військкомату</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Блок <code>else</code> у програмі є, але він порожній (між фігурними дужками немає жодної команди). Його можна просто прибрати, у програмі від цього нічого не зміниться.</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="60%">Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int age = 18;
+<span class="code text-viola">if</span> (<span class="code text-red">age == 18</span>)
+{
+   <span class="code text-green">System.out.println("З'явіться до військкомату")</span>;
+}</code></pre>
+        </td>
+        <td>На екран буде виведено напис:<br/>
+            <pre><code>З'явіться до військкомату</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int age = 18;
+<span class="code text-viola">if</span> (<span class="code text-red">age == 18</span>)
+   <span class="code text-green">System.out.println("З'явіться до військкомату")</span>;</code></pre>
+        </td>
+        <td>На екран буде виведено напис:<br/>
+            <pre><code>З'явіться до військкомату</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<hr>
+
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="ca48d210-2815-4362-92a3-d2268366cc1d" data-max-width="1024" src="https://cdn.javarush.com/images/article/ca48d210-2815-4362-92a3-d2268366cc1d/original.png" alt=""/>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,309 @@
+﻿Новий тип даних — enum: перелік
+<p>----------------------------------------</p>
+Передісторія появи enum. Сьогодні ми вивчимо ще один різновид типів даних у Java — enum. Назва enum походить від слова Enumeration — перелічування. Що ж це за тип даних і для чого він потрібен? Часом у програміста виникає потреба в такому типі даних, значення якого обмежуються невеликим
+<p>----------------------------------------</p>
+<h2>1. Передісторія появи <code>enum</code></h2>
+<p>Сьогодні ми вивчимо ще один різновид типів даних у Java — <code>enum</code>. Назва <code>enum</code> походить від слова <span class="term">Enumeration</span> — перелічування. Що ж це за тип даних і для чого він потрібен?</p>
+<p>Часом у програміста виникає потреба в такому типі даних, значення якого обмежуються невеликим фіксованим списком.</p>
+<p>Наприклад, тип <code>ДеньТижня</code> може набувати тільки значень <code>ПОНЕДІЛОК</code>, <code>ВІВТОРОК</code>, <code>СЕРЕДА</code>, ... — лише 7 значень. Або тип <code>Місяць</code> — він може набувати тільки значень <code>СІЧЕНЬ</code>, <code>ЛЮТИЙ</code>, <code>БЕРЕЗЕНЬ</code>, ... — лише 12 значень.</p>
+<p>Можна, звичайно, використовувати числа (тип <code>int</code>): <code>1</code> — понеділок, <code>2</code> — вівторок і т. ін. Але хтось випадково може присвоїти такій змінній значення <code>8</code>, або, скажімо, значення <code>0</code>.</p>
+<p>Може легко виникнути ситуація, коли один програміст вважає, що дні тижня (або місяці) нумеруються з нуля, інший — що з одиниці і т. д.</p>
+<p>Тому в Java створили тип даних, який складається з <span class="text-green">обмеженого набору значень</span> — <code>enum</code>.</p>
+<hr>
+<h2>2. Оголошення типу</h2>
+<p>Оголошення нового типу даних <code>enum</code> має такий вигляд:</p>
+<div class="lesson-example lesson-example--center">
+<pre class="lecture-code lecture-code--present language-java"><code>enum <span class="text-green">Ім'яТипу</span>
+{
+   <span class="text-user">ЗНАЧЕННЯ1</span>,
+   <span class="text-user">ЗНАЧЕННЯ2</span>,
+   <span class="text-user">ЗНАЧЕННЯ3</span>
+}</code></pre>
+</div>
+<p>де <code><span class="text-green">Ім'яТипу</span></code> — це ім'я нового типу (класу), а в дужках указано перелік можливих значень, розділених комами: <code><span class="text-user">Значення1</span></code>, <code><span class="text-user">Значення2</span></code>, <code><span class="text-user">Значення3</span></code>.</p>
+<p>Спробуймо для прикладу створити свій перелік <code>enum</code> для типу <code>ДеньТижня</code>:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>enum Day
+{
+   MONDAY,
+   TUESDAY,
+   WEDNESDAY,
+   THURSDAY,
+   FRIDAY,
+   SATURDAY,
+   SUNDAY
+}</code></pre>
+        </td>
+        <td>Новий тип <code>Day</code><br/><br/> Понеділок<br/> Вівторок<br/> Середа<br/> Четвер<br/> П'ятниця<br/> Субота<br/> Неділя</td>
+    </tr>
+    </tbody>
+</table>
+<p>Присвоювати значення змінним цього типу можна в такий спосіб:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-viola">Day</span> <span class="text-green">day</span> = <span class="text-viola">Day</span>.<span class="text-red">MONDAY</span>;</code></pre>
+</div>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Day day = Day.FRIDAY;
+System.out.println(day);</code></pre>
+        </td>
+        <td>На екран буде виведено:<br/>
+            <pre><code>FRIDAY</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task13.task1315"></div>
+<hr>
+<h2>3. Методи класу <code>enum</code></h2>
+<p>Тип <code>enum</code> має кілька вбудованих методів, два з яких дуже цікаві:</p>
+<p>Статичний метод <code>values()</code> повертає масив усіх значень переліку <code>enum</code>:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-viola">Day</span>[] <span class="text-user">days</span> = <span class="text-viola">Day</span>.<span class="text-red">values</span>();
+
+for (<span class="text-viola">Day</span> <span class="text-green">day</span>: <span class="text-user">days</span>)
+   System.out.println(<span class="text-green">day</span>);
+
+
+
+
+
+
+
+System.out.println(days[2]);</code></pre>
+        </td>
+        <td>У змінній <code>days</code> зберігається масив значень типу <code>Day</code> (7 значень)<br/><br/> Виводимо вміст масиву на екран:<br/>
+            <pre><code>MONDAY
+TUESDAY
+WEDNESDAY
+THURSDAY
+FRIDAY
+SATURDAY
+SUNDAY
+
+WEDNESDAY</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Метод <code>ordinal()</code> повертає порядковий номер константи. Викликати його потрібно не для класу <code>enum</code>, а для значення <code>enum</code>:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>System.out.println(<span class="text-viola">Day</span>.<span class="text-green">MONDAY</span>.<span class="text-red">ordinal</span>());
+System.out.println(<span class="text-viola">Day</span>.<span class="text-green">FRIDAY</span>.<span class="text-red">ordinal</span>());
+System.out.println(<span class="text-viola">Day</span>.<span class="text-green">SUNDAY</span>.<span class="text-red">ordinal</span>());</code></pre>
+        </td>
+        <td><pre><code>0
+4
+6</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task13.task1316"></div>
+<hr>
+<h2>4. Перетворення на клас</h2>
+<p>Насправді магії тут немає — компілятор просто підсипав нам трохи синтаксичного цукру. Під час компіляції клас <code>enum Day</code> буде перетворено на звичайний клас:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код, спрощена версія</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public class <span class="text-viola">Day</span>
+{
+   public static final <span class="text-viola">Day</span> MONDAY = new <span class="text-viola">Day</span>(0);
+   public static final <span class="text-viola">Day</span> TUESDAY = new <span class="text-viola">Day</span>(1);
+   public static final <span class="text-viola">Day</span> WEDNESDAY = new <span class="text-viola">Day</span>(2);
+   public static final <span class="text-viola">Day</span> THURSDAY = new <span class="text-viola">Day</span>(3);
+   public static final <span class="text-viola">Day</span> FRIDAY = new <span class="text-viola">Day</span>(4);
+   public static final <span class="text-viola">Day</span> SATURDAY = new <span class="text-viola">Day</span>(5);
+   public static final <span class="text-viola">Day</span> SUNDAY = new <span class="text-viola">Day</span>(6);
+
+    private static final <span class="text-viola">Day</span>[] <span class="text-user">array</span> = {MONDAY, TUESDAY,
+      WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY};
+
+   private final int <span class="text-green">value</span>;
+
+   private <span class="text-viola">Day</span> (int <span class="text-orange">value</span>)
+   {
+      this.<span class="text-green">value</span> = <span class="text-orange">value</span>;
+   }
+
+   public int <span class="text-red">ordinal</span>()
+   {
+      return this.<span class="text-green">value</span>;
+   }
+
+   public static <span class="text-viola">Day</span>[] <span class="text-red">values</span>()
+   {
+      return <span class="text-user">array</span>;
+   }
+}</code></pre>
+        </td>
+        <td>Клас <code>Day</code><br/><br/> Список статичних констант-значень<br/><br/><br/><br/><br/><br/><br/><br/> Масив з усіма значеннями типу <code>Day</code><br/><br/><br/> Змінна зі значенням певного об'єкта <code>Day</code><br/><br/> <code>private</code> конструктор класу <code>Day</code> — об'єкти класу <code>Day</code> можна створювати тільки всередині класу <code>Day</code>.<br/><br/><br/><br/> Метод <code><span class="text-red">ordinal</span></code> потрібно викликати для об'єкта <code>Day</code>.<br/><br/> Він повертає значення об'єкта — <code><span class="text-green">value</span></code>.<br/><br/><br/> Метод повертає статичний масив з усіма значеннями класу <code>Day</code></td>
+    </tr>
+    </tbody>
+</table>
+<p>Якщо видалити з класу <code><span class="text-viola">Day</span></code> усі статичні методи та змінні, отримаємо таку картину:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public class <span class="text-viola">Day</span>
+{
+  private int <span class="text-green">value</span>;
+
+  private <span class="text-viola">Day</span> (int <span class="text-orange">value</span>)
+  {
+    this.<span class="text-green">value</span> = <span class="text-orange">value</span>;
+  }
+
+  public int <span class="text-red">ordinal</span>()
+  {
+    return this.<span class="text-green">value</span>;
+  }
+}</code></pre>
+        </td>
+        <td><br/><br/>Змінна <code><span class="text-green">value</span></code> зберігає значення об'єкта <code>Day</code><br/><br/> Об'єкти <code>Day</code> можна створювати тільки всередині класу <code>Day</code> — конструктор <code>private</code>.<br/><br/><br/><br/> Метод <code><span class="text-red">ordinal</span>()</code> повертає значення <code><span class="text-green">value</span></code> об'єкта <code>Day</code>.</td>
+    </tr>
+    </tbody>
+</table>
+<p>Тобто нічого страшного тут не відбувається. Компілятор створює клас <code>Day</code>, потім додає в нього константи, які були значеннями в <code>enum</code>, додає відсутні методи й робить конструктор класу <code>private</code>. Як працюють конструктори, ми розглянемо трохи згодом.</p>
+<p>Тепер, сподіваємося, вам зрозуміло, чому ми присвоюємо значення змінній у такий спосіб:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-viola">Day</span> <span class="text-green">day</span> = <span class="text-viola">Day</span>.<span class="text-red">MONDAY</span>;</code></pre>
+</div>
+<p><code><span class="text-red">MONDAY</span></code> — це просто статичне поле (константа) класу <code><span class="text-viola">Day</span></code>. А під час звернення до статичних методів і полів поза межами класу перед іменем поля або методу потрібно вказувати ім'я класу.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task13.task1317"></div>
+<hr>
+<h2>5. Ще про методи класу <code>enum</code></h2>
+<p>Усі <code>enum</code>-класи мають іще кілька цікавих особливостей.</p>
+<p><strong>Перетворення на рядок і зворотне перетворення</strong></p>
+<p>Щоб перетворити об'єкт типу <code>enum</code> на рядок, для цього об'єкта потрібно викликати метод <code>toString()</code>.</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-viola">String</span> <span class="text-green">str</span> = <span class="text-viola">Day</span>.MONDAY.<span class="text-red">toString</span>();</code></pre>
+</div>
+<p>Для зворотного перетворення (рядка на об'єкт <code><span class="text-viola">Day</span></code>) можна скористатися статичним методом <code><span class="text-red">valueOf()</span></code>:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-viola">Day</span> <span class="text-green">day</span> = <span class="text-viola">Day</span>.<span class="text-red">valueOf</span>(<span class="text-green">"MONDAY"</span>);</code></pre>
+</div>
+<p>Дуже зручно й корисно в багатьох випадках.</p>
+<p><strong>Перетворення на число і зворотне перетворення</strong></p>
+<p>Як перетворити об'єкт типу <code>enum</code> на число, ви вже знаєте: для цього потрібно викликати метод <code><span class="text-red">ordinal()</span></code>:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-viola">int</span> <span class="text-green">index</span> = <span class="text-viola">Day</span>.MONDAY.<span class="text-red">ordinal</span>();</code></pre>
+</div>
+<p>Для зворотного перетворення (числа на об'єкт <code><span class="text-viola">Day</span></code>) потрібно скористатися дещо довшою конструкцією:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-viola">Day</span> <span class="text-green">day</span> = <span class="text-viola">Day</span>.<span class="text-red">values</span>()[2];</code></pre>
+</div>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-viola">Day</span> <span class="text-user">day</span> = <span class="text-viola">Day</span>.MONDAY;
+int <span class="text-green">index</span> = <span class="text-user">day</span>.<span class="text-red">ordinal</span>();
+<span class="text-viola">Day</span> newDay = <span class="text-viola">Day</span>.<span class="text-red">values</span>()[<span class="text-green">index</span>+2];</code></pre>
+        </td>
+        <td>Понеділок<br/> Отримуємо індекс понеділка (0)<br/> День тижня через 2 дні після понеділка</td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Важливий момент</strong>: оскільки значення типу <code>enum</code> — це фіксований набір констант, їх <strong>можна порівнювати за допомогою оператора ==</strong>. Тому що не можуть існувати два однакових об'єкти <code>MONDAY</code> з різними посиланнями. Кожен об'єкт-значення типу enum існує тільки в одному примірнику. Тому порівняння змінних типу enum за допомогою оператора == завжди діятиме.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task13.task1318"></div>
+<hr>
+<h2>6. Додавання в <code>enum</code> власних методів</h2>
+<p>Оскільки під час компіляції <code>enum</code> перетворюється на звичайний клас, у ньому можна оголошувати методи: ці методи просто буде додано в клас, який згенерує компілятор. Наприклад, ми хочемо, щоб наш перелік <code>Enum <span class="text-viola">Day</span></code> повертав не масив значень, а список.</p>
+<p>Тоді в нього можна додати такий код:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>enum <span class="text-viola">Day</span>
+{
+   MONDAY,
+   TUESDAY,
+   WEDNESDAY,
+   THURSDAY,
+   FRIDAY,
+   SATURDAY,
+   SUNDAY;
+
+   public static List&lt;<span class="text-viola">Day</span>&gt; <span class="text-red">asList</span>()
+   {
+      ArrayList&lt;<span class="text-viola">Day</span>&gt; <span class="text-user">list</span> = new ArrayList&lt;<span class="text-viola">Day</span>&gt;();
+
+      Collections.<span class="text-red">addAll</span>(<span class="text-user">list</span>, <span class="text-red">values</span>());
+
+      return list;
+   }
+
+}</code></pre>
+        </td>
+        <td><br/><br/><br/><br/><br/><br/><br/><br/>Після списку значень потрібно поставити крапку з комою.<br/><br/><br/><br/> Створюємо об'єкт <code>ArrayList</code>.<br/><br/> Додаємо в нього значення з масиву: його повертає метод <code>values()</code>.<br/> Повертаємо список.</td>
+    </tr>
+    </tbody>
+</table>
+<p>Тепер цей метод можна викликати в коді:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>List&lt;Day&gt; list = Day.asList();</code></pre>
+        </td>
+        <td>У змінній <code>list</code> буде збережено список усіх значень переліку <code>enum</code> <code>Day</code>.</td>
+    </tr>
+    </tbody>
+</table>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task13.task1319"></div>

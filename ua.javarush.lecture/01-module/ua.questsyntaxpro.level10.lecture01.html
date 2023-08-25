@@ -1,0 +1,299 @@
+﻿Об'єкти та конструктори
+<p>----------------------------------------</p>
+Створення об'єкта. Нарешті ми дійшли до створення об'єктів. Ви вже стикалися з цим раніше, а тепер ми розглянемо цю тему докладніше. Насправді створювати об'єкти дуже просто. Для того щоб створити об'єкт, слід використовувати оператор new. Створення об'єкта має приблизно такий вигляд: new Клас
+<p>----------------------------------------</p>
+<h2>1. Створення об'єкта</h2>
+<p>Нарешті ми дійшли до створення об'єктів. Ви вже стикалися з цим раніше, а тепер ми розглянемо цю тему докладніше. Насправді створювати об'єкти дуже просто.</p>
+<p>Для того щоб створити об'єкт, слід використовувати оператор <strong>new</strong>. Створення об'єкта має приблизно такий вигляд:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present"><code><span class="text-red">new</span> <span class="text-viola">Клас</span>(<span class="text-orange">параметри</span>)</code></pre>
+</div>
+<p>Найчастіше відразу після створення об'єкта ми зберігаємо посилання на нього в змінній, яка теж дуже часто має такий самий тип, як і створюваний об'єкт. Тому зазвичай код створення об'єкта має приблизно такий вигляд:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present"><code><span class="text-viola">Клас</span> <span class="text-green">ім'я</span> = <span class="text-red">new</span> <span class="text-viola">Клас</span>(<span class="text-orange">параметри</span>)</code></pre>
+</div>
+<p>де <code><span class="text-viola">Клас</span> <span class="text-green">ім'я</span></code> — це створення нової змінної, а код праворуч від знака рівності — це створення нового об'єкта типу <code><span class="text-viola">Клас</span></code>.</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Object o = new Object();</code></pre>
+        </td>
+        <td>Створення об'єкта типу <code>Object</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Cat pet = new Cat();</code></pre>
+        </td>
+        <td>Створення об'єкта типу <code>Cat</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Scanner console = new Scanner(System.in)</code></pre>
+        </td>
+        <td>Створення об'єкта типу <code>Scanner</code></td>
+    </tr>
+    </tbody>
+</table>
+<p>Дуже часто програмісти називають змінні таким самим ім'ям, що й класи, тільки з маленької літери. Програміста-початківця такий код може збивати з пантелику:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>BufferedReader bufferedReader = new BufferedReader( reader );</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Cat cat = new Cat();</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>PersonInfo personInfo = new PersonInfo()</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Насправді в цьому коді немає нічого страшного — це звичайнісінький код, в якому створюється змінна й одразу ініціалізується об'єктом її ж типу.</p>
+<p>Ліворуч від знака рівності — створення змінної. Праворуч — створення об’єкта. І все.</p>
+<h2>2. Конструктор</h2>
+<p>Ви, мабуть, часто бачили, що під час створення об'єкта в нього передаються якісь параметри. Причому в деякі об'єкти параметри передаються, а в деякі — ні. Як взагалі працює весь цей механізм із параметрами?</p>
+<p>Тут теж усе просто: кожен клас має спеціальний метод (або методи), що відповідають за обробку параметрів під час створення об'єкта. Такі методи називають <strong>конструкторами</strong>. А один метод, відповідно, <strong>конструктором</strong>.</p>
+<p>Відрізнити метод-конструктор від звичайного методу в коді нескладно. Він має дві особливості:</p>
+<ul>
+    <li>Ім'я методу-конструктора збігається з ім'ям його класу (і починається з великої літери).</li>
+    <li>Метод-конструктор не має типу повернення значення.</li>
+</ul>
+<p>Його загальний вигляд зазвичай такий:</p>
+<div class="lesson-example lesson-example--center">
+<pre class="lecture-code lecture-code--present"><code><span class="text-user">модифікатори</span> <span class="text-viola">Клас</span>(<span class="text-orange">параметри</span>)
+{
+   <span class="text-green">код</span>
+}</code></pre>
+</div>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public class <span class="text-viola">Point</span>
+{
+   public int <span class="text-green">x</span>;
+   public int <span class="text-green">y</span>;
+
+   Point(int <span class="text-user">x</span>, int <span class="text-user">y</span>)
+   {
+      this.<span class="text-green">x</span> = <span class="text-user">x</span>;
+      this.<span class="text-green">y</span> = <span class="text-user">y</span>;
+   }
+}</code></pre>
+        </td>
+        <td>Клас <code>Point</code><br/><br/><br/><br/><br/> Конструктор класу <code>Point</code></td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public class Solution
+{
+   public static void main(String[] args)
+   {
+      <span class="text-red">Point</span> <span class="text-viola">point</span> = new <span class="text-red">Point</span>(<span class="text-user">5</span>, <span class="text-user">10</span>);
+   }
+}</code></pre>
+        </td>
+        <td><br/><br/><br/><br/>Створення об'єкта класу <code>Point</code>, буде викликано конструктор класу.</td>
+    </tr>
+    </tbody>
+</table>
+<p>Зверніть увагу на вигляд методу-конструктора: у нього немає типу результату, а ім'я збігається з іменем-класу.</p>
+<p>І ще один момент: подивіться на код усередині конструктора. Змінні-параметри конструктора мають ті самі імена, що й поля класу, — x, y. Це стандартна практика, щоб не вигадувати назви змінних. Беруть такі самі імена, як у полів класу, а конфлікт імен вирішують за допомогою ключового слова this.</p>
+<h2>3. Виклик конструктора</h2>
+<p>Коли ви створюєте новий об'єкт за допомогою оператора <strong>new</strong> і команди формату «new <span class="text-red">Клас</span>(<span class="text-orange">параметри</span>)», відбуваються дві речі:</p>
+<ul>
+    <li>Java-машина створює об'єкт типу <span class="text-red">Клас</span></li>
+    <li>Java-машина викликає для об'єкта конструктор і передає туди ваші <span class="text-orange">параметри</span></li>
+</ul>
+<p>Ви, як програміст, самі вирішуєте, які у вашому класі мають бути конструктори та які параметри мають бути в цих конструкторів.</p>
+<p>Припустімо, ви хочете створити клас для обліку котів у притулку для тварин. Тоді ваш клас <code>Cat</code> може мати такий вигляд:</p>
+<table>
+    <tbody>
+    <tr>
+        <td>
+<pre class="language-java"><code>class Cat
+{
+   public String name;
+   public int age;
+
+   public Cat(String name, int age)
+   {
+      this.name = name;
+      this.age = age;
+   }
+}</code></pre>
+        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Cat cat = new Cat("Мурчик", 2);</code></pre>
+        </td>
+        <td>Так можна</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Cat cat = new Cat("Мурчик");</code></pre>
+        </td>
+        <td><span class="text-red">А так — ні. Код не скомпілюється.</span></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Cat cat = new Cat();</code></pre>
+        </td>
+        <td><span class="text-red">І так не можна. Код не скомпілюється.</span></td>
+    </tr>
+    </tbody>
+</table>
+<p>Клас <code>Cat</code> містить лише один конструктор з параметрами name і age. Оскільки інших конструкторів немає, ви повинні під час створення об'єкта передати як параметри ім'я (<code>name</code>) і вік (<code>age</code>) кота. Ви <strong>не можете не передати</strong> параметри в конструктор.</p>
+<h2>4. Декілька конструкторів</h2>
+<p>Однак за потреби ви можете додати в клас декілька конструкторів. Жодного обмеження щодо кількості конструкторів або їх параметрів немає. Під час створення об'єкта компілятор сам підбере відповідний за параметрами конструктор.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>class Cat
+{
+   public static final int <span class="text-user">UNKNOWN</span> = -1;
+   public String name;
+   public int age;
+
+   public Cat(String name, int age)
+   {
+      this.name = name;
+      this.age = age;
+   }
+   public Cat(String name)
+   {
+      this.name = name;
+      this.age = <span class="text-user">UNKNOWN</span>; // невідомо
+   }
+}</code></pre>
+        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Cat cat = new Cat("Мурчик", 2);</code></pre>
+        </td>
+        <td>Так можна: буде викликано перший конструктор</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Cat cat = new Cat("Мурчик");</code></pre>
+        </td>
+        <td>Так можна: буде викликано другий конструктор</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Cat cat = new Cat();</code></pre>
+        </td>
+        <td><span class="text-red">А так — ні. Код не скомпілюється.</span></td>
+    </tr>
+    </tbody>
+</table>
+<p>Ми вирішили врахувати ситуацію, коли вік кота невідомий. На цей випадок додали в код спеціальну константу — <code>UNKNOWN</code> — і конструктор, який отримує тільки один параметр — ім'я кота.</p>
+<p>Зверніть увагу, що ми, як і раніше, ініціалізуємо обидві змінні класу всередині обох конструкторів. Невідомі/відсутні параметри ми замінюємо на константу <code>UNKNOWN</code>.</p>
+<p>Якщо змінній age не присвоїти жодного значення, вона буде зберігати значення за замовчуванням == 0. Але ж знайденому на вулиці кошеняті цілком може бути 0 повних років. Тому нуль у змінній age зовсім необов'язково означає «невідомий вік».</p>
+<h2>5. Конструктор за замовчуванням</h2>
+<p>Якщо ви хочете, щоб об'єкти вашого класу створювалися без параметрів, у класі має бути оголошено конструктор без параметрів.</p>
+<p>Конструктор без параметрів — це необов'язково конструктор без коду; він може містити код, який ініціалізує змінні класу початковими значеннями:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>class Cat
+{
+   public static final int <span class="text-user">UNKNOWN</span> = -1;
+   public String name;
+   public int age;
+
+   public Cat(String name, int age)
+   {
+      this.name = name;
+      this.age = age;
+   }
+
+   public Cat()
+   {
+      this.name = <span class="text-green">"Безіменний"</span>;
+      this.age = <span class="text-user">UNKNOWN</span>; // невідомо
+   }
+}</code></pre>
+        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Cat cat = new Cat("Мурчик", 2);</code></pre>
+        </td>
+        <td>Так можна: буде викликано перший конструктор</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Cat cat = new Cat();</code></pre>
+        </td>
+        <td>Так можна: буде викликано другий конструктор</td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Конструктор за замовчуванням</strong></p>
+<p>Є дуже важливий момент, про який вам слід знати й пам'ятати.</p>
+<p>Якщо у вашому класі <strong>немає жодного конструктора</strong>, компілятор додасть у ваш клас конструктор-за-замовчуванням — конструктор без параметрів і коду, але з модифікатором public.</p>
+<p>Натомість якщо ваш клас <strong>містить принаймні один конструктор</strong>, то конструктор-за-замовчуванням уже <span class="text-red">не буде додано</span> — вам доведеться дописати його власноруч.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>class Cat
+{
+   public String name;
+   public int age;
+}</code></pre>
+        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Cat cat = new Cat();</code></pre>
+        </td>
+        <td>Так можна: буде викликано конструктор-за-замовчуванням</td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task10.task1001"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task10.task1002"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task10.task1003"></div>

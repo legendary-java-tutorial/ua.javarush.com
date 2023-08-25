@@ -1,0 +1,331 @@
+﻿Робота з файлами в Java
+<p>----------------------------------------</p>
+Клас Files. Для роботи з файлами є чудовий утилітний клас — java.nio.file.Files. Він має методи буквально на всі випадки. Усі методи цього класу є статичними й працюють з об'єктами типу Path. Методів дуже багато, тому ми розглянемо лише основні: Метод Опис
+<p>----------------------------------------</p>
+<h2>1. Клас <code>Files</code></h2>
+<p><img data-id="a86a798d-c988-4532-95a6-864dab6dfa51" src="https://cdn.javarush.com/images/article/a86a798d-c988-4532-95a6-864dab6dfa51/original.png" alt="Клас Files"/></p>
+<p>Для роботи з файлами є чудовий утилітний клас — <code><span class="text-red">java.nio.file.Files</span></code>. Він має методи буквально на всі випадки. Усі методи цього класу є статичними й працюють з об'єктами типу Path. Методів дуже багато, тому ми розглянемо лише основні:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="55%">Метод</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>Path <span class="text-red">createFile</span>(Path path)</code></pre>
+        </td>
+        <td>Створює новий файл зі шляхом <code>path</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>Path <span class="text-red">createDirectory</span>(Path path)</code></pre>
+        </td>
+        <td>Створює нову директорію</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>Path <span class="text-red">createDirectories</span>(Path path)</code></pre>
+        </td>
+        <td>Створює кілька директорій</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>Path <span class="text-red">createTempFile</span>(prefix, suffix)</code></pre>
+        </td>
+        <td>Створює тимчасовий файл</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>Path <span class="text-red">createTempDirectory</span>(prefix)</code></pre>
+        </td>
+        <td>Створює тимчасову директорію</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>void <span class="text-red">delete</span>(Path path)</code></pre>
+        </td>
+        <td>Видаляє файл або директорію, якщо вони порожні</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>Path <span class="text-red">copy</span>(Path src, Path dest)</code></pre>
+        </td>
+        <td>Копіює файл</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>Path <span class="text-red">move</span>(Path src, Path dest)</code></pre>
+        </td>
+        <td>Переміщує файл</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>boolean <span class="text-red">isDirectory</span>(Path path)</code></pre>
+        </td>
+        <td>Перевіряє, чи є шлях директорією, а не файлом</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>boolean <span class="text-red">isRegularFile</span>(Path path)</code></pre>
+        </td>
+        <td>Перевіряє, чи є шлях файлом, а не директорією</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>boolean <span class="text-red">exists</span>(Path path)</code></pre>
+        </td>
+        <td>Перевіряє, чи існує об'єкт за вказаним шляхом</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>long <span class="text-red">size</span>(Path path)</code></pre>
+        </td>
+        <td>Повертає розмір файлу</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>byte[] <span class="text-red">readAllBytes</span>(Path path)</code></pre>
+        </td>
+        <td>Повертає весь вміст файлу у вигляді масиву байтів</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>String <span class="text-red">readString</span>(Path path)</code></pre>
+        </td>
+        <td>Повертає весь вміст файлу у вигляді рядка</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>List&lt;String&gt; <span class="text-red">readAllLines</span>(Path path)</code></pre>
+        </td>
+        <td>Повертає весь вміст файлу у вигляді списку рядків</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>Path <span class="text-red">write</span>(Path path, byte[])</code></pre>
+        </td>
+        <td>Записує у файл масив байтів</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>Path <span class="text-red">writeString</span>(Path path, String str)</code></pre>
+        </td>
+        <td>Записує у файл рядок</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>DirectoryStream&lt;Path&gt; <span class="text-red">newDirectoryStream</span>(Path dir)</code></pre>
+        </td>
+        <td>Повертає колекцію файлів (і піддиректорій) зі вказаної директорії</td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<h2>2. Створення файлів і директорій</h2>
+<p>Створювати файли й директорії дуже просто. Переконайтеся в цьому на прикладах.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Files.<span class="text-red">createFile</span>(Path.of(<span class="text-green">"c:\\readme.txt"</span>));</code></pre>
+        </td>
+        <td>Створює файл</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Files.<span class="text-red">createDirectory</span>(Path.of(<span class="text-green">"c:\\test"</span>));</code></pre>
+        </td>
+        <td>Створює директорію</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Files.<span class="text-red">createDirectories</span>(Path.of(<span class="text-green">"c:\\test\\1\\2\\3"</span>));</code></pre>
+        </td>
+        <td>Створює директорію й усі потрібні піддиректорії, якщо їх немає.</td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<h2>3. Копіювання, переміщення й видалення</h2>
+<p>Копіювати, переміщати й видаляти файли теж дуже легко. Директорій це також стосується, але вони мають бути порожніми.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Path path1 = Path.of(<span class="text-green">"c:\\readme.txt"</span>);
+Path path2 = Path.of(<span class="text-green">"c:\\readme-copy.txt"</span>);
+Files.<span class="text-red">copy</span>(path1, path2);</code></pre>
+        </td>
+        <td>Копіює файл</td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Path path1 = Path.of(<span class="text-green">"c:\\readme.txt"</span>);
+Path path2 = Path.of(<span class="text-green">"d:\\readme-new.txt")</span>;
+Files.<span class="text-red">move</span>(path1, path2);</code></pre>
+        </td>
+        <td>Переміщує й перейменовує файл</td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Path path = Path.of(<span class="text-green">"d:\\readme-new.txt"</span>);
+Files.<span class="text-red">delete</span>(path);</code></pre>
+        </td>
+        <td>Видаляє файл</td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<h2>4. Перевірка типу файлу та його наявності</h2>
+<p>Коли ви отримуєте іззовні певний шлях, то, напевно, хочете дізнатися, чи це файл, чи директорія. І чи існують такий файл або директорія взагалі?</p>
+<p>Для цього теж є спеціальні методи. Так само можна легко дізнатися довжину файлу:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="65%">Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Files.<span class="text-red">isRegularFile</span>(<span class="code">Path.of(<span class="text-green">"c:\\readme.txt"</span>)</span>);</code></pre>
+        </td>
+        <td>
+            <pre><code>true</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Files.<span class="text-red">isDirectory</span>(<span class="code">Path.of(<span class="text-green">"c:\\test"</span>)</span>);</code></pre>
+        </td>
+        <td>
+            <pre><code>true</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code> Files.<span class="text-red">exists</span>(<span class="code">Path.of(<span class="text-green">"c:\\test\\1\\2\\3"</span>)</span>);</code></pre>
+        </td>
+        <td>
+            <pre><code>false</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Files.<span class="text-red">size</span>(<span class="code">Path.of(<span class="text-green">"c:\\readme.txt"</span>)</span>);</code></pre>
+        </td>
+        <td>
+            <pre><code>10112</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<h2>5. Робота із вмістом файлу</h2>
+<p>І нарешті, є ціла низка методів, які дають змогу легко прочитати або записати вміст файлу. Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Path <span class="code text-green">path</span> = Path.of(<span class="text-green">"c:\\readme.txt"</span>);
+List&lt;String&gt; <span class="code text-user">list</span> = Files.<span class="text-red">readAllLines</span>(<span class="code text-green">path</span>);
+
+for (String <span class="code text-orange">str</span> : <span class="code text-user">list</span>)
+   System.out.println(<span class="code text-orange">str</span>);</code></pre>
+        </td>
+        <td><br/>Читаємо вміст файлу у вигляді списку рядків<br/><br/> Виводимо рядки на екран</td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task15.task1516"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task15.task1517"></div>
+<hr>
+<h2>6. Отримання вмісту директорії</h2>
+<p>І на останок ще один цікавий метод — отримання списку файлів і піддиректорій у вказаній директорії.</p>
+<p>Для цього є спеціальний метод — <code>newDirectoryStream()</code>, який повертає спеціальний об'єкт типу <code>DirectoryStream&lt;Path&gt;</code>. Він має ітератор (!), і за допомогою цього ітератора можна отримати список усіх файлів і піддиректорій у вказаній директорії.</p>
+<p>Це простіше, ніж здається:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Path <span class="code text-green">path</span> = Path.of(<span class="text-green">"c:\\windows"</span>);
+
+try (<span class="text-neon">DirectoryStream</span>&lt;<span class="text-viola">Path</span>&gt; <span class="code text-user">files</span> = <span class="text-neon">Files</span>.newDirectoryStream(<span class="code text-green">path</span>)) {
+   for (<span class="text-viola">Path</span> <span class="code text-orange">path</span> : <span class="code text-user">files</span>)
+      System.out.println(<span class="code text-orange">path</span>);
+}</code></pre>
+        </td>
+        <td><br/><br/>Отримуємо об'єкт зі списком файлів<br/> <span>Цикл за списком файлів</span></td>
+    </tr>
+    </tbody>
+</table>
+<p>Об'єкт <code>DirectoryStream&lt;Path&gt;</code> має дві властивості. По-перше, у нього є ітератор, який повертає шляхи до файлів, і ми можемо використовувати цей об'єкт у циклі <code>for-each</code>.</p>
+<p><span class="text-orange">А по-друге, цей об'єкт є потоком даних, тому його потрібно закривати за допомогою методу <code><span class="text-orange">close()</span></code> або використовувати в операторі <code>try</code>-with-resources.</span></p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task15.task1518"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task15.task1519"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task15.task1520"></div>
+<hr>
+<h2>7. Метод <code>Files.newInputStream</code></h2>
+<p>Починаючи з версії Java 5 класи <code>FileInputStream</code> і <code>FileOutputStream</code> стали вважатися застарілими. Одним з їхніх недоліків є те, що під час створення об'єктів цих класів одразу відбувається створення файлів на диску. У такому разі викидаються всі можливі помилки, пов'язані зі створенням файлів.</p>
+<p>Зрештою це було визнано не найкращим рішенням. Тому для створення об'єктів-файлів рекомендується використовувати методи утилітного класу <code>java.nio.Files</code>.</p>
+<p>Порівняймо старий і новий підходи до створення файлів:</p>
+<table>
+    <tr>
+        <th>Було</th>
+    </tr>
+    <tr>
+        <td>
+                <pre class="language-java"><code>String <span class="code text-green">src</span> = "c:\\projects\\log.txt";
+InputStream <span class="code text-user">input</span> = new FileInputStream( <span class="code text-green">src</span> );</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <th>Стало</th>
+    </tr>
+    <tr>
+        <td>
+                <pre class="language-java"><code>String <span class="code text-green">src</span> = "c:\\projects\\log.txt";
+InputStream <span class="code text-user">input</span> = Files.newInputStream( Path.of( <span class="code text-green">src</span> ) );</code></pre>
+        </td>
+    </tr>
+</table>
+<p>Так само замінили й метод <code>FileOutputStream</code>:</p>
+<table>
+    <tr>
+        <th>Було</th>
+    </tr>
+    <tr>
+        <td>
+                <pre class="language-java"><code>String <span class="code text-green">src</span> = "c:\\projects\\log.txt";
+OutputStream  <span class="code text-user">input</span> = new FileOutputStream( <span class="code text-green">src</span> );</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <th>Стало</th>
+    </tr>
+    <tr>
+        <td>
+                <pre class="language-java"><code>String <span class="code text-green">src</span> = "c:\\projects\\log.txt";
+OutputStream  <span class="code text-user">input</span> = Files.newOutputStream( Path.of( <span class="code text-green">src</span> ) );</code></pre>
+        </td>
+    </tr>
+</table>
+<hr>

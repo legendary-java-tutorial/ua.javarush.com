@@ -1,0 +1,283 @@
+SortedMap
+<p>----------------------------------------</p>
+У цій лекції ми вивчимо інтерфейс SortedMap. Розглянемо нові методи, які є в цьому інтерфейсі, а також особливості однієї з імплементацій SortedMap — TreeMap та їхні відмінності...
+<p>----------------------------------------</p>
+<h2>SortedMap</h2>
+
+    <p>У цій лекції ми вивчимо інтерфейс <span class="text-neon"><span class="text-bold"><em>SortedMap</em></span></span>.
+    Розглянемо нові методи, які є в цьому інтерфейсі, а також особливості однієї з імплементацій <span
+        class="text-neon"><span class="text-bold"><em>SortedMap</em></span></span> — <span class="code text-green"><span
+            class="text-bold">TreeMap</span></span> та їхні відмінності, а також переваги порівняно з HashMap.</p>
+
+    <p>Давай подивимося, як влаштована ієрархія карт. Зверніть особливу увагу на інтерфейс <span class="text-neon"><span
+            class="text-bold"><em>SortedMap</em></span></span> та його реалізацію <span class="code text-green"><span
+            class="text-bold">TreeMap</span></span>, про які ми говоримо сьогодні:</p>
+
+    <img data-max-width="512" data-id="70e5b349-6779-49de-b9ee-da3fc67451ab" src="https://cdn.javarush.com/images/article/70e5b349-6779-49de-b9ee-da3fc67451ab/original.png" alt="">
+
+    <p>Інтерфейс <span class="text-neon"><span class="text-bold"><em>SortedMap</em></span></span> — це розширення інтерфейсу
+    <span class="text-neon"><span class="text-bold"><em>Map</em></span></span>. Він багато в чому схожий на <span class="text-neon"><span class="text-bold"><em>SortedSet</em></span></span> (який
+    так само розширює <span class="text-neon"><span class="text-bold"><em>Set</em></span></span>), так вони обидва описують
+    аналогічну функціональність щодо зберігання та використання відсортованих значень.</p>
+
+    <p><span class="text-neon"><span class="text-bold"><em>SortedSet</em></span></span> працює і зберігає <span class="code">&lt;TЗначення&gt;</span>, SortedMap SortedMap</em></span></span> — пари <span class="code">&lt;TКлюч, TЗначення&gt;</span>. Це карта, в якій всі елементи відсортовані у порядку зростання їхніх ключів.</p>
+
+    <p>Інтерфейс <span class="text-neon"><span class="text-bold"><em>SortedMap</em></span></span> розширює <span class="text-neon"><span class="text-bold"><em>Map</em></span></span>. Додатково в ньому оголошено такі методи:</p>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Метод</th><th>Опис</th>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">TКлюч firstKey()</span></td>
+                <td>Повертає ключ першого елемента карти</td>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">TКлюч lastKey()</span></td>
+                <td>Повертає ключ останнього елемента карти</td>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">SortedMap&lt;TКлюч, TЗначення&gt; headMap(TКлюч end)</span></td>
+                <td>Повертає карту <span class="text-neon"><span class="text-bold"><em>SortedMap</em></span></span>, яка містить всі
+                елементи оригінального <span class="text-neon"><span class="text-bold"><em>SortedMap</em></span></span> аж (тобто не
+                включно) до елемента з ключем end</td>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">SortedMap&lt;TКлюч, TЗначення&gt; tailMap(K start)</span></td>
+                <td>Повертає карту <span class="text-neon"><span class="text-bold"><em>SortedMap</em></span></span>, яка містить усі
+                елементи оригінального <span class="text-neon"><span class="text-bold"><em>SortedMap</em></span></span>, починаючи з
+                елемента з ключем start (включно)</td>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">SortedMap&lt;TКлюч, TЗначення&gt; subMap(TКлюч start, TКлюч end)</span></td>
+                <td>Повертає карту <span class="text-neon"><span class="text-bold"><em>SortedMap</em></span></span>, яка містить усі
+                елементи оригінального <span class="text-neon"><span class="text-bold"><em>SortedMap</em></span></span> аж від елемента
+                з ключем start до елемента з ключем end (end – не включно)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Клас TreeMap</h2>
+
+    <p>Клас <span class="code"><span class="text-green">TreeMap</span></span> — це імплементація інтерфейсу <span
+        class="text-neon"><span class="text-bold"><em>SortedMap</em></span></span>. Тобто в <span class="code"><span
+            class="text-green">TreeMap</span></span> реалізовані всі додаткові методи SortedMap і стандартні з інтерфейсу
+    <span class="text-neon"><span class="text-bold"><em>Map</em></span></span>.</p>
+
+    <p>Створити об’єкт типу <span class="code"><span class="text-green">TreeMap</span></span> можна за допомогою команд виду:</p>
+
+    <ul>
+        <li><p><span class="code text-orange">TreeMap()</span>: створює порожню карту у вигляді дерева;</li></p>
+        <li><p><span class="code text-orange">TreeMap(Map&lt;? extends TКлюч,​? extends TЗначення&gt; map)</span>: створює дерево, в яке додає всі елементи з карти map;</li></p>
+        <li><p><span class="code text-orange">TreeMap(SortedMap&lt;TКлюч, ? extends TЗначення&gt; smap)</span>: створює дерево, до якого додає всі елементи з карти smap;</li></p>
+        <li><p><span class="code text-orange">TreeMap(Comparator&lt;? super TКлюч&gt; comparator)</span>: створює порожнє дерево, де всі елементи, що додаються, згодом будуть відсортовані компаратором.</li></p>
+    </ul>
+
+    <p>Де <em>TКлюч</em> — це тип ключів із пари елементів, <em>TЗначення</em> — тип значень у парі елементів, які
+    зберігатимуться у карті <span class="code text-green"><span class="text-bold">TreeMap</span></span>.</p>
+
+    <p><span class="text-neon"><span class="text-bold"><em>Comparator</em></span></span> — досить важлива річ для <span
+        class="text-neon"><span class="text-bold"><em>SortedMap</em></span></span>/<span class="text-neon"><span
+            class="text-bold"><em>TreeMap</em></span></span>. Він надає інформацію про те, за якими правилами нам потрібно
+    сортувати, тобто вибудовувати порядок у нашій карті. Якщо його не надано під час створення <span class="text-neon"><span
+            class="text-bold"><em>SortedMap</em></span></span>, то буде використовуватися природний порядок нашого ключа.</p>
+
+    <h3>Додавання елементів у TreeMap</h3>
+
+    <p>Елементи додаються в карту відразу парами: для цього використовується метод <span class="code text-orange">put()</span>.
+    Першим до нього передається ключ, другим – значення. Наприклад, ми хочемо створити список учнів та їхніх оцінок.
+</p>
+
+    <pre class='language-java line-numbers'><code>
+SortedMap&lt;String, Integer&gt; map =new TreeMap &lt;String,Integer&gt;();
+
+map.put("Антон", 5);
+map.put("Сергій", 5);
+map.put("Руслан", 5);
+map.put("Юрій", 4);
+map.put("Микола", 4);
+map.put("Олег", 3);
+map.put("Олег", 5);
+
+System.out.println(map);
+</code></pre>
+
+    <p>Результат: </p>
+
+    <div class="terminal">{Антон=5, Микола=4, Олег=5, Руслан=5, Сергій=5, Юрiй=4}</div>
+
+    <p>Якщо у процесі додавання елемента з’ясується, що елемент із таким ключем вже є, старе значення ключа заміниться на нове.
+    Це показано на прикладі двох пар елементів — <span class="text-bold">("Олег",5)</span> i <span class="text-bold">("Олег",4)</span>.</p>
+
+    <p>Розглянемо приклад зі створеним <span class="text-neon"><span class="text-bold"><em>Comparator</em></span></span>-ом.
+    Припустимо, нам потрібно зберігати елементи у відсортованому вигляді за довжиною ключа-рядка. Якщо довжина ключів
+    однакова, далі йде порівняння, ґрунтуючись на алфавітному порядку (натуральний порядок для рядків):</p>
+
+    <pre class='language-java line-numbers'><code>
+class LengthComparator implements Comparator&lt;String&gt; {
+  public int compare(String o1, String o2) {
+    Integer lenghComparedResult = Integer.compare(o1.length(), o2.length());
+    return lenghComparedResult != 0 ? lenghComparedResult : o1.compareTo(o2);
+  }
+}
+
+SortedMap&lt;String, Integer&gt; lengthComaredMap = new TreeMap&lt;String,Integer&gt;(new LengthComparator());
+
+lengthComaredMap.put("Юрій",4);
+lengthComaredMap.put("Олег",5);
+lengthComaredMap.put("Руслан",4);
+lengthComaredMap.put("Ян",4);
+</code></pre>
+
+    <p>Послідовність буде такою:</p>
+
+    <div class="terminal">lenghComaredMap: {Ян=4, Олег=5, Юрій=4, Руслан=4}</div>
+
+    <p>Така поведінка робить <span class="code text-green"><span class="text-bold">TreeMap</span></span> схожим на
+    відсортований масив або список, якби у них як індекси виступали слова (<span class="text-orange">String</span>), а не
+    числа.</p>
+
+    <table>
+        <tbody>
+            <tr>
+                <td>Важливо: як Тип-Ключ і Тип-Значення можуть виступати практично будь-які типи. Є невеликі додаткові вимоги до Типу-Ключа,
+                але про них ви дізнаєтесь під час детального вивчення колекцій.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Методи SortedMap на прикладі класу TreeMap</h2>
+
+    <ol>
+
+        <li>
+            <p>Якщо тобі потрібно отримати ключ першого учня, можна скористатися методом <span class="code text-orange">firstKey()</span>:</p>
+
+            <pre class='language-java line-numbers'><code>
+String firstKey = map.firstKey();
+	System.out.println("Перший ключ → " + firstKey);
+</code></pre>
+
+            <p>Результат: <span class="code">Перший ключ → Антон</span></p>
+        </li>
+
+        <li>
+                <p>Якщо тобі потрібно отримати ключ останнього учня, можна скористатися методом <span class="code text-orange">lastKey()</span>:</p>
+
+            <pre class='language-java line-numbers'><code>
+String lastKey = map.lastKey();
+System.out.println("Останній ключ → " + lastKey);
+</code></pre>
+
+            <p>Результат: <span class="code">Останній ключ → Юрій</span></p>
+        </li>
+
+        <li>
+            <p>Отримати всі об’єкти, які стоять після об’єкта із ключем “<em>Сергій</em>”:</p>
+
+<pre class='language-java line-numbers'><code>
+Map&lt;String, Integer&gt; tailMap = map.tailMap("Сергій");
+         	System.out.println("tailMap: " + tailMap);
+</code></pre>
+
+            <p>Результат: <span class="code">tailMap: {Сергій=5, Юрій=4}</span></p>
+        </li>
+
+        <li>
+            <p>Отримати всі об’єкти, які стоять до об’єкта із ключем “<em>Микола</em>”:</p>
+
+            <pre class='language-java line-numbers'><code>
+System.out.println("headMap: " + headMap);
+ Map&lt;String, Integer&gt; headMap = map.headMap("Микола");
+</code></pre>
+         	
+            <p>Результат: <span class="code">headMap: {Антон=5}</span></p>
+        </li>
+
+        <li>
+            <p>Отримати всі об’єкти, які стоять після об’єкта із ключем “<em>Олег</em>”, але які стоять до об’єкта із ключем “<em>Сергій</em>”:</p>
+
+            <pre class='language-java line-numbers'><code>
+Map&lt;String, Integer&gt; subMap = map.subMap("Олег", "Сергій");	
+System.out.println("subMap: " + subMap);
+</code></pre>
+
+            <p>Результат: <span class="code">subMap: {Олег=5, Руслан=5}</span></p>
+        </li>
+
+    </ol>
+
+    <h2>Порівняння HashMap i SortedMap/TreeMap</h2>
+
+    <p>Давай поговоримо про послідовність та порядок зберігання елементів:</p>
+
+    <ul>
+        <li><p>Оскільки <span class="text-neon"><span class="text-bold"><em>HashMap</em></span></span> не дає нам жодних гарантій
+        щодо порядку ітерацій, він буде повністю змінюватися під час додавання нових елементів.</p></li>
+        <li><p>У <span class="text-neon"><span class="text-bold"><em>TreeMap</em></span></span> порядок буде відповідно до “natural order” ключів відповідно до їхнього методу <span class="code text-orange">compareTo()</span> (або <span class="text-neon"><span class="text-bold"><em>Comparator</em></span></span>, що поставляється зовні). Також не слід забувати, що <span class="text-neon"><span class="text-bold"><em>TreeMap</em></span></span> реалізує інтерфейс <span class="text-neon"><span class="text-bold"><em>SortedMap</em></span></span>, який містить методи, що залежать від цього порядку сортування.</p></li>
+    </ul>
+
+    <p>Якщо йдеться про продуктивність та швидкодію:</p>
+
+    <ul>
+        <li><p><span class="text-neon"><span class="text-bold"><em>HashMap</em></span></span> — карта, заснована на хешуванні ключів.
+        Вона підтримує операції вставлення та отримання елементів за фіксований час <span class="text-bold">O(1)</span>. Для
+        цього ключі повинні мати реалізації <span class="code text-orange">hashCode()</span> та <span
+            class="code text-orange">equals()</span>.</p></li>
+
+        <li><p><span class="text-neon"><span class="text-bold"><em>TreeMap</em></span></span> — карта, побудована на основі дерева. Її операції вставлення та отримання займають логарифмічний час, який залежить від
+        кількості елементів у карті <span class="text-bold">O(log n)</span>. Це необхідно, щоб елементи мали певний механізм
+        порівняння, наданий або нашим ключем, або зовнішнім Компаратором. Порядок ітерацій визначається цим механізмом.</p></li>
+    </ul>
+
+    <p>На цих факторах і базується наше рішення про те, що і коли краще використовувати.</p>
+
+    <p>Якщо нам необхідно зберігати значення в будь-якому порядку, вибір є очевидним — нам потрібна карта <span
+        class="text-neon"><span class="text-bold"><em>SortedMap</em></span></span>. Хоч вона і працює трохи повільніше, ніж
+    <span class="text-neon"><span class="text-bold"><em>HashMap</em></span></span>, вона виконує важливі для нас завдання.</p>
+
+    <p>Як уже сказано раніше, з <span class="text-neon"><span class="text-bold"><em>SortedMap</em></span></span> ми можемо
+    отримати перший (чи останній) ключ або значення, або пару ключ-значення в нашій карті, незалежно від того, коли це
+    значення додали. З реалізацією <span class="text-neon"><span class="text-bold"><em>HashMap</em></span></span> ми цього
+    зробити не можемо.</p>
+
+    <p>Розглянемо це на прикладі, коли ми маємо карту з ключами (Імена студентів) і значеннями (їх оцінки за залік).
+    Припустимо, нам бажано працювати зі списком у зворотному алфавітному порядку.</p>
+
+    <p>1.</p>
+
+    <pre class='language-java line-numbers'><code>
+SortedMap&lt;String, Integer&gt; sorted = new TreeMap&lt;String,Integer&gt;(Comparator.reverseOrder());
+sorted.put("Антон", 5);
+sorted.put("Сергій", 5);
+sorted.put("Юрій", 4);
+
+String firstKeyFromSortedMapVariant = sorted.firstKey();
+
+Integer markFromSortedMap = sorted.get(firstKeyFromSortedMapVariant);
+System.out.println(firstKeyFromSortedMapVariant + " - " + markFromSortedMap);
+</code></pre>
+
+    <p>2.</p>
+
+    <pre class='language-java line-numbers'><code>
+HashMap&lt;String, Integer&gt; hash = new HashMap&lt;String,Integer&gt;();
+hash.put("Антон", 5);
+hash.put("Сергій", 5);
+hash.put("Юрій", 4);
+
+SortedSet&lt;String&gt; keySetOfHashMap = new TreeSet&lt;String&gt;(Comparator.reverseOrder());
+// Або сортувати вручну, зберігаючи елементи в масив або список (зі збереженням порядку вставки)
+keySetOfHashMap.addAll(hash.keySet());
+String firstKeyFromHashMapVariant = keySetOfHashMap.first();
+
+
+Integer markFromHashMap = hash.get(firstKeyFromHashMapVariant);
+System.out.println(firstKeyFromHashMapVariant + " - " + markFromHashMap);
+</code></pre>
+
+    <p>На прикладі видно: у разі використання <span class="text-neon"><span class="text-bold"><em>HashMap</em></span></span>
+    завдання виглядає складніше, оскільки <span class="text-neon"><span class="text-bold"><em>HashMap</em></span></span> не
+    гарантує нам ані порядку зберігання, ані порядку отримання елементів із карти.</p>
+<jr-widget-youtube videoid="95k8zxmz8o8"></jr-widget-youtube>

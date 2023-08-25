@@ -1,0 +1,100 @@
+﻿Цикл do-while
+<p>----------------------------------------</p>
+Зворотний цикл. У Java є ще один різновид циклу while — цикл do-while. Він дуже схожий на while і так само складається з двох частин: «умови» й «тіла циклу». Тіло циклу виконується знов і знов, доки умова дорівнює true. Цикл do-while має такий загальний вигляд: do команда; while (умова) і
+<p>----------------------------------------</p>
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="e8c84632-29e7-4351-bf70-5c7dbf3d2878" data-max-width="1024" src="https://cdn.javarush.com/images/article/e8c84632-29e7-4351-bf70-5c7dbf3d2878/original.png" alt=""/>
+        </div>
+        <div class="lesson-carousel__item">
+            <img data-id="4a3fd506-6d25-484a-a7a6-09d9ab2124b4" data-max-width="1024" src="https://cdn.javarush.com/images/article/4a3fd506-6d25-484a-a7a6-09d9ab2124b4/original.png" alt=""/>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<h2>1. Зворотний цикл</h2>
+<p>У Java є ще один різновид циклу <code>while</code> — цикл <code>do-while</code>. Він дуже схожий на <code>while</code> і так само складається з двох частин: «умови» й «тіла циклу». Тіло циклу виконується знов і знов, доки умова дорівнює <code>true</code>. Цикл <code class="text-yellow">do-while</code> має такий загальний вигляд:</p>
+<div class="lesson-example lesson-example--center">
+<pre class="lecture-code lecture-code--present language-java"><code><span class="code text-yellow">do</span>
+   <span class="code text-viola">команда</span>;
+<span class="code text-yellow">while</span> (<span class="code text-red">умова</span>)</code></pre>
+</div>
+<p class="text-center">або</p>
+<div class="lesson-example lesson-example--center">
+<pre class="lecture-code lecture-code--present language-java"><code><span class="code text-yellow">do</span>
+{
+&nbsp;  <span class="code code--demo text-user">блок команд</span>
+}
+<span class="code text-yellow">while</span> (<span class="code text-red">умова</span>)</code></pre>
+</div>
+<p>Проте ці цикли відрізняються послідовністю виконання: у циклі <code>while</code> вона така: <span class="term text-red">умова</span>, <span class="term text-user">тіло циклу</span>, <span class="term text-red">умова</span>, <span class="term text-user">тіло циклу</span>, <span class="term text-red">умова</span>, <span class="term text-user">тіло циклу</span>, …</p>
+<p>А в циклі <code>do-while</code> вона дещо інша: <span class="term text-user">тіло циклу</span>, <span class="term text-red">умова</span>, <span class="term text-user">тіло циклу</span>, <span class="term text-red">умова</span>, <span class="term text-user">тіло циклу</span>, …</p>
+<p>Фактично, різниця між циклами <code>while</code> і <code>do-while</code> полягає лише в тому, що <span class="term text-user">тіло циклу</span> в циклі <code>do-while</code> виконується принаймні один раз.</p>
+<hr>
+<h2>2. Переваги використання циклу <code>do-while</code></h2>
+<p>Власне, єдиною відмінністю циклу <code>do-while</code> від циклу <code>while</code> є саме те, що <span class="term text-user">тіло циклу</span> в циклі <code>do-while</code> виконується принаймні один раз.</p>
+<p>Цикл <code>do-while</code> зазвичай використовують саме тоді, коли немає потреби перевіряти умову, доки тіло циклу не виконано. Приміром, у <span class="term text-user">тілі циклу</span> виконуються певні обчислення, а потім їх результати використовуються в <span class="term text-red">умові</span>.</p>
+<p>Приклад:</p>
+<p>Програма вводить рядки з клавіатури, доки не буде введено слово <code><span class="token string">exit</span></code></p>
+<table>
+    <tbody>
+    <tr>
+        <th>while</th>
+        <th>do while</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="text-red">s</span>;
+<span class="code text-yellow">while</span> (true)
+{
+&nbsp;  <span class="text-red">s</span> = <span class="text-viola">console</span>.nextLine();
+&nbsp; &nbsp;if (<span class="text-red">s</span>.equals("exit"))
+&nbsp; &nbsp;&nbsp; &nbsp;break;
+}</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>String <span class="text-red">s</span>;
+<span class="code text-yellow">do</span>
+{
+<span class="text-red">   s</span> = <span class="text-viola">console</span>.nextLine();
+}
+<span class="code text-yellow">while</span> (!<span class="text-red">s</span>.equals("exit"));</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Оператори <code>break</code> и <code>continue</code> в циклі <code>do-while</code> діють так само, як і в циклі <code>while</code>.</p>
+<hr>
+<h2>3. Порівняння циклів <code>do-while</code>: Java і Pascal</h2>
+<p>У мові Pascal також є цикл, подібний до <code>do-while</code>, тільки він називається <code>repeat-until</code>. Однак він дещо відрізняється від циклу <code class="text-yellow">do-while</code>. У циклі <code class="text-yellow">repeat-until</code> зазначають умову не для продовження циклу, а для виходу з нього.</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Pascal</th>
+        <th>Java</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-pascal"><code>&nbsp;
+<span class="code text-yellow">Repeat</span>
+   <span class="text-viola">ReadLn</span>(<span class="text-red">s</span>);
+<span class="code text-yellow">Until</span> <span class="text-red">s</span> = 'exit';
+&nbsp;</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>String <span class="text-red">s</span>;
+<span class="code text-yellow">do</span> {
+&nbsp;  <span class="text-red">s</span> = <span class="text-viola">console</span>.nextLine();
+<span>}
+</span><span class="code text-yellow">while</span> ( !<span class="text-red">s</span>.equals("exit") );</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Отакої! Тут Pascal виглядає справжнім красунчиком порівняно з Java. Годі вже приклади з Pascal показувати, а то засміють.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task04.task0414"></div>

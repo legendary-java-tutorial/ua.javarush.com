@@ -1,0 +1,117 @@
+﻿Викидання винятків
+<p>----------------------------------------</p>
+Оператор throw. Виняток, поки його не викинуто в систему або коли його вже перехоплено блоком catch, — це, в принципі, просто об'єкт класу, успадкованого від Exception (точніше, від Throwable). Ніяких магічних особливостей сам об'єкт-виняток не має. Уся логіка роботи винятків — це
+<p>----------------------------------------</p>
+<h2>1. Оператор <code>throw</code></h2>
+<p>Виняток, поки його не викинуто в систему або коли його вже перехоплено блоком <code><span class="text-green">catch</span></code> — це, власне, просто об'єкт класу, успадкованого від <code><span class="text-green">Exception</span></code> (точніше, від <code>Throwable</code>). <span class="text-red">Ніяких магічних особливостей сам об'єкт-виняток не має.</span></p>
+<p>Уся логіка роботи винятків — це просто особливий сценарій поведінки Java-машини, коли в її середовище виконання вкинуто виняток.</p>
+<p>Ви <span class="text-orange">завжди можете знову вкинути Java-машині виняток, який щойно перехопили. </span>Для цього слід використовувати оператор <code>throw</code>:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code>throw <span class="text-red">виняток</span>;</code></pre>
+</div>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>try
+{
+   int d = 2/0;
+}
+catch(<span class="text-viola">Exception</span> <span class="text-red">except</span>)
+{
+   System.out.println("Перехопили виняток");
+   throw <span class="text-red">except</span>;
+}</code></pre>
+        </td>
+        <td>
+            <pre><code>Перехопили виняток</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>У цьому коді ми перехопили виняток, вивели на екран відповідний напис і знову викинули цей виняток.</p>
+<p><span class="text-red">Повторно кинутий виняток не може бути захоплено іншими блоками <code><span class="text-red">catch</span></code> цього самого <code><span class="text-red">try</span></code>-блока.</span></p>
+<hr>
+<h2>2. Свій виняток</h2>
+<p>До речі, ви можете самі створити об'єкт-виняток: <span class="text-green">це просто об'єкт типу <code><span class="text-green">Exception</span></code> або успадкованого від нього класу.</span> І викинути його.</p>
+<p>Це простіше, ніж здається. Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>try
+{
+   throw new <span class="text-viola">RuntimeException</span>();
+}
+catch(<span class="text-viola">Exception</span> <span class="text-red">except</span>)
+{
+   System.out.println("Перехопили виняток");
+   throw <span class="text-red">except</span>;
+}</code></pre>
+        </td>
+        <td>
+            <pre><code>Перехопили виняток</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>У прикладі вище ми створили новий об'єкт-виняток типу <code><span class="text-viola">RuntimeException</span></code> і миттєво кинули його за допомогою оператора <code>throw</code>.</p>
+<p>Його відразу захопить блок <code>catch</code>, оскільки тип RuntimeException успадковано від типу <code><span class="text-viola">Exception</span></code>. Код <code>catch(Exception except)</code> захоплює об'єкти-винятки всіх класів, успадкованих від класу <code><span class="text-viola">Exception</span></code>.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task14.task1406"></div>
+<hr>
+<h2>3. Ключове слово <code>finally</code></h2>
+<p>Ще один важливий момент. Іноді програмісту потрібно виконати певні дії незалежно від того, був у коді виняток чи ні. Наприклад, у коді ми відкрили файл для запису, а відкритий файл треба <span class="text-viola">обов'язково закрити викликом методу <code><span class="text-viola">close()</span></code>.</span></p>
+<pre class="language-java"><code>try
+{
+   <span class="text-green">код, де може виникнути помилка</span>
+}
+catch(<span class="text-viola">ТипВинятку</span> <span class="text-red">ім'я</span>)
+{
+   <span class="text-user">код обробки винятку</span>
+}
+finally
+{
+   <span class="text-viola">код, який потрібно виконати в будь-якому разі</span>
+}</code></pre>
+<p>Для виконання таких обов'язкових дій до оператора <code>try-catch</code> додали ще один блок — <code>finally</code> й отримали оператор <code>try-catch-finally</code>. Отакий приблизно вигляд це має:</p>
+<p>Приклад:</p>
+<pre class="language-java"><code>FileInputStream source = null;
+try
+{
+   source = new FileInputStream("c:\\note.txt");
+   source.read();
+}
+catch(<span class="text-viola">Exception</span> <span class="text-red">except</span>)
+{
+   System.out.println("Перехопили виняток");
+   throw <span class="text-red">except</span>;
+}
+finally
+{
+   if (source != null)
+      source.close();
+}</code></pre>
+<p><span class="text-viola">Код у блоці <code><span class="text-viola">finally</span></code></span>&nbsp;<span class="text-green">буде виконано в будь-якому випадку незалежно від того, був виняток чи ні.</span>&nbsp;Навіть якщо виняток виник і його не було перехоплено, блок <code>finally</code> все одно буде виконано.</p>
+<p>До речі, якщо ви не хочете перехоплювати виняток, а блок <code>finally</code> вам потрібен, використовуйте скорочений запис блока <code>try-catch-finally</code> — <code>try-finally</code>. Він має приблизно такий вигляд:</p>
+<div class="lesson-example lesson-example--center">
+<pre class="lecture-code lecture-code--present-sm language-java"><code>try
+{
+   <span class="text-green">код, де може виникнути помилка</span>
+}
+finally
+{
+   <span class="text-viola">код, який потрібно виконати в будь-якому разі</span>
+}</code></pre>
+</div>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task14.task1407"></div>

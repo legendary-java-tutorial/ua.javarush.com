@@ -1,0 +1,269 @@
+﻿Цикл for
+<p>----------------------------------------</p>
+Порівняння циклів for і while. Цикл while можна використовувати у всіх випадках, коли команду або групу команд потрібно виконати кілька разів. Однак серед усіх цих випадків один варто виділити особливо. Це випадок, коли програміст (автор програми) заздалегідь знає, скільки разів має виконуватися його цикл. Зазвичай
+<p>----------------------------------------</p>
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="6289b80e-d6ff-4af0-9e3c-8b9b5220509b" data-max-width="1024" src="https://cdn.javarush.com/images/article/6289b80e-d6ff-4af0-9e3c-8b9b5220509b/original.png" alt=""/>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<h2>1. Порівняння циклів <code>for</code> і <code>while</code></h2>
+<p>Цикл <code>while</code> можна використовувати у всіх випадках, коли команду або групу команд потрібно виконати кілька разів. Однак серед усіх цих випадків один варто виділити особливо.</p>
+<p>Це випадок, коли програміст (автор програми) заздалегідь знає, скільки разів має виконуватися його цикл. Зазвичай для цього використовується спеціальна змінна-лічильник, яка під час кожної ітерації циклу збільшується (або зменшується) на <code>1</code>.</p>
+<p>Начебто все працює як слід, але це не дуже зручно. Перед циклом ми присвоюємо змінній-лічильнику початкове значення, а потім в умові перевіряємо, чи не досягла вона кінцевого значення. А от змінюємо її зазвичай аж наприкінці тіла циклу.</p>
+<p>А якщо тіло циклу велике? Або маємо кілька вкладених циклів? Загалом у таких випадках бажано зібрати всю цю інформацію про змінну-лічильник в одному місці. Так у мові Java з'явився цикл <code class="text-yellow">for</code>. Він теж має зовсім нескладний вигляд:</p>
+<div class="lesson-example lesson-example--center">
+<pre class="lecture-code lecture-code--present language-java"><code><span class="code text-yellow">for</span> (<span class="code text-green">команда1</span>; <span class="code text-red">умова</span>; <span class="code text-orange">команда2</span>)
+{
+   <span class="code code--demo text-user">блок команд</span>
+}</code></pre>
+</div>
+<p>У циклі <code>while</code> у круглих дужках була тільки умова, а тут додано ще дві команди, розділені крапкою з комою.</p>
+<p>Насправді все досить просто: компілятор перетворює цикл <code class="text-yellow">for</code> на звичайний цикл <code class="text-viola">while</code> таким чином:</p>
+<div class="lesson-example lesson-example--center">
+<pre class="lecture-code lecture-code--present language-java"><code><span class="code text-green">команда1;</span>
+<span class="code text-viola">while</span> (<span class="code text-red">умова</span>)
+{
+   <span class="code code--demo text-user">блок команд</span>
+   <span class="code text-orange">команда2;</span>
+}</code></pre>
+</div>
+<p>Покажемо це на прикладі: два приклади нижче ідентичні.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Варіант 1</th>
+        <th>Варіант 2</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>for (<span class="text-green">int i = 0;</span> <span class="text-red">i &lt; 20;</span> <span class="text-orange">i++</span>)
+{
+<span class="text-user">   System.out.println(i);</span>
+}</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code><span class="text-green">int i = 0;</span>
+while (<span class="text-red">i &lt; 20</span>)
+{
+<span class="text-user">   System.out.println(i);</span>
+&nbsp;  <span class="text-orange">i++;</span>
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Ми просто зібрали в одному місці весь код, який стосується змінної-лічильника — <code>i</code>.</p>
+<p><span class="text-green">команда1</span> у циклі <code>for</code> виконується тільки один раз перед початком циклу (це видно у другому прикладі)</p>
+<p><span class="text-orange">команда2</span> виконується таку саму кількість разів, як і тіло циклу, але вона виконується щоразу вже після повного завершення тіла циклу</p>
+<hr>
+<h2>2. Де використовується цикл <code>for</code></h2>
+<p>Цикл <code>for</code> використовується в Java, мабуть, найчастіше з усіх видів циклів. Він застосовується скрізь, тому що для програмістів це просто зрозуміліша й зручніша форма запису циклу <code>while</code>. Практично будь-який цикл <code>while</code> можна перетворити на цикл <code>for</code>.</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Цикл while</th>
+        <th>Цикл for</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-green">int i = 3;</span>
+while (<span class="text-red">i &gt;= 0</span>)
+{
+&nbsp; &nbsp;System.out.println(i);
+&nbsp;  <span class="text-orange">i--;</span>
+}</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>for (<span class="text-green">int i = 3;</span> <span class="text-red">i &gt;= 0;</span> <span class="text-orange">i--</span>)
+{
+&nbsp; &nbsp;System.out.println(i);
+}</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-green">int i = 0;</span>
+while (<span class="text-red">i &lt; 3</span>)
+{
+&nbsp; &nbsp;System.out.println(i);
+&nbsp;  <span class="text-orange">i++;</span>
+}</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>for (<span class="text-green">int i = 0;</span> <span class="text-red">i &lt; 3;</span> <span class="text-orange">i++</span>)
+{
+&nbsp; &nbsp;System.out.println(i);
+}</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-green">boolean isExit = false;</span>
+while (<span class="text-user">!</span><span class="text-red">isExit</span>)
+{
+&nbsp; &nbsp;String s = console.nextLine();
+&nbsp; &nbsp;isExit = s.equals("exit");
+}</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>for (<span class="text-green">boolean isExit = false;</span> !<span class="text-red">isExit</span>; )
+{
+&nbsp; &nbsp;String s = console.nextLine();
+&nbsp; &nbsp;isExit = s.equals("exit");
+}</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>while (<span class="text-red">true</span>)
+&nbsp; &nbsp;System.out.println("C");</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>for (; <span class="text-red">true</span>; )
+&nbsp; &nbsp;System.out.println("C");</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>while (<span class="text-red">true</span>)
+{
+&nbsp; &nbsp;String s = console.nextLine();
+&nbsp; &nbsp;if (s.equals("exit"))
+&nbsp; &nbsp;&nbsp; &nbsp;break;
+}</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>for (; <span class="text-red">true</span>; )
+{
+&nbsp; &nbsp;String s = console.nextLine();
+&nbsp; &nbsp;if (s.equals("exit"))
+&nbsp; &nbsp;&nbsp; &nbsp;break;
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Зверніть увагу на останній приклад. Там пропущені команди для роботи з лічильником циклу. Немає лічильника —- немає команд.</p>
+<p>Java дозволяє не писати в циклі <code>for</code> команди для ініціалізації лічильника та змінення лічильника. І навіть вираз-умову циклу можна не писати.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task04.task0411"></div>
+<hr>
+<h2>3. Особливості використання циклу <code>for</code></h2>
+<p>Важливий момент щодо використання циклу <code>for</code> і операторів <code>break</code> і <code>continue</code>.</p>
+<p>Оператор <code>break</code> у циклі <code>for</code> діє так само, як і в циклі <code>while</code> — призводить до негайного завершення циклу. А от коли використовується оператор <code>continue</code>, тіло циклу пропускається, а <code class="text-orange">команда2</code> (яка змінює лічильник циклу) — ні.</p>
+<p>Подивімося ще раз, як пов'язані між собою цикли <code>for</code> і <code>while</code>.</p>
+<div class="lesson-example lesson-example--center">
+<pre class="lecture-code lecture-code--present language-java"><code>for (<span class="text-green">команда1;</span> <span class="text-red">умова;</span> <span class="text-orange">команда2</span>)
+{
+&nbsp;  <span class="text-user">блок команд</span>
+}</code></pre>
+</div>
+<div class="lesson-example lesson-example--center">
+<pre class="lecture-code lecture-code--present language-java"><code><span class="text-green">команда1;</span>
+while (<span class="text-red">умова</span>)
+{
+&nbsp;  <span class="text-user">блок команд</span>
+&nbsp;  <span class="text-orange">команда2;</span>
+}</code></pre>
+</div>
+<p><span>Якщо в блоці команд циклу </span><code>for</code><span> викликати оператор </span><code>continue</code><span>, наступні команди блоку будуть пропущені, а от </span><span class="text-orange">команда2</span><span> (яка змінює лічильник циклу </span><code>for</code><span>) все одно буде виконана.</span></p>
+<p>Повернімося до нашого прикладу з пропусканням чисел, що діляться на 7.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Цей код зациклиться</th>
+        <th>Цей код чудово працюватиме</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="text-green">i</span> = <span class="text-user">1</span>;
+while (<span class="text-green">i</span> &lt;= <span class="text-user">20</span>)
+{
+&nbsp; &nbsp;if ( (<span class="text-green">i</span> % <span class="text-user">7</span>) == <span class="text-user">0</span>) continue;
+&nbsp; &nbsp;<span class="text-orange">System.out.println</span>(<span class="text-green">i</span>);
+&nbsp; &nbsp;i++;
+}</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>for (<span class="text-green">int i = 1; <span class="text-red">i &lt;= 20;</span></span> <span class="text-orange">i++</span>)
+{
+&nbsp; &nbsp;if ( (<span class="text-green">i</span> % <span class="text-user">7</span>) == <span class="text-user">0</span>) continue;
+&nbsp;  <span class="text-user">System.out.println(i);</span>
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Код із циклом <code>while</code> не діятиме — значення змінної <code>i</code> ніколи не перевищить 7. А от код із циклом <code>for</code> діятиме чудово.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task04.task0412"></div>
+<hr>
+<h2>4. Порівняння циклів for: Java і Pascal</h2>
+<p>До речі, у мові Pascal теж є цикл <code>For</code>. Цей цикл взагалі є майже в усіх мовах програмування. Але в Pascal він набагато зрозуміліший. Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="50%">Pascal</th>
+        <th>Java</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>For <span class="text-red">i</span> := <span class="text-red">1</span> to <span class="text-red">10</span> do
+Begin
+&nbsp;  <span class="text-orange">Writeln</span>(<span class="text-red">i</span>);
+End;</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>for (int <span class="text-red">i</span> =<span class="text-red"> 1</span>; <span class="text-red">i</span> &lt;= <span class="text-red">10</span>; <span class="text-red">i</span>++)
+{
+&nbsp;  <span class="text-orange">System.out.println</span>(<span class="text-red">i</span>);
+}</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>For i := <span class="text-red">1</span> to <span class="text-red">10 </span>do step <span class="text-user">2</span>
+Begin
+&nbsp;  <span class="text-orange">Writeln</span>(<span class="text-red">i</span>);
+End;</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>for (int <span class="text-red">i </span>= <span class="text-red">1</span>; <span class="text-red">i</span> &lt;= <span class="text-red">10</span>; <span class="text-red">i</span> = <span class="text-red">i</span> + <span class="text-user">2</span>)
+{
+&nbsp;  <span class="text-orange">System.out.println</span>(<span class="text-red">i</span>);
+}</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>For <span class="text-red">i</span> := <span class="text-red">10</span> <span class="text-user">downto</span> <span class="text-red">0</span> do step <span class="text-user">2</span>
+Begin
+&nbsp;  <span class="text-orange">Writeln</span>(<span class="text-red">i</span>);
+End;</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>for (int <span class="text-red">i</span> = <span class="text-red">10</span>; <span class="text-red">i</span> &gt;= 0; <span class="text-red">i</span> = <span class="text-red">i</span> - <span class="text-user">2</span>)
+{
+&nbsp;  <span class="text-orange">System.out.println</span>(<span class="text-red">i</span>);
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<hr>
+
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="15c4c0f3-e8d5-42e9-93c2-a87138dec6ee" data-max-width="1024" src="https://cdn.javarush.com/images/article/15c4c0f3-e8d5-42e9-93c2-a87138dec6ee/original.png" alt=""/>
+        </div>
+    </div>
+</div>

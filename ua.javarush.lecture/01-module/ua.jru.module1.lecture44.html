@@ -1,0 +1,165 @@
+Paths
+<p>----------------------------------------</p>
+Утилітарний клас — це клас-помічник, що містить статичні змінні та статичні методи, які виконують певний перелік завдань, об’єднаних одним сенсом...
+<p>----------------------------------------</p>
+<h2>Утилітарний клас та метод</h2>
+
+    <p>Утилітарний клас — це клас-помічник, що містить статичні змінні та статичні методи, які виконують певний перелік
+    завдань, об’єднаних одним сенсом.</p>
+
+    <p>Давайте розглянемо приклади стандартних утилітарних класів:</p>
+
+    <table>
+        <tbody>
+            <tr>
+                <td><span class="code"><span class="text-green">java.lang.Math</span></span></td>
+                <td>Клас, який може виконувати безліч різних математичних обчислень, дає нам деякі математичні константи.</td>
+            </tr>
+            <tr>
+                <td><span class="code"><span class="text-green">java.util.Arrays</span></span></td>
+                <td>Клас містить різні методи для роботи з масивами (як-то сортування та пошук). Цей клас містить статичну фабрику, яка
+                дозволяє переглядати масиви як списки.</td>
+            </tr>
+            <tr>
+                <td><span class="code"><span class="text-green">java.lang.System</span></span></td>
+                <td>Клас реалізує методи роботи з системою. Найчастіше ми можемо використовувати його для виведення тексту в консолі. Для
+                цього ми звертаємося до статичної змінної <mark class="user">out</mark>, яка зберігає об’єкт класу <span
+                    class="code"><span class="text-green">PrintStream</span></span>, і вже у нього викликаємо метод <span
+                    class="code text-orange">println</span> (<span class="code text-orange">System.out.println</span>).</td>
+            </tr>
+        </tbody>
+    </table>
+ 
+    <p>Ми можемо і самі створити утилітарний клас: для цього ми просто створюємо клас зі статичними <span
+        class="code">public</span> методами, які нам необхідні. Але треба пам’ятати, що для створення утилітарного класу
+    потрібні вагомі причини. Наприклад, необхідність використання одного і того самого методу або набору методів, що виконує
+    єдине завдання (скажімо, складне обчислення) із кількох різних класів.</p>
+
+    <p>Давай розглянемо приклад утилітарного класу <span class="code"><span class="text-green">Paths</span></span>. </p>
+
+    <h2>Класс Paths</h2>
+
+    <p>До цього класу належить лише один статичний метод — <span class="code text-orange">get</span> — з різними параметрами, що приймаються. </p>
+
+    <p>Ми можемо передати в метод <span class="code text-orange">get</span>: </p>
+
+    <table>
+        <tbody>
+            <tr>
+                <td><span class="code text-orange">get(String first, String... more)</span></td>
+                <td>Шлях цілком або перерахування назв директорій та (або) файлу в останньому аргументі.</td>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">get(URI uri)</span></td>
+                <td>URI.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>Цей утилітарний клас вирішує завдання перетворення шляху (у вигляді рядка) або URI у <span class="code"><span
+            class="text-green">Path</span></span>. <span class="code"><span class="text-green">Path</span></span> ми вже
+    проходили та розуміємо, навіщо він нам потрібен і як ми з ним далі можемо працювати.</p>
+
+    <p>Часто буває, що ми маємо справу із шляхом саме у вигляді <span class="code"><span
+            class="text-green">String</span></span> або URI. Ось тут ми і можемо скористатися методами утилітарного класу
+    <span class="code"><span class="text-green">Paths</span></span>.</p>
+
+    <p>Давайте розглянемо приклади:</p>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Приклад</th>
+                <th>Коментар</th>
+            </tr>
+            <tr>
+                <td>
+                    <pre class='language-java'><code>
+Path path =
+Paths.get("C:\\Users\\User\\Documents\\MyFile.txt");
+                    </code></pre>
+                </td>
+                <td>Передаємо в метод <span class="code text-orange">get String</span> (шлях до файлу) та отримуємо сформований <span
+                    class="code"><span class="text-green">Path</span></span>. Далі ми можемо з ним працювати.</td>
+            </tr>
+            <tr>
+                <td>
+                    <pre class='language-java'><code>
+Path path = Paths.get(URI.create("file:///Users/User/Code/MyClass.java"));
+                    </code></pre>
+                </td>
+                <td><span class="code"><span class="text-green">Path</span></span> можна також отримати і зі сформованого URI.</td>
+            </tr>
+            <tr>
+                <td>
+                    <pre class='language-java'><code>
+Path path = Paths.get(System.getProperty("user.home"),"documents", "document.txt");
+                    </code></pre>
+                </td>
+                <td>Вказуємо послідовно назви директорії та файлу, до якого нам потрібно отримати шлях.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>Але насправді є один нюанс. З появою Java 11 версії будь-яка реалізація методу <span class="code text-orange">get</span>
+    викликає в собі<span class="code text-orange">Path.of</span>. </p>
+
+    <pre class='language-java line-numbers'><code>
+public static Path get(String first, String... more) {
+    return Path.of(first, more);
+}
+ 
+public static Path get(URI uri) {
+    return Path.of(uri);
+}
+    </code></pre>
+ 
+    <p>Тепер цей утилітарний клас може бути визнаний застарілим, тому ми маємо використовувати саме <span
+        class="code text-orange">Path.of</span> для наших цілей.</p>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Було</th>
+                <th>Стало</th>
+            </tr>
+            <tr>
+                <td>
+                    <pre class='language-java'><code>
+Path path =
+Paths.get("C:\\Users\\User\\Documents\\MyFile.txt");
+                    </code></pre>
+                </td>
+                <td>
+                    <pre class='language-java'><code>
+Path path =
+Path.of("C:\\Users\\User\\Documents\\MyFile.txt");
+                    </code></pre>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <pre class='language-java'><code>
+Path path = Paths.get(URI.create("file:///Users/User/Code/MyClass.java"));
+                    </code></pre>
+                </td>
+                <td>
+                    <pre class='language-java'><code>
+Path path = Path.of(URI.create("file:///Users/User/Code/MyClass.java"));
+                    </code></pre>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <pre class='language-java'><code>
+Path path = Paths.get(System.getProperty("user.home"),"documents", "document.txt");
+                    </code></pre>
+                </td>
+                <td>
+                    <pre class='language-java'><code>
+ath path = Path.of(System.getProperty("user.home"),"documents", "document.txt");
+                    </code></pre>
+                </td>
+            </tr>
+        </tbody>
+    </table>

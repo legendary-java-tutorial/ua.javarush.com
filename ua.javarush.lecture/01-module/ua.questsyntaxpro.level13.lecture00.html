@@ -1,0 +1,221 @@
+﻿Колекція HashSet
+<p>----------------------------------------</p>
+Контейнери та колекції. Контейнерами або колекціями називають класи, які дають змогу зберігати й обробляти багато об'єктів одразу. Ви вже знаєте два різновиди контейнерів — масиви та списки. У Java є кілька десятків колекцій, кожна з яких зберігає елементи у свій особливий спосіб
+<p>----------------------------------------</p>
+<h2>1. Контейнери та колекції</h2>
+<p><strong>Контейнерами</strong> або колекціями називають класи, які дають змогу зберігати й обробляти багато об'єктів одразу. Ви вже знаєте два різновиди контейнерів — масиви та списки.</p>
+<p>У Java є кілька десятків колекцій, кожна з яких зберігає елементи у свій особливий спосіб. Ця таблиця містить скорочений перелік колекцій:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Тип колекції</th>
+        <th>Клас</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre><code><span class="text-bold">List</span></code></pre>
+        </td>
+        <td>
+            <pre><code>ArrayList</code></pre>
+        </td>
+        <td>Список</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <pre><code>LinkedList</code></pre>
+        </td>
+        <td>Зв'язаний список</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <pre><code>Vector</code></pre>
+        </td>
+        <td>Вектор</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <pre><code>Stack</code></pre>
+        </td>
+        <td>Стек (стос)</td>
+    </tr>
+    <tr class="row-separator">
+        <td colspan="3"></td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code><span class="text-bold">Set</span></code></pre>
+        </td>
+        <td>
+            <pre><code>HashSet</code></pre>
+        </td>
+        <td>Множина</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <pre><code>TreeSet</code></pre>
+        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <pre><code>LinkedHashSet</code></pre>
+        </td>
+        <td></td>
+    </tr>
+    <tr class="row-separator">
+        <td colspan="3"></td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code><span class="text-bold">Queue</span></code></pre>
+        </td>
+        <td>
+            <pre><code>PriorityQueue</code></pre>
+        </td>
+        <td>Черга</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <pre><code>ArrayDeque</code></pre>
+        </td>
+        <td></td>
+    </tr>
+    <tr class="row-separator">
+        <td colspan="3"></td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code><span class="text-bold">Map</span></code></pre>
+        </td>
+        <td>
+            <pre><code>HashMap</code></pre>
+        </td>
+        <td>Карта/Словник</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <pre><code>TreeMap</code></pre>
+        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <pre><code>HashTable</code></pre>
+        </td>
+        <td></td>
+    </tr>
+    </tbody>
+</table>
+<p>Тут є певна неоднозначність у назвах. Хоча в більшості мов програмування всі ці структури даних називають колекціями, у Java це не так. У мові Java деякі з цих класів реалізують інтерфейс <code>Collection</code>, а інші — ні.</p>
+<p>Тому колекції розділили на <strong>колекції в широкому сенсі й колекції у вузькому сенсі</strong> (тільки ті, які реалізують інтерфейс <code>Collection</code>).</p>
+<p>Отже, щоб не плутатися, <strong>колекціями</strong> називають тільки колекції у вузькому сенсі (класи мають реалізовувати інтерфейс <code>Collection</code>). Це всі колекції типів <code>List</code>, <code>Set</code> і <code>Queue</code>. А колекції в широкому сенсі називають <strong>контейнерами</strong>. Це класи типу <code>Map</code> і масиви.</p>
+<hr>
+<h2>2. Колекція <code>HashSet</code></h2>
+<p>Клас <code>HashSet</code> є типовим представником колекцій типу «множина». Багато в чому він схожий на клас <code>ArrayList</code> і в певному сенсі є його спрощеною версією.</p>
+<p>Створити об'єкт типу <code>HashSet</code> можна за допомогою такої команди:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-neon">HashSet</span>&lt;<span class="text-viola">Тип</span>&gt; <span class="text-green">ім'я</span> = new <span class="text-neon">HashSet</span>&lt;<span class="text-viola">Тип</span>&gt;();</code></pre>
+</div>
+<p>де тип — це тип елементів, які можна зберігати в колекції <code>HashSet</code>.</p>
+<p>Клас <code>HashSet</code> має такі методи:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Метод</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>boolean <span class="text-red">add</span>(Тип value)</code></pre>
+        </td>
+        <td>Додає елемент <code>value</code> в колекцію</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>boolean <span class="text-red">remove</span>(Тип value)</code></pre>
+        </td>
+        <td>Видаляє елемент <code>value</code> з колекції.<br/> Повертає <code>true</code>, якщо такий елемент там був.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>boolean <span class="text-red">contains</span>(Тип value)</code></pre>
+        </td>
+        <td>Перевіряє, чи є в колекції елемент <code>value</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>void <span class="text-red">clear</span>()</code></pre>
+        </td>
+        <td>Очищає колекцію: видаляє всі елементи</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">size</span>()</code></pre>
+        </td>
+        <td>Повертає кількість елементів у колекції</td>
+    </tr>
+    </tbody>
+</table>
+<p>Приклад використання множини.</p>
+<p>Спробуймо написати програму, яка прощається з користувачем, якщо він з нею привітався, тобто сказав «Привіт». Щоб було цікавіше, слово «Привіт» можна буде сказати декількома мовами.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">HashSet</span>&lt;<span class="text-viola">String</span>&gt; <span class="text-user">set</span> = new <span class="text-neon">HashSet</span>&lt;<span class="text-viola">String</span>&gt;();
+
+<span class="text-user">set</span>.<span class="text-red">add</span>("Привіт");
+<span class="text-user">set</span>.<span class="text-red">add</span>("Hello");
+<span class="text-user">set</span>.<span class="text-red">add</span>("Hola");
+<span class="text-user">set</span>.<span class="text-red">add</span>("Bonjour");
+<span class="text-user">set</span>.<span class="text-red">add</span>("Cialo");
+<span class="text-user">set</span>.<span class="text-red">add</span>("Namaste");
+
+Scanner <span class="text-orange">console</span> = new Scanner(System.in);
+String <span class="code text-green">str</span> = <span class="text-orange">console</span>.nextLine();
+
+if (<span class="text-user">set</span>.<span class="text-red">contains</span>(<span class="code text-green">str</span>))
+   System.out.println("Да спаткання!");</code></pre>
+        </td>
+        <td>Створюємо об'єкт типу <code>HashSet</code>, який зберігає елементи типу <code>String</code>.<br/><br/><br/> Записуємо в <code>set</code> привітання різними мовами.<br/><br/><br/><br/><br/> Вводимо з консолі слово;<br/><br/><br/> якщо це слово є в нашій множині привітань, то прощаємося (білоруською мовою).</td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task13.task1301"></div>
+<hr>
+<h2>3. Множина</h2>
+<p>Колекція <code>Set</code> призначена для зберігання множини елементів. Тому її так і називають: <code>Set</code> (множина). Ця колекція має три особливості.</p>
+<p><strong>Операції з множинами</strong></p>
+<p>Із множинами можна виконувати тільки три операції: додавати елементи до множини, видаляти елементи з множини і перевіряти, чи є в множині певний елемент. Це все.</p>
+<p><strong>Невпорядкованість</strong></p>
+<p>Елементи цієї колекції не мають номерів. Неможливо отримати елемент за його індексом або записати значення в колекцію за певним індексом. Методів <code>get()</code> і <code>set()</code> множина також не має.</p>
+<p><strong>Унікальність елементів</strong></p>
+<p>Усі елементи множини є унікальними. На відміну від списку, у множині кожний елемент може бути тільки в одному примірнику. Об'єкт або міститься у множині, або ні: третього не дано. Неможливо тричі додати «чорний колір» у множину кольорів. Він там або є, або його немає.</p>
+<p><strong>Пошук елементів</strong></p>
+<p>Коли ви додаєте до множини новий елемент, видаляєте елемент або перевіряєте наявність елемента, всередині методу виконується пошук елемента. Елементи колекції та переданий елемент порівнюються спочатку за допомогою методу <code>hashCode()</code>, а якщо отримані <code>хеш-значення</code> збігаються, то за допомогою методу <code>equals</code>.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task13.task1302"></div>
+<hr>
+<h2>4. Порівняння колекцій: <code>List</code> і <code>Set</code></h2>
+<p>Порівняймо колекції двох типів: <code>List</code> і <code>Set</code>. Які між ними основні відмінності, і коли вигідніше використовувати одну, а коли — другу?</p>
+<p>Спробуймо порівняти Список і Множину на прикладі дитячих іграшок.</p>
+<p><strong>Колекція <code>List</code> (Список)</strong> схожа на набір іграшок в дитячій кімнаті, які розставлено біля стіни. Можна додати іграшку в кінець списку. Можна вставити її в середину, якщо дуже потрібно (але частину іграшок доведеться пересунути).</p>
+<p>Кожна іграшка має порядковий номер. Можна взяти іграшку за її номером або замінити іграшку номер 7 на іграшку номер 13. Можна видалити зі списку іграшку номер 4. Ну і зрештою можна дізнатися кількість усіх іграшок у списку.</p>
+<p><strong>Колекція <code>Set</code> (множина)</strong> більше схожа на іграшки, скинуті на купу. У купу можна додати іграшку, можна видалити іграшку з купи, але фіксованого номера в таких іграшок немає.</p>
+<p>Або, <strong>припустімо, ви вибираєте дитині іграшку на день народження.</strong> Тоді ви в першу чергу думаєте, є в дитини така іграшка чи ні. Тож усі іграшки, які в неї є, утворюють множину іграшок, які ви не купуватимете.</p>
+<p>У такому разі порядок іграшок в наборі «Вже є» не має значення, так само як і наявність в іменинника двох однакових іграшок. Вас цікавлять не самі іграшки та їх кількість, а іграшки як набір певних унікальних об'єктів.</p>
+<p>Саме для таких випадків вам і знадобиться множина <code>Set</code> та її найпопулярніший представник — клас <code>HashSet</code>.</p>

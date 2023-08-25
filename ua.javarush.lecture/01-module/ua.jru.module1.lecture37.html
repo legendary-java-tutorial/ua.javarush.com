@@ -1,0 +1,359 @@
+ByteArrayInputStream
+<p>----------------------------------------</p>
+Клас ByteArrayInputStream пакету java.io можна використовувати для читання масиву вхідних даних (у байтах)...
+<p>----------------------------------------</p>
+<p>Клас <span class="code"><span class="text-green">ByteArrayInputStream</span></span> пакету <span
+        class="text-bold">java.io</span> можна використовувати для читання масиву вхідних даних (у байтах).</p>
+
+    <img data-max-width="512" data-id="8cfa780c-c376-4ff2-b1c2-b9be862f5908" src="https://cdn.javarush.com/images/article/8cfa780c-c376-4ff2-b1c2-b9be862f5908/original.png" alt="">
+
+    <p>Щоб створити вхідний потік масиву байтів, ми повинні спочатку імпортувати пакет <span
+        class="text-bold">java.io.ByteArrayInputStream</span>. Як тільки ми імпортуємо пакет, у нас є два конструктори для
+    створення вхідного потоку:</p>
+
+    <pre class='language-java line-numbers'><code>
+ByteArrayInputStream input = new ByteArrayInputStream(arr);
+ByteArrayInputStream input = new ByteArrayInputStream(arr, 2, 2);
+    </code></pre>
+
+    <p>Усередині класу є 4 поля:</p>
+
+    <pre class='language-java line-numbers'><code>
+//Масив байтів, наданий творцем потоку
+protected byte buf[];
+
+//Індекс наступного символу для читання з буфера вхідного потоку
+protected int pos;
+
+//Поточна зазначена позиція в потоці
+protected int mark = 0;
+
+//Індекс на одиницю більше, ніж останній допустимий символ у буфері вхідного потоку
+protected int count;
+    </code></pre>
+
+    <p>І ось наші конструктори:</p>
+
+    <pre class='language-java line-numbers'><code>
+public ByteArrayInputStream(byte buf[]) {
+    this.buf = buf;
+    this.pos = 0;
+    this.count = buf.length;
+}
+
+public ByteArrayInputStream(byte buf[], int offset, int length) {
+    this.buf = buf;
+    this.pos = offset;
+    this.count = Math.min(offset + length, buf.length);
+    this.mark = offset;
+}
+    </code></pre>
+
+    <h2>Методи ByteArrayInputStream</h2>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Метод</th>
+                <th>Дія</th>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">int read()</span></td>
+                <td>Зчитує наступний байт даних із цього вхідного потоку.</td>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">int read(byte b[], int off, int len)</span></td>
+                <td>Зчитує деяку кількість байтів із вхідного потоку та зберігає їх у буферному масиві <span class="text-neon">b</span>.<br />
+                <span class="code">off</span> – початкове зміщення в цільовому масиві <span class="text-neon">b</span>.<br />
+                <span class="code">len</span> – максимальна кількість прочитаних байтів.</td>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">long skip(long n)</span></td>
+                <td>Пропускає n байтів введення із цього вхідного потоку. Повертає кількість пропущених байтів (може бути меншим, якщо
+                досягнутий кінець вхідного потоку).</td>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">int available()</span></td>
+                <td>Повертає кількість байтів, що залишилися, які можна прочитати (або пропустити) із цього вхідного потоку.</td>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">void reset()</span></td>
+                <td>Скидає буфер у відмічену позицію. Відмічена позиція дорівнює 0, якщо не було відмічено іншу позицію або вказано інше
+                зміщення в конструкторі.</td>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">boolean markSupported()</span></td>
+                <td>Перевіряє, чи підтримує цей <span class="code"><span class="text-green">InputStream</span></span> відмітку/скидання.
+                Повертає <span class="text-green"><em>true</em></spam> для <span class="code"><span
+                            class="text-green">ByteArrayInputStream</span></span>.</td>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">void close()</span></td>
+                <td>Нічого не робить.</td>
+            </tr>
+            <tr>
+                <td><span class="code text-orange">void mark(int readAheadLimit)</span></td>
+                <td>Встановлює поточну позицію в поле <mark>mark</mark>. Якщо буде викликаний метод <span
+                    class="code text-orange">reset</span>, подальше читання розпочнеться саме з цієї позиції. Значення параметра методу
+                <span class="code text-orange">readAheadLimit</span> не впливає на його роботу і просто не використовується.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>Давайте розберемо ці методи докладніше і подивимося на практиці, як вони працюють.</p>
+
+    <h3>read()</h3>
+
+    <p>Коли потрібно читати байти з <span class="code"><span class="text-green">ByteArrayInputStream</span></span> так само, як
+    і зі звичайного <span class="code"><span class="text-green">InputStream</span></span>, можна використовувати метод <span
+        class="code text-orange">read()</span>.</p>
+
+    <pre class='language-java line-numbers'><code>
+public static void main(String[] args) {
+   byte[] array = {1, 2, 3, 4};
+
+   try (ByteArrayInputStream input = new ByteArrayInputStream(array)) {
+       for (int i = 0; i &lt; array.length; i++) {
+           int data = input.read();
+           System.out.print(data + ", ");
+       }
+   } catch (IOException e) {
+       e.printStackTrace();
+   }
+}
+    </code></pre>
+
+    <h3>available()</h3>
+
+    <p>Якщо ви хочете перевірити, чи є щось у вашому буфері, можна викликати метод  <span class="code text-orange">avalible()</span>.</p>
+
+    <pre class='language-java line-numbers'><code>
+public static void main(String[] args) {
+   byte[] array = {1, 2, 3, 4};
+
+   try (ByteArrayInputStream input = new ByteArrayInputStream(array)) {
+       System.out.println("байтів, доступних для читання  " + input.available());
+
+       input.read();
+       System.out.println("байтів, вільних для читання " + input.available());
+
+       input.read();
+       System.out.println("байтів, вільних для читання " + input.available());
+   } catch (IOException e) {
+       e.printStackTrace();
+   }
+}
+    </code></pre>
+
+    <p>В результаті ми побачимо, що кількість доступних для читання байтів змінюється після кожного читання з буфера.</p>
+
+    <p>Виведення програми:</p>
+
+<div class="terminal">
+байтів, доступних для читання 4<br />
+байтів, вільних для читання 3<br />
+байтів, вільних для читання 2
+</div>
+
+    <h3>skip(long n)</h3>
+
+    <p>За допомогою методу <span class="code text-orange">skip()</span> можна пропустити певну кількість байтів і не зчитувати
+    їх.</p>
+
+    <pre class='language-java line-numbers'><code>
+public static void main(String[] args) {
+   byte[] array = {1, 2, 3, 4};
+
+   try (ByteArrayInputStream input = new ByteArrayInputStream(array)) {
+       input.skip(2);
+
+       while (input.available() != 0) {
+           int data = input.read();
+           System.out.print(data + ", ");
+       }
+   } catch (IOException e) {
+       e.printStackTrace();
+   }
+}
+    </code></pre>
+
+    <p>Виведення програми:</p>
+
+    <div class="terminal">3, 4, </div>
+
+    <h3>reset() </h3>
+
+    <p>Метод скидає положення буферизованого потоку до останньої відміченої позиції. Він займає позицію мітки 0, якщо явно не
+    вказана інша мітка.</p>
+
+    <pre class='language-java line-numbers'><code>
+public static void main(String[] args) {
+   byte[] buf = {65, 66, 67, 68, 69};
+   try (ByteArrayInputStream input = new ByteArrayInputStream(buf)) {
+       System.out.println("прочитали: " + input.read());
+       System.out.println("прочитали: " + input.read());
+       System.out.println("прочитали: " + input.read());
+       System.out.println("прочитали: " + input.read());
+
+       System.out.println("виклик методу reset()");
+       input.reset();
+       System.out.println("прочитали: " + input.read());
+       System.out.println("прочитали: " + input.read());
+   } catch (IOException e) {
+       e.printStackTrace();
+   }
+}
+    </code></pre>
+
+    <p>В результаті ми побачимо, як після виклику методу <span class="code text-orange">reset()</span> ми потрапимо на
+    початкову точку нашого потоку.</p>
+
+    <p>Виведення програми:</p>
+
+    <div class="terminal">прочитали: 65<br />
+прочитали: 66<br />
+прочитали: 67<br />
+прочитали: 68<br />
+виклик методу reset()<br />
+прочитали: 65<br />
+прочитали: 66</div>
+
+    <h3>mark(int readAheadLimit)</h3>
+
+    <p>Метод <span class="code text-orange">mark()</span> класу <span class="code"><span
+            class="text-green">ByteArrayInputStream</span></span> встановлює внутрішню мітку в поточній позиції байта, тобто
+    відразу після читання попереднього байта. Цей метод приймає параметр, що вказує, скільки байтів можна прочитати після
+    цієї мітки, перш ніж вона стане недійсною. За замовчуванням, якщо мітка не була встановлена явно, <span
+        class="code"><span class="text-green">ByteArrayInputStream</span></span> відмічає позицію 0 або позицію зі
+    зміщенням, переданим його конструктору. Важливо відзначити, що для цього класу відмітка <span
+        class="text-green">readAheadLimit</span> недійсна.</p>
+
+    <pre class='language-java line-numbers'><code>
+/* Note: The {@code readAheadLimit} for this class
+*  has no meaning.
+*
+* @since   1.1
+*/
+public void mark(int readAheadLimit) {
+   mark = pos;
+}
+    </code></pre>
+
+    <p>Ось приклад встановлення мітки в <span class="code"><span class="text-green">ByteArrayInputStream</span></span> за допомогою його метода <span class="code text-orange">mark()</span> та метода <span class="code text-orange">reset()</span>. Ми додамо до попереднього прикладу виклик методу <span class="code text-orange">mark()</span>:</p>
+
+    <pre class='language-java line-numbers'><code>
+public static void main(String[] args) {
+   byte[] buf = {65, 66, 67, 68, 69};
+   try (ByteArrayInputStream input = new ByteArrayInputStream(buf)) {
+       System.out.println("прочитали: " + input.read());
+       System.out.println("прочитали: " + input.read());
+       System.out.println("прочитали: " + input.read());
+       input.mark(5);
+
+       System.out.println("прочитали: " + input.read());
+       System.out.println("прочитали: " + input.read());
+
+       System.out.println("виклик методу reset()");
+       input.reset();
+
+       System.out.println("прочитали: " + input.read());
+       System.out.println("прочитали: " + input.read());
+
+   } catch (IOException e) {
+       e.printStackTrace();
+   }
+}
+    </code></pre>
+
+    <p>В результаті ми можемо побачити, що позиція поточного потоку вже змінилася.</p>
+
+    <p>Виведення програми:</p>
+
+    <div class="terminal">прочитали: 65<br />
+прочитали: 66<br />
+прочитали: 67<br />
+прочитали: 68<br />
+прочитали: 69<br />
+виклик методу reset()<br />
+прочитали: 68<br />
+прочитали: 69</div>
+
+    <h3>markSupported()</h3>
+
+    <p>Метод <span class="code text-orange">markSupported()</span> дозволяє перевірити доступ для встановлення мітки. Щоб
+    зрозуміти, на основі чого видається результат, перейдемо в метод:</p>
+
+    <pre class='language-java line-numbers'><code>
+/**
+* Tests if this {@code InputStream} supports mark/reset. The
+* {@code markSupported} method of {@code ByteArrayInputStream}
+* always returns {@code true}.
+*
+* @since   1.1
+*/
+public boolean markSupported() {
+   return true;
+}
+    </code></pre>
+
+    <p>Наш метод завжди повертає <span class="text-green"><em>true</em></span>. Перевіримо це на прикладі:</p>
+
+    <pre class='language-java line-numbers'><code>
+public static void main(String[] args) {
+   byte[] buf = {65, 66, 67, 68, 69};
+   try (ByteArrayInputStream bais = new ByteArrayInputStream(buf)) {
+       boolean isMarkSupported = bais.markSupported();
+
+       System.out.println("isMarkSupported: " + isMarkSupported);
+       System.out.println("прочитали: " + bais.read());
+       System.out.println("прочитали: " + bais.read());
+
+       bais.mark(1);
+       System.out.println("прочитали: " + bais.read());
+       isMarkSupported = bais.markSupported();
+       System.out.println("isMarkSupported: " + isMarkSupported);
+
+       bais.reset();
+       isMarkSupported = bais.markSupported();
+       System.out.println("isMarkSupported: " + isMarkSupported);
+   } catch (IOException e) {
+       e.printStackTrace();
+   }
+}
+    </code></pre>
+
+    <p>В результаті після виконання методу <span class="code text-orange">mark()</span> та методу <span
+        class="code text-orange">reset()</span> наш потік завжди готовий і може встановлювати відмітки:</p>
+
+    <p>Виведення програми:</p>
+
+    <div class="terminal">isMarkSupported: true<br />
+прочитали: 65<br />
+прочитали: 66<br />
+прочитали: 67<br />
+isMarkSupported: true<br />
+isMarkSupported: true</div>
+
+    <h3>close()</h3>
+
+    <p>Щоб зрозуміти роботу методу <span class="code text-orange">close</span>, ми також подивимося, що у нього всередині:</p>
+
+    <pre class='language-java line-numbers'><code>
+/**
+* Closing a {@code ByteArrayInputStream} has no effect. The methods in
+* this class can be called after the stream has been closed without
+* generating an {@code IOException}.
+*/
+public void close() throws IOException {
+}
+    </code></pre>
+
+    <p>У документації про метод close сказано: закриття <span class="code">
+        <span class="text-green">ByteArrayInputStream</span></span> не має жодного ефекту. Методи класу <span class="code">
+        <span class="text-green">ByteArrayInputStream</span></span> можна викликати після закриття потоку без створення
+    винятку <span class="text-red"><span class="text-bold">IOException</span></span>.</p>
+
+    <h2>Який висновок можемо зробити?</h2>
+
+    <p><span class="code"><span class="text-green">ByteArrayInputStream</span></span> потрібний нам, коли необхідно читати дані з масиву байт. Зазвичай є сенс використовувати цей клас не сам по собі, а в
+    комбінації з іншим кодом, який вміє працювати з <span class="code"><span class="text-green">InputStream</span></span>.</p>

@@ -1,0 +1,68 @@
+Обгортання винятку
+<p>----------------------------------------</p>
+Checked-винятки здавалися чимось класним у теорії та виявилися повним розчаруванням на практиці. Рішення – обгортання винятку
+<p>----------------------------------------</p>
+<h2>3. Обгортання винятків</h2>
+<p>Checked-винятки здавалися чимось класним у теорії та виявилися повним розчаруванням на практиці.</p>
+<p>Припустимо, у вас у проєкті є суперпопулярний метод, який викликається із сотень місць програми. І ви вирішили додати в
+нього новий <span class="term">checked-виняток</span>. І цілком може виявитися, що цей <span
+   class="term">checked-виняток</span> дійсно такий важливий і особливий, що тільки метод main() знає, що робити у разі
+захоплення цього винятку.</p>
+<p>Тому <span class="text-orange">вам доведеться додати <span class="term"><span class="text-orange">checked-винятки</span></span> в <code>throws</code> всіх методів,</span> які викликають ваш суперпопулярний метод. А також в <code>throws</code> всіх методів, які викликають ті методи. І в методи, які викликають ті методи.</p>
+<p>В результаті у вас в <code>throws</code> у половини методів проєкту буде доданий новий <span
+   class="term">checked-виняток</span>. А потім виявиться, що у вас проєкт покритий тестами, і тести не компілюються. І
+вам доведеться правити throws ще й у тестах.</p>
+<p><span class="text-green">А потім весь ваш код (зміни в сотнях файлів) повинні будуть рев’ювити інші програмісти.</span> І тут ми запитуємо себе: а заради чого ми вносили в проєкт дохреналіон змін? День(дні?) роботи, зламані тести, і все
+заради додавання одного <span class="term">checked-винятку</span>?</span>?</p>
+<p>Адже є ще проблеми з наслідуванням та перевизначенням методів. <span class="text-red">Проблем від <span class="term"><span class="text-red">checked-винятків</span></span> набагато більше, ніж користі.</span> Загалом зараз мало хто їх любить і мало хто використовує.</p>
+<p>Однак все ще багато кодів (зокрема код стандартних бібліотек Java) містять ці самі <span
+   class="term">checked-винятки</span>. І що ж із ними робити? Ігнорувати не можна, обробляти – невідомо як.</p>
+<p>Java-програмісти запропонували «загортати» <span class="term">checked-винятки</span> всередину
+<code>RuntimeException</code>. Інакше кажучи, перехоплювати всі <span class="term">checked-винятки</span>, створювати
+замість них <span class="term">unchecked-винятки</span> (наприклад, <code>RuntimeException</code>) і викидати вже їх.
+Виглядає все це приблизно так:</p>
+<div class="lesson-example lesson-example--center">
+<pre class="lecture-code lecture-code--present-sm language-java"><code>try
+{
+   <span class="text-green">код, де може виникнути checked-виняток</span>
+}
+catch(<span class="text-neon">Exception exp</span>)
+{
+   throw new <span class="text-viola">RuntimeException</span>(<span class="text-viola">exp</span>);
+}</code></pre>
+</div>
+<p>Не дуже красиве рішення, але нічого кримінального: виняток просто поклали всередину винятку
+<code>RuntimeException</code>.</p>
+<p>За бажання його можна звідти легко дістати. Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>try
+{
+   // код, де ми запакували checked виняток
+   // в RuntimeException
+}
+catch(<span class="text-viola">RuntimeException</span> <span class="code"><span class="text-viola">e</span></span>)
+{
+   Throwable <span class="code"><span class="text-green">cause</span></span> = <span class="code"><span class="text-viola">e</span></span>.getCause();
+   if (<span class="code"><span class="text-green">cause</span></span> instanceof <span class="text-neon">Exception</span>)
+   {
+      <span class="text-neon">Exception <span class="code">exp</span></span> = (<span class="text-neon">Exception</span>) <span class="code"><span class="text-green">cause</span></span>;
+      // тут код по обработке Exception
+   }
+}</code></pre>
+        </td>
+        <td><br><br><br><br><br><br><br>Отримуємо виняток, збережений всередині об’єкта <code>RuntimeException</code>. <code><span class="text-green">cause</span></code> може бути <code>null</code><br><br>
+            Визначаємо його тип та перетворюємо до змінної <span class="term">checked</span> -типу.
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task14.task1410"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task14.task1411"></div>

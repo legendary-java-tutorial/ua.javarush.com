@@ -1,0 +1,245 @@
+﻿Сучасна робота з часом
+<p>----------------------------------------</p>
+Клас LocalTime. Клас LocalTime створено для випадків, коли потрібно працювати лише з часом без дати. Наприклад, ви пишете програму-будильник. Час для вас важливий, а дата — ні. Клас LocalTime дуже схожий на клас LocalDate — його об'єкти теж не можна змінювати після створення. Отримання поточного
+<p>----------------------------------------</p>
+<h2>1. Клас <code>LocalTime</code></h2>
+<p>Клас <code><span class="text-neon">LocalTime</span></code> створено для випадків, коли потрібно працювати лише з часом без дати. Наприклад, ви пишете програму-будильник. Час для вас важливий, а дата — ні.</p>
+<p>Клас <code><span class="text-neon">LocalTime</span></code> дуже схожий на клас <code><span class="text-neon">LocalDate</span></code> — його об'єкти теж не можна змінювати після створення.</p>
+<p><strong>Отримання поточного часу</strong></p>
+<p>Для створення нового об'єкта класу <code><span class="text-neon">LocalTime</span></code> слід скористатися статичним методом <code><span class="text-red">now</span>()</code>. Приклад:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-neon">LocalTime</span> <span class="code text-user">time</span> = <span class="text-neon">LocalTime</span>.<span class="text-red">now</span>();</code></pre>
+</div>
+<p>де <code class="text-user">time</code> — це змінна класу <code><span class="text-neon">LocalTime</span></code>, а <code><span class="text-neon">LocalTime</span>.<span class="text-red">now</span>()</code> — виклик статичного методу <code><span class="text-red">now</span>()</code> для класу <code><span class="text-neon">LocalTime</span></code>.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">LocalTime</span> <span class="code text-user">time</span> = <span class="text-neon">LocalTime</span>.<span class="text-red">now</span>();
+System.out.println("Зараз = " + <span class="code text-user">time</span>);</code></pre>
+        </td>
+        <td><pre><code>
+Зараз = <span class="text-red">09:13:13.</span>642881600</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Після крапки вказується поточне значення наносекунд.</p>
+<h2>2. Отримання заданого часу</h2>
+<p>Щоб отримати заданий час, слід скористатися статичним методом <code><span class="text-red">of</span>()</code>. Приклад:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm language-java"><code><span class="text-neon">LocalTime</span> <span class="code text-user">time</span> = LocalTime.<span class="text-red">of</span>(<span class="text-user">години</span>, <span class="text-user">хвилини</span>, <span class="text-user">секунди</span>, <span class="text-user">наносекунди</span>);</code></pre>
+</div>
+<p>в який можна передати години, хвилини, секунди й наносекунди.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">LocalTime</span> <span class="code text-user">time</span> = <span class="text-neon">LocalTime</span>.<span class="text-red">of(</span>12, 15, 0, <span class="text-green">100</span>);
+System.out.println("Зараз = " + <span class="code text-user">time</span>);</code></pre>
+        </td>
+        <td>
+            <pre><code>Зараз = <span class="text-red">12:15:00</span>.000000<span class="text-green">100</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Є, до речі, ще дві модифікації цього методу:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm language-java"><code><span class="text-neon">LocalTime</span> <span class="code text-user">time</span> = LocalTime.<span class="text-red">of</span>(<span class="text-user">години</span>, <span class="text-user">хвилини</span>, <span class="text-user">секунди</span>);</code></pre>
+</div>
+<p class="text-center">і</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm language-java"><code><span class="text-neon">LocalTime</span> <span class="code text-user">time</span> = LocalTime.<span class="text-red">of</span>(<span class="text-user">години</span>, <span class="text-user">хвилини</span>);</code></pre>
+</div>
+<p>Тож можете користуватися тим, яким вам зручніше.</p>
+<p><strong>Отримання часу за номером секунди</strong></p>
+<p>Також можна отримати час за номером секунди в добі: для цього є спеціальний статичний метод <code><span class="text-red">ofSecondOfDay</span>()</code>:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm language-java"><code><span class="text-neon">LocalTime</span> <span class="code text-user">time</span> = <span class="text-neon">LocalTime</span>.<span class="text-red">ofSecondOfDay</span>(<span class="text-user">секунди</span>);</code></pre>
+</div>
+<p>де <strong>секунди</strong> — це кількість секунд, які минули від початку доби.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">LocalTime</span> <span class="code text-user">time</span> = <span class="text-neon">LocalTime</span>.<span class="text-red">ofSecondOfDay</span>(<span class="text-user">10000</span>);
+System.out.println(<span class="code text-user">time</span>);</code></pre>
+        </td>
+        <td><pre><code>
+02:46:40</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Так, 10 тисяч секунд — це трохи менше трьох годин. Усе правильно.</p>
+<h2>3. Отримання фрагментів часу</h2>
+<p>Для того щоб з об'єкта <code><span class="text-neon">LocalTime</span></code> отримати значення певного елемента часу, використовують спеціальні методи:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Метод</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int getHour()</code></pre>
+        </td>
+        <td>Повертає години</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int getMinute()</code></pre>
+        </td>
+        <td>Повертає хвилини</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int getSecond()</code></pre>
+        </td>
+        <td>Повертає секунди</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int getNano()</code></pre>
+        </td>
+        <td>Повертає наносекунди</td>
+    </tr>
+    </tbody>
+</table>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">LocalTime</span> <span class="code text-user">now</span> = <span class="text-neon">LocalTime</span>.<span class="text-red">now</span>();
+System.out.println(<span class="code text-user">now</span>.getHour());
+System.out.println(<span class="code text-user">now</span>.getMinute());
+System.out.println(<span class="code text-user">now</span>.getSecond());
+System.out.println(<span class="code text-user">now</span>.getNano());</code></pre>
+        </td>
+        <td>
+                <pre><code>
+2
+46
+40
+0</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<h2>4. Змінення часу в об'єкті класу <code>LocalTime</code></h2>
+<p>Клас <code><span class="text-neon">LocalTime</span></code> також містить методи, які дають змогу працювати з часом. Ці методи реалізовано за аналогією до методів класу <code><span class="text-neon">LocalDate</span></code>: кожен із них не змінює наявний об'єкт <code><span class="text-neon">LocalTime</span></code>, а повертає новий із потрібними даними.</p>
+<p>Отакі методи має клас <code><span class="text-neon">LocalTime</span></code>:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Метод</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">plusHours</span>(int hours)</code></pre>
+        </td>
+        <td>Додає години</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">plusMinutes</span>(int minutes)</code></pre>
+        </td>
+        <td>Додає хвилини</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">plusSeconds</span>(int seconds)</code></pre>
+        </td>
+        <td>Додає секунди</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">plusNanos</span>(int nanos)</code></pre>
+        </td>
+        <td>Додає наносекунди</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">minusHours</span>(int hours)</code></pre>
+        </td>
+        <td>Віднімає години</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">minusMinutes</span>(int minutes)</code></pre>
+        </td>
+        <td>Віднімає хвилини</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">minusSeconds</span>(int seconds)</code></pre>
+        </td>
+        <td>Віднімає секунди</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">minusNanos</span>(int nanos)</code></pre>
+        </td>
+        <td>Віднімає наносекунди</td>
+    </tr>
+    </tbody>
+</table>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>LocalTime time = LocalTime.now();
+LocalTime <span class="text-green">time2</span> = time.<span class="text-green">plusHours</span>(2);
+LocalTime <span class="text-red">time3</span> = time.<span class="text-red">minusMinutes</span>(40);
+LocalTime <span class="text-user">time4</span> = time.<span class="text-user">plusSeconds</span>(3600);
+
+System.out.println(time);
+System.out.println(<span class="text-green">time2</span>);
+System.out.println(<span class="text-red">time3</span>);
+System.out.println(<span class="text-user">time4</span>);</code></pre>
+        </td>
+        <td>
+                <pre><code>
+
+
+
+
+10:33:55.978012200
+<span class="text-green">12</span>:33:55.978012200
+<span class="text-red">09:53</span>:55.978012200
+<span class="text-user">11:33:55</span>.978012200</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Зверніть увагу, що кожного разу ми отримуємо новий час відносно першого об'єкта <code>time</code>. Якщо додати до часу <code>3600 секунд</code>, це буде рівно <code>1 година</code>.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task16.task1610"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task16.task1611"></div>

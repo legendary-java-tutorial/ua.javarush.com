@@ -1,0 +1,265 @@
+﻿Статичні методи
+<p>----------------------------------------</p>
+Статичні методи. Окрім статичних змінних, у класах можуть також бути статичні методи. Звичайні методи прив'язані до об'єктів (екземплярів) класу й можуть звертатися до звичайних змінних класу (а також до статичних змінних і методів). Натомість статичні методи прив'язані до статичного об'єкта
+<p>----------------------------------------</p>
+<h2>1. Статичні методи</h2>
+<p>Окрім статичних змінних, у класах можуть також бути статичні методи.</p>
+<p>Звичайні методи прив'язані до об'єктів (екземплярів) класу й можуть звертатися до звичайних змінних класу (а також <span class="text-red">до статичних змінних і методів</span>). Натомість статичні методи прив'язані до статичного об'єкта класу й можуть звертатися тільки до статичних змінних і/або інших статичних методів класу.</p>
+<p>Щоб викликати звичайний метод класу, <span class="text-green">спочатку потрібно створити об'єкт цього класу</span>, а тільки потім можна викликати метод для створеного об'єкта. <span class="text-red">Викликати звичайний метод не в об'єкті, а в класі не можна.</span></p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th><span class="text-red">Викликати нестатичний метод у класі не можна!</span></th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public class <span class="text-neon">DataInfo</span>
+{
+   public int getValue()
+   {
+      return 100;
+   }
+}
+
+public class Solution
+{
+   public static void main(String[] args)
+   {
+      System.out.println(<span class="text-neon">DataInfo</span>.getValue()); // Тут буде помилка!
+   }
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>А для виклику статичного методу досить наявності статичного об'єкта класу (який завжди існує після завантаження класу в пам'ять). Саме тому метод main () — статичний. Він прив'язаний до статичного об'єкта класу, і для його виклику не потрібно створювати ніяких об'єктів.</p>
+<p>Щоб оголосити метод статичним, потрібно перед заголовком методу написати ключове слово static. Загальний вигляд цієї конструкції такий:</p>
+<div class="lesson-example lesson-example--center">
+<pre class="lecture-code lecture-code--present"><code><span class="text-red">static</span> <span class="text-viola">тип</span> <span class="text-user">ім'я</span>(<span class="text-orange">параметри</span>)
+{
+   <span class="code code--demo text-green">код методу</span>
+}</code></pre>
+</div>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public class <span class="text-neon">Solution</span>
+{
+   public <span class="text-red">static</span> void <span class="code text-user">main</span>(String args[])
+   {
+      <span class="code text-user">test</span>();
+   }
+
+   public <span class="text-red">static</span> void <span class="code text-user">test</span>()
+   {
+      int d = <span class="text-user">2</span>/<span class="text-user">0</span>;
+   }
+}</code></pre>
+        </td>
+        <td>
+            <br/><br/>Метод <code>main</code> викликається Java-машиною за допомогою команди <code>Solution.main()</code>; <br/><br/><br/><br/>Виклик статичного методу <code>test()</code> здійснюється у статичному методі <code>main()</code>.
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Щоб викликати статичний метод з іншого класу, потрібно перед ім'ям статичного методу вказати ім'я класу. Загальний вигляд цієї конструкції такий:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-viola">Тип</span> <span class="text-user">ім'я</span> = <span class="text-neon">Ім'яКласу</span>.<span class="text-red">ім'яМетоду</span>(<span class="text-orange">параметри</span>)</code></pre>
+</div>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Статичний метод</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int x = <span class="text-neon">Math</span>.<span class="text-red">min</span>(a, b);</code></pre>
+        </td>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">min</span>(int a, int b)</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-neon">Thread</span>.<span class="text-red">sleep</span>(200);</code></pre>
+        </td>
+        <td>
+            <pre class="language-java"><code>void <span class="text-red">sleep</span>(long ms)</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Path path = <span class="text-neon">Path</span>.<span class="text-red">of</span>("c:\\readme.txt");</code></pre>
+        </td>
+        <td>
+            <pre class="language-java"><code>Path <span class="text-red">of</span>(String str)</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task11.task1104"></div>
+<hr>
+<h2>2. Статичні та звичайні методи</h2>
+<p>У чому ж відмінність статичних методів від звичайних?</p>
+<p>Звичайний метод має прив'язку до об'єкта — екземпляра класу, а статичний метод такої прив'язки не має. Звичайний метод може звертатися до змінних у своєму екземплярі класу, а статичний — ні: у нього просто немає жодного екземпляра класу, пов'язаного з ним.</p>
+<p>Відмінності між цими двома типами методів показано в таблиці:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Характеристика</th>
+        <th>Звичайний метод</th>
+        <th>Статичний метод</th>
+    </tr>
+    <tr>
+        <td>Є зв'язок з екземпляром класу</td>
+        <td class="text-center"><strong><span class="text-green">Так</span></strong></td>
+        <td class="text-center"><strong><span class="text-red">Ні</span></strong></td>
+    </tr>
+    <tr>
+        <td>Може викликати звичайні методи класу</td>
+        <td class="text-center"><strong><span class="text-green">Так</span></strong></td>
+        <td class="text-center"><strong><span class="text-red">Ні</span></strong></td>
+    </tr>
+    <tr>
+        <td>Може викликати статичні методи класу</td>
+        <td class="text-center"><strong><span class="text-green">Так</span></strong></td>
+        <td class="text-center"><strong><span class="text-green">Так</span></strong></td>
+    </tr>
+    <tr class="row-separator">
+        <td colspan="3"></td>
+    </tr>
+    <tr>
+        <td>Може звертатися до звичайних змінних класу</td>
+        <td class="text-center"><strong><span class="text-green">Так</span></strong></td>
+        <td class="text-center"><strong><span class="text-red">Ні</span></strong></td>
+    </tr>
+    <tr>
+        <td>Може звертатися до статичних змінних класу</td>
+        <td class="text-center"><strong><span class="text-green">Так</span></strong></td>
+        <td class="text-center"><strong><span class="text-green">Так</span></strong></td>
+    </tr>
+    <tr class="row-separator">
+        <td colspan="3"></td>
+    </tr>
+    <tr>
+        <td>Можна викликати для об'єкта</td>
+        <td class="text-center"><strong><span class="text-green">Так</span></strong></td>
+        <td class="text-center"><strong><span class="text-green">Так</span></strong></td>
+    </tr>
+    <tr>
+        <td>Можна викликати для класу</td>
+        <td class="text-center"><strong><span class="text-red">Ні</span></strong></td>
+        <td class="text-center"><strong><span class="text-green">Так</span></strong></td>
+    </tr>
+    </tbody>
+</table>
+<p>Навіщо потрібні такі методи, якщо вони настільки обмежені? Річ у тім, що такий підхід теж має свої переваги.</p>
+<p>По-перше, щоб звернутися до статичних методів і змінних, не треба передавати ніяких посилань на об'єкт.</p>
+<p>По-друге, часом є потреба мати тільки один екземпляр змінної, наприклад, такої змінної як <code>System.out</code> (<span class="text-orange">статична змінна out класу System</span>).</p>
+<p>І, по-третє, іноді потрібно викликати метод раніше, ніж з'явиться можливість створювати якісь об'єкти. Це, наприклад, виклик методу main (), з якого починається виконання програми: Java-машина викликає його ще до створення екземпляра класу.</p>
+<p><strong>Є зв'язок з екземпляром класу</strong></p>
+<p>Під час виклику звичайного методу в нього передається прихований параметр — <span class="text-green">об'єкт, для якого його викликано</span>. <span class="text-orange">Цей параметр має ім'я <code>this</code>.</span> <span class="text-viola">Саме цей прихований параметр — посилання на об'єкт, для якого викликано метод, — і відрізняє звичайні методи від статичних.</span></p>
+<p>У статичних методів такого прихованого параметра немає, тому всередині статичних методів не можна користуватися ключовим словом <code>this</code>. Крім того, зі статичного методу не можна викликати нестатичний: посилання на екземпляр класу просто немає звідки взяти.</p>
+<p><strong>Може викликати звичайні методи класу</strong></p>
+<p>У звичайному методі класу завжди є прихований параметр — <code><span class="text-red">this</span></code>, тобто посилання на об'єкт класу, чий метод було викликано. Щоразу, коли ви викликаєте звичайний метод всередині іншого звичайного методу, для цього виклику використовується прихований параметр <code>this</code>. Приклад</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Як це працює</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="code text-user">min</span>(int a, int b)
+{
+   return a &lt; b ? a : b;
+}
+
+int <span class="code text-user">min</span>(int a, int b, int c)
+{
+   int t = <span class="code text-user">min</span>(a, b);
+   return <span class="code text-user">min</span>(t, c);
+}</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>int <span class="code text-user">min</span>(int a, int b)
+{
+   return a &lt; b ? a : b;
+}
+
+int <span class="code text-user">min</span>(int a, int b, int c)
+{
+   int t = <span class="text-red">this</span>.<span class="code text-user">min</span>(a, b);
+   return <span class="text-red">this</span>.<span class="code text-user">min</span>(t, c);
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Саме тому неможливо викликати звичайний метод зі статичного. Усередині статичного методу просто немає прихованої змінної з ім'ям <code>this</code>.</p>
+<p>Можна уявити іншу ситуацію: у програмі ще не створено жодного об'єкта нашого класу. Чи можна викликати статичний метод класу? Так. А чи зможе цей статичний метод викликати звичайний метод?</p>
+<p>І для якого об'єкта він його викличе? Адже немає ще жодного екземпляра нашого класу!</p>
+<p><strong>Може викликати статичні методи класу</strong></p>
+<p>Статичні методи можна викликати звідки завгодно — з будь-якого місця програми. Тобто їх можна викликати як зі статичних методів, так і зі звичайних. Жодних обмежень тут немає.</p>
+<p><strong>Може звертатися до звичайних змінних класу</strong></p>
+<p>Зі звичайного методу можна звертатися до звичайних змінних класу, тому що в цьому разі відбудеться звернення до змінних екземпляра класу, який легко отримати з прихованого параметра <code>this</code>.</p>
+<p>Статичний метод не знає, з якого саме екземпляра класу йому потрібно брати значення звичайних змінних. Може легко статися така ситуація, коли статичний метод викликано, а в програмі ще не створено жодного екземпляра класу.</p>
+<p><span class="text-red">Тому статичні методи не можуть звертатися до звичайних змінних класу.</span></p>
+<p><span>Статичний метод викликає звичайний метод, от тільки для якого об'єкта його слід викликати?</span></p>
+<img data-max-width="1024" data-id="853b30f6-36ee-43f3-aef2-d7915ba60354" src="https://cdn.javarush.com/images/article/853b30f6-36ee-43f3-aef2-d7915ba60354/1024.jpeg" alt="">
+<p><span class="text-red">Невідомо</span>! От тому й <span class="text-red">не можна</span> викликати звичайний метод зі статичного, не вказуючи посилання на об'єкт!</p>
+<p><strong>Може звертатися до статичних змінних класу</strong></p>
+<p>Ситуація зі зверненням до статичних змінних така сама, як і зі зверненнями до статичних методів. До статичних змінних можна звертатися з будь-якого місця в програмі. А це означає, що можна звертатися зі статичних і звичайних методів.</p>
+<p><strong>Можна викликати для об'єкта</strong></p>
+<p>І статичні, і звичайні методи можна викликати для об'єкта. Звичайний метод можна тому, що тільки для об'єкта його й можна викликати. Статичний метод теж можна викликати для об'єкта: у цьому разі <span class="text-green">компілятор сам визначить тип змінної та викличе статичний метод за її типом:</span></p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Як його бачить компілятор</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">Thread</span> th = <span class="text-neon">Thread</span>.current();
+th.<span class="text-red">sleep</span>(1000);</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code><span class="text-neon">Thread</span> th = <span class="text-neon">Thread</span>.current();
+<span class="text-neon">Thread</span>.<span class="text-red">sleep</span>(1000);</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">Integer</span> i = 1;
+int x = i.<span class="text-red">parseInt</span>("12");</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code><span class="text-neon">Integer</span> i = 1;
+int x = <span class="text-neon">Integer</span>.<span class="text-red">parseInt</span>("12");</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>"".<span class="text-red">valueOf</span>(12);</code></pre>
+        </td>
+        <td>
+            <pre class="language-java"><code><span class="text-neon">String</span>.<span class="text-red">valueOf</span>(12);</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Можна викликати для класу</strong></p>
+<p>Для класу можна викликати тільки статичний метод, а для виклику звичайного методу потрібне посилання на екземпляр класу. Тому не можна викликати звичайний метод за допомогою конструкції формату <code><span class="text-neon">Ім'яКласу</span>.<span class="text-user">ім'я методу</span>(<span class="text-orange">параметри</span>)</code></p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task11.task1105"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task11.task1106"></div>

@@ -1,0 +1,166 @@
+﻿Результат функції
+<p>----------------------------------------</p>
+Оператор return. Думаєте, ви вже вивчили все про методи в Java? Де ж пак, ви ще й половини не знаєте. return; Почнімо з чогось простого. Наприклад, у Java є команда (оператор) return, який дає змогу миттєво завершити виконання методу, в якому його викликано. Зовнішній вигляд команди: І все: лише
+<p>----------------------------------------</p>
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="f55df62c-719d-49b5-b8a7-15349fb74d35" src="https://cdn.javarush.com/images/article/f55df62c-719d-49b5-b8a7-15349fb74d35/original.png" alt=""/>
+        </div>
+        <div class="lesson-carousel__item">
+            <img data-id="5770f57f-e4d9-4457-b77d-93f231cca0fc" src="https://cdn.javarush.com/images/article/5770f57f-e4d9-4457-b77d-93f231cca0fc/original.png" alt=""/>
+        </div>
+    </div>
+</div>
+<hr>
+<h2>1. Оператор <code>return</code></h2>
+<p>Думаєте, ви вже вивчили все про методи в Java? Де ж пак, ви ще й половини не знаєте.</p>
+<p>Почнімо з чогось простого. Наприклад, у Java є команда (оператор) <strong>return</strong>, який дає змогу миттєво завершити виконання методу, в якому його викликано. Зовнішній вигляд команди:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java text-center"><code>return;</code></pre>
+</div>
+<p>І все: лише одне слово <code>return</code> і крапка з комою. Щойно програма виконає цю команду, робота поточного методу відразу завершиться, і продовжиться робота методу, звідки його було викликано.</p>
+<p>Якщо <code>return</code> викликати в методі <code>main</code>, метод <code>main</code> на цьому завершиться, а разом із ним — вся програма.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <td>
+<pre class="language-java"><code>class Solution
+{
+&nbsp; &nbsp;public static void <span class="text-red">fill</span>(int[] <span class="text-neon">data</span>, int <span class="text-green">from</span>, int <span class="text-green">to</span>, int <span class="text-user">value</span>)
+&nbsp; &nbsp;{
+
+
+&nbsp; &nbsp; &nbsp;if (<span class="text-green">from</span> &lt; 0 || <span class="text-green">to</span> &gt; <span class="text-neon">data</span>.length)
+&nbsp; &nbsp; &nbsp; &nbsp;return;
+
+&nbsp; &nbsp; &nbsp;for (int i = <span class="text-green">from</span>; i &lt; <span class="text-green">to</span>; i++)
+&nbsp; &nbsp; &nbsp;{
+&nbsp; &nbsp; &nbsp;  <span class="text-neon">data</span>[i] = <span class="text-user">value</span>;
+&nbsp; &nbsp; &nbsp;}
+&nbsp; &nbsp;}
+
+&nbsp; &nbsp;<span>public static void main(String[] args)
+</span><span>&nbsp; &nbsp;{
+&nbsp; &nbsp; &nbsp;</span><span>int[] months = {1, 2, 3, 4, 5, 6, 7, 8 ,9, 10, 11, 12};
+&nbsp; &nbsp;  <span class="text-red">fill</span></span><span>(months, 2, 10, 8);
+&nbsp; &nbsp;</span><span>}
+</span><span>}</span></code></pre>
+        </td>
+        <td style="min-width: 300px"><br/><br/>Метод <code><span class="text-red">fill</span></code>&nbsp;заповнює частину переданого масиву значенням <code><span class="text-user">value</span></code>.<br/> Частина масиву визначається індексами <code><span class="text-green">from</span></code>&nbsp;і <code><span class="text-green">to</span></code>.<br/> Якщо <code><span class="text-green">from</span></code>&nbsp;менший за <code>0</code> або <code><span class="text-green">to</span></code>&nbsp;більший за довжину масиву, метод відразу завершується.</td>
+    </tr>
+    </tbody>
+</table>
+<p>У наведеній вище програмі є метод <code><span class="text-red">fill</span></code>, який заповнює переданий у нього масив значенням <code><span class="text-user">value</span></code>, причому заповнює не весь масив, а його частину, задану індексами <code><span class="text-green">from</span></code> і <code><span class="text-green">to</span></code>.</p>
+<p>На початку методу <code><span class="text-red">fill</span></code>&nbsp;виконується перевірка, чи коректні значення в нього передано. Якщо індекс <code><span class="text-green">from</span></code> менший за 0 або індекс <code><span class="text-green">to</span></code> більший за довжину масиву, то метод <code><span class="text-red">fill</span></code>&nbsp;на цьому завершується (викликає команду <code>return</code>).</p>
+<p>Корисна річ, цей оператор <code>return</code>: він є майже в кожному методі в Java, і от чому.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task06.task0607"></div>
+<hr>
+<h2>2. Функції з результатом <code>void</code></h2>
+<p>Пам'ятаєте, ми колись з'ясували, що є команди, а є <span class="text-user">вирази</span>? І вираз, на відміну від команди, має значення, яке можна десь використовувати.</p>
+<p>Отож у Java методи можуть мати <span class="text-viola">значення</span>. І це дуже добра новина: методи можуть не просто щось робити залежно від параметрів, але й, приміром, обчислити що-небудь і <strong>повернути результат обчислення</strong>.</p>
+<p>Ви, до речі, з такими методами вже стикалися:</p>
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-viola">double</span> delta = Math.<span class="text-red">abs</span>(d1 - d2);</code></pre>
+        </td>
+        <td>Метод <code><span class="text-red">abs</span>()</code> повертає значення типу double</td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Scanner <span class="text-neon">console</span> = new Scanner(System.in);
+<span class="text-viola">int</span> x = <span class="text-neon">console</span>.<span class="text-red">nextInt</span>();</code></pre>
+        </td>
+        <td><br/>Метод <code><span class="text-red">nextInt</span>()</code> повертає значення типу <code>int</code></td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String str = "Привіт";
+<span class="text-viola">String</span> s2 = str.<span class="text-red">toUpperCase</span>();</code></pre>
+        </td>
+        <td><br/>Метод <code><span class="text-red">toUpperCase</span>()</code> повертає значення типу <code>String</code></td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int[] data = {1, 4, 5, 6, 7, 8, 11};
+<span class="text-viola">int</span>[] array = Arrays.<span class="text-red">copyOf</span>(data, 4);</code></pre>
+        </td>
+        <td><br/>Метод <code><span class="text-red">copyOf</span>()</code> повертає значення типу <code>int[]</code></td>
+    </tr>
+    </tbody>
+</table>
+<p>Кожен метод може повернути лише одне значення одного наперед заданого типу. Тип повернення значення визначається під час оголошення методу:</p>
+<div class="lesson-example lesson-example--center">
+<pre class="lecture-code lecture-code--present language-java"><code>public static <span class="text-viola">тип</span> <span class="text-red">ім'я</span>(<span class="text-neon">параметри</span>)
+{
+&nbsp;  <span class="text-green">код методу</span>
+}</code></pre>
+</div>
+<p>де <code><span class="text-red">ім'я</span></code>&nbsp;— це ім'я методу, <code><span class="text-neon">параметри</span></code>&nbsp;— список параметрів методу, а <code><span class="text-viola">тип</span></code>&nbsp;— тип результату, що повертається методом.</p>
+<p>Для методів, які нічого не повертають, є спеціальний тип-заглушка — <code>void</code>.</p>
+<p>Пишете свій метод і не хочете нічого повертати в метод, звідки здійснюється виклик? Просто оголосіть тип методу <code>void</code>, і проблему вирішено. Таких методів у Java теж багато.</p>
+<hr>
+<h2>3. Повернення результату</h2>
+<p>Як оголошувати метод із результатом обчислення/роботи ми щойно розібралися, а як же цей результат повернути з методу?</p>
+<p>Для цього нам знову стане в пригоді оператор <code>return</code>. Передавання результату з методу матиме такий вигляд:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java text-center"><code>return <span class="text-user">значення</span>;</code></pre>
+</div>
+<p>де <code><span class="text-orange">return</span></code> — це оператор, який негайно завершить роботу методу. А <code><span class="text-user">значення</span></code>&nbsp;— це значення, що метод має повернути як результат у той метод, звідки відбувся виклик. Тип <code><span class="text-user">значення</span></code> має збігатися з <code><span class="text-viola">типом</span></code>, зазначеним під час оголошення методу.</p>
+<p>Приклад 1. Метод знаходить менше з двох чисел:</p>
+<table>
+    <tbody>
+    <tr>
+        <td>
+<pre class="language-java"><code>int min(int <span class="text-neon">a</span>, int <span class="text-neon">b</span>)
+{
+&nbsp; &nbsp;if (<span class="text-neon">a</span> &lt; <span class="text-neon">b</span>)
+&nbsp; &nbsp; &nbsp;return <span class="text-neon">a</span>;
+&nbsp; &nbsp;else
+&nbsp; &nbsp; &nbsp;return <span class="text-neon">b</span>;
+}</code></pre>
+        </td>
+        <td>Метод повертає менше з двох чисел.<br/><br/> Якщо <code>a &lt; b</code><br/> повернути <code>a</code><br/> Інакше —<br/> повернути <code>b</code></td>
+    </tr>
+    </tbody>
+</table>
+<p>Приклад 2. Метод дублює переданий у нього рядок <code>n</code> разів:</p>
+<table>
+    <tbody>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="text-red">multiple</span>(String <span class="text-neon">str</span>, int <span class="text-user">times</span>)
+{
+&nbsp; &nbsp;String <span class="text-green">result</span> = <span class="text-green">""</span>;
+&nbsp; &nbsp;for (int i = 0; i &lt; <span class="text-user">times</span>; i++)
+&nbsp; &nbsp;  <span class="text-green">result</span> = <span class="text-green">result</span> + " "+ <span class="text-neon">str</span>;
+&nbsp; &nbsp;return <span class="text-green">result</span>;
+}</code></pre>
+        </td>
+        <td>Метод отримує два параметри — рядок і кількість його повторень.<br/> Створюється порожній рядок для майбутнього результату.<br/><br/> У циклі <code><span class="text-user">times</span></code> разів<br/> до рядка <code><span class="text-green">result</span></code> додаються пробіл і рядок <code><span class="text-neon">str</span></code>.<br/> Як результат метод повертає змінну <code><span class="text-green">result</span></code>.</td>
+    </tr>
+    </tbody>
+</table>
+<p>Приклад 3: Метод знаходить більше з двох чисел за допомогою тернарного оператора:</p>
+<table>
+    <tbody>
+    <tr>
+        <td>
+<pre class="language-java"><code>int max(int <span class="text-neon">a</span>, int <span class="text-neon">b</span>)
+{
+&nbsp; &nbsp;return (<span class="text-neon">a</span> &gt; <span class="text-neon">b</span> ? <span class="text-neon">a</span> : <span class="text-neon">b</span>);
+}</code></pre>
+        </td>
+        <td>
+            Метод повертає більше з двох чисел.<br/><br/> Повернути (якщо <code>a &gt; b</code>, то <code>a</code>, інакше — <code>b</code>)
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task06.task0608"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task06.task0609"></div>

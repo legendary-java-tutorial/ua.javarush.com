@@ -1,0 +1,125 @@
+Java Collections Framework
+<p>----------------------------------------</p>
+Практично у всіх програмах виникає потреба зберігати набір будь-яких даних. Це можуть бути рядки та числа, об’єкти тощо. Для цих цілей дуже доречними є масиви. Але масиви мають деякі обмеження...
+<p>----------------------------------------</p>
+<h2>Введення</h2>
+
+    <p>Практично у всіх програмах виникає потреба зберігати набір будь-яких даних. Це можуть бути рядки та числа, об’єкти тощо.
+    Для цих цілей дуже доречними є масиви. Але масиви мають деякі обмеження. Наприклад, фіксований розмір, відсутність
+    можливості видаляти елементи, вставляти елементи всередину. Для обходу цього та інших обмежень створили колекції. У всіх
+    типах колекцій (а їх багато, як ми побачимо далі протягом цієї лекції) є можливість динамічно змінювати свій розмір.
+    Деякі типи колекцій можуть зберігати впорядковані елементи та автоматично впорядковувати нові елементи в міру їхнього
+    додавання.</p>
+
+    <p>У цій лекції ми ознайомимося з ієрархією класів базових колекцій <span class="text-bold">Java Collections
+        Framework</span>. Ще існують різні альтернативні бібліотеки, які розширюють можливості стандартної <span
+        class="text-bold">Java Collections Framework</span>. Напопулярніша з них — <span class="text-bold">Guava</span>
+    (Google Collections Library).</p>
+
+    <img data-max-width="1024" data-id="7dbef28e-e19b-423a-bc20-8892d85e2917" src="https://cdn.javarush.com/images/article/7dbef28e-e19b-423a-bc20-8892d85e2917/original.png" alt="">
+
+    <p style="margin-top:-20px;"><center><small><em>* На схемі представлені далеко не всі інтерфейси та класи. Деякі пропущені для простоти розуміння</em></small></center></p>
+
+    <h2>Основні інтерфейси</h2>
+
+    <p>На схемі видно, що є два основні інтерфейси, від яких реалізуються інші класи та інтерфейси колекцій.</p>
+
+    <p>Давай розглянемо ці інтерфейси:</p>
+
+    <ol>
+        <li><p><span class="text-neon"><span class="text-bold">Collection</span></span> – звичайна колекція, що містить набір окремих
+        елементів (об’єктів). У цій колекції є основні методи роботи з елементами: вставлення (<span
+            class="code text-orange">add</span>, <span class="code text-orange">addAll</span>), видалення (<span
+            class="code text-orange">remove</span>, <span class="code text-orange">removeAll</span>, <span
+            class="code text-orange">clear</span>), пошук (<span class="code text-orange">contains</span>, <span
+            class="code text-orange">containsAll</span>), перевірка на порожнечу колекції (<span
+            class="code text-orange">isEmpty</span>) і розмір (<span class="code text-orange">size</span>).</p></li>
+
+        <li><p><span class="text-neon"><span class="text-bold">Map</span></span> — колекція, структура якої представляє пари
+        «ключ-значення». Причому в межах однієї <span class="text-neon"><span class="text-bold">Map</span></span> кожен ключ є
+        унікальним: немає двох однакових за значенням ключів. Також цю колекцію іноді називають словником (dictionary). <span
+            class="text-neon"><span class="text-bold">Map</span></span> — це окремий інтерфейс. Він не реалізує інтерфейс <span
+            class="text-neon"><span class="text-bold"><em>Collection</em></span></span>, але входить до <span
+            class="text-bold">Java Collections Framework</span>.</p></li>
+    </ol>
+
+        <p>Основні методи для роботи з елементами <span class="text-neon"><span class="text-bold">Map</span></span>:</p>
+
+    <ul>
+        <li><p>вставлення (<span class="code text-orange">put</span>, <span class="code text-orange">putAll</span>) </p></li>
+        <li><p>отримання (<span class="code text-orange">get</span>, <span class="code text-orange">keySet</span>, <span class="code text-orange">values</span>, <span class="code text-orange">entrySet</span>) </p></li>
+        <li><p>видалення (<span class="code text-orange">remove</span>, <span class="code text-orange">clear</span>) </p></li>
+        <li><p>пошук (<span class="code text-orange">containsKey</span>, <span class="code text-orange">containsValue</span>) </p></li>
+        <li><p>перевірка на порожнечу колекції (<span class="code text-orange">isEmpty</span>) </p></li>
+        <li><p>розмір (<span class="code text-orange">size</span>)</p></li>
+    </ul>
+
+    <p>А тепер давай докладніше поговоримо про кожний із них.</p>
+
+    <h3>Інтерфейс Collection</h3>
+
+    <p>Інтерфейс <span class="text-neon"><span class="text-bold"><em>Collection</em></span></span> розширяє інтерфейс <span
+        class="text-neon"><span class="text-bold"><em>Iterable</em></span></span>, а цей інтерфейс має єдиний метод <span
+        class="code text-orange">iterator()</span>. Для нас це означає, що будь-яка колекція, яка успадковується від <span
+        class="text-neon"><span class="text-bold"><em>Iterable</em></span></span>, вмітиме повертати ітератор.</p>
+
+    <p><span class="text-bold">Ітератор</span> – це спеціальний об’єкт, за допомогою якого можна отримати доступ до елементів будь-якої колекції без врахування
+    особливостей її реалізації.</p>
+
+    <p>З рисунка видно, що від інтерфейсу <span class="text-neon"><span class="text-bold"><em>Collection</em></span></span>
+    успадковується 3 інтерфейси: <span class="text-neon"><span class="text-bold"><em>List</em></span></span>, <span
+        class="text-neon"><span class="text-bold"><em>Queue</em></span></span> і <span class="text-neon"><span
+            class="text-bold"><em>Set</em></span></span>. Зараз стисло розглянемо кожний із них.</p>
+
+    <p><span class="text-neon"><span class="text-bold"><em>List</em></span></span> — це впорядкована колекція, яка допускає
+    дублікати серед значень. Також можна зустріти й інші назви — послідовність (sequence), список. Особливістю <span
+        class="text-neon"><span class="text-bold"><em>List</em></span></span> є те, що елементи пронумеровані і до них можна
+    звертатися за номером (індексом).</p>
+
+    <p><span class="text-neon"><span class="text-bold"><em>Queue</em></span></span> — перекладається з англійської як
+    <em>черга</em>. Правильна вимова: <span class="text-neon"><span class="text-bold"><em>Queue</em></span></span> — К’Ю. В
+    Queue елементи зберігаються в порядку додавання їх до черги.</p>
+
+    <p><span class="text-neon"><span class="text-bold"><em>Set</em></span></span> – на відміну від списку, описує
+    невпорядковану колекцію, в якій немає повторів елементів. У <span class="text-neon"><span
+            class="text-bold"><em>Set</em></span></span> є відповідність із поняттям у математиці — множина (<em>set</em>).</p>
+    
+    <h3>Реалізація інтерфейсу Map</h3>
+
+    <p>В інтерфейсі <span class="text-neon"><span class="text-bold"><em>Map</em></span></span> ми можемо бачити співвідношення
+    унікальних ключів із значеннями.</p>
+
+    <pre class='language-java line-numbers'><code>
+interface Мар&lt;К, V&gt;
+</code></pre>
+
+    <p>де <span class="code">К</span> — це тип ключів, а <span class="code">V</span> — тип значень, що зберігаються.</p>
+
+    <p>За ключем ми можемо отримувати дані з <span class="text-neon"><span class="text-bold"><em>Map</em></span></span>. Щоб
+    додати елемент в <span class="text-neon"><span class="text-bold"><em>Map</em></span></span>, потрібно вказати ключ і
+    значення.</p>
+
+    <p>Розглянемо деякі реалізації <span class="text-neon"><span class="text-bold"><em>Map</em></span></span>:</p>
+
+    <ol>
+        <li><p><span class="code text-green"><span class="text-bold">HashMap</span></span> — реалізація <span class="text-neon"><span class="text-bold"><em>Map</em></span></span>, в основі якої лежать хеш-таблиці. Може зберігати ключі та значення будь-яких типів, зокрема і <span class="text-bold">null</span>. Порядок елементів не гарантовано.</p></li>
+
+        <li><p><span class="code text-green"><span class="text-bold">LinkedHashMap</span></span> — структура даних, зберігає дані у вигляді зв’язного списку елементів. Елементи розташовані в порядку, в якому вони додавалися.</p></li>
+
+        <li><p><span class="code text-green"><span class="text-bold">TreeMap</span></span> — реалізує інтерфейс <span class="text-neon"><span class="text-bold"><em>SortedMap</em></span></span> (через <span class="code text-green"><span class="text-bold">NavigableMap</span></span>). Елементи у такій структурі зберігаються у відсортованому вигляді (у разі додавання нового елемента колекція сортується автоматично). <span class="code text-green"><span class="text-bold">TreeMap</span></span> чудово підходить для зберігання великих обсягів відсортованої інформації із здійсненням швидкого пошуку.</p></li>
+    </ol>
+
+    <h3>Застарілі колекції</h3>
+
+    <p>Від попередніх версій Java залишилися застарілі колекції (для підтримання зворотної сумісності), які використовувати не рекомендується:</p>
+
+    <ul>
+        <li><p><span class="text-neon"><span class="text-bold">Enumeration</span></span> — аналог інтерфейсу <span class="text-neon"><span class="text-bold"><em>Iterator</em></span></span>;</p></li>
+        <li><p><span class="text-neon"><span class="text-bold">Vector</span></span> — впорядкований список елементів, аналог класу <span class="code"><span class="text-green">ArrayList</span></span>;</p></li>
+        <li><p><span class="text-neon"><span class="text-bold">Stack</span></span> — структура, яка реалізує зберігання елементів за принципом стека (наприклад, стопка книг), є методи заштовхування (<em>push</em>)
+        і виштовхування (<em>pop</em>) елементів;</p></li>
+        <li><p><span class="text-neon"><span class="text-bold">Dictionary</span></span> — аналог інтерфейсу <span class="text-neon"><span class="text-bold"><em>Map</em></span></span>, але є абстрактним класом;</p></li>
+        <li><p><span class="text-neon"><span class="text-bold">Hashtable</span></span> — аналог <span class="code text-green"><span class="text-bold">HashMap</span></span>.</p></li>
+</ul>
+
+    <p>Докладніше про <span class="text-bold">Collections Framework</span> ти можеш прочитати у <a href="https://javarush.com/groups/posts/4047-korotko-o-glavnom---java-collections-framework" target="_blank">цій статті </a>. </p>

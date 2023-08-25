@@ -1,0 +1,110 @@
+Компіляція класу в байт-код із консолі
+<p>----------------------------------------</p>
+JVM не може напряму запустити код, який ти пишеш. Вона може виконувати тільки програми, записані байт-кодом. Байт-код — це мова низького рівня, близька до машинного коду. Компіляція в Java — це переклад програми...
+<p>----------------------------------------</p>
+<p>JVM не може напряму запустити код, який ти пишеш. Вона може виконувати тільки програми, записані байт-кодом. Байт-код —
+    це мова низького рівня, близька до машинного коду.</p>
+
+    <p>Компіляція в Java — це переклад програми, написаної на Java (високий рівень) у таку саму програму, записану байт-кодом.</p>
+
+    <p>Твій код у файлі з розширенням .java передається компілятору, і якщо код не мав помилок, після компіляції ти отримаєш
+    новий файл із байт-кодом. У файлі буде таке саме ім’я, але інше розширення: <span class="code">.class</span>. А якщо в
+    коді були помилки, то кажуть, що «програма не скомпілювалася». Тоді потрібно прочитати повідомлення про помилки та
+    виправити їх.</p>
+
+    <img data-max-width="800" data-id="2d6fd53e-c592-4dcc-9fce-1ec2852844ef" src="https://cdn.javarush.com/images/article/2d6fd53e-c592-4dcc-9fce-1ec2852844ef/800.jpeg" alt="">
+
+    <p>Компілятор представляє з себе команду javac, що входить до JDK (Java Development Kit). Наприклад, якщо встановити тільки
+    JRE (Java Runtime Environment), то компілятора там не буде! Буде тільки JVM, яка вміє запускати тільки байт-код. Отже
+    встановлюємо JDK і передаємо компілятору наш файл <span class="code">.java</span>.</p>
+
+    <p>Для прикладу візьмемо просту програму з виведенням у консоль:</p>
+
+    <pre class='language-java line-numbers'><code>
+class MySolution {
+   public static void main(String[] args) {
+      System.out.println("Привіт командний рядок!");
+   }
+}
+</code></pre>
+
+    <p>Збережемо цей код у файл <span class="text-bold">D:/temp/MySolution.java</span>.</p>
+
+    <p>Скомпілюємо наш код, використовуючи команду</p>
+
+    <pre class='language-java line-numbers'><code>
+D:\temp>javac MySolution.java
+</code></pre>
+
+    <p>Якщо у коді немає помилок компіляції, у папці <span class="text-bold">temp</span> з’явиться файл <span
+        class="code">MySolution.class</span>. При цьому файл <span class="code">MySolution.java</span> з твоїм кодом нікуди
+    не дінеться, залишиться на місці. А ось <span class="code">MySolution.class</span> вже містить байт-код і готовий
+    безпосередньо до запуску за допомогою JVM.</p>
+
+    <p>Наш приклад максимально простий, але команда <span class="code">javac</span> застосовується і у найбільших та
+    найскладніших проєктах. Тому знати засади її роботи дуже корисно.</p>
+
+    <p>Компілювати можна і більше одного класу за один раз. Наприклад, нехай у папці <span class="text-bold">temp</span> є ще
+    один файл <span class="code">Cat.java</span>::<p>
+
+    <pre class='language-java line-numbers'><code>
+D:\temp>javac MySolution.java Cat.java
+</code></pre>  
+
+    <p>або так:</p>
+
+    <pre class='language-java line-numbers'><code>
+D:\temp>javac *.java
+</code></pre>
+
+    <p>Після компіляції файли <span class="code">.class</span> можна запакувати в <span class="code">jar</span>-файл, щоб його
+    було зручно переносити та запускати на різних комп’ютерах. Приклад команди для створення <span
+        class="code">jar</span>-файлу:</p>
+
+    <pre class='language-java line-numbers'><code>
+D:\temp>jar cvfe myjar.jar MySolution MySolution.class Cat.class
+</code></pre>
+
+    <p>де:</p>
+
+    <ul>
+        <li><p><span class="code">jar</span> – команда для створення <span class="code">.jar</span>-файлів, що входить до складу JDK;</p></li>
+        <li><p><span class="code">cvfe</span> – прапорці, які означають:</p>
+            <ul>
+                <li><p><span class="code">с</span> – потрібно створити новий <span class="code">jar</span>-файл;</p></li>
+                <li><p><span class="code">v</span> – виводити додаткову інформацію у процесі виконання команди;</p></li>
+                <li><p><span class="code">f</span> – разом із <span class="code">myjar.jar</span> говорить про те, файл з яким ім’ям ми отримаємо в результаті;</p></li>
+                <li><p><span class="code">e</span> – разом із <span class="code">MySolution</span> вказує, який клас містить метод <span class="code text-orange">main</span>;</p></li>
+            </ul>
+        </li>
+        <li><p><span class="code">MySolution.class Cat.class</span> – розділені пробілом імена файлів, які потрібно запакувати в <span class="code">jar</span>-файл.</p></li>
+    </ul>
+
+    <p>Запуск отриманого <span class="code">jar</span>-файлу:</p>
+
+    <pre class='language-java line-numbers'><code>
+D:\temp>java -jar myjar.jar
+</code></pre>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Для більш детального ознайомлення:
+</th>
+            </tr>
+            <tr>
+                <td>
+                    <ol>
+                        <li><a href="https://javarush.com/groups/posts/4044-kompiljacija-i-ispolnenie-java-prilozheniy-pod-kapotom" target="_blank">Компіляція та виконання Java програм під капотом</a></li>
+                        <li><a href="https://javarush.com/groups/posts/4048-kompiljacija-v-java" target="_blank">Компіляція в Java</a></li>
+                        <li>В <span class="code">javac</span> и <span class="code">jar</span> є вбудована допомога. Для її відображення виконай у командному рядку:
+                            <ul>
+                                <li><span class="code">javac --help</span></li>
+                                <li><span class="code">jar --help</span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>

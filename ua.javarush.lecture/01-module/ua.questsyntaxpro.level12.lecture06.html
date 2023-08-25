@@ -1,0 +1,374 @@
+﻿Параметризовані типи в Java — generics
+<p>----------------------------------------</p>
+Усі класи успадковано від Object. Усі класи в Java неявно (приховано) успадковано від класу Object. Що таке успадкування та як воно працює в Java, ми розберемо у квесті Java Core. А наразі ми розглянемо один простий факт, який із цього випливає: Змінній типу Object можна присвоїти об'єкт
+<p>----------------------------------------</p>
+<h2>1. Усі класи успадковано від <code>Object</code></h2>
+<p>Усі класи в Java неявно (приховано) успадковано від класу <code>Object</code>.</p>
+<p>Що таке успадкування та як воно працює в Java, ми розберемо у квесті Java Core. А наразі ми розглянемо один простий факт, який із цього випливає:</p>
+<p>Змінній типу <code>Object</code> можна присвоїти об'єкт будь-якого класу. Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Object <span class="code text-red">o</span> = new Scanner(System.in);</code></pre>
+        </td>
+        <td>У змінній <code class=" text-red">o</code> збережено посилання на об'єкт типу <code>Scanner</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Object <span class="code text-red">o</span> = new String();</code></pre>
+        </td>
+        <td>У змінній <code class="text-red">o</code> збережено посилання на об'єкт типу <code>String</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Object <span class="code text-red">o</span> = new Integer(15);</code></pre>
+        </td>
+        <td>У змінній <code class="text-red">o</code> збережено посилання на об'єкт типу <code>Integer</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Object <span class="code text-red">o</span> = "Привіт";</code></pre>
+        </td>
+        <td>У змінній <code class="text-red">o</code> збережено посилання на об'єкт типу <code>String</code></td>
+    </tr>
+    </tbody>
+</table>
+<p>На цьому добрі новини закінчуються. <strong>Компілятор не стежить за тим</strong>, якого саме типу об'єкт було збережено в змінній типу <code>Object</code>, тому <strong>викликати методи, що були у</strong> збереженого об'єкта, але відсутні у змінної типу <code>Object</code>, <span class="text-red">не можна</span>.</p>
+<p>Якщо треба викликати методи такого об'єкта, то спочатку посилання на нього потрібно зберегти в змінній правильного типу, а лише потім викликати методи для цієї змінної:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Object <span class="code text-red">o</span> = new <span class="text-viola">Scanner</span>(System.in);
+int x = <span class="code text-red">o</span>.<span class="text-green">nextInt</span>();</code></pre>
+        </td>
+        <td><span class="text-red">Програма не скомпілюється. Клас <code><span class="text-red">Object</span></code> не має методу <code><span class="text-red">nextInt()</span></code>.</span></td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Object <span class="code text-red">o</span> = new <span class="text-viola">Scanner</span>(System.in);
+
+<span class="text-viola">Scanner</span> <span class="code text-user">console</span> = (<span class="text-viola">Scanner</span>) <span class="code text-red">o</span>;
+
+int x = <span class="code text-user">console</span>.<span class="text-green">nextInt</span>();</code></pre>
+        </td>
+        <td>Так працюватиме.<br/><br/> Тут ми зберігаємо посилання на об'єкт типу <code><span class="text-viola">Scanner</span></code> у змінній типу <code><span class="text-viola">Scanner</span></code> за допомогою <span class="term">оператора перетворення типу</span>.</td>
+    </tr>
+    </tbody>
+</table>
+<p><span class="text-red">Просто так змінну типу <code><span class="text-red">Object</span></code> не можна присвоїти змінній типу Scanner, навіть якщо змінна типу <code><span class="text-red">Object</span></code> зберігає посилання на об'єкт типу <code><span class="text-red">Scanner</span></code>.</span> Натомість це можна зробити, якщо використати вже відомий вам <span class="term">оператор&nbsp;перетворення типу</span>. У загальному випадку це має такий вигляд:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-viola">Тип</span> <span class="code text-user">ім'я1</span> = (<span class="text-viola">Тип</span>) <span class="code text-green">ім'я2</span>;</code></pre>
+</div>
+<p>де <code class="text-user">ім'я1</code>&nbsp;— це ім'я змінної типу <code><span class="text-viola">Тип</span></code>, а <code class="text-green">ім'я2</code>&nbsp;— це ім'я змінної типу <code>Object</code>, яка зберігає посилання на об'єкт типу <code><span class="text-viola">Тип</span></code>.</p>
+<p><strong>Перетворення типу</strong></p>
+<p>Якщо типи змінної та об'єкта не збігаються, виникне помилка <code><span class="text-red">ClassCastException</span></code>. Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Object <span class="code text-user">o</span> = new Integer(5);
+<span class="text-viola">String</span> <span class="code text-green">s</span> = (<span class="text-viola">String</span>) <span class="code text-user">o</span>;</code></pre>
+        </td>
+        <td><span class="text-red">Під час виконання виникне помилка:<br/> тут буде кинуто виняток <code>ClassCastException</code></span></td>
+    </tr>
+    </tbody>
+</table>
+<p>У Java є спосіб обійти цю помилку: існує можливість перевірити, <span class="code"><span class="text-green">який тип насправді має змінна</span></span>:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="code text-user">ім'я</span> instanceof <span class="code"><span class="text-viola">Тип</span></span></code></pre>
+</div>
+<p>Оператор <code>instanceof</code> перевіряє, чи є змінна <code><span class="text-green">ім'я</span></code>&nbsp;об'єктом типу <code><span class="text-viola">Тип</span></code>.</p>
+<p>Приклад — пошук рядка серед елементів масиву даних:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Object[] <span class="code text-user">objects</span> = {10, "Привіт", 3.14};
+
+for (int i = 0; i &lt; <span class="code text-user">objects</span>.length; i++)
+{
+   if (<span class="code text-user">objects</span>[i] <strong>instanceof</strong> <span class="text-viola">String</span>)
+   {
+      <span class="text-viola">String</span> s = (<span class="text-viola">String</span>) <span class="code text-user">objects</span>[i];
+      System.out.println(s);
+   }
+}</code></pre>
+        </td>
+        <td>Autoboxing перетворить ці значення на <code>Integer</code>, <code>String</code> і <code>Double</code>.<br/><br/> Цикл по масиву об'єктів<br/><br/> Якщо об'єкт має тип <code>String</code>,<br/><br/> зберігаємо його в змінній типу <code>String</code>,<br/> виводимо змінну на екран.</td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task12.task1220"></div>
+<hr>
+<h2>2. Причина виникнення шаблонів (колекції)</h2>
+<p>Повертаємося до колекцій.</p>
+<p>Коли Java-розробники тільки створювали клас <code>ArrayList</code>, вони хотіли зробити його універсальним, щоб у ньому можна було зберігати об'єкти будь-якого типу. Тому для зберігання елементів вони скористалися масивом типу <code>Object</code>.</p>
+<p>Сильна сторона такого підходу в тому, що в колекцію можна додати об'єкт будь-якого типу.</p>
+<p>Ну а слабких сторін одразу декілька.</p>
+<p><strong>Недолік 1.</strong></p>
+<p>Завжди доводилося писати оператор перетворення типу, коли діставали елементи з колекції:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>ArrayList <span class="code text-user">numbers</span> = new ArrayList();
+
+
+for (int i = 0; i &lt; 10; i++)
+   <span class="code text-user">numbers</span>.add(i * 10);
+
+
+int <span class="code text-green">sum</span> = 0;
+for (int i = 0; i &lt; 10; i++)
+{
+   <span class="code text-green">sum</span> = <span class="code text-green">sum</span> + (<span class="text-viola">Integer</span>) <span class="code text-user">numbers</span>.get(i);
+}</code></pre>
+        </td>
+        <td>Створюємо об'єкт-колекцію для зберігання посилань на об'єкти типу <code>Object</code><br/><br/> Заповнюємо колекцію числами <code>10</code>, <code>20</code>, … <code>100</code>;<br/><br/><br/><br/> Знаходимо суму елементів колекції<br/><br/><br/> <span class="text-green">Потрібно використовувати перетворення типу</span></td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Недолік 2.</strong></p>
+<p>Не було гарантії, що в колекції зберігаються елементи певного типу</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>ArrayList <span class="text-user">numbers</span> = new ArrayList();
+
+
+for (int i = 0; i &lt; 10; i++)
+   <span class="code text-user">numbers</span>.add(i * 2.5);
+
+
+int <span class="code text-green">sum</span> = 0;
+for (int i = 0; i &lt; 10; i++)
+{
+   <span class="code text-green">sum</span> = <span class="code text-green">sum</span> + (Integer) <span class="code text-user">numbers</span>.get(i);
+}</code></pre>
+        </td>
+        <td>Створюємо об'єкт-колекцію для зберігання посилань на об'єкти типу <code>Object</code><br/><br/> Заповнюємо колекцію числами типу <code>Double</code>:<br/> <code>0.0</code>, <code>2.5</code>, <code>5.0</code>, ...<br/><br/><br/> Знаходимо суму елементів колекції<br/><br/><br/> <span class="text-red">Буде помилка: тип <code><span class="text-red">Double</span></code> не можна перетворити на тип <code><span class="text-red">Integer</span></code></span></td>
+    </tr>
+    </tbody>
+</table>
+<p>Дані в колекцію можуть вноситися де завгодно:</p>
+<ul>
+    <li>в іншому методі</li>
+    <li>в іншій програмі</li>
+    <li>завантажуватися з файлу</li>
+    <li>отримуватися з мережі</li>
+</ul>
+<p><strong>Недолік 3.</strong></p>
+<p>Дані колекції можна випадково змінити через незнання.</p>
+<p>Ви можете передати колекцію, заповнену своїми даними, в якийсь метод, а цей метод, написаний зовсім іншим програмістом, додасть до вашої колекції свої дані.</p>
+<p>З назви колекції незрозуміло, які саме типи даних можна в ній зберігати. Та навіть якщо й дати змінній зрозумілу назву, посилання на неї можна передати в десяток методів, і там уже точно про початкове ім'я змінної нічого не буде відомо.</p>
+<hr>
+<h2>3. Узагальнення</h2>
+<p><img data-id="072652bf-ef87-4e4b-8107-fe589bc960ec" src="https://cdn.javarush.com/images/article/072652bf-ef87-4e4b-8107-fe589bc960ec/original.png" alt="Узагальнення в Java"/></p>
+<p>Усі ці проблеми усуває така чудова річ у Java, як узагальнення (generics).</p>
+<p>Під узагальненнями в Java мають на увазі можливість додавати до типів типи-параметри. Таким чином утворюються складені типи. Такий складений тип у загальному випадку має ось який вигляд:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-neon">ОсновнийТип</span>&lt;<span class="text-viola">ТипПараметр</span>&gt;</code></pre>
+</div>
+<p>Усе разом — це саме тип. І він може використовуватися там, де зазвичай можна використовувати типи.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-neon">ArrayList</span>&lt;<span class="text-viola">Integer</span>&gt; <span class="code text-user">list</span>;</code></pre>
+        </td>
+        <td>Створення змінних</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="code text-user">list</span> = new <span class="text-neon">ArrayList</span>&lt;<span class="text-viola">Integer</span>&gt; ();</code></pre>
+        </td>
+        <td>Створення об'єктів</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-neon">ArrayList</span>&lt;<span class="text-viola">Integer</span>&gt;[] <span class="code text-user">array</span>;</code></pre>
+        </td>
+        <td>Створення масивів</td>
+    </tr>
+    </tbody>
+</table>
+<p>У такій колекції можна зберегти тільки змінні типу <code>Integer</code>:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">ArrayList</span>&lt;<span class="text-viola">Integer</span>&gt; <span class="code text-user">list</span> = new <span class="text-neon">ArrayList</span>&lt;<span class="text-viola">Integer</span>&gt;();
+<span class="code text-user">list</span>.add(new <span class="text-viola">Integer</span>(1));
+<span class="code text-user">list</span>.add(2);
+<span class="code text-user">list</span>.add("Привіт");</code></pre>
+        </td>
+        <td>Колекція типу <code>ArrayList</code> з елементами типу <code>Integer</code><br/> Так можна<br/> І так можна: працюватиме
+            <div class="term">autoboxing</div>
+            <br/> А так не можна: <span class="text-red">помилка компіляції</span></td>
+    </tr>
+    </tbody>
+</table>
+<p>Як створювати свої класи з типами-параметрами, ви дізнаєтеся у квесті Java Collections. А наразі ми розглянемо, як цим користуватися та як воно працює.</p>
+<hr>
+<h2>4. Як працюють generics</h2>
+<p>Насправді generics працюють надзвичайно примітивно.</p>
+<p>Компілятор просто замінює тип із параметром на нього ж, тільки без параметра. А при взаємодії з його методами додає операцію перетворення типу на тип-параметр:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Що зробить компілятор</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-neon">ArrayList</span>&lt;<span class="text-viola">Integer</span>&gt; <span class="code text-green">list</span> = new <span class="text-neon">ArrayList</span>&lt;<span class="text-viola">Integer</span>&gt;();</code></pre>
+        </td>
+        <td>
+            <pre class="language-java"><code><span class="text-neon">ArrayList</span> <span class="code text-green">list</span> = new <span class="text-neon">ArrayList</span>();</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="code text-green">list</span>.add(1);</code></pre>
+        </td>
+        <td>
+            <pre class="language-java"><code><span class="code text-green">list</span>.add( (<span class="text-viola">Integer</span>) 1 );</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int x = <span class="code text-green">list</span>.get(<span class="text-orange">0</span>);</code></pre>
+        </td>
+        <td>
+            <pre class="language-java"><code>int x = (<span class="text-viola">Integer</span>) <span class="code text-green">list</span>.get(<span class="text-orange">0</span>);</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="code text-green">list</span>.set(<span class="text-orange">0</span>, 10);</code></pre>
+        </td>
+        <td>
+            <pre class="language-java"><code><span class="code text-green">list</span>.set(<span class="text-orange">0</span>, (<span class="text-viola">Integer</span>) 10);</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Припустімо, ми мали код методу, що підсумовує числа в колекції цілих чисел:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Що зробить компілятор</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public int sum(<span class="text-neon">ArrayList</span>&lt;<span class="text-viola">Integer</span>&gt; <span class="code text-green">numbers</span>)
+{
+   int <span class="code text-user">result</span> = 0;
+
+   for (int i = 0; i &lt; <span class="code text-green">numbers</span>.size(); i++)
+      <span class="code text-user">result</span> = <span class="code text-user">result</span> + <span class="code text-green">numbers</span>.get(i);
+
+   return <span class="code text-user">result</span>;
+}</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>public int sum(<span class="text-neon">ArrayList</span> <span class="code text-green">numbers</span>)
+{
+   int <span class="code text-user">result</span> = 0;
+
+   for (int i = 0; i &lt; <span class="code text-green">numbers</span>.size(); i++)
+      <span class="code text-user">result</span> = <span class="code text-user">result</span> + (<span class="text-viola">Integer</span>) <span class="code text-green">numbers</span>.get(i);
+
+   return <span class="code text-user">result</span>;
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Тобто по суті узагальнення — це так само різновид синтаксичного цукру, як і autoboxing, тільки більший. Під час autoboxing компілятор за нас додає методи для перетворення типу <code>int</code> на <code>Integer</code> і навпаки, а для generics додає оператори перетворення типу.</p>
+<p>Після того як компілятор скомпілював ваш код з узагальненнями, у ньому всі класи з параметрами буде перетворено на прості класи та оператори перетворення типу. Інформація про те, які типи-параметри спочатку мали змінні складних типів, загубилася. Цей ефект інакше називають <span class="term">стиранням типів</span>.</p>
+<p>Іноді програмістам, які пишуть свої класи з типами-параметрами, дуже не вистачає інформації про типи, які туди передаються як параметри. Як із цим борються та що з цього виходить, ви дізнаєтеся у квесті Java Collections.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task12.task1221"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task12.task1222"></div>
+<hr>
+<h2>5. Кілька фактів про узагальнення</h2>
+<p>Ще кілька цікавих фактів про узагальнення.</p>
+<p>У класів <strong>може бути не один тип-параметр, а декілька.</strong> Отакий вигляд це має:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm language-java"><code><span class="text-neon">ОсновнийТип</span>&lt;<span class="text-viola">ТипПараметр1</span>, <span class="text-viola">ТипПараметр2</span>, <span class="text-viola">ТипПараметр3</span>&gt;</code></pre>
+</div>
+<p>Власне кажучи, у цьому немає нічого дивного. Там, де компілятор може додати оператор перетворення на один тип, він може додати й декілька таких.</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-viola">HashMap</span>&lt;<span class="text-user">Integer</span>, <span class="text-orange">String</span>&gt; map = new <span class="text-viola">HashMap</span>&lt;<span class="text-user">Integer</span>, <span class="text-orange">String</span>&gt;();
+<span class="text-orange">map</span>.put(7, <span class="text-green">"Привіт"</span>);
+<span class="text-orange">map</span>.put(-15, <span class="text-green">"Привіт"</span>);</code></pre>
+        </td>
+        <td>Перший параметр методу <code>put</code> має тип <code><span class="text-user">Integer</span></code>, другий — тип <code><span class="text-orange">String</span></code></td>
+    </tr>
+    </tbody>
+</table>
+<p>Крім того, складні типи теж можна <strong>використовувати як параметри</strong>. Отакий вигляд це має:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm language-java"><code><span class="text-neon">ОсновнийТип</span>&lt;<span class="text-viola">ТипПараметр&lt;</span><span class="text-user">ТипПараметрПараметра</span><span class="text-viola">&gt;</span>&gt;</code></pre>
+</div>
+<p>Припустімо, нам треба створити список, який зберігатиме списки рядків. У цьому разі ми отримаємо приблизно такий код:</p>
+<pre class="language-java"><code>// список привітань
+<span class="text-viola">ArrayList&lt;String&gt;</span> <span class="code text-green">listHello</span> = new <span class="text-viola">ArrayList&lt;String&gt;</span>();
+<span class="code text-green">listHello</span>.add("Привіт");
+<span class="code text-green">listHello</span>.add("Hi");
+
+// список прощань
+<span class="text-viola">ArrayList&lt;String&gt;</span> <span class="code text-user">listBye</span> = new <span class="text-viola">ArrayList&lt;String&gt;</span>();
+<span class="code text-user">listBye</span>.add("Бувай");
+<span class="code text-user">listBye</span>.add("Good Bye");
+
+// список списків
+ArrayList&lt;<span class="text-viola">ArrayList&lt;String&gt;</span>&gt; <span class="code text-orange">lists</span> = new ArrayList&lt;<span class="text-viola">ArrayList&lt;String&gt;</span>&gt;();
+<span class="code text-orange">lists</span>.add(<span class="code text-green">listHello</span>);
+<span class="code text-orange">lists</span>.add(<span class="code text-user">listBye</span>);</code></pre>

@@ -1,0 +1,158 @@
+﻿Модифікатори методів
+<p>----------------------------------------</p>
+Модифікатори доступу. Перед кожним методом програміст може вказати так звані модифікатори доступу. До них належать ключові слова: public, protected, private. Ці «модифікатори доступу» дають змогу обмежувати доступ до методу з інших класів. Наприклад, якщо перед оголошенням методу написати
+<p>----------------------------------------</p>
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="14aed6c7-4abc-4154-a39e-dda19c3089ff" src="https://cdn.javarush.com/images/article/14aed6c7-4abc-4154-a39e-dda19c3089ff/original.png" alt=""/>
+        </div>
+    </div>
+</div>
+<hr>
+<h2>1. Модифікатори доступу</h2>
+<p>Перед кожним методом програміст може вказати так звані модифікатори доступу. До них належать ключові слова: <code>public</code>, <code>protected</code>, <code>private</code>.</p>
+<p>Ці «модифікатори доступу» дають змогу обмежувати доступ до методу з інших класів.</p>
+<p>Приміром, якщо перед оголошенням методу написати ключове слово <code>private</code>, цей метод можна буде викликати тільки з того самого класу, в якому його оголошено. Ключове слово <code>public</code> дозволяє звертатися до позначеного методу з будь-якого методу будь-якого класу.</p>
+<p>Всього таких модифікаторів 3, а типів доступу до методу — 4, адже відсутність модифікатора доступу теж щось означає.</p>
+<table>
+    <tbody>
+    <tr>
+        <th></th>
+        <th colspan="4">Доступ із…</th>
+    </tr>
+    <tr>
+        <td>Модифікатори</td>
+        <td>Будь-якого класу</td>
+        <td>Класу-спадкоємця</td>
+        <td>Свого пакету</td>
+        <td>Свого класу</td>
+    </tr>
+    <tr>
+        <td><code>public</code></td>
+        <td><strong><span class="text-green">Є</span></strong></td>
+        <td><strong><span class="text-green">Є</span></strong></td>
+        <td><strong><span class="text-green">Є</span></strong></td>
+        <td><strong><span class="text-green">Є</span></strong></td>
+    </tr>
+    <tr>
+        <td><code>protected</code></td>
+        <td><strong><span class="text-red">Немає</span></strong></td>
+        <td><strong><span class="text-green">Є</span></strong></td>
+        <td><strong><span class="text-green">Є</span></strong></td>
+        <td><strong><span class="text-green">Є</span></strong></td>
+    </tr>
+    <tr>
+        <td>без модифікатора</td>
+        <td><strong><span class="text-red">Немає</span></strong></td>
+        <td><strong><span class="text-red">Немає</span></strong></td>
+        <td><strong><span class="text-green">Є</span></strong></td>
+        <td><strong><span class="text-green">Є</span></strong></td>
+    </tr>
+    <tr>
+        <td><code>private</code></td>
+        <td><strong><span class="text-red">Немає</span></strong></td>
+        <td><strong><span class="text-red">Немає</span></strong></td>
+        <td><strong><span class="text-red">Немає</span></strong></td>
+        <td><strong><span class="text-green">Є</span></strong></td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>1. Модифікатор <code>public</code>.</strong></p>
+<p>До методу (змінної або класу), позначеного модифікатором <code>public</code>, можна звертатися <span class="text-green">з будь-якого місця програми</span>. Це найвищий ступінь відкритості — жодного обмеження немає.</p>
+<p><strong>2. Модифікатор <code>private</code>.</strong></p>
+<p>До методу (змінної або класу), позначеного модифікатором <code>private</code>, можна звертатися <span class="text-red">тільки з того самого класу, в якому його оголошено</span>. Для решти класів позначені метод або змінна — невидимі й «наче не існують». Це найвищий ступінь замкнутості — тільки свій клас.</p>
+<p><strong>3. Без модифікатора (модифікатор за замовчуванням).</strong></p>
+<p>Якщо метод або змінну не позначено жодним модифікатором, вважається, що їх позначено «модифікатором за замовчуванням». Змінні або методи з таким модифікатором (тобто взагалі без жодного) <span class="text-red">видно всім класам пакету, в якому їх оголошено</span>. І тільки їм. Цей модифікатор також іноді називають <code>package</code> — з натяком на те, що доступ до змінних і методів відкрито для всього пакету, в якому міститься їхній клас.</p>
+<p><strong>4. Модифікатор <code>protected</code>.</strong></p>
+<p>Якщо метод позначено модифікатором <code>protected</code>, до нього можна звертатися з того самого класу, того самого пакету й класів-спадкоємців (класів, успадкованих від класу, в якому оголошено метод). Цю тему ми розберемо докладніше в квесті Java Core.</p>
+<p>До кінця квесту Java Syntax ви можете всім своїм методам (а також класам і змінним класу) призначати модифікатор <code>public</code>. Інші модифікатори вам знадобляться, коли ми почнемо глибоко вивчати ООП.</p>
+<p><strong>Навіщо потрібні модифікатори доступу?</strong></p>
+<p>Вся річ у великих проєктах, які пишуть десятки й сотні програмістів одночасно.</p>
+<p>Трапляються ситуації, коли програміст хоче поділити занадто великий метод свого класу на частини й винести частину коду в допоміжні методи. Разом з тим він не хоче, щоб інші програмісти викликали ці допоміжні методи, оскільки в такому разі код його класу може працювати неправильно.</p>
+<p>Отож і придумали відповідні модифікатори доступу. Позначте допоміжний метод словом <strong>private</strong>, і жоден код, окрім вашого класу, не зможе побачити ваш допоміжний метод.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task06.task0610"></div>
+<hr>
+<h2>2. Ключове слово <code>static</code></h2>
+<p>Ключове слово <code>static</code> перетворює метод на статичний. Що це таке, ми розглянемо згодом, а зараз просто запам'ятаймо пару фактів про статичні методи.</p>
+<p><strong>Факт 1. Статичний метод не прив'язано до жодного об'єкта</strong>, проте він належить до класу, в якому його оголошено. Щоб викликати статичний метод, слід написати:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-orange">Ім'яКласу</span>.<span class="text-red">ім'яМетоду</span>()</code></pre>
+</div>
+<p>Приклади статичних методів:</p>
+<table>
+    <tbody>
+    <tr>
+        <th></th>
+        <th>Ім'я класу</th>
+        <th>Ім'я статичного методу</th>
+    </tr>
+    <tr>
+        <td>
+            <code>Thread.<span class="text-red">sleep</span>()</code>
+        </td>
+        <td><code>Thread</code></td>
+        <td><code>sleep()</code></td>
+    </tr>
+    <tr>
+        <td>
+            <code>Math.<span class="text-red">abs</span>()</code>
+        </td>
+        <td><code>Math</code></td>
+        <td><code>abs()</code></td>
+    </tr>
+    <tr>
+        <td>
+            <code>Arrays.<span class="text-red">sort</span>()</code>
+        </td>
+        <td><code>Arrays</code></td>
+        <td><code>sort()</code></td>
+    </tr>
+    </tbody>
+</table>
+<p><span class="text-orange">Ім'я класу</span> перед <span class="text-red">іменем статичного методу</span> можна не писати, якщо ви викликаєте статичний метод з того самого класу. Саме тому немає потреби щоразу писати <code>Solution</code> перед іменами статичних методів, які ви викликаєте.</p>
+<p><strong>Факт 2. Статичний метод не може звертатися до нестатичних методів</strong> свого класу. Статичний метод може звертатися лише до статичних методів. Отож усі методи, які ми хочемо викликати з методу <code>main</code>, ми оголошуємо статичними.</p>
+<p>Чому? Ви самі зможете відповісти на це запитання, коли почнете вивчати ООП і зрозумієте, як влаштовано статичні методи.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task06.task0611"></div>
+<hr>
+<h2>3. Ключове слово <code>throws</code></h2>
+<p>Є ще одне ключове слово, яке ви, мабуть, бачили поруч з оголошенням методу — це слово <code>throws</code>. Його, на відміну від модифікаторів доступу та ключового слова <code>static</code>, розміщують після параметрів методу:</p>
+<div class="lesson-example lesson-example--center">
+        <pre class="lecture-code lecture-code--present language-java"><code>public static <span class="text-viola">тип</span> <span class="text-user">ім'я</span>(<span class="text-neon">параметри</span>) throws <span class="text-red">Exception</span>
+{
+&nbsp;  <span class="text-green">код методу</span>
+}</code></pre>
+</div>
+<p>Який зміст воно несе, ми з'ясуємо трохи згодом, коли будемо вивчати винятки.</p>
+<p>Однак, якщо побіжно торкнутися його, можна сказати, що в методі, позначеному словом throws, можуть виникати помилки (винятки) типу <code><span class="text-red">Exception</span></code>&nbsp;(в цьому класі та в успадкованих від нього класах). Якщо в класі можуть виникнути помилки кількох типів, слід перелічити всі типи через кому.</p>
+<hr>
+<h2>4. Метод <code>main</code></h2>
+<p>Рядок, в якому оголошується метод з усіма модифікаторами, впливатиме на те, як цей метод буде викликатися з інших класів і методів, а також на те, результат якого типу він повертатиме та які помилки можуть виникати під час його роботи.</p>
+<p>Такий рядок називається оголошенням методу. Ось його загальний вигляд:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm language-java"><code><span class="text-green">модифікатори доступу</span> static <span class="text-viola">тип</span> <span class="text-user">ім'я</span>(<span class="text-neon">параметри</span>) throws <span class="text-red">винятки</span></code></pre>
+    <div class="lesson-example-caption">Загальний вигляд оголошення методу</div>
+</div>
+<p>де <code><span class="text-green">модифікатори доступу</span></code>&nbsp;— це <code>public</code>, <code>protected</code>, <code>private</code> або нічого;</p>
+<p><code>static</code> пишемо, якщо метод статичний (не пишемо для нестатичних методів);</p>
+<p><code><span class="text-viola">тип</span></code> — тип результату функції (<code>void</code>, якщо результату немає).</p>
+<p>Тепер ви вже, напевно, розумієте, що означають усі ключові слова під час оголошення методу <code><span class="text-user">main</span></code>:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm language-java"><code><span class="text-green">public</span> static <span class="text-viola">void</span> <span class="text-user">main</span>(<span class="text-neon">String[] args</span>) throws <span class="text-red">Exception</span></code></pre>
+    <div class="lesson-example-caption">Оголошення методу <code>main</code></div>
+</div>
+<p>Доступ до методу <code><span class="text-user">main</span>()</code> можливий із будь-якого класу, про це говорить слово <code><span class="text-green">public</span></code>.</p>
+<p>Метод статичний (його можна явно викликати у вигляді <code>Solution.main()</code>).</p>
+<p>Метод <code>main</code> не повертає жодного результату. Тип результату — <code><span class="text-viola">void</span></code> (порожній тип/заглушка)</p>
+<p>Метод <code>main</code> отримує параметри (!): масив рядків. І назва <code>args</code> натякає на «аргументи програми». Під час запуску програми в неї можна передати параметри — масив рядків. Вони й будуть міститися в масиві <code><span class="text-neon">args</span></code>&nbsp;методу <code>main()</code>.</p>
+<p>У методі <code>main()</code> можуть виникати необроблені помилки типу <code><span class="text-red">Exception</span></code> (у цьому класі та в успадкованих від нього класах).</p>
+<hr>
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="737355b3-8910-4326-923a-91fd12cd4aa8" src="https://cdn.javarush.com/images/article/737355b3-8910-4326-923a-91fd12cd4aa8/original.png" alt=""/>
+        </div>
+    </div>
+</div>

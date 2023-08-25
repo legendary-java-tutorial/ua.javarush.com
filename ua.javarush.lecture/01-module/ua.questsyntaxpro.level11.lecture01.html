@@ -1,0 +1,314 @@
+﻿Статичні змінні
+<p>----------------------------------------</p>
+Статичні змінні. Коли клас завантажується в пам'ять, для нього відразу створюється статичний об'єкт класу. Цей об'єкт зберігає статичні змінні класу (статичні поля класу). Статичний об'єкт класу існує, навіть якщо не було створено жодного звичайного об'єкта класу. Коли ми описуємо
+<p>----------------------------------------</p>
+<h2>1. Статичні змінні</h2>
+<p>Коли клас завантажується в пам'ять, для нього відразу створюється <strong>статичний об'єкт класу</strong>. Цей об'єкт зберігає статичні змінні класу (статичні поля класу). <span class="text-green">Статичний об'єкт класу існує, навіть якщо не було створено жодного звичайного об'єкта класу.</span></p>
+<p>Коли ми описуємо змінні в класі, ми вказуємо, буде ці змінні створено лише один раз чи потрібно створювати їх копії для кожного об'єкта. За замовчуванням для кожного об'єкта створюється нова копія змінної.</p>
+<p>А статична (<strong>static</strong>) змінна прив'язана до статичного об'єкта класу й завжди існує в одному екземплярі.</p>
+<p>Щоб створити статичну змінну класу, потрібно перед її ім'ям написати ключове слово <code><span class="text-red">static</span></code>. Оголошення статичної змінної має такий загальний вигляд:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present"><code><span class="text-red">static</span> <span class="text-viola">Тип</span> <span class="code text-user">ім'я</span> = <span class="text-green">значення</span>;</code></pre>
+</div>
+<p>Якщо статичній змінній під час оголошення не присвоїти значення, її буде ініціалізовано значенням за замовчуванням.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Тип</th>
+        <th>Значення за замовчуванням</th>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>byte</code></pre>
+        </td>
+        <td>
+            <pre><code>0</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>short</code></pre>
+        </td>
+        <td>
+            <pre><code>0</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>int</code></pre>
+        </td>
+        <td>
+            <pre><code>0</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>long</code></pre>
+        </td>
+        <td>
+            <pre><code>0</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>float</code></pre>
+        </td>
+        <td>
+            <pre><code>0.0</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>double</code></pre>
+        </td>
+        <td>
+            <pre><code>0.0</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>char</code></pre>
+        </td>
+        <td>
+            <pre class="inline-block"><code>'\u0000'</code></pre>
+            (те саме, що й
+            <pre class="inline-block"><code>0</code></pre>
+            )
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>boolean</code></pre>
+        </td>
+        <td>
+            <pre><code>false</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="inline-block"><code>Object</code></pre>
+            і будь-які класи
+        </td>
+        <td>
+            <pre><code>null</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>public <span class="text-red">static</span> <span class="text-viola">int</span> <span class="text-user">WIDTH</span> = 100;</code></pre>
+        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>public <span class="text-red">static</span> <span class="text-viola">String</span> <span class="text-user">message</span> = "Hello";</code></pre>
+        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>private <span class="text-red">static</span> <span class="text-viola">Scanner</span> <span class="text-user">console</span>;</code></pre>
+        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>private <span class="text-red">static</span> <span class="text-viola">int</span> <span class="text-user">count</span> = 0;</code></pre>
+        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>private <span class="text-red">static</span> <span class="text-viola">boolean</span> <span class="text-user">flag</span>;</code></pre>
+        </td>
+        <td></td>
+    </tr>
+    </tbody>
+</table>
+<p>Щоб звернутися до статичної змінної в її класі, досить просто вказати її ім'я. Щоб звернутися з іншого класу, перед ім'ям статичної змінної потрібно вказати ім'я класу.</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present"><code><span class="text-neon">Ім'яКласу</span>.<span class="text-user">змінна</span></code></pre>
+</div>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Змінна</th>
+        <th>Клас</th>
+        <th>Звернення до змінної з іншого класу</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>public <span class="text-red">static</span> <span class="text-viola">int</span> <span class="text-user">WIDTH</span> = 100;</code></pre>
+        </td>
+        <td>
+            <pre><code>Solution</code></pre>
+        </td>
+        <td>
+            <pre><code><span class="text-neon">Solution</span>.<span class="text-user">WIDTH</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>public <span class="text-red">static</span> <span class="text-viola">String</span> <span class="text-user">message</span> = "Hello";</code></pre>
+        </td>
+        <td>
+            <pre><code>Main</code></pre>
+        </td>
+        <td>
+            <pre><code><span class="text-neon">Main</span>.<span class="text-user">message</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>private <span class="text-red">static</span> <span class="text-viola">Scanner</span> <span class="text-user">console</span>;</code></pre>
+        </td>
+        <td>
+            <pre><code>JavaGame</code></pre>
+        </td>
+        <td>Змінну <code>private</code> поза її класом не видно</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code class="language-java">private <span class="text-red">static</span> <span class="text-viola">int</span> <span class="text-user">count</span> = 0;</code></pre>
+        </td>
+        <td>
+            <pre><code>Counter</code></pre>
+        </td>
+        <td>Змінну <code>private</code> поза її класом не видно</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code class="language-java">private <span class="text-red">static</span> <span class="text-viola">boolean</span> <span class="text-user">flag</span>;</code></pre>
+        </td>
+        <td>
+            <pre><code>Arithmetic</code></pre>
+        </td>
+        <td>Змінну <code>private</code> поза її класом не видно</td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task11.task1101"></div>
+<hr>
+<h2>2. Різниця між статичними й нестатичними змінними</h2>
+<p>Нестатичні (звичайні) змінні класу оголошуються так само, як і статичні, тільки без ключового слова <code>static</code>.</p>
+<p>У чому ж різниця між звичайними й статичними змінними?</p>
+<p>Звичайні змінні класу прив'язані до об'єктів свого класу (екземплярів класу), а статичні змінні — до статичного об'єкта класу.</p>
+<p>Якщо екземплярів класу декілька, у кожному з них є своя копія нестатичних (звичайних) змінних класу. Статичні змінні класу завжди існують тільки в одному екземплярі, який знаходиться всередині статичного об'єкта класу.</p>
+<p>Звертатися до звичайних змінних класу (полів класу) можна тільки за допомогою посилання на об'єкт класу або в методах всередині цього ж класу.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Звернення до поля класу за допомогою посилання на об'єкт класу</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public class <span class="text-neon">DataInfo</span>
+{
+   public int <span class="code text-orange">value</span> = 100;
+}
+
+public class Solution
+{
+   public static void main(String[] args)
+   {
+      <span class="text-neon">DataInfo</span> <span class="code text-user">info</span> = new <span class="text-neon">DataInfo</span>();
+      System.out.println(<span class="code text-user">info</span>.<span class="code text-orange">value</span>);
+   }
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Звертатися до статичних змінних можна звідки завгодно (з урахуванням модифікаторів видимості): зі звичайних методів, зі статичних методів того самого класу, з методів інших класів і т. ін.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Звернення до статичного поля класу <span class="text-red">без</span> використання посилання на об'єкт класу</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public class <span class="text-neon">DataInfo</span>
+{
+   public static int <span class="code text-orange">value</span> = 100;
+}
+
+public class Solution
+{
+   public static void main(String[] args)
+   {
+      System.out.println(<span class="text-neon">DataInfo</span>.<span class="code text-orange">value</span>);
+   }
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Об'єкти в пам'яті</strong></p>
+<p>Припустімо, у нас є клас <code>Person</code> із 4 полями: два статичних, а два — ні.</p>
+<div class="lesson-example">
+<pre class="language-java"><code>public class Person
+{
+   public <span class="text-red">static</span> <span class="text-viola">int</span> <span class="code text-user">count</span> = 0;
+   public <span class="text-red">static</span> <span class="text-viola">int</span> <span class="code text-user">sum</span> = 0;
+   public <span class="text-viola">int</span> <span class="code text-green">age</span> = 0;
+   public <span class="text-viola">String</span> <span class="code text-green">name</span>;
+}</code></pre>
+</div>
+<p><strong>Одразу після завантаження класу</strong></p>
+<p>Коли Java-машина завершить завантаження класу <code>Person</code>, у пам'яті буде така картина:</p>
+<img data-max-width="512" data-id="d10af697-502f-49a3-a440-258c23f1ce2b" src="https://cdn.javarush.com/images/article/d10af697-502f-49a3-a440-258c23f1ce2b/512.jpeg" alt="">
+<p><strong>Після створення першого об'єкта</strong></p>
+<p>Після створення об'єкта класу <code>Person</code> картина стане такою:</p>
+<img data-max-width="1024" data-id="e6c484b3-cf25-4ada-b3b1-a5093c4009db" src="https://cdn.javarush.com/images/article/e6c484b3-cf25-4ada-b3b1-a5093c4009db/1024.jpeg" alt="">
+<p>Зверніть увагу, що, хоча об'єкти мають по дві змінні, це різні змінні: у звичайного об'єкта — звичайні, у статичного — статичні.</p>
+<p><strong>Потрібно більше об'єктів</strong></p>
+<p><span>Тепер створімо ще два об'єкти типу </span><code><span>Person</span></code><span>. Нова картина буде такою:</span></p>
+<img data-max-width="1024" data-id="dbcd2537-f4d1-4b52-8e3d-9aa68ad44a1b" src="https://cdn.javarush.com/images/article/dbcd2537-f4d1-4b52-8e3d-9aa68ad44a1b/1024.jpeg" alt="">
+<p>Зверніть увагу, що кожний об'єкт має власні змінні age і name.<strong><br/> </strong></p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task11.task1102"></div>
+<hr>
+<h2>3. Видалення й додавання модифікатора <code>static</code></h2>
+<p><strong>Перетворення статичної на звичайну</strong></p>
+<p>Що буде, якщо перетворити статичну змінну на звичайну, тобто видалити в неї модифікатор <code>static</code>? Візьмімо, наприклад, змінну <code>static int sum</code>.</p>
+<p>Змінений код матиме такий вигляд:</p>
+<div class="lesson-example">
+<pre class="language-java"><code>public class Person
+{
+   public <span class="text-red">static</span> <span class="text-viola">int</span> <span class="code text-user">count</span> = 0;
+   public <span class="text-viola">int</span> <span class="code text-green">sum</span> = 0;
+   public <span class="text-viola">int</span> <span class="code text-green">age</span> = 0;
+   public <span class="text-viola">String</span> <span class="code text-green">name</span>;
+}</code></pre>
+</div>
+<p>А картина в пам'яті стане такою:</p>
+<img data-max-width="1024" data-id="8172078d-c04f-4b44-82d8-dc1a79e40c7e" src="https://cdn.javarush.com/images/article/8172078d-c04f-4b44-82d8-dc1a79e40c7e/1024.jpeg" alt="">
+<p>Статична змінна в статичного об'єкта зникла, натомість у кожного об'єкта з'явилася своя власна змінна <code><span class="text-user">sum</span></code>.</p>
+<p><strong>Перетворення зі звичайної в статичну</strong></p>
+<p>Можна зробити й навпаки: додати перед звичайними змінними класу модифікатор <code>static</code> — тоді ці змінні зникнуть у всіх об'єктів і натомість з'являться в статичного об'єкта. <span class="text-red">Припустімо, ми вирішили зробити статичними змінні <code>age</code> і <code>name</code>.</span> Тоді код матиме такий вигляд:</p>
+<div class="lesson-example">
+<pre class="language-java"><code>public class Person
+{
+   public <span class="text-red">static</span> <span class="text-viola">int</span> <span class="code text-user">count</span> = 0;
+   public <span class="text-viola">int</span> <span class="code text-green">sum</span> = 0;
+   public <span class="text-red">static</span> <span class="text-viola">int</span> <span class="code text-user">age</span> = 0;
+   public <span class="text-red">static</span> <span class="text-viola">String</span> <span class="code text-user">name</span>;
+}</code></pre>
+</div>
+<p>А картина в пам'яті стане такою:</p>
+<img data-max-width="1024" data-id="19d77ff1-48e6-4c7c-9ed0-8cb0e075e457" src="https://cdn.javarush.com/images/article/19d77ff1-48e6-4c7c-9ed0-8cb0e075e457/1024.jpeg" alt="">
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task11.task1103"></div>

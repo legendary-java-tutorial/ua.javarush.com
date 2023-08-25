@@ -1,0 +1,154 @@
+﻿Будова класу String
+<p>----------------------------------------</p>
+Будова класу String. Сьогодні розмова піде про клас String. Клас String — найпопулярніший клас у Java після типу int. Він використовується скрізь і має купу корисних методів, які варто знати. Клас String — це єдиний клас, крім примітивних типів, літерали якого
+<p>----------------------------------------</p>
+<h2>1. Будова класу <code>String</code></h2>
+<p>Сьогодні розмова піде про клас <code>String</code>. Клас String — найпопулярніший клас у Java після типу int. Він використовується скрізь і має купу корисних методів, які варто знати.</p>
+<p>Клас <code>String</code> — це єдиний клас, крім примітивних типів, літерали якого можна використовувати в операторах <code>switch</code>; компілятор в особливий спосіб обробляє додавання рядків і об'єктів; об'єкти <code>String</code> в особливий спосіб зберігаються в пам'яті. Клас <code>String</code> — дійсно особливий клас.</p>
+<p>Крім того, клас <code>String</code> має купу класів-сателітів, які спрощують роботу з рядками в Java. Коли ви все це вивчите, ви зможете легко робити багато речей. Ну а почнемо ми з найголовнішого — з будови класу <code>String</code>.</p>
+<p><strong>Масив символів</strong></p>
+<p>Клас <code>String</code> насправді влаштований дуже просто: він містить масив символів (char), де зберігаються всі символи рядка. Отак, наприклад, зберігається слово «Привіт»:</p>
+<img data-max-width="1024" data-id="dc78b914-d02c-41a3-81f3-7092210e2fb0" src="https://cdn.javarush.com/images/article/dc78b914-d02c-41a3-81f3-7092210e2fb0/original.png" alt="">
+<div class="lesson-note lesson-note--important">
+    <div class="lesson-note__container">
+        <div class="lesson-note__head">Важливо!</div>
+        <div class="lesson-note__content">
+            <p>Насправді все так, але трохи не так. Оскільки клас <code>String</code> дуже важливий, у ньому використовується дуже багато оптимізацій, і дані в ньому зберігаються не у вигляді масиву символів, а просто у вигляді масиву байтів.</p>
+        </div>
+    </div>
+</div>
+<hr>
+<h2>2. Методи класу <code>String</code></h2>
+<p>Клас <code>String</code> має дуже багато методів: самих лише конструкторів 18 штук! Тому ми наведемо тільки найважливіші методи.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Методи</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">length</span>()</code></pre>
+        </td>
+        <td>Повертає кількість символів у рядку</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>boolean <span class="text-red">isEmpty</span>()</code></pre>
+        </td>
+        <td>Перевіряє, чи рядок є порожнім</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>boolean <span class="text-red">isBlank</span>()</code></pre>
+        </td>
+        <td>Перевіряє, чи рядок містить тільки пробіли або керівні символи (tab, enter тощо)</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>char <span class="text-red">charAt</span>(int index)</code></pre>
+        </td>
+        <td>Повертає символ, який знаходиться в рядку на позиці з номером index</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>char[] <span class="text-red">toCharArray</span>()</code></pre>
+        </td>
+        <td>Повертає масив символів (копію), з яких складається рядок</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>byte[] <span class="text-red">getBytes</span>()</code></pre>
+        </td>
+        <td>Перетворює рядок на набір байтів і повертає масив байтів</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String[] <span class="text-red">split</span>(String regex)</code></pre>
+        </td>
+        <td>Розділяє рядок на кілька підрядків</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String <span class="text-red">join</span>(CharSequence delimiter, elements)</code></pre>
+        </td>
+        <td>Склеює в один рядок кілька підрядків</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String <span class="text-red">intern</span>()</code></pre>
+        </td>
+        <td>Поміщає рядок у пул <code>StringPool</code></td>
+    </tr>
+    </tbody>
+</table>
+<p>Докладну інформацію про конструктори див. у статті «<a href="https://javarush.com/groups/posts/konstruktory-v-java-1">Навіщо потрібен конструктор?</a>»</p>
+<p>Спробуймо написати програму, що перетворює шлях до файлу у форматі ОС Unix на формат, який використовується в ОС Windows. В ОС Unix роздільником директорій є символ <code>/</code>, а в ОС Windows — символ <code>\</code>.</p>
+<p><strong>Спосіб 1 —</strong> використання масиву символів (char)</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітки</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Scanner <span class="text-orange">console</span> = new Scanner(System.in);
+String <span class="text-green">path</span> = <span class="text-orange">console</span>.nextLine();
+
+char[] <span class="text-user">chars</span> = <span class="text-green">path</span>.<span class="text-red">toCharArray</span>();
+for (int i = 0; i &lt; <span class="text-user">chars</span>.length; i++)
+   if (<span class="text-user">chars</span>[i] == '/')
+      <span class="text-user">chars</span>[i] = '\\';
+
+String <span class="text-viola">result</span> = new String(<span class="text-user">chars</span>);
+System.out.println(<span class="text-viola">result</span>);</code></pre>
+        </td>
+        <td>Створення об'єкта Scanner<br/> Читання рядка з консолі<br/><br/> Перетворення рядка на масив символів<br/> Цикл по символах<br/> Якщо символ дорівнює <code>/</code>,<br/> замінити його на <code>\</code>. Не забуваємо про екранування.<br/><br/> Створюємо новий рядок на основі масиву символів.<br/> Виводимо рядок на екран.</td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Спосіб 2</strong> — використання методів <code>split()</code> і <code>join()</code>:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітки</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Scanner <span class="text-orange">console</span> = new Scanner(System.in);
+String <span class="text-green">path</span> = <span class="text-orange">console</span>.nextLine();
+
+String[] <span class="text-user">array</span> = <span class="text-green">path</span>.<span class="text-red">split</span>("/");
+
+
+String result = <span class="text-viola">String</span>.<span class="text-red">join</span>("\\", <span class="text-user">array</span>);
+
+
+System.out.println(result);</code></pre>
+        </td>
+        <td>Створення об'єкта Scanner<br/> Читання рядка з консолі<br/><br/> Перетворення рядка на <span class="text-user">масив рядків</span>. Як роздільник використовується символ <code>/</code> (дві додаткові скісні риски — це результат подвійного екранування).<br/> Об'єднуємо всі рядки з <span class="text-user">масиву рядків</span>; як роздільник використовується символ <code>\</code> (ми бачимо його екранованим).<br/><br/> Виводимо рядок на екран.</td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Спосіб 3</strong> — використання методу <code>replace(char oldChar, char newChar)</code>:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітки</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Scanner <span class="text-orange">console</span> = new Scanner(System.in);
+String <span class="text-green">path</span> = <span class="text-orange">console</span>.nextLine();
+
+String <span class="text-viola">result</span> = <span class="text-green">path</span>.<span class="text-red">replace</span>('/', '\\');
+
+System.out.println(<span class="text-viola">result</span>);</code></pre>
+        </td>
+        <td>Створення об'єкта Scanner<br/> Читання рядка з консолі<br/><br/> Просто замінюємо один символ на другий<br/> (другий символ екрановано)<br/> Виводимо рядок на екран.</td>
+    </tr>
+    </tbody>
+</table>

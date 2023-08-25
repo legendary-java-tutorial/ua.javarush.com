@@ -1,0 +1,286 @@
+﻿Відображення часу — форматування
+<p>----------------------------------------</p>
+Клас DateTimeFormatter. У Date Time API було додано спеціальний клас DateTimeFormatter. Його призначення — максимально полегшити перетворення дати й часу саме в той формат, який потрібен програмісту. І можна сказати, що авторам Java це вдалося. Користуватися цим класом дуже просто. Спочатку потрібно
+<p>----------------------------------------</p>
+<h2>1. Клас DateTimeFormatter</h2>
+<p>У Date Time API було додано спеціальний клас <code><span class="text-neon">DateTimeFormatter</span></code>. Його призначення — максимально полегшити перетворення дати й часу саме в той формат, який потрібен програмісту. І можна сказати, що авторам Java це вдалося.</p>
+<p>Користуватися цим класом дуже просто. Спочатку потрібно створити об'єкт класу <code><span class="text-neon">DateTimeFormatter</span></code> і передати в нього шаблон, за яким відображатимуться дата й час:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm language-java"><code><span class="text-neon">DateTimeFormatter</span> <span class="text-user">dtf</span> = <span class="text-neon">DateTimeFormatter</span>.<span class="text-red">ofPattern</span>(<span class="text-green">шаблон</span>);</code></pre>
+</div>
+<p>де <code><span class="text-user">dtf</span></code>&nbsp;— це змінна типу <code><span class="text-neon">DateTimeFormatter</span></code>, <code><span class="text-neon">DateTimeFormatter</span>.<span class="text-red">ofPattern</span>()</code> — це статичний метод класу <code><span class="text-neon">DateTimeFormatter</span></code>, а <span class="text-green">шаблон</span> — це рядок, що задає шаблон, за яким відображатимуться дата й час.</p>
+<p>Приклади</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">DateTimeFormatter</span> <span class="text-user">dtf</span> = <span class="text-neon">DateTimeFormatter</span>.<span class="text-red">ofPattern</span>(<span class="text-green">"MM-dd-yy"</span>);
+String <span class="text-orange">text</span> = <span class="text-user">dtf</span>.<span class="text-red">format</span>( LocalDateTime.<span class="text-viola">now</span>() );
+System.out.println(<span class="text-orange">text</span>);</code></pre>
+        </td>
+        <td><pre><code>
+
+02-22-19</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>У прикладі вище ми за допомогою методу <code><span class="text-red">ofPattern</span>()</code> створюємо об'єкт <code><span class="text-neon">DateTimeFormatter</span></code> на основі рядка-шаблону. А в наступному рядку за допомогою методу <code><span class="text-red">format</span>()</code> перетворюємо об'єкт типу <code>LocalDateTime</code> на рядок. Результат ви бачите на екрані.</p>
+<p>У метод <code><span class="text-red">format</span>()</code> можна передати практично будь-який об'єкт із Date Time API.</p>
+<p>Статичний метод <code><span class="text-red">ofPattern</span>()</code> теж дуже простий: отримує як параметр рядок-шаблон, а повертає об'єкт типу <code><span class="text-neon">DateTimeFormatter</span></code>. Найцікавіше міститься всередині шаблону.</p>
+<hr>
+<h2>2. Шаблон форматування</h2>
+<p>Рядок, переданий параметром, використовується як шаблон під час виведення інформації. <strong>MM</strong> замінюється на номер місяця, <strong>dd</strong> — на день місяця, <strong>yy</strong> — на номер року. Регістр літер має значення.</p>
+<p>Повна таблиця перетворення часу має такий вигляд:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Літера</th>
+        <th>Позначення</th>
+    </tr>
+    <tr>
+        <td class="text-center"><strong>y</strong></td>
+        <td>Рік (Year)</td>
+    </tr>
+    <tr>
+        <td class="text-center"><strong>M</strong></td>
+        <td>Місяць (Month)</td>
+    </tr>
+    <tr>
+        <td class="text-center"><strong>d</strong></td>
+        <td>День (day)</td>
+    </tr>
+    <tr>
+        <td class="text-center"><strong>H</strong></td>
+        <td>Години (Hours)</td>
+    </tr>
+    <tr>
+        <td class="text-center"><strong>m</strong></td>
+        <td>Хвилини (Minutes)</td>
+    </tr>
+    <tr>
+        <td class="text-center"><strong>s</strong></td>
+        <td>Секунди (Seconds)</td>
+    </tr>
+    <tr>
+        <td class="text-center"><strong>S</strong></td>
+        <td>Мілісекунди</td>
+    </tr>
+    <tr>
+        <td class="text-center"><strong>n</strong></td>
+        <td>Наносекунди</td>
+    </tr>
+    </tbody>
+</table>
+<p>Взагалі, запам'ятати не складно.</p>
+<p>А чому тоді в шаблоні з прикладу літери MM, dd та yy написані по два рази? А це вже цікавіше.</p>
+<p><strong>Загальна ідея</strong></p>
+<p>Кількість літер впливає на довжину тексту. Що більше літер, то довшим буде текст.</p>
+<p>Якщо літеру H вказано один раз, то 9 година відображатиметься як 9, а якщо літеру H указано двічі поспіль, то 9 година відображатиметься як 09.</p>
+<p>Якщо літеру y вказано двічі поспіль, то рік пишеться 2 цифрами, якщо 4 рази поспіль — 4-мя цифрами.</p>
+<p>Якщо літеру M вказано двічі поспіль, то пишеться номер місяця, якщо тричі поспіль, то назва місяця (3 перші літери), якщо 4 рази поспіль, то повна назва місяця.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>DateTimeFormatter <span class="text-user">dtf</span> = DateTimeFormatter.<span class="text-red">ofPattern</span>(<span class="text-green">"MMMM-dd-yyyy"</span>);
+String <span class="text-orange">text</span> = <span class="text-user">dtf</span>.<span class="text-red">format</span>( LocalDateTime.now() );
+System.out.println(<span class="text-orange">text</span>);</code></pre>
+        </td>
+        <td><pre><code>
+
+February-22-2019</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task16.task1619"></div>
+<hr>
+<h2>3. Повна таблиця шаблонів</h2>
+<p>Повна таблиця досить велика й дуже цікава:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Шаблон</th>
+        <th>Варіанти шаблону</th>
+        <th>Приклад</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td class="text-center"><strong>y</strong></td>
+        <td>yy, yyyy</td>
+        <td>19; 2019</td>
+        <td>Рік</td>
+    </tr>
+    <tr>
+        <td class="text-center"><strong>M/L</strong></td>
+        <td>M, MM, MMM, MMMM, MMMMM</td>
+        <td>1; 01; Jan; January; J</td>
+        <td>Місяць</td>
+    </tr>
+    <tr>
+        <td class="text-center"><strong>d</strong></td>
+        <td>d, dd</td>
+        <td>9; 09</td>
+        <td>День</td>
+    </tr>
+    <tr>
+        <td class="text-center"><strong>H</strong></td>
+        <td>H, HH</td>
+        <td>2; 02</td>
+        <td>Години</td>
+    </tr>
+    <tr>
+        <td class="text-center"><strong>m</strong></td>
+        <td>m, mm</td>
+        <td>3; 03</td>
+        <td>Хвилини</td>
+    </tr>
+    <tr>
+        <td class="text-center"><strong>s</strong></td>
+        <td>s, ss</td>
+        <td>5; 05</td>
+        <td>Секунди</td>
+    </tr>
+    <tr>
+        <td class="text-center"><strong>S</strong></td>
+        <td>S, SS, SSS, ...</td>
+        <td>1; 12; 123</td>
+        <td>Мілісекунди</td>
+    </tr>
+    <tr>
+        <td class="text-center"><strong>n</strong></td>
+        <td>n</td>
+        <td>123456789</td>
+        <td>Наносекунди</td>
+    </tr>
+    <tr>
+        <td class="text-center"><strong>G</strong></td>
+        <td>G, GGGG, GGGGG</td>
+        <td>AD; Anno Domini; A;</td>
+        <td>Ера</td>
+    </tr>
+    <tr>
+        <td class="text-center"><strong>Q/q</strong></td>
+        <td>q, qq, qqq, qqqq</td>
+        <td>3; 03; Q3; 3rd quarter</td>
+        <td>Квартал</td>
+    </tr>
+    <tr>
+        <td class="text-center"><strong>w</strong></td>
+        <td>w</td>
+        <td>13</td>
+        <td>Тиждень року</td>
+    </tr>
+    <tr>
+        <td class="text-center"><strong>W</strong></td>
+        <td>W</td>
+        <td>3</td>
+        <td>Тиждень місяця</td>
+    </tr>
+    <tr>
+        <td class="text-center"><strong>E</strong></td>
+        <td>EEE, EEEE, EEEEE</td>
+        <td>Mon; Monday; M</td>
+        <td>День тижня</td>
+    </tr>
+    <tr>
+        <td class="text-center"><strong>e/c</strong></td>
+        <td>e, ee, eee, eeee, eeeee</td>
+        <td>1; 01; Mon; Monday; M</td>
+        <td>День тижня</td>
+    </tr>
+    <tr>
+        <td class="text-center"><strong>a</strong></td>
+        <td>a</td>
+        <td>PM</td>
+        <td>AM або PM</td>
+    </tr>
+    <tr>
+        <td class="text-center"><strong>h</strong></td>
+        <td>h</td>
+        <td>12</td>
+        <td>Час 1–12 годин</td>
+    </tr>
+    <tr>
+        <td class="text-center"><strong>V</strong></td>
+        <td>VV</td>
+        <td>Europe/Helsinki</td>
+        <td>Часова зона</td>
+    </tr>
+    <tr>
+        <td class="text-center"><strong>z</strong></td>
+        <td>z zzzz</td>
+        <td>EET; &nbsp;Eastern European Standard Time</td>
+        <td>Часова зона</td>
+    </tr>
+    <tr>
+        <td class="text-center"><strong>O</strong></td>
+        <td>O OOOO</td>
+        <td>GMT+2; &nbsp;GMT+02:00</td>
+        <td>Часова зона</td>
+    </tr>
+    </tbody>
+</table>
+<p>Це, до речі, ще неповний список. Повний знаходиться за посиланням:</p>
+<p><a href="https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/time/format/DateTimeFormatter.html">https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/time/format/DateTimeFormatter.html</a></p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task16.task1620"></div>
+<hr>
+<h2>4. Парсинг часу</h2>
+<p>Клас <code><span class="text-neon">DateTimeFormatter</span></code> цікавий ще й тим, що може не тільки перетворювати дату й час на рядок за заданим шаблоном, але й виконувати зворотну операцію!</p>
+<p>Аналіз і розбір рядка називають парсингом, від слова <span class="term">parse</span>.</p>
+<p>Отакий вигляд має цей процес:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>DateTimeFormatter <span class="text-user">dtf</span> = DateTimeFormatter.<span class="text-red">ofPattern</span>(<span class="text-green">"MMMM-dd-yyyy"</span>, Locale.<span class="text-viola">ENGLISH</span>);
+LocalDate <span class="text-viola">date</span> = LocalDate.parse(<span class="text-green">"February-23-2019"</span>, <span class="text-user">dtf</span>);
+System.out.println(<span class="text-viola">date</span>);</code></pre>
+        </td>
+        <td><pre><code>
+
+February-23-2019</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Спочатку ми створюємо об'єкт <code>DateTimeFormatter</code> і задаємо в ньому шаблон парсингу.</p>
+<p>Відтак викликаємо метод <code>LocalDate.parse()</code> або <code>LocalTime.parse()</code>, або <code>LocalDateTime.parse()</code> і передаємо в цей метод рядок, який потрібно розпарсити, і об'єкт <code>DateTimeFormatter</code>, який розуміє, як і за яким шаблоном слід розпарсити переданий текст.</p>
+<p>Ще один приклад: цього разу з парсингом часу.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>DateTimeFormatter <span class="text-user">dtf</span> = DateTimeFormatter.<span class="text-red">ofPattern</span>(<span class="text-green">"HH:mm:ss"</span>);
+LocalTime <span class="text-viola">time</span> = LocalTime.<span class="text-red">parse</span>(<span class="text-green">"23:59:59"</span>, <span class="text-user">dtf</span>);
+System.out.println(<span class="text-viola">time</span>);</code></pre>
+        </td>
+        <td><pre><code>
+
+23:59:59</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task16.task1621"></div>

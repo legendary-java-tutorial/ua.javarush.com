@@ -1,0 +1,389 @@
+Патерни проєктування. Декоратор
+<p>----------------------------------------</p>
+Ми вже пройшли таку схему використання об’єкта класу, як Singleton, але ти, можливо, ще не підозрюєш, що це один із патернів проєктування, причому один із тих, що найчастіше використовується...
+<p>----------------------------------------</p>
+<p>Ми вже пройшли таку схему використання об’єкта класу, як Singleton, але ти, можливо, ще не підозрюєш, що це один із
+    патернів проєктування, причому один із тих, що найчастіше використовується.</p>
+
+    <p>Насправді існує дуже багато цих самих патернів, ба більше — вони мають ієрархію, і у кожного патерну — своє призначення.</p>
+
+    <h2>Класифікація патернів</h2>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Вид патерну Застосовність</th>
+                <th>Застосовність</th>
+            </tr>
+            <tr>
+                <td>Породжувальні</td>
+                <td>Тип, який вирішує проблему створення об’єктів</td>
+            </tr>
+            <tr>
+                <td>Структурні</td>
+                <td>Патерни, які дозволяють побудувати правильну, доступну до розширення ієрархію класів у нашій архітектурі</td>
+            </tr>
+            <tr>
+                <td>Поведінкові</td>
+                <td>Цей кластер патернів відповідає за безпечну та зручну взаємодію між об’єктами програми</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>Зазвичай патерн характеризується проблемою, яку він вирішує. Давайте розглянемо кілька патернів, з якими ми найчастіше
+    стикаємося під час роботи з Java:</p>
+
+    <table>
+        <tbody>
+            </tr>
+                <th>Патерн</th>
+                <th>Призначення</th>
+            </tr>
+            <tr>
+                <td>Singleton</td>
+                <td>З ним ми вже знайомі і використовуємо його для створення та звернення до класу, у якого не може бути більше ніж один
+                екземпляр.</td>
+            </tr>
+            <tr>
+                <td>Iterator</td>
+                <td>Ми, до речі, теж із ним знайомі та знаємо, що цей патерн дозволяє нам перебирати складовий об’єкт, не розкриваючи його
+                внутрішнього представлення. Використовується з колекціями.</td>
+            </tr>
+            <tr>
+                <td>Adapter</td>
+                <td>Пов’язує несумісні об’єкти для спільної роботи. Думаю, що говорячи про адаптер, кожен собі уявляє саме те, що і робить
+                цей патерн. Простий приклад із життя — адаптер USB — вилка в розетку.</td>
+            </tr>
+            <tr>
+                <td>Template Method</td>
+                <td>
+                    <p>Поведінковий патерн програмування, який вирішить проблему інтеграції та дозволяє, не змінюючи структуру алгоритму,
+                    змінити його кроки.</p>
+                    <p>Уявимо, що у нас є алгоритм збирання автомобіля у вигляді послідовності збирання:</p>
+                    <p>Шасі -&gt; Кузов -&gt; Двигун -&gt; збірка салону</p>
+                    <p>Якщо ми поставимо посилену раму, потужніший двигун або салон із додатковим підсвічуванням, ми все одно не змінимо
+                    алгоритм, і абстрактна послідовність залишиться такою самою.</p>
+                </td>
+            </tr>
+            <tr>
+                <td>Decorator</td>
+                <td>Створює об’єктам обгортки, щоб додати їм корисну функціональність. Його ми й розглянемо в цій статті.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>В Java.io патерни реалізуються у таких класах:</p>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Патерн</th>
+                <th>Де використовується в Java.io</th>
+            </tr>
+            <tr>
+                <td>Adapter</td>
+                <td>
+                    <ul>
+                        <li><a href="http://docs.oracle.com/javase/8/docs/api/java/io/InputStreamReader.html#InputStreamReader-java.io.InputStream-" target="_blank">java.io.InputStreamReader(InputStream)</a> (повертає  <span class="text-green"><span class="text-bold">Reader</span></span>)</li>
+                        <li><a href="http://docs.oracle.com/javase/8/docs/api/java/io/OutputStreamWriter.html#OutputStreamWriter-java.io.OutputStream-" target="_blank">java.io.OutputStreamWriter(OutputStream)</a> (повертає  <span class="text-green"><span class="text-bold">Writer</span></span>)</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Template Method</td>
+                <td>
+                    <ul>
+                        <li><a href="http://docs.oracle.com/javase/8/docs/api/java/io/InputStream.html" target="_blank">java.io.InputStream</a></li>
+                        <li><a href="http://docs.oracle.com/javase/8/docs/api/java/io/OutputStream.html" target="_blank">java.io.OutputStream</a></li>
+                        <li><a href="http://docs.oracle.com/javase/8/docs/api/java/io/Reader.html" target="_blank">java.io.Reader</a></li>
+                        <li><a href="http://docs.oracle.com/javase/8/docs/api/java/io/Writer.html" target="_blank">java.io.Writer</a></li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Decorator</td>
+                <td>
+                    <ul>
+                        <li><a href="http://docs.oracle.com/javase/8/docs/api/java/io/InputStream.html" target="_blank">java.io.InputStream</a></li>
+                        <li><a href="http://docs.oracle.com/javase/8/docs/api/java/io/OutputStream.html" target="_blank">OutputStream</a></li>
+                        <li><a href="http://docs.oracle.com/javase/8/docs/api/java/io/Reader.html" target="_blank">Reader</a></li>
+                        <li><a href="http://docs.oracle.com/javase/8/docs/api/java/io/Writer.html" target="_blank">Writer</a></li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+ 
+    <h2>Патерн Декоратор</h2>
+
+    <p>Давайте уявимо, що ми описуємо модель проєктування будинку.</p>
+
+    <p>Загалом схема буде такою:</p>
+
+    <p>Спочатку у нас є вибір із декількох видів будинків. Мінімальна комплектація — один поверх із дахом, далі — за допомогою
+    декораторів будь-який із видів ми можемо змінити додатковими параметрами, і це впливатиме на ціну будинку.</p>
+
+    <p>Створюємо абстрактний клас будинку:</p>
+
+    <pre class='language-java line-numbers'><code>
+public abstract class House {
+	String info;
+ 
+	public String getInfo(){
+    	return info;
+	}
+ 
+	public abstract int getPrice();
+}
+    </code></pre>
+ 
+    <p>Тут у нас 2 методи:</p>
+
+    <ul>
+        <li><span class="code text-orange">getInfo()</span> повертає інформацію про назву та комплектацію нашого будинку;</li>
+        <li><span class="code text-orange">getPrice()</span> — ціну будинку в поточній комплектації.</li>
+    </ul>
+
+    <p>Також у нас є стандартні реалізації будинків — цегляний та дерев’яний:</p>
+
+    <pre class='language-java line-numbers'><code>
+public class BrickHouse extends House {
+ 
+	public BrickHouse() {
+    	info = "Цегляний будинок";
+	}
+ 
+	@Override
+	public int getPrice() {
+    	return 20_000;
+	}
+}
+ 
+public class WoodenHouse extends House {
+ 
+	public WoodenHouse() {
+    	info = "Дерев’яний будинок";
+	}
+ 
+	@Override
+	public int getPrice() {
+    	return 25_000;
+	}
+}
+    </code></pre>
+
+    <p>Обидва класи успадковують від класу <span class="code"><span class="text-green">House</span></span> та перевизначають
+    метод ціни, встановлюючи індивідуальну ціну за стандартний будинок. В конструкторі присвоюємо ім’я.</p>
+
+    <p>Далі нам потрібно написати класи — декоратори. Це класи, які також успадковані від класу <span class="code"><span
+            class="text-green">House</span></span>. Для цього ми створюємо абстрактний клас декоратора.</p>
+
+    <p>У нього ми можемо покласти додаткову логіку для зміни об’єкта. В нашому випадку додаткової логіки не буде, і абстрактний
+    клас буде порожнім.</p>
+
+    <pre class='language-java line-numbers'><code>
+abstract class HouseDecorator extends House {
+}
+    </code></pre>
+
+    <p>Далі створюємо класи-реалізації декораторів. Ми створимо кілька класів, які дозволяють додати до будинку додаткові
+    параметри:</p>
+
+    <pre class='language-java line-numbers'><code>
+public class SecondFloor extends HouseDecorator {
+	House house;
+ 
+	public SecondFloor(House house) {
+    	this.house = house;
+	}
+ 
+	@Override
+	public int getPrice() {
+    	return house.getPrice() + 20_000;
+	}
+ 
+	@Override
+	public String getInfo() {
+    	return house.getInfo() + " + второй этаж";
+	}
+}
+    </code></pre>
+ 
+    <table>
+        <tbody>
+            <tr>
+                <td>Декоратор, який додає другий поверх до нашого будинку
+</td>
+            </tr>
+        </tbody>
+    </table>
+
+     <p>У конструктор декоратора приймається будинок, до якого ми застосовуємо модифікації декоратора. А методи <span
+        class="code text-orange">getPrice()</span> та <span class="code text-orange">getInfo()</span> ми перевизначаємо,
+    повертаючи інформацію про новий модернізований будинок, створений на основі старого.</p>
+
+    <pre class='language-java line-numbers'><code>
+public class Garage extends HouseDecorator {
+ 
+	House house;
+	public Garage(House house) {
+    	this.house = house;
+	}
+ 
+	@Override
+	public int getPrice() {
+    	return house.getPrice() + 5_000;
+	}
+ 
+	@Override
+	public String getInfo() {
+    	return house.getInfo() + " + гараж";
+	}
+}
+    </code></pre>
+ 
+    <table>
+        <tbody>
+            <tr>
+                <td>Декоратор, який додає до нашого будинку гараж
+</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>Тепер ми можемо змінити наш будинок за допомогою декораторів. Для цього потрібно створити будинок:</p>
+
+    <pre class='language-java line-numbers'><code>
+House brickHouse = new BrickHouse();
+    </code></pre>
+
+    <p>Далі ми привласнюємо нашій змінній <mark class="user">house</mark> нове значення у вигляді декоратора, в який ми
+    передаємо наш будинок:</p>
+
+    <pre class='language-java line-numbers'><code>
+brickHouse = new SecondFloor(brickHouse); 
+    </code></pre>
+
+    <p>Наша змінна <mark class="user">house</mark> вже має будинок із другим поверхом.</p>
+
+    <p>Давайте розглянемо кейси використання декораторів:</p>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Приклад коду</th>
+                <th>Виведення</th>
+            </tr>
+            <tr>
+                <td>
+                    <pre class='language-java line-numbers'><code>
+House brickHouse = new BrickHouse(); 
+
+  System.out.println(brickHouse.getInfo());
+  System.out.println(brickHouse.getPrice());
+                    </code></pre>
+                </td> 
+                <td>
+                    <div class="terminal">
+                        <p>Цегляний будинок</p>
+                        <p>20000</p>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <pre class='language-java line-numbers'><code>
+House brickHouse = new BrickHouse(); 
+
+  brickHouse = new SecondFloor(brickHouse); 
+
+  System.out.println(brickHouse.getInfo());
+  System.out.println(brickHouse.getPrice());
+                    </code></pre>
+                </td>
+                <td>
+                    <div class="terminal">
+                        <p>Цегляний будинок + другий поверх</p>
+                        <p>40000</p>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <pre class='language-java line-numbers'><code>
+House brickHouse = new BrickHouse();
+ 
+
+  brickHouse = new SecondFloor(brickHouse);
+  brickHouse = new Garage(brickHouse);
+
+  System.out.println(brickHouse.getInfo());
+  System.out.println(brickHouse.getPrice());
+                    </code></pre>
+                </td>
+                <td> 
+                    <div class="terminal">
+                        <p>Цегляний будинок + другий поверх + гараж</p>
+                        <p>45000</p>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <pre class='language-java line-numbers'><code>
+House woodenHouse = new SecondFloor(new Garage(new WoodenHouse())); 
+
+  System.out.println(woodenHouse.getInfo());
+  System.out.println(woodenHouse.getPrice());
+                    </code></pre>
+                </td>
+                <td>
+                    <div class="terminal">
+                        <p>Дерев’яний будинок + гараж + другий поверх</p>
+                        <p>50000</p>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <pre class='language-java line-numbers'><code>
+House woodenHouse = new WoodenHouse(); 
+
+  House woodenHouseWithGarage = new Garage(woodenHouse);
+
+  System.out.println(woodenHouse.getInfo());
+  System.out.println(woodenHouse.getPrice());
+
+  System.out.println(woodenHouseWithGarage.getInfo());
+  System.out.println(woodenHouseWithGarage.getPrice());
+                    </code></pre>
+                </td>
+                <td>
+                    <div class="terminal">
+                         <p>Дерев’яний будинок</p>
+                         <p>25000</p>
+                         <p>Дерев’яний будинок + гараж</p>
+                         <p>30000</p>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+     </table>
+
+    <p>У цьому прикладі ми бачимо перевагу модернізації об’єкта за допомогою декоратора. Виходить, що ми не змінили власне
+    об’єкт <mark class="green">woodenHouse</mark>, а створили новий об’єкт на базі нього. Але крізь цю перевагу можна
+    розгледіти й недоліки: ми щоразу створюємо новий об’єкт у пам’яті, що дає на неї додаткове навантаження.</p>
+
+    <p>Розглянемо UML діаграму нашої програми:</p>
+ 
+    <img data-max-width="800" data-id="e42bbbdd-f89b-4d65-93b1-d16194daafc0" src="https://cdn.javarush.com/images/article/e42bbbdd-f89b-4d65-93b1-d16194daafc0/original.png" alt="">
+
+    <p>Декоратор реалізується досить просто та застосовується для динамічної зміни об’єктів, їхньої модернізації. Декоратор
+    можна розпізнати за конструкторами, які приймають у параметрах об’єкти того самого абстрактного типу або інтерфейсу, що
+    й поточний клас. В Java цей патерн широко використовується в класах введення/виведення.</p>
+
+    <p>Наприклад, як ми вже зазначили, всі підкласи <span class="code"><span
+            class="text-green">java.io.InputStream</span></span> <span class="code"><span
+            class="text-green">OutputStream</span></span>, <span class="code"><span class="text-green">Reader</span></span>
+    та <span class="code"><span class="text-green">Writer</span></span> мають конструктор, який приймає об’єкти цих самих
+    класів.</p>

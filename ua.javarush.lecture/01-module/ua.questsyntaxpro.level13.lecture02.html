@@ -1,0 +1,521 @@
+﻿Допоміжний клас Collections
+<p>----------------------------------------</p>
+Список методів. Пам'ятаєте, як розробники Java для зручності роботи з масивами написали цілий клас-помічник — Arrays? Для колекцій вони зробили те саме. У Java є клас java.util.Collections, який має дуже багато корисних методів для роботи з колекціями. Наведемо найцікавіші з них:
+<p>----------------------------------------</p>
+<h2>1. Список методів</h2>
+<p>Пам'ятаєте, як розробники Java для зручності роботи з масивами написали цілий клас-помічник — <code>Arrays</code>?</p>
+<p>Для колекцій вони зробили те саме. У Java є клас <code>java.util.Collections</code>, який має дуже багато корисних методів для роботи з колекціями. Наведемо найцікавіші з них:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Методи</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">addAll</span>(<span class="text-user">colls</span>, e1, e2, e3, ..)</code></pre>
+        </td>
+        <td>Додає в колекцію <code><span class="text-user">colls</span></code> елементи <code>e1</code>, <code>e2</code>, <code>e3</code>…</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">fill</span>(list, obj)</code></pre>
+        </td>
+        <td>Замінює в переданому списку всі елементи на <code>obj</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">nCopies</span>(n, obj)</code></pre>
+        </td>
+        <td>Повертає список, який містить <code>n</code> копій об'єкта <code>obj</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">replaceAll</span>(list, oldVal, newVal)</code></pre>
+        </td>
+        <td>Замінює в списку <code>list</code> усі значення <code>oldVal</code> на <code>newVal</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">copy</span>(dest, src)</code></pre>
+        </td>
+        <td>Копіює всі елементи зі списку <code>src</code> у список <code>dest</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">reverse</span>(list)</code></pre>
+        </td>
+        <td>Розташовує елементи списку в зворотному порядку</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">sort</span>(list)</code></pre>
+        </td>
+        <td>Відсортовує список за зростанням</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">rotate</span>(list, n)</code></pre>
+        </td>
+        <td>Циклічно зсуває елементи списку <code>list</code> на <code>n</code> елементів</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">shuffle</span>(list)</code></pre>
+        </td>
+        <td>Перемішує елементи списку й розташовує їх у довільному порядку</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">min</span>(colls)</code></pre>
+        </td>
+        <td>Знаходить мінімальний елемент колекції <code>colls</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">max</span>(colls)</code></pre>
+        </td>
+        <td>Знаходить максимальний елемент колекції <code>colls</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">frequency</span>(colls, obj)</code></pre>
+        </td>
+        <td>Визначає, скільки разів зустрічається елемент <code>obj</code> у колекції <code>colls</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">binarySearch</span>(list, key)</code></pre>
+        </td>
+        <td>Шукає елемент <code>key</code> у відсортованому списку й повертає його індекс</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-red">disjoint</span>(colls1, colls2)</code></pre>
+        </td>
+        <td>Повертає <code>true</code>, якщо колекції не мають однакових елементів</td>
+    </tr>
+    </tbody>
+</table>
+<div class="lesson-note lesson-note--important">
+    <div class="lesson-note__container">
+        <div class="lesson-note__head">Важливо!</div>
+        <div class="lesson-note__content">
+            <p>Багато з цих методів працюють не з класами <code>ArrayList</code>, <code>HashSet</code> і <code>HashMap</code>, а з їхніми інтерфейсами: <code>Collection&lt;T&gt;</code>, <code>List&lt;T&gt;</code>, <code>Map&lt;K, V&gt;</code>.</p>
+            <p>Це не проблема: якщо метод отримує <code>List&lt;T&gt;</code>, у нього завжди можна передати <code>ArrayList&lt;Integer&gt;</code>, але у зворотному напрямку присвоювання не працює.</p>
+        </div>
+    </div>
+</div>
+<hr>
+<h2>2. Створення та змінення колекцій</h2>
+<p><strong>Метод <code>Collections.addAll(Collection&lt;T&gt; colls, T e1, T e2, T e3, ...)</code></strong></p>
+<p>Метод <code>addAll()</code> додає в колекцію <code>colls</code> елементи <code>e1</code>, <code>e2</code>, <code>e3</code>... Можна передати будь-яку кількість елементів.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>ArrayList&lt;Integer&gt; <span class="code text-user">list</span> = new ArrayList&lt;Integer&gt;();
+<span class="text-neon">Collections</span>.<span class="text-red">addAll</span>(<span class="code text-user">list</span>, 1, 2, 3, 4, 5);
+
+for (int i: <span class="code text-user">list</span>)
+   System.out.println(i);</code></pre>
+        </td>
+        <td>
+                <pre><code>1
+2
+3
+4
+5</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Метод <code>Collections.fill(List&lt;T&gt; list, T obj)</code></strong></p>
+<p>Метод <code>fill()</code> замінює всі елементи колекції <code>list</code> на елемент <code>obj</code>.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>ArrayList&lt;Integer&gt; <span class="code text-user">list</span> = new ArrayList&lt;Integer&gt;();
+<span class="code text-user">list</span>.<span class="text-red">add</span>(1);
+<span class="code text-user">list</span>.<span class="text-red">add</span>(2);
+<span class="code text-user">list</span>.<span class="text-red">add</span>(3);
+
+<span class="text-neon">Collections</span>.<span class="text-red">fill</span>(<span class="code text-user">list</span>, 10);
+
+for (int i: <span class="code text-user">list</span>)
+   System.out.println(i);</code></pre>
+        </td>
+        <td>
+                <pre><code>10
+10
+10</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Метод <code>Collections.nCopies (int n, T obj)</code></strong></p>
+<p>Метод <code>nCopies()</code> повертає список з <code>n</code> копій елементів <code>obj</code>. Список можна назвати фіктивним (реального масиву в ньому немає), тому змінювати його не можна! Його можна використовувати лише для читання.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>List&lt;<span class="text-green">String</span>&gt; <span class="code text-orange">fake</span> = <span class="text-neon">Collections</span>.<span class="text-red">nCopies</span>(5, "Привіт");
+
+ArrayList&lt;<span class="text-green">String</span>&gt; <span class="code text-user">list</span> = new ArrayList&lt;String&gt;(<span class="code text-orange">fake</span>);
+
+for(<span class="text-green">String</span> s: <span class="code text-user">list</span>)
+   System.out.println(s);</code></pre>
+        </td>
+        <td>Створюємо незмінюваний список із 5 елементів <code><span class="text-green">Привіт</span></code><br/> Створюємо реальний список <code><span class="text-user">list</span></code>, заповнюємо його значеннями зі списку <code><span class="text-orange">fake</span></code>.<br/><br/> Виводимо на екран:<br/>
+            <pre><code>Привіт
+Привіт
+Привіт
+Привіт
+Привіт</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Метод <code>Collections.replaceAll (List&lt;T&gt; list, T oldValue, T newValue)</code></strong></p>
+<p>Метод <code>replaceAll()</code> замінює всі елементи колекції <code>list</code>, які дорівнюють <code>oldValue</code>, на елемент <code>newValue</code>.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>ArrayList&lt;Integer&gt; <span class="code text-user">list</span> = new ArrayList&lt;Integer&gt;();
+<span class="code text-user">list</span>.add(1);
+<span class="code text-user">list</span>.add(2);
+<span class="code text-user">list</span>.add(3);
+
+<span class="text-neon">Collections</span>.<span class="text-red">replaceAll</span>(<span class="code text-user">list</span>, <span class="code">2</span>, <span class="code">20</span>);
+
+for (int i: <span class="code text-user">list</span>)
+   System.out.println(i);</code></pre>
+        </td>
+        <td>
+                <pre><code>1
+20
+3</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Метод <code>Collections.copy (List&lt;T&gt; dest, List&lt;T&gt; src)</code></strong></p>
+<p>Метод <code>copy()</code> копіює всі елементи колекції <code>src</code> в колекцію <code>dest</code>.</p>
+<p>Якщо початковий розмір колекції <code>dest</code> більший за розмір колекції <code>src</code>, то решта елементів у колекції <code>dest</code> не змінюється.</p>
+<div class="lesson-note lesson-note--important">
+    <div class="lesson-note__container">
+        <div class="lesson-note__head">Важливо!</div>
+        <div class="lesson-note__content">
+            Розмір колекції <code>dest</code> має бути не меншим за розмір колекції <code>src</code> (інакше буде викинуто виняток <code>IndexOutOfBoundsException</code>).
+        </div>
+    </div>
+</div>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>ArrayList&lt;Integer&gt; <span class="code text-green">srcList</span> = new ArrayList&lt;Integer&gt;();
+<span class="text-neon">Collections</span>.<span class="text-red">addAll</span>(<span class="code text-green">srcList</span>, 99, 98, 97);
+
+ArrayList&lt;Integer&gt; <span class="code text-user">destList</span> = new ArrayList&lt;Integer&gt;();
+<span class="text-neon">Collections</span>.<span class="text-red">addAll</span>(<span class="code text-user">destList</span>, 1, 2, 3, 4, 5, 6, 7);
+
+<span class="text-neon">Collections</span>.<span class="text-red">copy</span>(<span class="code text-user">destList</span>, <span class="code text-green">srcList</span>);
+
+for (int i: <span class="code text-user">destList</span>)
+   System.out.println(i);</code></pre>
+        </td>
+        <td>
+                <pre><code>99
+98
+97
+4
+5
+6
+7</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task13.task1306"></div>
+<hr>
+<h2>3. Порядок елементів</h2>
+<p><strong>Метод <code>Collections.reverse(List&lt;T&gt; list)</code></strong></p>
+<p>Метод <code>reverse()</code> змінює порядок переданих у нього елементів списку на зворотний.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>ArrayList&lt;Integer&gt; <span class="code text-user">list</span> = new ArrayList&lt;Integer&gt;();
+<span class="text-neon">Collections</span>.<span class="text-red">addAll</span>(<span class="code text-user">list</span>, 1, 2, 3, 4, 5);
+
+<span class="text-neon">Collections</span>.<span class="text-red">reverse</span>(<span class="code text-user">list</span>);
+
+for (int i: <span class="code text-user">list</span>)
+   System.out.println(i);</code></pre>
+        </td>
+        <td>
+                <pre><code>5
+4
+3
+2
+1</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Метод <code>Collections.sort(List&lt;T&gt; list)</code></strong></p>
+<p>Метод <code>sort()</code> сортує переданий у нього список за зростанням.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>ArrayList&lt;Integer&gt; <span class="code text-user">list</span> = new ArrayList&lt;Integer&gt;();
+<span class="text-neon">Collections</span>.<span class="text-red">addAll</span>(<span class="code text-user">list</span>, 11, 2, 23, 4, 15);
+
+<span class="text-neon">Collections</span>.<span class="text-red">sort</span>(<span class="code text-user">list</span>);
+
+for (int i: <span class="code text-user">list</span>)
+   System.out.println(i);</code></pre>
+        </td>
+        <td>
+                <pre><code>2
+4
+11
+15
+23</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Метод <code>Collections.rotate(List&lt;T&gt; list, int distance)</code></strong></p>
+<p>Метод <code>rotate()</code> циклічно зсуває передані в нього елементи на <code>distance</code> позицій уперед.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>ArrayList&lt;Integer&gt; <span class="code text-user">list</span> = new ArrayList&lt;Integer&gt;();
+<span class="text-neon">Collections</span>.<span class="text-red">addAll</span>(<span class="code text-user">list</span>, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+
+<span class="text-neon">Collections</span>.<span class="text-red">rotate</span>(<span class="code text-user">list</span>, 3); // зсунути на 3 позиції
+
+for (int i: <span class="code text-user">list</span>)
+   System.out.println(i);</code></pre>
+        </td>
+        <td>
+                <pre><code>7
+8
+9
+1
+2
+3
+4
+5
+6</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Метод <code>Collections.shuffle(List&lt;T&gt; list)</code></strong></p>
+<p>Метод <code>shuffle()</code> перемішує всі елементи переданого списку й розташовує їх у довільному порядку. Результат щоразу буде різним.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>ArrayList&lt;Integer&gt; <span class="code text-user">list</span> = new ArrayList&lt;Integer&gt;();
+<span class="text-neon">Collections</span>.<span class="text-red">addAll</span>(<span class="code text-user">list</span>, 1, 2, 3, 4, 5);
+
+<span class="text-neon">Collections</span>.<span class="text-red">shuffle</span>(<span class="code text-user">list</span>); // перемішуємо
+
+for (int i: <span class="code text-user">list</span>)
+   System.out.println(i);</code></pre>
+        </td>
+        <td>
+                <pre><code>5
+2
+4
+3
+1</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task13.task1307"></div>
+<hr>
+<h2>4. Пошук елементів у колекціях</h2>
+<p><strong>Метод <code>Collections.min(Collection&lt;T&gt; colls)</code></strong></p>
+<p>Метод <code>min()</code> повертає мінімальний елемент колекції.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>ArrayList&lt;Integer&gt; <span class="code text-user">list</span> = new ArrayList&lt;Integer&gt;();
+<span class="text-neon">Collections</span>.addAll(<span class="code text-user">list</span>, 11, 2, 23, 4, 15);
+
+int <span class="code text-green">min</span> = <span class="text-neon">Collections</span>.<span class="text-red">min</span>(<span class="code text-user">list</span>);
+
+System.out.println(<span class="code text-green">min</span>);</code></pre>
+        </td>
+        <td>
+            <pre><code>2</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Метод <code>Collections.max(Collection&lt;T&gt; colls)</code></strong></p>
+<p>Метод <code>max()</code> повертає максимальний елемент колекції.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>ArrayList&lt;Integer&gt; <span class="code text-user">list</span> = new ArrayList&lt;Integer&gt;();
+<span class="text-neon">Collections</span>.<span class="text-red">addAll</span>(<span class="code text-user">list</span>, 11, 2, 23, 4, 15);
+
+int <span class="code text-green">max</span> = <span class="text-neon">Collections</span>.<span class="text-red">max</span>(<span class="code text-user">list</span>);
+
+System.out.println(<span class="code text-green">max</span>);</code></pre>
+        </td>
+        <td>
+            <pre><code>23</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Метод <code>Collections.frequency(Collection&lt;T&gt; colls, T obj)</code></strong></p>
+<p>Метод <code>frequency()</code> визначає, скільки разів зустрічається елемент <code>obj</code> у колекції <code>colls</code></p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>ArrayList&lt;Integer&gt; <span class="code text-user">list</span> = new ArrayList&lt;Integer&gt;();
+<span class="text-neon">Collections</span>.<span class="text-red">addAll</span>(<span class="code text-user">list</span>, 11, 2, 23, 4, 15, 4, 2, 4);
+
+int <span class="code text-green">count</span> = <span class="text-neon">Collections</span>.<span class="text-red">frequency</span>(<span class="code text-user">list</span>, 4);
+
+System.out.println(<span class="code text-green">count</span>);</code></pre>
+        </td>
+        <td>
+            <pre><code>3</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Метод <code>Collections.binarySearch(List&lt;T&gt; list, T key)</code></strong></p>
+<p>Метод <code>binarySearch()</code> шукає елемент <code>key</code> у списку <code>list</code> і повертає номер знайденого елемента. Якщо елемент не знайдено, повертає від'ємне число.</p>
+<div class="lesson-note lesson-note--important">
+    <div class="lesson-note__container">
+        <div class="lesson-note__head">Важливо!</div>
+        <div class="lesson-note__content">
+            Перед викликом методу <code>binarySearch()</code> список слід відсортувати (<code>Collections.sort()</code>).
+        </div>
+    </div>
+</div>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>ArrayList&lt;Integer&gt; <span class="code text-user">list</span> = new ArrayList&lt;Integer&gt;();
+<span class="text-neon">Collections</span>.<span class="text-red">addAll</span>(<span class="code text-user">list</span>, 11, 2, 23, 5, 15, 4, 2, 4);
+
+Collections.sort(<span class="code text-user">list</span>);  // 2, 2, 4, 4, 5, 11, 15, 23
+
+int <span class="code text-green">index</span> = <span class="text-neon">Collections</span>.<span class="text-red">binarySearch</span>(<span class="code text-user">list</span>, 5);    // 4
+System.out.println(<span class="code text-green">index</span>);
+
+int <span class="code text-green">index2</span> = <span class="text-neon">Collections</span>.<span class="text-red">binarySearch</span>(<span class="code text-user">list</span>, 15);  // 6
+System.out.println(<span class="code text-green">index2</span>);
+
+int <span class="code text-green">index3</span> = <span class="text-neon">Collections</span>.<span class="text-red">binarySearch</span>(<span class="code text-user">list</span>, 16);  // немає
+System.out.println(<span class="code text-green">index3</span>);</code></pre>
+        </td>
+        <td>
+                <pre><code>4
+6
+-8</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Метод <code>Collections.disjoint(Collection&lt;T&gt; coll1, Collection&lt;T&gt; coll2)</code></strong></p>
+<p>Метод <code>disjoint()</code> повертає <code>true</code>, якщо в переданих колекціях немає однакових елементів.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>ArrayList&lt;Integer&gt; <span class="code text-user">list</span> = new ArrayList&lt;Integer&gt;();
+<span class="text-neon">Collections</span>.<span class="text-red">addAll</span>(<span class="code text-user">list</span>, 1, 2, 3, 4, 5, 6, 7);
+
+ArrayList&lt;Integer&gt; <span class="code text-green">list2</span> = new ArrayList&lt;Integer&gt;();
+<span class="text-neon">Collections</span>.<span class="text-red">addAll</span>(<span class="code text-green">list2</span>, 99, 98, 97);
+
+boolean <span class="code text-orange">isDifferent</span> = <span class="text-neon">Collections</span>.disjoint(<span class="code text-user">list</span>, <span class="code text-green">list2</span>);
+System.out.println(<span class="code text-orange">isDifferent</span>);</code></pre>
+        </td>
+        <td>
+            <pre><code>true</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task13.task1308"></div>

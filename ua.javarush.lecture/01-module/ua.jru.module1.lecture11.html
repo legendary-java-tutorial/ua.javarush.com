@@ -1,0 +1,117 @@
+Запуск програми з консолі
+<p>----------------------------------------</p>
+Запуск програми з консолі
+<p>----------------------------------------</p>
+<p>У попередній лекції ми скомпілювали невелику програму і отримали на виході файл <span
+        class="code">MySolution.class</span>, що містить цю програму у вигляді байт-коду. Вихідний код був таким:</p>
+
+    <pre class='language-java line-numbers'><code>
+class MySolution {
+   public static void main(String[] args) {
+      System.out.println("Привет командная строка!");
+   }
+}
+</code></pre>
+
+    <p>Тепер давай передаємо <span class="code">.class</span> цей файл <span class="text-bold">java</span>, щоб вона його
+    виконала. Для цього скористаємося командою java і вкажемо ім’я класу, що містить метод <span
+        class="code text-orange">main</span>:</p>
+
+    <pre class='language-java line-numbers'><code>
+D:\temp>java MySolution
+</code></pre>
+
+    <p>У консоль виведеться напис <em><strong>"Привіт командний рядок!"</strong></em>. </p>
+
+    <p>Зверніть увагу, що тепер потрібно вказувати не ім’я файлу (<span class="code">MySolution.class</span>), а ім’я класу
+    (<span class="code">
+        <span class="text-green">MySolution</span></span>).
+</p>
+
+    <p>Давай спробуємо запустити з консолі ще одну програму, яка на цей раз використовує масив <span
+        class="text-neon"><strong>args</strong></span>, параметр методу у <span class="code text-orange">main</span>:</p>
+
+    <pre class='language-java line-numbers'><code>
+public class MyArgs {
+    public static void main(String[] args) {
+        if (args.length == 3) {
+            System.out.println(args[0].toLowerCase());
+            System.out.println(args[1].toUpperCase());
+            System.out.println(args[2].length());
+        } else {
+            System.out.println("Three parameters are expected.");
+        }
+    }
+}
+</code></pre>
+
+    <p>Скомпілюємо::</p>
+
+    <pre class='language-java line-numbers'><code>
+D:\temp>javac MyArgs.java
+</code></pre>
+
+    <p>І запустимо:</p>
+
+    <pre class='language-java line-numbers'><code>
+D:\temp>java MyArgs
+</code></pre>
+
+    <p>Отримуємо виведення: <em><strong>Three parameters are expected.</strong></em>.</p>
+
+    <p>В останню команду після імені класу через пробіл можна вказати параметри, які потраплять до масиву рядків <span class="text-neon"><strong>args</strong></span>. Наприклад, якщо передати такі параметри:</p>
+
+    <pre class='language-java line-numbers'><code>
+D:\temp>java MyArgs One Two Three
+</code></pre>
+
+    <p>То масив args буде містити: ["One", "Two", "Three"]</p>
+
+    <p>А на екран буде виведено:</p>
+
+    <div class="terminal">one<br />
+TWO<br />
+5</div>
+
+    <p>Якщо хочеш, щоб якийсь параметр містив пробіли, його потрібно взяти в подвійні лапки:</p>
+
+    <pre class='language-java line-numbers'><code>
+D:\temp>java MyArgs "One Two" Three "Four Five Six"
+</code></pre>
+
+    <p>Виведення:</p>
+
+    <div class="terminal">one two<br />
+THREE<br />
+13</div>
+
+    <p>Якщо твоя програма складається з одного файлу, є спрощений спосіб її запуску без явної компіляції. Просто вкажи команді
+    <span class="text-bold">java</span> ім’я твого файлу з розширенням <span class="code">.java</span> та параметри, якщо
+    потрібно:</p>
+
+    <pre class='language-java line-numbers'><code>
+D:\temp>java MyArgs.java param1 param2
+</code></pre> 
+
+    <p>Таку можливість додали починаючи з 11-ї версії Java, щоб спростити життя тим, хто тільки починає вивчати мову
+    програмування.</p>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Для більш детального ознайомлення:</th>
+            </tr>
+            <tr>
+                <td>
+                    <ol>
+                        <li><a href="https://javarush.com/groups/posts/4044-kompiljacija-i-ispolnenie-java-prilozheniy-pod-kapotom" target="_blank">1. Компіляція та виконання Java програм під капотом</a></li>
+                        <li>У команді java є вбудована допомога. Для її відображення виконай у командному рядку:
+                            <ul>
+                                <li>java --help</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </td>
+            </tr>
+        </tbody>
+    </table>

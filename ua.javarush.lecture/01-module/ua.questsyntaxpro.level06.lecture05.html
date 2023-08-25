@@ -1,0 +1,290 @@
+﻿Особливості роботи зі змінними
+<p>----------------------------------------</p>
+Константи. У багатьох мовах програмування є константи — змінні, значення яких змінювати не можна. Зазвичай це якісь фундаментальні речі на кшталт числа Pi або кількості днів у місяцях. Хоча в принципі програміст може зробити будь-яку змінну константою, якщо вважатиме це за потрібне
+<p>----------------------------------------</p>
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="d4062dad-c4e5-4088-a109-98616a9dcd4c" src="https://cdn.javarush.com/images/article/d4062dad-c4e5-4088-a109-98616a9dcd4c/original.png" alt=""/>
+        </div>
+    </div>
+</div>
+<hr>
+<h2>1. Константи</h2>
+<p>У багатьох мовах програмування є <span class="term">константи</span> — <span class="text-orange">змінні, значення яких змінювати не можна</span>. Зазвичай це якісь фундаментальні речі на кшталт числа <code>Pi</code> або кількості днів у місяцях. Хоча в принципі програміст може зробити будь-яку змінну константою, якщо вважатиме це за потрібне.</p>
+<p>Отже, як оголосити незмінювану змінну (константу) в Java? Для цього є спеціальне ключове слово — <code>final</code>. Створення незмінюваної змінної має такий самий вигляд, як і створення звичайної, тільки перед типом змінної слід написати слово <code>final</code>:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code>final <span class="text-viola">тип</span> <span class="text-red">ім'я</span> = <span class="text-user">значення</span>;</code></pre>
+</div>
+<p>Якщо ви спробуєте присвоїти <code>final</code>-змінній інше значення, ваша програма просто не скомпілюється.</p>
+<p><code>final</code>-змінну обов'язково треба ініціалізувати (присвоїти їй значення) під час оголошення. Це правило має один виняток: можна перенести ініціалізацію змінної класу в конструктор. <a href="https://javarush.com/quests/lectures?quest=QUEST_JAVA_SYNTAX_PRO&amp;level=10">Однак про це ви дізнаєтеся на 10-му рівні</a>.</p>
+<p>Щоб зменшити кількість ключових слів, розробники Java використовують слово <code>final</code> не тільки для оголошення констант. Метод і навіть клас теж можуть бути <code>final</code>. Методи, оголошені як <code>final</code>, не можна перевизначати (override), а клас, оголошений як <code>final</code>, не може бути базовим класом для успадкування.</p>
+<p>Модифікатор <code>final</code> можна вказувати перед будь-якими змінними: локальними, параметрами, полями класу і статичними змінними.</p>
+<p>Зверніть увагу, що <code>final</code> — це лише <span class="text-orange">захист від змінення змінної</span>. Якщо змінна зберігає посилання на об'єкт, то об'єкт все ж таки міняти можна.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <td>
+<pre class="language-java"><code>final <span class="text-viola">int[]</span> <span class="text-red">data</span> = {1, 2, 3, 4, 5, 6};
+
+<span class="text-red">data</span> = {6, 7, 8, 9};
+
+<span class="text-red">data</span>[0] = 0;
+<span class="text-red">data</span>[1] = 0;
+<span class="text-red">data</span>[2] = 0;</code></pre>
+        </td>
+        <td>Створюємо масив.<br/><br/> <span class="text-red">Так не можна:</span> змінну <code><span class="text-red">data</span></code> оголошено як <code class="token keyword">final</code>.<br/><br/> <span class="text-green">А так можна.<br/> І так можна.</span></td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Глобальні константи</strong></p>
+<p>Якщо ви захочете оголосити у своїй програмі глобальні константи, вам потрібно створити <span class="term">статичні змінні класу</span>, а також визначити їх як <code>public</code> і <code>final</code>. Для імен таких змінних існує спеціальний стиль написання: їх пишуть великими літерами, а як роздільник слів використовують знак підкреслення.</p>
+<p>Приклади:</p>
+<pre class="language-java"><code>class Solution
+{
+&nbsp; &nbsp;public static <span class="code code--inherit">final</span> <span class="text-viola">String</span> <span class="text-red">SOURCE_ROOT</span> = <span class="text-green">"c:\\projects\\my\\"</span>;
+&nbsp; &nbsp;public static <span class="code code--inherit">final</span> <span class="text-viola">int</span> <span class="text-red">DISPLAY_WIDTH</span> = 1024;
+&nbsp; &nbsp;public static <span class="code code--inherit">final</span> <span class="text-viola">int</span> <span class="text-red">DISPLAY_HEIGHT</span> = 768;
+}</code></pre>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task06.task0614"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task06.task0615"></div>
+<hr>
+<h2>2. Затінення змінних</h2>
+<p>Як ми вже казали, не можна в одному методі створити кілька локальних змінних з однаковими іменами. У різних методах — можна.</p>
+<p>А цього ви, напевно, не знаєте: змінним класу і локальним змінним методу дозволено мати однакові імена.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Доступність змінних</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public class Solution
+{
+   public int <span class="text-neon">count</span> = 0;
+   public int <span class="text-green">sum</span> = 0;
+
+   public void add(int <span class="text-viola">data</span>)
+   {
+     <span class="text-green">sum</span> = <span class="text-green">sum</span> + <span class="text-viola">data</span>;
+     int <span class="text-red">sum</span> = <span class="text-viola">data</span> * 2;
+     <span class="text-neon">count</span>++;
+   }
+}</code></pre>
+        </td>
+        <td><pre><code>
+
+<span class="text-neon">count</span>
+<span class="text-neon">count</span>, <span class="text-green">sum</span>
+<span class="text-neon">count</span>, <span class="text-green">sum</span>
+<span class="text-neon">count</span>, <span class="text-green">sum</span>
+<span class="text-neon">count</span>, <span class="text-green">sum</span>, <span class="text-viola">data</span>
+<span class="text-neon">count</span>, <span class="text-green">sum</span>, <span class="text-viola">data</span>
+<span class="text-neon">count</span>, <span class="text-red">sum</span>, <span class="text-viola">data</span>
+<span class="text-neon">count</span>, <span class="text-red">sum</span>, <span class="text-viola">data</span>
+<span class="text-neon">count</span>, <span class="text-green">sum</span>
+
+</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>У методі <code>add</code> ми оголосили локальну змінну <code><span class="text-red">sum</span></code>, і вона до кінця дії методу перекриває (або ще кажуть <strong>затіняє</strong>) собою змінну класу <code><span class="text-green">sum</span></code>.</p>
+<p>Ну гаразд, скажете ви, навіть в якомусь сенсі очікувана поведінка. Але це ще не все. Виявляється, якщо змінну класу затіняє локальна змінна, у методі все-таки є спосіб звернутися до змінної класу. Для цього потрібно перед її іменем написати ключове слово <code>this</code>:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java text-center"><code>this.<span class="text-green">ім'я</span></code></pre>
+</div>
+<p>Ось приклад, в якому конфлікт імен успішно вирішується:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Доступність змінних</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public class Solution
+{
+   public int <span class="text-neon">count</span> = 0;
+   public int <span class="text-green">sum</span> = 0;
+
+   public void add(int <span class="text-viola">data</span>)
+   {
+     int <span class="code"><span class="text-red">sum</span></span> = data * 2;
+     this.<span class="text-green">sum</span> = this.<span class="text-green">sum</span> + <span class="text-viola">data</span>;
+     <span class="text-neon">count</span>++;
+   }
+}</code></pre>
+        </td>
+        <td>
+                <pre><code>
+
+this.<span class="text-neon">count</span>
+this.<span class="text-neon">count</span>, this.<span class="text-green">sum</span>
+this.<span class="text-neon">count</span>, this.<span class="text-green">sum</span>
+this.<span class="text-neon">count</span>, this.<span class="text-green">sum</span>
+this.<span class="text-neon">count</span>, this.<span class="text-green">sum</span>, <span class="text-viola">data</span>
+this.<span class="text-neon">count</span>, <span class="code">this.<span class="text-green">sum</span></span>, <span class="text-viola">data</span>, <span class="code"><span class="text-red">sum</span></span>
+this.<span class="text-neon">count</span>, <span class="code">this.<span class="text-green">sum</span></span>, <span class="text-viola">data</span>, <span class="code"><span class="text-red">sum</span></span>
+this.<span class="text-neon">count</span>, <span class="code">this.<span class="text-green">sum</span></span>, <span class="text-viola">data</span>, <span class="code"><span class="text-red">sum</span></span>
+this.<span class="text-neon">count</span>, this.<span class="text-green">sum</span>
+
+</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Змінні <code><span class="text-neon">count</span></code>&nbsp;і <code><span class="text-green">sum</span></code>&nbsp;доступні всюди як із ключовим словом <code>this</code>, так і без нього. У тих рядках, де локальна змінна <code><span class="text-red">sum</span></code>&nbsp;затіняє змінну класу <code><span class="text-green">sum</span></code>, доступ до змінної класу <code><span class="text-green">sum</span></code>&nbsp;можливий тільки за умови застосування <code>this</code>.</p>
+<p>Якщо затіняється не просто змінна класу, а статична змінна класу, звертатися до неї потрібно не через <code>this</code>, а через ім'я класу:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code>ClassName.<span class="text-green">ім'я</span></code></pre>
+</div>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Доступність змінних</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public class Solution
+{
+   public static int <span class="text-neon">count</span> = 0;
+   public static int <span class="text-green">sum</span> = 0;
+
+   public void add(int <span class="text-viola">data</span>)
+   {
+     int <span class="code"><span class="text-red">sum</span></span> = data * 2;
+     Solution.<span class="text-green">sum</span> = Solution.<span class="text-green">sum</span> + <span class="text-viola">data</span>;
+     <span class="text-neon">count</span>++;
+   }
+}</code></pre>
+        </td>
+        <td>
+                <pre><code>
+Solution.<span class="text-neon">count</span>, Solution.<span class="text-green">sum</span>
+Solution.<span class="text-neon">count</span>, Solution.<span class="text-green">sum</span>
+Solution.<span class="text-neon">count</span>, Solution.<span class="text-green">sum</span>
+Solution.<span class="text-neon">count</span>, Solution.<span class="text-green">sum</span>
+Solution.<span class="text-neon">count</span>, Solution.<span class="text-green">sum</span>
+Solution.<span class="text-neon">count</span>, Solution.<span class="text-green">sum</span>, <span class="text-viola">data</span>
+Solution.<span class="text-neon">count</span>, <span class="code">Solution.<span class="text-green">sum</span></span>, <span class="text-viola">data</span>, <span class="code"><span class="text-red">sum</span></span>
+Solution.<span class="text-neon">count</span>, <span class="code">Solution.<span class="text-green">sum</span></span>, <span class="text-viola">data</span>, <span class="code"><span class="text-red">sum</span></span>
+Solution.<span class="text-neon">count</span>, <span class="code">Solution.<span class="text-green">sum</span></span>, <span class="text-viola">data</span>, <span class="code"><span class="text-red">sum</span></span>
+Solution.<span class="text-neon">count</span>, Solution.<span class="text-green">sum</span>
+
+</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Статичні змінні <code><span class="text-neon">count</span></code>&nbsp;і <code><span class="text-green">sum</span></code>&nbsp;доступні всюди як із префіксом у вигляді імені класу <code>Solution</code>, так и без нього. У тих рядках, де локальна змінна <code><span class="text-red">sum</span></code> затіняє змінну класу <code><span class="text-green">sum</span></code>, доступ до змінної класу <code><span class="text-green">sum</span></code>&nbsp;можливий тільки за умови застосування префікса <code>Solution</code>.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task06.task0616"></div>
+<hr>
+<h2>3. Змінні всередині циклу <code>for</code></h2>
+<p>І ще один маленький, але цікавий факт.</p>
+<p>Є ще одне місце, де в особливий спосіб оголошується змінна — це <strong>цикл <code>for</code></strong>.</p>
+<p>Якщо ви пам'ятаєте, зазвичай у циклі <code>for</code> в круглих дужках оголошується змінна-лічильник. І яка ж буде область видимості цієї змінної? Адже вона не міститься в тілі циклу — значить, її буде видно по всьому методу? Чи все-таки ні?</p>
+<p>Правильна відповідь така: змінну, оголошену в заголовку <strong>циклу <code>for</code></strong>, видно лише в <strong>тілі циклу</strong> і в <strong>заголовку циклу <code>for</code></strong>.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Доступність змінних</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public static void main(String[] args)
+{
+   int <span class="text-red">a</span> = 0;
+
+   for (int <span class="text-neon">i</span> = 0; <span class="text-neon">i</span> &lt; 10; <span class="text-neon">i</span>++)
+   {
+     System.out.println(<span class="text-neon">i</span>);
+   }
+
+   System.out.println("end");
+}</code></pre>
+        </td>
+        <td><pre><code>
+
+<span class="text-red">a</span>
+<span class="text-red">a</span>
+<span class="text-red">a</span>, <span class="text-neon">i</span>
+<span class="text-red">a</span>, <span class="text-neon">i</span>
+<span class="text-red">a</span>, <span class="text-neon">i</span>
+<span class="text-red">a</span>
+<span class="text-red">a</span>
+<span class="text-red">a</span>
+
+</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Отож ви завжди можете в своєму коді послідовно написати кілька циклів зі змінною-лічильником із однаковим іменем — проблем не буде.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Доступність змінних</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public static void main(String[] args)
+{
+   int <span class="text-red">a</span> = 0;
+
+   for (int <span class="text-neon">i</span> = 0; <span class="text-neon">i</span> &lt; 10; <span class="text-neon">i</span>++)
+   {
+     System.out.println(<span class="text-neon">i</span>);
+   }
+
+   for (int <span class="text-viola">i</span> = 0; <span class="text-viola">i</span> &lt; 10; <span class="text-viola">i</span>++)
+   {
+     System.out.println(<span class="text-viola">i</span>);
+   }
+
+   System.out.println("end");
+}</code></pre>
+        </td>
+        <td><pre><code>
+
+<span class="text-red">a</span>
+<span class="text-red">a</span>
+<span class="text-red">a</span>, <span class="text-neon">i</span>
+<span class="text-red">a</span>, <span class="text-neon">i</span>
+<span class="text-red">a</span>, <span class="text-neon">i</span>
+<span class="text-red">a</span>
+<span class="text-red">a</span>
+<span class="text-red">a</span>, <span class="text-viola">i</span>
+<span class="text-red">a</span>, <span class="text-viola">i</span>
+<span class="text-red">a</span>, <span class="text-viola">i</span>
+<span class="text-red">a</span>
+<span class="text-red">a</span>
+<span class="text-red">a</span>
+
+</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="0a6277b1-daa4-4dac-b7a1-e6bac856f62d" src="https://cdn.javarush.com/images/article/0a6277b1-daa4-4dac-b7a1-e6bac856f62d/original.png" alt=""/>
+        </div>
+        <div class="lesson-carousel__item">
+            <img data-id="397407a9-dd74-4987-8e0e-72daa97dff93" src="https://cdn.javarush.com/images/article/397407a9-dd74-4987-8e0e-72daa97dff93/original.png" alt=""/>
+        </div>
+    </div>
+</div>

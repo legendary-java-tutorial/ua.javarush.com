@@ -1,0 +1,158 @@
+Null
+<p>----------------------------------------</p>
+Щоб зрозуміти, навіщо потрібен null в Java, наведемо аналогію з числами: число 0 символізує відсутність будь-чого, а null означає те саме для посилальних типів даних.
+<p>----------------------------------------</p>
+<p>Щоб зрозуміти, навіщо потрібен <span class="text-bold">null</span> в Java, наведемо аналогію з числами: число 0
+    символізує відсутність будь-чого, а <span class="text-bold">null</span> означає те саме для посилальних типів даних.
+    Якщо полю посилального типу (<span class="code text-viola">String</span>, <span class="code text-viola">Object</span>,
+    <span class="code text-viola">StringBuilder</span>) не присвоїти жодного знання за аналогією з примітивними типами, воно
+    отримає значення за замовчуванням, і цим значенням буде <span class="text-bold">null</span>:</p>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Код</th>
+                <th>Виведення на екран</th>
+            </tr>
+            <tr>
+            <td>
+                    <pre class='language-java line-numbers'><code>
+public class Solution {
+
+    public static int i;
+    public static String s;
+
+    public static void main(String[] args) {
+        System.out.println(i);
+        System.out.println(s);
+    }
+}
+                    </code></pre>
+                </td>
+                <td>
+                    <div class="terminal">0<br />
+null</div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>А якщо оголосити масив у такий спосіб:</p>
+
+    <pre class='language-java line-numbers'><code>
+String[] strings = new String[12];
+</code></pre>
+
+    <p>створиться масив, що містить 12 елементів, і всі вони дорівнюватимуть <span class="text-bold">null</span>:</p>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Код</th>
+                <th>Виведення на екран</th>
+            </tr>
+            <tr>
+                <td>
+                    <pre class='language-java line-numbers'><code>
+public class Solution {
+    public static void main(String[] args) {
+        String[] strings = new String[12];
+
+        for (int i = 0; i < strings.length; i++) {
+            System.out.println(i + "-й елемент: " + strings[i]);
+        }
+    }
+}
+                    </code></pre>
+                </td>
+                <td>
+                    <div class="terminal">0-й елемент: null<br />
+1-й елемент: null<br />
+2-й елемент: null<br />
+3-й елемент: null<br />
+4-й елемент: null<br />
+5-й елемент: null<br />
+6-й елемент: null<br />
+7-й елемент: null<br />
+8-й елемент: null<br />
+9-й елемент: null<br />
+10-й елемент: null<br />
+11-й елемент: null</div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>Як бачиш, під час конкатенації з рядком <span class="text-bold">null</span> перетворюється на рядок <span
+        class="code">null</span>. Хоча, якщо викликати в нього метод <span class="code text-orange">toString()</span>:</p>
+
+    <pre class='language-java line-numbers'><code>
+String[] strings = null;
+System.out.println(strings.toString());
+</code></pre>
+
+    <p>отримаєш <span class="text-red">
+        <span class="text-bold">NullPointerException</span></span> (виключення ми пізніше розберемо детально). Те саме
+    станеться, якщо спробувати викликати у <span class="text-bold">null</span> будь-який інший метод (виняток — статичні
+    методи, з якими ти незабаром ознайомишся):</p>
+
+    <pre class='language-java line-numbers'><code>
+public static void main(String[] args) {
+    StringBuilder sb = null;
+    sb.append("test"); // скомпілюється, але при виконанні буде помилка
+}
+</code></pre>
+
+    <p><span class="text-bold">null</span>, окрім іншого, — зарезервоване ключове слово (як <span
+        class="text-user"><strong>public</strong></span> або <span class="text-user"><strong>static</strong></span>), отже
+    не вдасться створити змінну, метод або клас з ім’ям <span class="text-bold">null</span>. Це ключове слово, як і інші,
+    реєстрозалежне (ти міг звернути увагу, що ми скрізь пишемо <span class="text-bold">null</span> із маленької літери),
+    тому:</p>
+
+    <pre class='language-java line-numbers'><code>
+String firstName = Null; // буде помилка компіляції
+</code></pre> 
+    <pre class='language-java line-numbers'><code>
+String secondName = NULL; // буде помилка компіляції
+</code></pre>
+    <pre class='language-java line-numbers'><code>
+String fullName = null; // скомпілюється
+</code></pre>
+
+    <p>Розглянемо, що ще можна і не можна робити з <span class="text-bold">null</span>:</p>
+
+    <ul>
+        <li><p>Будь-якому посиланню можна присвоїти <span class="text-bold">null</span>:</p>
+            <pre class='language-java line-numbers'><code>
+StringBuilder sb = null;
+            </code></pre></li>
+
+        <li><p><span class="text-bold">null</span> можна привести до будь-якого посилального типу:</p>
+            <pre class='language-java line-numbers'><code>
+String s = (String) null; // скомпілюється, хоча сенсу не додасть :)
+            </code></pre></li>
+
+        <li><p><span class="text-bold">null</span> не можна присвоїти примітивній змінній:</p>
+            <pre class='language-java line-numbers'><code>
+int i = null; // не скомпілюється
+            </code></pre></li>
+
+        <li><p><span class="text-bold">null</span> можна порівнювати за допомогою <span class="code">==</span> i <span class="code">!=</span></p></li>
+
+        <li><p><span class="code">null == null</span> повертає <span class="text-green">true</span></p></li>
+    </ul>
+
+    <p>У попередніх лекціях ми розповідали, що в Java все є об’єктом, і кожен об’єкт має тип.</p>
+
+    <p>Що ми можемо щодо цього сказати про <span class="text-bold">null</span>? <span class="text-bold">null</span> – це літерал якогось типу, і у цього типу немає
+    імені. А оскільки у цього типу немає імені, неможливо оголосити змінну цього типу або зробити приведення до нього. Отже,
+    <span class="text-bold">null</span> – єдиний представник цього безіменного типу. На практиці ж ми можемо ігнорувати цей тип і представляти
+    <span class="text-bold">null</span> як спеціальний літерал, який можна присвоїти змінній будь-якого посилального типу.</p>
+
+    <p><span class="text-orange"><span class="text-bold">Що важливо запам’ятати:</span></span></p>
+
+    <ul>
+        <li><span class="text-bold">null</span> – це значення за замовчуванням для посилальних типів даних;</li>
+        <li><span class="text-bold">null</span> – це «відсутність значення»;</li>
+        <li>якщо об’єкт, значення якого дорівнює <span class="text-bold">null</span>, викликати будь-який метод – компіляція такого коду пройде, а під час виконання матимемо виняток <span class="text-red"><span class="text-bold">NullPointerException</span></span>.</li>
+    </ul>

@@ -1,0 +1,162 @@
+Error
+<p>----------------------------------------</p>
+Error-ів боятися – джавою не писати! Напевно, ти вже дещо знаєш про винятки в Java. Сьогодні хоча б поверхове знання тобі стане в нагоді: ми будемо розбирати клас Error і особливий тип винятків, який багатьох «лякає», з’являючись у їхніх Стектрейсах...
+<p>----------------------------------------</p>
+<p>Error-ів боятися – джавою не писати! Напевно, ти вже дещо знаєш про <a href="https://javarush.com/groups/posts/4055-iskljuchenija-checked-unchecked-i-svoi-sobstvennihe" target="_blank">винятки в Java</a>. Сьогодні хоча б поверхове знання тобі стане в нагоді: ми будемо розбирати клас Error і особливий тип винятків, який
+багатьох «лякає», з’являючись у їхніх <a href="https://javarush.com/groups/posts/4055-stack-trace-i-s-chem-ego-edjat" target="_blank">Стектрейсах</a>.</p>
+
+<p>На чолі ієрархії винятків у Java стоїть клас <span class="code"><span class="text-green">Throwable</span></span>, у
+якого є два спадкоємці:</p>
+
+<ul>
+<li><span class="text-red"><span class="text-bold">Exception</span></span>, який відповідає за помилки у системі.</li>
+<li>І наш сьогоднішній герой — <span class="text-red"><span class="text-bold">Error</span></span>, який відповідає за
+помилки JVM.<br />
+Варто сказати, що це скоріше навіть не помилки, а проблеми, які зазвичай не залежать від розробника.</li>
+</ul>
+
+<h2>Що робити з Error</h2>
+
+<p>Відловлюючи “еррори”, виконати будь-які дії в блоці <span class="text-viola">catch</span>, окрім <a
+    href="https://javarush.com/groups/posts/4052-logirovanie-chto-kak-gde-i-chem" target="_blank">логування</a>, тобі не
+вдасться, оскільки це проблеми власне JVM.</p>
+
+<p>Логування — гарна справа: отримавши помилку під час виконання програми, ти можеш подивитися в логи, побачити причину
+поломки та знати, що виправляти.</p>
+
+<p>Оскільки ти не знаєш, який error можеш отримати, створюючи свій код, вписувати в блок <span
+    class="text-viola">catch</span> якийсь конкретний тип немає сенсу. Використовувати власне клас <span
+    class="code"><span class="text-green">Error</span></span> — теж не найвдаліше рішення: у такому разі будеш ловити
+лише помилки.</p>
+
+<p>Тому краще використовувати клас <span class="code"><span class="text-green">Throwable</span></span>, який може зловити і
+винятки типу <span class="text-red"><span class="text-bold">Error</span></span>, і <span class="text-red"><span
+        class="text-bold">Exception</span></span>. Як це виглядає на практиці</p>
+
+<table>
+<tbody>
+<tr>
+<th>Так писати не ОК:</th>
+</tr>
+<tr>
+<td>
+<pre class='language-java line-numbers'><code>
+try {
+    //Твій код
+} catch (OutOfMemoryError outOfMemoryError) {
+    //Код для отловки OutOfMemoryError
+}
+</code></pre>
+</td>
+</tr>
+</tbody>
+</table>
+
+
+<table>
+<tbody>
+<tr>
+<th>Так писати — теж не ОК:</th>
+</tr>
+<tr>
+<td>
+<pre class='language-java line-numbers'><code>
+try {
+    //Твій код
+} catch (Error error) {
+    //Код для відловлювання всіх Error
+}
+</code></pre>
+</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<tbody>
+<tr>
+<th>А ось так писати — ОК:</th>
+</tr>
+<tr>
+<td>
+<pre class='language-java line-numbers'><code>
+try {
+    //Твій код
+} catch (Throwable throwable) {
+    //Код для відловлювання всіх Throwable
+}
+</code></pre>
+</td>
+</tr>
+</tbody>
+</table>
+
+<p>Другий варіант обробки error-ів — це <span class="text-bold">прокидання</span> їх далі за допомогою ключового слова
+<span class="text-viola">throws</span> на рівні методу. Такий спосіб використовують у випадках, коли твій код теоретично
+може кинути помилку типу error, і ти хочеш повідомити це всім, хто буде використовувати твій код, щоб вони могли його
+обробити.</p>
+
+<h2>Поширені error-и</h2>
+
+<p>Одні з найпопулярніших ерорів — класи <span class="code"><span class="text-green">OutOfMemoryError</span></span> та <span class="code"><span class="text-green">StackOverflowError</span></span>.</p>
+
+<p><span class="text-red"><span class="text-bold">OutOfMemoryError</span></span> часто з’являється у тих випадках, коли програмі <a href="https://javarush.com/groups/posts/4032-ejshje-o-sborjshike-musora-" target="_blank">не вистачає місця для створення об’єктів</a>, збирач сміття обробити не встигає, і як результат – <span class="code"><span class="text-green">OutOfMemoryError</span></span>. </p>
+
+<p>В Java ти не можеш контролювати видалення об’єктів, щоб запобігти витоку пам’яті, але ти можеш не смітити, щоб не давати
+зайвої роботи Garbage Collector-у і не засмічувати heap (купу).</p>
+
+<p>Наприклад, код такого типу породжуватиме багато сміття в пам’яті:</p>
+
+<pre class='language-java line-numbers'><code>
+while (true) {
+    new Object();
+}
+</code></pre>
+
+<p>Друга помилка, про яку хочу тобі розповісти, — це <span class="text-red"><span
+        class="text-bold">StackOverflowError</span></span>: викидається у випадках, коли переповнюється стек. Оскільки
+стек в основному зберігає локальні змінні, параметри та виклики методів, дуже частою причиною цього є рекурсія, або
+рекурсивний виклик методу:</p>
+
+<pre class='language-java line-numbers'><code>
+public void foo() {
+    foo();
+}
+</code></pre>
+
+<p>Сучасні IDE часто повідомляють про рекурсивний виклик методів, щоб уникнути проблем під час виконання програми.</p>
+
+<p>Ти не зможеш полагодити програму, яка кинула винятки типу <span class="text-red"><span
+        class="text-bold">Error</span></span>, але ти можеш писати такий код, який в результаті не викине помилку і не
+зламає тобі програму. Просто не нехтуй пам’яттю, уважно створюй об’єкти та викликай методи правильно, і тоді проблем у
+твоєму коді буде менше.</p>
+
+<h2>Різниця між винятками типу Error та Exception</h2>
+
+<table>
+<tbody>
+<tr>
+<th>Error</th>
+<th>Exception</th>
+</tr>
+<tr>
+<td>Не можна виправити у блоці <span class="text-viola">catch</span></td>
+<td>Можна обробити у блоці <span class="text-viola">catch</span></td>
+</tr>
+<tr>
+<td>Не з’явиться під час компіляції</td>
+<td>Можна зловити на етапі компіляції</td>
+</tr>
+<tr>
+<td>Проблеми JVM</td>
+<td>Проблеми логіки коду</td>
+</tr>
+<tr>
+<td>Всі <span class="text-red"><span class="text-bold">Error</span></span> <span class="code">uncheked</span></td>
+<td><span class="code">checked</span> та <span class="code">uncheked</span></td>
+</tr>
+<tbody>
+</table>
+
+<p>Без винятків у Java ніяк, але боятися їх не варто. Просто треба розуміти, що означає кожен із типів, і знати, як їх
+обробляти. На сьогодні це все. Побачимося!</p>

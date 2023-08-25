@@ -1,0 +1,153 @@
+Buffer, Channel
+<p>----------------------------------------</p>
+Раніше ми з вами познайомилися з IO API (Input & Output Application Programming Interface) та пакетом java.io, у класах якого зосереджено основний функціонал роботи з потоками Java. Ключовим тут є поняття потоку (stream)...
+<p>----------------------------------------</p>
+<p>Раніше ми з вами познайомилися з <span class="text-bold">IO API</span> (Input & Output Application Programming
+Interface) та пакетом <span class="text-bold">java.io</span>, у класах якого зосереджено основний функціонал роботи з
+потоками Java. Ключовим тут є поняття потоку (<em>stream</em>).</p>
+
+<p>Сьогодні ж ми почнемо розглядати <span class="text-bold">NIO API</span> (New Input & Output).</p>
+
+<p>Основна відмінність між двома підходами до організації введення/виведення полягає в тому, що IO API — потокоорієнтоване,
+а NIO API — буфероорієнтоване. Головні поняття в цьому випадку — поняття буфера (<em>buffer</em>) та каналу
+(<em>channel</em>).</p>
+
+<h2>Що таке буфер і канал?</h2>
+
+<p><span class="text-bold">Канал</span> — це логічний портал, через який здійснюється введення/виведення даних, а буфер є
+джерелом або приймачем цих переданих даних. Під час організації виведення дані, які ви хочете відправити, розміщуються в
+буфер, а він передає їх у канал. Під час введення дані з каналу поміщаються в буфер.</p>
+
+<p>Інакше кажучи:</p>
+<ul>
+<li>• <span class="text-bold">буфер</span> — це просто блок пам’яті, у який ми можемо записувати інформацію і з якого ми
+можемо читати інформацію,</li>
+<li>• <span class="text-bold">канал</span> — це шлюз, який дозволяє отримати доступ до пристроїв введення/виведення, як-то
+файл або сокет.</li>
+</ul>
+
+<p>Канали дуже схожі на потоки у пакеті java.io. Усі дані, які йдуть куди завгодно (або приходять звідки завгодно), повинні
+проходити через об’єкт каналу. Загалом щоб використовувати систему NIO, ви отримуєте канал до пристрою
+введення/виведення та буфер для зберігання даних. Потім ви працюєте з буфером, вводячи або виводячи дані за
+необхідності.</p>
+
+<p>Ви можете рухатися буфером вперед і назад, тобто «гуляти» ним, чого не могли робити в потоках. Це дає більшу гнучкість
+під час обробки даних. У стандартній бібліотеці буфер представлений абстрактним класом <span class="code"><span
+      class="text-green">Buffer</span></span> та безліччю його спадкоємців:</p>
+
+<ul>
+<li><span class="code"><span class="text-green">ByteBuffer</span></span></li>
+<li><span class="code"><span class="text-green">CharBuffer</span></span></li>
+<li><span class="code"><span class="text-green">ShortBuffer</span></span></li>
+<li><span class="code"><span class="text-green">IntBuffer</span></span></li>
+<li><span class="code"><span class="text-green">FloatBuffer</span></span></li>
+<li><span class="code"><span class="text-green">DoubleBuffer</span></span></li>
+<li><span class="code"><span class="text-green">LongBuffer</span></span></li>
+</ul>
+
+<p>Основна відмінність спадкоємців — тип даних, який вони зберігатимуть — <span class="text-orange">byte</span>, <span class="text-orange">int</span>, <span class="text-orange">long</span> и та інші примітивні типи даних.</p>
+
+<h2>Властивості буфера</h2>
+
+<p>Буфер має чотири основні властивості. Це ємність, ліміт, позиція та маркер.</p>
+
+<p><span class="text-bold">Ємність</span> (<em>Capacity</em>) — максимальний обсяг даних/байт, який може бути збережений у буфер. Ємність буфера <span class="text-bold"><em>не може бути змінена</em></span>. Щойно буфер буде заповнений, його слід очистити перед записом у нього.</p>
+
+<p><span class="text-bold">Ліміт</span> (<em>Limit</em>) — в режимі записування буфера Ліміт дорівнює ємності, що показує максимальну кількість даних, які можуть бути записані в
+буфер. У режимі читання буфера Ліміт означає максимальну кількість даних, які можна прочитати з буфера.</p>
+
+<p><span class="text-bold">Позиція</span> (<em>Position</em>) — вказує на поточну позицію курсору в буфері. Спочатку встановлюється на 0 у момент створення буфера. Інакше кажучи, це
+індекс елемента, який має бути прочитаний чи записаний.</p>
+
+<p><span class="text-bold">Маркер</span> (<em>Mark</em>) — використовується для маркування поточної позиції курсору. У процесі маніпуляцій із буфером позиція курсору постійно
+змінюється, але ми завжди можемо повернути його в марковану раніше позицію.</p>
+
+<h2>Методи для роботи з буфером</h2>
+
+<p>Тепер давайте розглянемо основний набір методів, які дозволяють працювати з нашим буфером (блоком пам’яті) для читання
+та запису даних у канали та із каналів.</p>
+
+<ol>
+<li><p><span class="code text-orange">allocate (int capacity)</span> — метод використовується для виділення нового буфера з ємністю як параметр. Метод <span class="code text-orange">allocate()</span> видає виняток <span class="text-red"><span class="text-bold">IllegalArgumentException</span></span> у разі, якщо передана ємність є від’ємним цілим числом.</p></li>
+<li><p><span class="code text-orange">capacity()</span> — повертає ємність (<code>capacity</code>) поточного буфера.</p></li>
+<li><p><span class="code text-orange">position()</span> — повертає поточну позицію курсору. Як операції читання, так і запису переміщають курсор у кінець буфера. Значення, що
+повертається, завжди менше або дорівнює limit.</p></li>
+<li><p><span class="code text-orange">limit()</span> — повертає ліміт поточного буфера.</p></li>
+<li><p><span class="code text-orange">mark()</span> — використовується для позначення (маркування) поточної позиції курсору.</p></li>
+<li><p><span class="code text-orange">reset()</span> — поверне курсор у у раніше позначену (марковану) позицію.</p></li>
+<li><p><span class="code text-orange">clear()</span> — встановлює позицію у нуль і обмежує її до ємності. У цьому методі дані в буфері <span class="text-bold"><em>не
+      очищаются</em></span>, тільки маркери ініціалізуються повторно.</p></li>
+<li><p><span class="code text-orange">flip()</span> — перемикає режим буфера з режиму запису на режим читання. Він також встановлює позицію назад у нуль і встановлює ліміт, у
+якому позиція була під час запису.</p></li>
+<li><p><span class="code text-orange">read()</span> — метод читання каналу використовується для запису даних із каналу в буфер, а <span class="code text-orange">put()</span>
+— метод буфера, який використовується для запису даних у буфер.</p></li>
+<li><p><span class="code text-orange">write()</span> — метод запису каналу використовується для запису даних із буфера в канал, тоді як <span
+   class="code text-orange">get()</span> є методом буфера, який використовується для читання даних із буфера.</p></li>
+<li><p><span class="code text-orange">rewind()</span> — Використовується, коли потрібно перечитування, оскільки він встановлює позицію в нуль і змінює значення ліміту.</p></li>
+</ol>
+ 
+<p>А тепер — трохи про канал.</p>
+
+<p>Найбільш важливими реалізаціями каналу в Java NIO виступають такі класи:</p>
+
+<ol>
+<li><p><span class="text-orange"><span class="text-bold">FileChannel</span></span> — канал для читання та запису даних у файл.</p></li>
+<li><p><span class="text-orange"><span class="text-bold">DatagramChannel</span></span> — зчитує та записує дані за допомогою мережі через UDP (User Datagram Protocol).</p></li>
+<li><p><span class="text-orange"><span class="text-bold">SocketChannel</span></span> — канал для зчитування та запису даних за допомогою мережі через TCP (Transmission Control Protocol).</p></li>
+<li><p><span class="text-orange"><span class="text-bold">ServerSocketChannel</span></span> — канал для читання та запису даних через TCP-з’єднання так само, як це робить вебсервер. Для кожного вхідного з’єднання
+створюється <span class="text-orange"><span class="text-bold">SocketChannel</span></span>.</p></li>
+</ol>
+ 
+<h2>Практика</h2>
+
+<p>Настав час написати кілька рядків коду. Спочатку давайте прочитаємо файл і виведемо його вміст у консолі, а потім
+запишемо у файл будь-який створений нами рядок.</p>
+ 
+<p>У коді міститься багато коментарів, сподіваюся, вони допоможуть вам зрозуміти, як все працює:</p>
+
+<pre class='language-java line-numbers'><code>
+// ініціалізуємо клас RandomAccessFile, у параметри передаємо шлях до файлу
+// та модифікатор, який говорить, що файл відкриється для читання та запису
+try (RandomAccessFile randomAccessFile = new RandomAccessFile("text.txt", "rw");
+    // отримуємо екземпляр класса FileChannel
+    FileChannel channel = randomAccessFile.getChannel();
+) {
+// наш файл має невеликий розмір, тому зчитувати ми його будемо за один раз
+// створюємо буфер необхідного розміру, виходячи з розміру нашого каналу
+   ByteBuffer byteBuffer = ByteBuffer.allocate((int) channel.size());
+   // прочитані дані будемо розміщати в StringBuilder
+   StringBuilder builder = new StringBuilder();
+   // записуємо дані з каналу в буфер
+   channel.read(byteBuffer);
+   // перемикаємо буфер із режиму запису на режим читання
+   byteBuffer.flip();
+   // у циклі записуємо дані з буфера в StringBuilder
+   while (byteBuffer.hasRemaining()) {
+       builder.append((char) byteBuffer.get());
+   }
+   // виводимо вміст StringBuilder у консолі
+   System.out.println(builder);
+ 
+   // тепер продовжимо нашу програму і запишемо дані з рядка у файл
+   // створюємо рядок із довільним текстом
+   String someText = "Hello, Amigo!!!!!";
+   // створюємо до роботи із записом новий буфер,
+   // а канал нехай залишається тим самим, оскільки ми будемо писати в той самий файл
+   // тобто один канал ми можемо використовувати як для читання, так і для запису у файл
+   // створюємо буфер конкретно під наш рядок — рядок переводимо в масив і беремо його довжину
+   ByteBuffer byteBuffer2 = ByteBuffer.allocate(someText.getBytes().length);
+   // записуємо наш рядок у буфер
+   byteBuffer2.put(someText.getBytes());
+   // перемикаємо буфер із режиму запису на режим читання,
+   // щоб канал зміг прочитати з буфера і записати наш рядок у файл
+   byteBuffer2.flip();
+   // канал читає інформацію з буфера та записує її в наш файл
+   channel.write(byteBuffer2);
+} catch (FileNotFoundException e) {
+   e.printStackTrace();
+} catch (IOException e) {
+   e.printStackTrace();
+}
+</code></pre>
+ 
+<p>Спробуйте <span class="text-bold">NIO API</span>, і він вам сподобається!</p>

@@ -1,0 +1,423 @@
+Створення своїх винятків
+<p>----------------------------------------</p>
+Думаю, тобі вже доводилося стикатися з ситуацією, коли запускаєш код, а в результаті отримуєш щось на зразок NullPointerException, ClassCastException або навіть гірше...
+<p>----------------------------------------</p>
+<p>Думаю, тобі вже доводилося стикатися з ситуацією, коли запускаєш код, а в результаті отримуєш щось на зразок <span
+        class="text-red"><span class="text-bold">NullPointerException</span></span>, <span class="text-red"><span
+            class="text-bold">ClassCastException</span></span> або навіть гірше. Потім — довге налагодження, розбирання,
+    гуглення тощо. Власне винятки — відмінна штука: вони вказують, де виникла проблема і якого роду. Якщо хочеш освіжити
+    пам’ять та й просто дізнатися докладніше, заглянь у статтю <a
+        href="https://javarush.com/groups/posts/4035-iskljuchenija-checked-unchecked-i-svoi-sobstvennihe"
+        target="_blank">Винятки: checked, unchecked та свої власні</a></p>
+
+    <p>Але можуть виникнути ситуації, коли треба створити свій виняток. Наприклад, твій код повинен запитати інформацію з
+    віддаленого сервісу, а він недоступний з якихось причин. Або людина заповнює заявку на банківську картку та вводить свій
+    номер телефону і, випадково чи ні, вписує номер, який вже є в системі та належить іншому користувачу.</p>
+
+    <p>Тут, звісно, ще залежить від вимог замовника та архітектури системи, але давай припустимо, що надійшло завдання зробити
+    перевірку номера телефону, і якщо він вже використовується — викидати виняток.</p>
+
+    <p>Створюємо виняток:</p>
+
+    <pre class='language-java line-numbers'><code>
+public class PhoneNumberIsExistException extends Exception {
+
+   public PhoneNumberIsExistException(String message) {
+       super(message);
+   }
+}
+    </code></pre>
+
+    <p>Потім використовуємо його для перевірки:</p>
+
+    <pre class='language-java line-numbers'><code>
+public class PhoneNumberRegisterService {
+   List&lt;String&gt; registeredPhoneNumbers = Arrays.asList("+1-111-111-11-11", "+1-111-111-11-12", "+1-111-111-11-13", "+1-111-111-11-14");
+
+   public void validatePhone(String phoneNumber) throws PhoneNumberIsExistException {
+       if (registeredPhoneNumbers.contains(phoneNumber)) {
+           throw new PhoneNumberIsExistException("Вказаний номер телефону вже використовується іншим клієнтом!");
+       }
+   }
+}
+    </code></pre>
+
+    <p>Для спрощення завдання ми «захардкодимо» кілька номерів телефонів — нехай це буде наша база даних. Ну і, нарешті,
+    спробуємо застосувати наш виняток:</p>
+
+    <pre class='language-java line-numbers'><code>
+public class CreditCardIssue {
+   public static void main(String[] args) {
+       PhoneNumberRegisterService service = new PhoneNumberRegisterService();
+       try {
+           service.validatePhone("+1-111-111-11-14");
+       } catch (PhoneNumberIsExistException e) {
+           // тут можна зробити запис в логи або виведення стеку викликів
+		e.printStackTrace();
+       }
+   }
+}
+    </code></pre>
+
+    <p>Ну що, настав час натиснути <span class="text-bold">Shift+F10</span> (якщо використовуєш IDEA), тобто запустити проєкт.
+    І ось що ти побачиш у консолі:</p>
+
+    <div class="terminal">exception.CreditCardIssue<br />
+exception.PhoneNumberIsExistException: Вказаний номер телефону вже використовується іншим клієнтом!<br />
+	at exception.PhoneNumberRegisterService.validatePhone(PhoneNumberRegisterService.java:11)</div>
+
+    <p>Ну ось, ти створив свій виняток і навіть трохи його протестував. Вітаю тебе із цим досягненням! Рекомендую трохи
+    поекспериментувати із ним, щоб краще розібратися, як це працює.</p>
+
+    <p>Додай ще одне: наприклад, для перевірки наявності літер. Як ти, напевно, знаєш, у США часто використовують літери для
+    спрощення запам’ятовування номера, наприклад, 1-800-MY-APPLE. Тобто тобі треба перевірити, щоб у номері були лише цифри.</p>
+
+    <p>Отже, ми створили те, що перевіряється, тобто, checked, виняток. І все б добре, але…</p>
+
+ <img data-max-width="800" data-id="f3853876-3bd6-4939-87bb-0e840f960169" src="https://cdn.javarush.com/images/article/f3853876-3bd6-4939-87bb-0e840f960169/800.jpeg" alt="">
+
+    <p>Спільнота програмістів розділилася на два табори — ті, хто за винятки, що перевіряються, і ті, хто проти. Обидві сторони
+    наводять вагомі аргументи. Серед тих та інших є розробники екстра-класу: Брюс Еккель критикує концепцію винятків, що
+    перевіряються, Джеймс Гослінг захищає. Схоже, це питання ніколи не буде остаточно закрите. Тим не менш, давайте
+    розглянемо основні мінуси використання винятків, що перевіряються.</p>
+
+    <p><span class="text-bold">Головний мінус винятків, що перевіряються</span> — їх треба обробляти. І тут у нас два варіанти: або обробляти на місці, використовуючи <span
+        class="text-viola">try-catch</span>, або, якщо у нас один і той самий виняток використовується в багатьох місцях,
+    прокидати за допомогою <span class="text-viola">throws</span> вище і в класах верхнього рівня їх обробляти.</p>
+
+    <p>Також у нас може виникнути «простирадло» коду, або, як іноді можна почути, — boilerplate, тобто багато коду, який місця
+    займає багато, але смислового навантаження несе мало.</p>
+
+    <p>Проблеми починаються у досить великих програмах: винятків, що обробляються, стає багато, і метод верхнього шару легко
+    може обрости списком <span class="text-viola">throws</span> із десятком винятків.</p>
+
+    <div class="terminal">public OurCoolClass() throws FirstException, SecondException, ThirdException, ApplicationNameException...</div>
+
+    <p>Часто розробникам це не подобається, і вони йдуть на хитрість: успадковують усі свої винятки, що перевіряються, від
+    одного предка — <span class="text-red"><span class="text-bold">ApplicationNameException</span></span>. Тепер вони
+    повинні ловити в обробнику ще і його (<span class="code">checked</span> же!):</p>
+
+    <pre class='language-java line-numbers'><code>
+catch(FirstException e){
+    // todo
+}
+catch(SecondException e){
+    // todo
+}
+catch(ThirdException e){
+    // todo
+}
+catch(ApplicationNameException e){
+    // todo
+}
+    </code></pre>
+
+    <p>Тут на нас чекає ще одна проблема: а що робити в останньому <span class="text-viola">catch</span>? Вище ми вже обробили
+    всі штатні ситуації, які передбачили, але тут <span class="text-red"><span
+            class="text-bold">ApplicationNameException</span></span> для нас означає не більше ніж <span
+        class="text-red"><span class="text-bold">Exception</span></span>: «якась незрозуміла помилка». Так і обробляємо:</p>
+
+    <pre class='language-java line-numbers'><code>
+catch(ApplicationNameException e){
+    LOGGER.error("Unknown error", e.getMessage());
+}
+    </code></pre>
+
+    <p>І ми знаємо що відбулося.</p>
+
+    <p>Але, здавалося б, можна ж все прокинути одним рухом руки:</p>
+
+    <pre class='language-java line-numbers'><code>
+public void ourCoolMethod() throws Exception{
+// do some
+}
+    </code></pre>
+
+    <p>Так, можна. Але яку інформацію несе “throws Exception”? Щось зламалося. Доведеться перевіряти все від і до, і ти надовго
+    потоваришуєш із дебагером, щоб зрозуміти причину.</p>
+
+    <p>Ще ти можеш зустріти конструкцію, яку іноді називають «спіймав — мовчи»:</p>
+
+    <pre class='language-java line-numbers'><code>
+try{
+// some code
+} catch(Exception e){
+   throw new ApplicationNameException("Error");
+}
+    </code></pre>
+
+    <p>Тут не потрібно зайвих слів — за кодом все зрозуміло, а точніше — нічого не зрозуміло.</p>
+
+    <p>Звісно, ти можеш заперечити, що таке не зустрінеш у реальному коді. Добре, давай подивимося таку штуку, як клас <span
+        class="code"><span class="text-green">URL</span></span> із пакету <span class="text-bold">java.net</span>, і
+    заглянемо в її надра, в її код. Follow me if you want to know!</p>
+
+    <p>Ось один із конструкторів <span class="code"><span class="text-green">URL</span></span>:</p>
+
+    <pre class='language-java line-numbers'><code>
+public URL(String spec) throws MalformedURLException {
+   this(null, spec);
+}
+    </code></pre>
+
+    <p>Як бачиш, тут є цікавий виняток, що перевіряється, — <span class="text-red"><span
+            class="text-bold">MalformedURLException</span></span>. І він може бути викинутий у разі, цитую:<br />
+<em>if no protocol is specified, or an unknown protocol is found, or spec is null, or the parsed URL fails to comply with the specific syntax of the associated protocol.</em></p>
+
+    <p>Тобто</p>
+
+    <ol>
+        <li>Якщо протокол не вказано.</li>
+        <li>Знайдено невідомий протокол.</li>
+        <li>Специфікація має значення <span class="text-bold">null</span>.</li>
+        <li>URL-адреса не відповідає конкретному синтаксису зв’язаного протоколу.</li>
+    </ol>
+
+    <p>Давай створимо метод, який буде створювати об’єкт класу <span class="code"><span class="text-green">URL</span></span>:</p>
+
+
+    <pre class='language-java line-numbers'><code>
+public URL createURL() {
+   URL url = new URL("https://javarush.com");
+   return url;
+}
+    </code></pre>
+
+    <p>Щойно ти напишеш ці рядки в IDE (я пишу в IDEA, але навіть в Eclipse та NetBeans це спрацює), побачиш ось це:</p>
+
+    <img data-max-width="512" data-id="0cf7709b-cc19-4b54-93db-15f5ae7b508e" src="https://cdn.javarush.com/images/article/0cf7709b-cc19-4b54-93db-15f5ae7b508e/original.png" alt="">
+
+    <p>Це говорить про те, що нам треба або прокинути виняток, або «обгорнути» в <span class="text-viola">try-catch</span>.
+    Пропоную поки обрати другий варіант, щоб наочно побачити, що вийде:</p>
+
+    <pre class='language-java line-numbers'><code>
+public static URL createURL() {
+   URL url = null;
+   try {
+       url = new URL("https://javarush.com");
+   } catch(MalformedURLException e){
+  e.printStackTrace();
+   }
+   return url;
+}
+    </code></pre>
+
+    <p>Як бачиш, вийшло вже досить багатослівно. Власне, про це вже сказано вище. Це одна з найбільш очевидних причин
+    використовувати винятки, що не перевіряються.</p>
+
+    <p>Ми можемо створити такий виняток, розширивши <span class="text-red"><span class="text-bold">RuntimeException</span></span> в Java.</p>
+
+    <p>Винятки, що не перевіряються, успадковуються від класу <span class="code"><span class="text-green">Error</span></span>
+    або класу <span class="code"><span class="text-green">RuntimeException</span></span>. Багато програмістів вважають, що
+    ми не можемо обробляти ці винятки в наших програмах, оскільки вони є типом помилок, від яких не можна очікувати
+    відновлення виконання коду під час роботи програми.</p>
+
+    <p>Коли виникає виняток, що не перевіряється, це зазвичай спричинено неправильним використанням коду, передачею нульового
+    чи іншого неправильного аргументу.</p>
+
+    <p>Отже, давай писати код:</p>
+
+    <pre class='language-java line-numbers'><code>
+public class OurCoolUncheckedException extends RuntimeException {
+   public OurCoolUncheckedException(String message) {
+       super(message);
+   }
+
+   public OurCoolUncheckedException(Throwable cause) {
+       super(cause);
+   }
+  
+   public OurCoolUncheckedException(String message, Throwable throwable) {
+       super(message, throwable);
+   }
+}
+    </code></pre>
+
+    <p>Зверни увагу: ми зробили кілька конструкторів для різних цілей. Це дозволяє нам розширити можливості нашого винятку.
+    Ось, наприклад, ми можемо зробити так, щоб виняток міг видати нам код помилки. Спочатку сформуємо <span
+        class="code"><span class="text-green">enum</span></span>, в якому, власне, наші коди помилок і будуть лежати:</p>
+
+    <pre class='language-java line-numbers'><code>
+public enum ErrorCodes {
+   FIRST_ERROR(1),
+   SECOND_ERROR(2),
+   THIRD_ERROR(3);
+
+   private int code;
+
+   ErrorCodes(int code) {
+       this.code = code;
+   }
+
+   public int getCode() {
+       return code;
+   }
+}
+    </code></pre>
+
+    <p>А тепер додамо ще один конструктор у клас нашого винятку:</p>
+
+    <pre class='language-java line-numbers'><code>
+public OurCoolUncheckedException(String message, Throwable cause, ErrorCodes errorCode) {
+   super(message, cause);
+   this.errorCode = errorCode.getCode();
+}
+    </code></pre>
+
+    <p>І, так, не забудемо додати поле, мало не забули:</p>
+
+    <pre class='language-java line-numbers'><code>
+private Integer errorCode;
+    </code></pre>
+
+    <p>Ну і, звісно, метод для отримання цього коду:</p>
+
+    <pre class='language-java line-numbers'><code>
+public Integer getErrorCode() {
+   return errorCode;
+}
+    </code></pre>
+
+    <p>Поглянемо на весь клас цілком, щоб можна було перевірити та порівняти:</p>
+
+    <pre class='language-java line-numbers'><code>public class OurCoolUncheckedException extends RuntimeException {
+   private Integer errorCode;
+
+   public OurCoolUncheckedException(String message) {
+       super(message);
+   }
+
+   public OurCoolUncheckedException(Throwable cause) {
+       super(cause);
+   }
+
+   public OurCoolUncheckedException(String message, Throwable throwable) {
+
+       super(message, throwable);
+   }
+
+   public OurCoolUncheckedException(String message, Throwable cause, ErrorCodes errorCode) {
+       super(message, cause);
+       this.errorCode = errorCode.getCode();
+   }
+   public Integer getErrorCode() {
+       return errorCode;
+   }
+}
+    </code></pre>
+
+    <p>Ось наш виняток і готовий! Як бачиш, нічого особливо складного немає. Перевіримо його у роботі:</p>
+
+    <pre class='language-java line-numbers'><code>
+   public static void main(String[] args) {
+       getException();
+   }
+   public static void getException(){
+       throw new OurCoolUncheckedException("Наше круте виключення!");
+   }
+    </code></pre>
+
+    <p>Запустимо нашу невелику програму і побачимо в консолі приблизно таке:</p>
+
+    <img data-max-width="800" data-id="a1283575-229b-4c19-b8b4-064dfbafe849" src="https://cdn.javarush.com/images/article/a1283575-229b-4c19-b8b4-064dfbafe849/original.png" alt="">
+
+    <p>А тепер давай скористаємось додатковою функціональністю, яку ми додали. Трохи допишемо попередній код:</p>
+
+    <pre class='language-java line-numbers'><code>
+public static void main(String[] args) throws Exception {
+
+   OurCoolUncheckedException exception = getException(3);
+   System.out.println("getException().getErrorCode() = " + exception.getErrorCode());
+   throw exception;
+
+}
+
+public static OurCoolUncheckedException getException(int errorCode){
+   return switch (errorCode) {
+   case 1:
+       return new OurCoolUncheckedException("Наш крутий виняток! Ми отримали помилку: " + ErrorCodes.FIRST_ERROR.getCode(), new Throwable(), ErrorCodes.FIRST_ERROR);
+   case 2:
+       return new OurCoolUncheckedException("Наш крутий виняток! Ми отримали помилку: " + ErrorCodes.SECOND_ERROR.getCode(), new Throwable(), ErrorCodes.SECOND_ERROR);
+   default: // зтут ми підхопимо трійку та всі інші коди, які ми ще не додали, тобто це дія за замовчуванням. Докладніше можеш дізнатися
+тут <a href="https://javarush.com/groups/posts/4028-operator-switch-v-java" target="_blank">оператор switch в Java</a>
+       return new OurCoolUncheckedException("Наш крутий виняток! Ми отримали помилку: " + ErrorCodes.THIRD_ERROR.getCode(), new Throwable(), ErrorCodes.THIRD_ERROR);
+}
+
+}
+    </code></pre>
+
+    <p>З винятками можна працювати як з об’єктами, хоча, впевнений, ти і так знаєш, що в Java все є об’єктом.</p>
+
+    <p>І дивись, що ми зробили. Спочатку ми змінили метод, який тепер не кидає, а просто створює виняток залежно від того, який
+    нам прилетів параметр. Далі за допомогою <span class="text-viola">switch-case</span> генеруємо виняток із потрібним нам
+    кодом помилки та повідомленням. А в основному методі ми створений виняток отримали, дістали код помилки та кинули його.</p>
+
+    <p>Давай запустимо і подивимося, що потрапить у консоль:</p>
+
+    <img data-max-width="800" data-id="1df43ff6-22bf-4801-b03b-d80c1d4ae9da" src="https://cdn.javarush.com/images/article/1df43ff6-22bf-4801-b03b-d80c1d4ae9da/original.png" alt="">
+
+    <p>І дивись, виходить, що ми вивели код помилки, який отримали з винятку, потім викинули власне виняток. При цьому ми
+    навіть можемо відстежити, а де саме був викинутий виняток. За необхідності ти можеш додати всю необхідну інформацію в
+    повідомлення, створити необхідні коди помилок, доповнити свої винятки новими можливостями.</p>
+
+    <p>Ну як? Сподіваюся, у тебе все вийшло!</p>
+
+    <p>Взагалі, тема винятків досить велика і не така вже однозначна. Тут буде ще багато суперечок та буде зламано чимало
+    списів. Наприклад, лише в Java є винятки, що перевіряються. Із найпоширеніших мов я не бачив жодної, яка б їх
+    використовувала.</p>
+
+    <p>Дуже добре про винятки загалом написав Брюс Еккель у своїй книзі «Філософія Java», у главі 12, рекомендую ознайомитись!
+    Також заглянь у перший том «Java. Бібліотека професіонала» Хорстманна, у главу 7 — там теж багато цікавого.</p>
+
+    <h2>Невеликі підсумки</h2>
+
+    <ol>
+        <li><p>Пиши все в лог! Логуй повідомлення, які може видати виняток. У більшості випадків це дуже допоможе у налагодженні та
+        дозволить зрозуміти, що сталося. Не залишай порожнім блок <span class="text-viola">catch</span>, інакше він буде просто
+        «з’їдати» виняток, і у тебе не буде даних для пошуку проблем.</p></li>
+
+        <li><p>Погана практика щодо винятку — зловити їх всі одночасно (як сказав один мій колега, це не покемон — це Java), тому
+        уникай catch або, того гірше, <span class="text-viola">catch(Throwable t)</span>.</p></li>
+
+        <li>Кидай виняток якомога раніше. Це гарна практика програмування в Java. Коли ти будеш вивчати фреймворки типу Spring,
+        побачиш, що він працює за принципом Failed First. Тобто «впасти» якомога раніше, щоб швидше знайти помилку. Це, звісно,
+        несе певні незручності. Проте такий підхід допомагає створювати надійніший код.</li></p>
+
+        <li>У разі виклику інших частин коду найкраще ловити певні винятки. Якщо код, що викликається, генерує кілька винятків,
+        погана практика програмування — перехоплювати тільки батьківський клас цих винятків. Наприклад, якщо код, що
+        викликається, видає <span class="text-red"><span class="text-bold">FileNotFoundException</span></span>за участю <span
+            class="text-red"><span class="text-bold">IOException</span></span>. І в твій код, який викликає цей модуль, краще
+        написати два блоки <span class="text-viola">catch</span> для захоплення кожного з винятків замість одного catch для
+        перехоплення <span class="text-red"><span class="text-bold">Exception</span></span>.</li></p>
+
+        <li><p>Лови винятки тільки тоді, коли зможеш ефективно для користувача та налагодження їх обробити.</p></li>
+
+        <li>Не соромся писати свої винятки. Звісно, в Java дуже багато готових, на будь-який смак і колір, але іноді доведеться
+        все ж таки створювати свій «велосипед». Але ти маєш чітко розуміти, навіщо ти це робиш, і бути впевненим, що серед
+        штатних немає потрібного тобі.</li></p>
+
+        <li>Коли ти створюєш свої класи винятків, стеж за іменуванням! Ти, швидше за все, вже знаєш, що правильне іменування
+        класів, змінних, методів та пакетів — це дуже важливо. Винятки — не винятки (вибач за тавтологію)! Наприкінці завжди
+        став слово <span class="text-red"><span class="text-bold">Exception</span></span>, а назва винятку має чітко говорити
+        про помилку, яку він ловить. Приклад — <span class="text-red"><span
+                class="text-bold">FileNotFoundException</span></span>.</li></p>
+
+        <li>Документуй винятки. Бажано писати javadoc @throws для винятків. Це буде особливо корисним у тих випадках, коли твої
+        розробки надають будь-які інтерфейси. Та й самому потім буде простіше розібратися у своєму ж коді. Ось як ти думаєш,
+        звідки можна дізнатися, що робить <span class="text-red"><span class="text-bold">MalformedURLException</span></span>? Із
+        javadoc! Так, перспектива писати документацію не дуже тішить, але, повір, ти собі скажеш спасибі, коли через пів року
+        повернешся до свого ж коду.</li></p>
+
+        <li><p>Звільняй ресурси і не нехтуй конструкцією <span class="text-viola">try-with-resources</span>. Якщо ти ще не знаєш, що це таке, то ознайомся з ними тут — <a href="https://javarush.com/groups/posts/4025-java-7-try-with-resources" target="_blank">Java 7 try-with-resources</a>.</li></p>
+
+        <li><p>Це, імовірніше, загальний підсумок: використовуй винятки розумно. Кинути виняток — це досить «дорога» за ресурсами
+        операція. Не виключено, що в багатьох випадках буде простіше не кидати винятки, а повернути, скажімо, логічну змінну,
+        яка вкаже, як пройшла операція, використовуючи простий і більш «дешевий» <span class="text-viola">if-else</span>.</p>
+
+        <p>Також може з’явитися спокуса зав’язати на винятки логіку програми, чого робити точно не варто. Винятки, як ми вже
+        говорили на початку статті, це виняткова ситуація, а не штатна, і для їхньої «профілактики» є різні інструменти.
+        Зокрема, є <span class="code"><span class="text-green">Optional</span></span>, щоб запобігти <span
+            class="text-red"><span class="text-bold">NullPointerException</span></span>, або Scanner.hasNext і йому подібні для
+        недопущення винятку <span class="text-red"><span class="text-bold">IOException</span></span>, який може кинути метод
+        <span class="code text-orange">read()</span>.</p></li>
+    </ol>

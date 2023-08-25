@@ -1,0 +1,288 @@
+﻿Ініціалізація
+<p>----------------------------------------</p>
+Ініціалізація змінних. Як вам уже відомо, ви можете у своєму класі оголосити кілька змінних класу, і не просто оголосити, а відразу ініціалізувати їх початковими значеннями. Натомість ці самі змінні можна ініціалізувати і в конструкторі. Тому теоретично можлива ситуація, коли одним
+<p>----------------------------------------</p>
+<h2>1. Ініціалізація змінних</h2>
+<p>Як вам уже відомо, ви можете у своєму класі оголосити кілька змінних класу, і не просто оголосити, а відразу ініціалізувати їх початковими значеннями.</p>
+<p>Натомість ці самі змінні можна ініціалізувати і в конструкторі. Тому теоретично можлива ситуація, коли одним і тим самим змінним класу присвоюються значення двічі. Приклад</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>class Cat
+{
+&nbsp; &nbsp;public String name;
+&nbsp;  <span class="text-red">public int age = -1;</span>
+
+&nbsp; &nbsp;public Cat(String name, int age)
+&nbsp; &nbsp;{
+&nbsp; &nbsp; &nbsp;this.name = name;
+&nbsp; &nbsp; &nbsp;this.age = age;
+&nbsp; &nbsp;}
+
+&nbsp; &nbsp;public Cat()
+&nbsp; &nbsp;{
+&nbsp; &nbsp; &nbsp;this.name = <span class="text-green">"Безіменний"</span>;
+&nbsp; &nbsp;}
+}</code></pre>
+        </td>
+        <td><br/><br/><br/>Змінній <code><span class="text-red">age</span></code> присвоюється початкове значення <br/><br/><br/><br/><br/>Початкове значення затирається <br/><br/><br/>Для age використовується початкове значення</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>&nbsp;Cat cat = new Cat("Мурчик", 2);</code></pre>
+        </td>
+        <td>Так можна: буде викликано перший конструктор</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>&nbsp;Cat cat = new Cat();</code></pre>
+        </td>
+        <td>Так можна: буде викликано другий конструктор</td>
+    </tr>
+    </tbody>
+</table>
+<p>От що відбуватиметься під час виконання коду <code>Cat cat = new Cat("Мурчик", 2);</code>:</p>
+<ul>
+    <li>Створюється об'єкт типу <code>Cat</code>.</li>
+    <li>Ініціалізуються всі змінні класу своїми початковими значеннями.</li>
+    <li>Викликається конструктор і виконується його код.</li>
+</ul>
+<p>Тобто змінні класу спочатку ініціалізуються своїми значеннями, а вже потім виконується код конструкторів.</p>
+<hr>
+<h2>2. Порядок ініціалізації змінних класу</h2>
+<p>Змінні не просто ініціалізуються до початку роботи конструктора: вони ще й ініціалізуються в чітко визначеному порядку — <strong>порядку їх оголошення в класі.</strong></p>
+<p>Розгляньмо отакий цікавий код:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public class Solution
+{
+&nbsp; &nbsp;public int <span class="text-green">a</span> = <span class="text-red">b</span> + <span class="text-red">c</span> + 1;
+&nbsp; &nbsp;public int <span class="text-green">b</span> = a + <span class="text-red">c</span> + 2;
+&nbsp; &nbsp;public int <span class="text-green">c</span> = a + b + 3;
+}</code></pre>
+        </td>
+        <td></td>
+    </tr>
+    </tbody>
+</table>
+<p>Такий код не скомпілюється, оскільки на момент створення змінної <code><span class="text-green">а</span></code> змінних <code><span class="text-red">b</span></code>&nbsp;і <code><span class="text-red">c</span></code>&nbsp;ще не існує. А отак записати можна, і цей код чудово скомпілюється і <strong>працюватиме</strong>.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public class Solution
+{
+&nbsp; &nbsp;public int a;
+&nbsp; &nbsp;public int b = a + 2;
+&nbsp; &nbsp;public int c = a + b + 3;
+}</code></pre>
+        </td>
+        <td><br/><br/>0<br/> 0+2<br/> 0+2+3</td>
+    </tr>
+    </tbody>
+</table>
+<p><span class="text-red">Примітка. Сподіваюсь, ви пам'ятаєте, що ваш код має бути прозорим для інших розробників, отож такі прийоми краще не використовувати — це погіршує читомість коду.</span></p>
+<p>Не забувайте, що всі змінні класу, перш ніж їм присвоять певні значення, мають значення <strong>за замовчуванням</strong>. Для типу <code>int</code> це нуль.</p>
+<p>Коли віртуальна машина Java ініціалізуватиме змінну <code>а</code>, вона просто присвоїть їй значення за замовчуванням для типу int — 0.</p>
+<p>Коли черга дійде до <code>b</code>, змінна <code>a</code> вже буде відома й міститиме значення, тому JVM присвоїть змінній <code>b</code> значення 2.</p>
+<p>Ну а коли дійдеться до змінної <code>c</code>, змінні <code>а</code> і <code>b</code> вже будуть проініціалізовані, і JVM легко обчислить початкове значення для <code>с</code>: 0+2+3.</p>
+<p>Якщо ви створили змінну всередині методу, ви не можете її використовувати, не присвоївши їй перед цим певне значення. А зі змінними класу це не так. Якщо змінній класу не присвоєно початкове значення, значить, їй присвоюється значення за замовчуванням.</p>
+<hr>
+<h2>3. Константи</h2>
+<p>Коли ми вже продовжуємо розбиратися в процесі створення об'єкта, варто торкнутися питання ініціалізації констант — змінних класу, які мають модифікатор <code>final</code>.</p>
+<p>Якщо змінна класу має модифікатор <code>final</code>, їй має бути присвоєно початкове значення. Це ви вже знаєте, і тут немає нічого дивного.</p>
+<p>А от чого ви не знаєте: початкове значення можна не присвоювати відразу, якщо присвоїти його в конструкторі. І це чудово працюватиме для final-змінної. Єдина вимога — якщо конструкторів декілька, то final-змінній має бути присвоєно значення у всіх конструкторах.</p>
+<p>Приклад:</p>
+<pre class="language-java"><code>public class Cat
+{
+&nbsp; &nbsp;public <strong>final</strong> int maxAge = 25;
+&nbsp; &nbsp;public <strong>final</strong> int <span class="text-red">maxWeight</span>;
+
+&nbsp; &nbsp;public Cat (int weight)
+&nbsp; &nbsp;{
+&nbsp;  &nbsp; &nbsp;this.<span class="text-red">maxWeight</span> = weight; // внесення початкового значення в константу
+&nbsp; &nbsp;}
+}</code></pre>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task10.task1004"></div>
+<hr>
+<h2>4. Код у конструкторі</h2>
+<p>І ще кілька важливих зауважень щодо конструкторів. Згодом у процесі вивчення Java ви зіткнетеся з такими речами як успадкування, серіалізація, винятки тощо. Усі вони по-різному впливають на роботу конструкторів. Наразі немає сенсу дуже заглиблюватися в ці теми, але принаймні зачепити їх ми мусимо.</p>
+<p>От, наприклад, одне з вагомих зауважень. Теоретично в конструкторі можна писати код будь-якої складності. Однак не треба цього робити. Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <td>
+<pre class="language-java"><code>class <span class="text-viola">FilePrinter</span>
+{
+&nbsp; &nbsp;public String <span class="text-red">content</span>;
+
+&nbsp; &nbsp;public <span class="text-viola">FilePrinter</span>(String <span class="text-green">filename</span>) <strong>throws</strong> Exception
+&nbsp; &nbsp;{
+&nbsp;  &nbsp; &nbsp;FileInputStream <span class="text-user">input</span> = new FileInputStream(<span class="text-green">filename</span>);
+&nbsp;  &nbsp; &nbsp;byte[] <span class="text-orange">buffer</span> = <span class="text-user">input</span>.readAllBytes();
+&nbsp;  &nbsp; &nbsp;this.<span class="text-red">content</span> = new String(<span class="text-orange">buffer</span>);
+&nbsp; &nbsp;}
+
+&nbsp; &nbsp;public void <strong>printFile</strong>()
+&nbsp; &nbsp;{
+&nbsp;  &nbsp; &nbsp;System.out.println(<span class="text-orange">content</span>);
+&nbsp; &nbsp;}
+}</code></pre>
+        </td>
+        <td><br/><br/><br/><br/><br/><br/>Відкриваємо потік читання файлу<br/> Зчитуємо файл у масив байтів<br/> Зберігаємо масив байтів у вигляді рядка<br/> <br/><br/><br/><br/>Виводимо вміст файлу на екран</td>
+    </tr>
+    </tbody>
+</table>
+<p>У конструкторі класу FilePrinter ми одразу відкрили байтовий потік до файлу і прочитали його вміст. Це досить складна поведінка, яка потенційно може спричинити помилки.</p>
+<p>А якби такого файлу не було? А якби були проблеми з його читанням? А якби він був занадто великим?</p>
+<p>Складна логіка передбачає велику ймовірність помилок і код, який має правильно обробляти винятки.</p>
+<p><strong>Приклад 1 — Серіалізація</strong></p>
+<p>У стандартній Java-програмі є багато ситуацій, коли об'єкти вашого класу створюєте не ви. Наприклад, ви хочете передати об'єкт мережею: у такому разі Java-машина сама перетворить ваш об'єкт на набір байтів, передасть його та знову за набором байтів створить об'єкт.</p>
+<p>І отут виявиться, що на іншому комп'ютері немає вашого файлу, в конструкторі виникне помилка, і ніхто її не обробить — усе це разом може призвести до закриття програми.</p>
+<p><strong>Приклад 2 — Ініціалізація полів класу</strong></p>
+<p>Якщо конструктор вашого класу може кинути checked-виняток (містить ключове слово throws), ви повинні перехопити цей виняток у методі, який створює ваш об'єкт.</p>
+<p>А якщо такого методу немає? Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>&nbsp;Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>class Solution
+{
+&nbsp; &nbsp;public FilePrinter reader = new FilePrinter("c:\\readme.txt");
+}</code></pre>
+        </td>
+        <td><span class="text-red">Такий код не скомпілюється.</span></td>
+    </tr>
+    </tbody>
+</table>
+<p>Конструктор класу <code>FilePrinter</code> містить <strong>checked-винятки</strong>: ви не можете створити об'єкт <code>FilePrinter</code>, не обгорнувши його конструкцією try-catch. А try-catch можна писати тільки в методі.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task10.task1005"></div>
+<hr>
+<h2>5. Конструктор базового класу</h2>
+<p>У попередніх лекціях ми трохи обговорювали успадкування. На жаль, докладно обговорювати успадкування та ООП ми будемо на рівні, присвяченому ООП, а конструкторів це стосується вже зараз.</p>
+<p>Якщо ви успадкуєте свій клас від іншого класу, фактично в об'єкт вашого класу буде вбудовано об'єкт батьківського класу, причому цей батьківський клас має свої змінні класу та свої конструктори.</p>
+<p>Тому вам дуже важливо знати й розуміти, як відбуваються ініціалізація параметрів і виклик конструкторів, коли ваш клас має батьківський клас, чиї змінні та методи ви успадковуєте.</p>
+<p><strong>Класи</strong></p>
+<p>Як же нам дізнатися, в якому порядку ініціалізуються змінні й викликаються конструктори? Для початку напишімо код двох класів, один з яких успадковується від іншого:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>class <span class="text-user">ParentClass</span>
+<span>{
+</span>&nbsp; &nbsp;public String a;
+&nbsp; &nbsp;public String b;
+
+&nbsp; &nbsp;public <span class="text-user">ParentClass</span>()
+&nbsp; &nbsp;{
+&nbsp; &nbsp;}
+}
+
+class <span class="text-red">ChildClass</span> extends <span class="text-user">ParentClass</span>
+{
+&nbsp; &nbsp;public String c;
+&nbsp; &nbsp;public String d;
+
+&nbsp; &nbsp;public <span class="text-red">ChildClass</span>()
+&nbsp; &nbsp;{
+&nbsp; &nbsp;}
+}</code></pre>
+        </td>
+        <td><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>Клас <code><span class="text-red">ChildClass</span></code>&nbsp;успадковується від класу <code><span class="text-user">ParentClass</span></code>.</td>
+    </tr>
+    </tbody>
+</table>
+<p>Нам треба визначити, в якому порядку ініціалізуються змінні й викликаються конструктори. Зробити це допоможе логування.</p>
+<p><strong>Логування</strong></p>
+<p>Логуванням називається процес запису в консоль або у файл тих дій, які відбуваються під час роботи програми.</p>
+<p>Визначити, що відбувся виклик конструктора, досить просто: потрібно в тілі конструктора вивести в консоль повідомлення про це. А от як визначити, що змінну ініціалізовано?</p>
+<p>Насправді це теж не дуже складно: потрібно написати спеціальний метод, котрий повертатиме значення, яким ініціалізується змінна класу, і залогувати цей факт. Цей код може мати, приміром, такий вигляд:</p>
+<p><strong>Остаточний код</strong></p>
+<table>
+    <tbody>
+    <tr>
+        <td>
+<pre class="language-java"><code>public class <span class="text-red">Main</span>
+{
+&nbsp; &nbsp;public static void main(String[] args)
+&nbsp; &nbsp;{
+&nbsp;  &nbsp;  <span class="text-green">ChildClass</span> obj = new <span class="text-green">ChildClass</span>();
+&nbsp; &nbsp;}
+
+&nbsp; &nbsp;public static String <span class="text-viola">print</span>(String <span class="text-orange">text</span>)
+&nbsp; &nbsp;{
+&nbsp;  &nbsp; &nbsp;System.out.println(<span class="text-orange">text</span>);
+&nbsp;  &nbsp; &nbsp;return <span class="text-orange">text</span>;
+&nbsp; &nbsp;}
+}
+
+class <span class="text-user">ParentClass</span>
+{
+&nbsp; &nbsp;public String a = <span class="text-red">Main</span>.<span class="text-viola">print</span>("ParentClass.a");
+&nbsp; &nbsp;public String b = <span class="text-red">Main</span>.<span class="text-viola">print</span>("ParentClass.b");
+
+&nbsp; &nbsp;public <span class="text-user">ParentClass</span>()
+&nbsp; &nbsp;{
+&nbsp;  &nbsp;  <span class="text-red">Main</span>.<span class="text-viola">print</span>("ParentClass.constructor");
+&nbsp; &nbsp;}
+}
+
+class <span class="text-green">ChildClass</span> extends <span class="text-user">ParentClass</span>
+{
+&nbsp; &nbsp;public String c = <span class="text-red">Main</span>.<span class="text-viola">print</span>("ChildClass.c");
+&nbsp; &nbsp;public String d = <span class="text-red">Main</span>.<span class="text-viola">print</span>("ChildClass.d");
+
+&nbsp; &nbsp;public <span class="text-green">ChildClass</span>()
+&nbsp; &nbsp;{
+&nbsp;  &nbsp;  <span class="text-red">Main</span>.<span class="text-viola">print</span>("ChildClass.constructor");
+&nbsp; &nbsp;}
+}</code></pre>
+        </td>
+        <td><br/><br/><br/><br/>Створюємо об'єкт типу <code><span class="text-green">ChildClass</span></code> <br/><br/><br/>Цей метод записує в консоль переданий текст і повертає його<br/> <br/><br/><br/><br/><br/>Оголошуємо <code><span class="text-user">ParentClass</span></code><br/> <br/>Пишемо текст і ним же ініціалізуємо змінні<br/> <br/><br/><br/><br/>Записуємо в консоль повідомлення про виклик конструктора. Значення, що повертається, ігноруємо. <br/><br/><br/>Оголошуємо <code><span class="text-green">ChildClass</span></code><br/> <br/>Пишемо текст і ним же ініціалізуємо змінні <br/><br/><br/><br/><br/>Записуємо в консоль повідомлення про виклик конструктора. Значення, що повертається, ігноруємо.</td>
+    </tr>
+    </tbody>
+</table>
+<p>Якщо виконати цей код, на екран буде виведено текст:</p>
+<table>
+    <tr>
+        <th>Виведення на екран методу <code><span class="text-red">Main</span>.<span class="text-viola">print</span>()</code></th>
+    <tr>
+        <td>
+                <pre><code><span class="text-user">ParentClass.a
+ParentClass.b
+ParentClass.constructor</span>
+<span class="text-green">ChildClass.c
+ChildClass.d
+ChildClass.constructor</span></code></pre>
+        </td>
+    </tr>
+</table>
+
+<p>Отже, ви завжди можете особисто переконатися, що змінні класу ініціалізуються до виклику його конструктора. Уся ініціалізація членів базового класу відбувається до ініціалізації членів класу-спадкоємця.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task10.task1006"></div>

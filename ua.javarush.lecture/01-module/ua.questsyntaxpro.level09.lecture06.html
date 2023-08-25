@@ -1,0 +1,221 @@
+﻿StringBuilder
+<p>----------------------------------------</p>
+Змінення рядків. Рядки в Java — це незмінювані об'єкти (immutable). Так зробили для того, щоб клас-рядок можна було оптимізувати й використовувати повсюдно.&nbsp;Наприклад, в колекції HashMap рекомендується використовувати як ключі тільки об'єкти незмінюваних типів. Проте часто
+<p>----------------------------------------</p>
+<h2>1. Змінення рядків</h2>
+<p>Рядки в Java — це незмінювані об'єкти (immutable). Так зробили для того, щоб клас-рядок можна було оптимізувати й використовувати повсюдно. Наприклад, <a href="https://javarush.com/groups/posts/4034-klass-hashmap-">в колекції HashMap</a> рекомендується використовувати як ключі тільки об'єкти незмінюваних типів.</p>
+<p>Проте часто виникають ситуації, коли програмісту було б зручніше мати <code>String</code>-клас, який можна змінювати. Тобто клас, який не створюватиме новий підрядок щоразу, коли відбувається виклик його методу.</p>
+<p>Приміром, маємо дуже великий рядок і часто дописуємо щось у кінець цього рядка. У такій ситуації навіть колекція символів (<code>ArrayList&lt;Character&gt;</code>) може виявитися ефективнішою, ніж постійне повторне створення рядків і конкатенація об'єктів типу <code>String</code>.</p>
+<p>Саме тому в мову Java все ж таки додали клас String, який можна змінювати. Він має назву <code>StringBuilder</code>.</p>
+<p><strong>Створення об'єкта</strong></p>
+<p>Щоб створити об'єкт <code>StringBuilder</code> на основі наявного рядка, слід виконати таку команду:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-red">StringBuilder</span> <span class="text-user">ім'я</span> = new <span class="text-red">StringBuilder</span>(<span class="text-green">рядок</span>);</code></pre>
+</div>
+<p>Щоб створити порожній змінюваний рядок, слід виконати таку команду:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-red">StringBuilder</span> <span class="text-user">ім'я</span> = new <span class="text-red">StringBuilder</span>();</code></pre>
+</div>
+<p>Список методів</p>
+<p>Клас <code>StringBuilder</code> має понад два десятки корисних методів. У цій таблиці наведено перелік найважливіших із них.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Метод</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>StringBuilder <span class="text-red">append</span>(obj)</code></pre>
+        </td>
+        <td>Перетворює переданий об'єкт на рядок і додає до поточного рядка</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>StringBuilder <span class="text-red">insert</span>(int index, obj)</code></pre>
+        </td>
+        <td>Перетворює переданий об'єкт на рядок і вставляє всередину поточного рядка</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>StringBuilder <span class="text-red">replace</span>(int start, int end, String str)</code></pre>
+        </td>
+        <td>Замінює частину рядка, визначену інтервалом start..end, на переданий рядок</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>StringBuilder <span class="text-red">deleteCharAt</span>(int index)</code></pre>
+        </td>
+        <td>Видаляє з рядка символ у позиції index</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>StringBuilder <span class="text-red">delete</span>(int start, int end)</code></pre>
+        </td>
+        <td>Видаляє з рядка символи підрядка, визначеного інтервалом</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">indexOf</span>(String str, int index)</code></pre>
+        </td>
+        <td>Шукає підрядок в поточному рядку</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">lastIndexOf</span>(String str, int index)</code></pre>
+        </td>
+        <td>Шукає підрядок в поточному рядку, починаючи з кінця</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>char <span class="text-red">charAt</span>(int index)</code></pre>
+        </td>
+        <td>Повертає символ рядка, який знаходиться в позиції, визначеній індексом</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String <span class="text-red">substring</span>(int start, int end)</code></pre>
+        </td>
+        <td>Повертає підрядок, визначений інтервалом</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>StringBuilder <span class="text-red">reverse</span>()</code></pre>
+        </td>
+        <td>Змінює порядок символів у рядку на зворотний</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>void <span class="text-red">setCharAt</span>(int index, char)</code></pre>
+        </td>
+        <td>Замінює символ рядка, визначений індексом, на переданий символ</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">length</span>()</code></pre>
+        </td>
+        <td>Повертає довжину рядка (кількість символів)</td>
+    </tr>
+    </tbody>
+</table>
+<p>Читайте далі короткий опис цих методів.</p>
+<hr>
+<h2>2. Короткий опис методів</h2>
+<p>Додавання до рядка</p>
+<p>Для того щоб щось додати до змінюваного рядка (<code>StringBuilder</code>), потрібно скористатися методом <code>append()</code>. Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-viola">StringBuilder</span> builder = new <span class="text-viola">StringBuilder</span>("Привіт");
+<span class="text-user">builder</span>.<span class="text-red">append</span>("Бувай");
+<span class="text-user">builder</span>.<span class="text-red">append</span>(123);</code></pre>
+        </td>
+        <td>
+                <pre><code>Привіт
+ПривітБувай
+ПривітБувай123</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Перетворення на стандартний рядок</strong></p>
+<p>Для того щоб перетворити об'єкт <code>StringBuilder</code> на рядок типу String, потрібно просто скористатися методом <code>toString()</code>. Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-viola">StringBuilder</span> <span class="text-user">builder</span> = new <span class="text-viola">StringBuilder</span>("Привіт");
+<span class="text-user">builder.<span class="text-red">append</span></span>(123);
+String <span class="text-green">result</span> = <span class="text-user">builder</span>.<span class="text-red">toString</span>();
+System.out.println(<span class="text-green">result</span>);</code></pre>
+        </td>
+        <td>
+            <pre><code>Привіт123</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Видалення символу</strong></p>
+<p>Для того щоб видалити символ у змінюваному рядку, слід скористатися методом <code>deleteCharAt()</code>. Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-viola">StringBuilder</span> <span class="text-user">builder</span> = new <span class="text-viola">StringBuilder</span>("Привіт");
+<span class="text-user">builder</span>.<span class="text-red">deleteCharAt</span>(2);
+String <span class="text-green">result</span> = <span class="text-user">builder</span>.<span class="text-red">toString</span>();
+System.out.println(<span class="text-green">result</span>);</code></pre>
+        </td>
+        <td>
+            <pre><code>Првіт</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Заміна частини рядка</strong></p>
+<p>Для заміни частини рядка на інший підрядок використовується метод <code>replace(int begin, int end, String str)</code>. Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-viola">StringBuilder</span> builder = new <span class="text-viola">StringBuilder</span>("Привіт");
+<span class="text-user">builder</span>.<span class="text-red">replace</span>(2, 5, "Hello!");
+String <span class="text-green">result</span> = <span class="text-user">builder</span>.<span class="text-red">toString</span>();
+System.out.println(<span class="text-green">result</span>);
+</code></pre>
+        </td>
+        <td>
+            <pre><code>ПрHello!т</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task09.task0918"></div>
+<hr>
+<h2>3. Корисні приклади роботи з рядками</h2>
+<p><strong>Як змінити порядок символів у рядку на зворотний?</strong></p>
+<p>Для цієї операції є спеціальний метод — <code>reverse()</code>. Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="text-orange">str</span> = <span class="text-green">"Привіт"</span>;
+<span class="text-viola">StringBuilder</span> <span class="text-user">builder</span> = new <span class="text-viola">StringBuilder</span>(<span class="text-orange">str</span>);
+<span class="text-user">builder</span>.<span class="text-red">reverse</span>();
+String <span class="text-green">result</span> = <span class="text-user">builder</span>.<span class="text-red">toString</span>();
+System.out.println(<span class="text-green">result</span>);
+</code></pre>
+        </td>
+        <td>
+            <pre><code>тівирП</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Клас <code>StringBuffer</code></strong></p>
+<p>Є ще один клас — <code>StringBuffer</code>. Це аналог класу <code>StringBuilder</code>, але його методи мають модифікатор <code>synchronized</code>. А це означає, що до об'єкта <code>StringBuffer</code> можна звертатися з декількох ниток одночасно.</p>
+<p>Але він працює значно повільніше, ніж <code>StringBuilder</code>. Такий клас може вам знадобитися, коли ви почнете активно вивчати багатонитковість у квесті <span class="term">Java Multithreading</span>.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task09.task0919"></div>

@@ -1,0 +1,178 @@
+Ознайомлення з колекцією TreeMap
+<p>----------------------------------------</p>
+Одного разу в університеті мені потрібно було написати завдання для сортування в порядку зростання прізвищ, які були ключами до особистих справ моїх одногрупників, і я витратив на це чимало часу. Але якби тоді я мав уявлення про клас TreeMap...
+<p>----------------------------------------</p>
+<p>Одного разу в університеті мені потрібно було написати завдання для сортування в порядку зростання прізвищ, які були
+    ключами до особистих справ моїх одногрупників, і я витратив на це чимало часу. Але якби тоді я мав уявлення про клас
+    <span class="code"><span class="text-green">TreeMap</span></span>, це в мене вийшло б набагато швидше.</p>
+ 
+    <p>Що таке <span class="code"><span class="text-green">TreeMap</span></span>? Це структура даних, схожа на словник, яка дає
+    можливість зберігати елементи у вигляді ключ-значення, використовуючи сортування за ключами.</p>
+ 
+    <p>Де і як його можна використати? Наприклад, у тому самому випадку з одногрупниками. Якщо мені потрібно зберігати значення
+    в порядку зростання замість того, щоб писати свої алгоритми сортування, достатньо створити <span class="code"><span
+            class="text-green">TreeMap</span></span> і покласти значення туди.</p>
+ 
+    <p>Для таких типів як <span class="text-orange">Integer</span> і <span class="text-orange">String</span> використовується
+    порядок сортування за зростанням. Але якщо ти хочеш покласти в <span class="code">
+        <span class="text-green">TreeMap</span></span> власний тип, потрібно щоб твій клас імплементував інтерфейс <span
+        class="text-neon">
+        <span class="text-bold"><em>Comparable</em></span></span>, у класі був реалізований метод <span
+        class="code text-orange">compareTo()</span> і вказано, як потрібно сортувати значення цього класу.</p>
+ 
+    <pre class='language-java line-numbers'><code>
+public class Person implements Comparable&lt;Person&gt; {
+ 
+    private String firstName;
+    private String lastName;
+ 
+    public Person(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+ 
+    public String getFirstName() {
+        return firstName;
+    }
+ 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+ 
+  ….
+ 
+    @Override
+    public int compareTo(Person person) {
+        return person.getFirstName().compareTo(firstName);
+    }
+ 
+    @Override
+    public String toString() {
+        return "Person{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
+}
+</code></pre>
+ 
+    <p>Перевизначимо метод <span class="code text-orange">compareTo()</span>, щоб він сортував значення в порядку алфавітного
+    зменшення імені:</p>
+ 
+    <pre class='language-java line-numbers'><code>
+TreeMap map = new TreeMap&lt;Person, String&gt;();
+ 
+map.put(new Person("AA","BB"), "aa");
+map.put(new Person("BB","BB"), "aa");
+map.put(new Person("DD","BB"), "aa");
+map.put(new Person("CC","BB"), "aa");
+</code></pre>
+  
+    <p>Значення зберігатимуться у такому порядку:</p>
+ 
+    <pre class='language-java line-numbers'><code>
+Person{firstName='DD', lastName='BB'}
+Person{firstName='CC', lastName='BB'}
+Person{firstName='BB', lastName='BB'}
+Person{firstName='AA', lastName='BB'}
+</code></pre>
+ 
+    <p>Клас <span class="code">
+        <span class="text-green">TreeMap</span></span> реалізує інтерфейс <span class="text-neon">
+        <span class="text-bold"><em>NavigableMap</em></span></span>, який своєю чергою розширює <span class="text-neon">
+        <span class="text-bold"><em>SortedMap</em></span></span>. Це дозволяє класу <span class="code">
+        <span class="text-green">TreeMap</span></span> використовувати для зберігання дерева і зберігати значення у
+    відсортованому порядку.</p>
+ 
+    <table>
+        <tbody>
+            <tr>
+                <td>Дерево, як зазначає Вікіпедія, — це самобалансуюча двійкова структура пошуку для зберігання даних, яка використовує
+                вузли для зберігання, порівнюючи перед цим значення.
+</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>Якщо говорити простими словами, червоно-чорне дерево — це структура даних, що зберігає праворуч значення, які більші за
+    кореневе, а ліворуч — ті, що менше. Така реалізація допомагає швидше шукати значення у структурі.</p>
+     
+    <p>Червоно-чорне дерево є самобалансуючим, тому за кожної нової вставки воно змінюватиме свою структуру, оскільки додаються
+    нові значення. Кореневим вважається значення, додане першим, але у процесі балансування кореневим може стати і друге
+    значення.</p>
+ 
+    <img data-max-width="256" data-id="916c2721-15c4-424f-83b0-c83ff2874f8f" src="https://cdn.javarush.com/images/article/916c2721-15c4-424f-83b0-c83ff2874f8f/original.png" alt="">
+ 
+    <p>Отже, тепер ти знаєш, що таке <span class="code"><span class="text-green">TreeMap</span></span> і за яким принципом воно
+    працює.</p>
+
+    <p>Важливо пам’ятати, що зберігати в <span class="code"><span class="text-green">TreeMap</span></span> можна тільки тих,
+    хто імплементував <span class="text-neon"><span class="text-bold"><em>Comparable</em></span></span> інтерфейс і
+    перевизначив метод <span class="code text-orange">compareTo()</span>.</p>
+ 
+    <p>Але що робити, якщо ми використовуємо сторонні класи, які підвантажуємо з інших бібліотек, і не можемо імплементувати в
+    них <span class="text-neon"><span class="text-bold"><em>Comparable</em></span></span>? Для таких випадків є рішення:
+    написати свій <span class="text-neon"><span class="text-bold"><em>Comparator</em></span></span>.</p>
+ 
+    <p><span class="text-neon"><span class="text-bold"><em>Comparator</em></span></span> — це інтерфейс, у якому є метод
+    compare(). З його допомогою ми можемо порівнювати об’єкти та зберігати їх у <span class="code"><span
+            class="text-green">TreeMap</span></span>.</p>
+ 
+    <pre class='language-java line-numbers'><code>
+Comparator&lt;Person&gt; comparator = new Comparator&lt;Person&gt;() {
+ 
+    @Override
+    public int compare(Person person1, Person person2) {
+        return person1.getFirstName().compareTo(person2.getFirstName());
+    }
+};
+ 
+ 
+TreeMap map = new TreeMap&lt;Person, String&gt;(comparator);
+</code></pre>
+ 
+    <p>У цьому прикладі ми створили кастомний <span class="text-neon"><span class="text-bold"><em>Comparator</em></span></span>
+    і передали <span class="code"><span class="text-green">TreeMap</span></span> класу.</p>
+ 
+    <p>Починаючи з Java 8, це можна написати, використовуючи лямбда-вираз:</p>
+ 
+    <pre class='language-java line-numbers'><code>
+TreeMap map = new TreeMap&lt;Person, String&gt;((Person person1, Person person2) -&gt; person1.getFirstName().compareTo(person2.getFirstName()) );
+</code></pre>
+ 
+    <p>Тобто, щоб зберігати значення в <span class="code"><span class="text-green">TreeMap</span></span>, потрібно вказати, як
+    їх сортувати. Зробити це можна двома способами: імплементувати <span class="text-neon"><span
+            class="text-bold"><em>Comparable</em></span></span> або реалізувати свій <span
+        class="text-neon"><span class="text-bold"><em>Comparator</em></span></span>.</p>
+ 
+    <p>Але що, якщо нам потрібно покласти в <span class="code"><span class="text-green">TreeMap</span></span> значення <span
+        class="text-bold">null</span> як ключ? <span class="code text-green"><span class="text-bold">HashMap</span></span>
+    дозволяє це зробити. А як же працює із цим <span class="code"><span class="text-green">TreeMap</span></span>?</p>
+ 
+    <pre class='language-java line-numbers'><code>
+TreeMap map = new TreeMap&lt;Person, String&gt;();
+map.put (null, "Person");
+</code></pre>
+ 
+    <p>Запустивши цей код, отримаємо помилку:</p>
+ 
+    <div class="terminal">Exception in thread "main" java.lang.NullPointerException
+at java.base/java.util.TreeMap.put(TreeMap.java:561)</div>
+ 
+    <p>Проблема полягає у тому, що всередині класу <span class="code"><span class="text-green">TreeMap</span></span>
+    відбувається порівняння значень методом <span class="code text-orange">compareTo()</span>. Ти, звичайно ж, можеш
+    покласти туди <span class="text-bold">null</span> значення, і воно скомпілюється, але в рантаймі ти отримаєш помилку,
+    оскільки на значенні <span class="text-bold">null</span> викличеться метод і вилетить <span class="text-red"><span
+            class="text-bold">NullPointerException</span></span>.</p>
+
+    <h2>Порівняння HashMap і TreeMap</h2>
+
+    <p>На відміну від <span class="code"><span class="text-green">TreeMap</span></span>, у <span class="code text-green"><span
+            class="text-bold">HashMap</span></span> дозволено зберігати <span class="text-bold">null</span> як ключ. Для
+    всіх <span class="text-bold">null</span> ключів виділено певне місце у структурі. Зберігати <span
+        class="text-bold">null</span> ключі в <span class="code text-green"><span class="text-bold">HashMap</span></span>
+    дозволяє те, що визначення місця тут відбувається за значенням хеша, і для цього не потрібно порівнювати значення з
+    іншими. Тому всі <span class="text-bold">null</span> ключі мають своє місце.</p>
+ 
+    <p>Отже, тепер ти знаєш, що використовувати, коли потрібно зберігати значення у відсортованому порядку, і як задавати
+    правила і порядок сортування.</p>

@@ -1,0 +1,418 @@
+﻿Знайомство з файлами
+<p>----------------------------------------</p>
+Клас Path. Якщо ви хочете написати програму, що працює з файлами на диску, ви можете легко це зробити. У Java є дуже багато класів, які допомагають працювати з файлами та їхнім вмістом. У ранніх версіях Java для роботи з файлами використовувалися такі класи, як File
+<p>----------------------------------------</p>
+<h2>1. Клас <code>Path</code></h2>
+<p>Якщо ви хочете написати програму, що працює з файлами на диску, ви можете легко це зробити. У Java є дуже багато класів, які допомагають працювати з файлами та їхнім вмістом.</p>
+<p>У ранніх версіях Java для роботи з файлами використовувалися такі класи, як <code>File</code> і <code>FileInputStream</code>. Але тепер клас <code>File</code> вважається застарілим, і використовувати його не рекомендується. Щоправда, його й досі можна побачити в коді, параметрах методів або конструкторах класів.</p>
+<p><span class="text-orange">Ми розпочнемо вивчення роботи з файлами відразу з класу <code><span class="text-orange">Path</span></code>. <code><span class="text-orange">Path</span></code> — це клас, який прийшов на зміну <code><span class="text-orange">File</span></code>. Його використання безпечніше й ефективніше.</span></p>
+<p><strong>Клас <code>Path</code></strong></p>
+<p>Клас <code>Path</code> — це, власне, не клас, а інтерфейс. Так було зроблено для того, щоб для кожної операційної чи файлової системи можна було створити свій клас-спадкоємець <code>Path</code>.</p>
+<p>Windows моє свій стандартний формат шляху файлів, Linux — свій. До того ж у світі є ще багато операційних систем, і кожна має свої стандарти.</p>
+<p>Тому в усіх методах для роботи з файлами вказано інтерфейс <code>Path</code>, але в дійсності використовуються його класи-спадкоємці: <code>WindowsPath</code>, <code>UnixPath</code>, ...</p>
+<p><strong>Створення об'єкта <code>Path</code></strong></p>
+<p>Для створення об'єкта <code>Path</code> (насправді це буде об'єкт класу-спадкоємця <code>WindowsPath</code>), використовується така команда:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-neon">Path</span> <span class="code text-user">ім'я</span> = <span class="text-neon">Path</span>.<span class="text-red">of</span>(<span class="text-green">шлях</span>);</code></pre>
+</div>
+<p>де <code class="text-user">ім'я</code> — це ім'я змінної типу <code><span class="text-neon">Path</span></code>, <code><span class="text-green">шлях</span></code> — це шлях до файлу (або директорії) разом з ім'ям файлу (або директорії), а <code><span class="text-red">of</span></code> — це статичний метод класу <code><span class="text-neon">Path</span></code>.</p>
+<p>Метод <code>of()</code> використовується для створення об'єктів типу <code>WindowsPath</code>, якщо програма призначена для ОС Windows, або об'єктів <code>UnixPath</code>, якщо програма призначена для ОС Linux. <span class="text-red">Ви не можете створити об'єкт типу <code><span class="text-red">Path</span></code> за допомогою коду <code>new <span class="text-red">Path()</span></code>.</span></p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-neon">Path</span> <span class="code text-user">file</span> = <span class="text-neon">Path</span>.<span class="text-red">of</span>("c:\\projects\\note.txt");</code></pre>
+        </td>
+        <td>Шлях до файлу</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-neon">Path</span> <span class="code text-user">directory</span> = <span class="text-neon">Path</span>.<span class="text-red">of</span>("c:\\projects\\");</code></pre>
+        </td>
+        <td>Шлях до директорії</td>
+    </tr>
+    </tbody>
+</table>
+<p>Для існування валідного об'єкта типу <code>Path</code> необов'язково має існувати файл (або директорія). Можливо, ви тільки збираєтеся створити цей файл… Об'єкт типу <code>Path</code> — це немов розширена версія типу <code>String</code>: він не прив'язаний до певного файлу на диску, а просто зберігає якийсь шлях.</p>
+<hr>
+<h2>2. Методи типу <code>Path</code></h2>
+<p>Інтерфейс <code>Path</code> має чимало цікавих методів. Найцікавіші з них наведено в цій таблиці.</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="47%">Метод</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>Path <span class="text-red">getParent(</span>)</code></pre>
+        </td>
+        <td>Повертає батьківську директорію</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>Path <span class="text-red">getFileName</span>()</code></pre>
+        </td>
+        <td>Повертає ім'я файлу без директорії</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>Path <span class="text-red">getRoot</span>()</code></pre>
+        </td>
+        <td>Повертає кореневу директорію зі шляху</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>boolean <span class="text-red">isAbsolute</span>()</code></pre>
+        </td>
+        <td>Перевіряє, чи є поточний шлях абсолютним</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>Path <span class="text-red">toAbsolutePath</span>()</code></pre>
+        </td>
+        <td>Перетворює шлях на абсолютний</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>Path <span class="text-red">normalize</span>()</code></pre>
+        </td>
+        <td>Видаляє шаблони в імені директорії</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>Path <span class="text-red">resolve</span>(Path other)</code></pre>
+        </td>
+        <td>Формує новий абсолютний шлях з абсолютного та відносного шляхів</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>Path <span class="text-red">relativize</span>(Path other)</code></pre>
+        </td>
+        <td>Отримує відносний шлях із двох абсолютних шляхів</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>boolean <span class="text-red">startsWith</span>(Path other)</code></pre>
+        </td>
+        <td>Перевіряє, чи поточний шлях починається зі вказаного шляху</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>boolean <span class="text-red">endsWith</span>(Path other)</code></pre>
+        </td>
+        <td>Перевіряє, чи поточний шлях закінчується вказаним шляхом</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>int <span class="text-red">getNameCount</span>()</code></pre>
+        </td>
+        <td>Поділяє шлях на частини роздільником <code>/</code><br/> і повертає кількість частин</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>Path <span class="text-red">getName</span>(int index)</code></pre>
+        </td>
+        <td>Поділяє шлях на частини роздільником <code>/</code><br/> і повертає частину шляху за її номером</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>Path <span class="text-red">subpath</span>(int beginIndex, int endIndex)</code></pre>
+        </td>
+        <td>Поділяє шлях на частини роздільником <code>/</code><br/> і повертає частину шляху, задану інтервалом</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>File <span class="text-red">toFile</span>()</code></pre>
+        </td>
+        <td>Перетворює об'єкт <code>Path</code> на застарілий об'єкт <code>File</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>URI <span class="text-red">toUri</span>()</code></pre>
+        </td>
+        <td>Перетворює об'єкт <code>Path</code> на об'єкт типу <code>URI</code></td>
+    </tr>
+    </tbody>
+</table>
+<p>Далі наведено короткий опис методів.</p>
+<hr>
+<h2>3. Поділ шляху на частини</h2>
+<p>Метод <code><span class="text-red">getParent()</span></code> повертає шлях, який указує батьківську директорію поточного шляху незалежно від того, чи є цей шлях директорією чи файлом:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="60%">Код</th>
+        <th>Значення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="code text-user">str</span> = "c:\\windows\\projects\\note.txt";
+<span>Path <span class="code text-orange">path</span> = Path.of(<span class="code text-user">str</span>).<span class="text-red">getParent</span>();</span></code></pre>
+        </td>
+        <td>
+            <pre><code><span class="token string">"c:\\windows\\projects\\"</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="code text-user">str</span> = "c:\\windows\\projects\\";
+Path <span class="code text-orange">path</span> = Path.of(<span class="code text-user">str</span>).<span class="text-red">getParent</span>();</code></pre>
+        </td>
+        <td>
+            <pre><code><span class="token string">"c:\\windows\\"</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="code text-user">str</span> = "c:\\";
+Path <span class="code text-orange">path</span> = Path.of(<span class="code text-user">str</span>).<span class="text-red">getParent</span>();</code></pre>
+        </td>
+        <td>
+            <pre><code>null</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Метод <code><span class="text-red">getFileName()</span></code> повертає частину шляху після останнього роздільника, тобто тільки ім'я файлу (або директорії):</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="60%">Код</th>
+        <th>Значення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="code text-user">str</span> = "c:\\windows\\projects\\note.txt";
+Path <span class="code text-orange">path</span> = Path.of(<span class="code text-user">str</span>).<span class="text-red">getFileName</span>();</code></pre>
+        </td>
+        <td>
+            <pre><code><span class="token string">"note.txt"</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="code text-user">str</span> = "c:\\windows\\projects\\";
+Path <span class="code text-orange">path</span> = Path.of(<span class="code text-user">str</span>).<span class="text-red">getFileName</span>();</code></pre>
+        </td>
+        <td>
+            <pre><code><span class="token string">"projects"</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="code text-user">str</span> = "c:\\";
+Path <span class="code text-orange">path</span> = Path.of(<span class="code text-user">str</span>).<span class="text-red">getFileName</span>();</code></pre>
+        </td>
+        <td>
+            <pre><code>null</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Метод <code><span class="text-red">getRoot()</span></code> повертає шлях до кореневої директорії:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="60%">Код</th>
+        <th>Значення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="code text-user">str</span> = "c:\\windows\\projects\\";
+Path <span class="code text-orange">path</span> = Path.of(<span class="code text-user">str</span>).<span class="text-red">getRoot</span>();</code></pre>
+        </td>
+        <td>
+            <pre><code><span class="token string">"c:\\"</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task15.task1513"></div>
+<hr>
+<h2>4. Абсолютний і відносний шляхи</h2>
+<p>Є два типи шляхів: абсолютні й відносні. Абсолютний шлях починається з кореневої директорії. Для Windows це може бути папка <code>c:\</code>, для Linux — директорія <code>/</code></p>
+<p>Відносний шлях вказується відносно певної директорії. Тобто це кінцева частина шляху без початкової. Відносний шлях можна перетворити на абсолютний і навпаки.</p>
+<p><strong>Метод <code>boolean isAbsolute()</code></strong></p>
+<p>Метод перевіряє, чи є поточний шлях абсолютним:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="60%">Код</th>
+        <th>Значення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="code text-user">str</span> = "c:\\windows\\projects\\note.txt";
+boolean <span class="code text-orange">abs</span> = Path.of(<span class="code text-user">str</span>).<span class="text-red">isAbsolute</span>();</code></pre>
+        </td>
+        <td>
+            <pre><code>true</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="code text-user">str</span> = "src\\com\\javarush\\Main.java";
+boolean <span class="code text-orange">abs</span> = Path.of(<span class="code text-user">str</span>).<span class="text-red">isAbsolute</span>();</code></pre>
+        </td>
+        <td>
+            <pre><code>false</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Метод <code>Path toAbsolutePath()</code></strong></p>
+<p>Перетворює шлях на абсолютний і за потреби додає до нього поточну робочу директорію:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="60%">Код</th>
+        <th>Значення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="code text-user">str</span> = "c:\\windows\\projects\\note.txt";
+Path <span class="code text-orange">path</span> = Path.of(<span class="code text-user">str</span>).<span class="text-red">toAbsolutePath</span>();</code></pre>
+        </td>
+        <td>
+            <pre><code><span class="token string">"c:\\windows\\projects\\note.txt"</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-green">String <span class="code text-user">str</span> = "src\\com\\javarush\\Main.java"</span>;
+Path <span class="code text-orange">path</span> = Path.of(<span class="code text-user">str</span>).<span class="text-red">toAbsolutePath</span>();</code></pre>
+        </td>
+        <td>
+            <pre><code><span class="token string">"d:\\work\\src\\com\\javarush\\Main.java"</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Метод <code>Path normalize()</code></strong></p>
+<p>У шляху замість імені директорії можна писати «..», що означає <span class="text-orange">повернення на одну директорію назад. </span>Нормалізація це усуває. Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="60%">Код</th>
+        <th>Значення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="code text-user">str</span> = c:\\windows\\..\\projects\\note.txt";
+Path <span class="code text-orange">path</span> = Paths.of(<span class="code text-user">str</span>).<span class="text-red">normalize</span>();</code></pre>
+        </td>
+        <td>
+            <pre><code><span class="token string">"c:\\projects\\note.txt"</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="code text-user">str</span> = "src\\com\\javarush\\..\\Main.java";
+Path <span class="code text-orange">path</span> = Paths.of(<span class="code text-user">str</span>).<span class="text-red">normalize</span>();</code></pre>
+        </td>
+        <td>
+            <pre><code><span class="token string">"src\\com\\Main.java"</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Метод <code>Path relativize(Path other)</code></strong></p>
+<p>Метод <code><span class="text-red">relativize()</span></code> дозволяє обчислити «різницю шляхів», тобто показати, чим один шлях відрізняється від іншого.</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="60%">Код</th>
+        <th>Значення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Path <span class="code text-neon">path1</span> = Path.of("c:\\windows\\projects\\note.txt");
+<span>Path <span class="code text-user">path2</span> = Path.of("<span class="text-green">c:\\windows\\"</span>);
+</span>Path <span class="code text-orange">result</span> = <span class="code text-user">path2</span>.<span class="text-red">relativize</span>(<span class="code text-neon">path1</span>);</code></pre>
+        </td>
+        <td>
+            <pre><code><span class="token string">"projects\\note.txt"</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Path <span class="code text-neon">path1</span> = Path.of("c:\\windows\\projects\\note.txt");
+<span>Path <span class="code text-user">path2</span> = Path.of("c:\\windows\\");
+</span>Path <span class="code text-orange">result</span> = <span class="code text-neon">path1</span>.<span class="text-red">relativize</span>(<span class="code text-user">path2</span>);</code></pre>
+        </td>
+        <td>
+            <pre><code><span class="token string">"..\\.."</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Path <span class="code text-neon">path1</span> = Path.of("c:\\aaa\\bbb\\1.txt");
+<span>Path <span class="code text-user">path2</span> = Path.of("d:\\zzz\\y.jpg");
+</span>Path <span class="code text-orange">result</span> = <span class="code text-neon">path1</span>.<span class="text-red">relativize</span>(<span class="code text-user">path2</span>);</code></pre>
+        </td>
+        <td><pre>Помилка IllegalArgumentException:
+два шляхи мають різний «корінь» (різні диски)</pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Метод <code>Path resolve(Path other)</code></strong></p>
+<p>Метод <code><span class="text-red">resolve()</span></code> виконує операцію, зворотну <code><span class="text-red">relativize()</span></code>: він формує новий абсолютний шлях з абсолютного і відносного шляхів.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Значення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Path <span class="code text-neon">path1</span> = Path.of("projects\\note.txt");
+Path <span><span class="code text-user">path2</span></span> = Path.of("c:\\windows\\");
+Path <span class="code text-orange">result</span> = <span class="code text-neon">path1</span>.<span class="text-red">resolve</span>(<span class="code text-user">path2</span>);</code></pre>
+        </td>
+        <td>
+            <pre><code><span class="token string">"c:\\windows"</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Path <span class="code text-neon">path1</span> = Path.of("projects\\note.txt");
+Path <span><span class="code text-user">path2</span></span> = Path.of("c:\\windows\\");
+Path <span class="code text-orange">result</span> = <span class="code text-user">path2</span>.<span class="text-red">resolve</span>(<span class="code text-neon">path1</span>);</code></pre>
+        </td>
+        <td>
+            <pre><code><span class="token string">"c:\\windows\\projects\\note.txt"</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Метод <code>toFile()</code></strong></p>
+<p>Метод повертає застарілий об'єкт <code>File</code>, який зберігає той самий шлях до файлу, що й об'єкт <code>Path</code>.</p>
+<p><strong>Метод <code>toURI()</code></strong></p>
+<p>Метод перетворює шлях відповідно до стандарту <span class="term">URI</span> і повертає об'єкт, який містить шлях до файлу:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Шлях до файлу</th>
+        <th>URI до файлу</th>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>c:<span class="text-red">\</span>windows<span class="text-red">\</span>projects<span class="text-red">\</span>note.txt</code></pre>
+        </td>
+        <td>
+            <pre><code><span class="text-red">file:///</span>c:<span class="text-red">/</span>windows<span class="text-red">/</span>projects<span class="text-red">/</span>note.txt</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task15.task1514"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task15.task1515"></div>

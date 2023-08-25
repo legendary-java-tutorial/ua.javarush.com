@@ -1,0 +1,262 @@
+﻿Клас Calendar
+<p>----------------------------------------</p>
+Перехід від класу Date до класу Calendar. Програмісти любили клас Date за його простоту й за підтримку стандартів Unix, але, як відомо, наші недоліки — це продовження наших чеснот. Програмісти хотіли мати «розумний клас Date». І такий клас з'явився — ним став клас Calendar. Його задумували
+<p>----------------------------------------</p>
+<h2>1. Перехід від класу <code>Date</code> до класу <code>Calendar</code></h2>
+<p><img data-id="0453906c-dc93-442f-882d-05a9d614734e" src="https://cdn.javarush.com/images/article/0453906c-dc93-442f-882d-05a9d614734e/original.png" alt="Перехід від класу Date до класу Calendar"/></p>
+<p>Програмісти любили клас <code>Date</code> за його простоту й за підтримку стандартів Unix, але, як відомо, наші недоліки — це продовження наших чеснот.</p>
+<p>Програмісти хотіли мати «розумний клас <code>Date</code>». І такий клас з'явився — ним став клас <code><span class="text-viola">Calendar</span></code>. Його задумували як інструмент не лише для зберігання дат, а й для складної роботи з ними.</p>
+<p>Повне ім'я класу <code>Calendar</code> — java.util.Calendar. Не забувайте додавати його в import, якщо вирішите використовувати у своєму коді.</p>
+<p>Створити об'єкт <code>Calendar</code> можна за допомогою команди:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-viola">Calendar</span> <span class="code text-green">date</span> = <span class="text-viola">Calendar</span>.<span class="text-orange">getInstance</span>();</code></pre>
+</div>
+<p>Статичний метод <code><span class="text-orange">getInstance</span>()</code> класу <code><span class="text-viola">Calendar</span></code> створить об'єкт <code>Calendar</code>, ініціалізований поточною датою. Залежно від налаштувань комп'ютера, на якому виконується програма, буде створено потрібний календар.</p>
+<p>Правильніше було б сказати «актуальний». Річ у тім, що на Землі не один календар, а багато. І майже кожен із них пов'язаний з якоюсь релігією або країною. Клас <code>Calendar</code> підтримує три календарі:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Календар</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td><strong>GregorianCalendar</strong></td>
+        <td>Християнський григоріанський календар</td>
+    </tr>
+    <tr>
+        <td><strong>BuddhistCalendar</strong></td>
+        <td>Буддистський календар</td>
+    </tr>
+    <tr>
+        <td><strong>JapaneseImperialCalendar</strong></td>
+        <td>Японський імператорський календар</td>
+    </tr>
+    </tbody>
+</table>
+<p>А ще ж є китайський та арабський календарі. Загалом, працювати з часом не так просто, як здається.</p>
+<p><span class="text-viola">У Китаї на момент написання цієї лекції офіційно 4716 рік. А за мусульманським календарем — 1398. Ласкаво просимо у великий світ, друже-програмісте!</span></p>
+<h2>2. Створення об'єкта-календаря</h2>
+<p><span class="text-viola">Ми будемо використовувати григоріанський календар, як найпоширеніший у світі. Принаймні доти, доки Китай не купить компанію Oracle і не зробить свій календар основним.</span></p>
+<p>Об'єкт-календар із довільною датою створюють за допомогою команди</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-viola">Calendar</span> <span class="code text-green">date</span> = new <span class="text-neon">GregorianCalendar</span>(<span class="text-red">рік</span>, <span class="text-red">місяць</span>, <span class="text-red">день</span>);</code></pre>
+</div>
+<p>Так, щоразу доведеться писати <code><span class="text-neon">GregorianCalendar</span></code>. Можна і замість <code><span class="text-viola">Calendar</span></code> писати <code>GregorianCalendar</code>: так теж працюватиме. Просто <code>Calendar</code> писати швидше.</p>
+<p><span class="text-viola">Рік потрібно писати повністю: ніяких 19 замість 2019. Місяці, як і раніше, нумеруються з нуля. А дні місяця, як і раніше, нумеруються не з нуля (слабаки!).</span></p>
+<p>Щоб задати не тільки дату, а й час, слід передати його як додаткові параметри:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm language-java"><code>… = new <span class="text-neon">GregorianCalendar</span>(рік, місяць, день, <span class="text-red">години</span>, <span class="text-red">хвилини</span>, <span class="text-red">секунди</span>);</code></pre>
+</div>
+<p>Можна передати навіть мілісекунди, якщо є потреба: їх указують як наступний параметр після секунд.</p>
+<h2>3. Виведення об'єкта-календаря на екран</h2>
+<p>Якщо просто вивести об'єкт-календар на екран, результат вас не дуже порадує.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-viola">Calendar</span> <span class="text-green">calendar</span> = new <span class="text-neon">GregorianCalendar</span>(2019, 03, 12);
+System.out.println(<span class="text-green">calendar</span>);</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+            <pre><code style="word-break: break-all; white-space: normal;">java.util.GregorianCalendar[time=?,areFieldsSet=false,areAllFieldsSet=false,lenient=true,zone=sun.util.calendar.ZoneInfo[id="Europe/Helsinki",offset=7200000,dstSavings=3600000,useDaylight=true,transitions=118,lastRule=java.util.SimpleTimeZone[id=Europe/Helsinki,offset=7200000,dstSavings=3600000,useDaylight=true,startYear=0,startMode=2,startMonth=2,startDay=-1,startDayOfWeek=1,startTime=3600000,startTimeMode=2,endMode=2,endMonth=9,endDay=-1,endDayOfWeek=1,endTime=3600000,endTimeMode=2]],firstDayOfWeek=1,minimalDaysInFirstWeek=1,ERA=?,YEAR=2019,MONTH=3,WEEK_OF_YEAR=?,WEEK_OF_MONTH=?,DAY_OF_MONTH=12,DAY_OF_YEAR=?,DAY_OF_WEEK=?,DAY_OF_WEEK_IN_MONTH=?,AM_PM=0,HOUR=0,HOUR_OF_DAY=0,MINUTE=0,SECOND=0,MILLISECOND=?,ZONE_OFFSET=?,DST_OFFSET=?]</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Уся річ у тім, що <span class="text-viola">календар — це саме календар, а не дата</span>: у нього багато різних параметрів, і всі вони виводяться на екран.</p>
+<p>Правильно буде відображати об'єкт календар за допомогою класу <code>SimpleDateFormat</code>, але поки ми його не вивчили, можна скористатися лайфхаком.</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code>Date <span class="code text-user">date</span> = <span class="code text-orange">calendar</span>.<span class="text-red">getTime</span>();</code></pre>
+</div>
+<p>Просто об'єкт типу <code>Calendar</code> можна легко перетворити на об'єкт типу <code>Date</code>, а як виводити на екран об'єкт типу <code>Date</code>, ви вже знаєте. Приблизно так можна перетворити об'єкт <code>Calendar</code> на <code>Date</code>:</p>
+<p>Використання методу <code><span class="text-red">getTime</span>()</code>:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-viola">Calendar</span> <span class="code text-green">calendar</span> = new <span class="text-neon">GregorianCalendar</span>(2019, 03, 12);
+System.out.println(<span class="code text-green">calendar</span>.<span class="text-red">getTime</span>());</code></pre>
+        </td>
+        <td>
+            <pre><code>&nbsp;Fri Apr 12 00:00:00 EEST 2019</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Зовсім інша справа, чи не так?</p>
+<h2>4. Робота з фрагментами дати</h2>
+<p>Для отримання фрагменту дати (рік, місяць, …) клас <code><span class="text-viola">Calendar</span></code> має спеціальний метод — <code><span class="text-red">get</span>()</code>. Метод один, зате з параметрами:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code>int <span class="code text-user">month</span> = <span class="code text-green">calendar</span>.<span class="text-red">get</span>(<span class="text-viola">Calendar</span>.<span class="text-orange">MONTH</span>);</code></pre>
+</div>
+<p>де <code class="text-green">calendar</code>&nbsp;— це змінна типу <code><span class="text-viola">Calendar</span></code>, а <code><span class="text-orange">MONTH</span></code>&nbsp;— це змінна-константа класу <code><span class="text-viola">Calendar</span></code>.</p>
+<p>У метод <code><span class="text-red">get</span></code>&nbsp;ви передаєте як параметр спеціальну константу класу <code><span class="text-viola">Calendar</span></code> і в результаті отримуєте потрібне значення.</p>
+<p>Приклади</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Calendar <span class="code text-green">calendar</span> = Calendar.getInstance();
+
+int era = <span class="code text-green">calendar</span>.<span class="text-red">get</span>(<span class="text-viola">Calendar</span>.ERA);
+int year = <span class="code text-green">calendar</span>.<span class="text-red">get</span>(<span class="text-viola">Calendar</span>.YEAR);
+int month = <span class="code text-green">calendar</span>.<span class="text-red">get</span>(<span class="text-viola">Calendar</span>.MONTH);
+int day = <span class="code text-green">calendar</span>.<span class="text-red">get</span>(<span class="text-viola">Calendar</span>.DAY_OF_MONTH);
+
+int dayOfWeek = <span class="code text-green">calendar</span>.<span class="text-red">get</span>(<span class="text-viola">Calendar</span>.DAY_OF_WEEK);
+int hour = <span class="code text-green">calendar</span>.<span class="text-red">get</span>(<span class="text-viola">Calendar</span>.HOUR);
+int minute = <span class="code text-green">calendar</span>.<span class="text-red">get</span>(<span class="text-viola">Calendar</span>.MINUTE);
+int second = <span class="code text-green">calendar</span>.<span class="text-red">get</span>(<span class="text-viola">Calendar</span>.SECOND);</code></pre>
+        </td>
+        <td><br/><br/>ера (до нашої ери чи після)<br/> рік<br/> місяць<br/> день місяця<br/><br/> день тижня<br/> години<br/> хвилини<br/> секунди</td>
+    </tr>
+    </tbody>
+</table>
+<p>Для змінення фрагмента дати використовується метод <code><span class="text-red">set</span></code>:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="code text-green">calendar</span>.<span class="text-red">set</span>(<span class="text-viola">Calendar</span>.<span class="text-orange">MONTH</span>, <span class="text-user">значення</span>);</code></pre>
+</div>
+<p>де <code class="text-green">calendar</code>&nbsp;— це змінна типу <code><span class="text-viola">Calendar</span></code>, а <code><span class="text-orange">MONTH</span></code>&nbsp;— це змінна-константа класу <code><span class="text-viola">Calendar</span></code>.</p>
+<p>У метод <code><span class="text-red">set</span></code>&nbsp;ви передаєте як перший параметр спеціальну константу класу <code><span class="text-viola">Calendar</span></code>, а як другий параметр — нове значення.</p>
+<p>Приклади</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Calendar <span class="code text-green">calendar</span> = new GregorianCalendar();
+
+<span><span class="code text-green">calendar</span>.set(<span class="text-viola">Calendar</span>.YEAR, <span class="text-user">2019</span>);
+</span><span class="code text-green">calendar</span>.set(<span><span class="text-viola">Calendar</span></span>.MONTH, <span class="text-user">6</span>);
+<span class="code text-green">calendar</span>.set(<span><span class="text-viola">Calendar</span></span>.DAY_OF_MONTH, <span class="text-user">4</span>);
+<span class="code text-green">calendar</span>.set(<span><span class="text-viola">Calendar</span></span>.HOUR_OF_DAY, <span class="text-user">12</span>);
+<span class="code text-green">calendar</span>.set(<span><span class="text-viola">Calendar</span></span>.MINUTE, <span class="text-user">15</span>);
+<span class="code text-green">calendar</span>.set(<span><span class="text-viola">Calendar</span></span>.SECOND, <span class="text-user">0</span>);
+
+System.out.println(<span class="code text-green">calendar</span>.getTime());</code></pre>
+        </td>
+        <td><br/><br/>рік = 2019<br/> місяць = липень (нумерація з 0)<br/> 4 число<br/> години<br/> хвилини<br/> секунди</td>
+    </tr>
+    </tbody>
+</table>
+<h2>5. Константи класу <code>Calendar</code></h2>
+<p>У класі <code><span class="text-viola">Calendar</span></code> є константи не лише для назв фрагментів дати, а й, мабуть, на всі випадки життя.</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm language-java"><code><span class="text-viola">Calendar</span> <span class="code text-green">date</span> = new <span class="text-neon">GregorianCalendar</span>(2019, <span class="text-viola">Calendar</span>.<span class="text-red">JANUARY</span>, 31);</code></pre>
+</div>
+<p>Наприклад, є константи для позначення місяців:</p>
+<p>Або, приміром, для днів тижня:</p>
+<pre class="language-java"><code>Calendar <span class="code text-green">calendar</span> = new GregorianCalendar(2019, <span class="text-viola">Calendar</span>.<span class="text-neon">JANUARY</span>, 31);
+if (<span class="code text-green">calendar</span>.<span class="text-red">get</span>(<span class="text-viola">Calendar</span>.<span class="text-neon">DAY_OF_WEEK</span>) == <span class="text-viola">Calendar</span>.<span class="text-red">FRIDAY</span>)
+{
+&nbsp; &nbsp;System.out.println("Це п'ятниця");
+}</code></pre>
+<p>Усе перелічувати не будемо. Просто не дивуйтеся, якщо побачите такі записи в коді.</p>
+<p>Використання констант дає змогу зробити код читабельнішим, тому програмісти їх і додали. Ну а місяці нумеруються з нуля теж заради легкочитності. Або ні.</p>
+<h2>6. Змінення дати в об'єкті <code>Calendar</code></h2>
+<p>Клас <code><span class="text-viola">Calendar</span></code> має метод, який дає змогу виконувати з датою розумніші операції, як-от додати до неї рік, місяць або кілька днів. Або відняти. Цей метод називається <code><span class="text-red">add</span>()</code>. Працювати з ним можна приблизно так:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="code text-green">calendar</span>.<span class="text-red">add</span>(<span class="text-viola">Calendar</span>.<span class="text-orange">MONTH</span>, <span class="text-user">значення</span>);</code></pre>
+</div>
+<p>де <code class="text-green">calendar</code>&nbsp;— це змінна типу <code><span class="text-viola">Calendar</span></code>, а <code><span class="text-orange">MONTH</span></code>&nbsp;— це змінна-константа класу <code><span class="text-viola">Calendar</span></code>.</p>
+<p>У метод <code><span class="text-red">add</span></code>&nbsp;ви передаєте як перший параметр спеціальну константу класу <code><span class="text-viola">Calendar</span></code>, а як другий параметр — значення, яке треба додати.</p>
+<p>Особливість цього методу в тому, що він розумний. Подивіться самі наскільки:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Calendar <span class="code text-green">calendar</span> = new GregorianCalendar(2019, <span class="text-viola">Calendar</span>.<span class="text-orange">FEBRUARY</span>, 27);
+<span class="code text-green">calendar</span>.<span class="text-red">add</span>(<span class="text-viola">Calendar</span>.<span class="text-orange">DAY_OF_MONTH</span>, 2);
+System.out.println(<span class="code text-green">calendar</span>.getTime());</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>Fri <span class="text-red">Mar 01 </span>00:00:00 EET 2019</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Цей метод розуміє, що в лютому 2019 року лише 28 днів і підсумкова дата — 1 березня.</p>
+<p>А тепер віднімемо 2 місяці! Що має вийти? 27 грудня 2018 року! Зараз перевіримо.</p>
+<p><span class="text-viola">Щоб виконати дію, яка зменшує дату, потрібно в метод <code><span class="text-viola">add()</span></code> передати значення зі знаком «−»:</span></p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Calendar <span class="code text-green">calendar</span> = new GregorianCalendar(2019, <span class="text-viola">Calendar</span>.<span class="text-orange">FEBRUARY</span>, 27);
+<span class="code text-green">calendar</span>.<span class="text-red">add</span>(<span class="text-viola">Calendar</span>.<span class="text-neon">MONTH</span>, <span class="text-user">-2</span>);
+System.out.println(<span class="code text-green">calendar</span>.getTime());</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>Thu <span class="text-red">Dec 27</span> 00:00:00 EET 2018</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Працює!</p>
+<p>Цей метод ураховує кількість днів у місяцях і високосні роки. Тобто метод чудовий. Саме те, що потрібно більшості програмістів, які багато працюють із датами.</p>
+<h2>7. Прокручування фрагментів дати</h2>
+<p>Однак іноді трапляються ситуації, коли така розумна поведінка зайва: хочеться щось зробити з однією частиною дати, не змінюючи все інше.</p>
+<p>Для цього клас <code><span class="text-viola">Calendar</span></code> має спеціальний метод — <code><span class="text-red">roll</span>()</code>. За своєю сигнатурою він повністю аналогічний методу <code><span class="text-red">add</span>()</code>, але будь-які зміни з його допомогою стосуються одного параметра, решта залишаються незмінними.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Calendar <span class="code text-green">calendar</span> = new GregorianCalendar(2019, <span class="text-viola">Calendar</span>.<span class="text-orange">FEBRUARY</span>, 27);
+<span class="code text-green">calendar</span>.<span class="text-red">roll</span>(<span class="text-viola">Calendar</span>.<span class="text-neon">MONTH</span>, -2);
+System.out.println(<span class="code text-green">calendar</span>.getTime());</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>Fri <span class="text-red">Dec</span> 27 00:00:00 EET <span class="text-red">2019</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Місяць ми змінили, а рік і число залишилися без змін.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task16.task1604"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task16.task1605"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task16.task1606"></div>

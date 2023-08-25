@@ -1,0 +1,534 @@
+﻿Класи-обгортки докладно
+<p>----------------------------------------</p>
+Клас Integer. Integer гарний ще й тим, що це клас, а отже, він може мати поля й методи. І, звичайно, він їх має. Навіть багато — кілька десятків. Тому ми розглянемо основні з них. Клас Integer має два поля, що містять максимальне й мінімальне значення змінної типу int
+<p>----------------------------------------</p>
+<h2>1. Клас <code>Integer</code></h2>
+<p><code>Integer</code> гарний ще й тим, що це клас, а отже, він може мати поля й методи. І, звичайно, він їх має. Навіть багато — кілька десятків. Тому ми розглянемо основні з них.</p>
+<p>Клас <code>Integer</code> має два поля, що містять максимальне й мінімальне значення змінної типу <code>int</code>:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Поле</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>Integer.MAX_VALUE</code></pre>
+        </td>
+        <td>Максимальне значення змінної типу <code>int</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>Integer.MIN_VALUE</code></pre>
+        </td>
+        <td>Мінімальне значення змінної типу <code>int</code></td>
+    </tr>
+    </tbody>
+</table>
+<p>Інколи хочеться присвоїти змінній найменше чи найбільше значення типу <code>int</code>. Щоб не захаращувати код незрозумілими константами, можна ось так красиво написати:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-user">min</span> = <span class="text-neon">Integer</span>.<span class="text-orange">MIN_VALUE</span>;</code></pre>
+        </td>
+        <td>
+            <pre><code>min == 0x80000000</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Крім того, клас <code>Integer</code> має кілька цікавих методів. От вони:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Методи</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String <span class="text-neon">Integer</span>.<span class="text-red">toHexString</span>(int)</code></pre>
+        </td>
+        <td>Повертає рядок — шістнадцяткове подання числа</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String <span class="text-neon">Integer</span>.<span class="text-red">toBinaryString</span>(int)</code></pre>
+        </td>
+        <td>Повертає рядок — двійкове подання числа</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String <span class="text-neon">Integer</span>.<span class="text-red">toOctalString</span>(int)</code></pre>
+        </td>
+        <td>Повертає рядок — вісімкове подання числа</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Integer <span class="text-neon">Integer</span>.<span class="text-red">valueOf</span>(int i)</code></pre>
+        </td>
+        <td>Обгортає переданий <code>int</code> класом <code>Integer</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Integer <span class="text-neon">Integer</span>.<span class="text-red">parseInt</span>(String)</code></pre>
+        </td>
+        <td>Повертає число після перетворення рядка</td>
+    </tr>
+    </tbody>
+</table>
+<p>Раніше ви вже стикалися зі статичним методом <code>Integer.parseInt()</code>. Нагадаємо, як він працює:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code>int <span class="text-user">ім'я</span> = <span class="text-neon">Integer</span>.<span class="text-red">parseInt</span>(<span class="text-green">рядок</span>);</code></pre>
+</div>
+<p>Якщо в метод <code>parseInt()</code> передати рядок, який містить число (тільки цифри), то метод розпарсить цей рядок і поверне число, що в ньому міститься.</p>
+<p>Решта методів також корисні. Наприклад, деякі з них можуть перетворювати передане число в рядок із двійковим, вісімковим або шістнадцятковим записом числа.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task12.task1204"></div>
+<hr>
+<h2>2. Клас <code>Double</code></h2>
+<p>Клас <code>Double</code> загалом подібний до класу <code>Integer</code>, тільки він є обгорткою не для типу <code>int</code>, а для типу <code>double</code>. У нього теж є цікаві для нас поля й методи. Розгляньмо деякі з них:</p>
+<p>Цікавих полів у класу <code>Double</code> шість:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Поле</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>double <span class="text-neon">Double</span>.NEGATIVE_INFINITY</code></pre>
+        </td>
+        <td>Мінус нескінченність</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>double <span class="text-neon">Double</span>.POSITIVE_INFINITY</code></pre>
+        </td>
+        <td>Плюс нескінченність</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-neon">Double</span>.MIN_EXPONENT</code></pre>
+        </td>
+        <td>Мінімальне значення експонента (2<sup>x</sup>)</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-neon">Double</span>.MAX_EXPONENT</code></pre>
+        </td>
+        <td>Максимальне значення експонента (2<sup>x</sup>)</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>double <span class="text-neon">Double</span>.MIN_VALUE</code></pre>
+        </td>
+        <td>Мінімальне значення типу <code>double</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>double <span class="text-neon">Double</span>.MAX_VALUE</code></pre>
+        </td>
+        <td>Максимальне значення типу <code>double</code></td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Нескінченність</strong></p>
+<p>Якщо ви поділите <code>-1.0</code> на <code>0.0</code>, отримаєте від'ємну нескінченність; якщо <code>1.0</code> на <code>0.0</code> — додатну нескінченність. Змінні типу <code>double</code> можна не тільки ділити на нуль, але й зберігати в них такі значення.</p>
+<p><strong>Експонент числа <code>double</code></strong></p>
+<p>З експонентом (показником степеня) теж усе просто. Число double усередині складається з мантиси й експонента. Тільки от наше значення числа — це не <code>10<sup>х</sup></code>, а <code>2<sup>х</sup></code>. Якщо експонент зросте на <code>1</code>, значення числа збільшиться вдвічі.</p>
+<p><code>MIN_EXPONENT == -1024</code>, у результаті отримуємо <code>2<sup>-1024</sup></code>, що приблизно дорівнює <code>10<sup>-308</sup></code></p>
+<p><code>Double</code> також має цікаві методи:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Методи</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String <span class="text-neon">Double</span>.<span class="text-red">toHexString</span>(double)</code></pre>
+        </td>
+        <td>Повертає рядок — шістнадцяткове подання числа</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>boolean <span class="text-neon">Double</span>.<span class="text-red">isInfinite</span>(double)</code></pre>
+        </td>
+        <td>Перевіряє, чи є передане число нескінченністю</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>boolean <span class="text-neon">Double</span>.<span class="text-red">isNaN</span>(double)</code></pre>
+        </td>
+        <td>Перевіряє, чи є передане число <code><span class="text-red">NaN</span></code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Double <span class="text-neon">Double</span>.<span class="text-red">valueOf</span>(double)</code></pre>
+        </td>
+        <td>Обгортає переданий <code>double</code> класом <code><span class="text-neon">Double</span></code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Double <span class="text-neon">Double</span>.<span class="text-red">parseDouble</span>(String)</code></pre>
+        </td>
+        <td>Повертає число після перетворення рядка</td>
+    </tr>
+    </tbody>
+</table>
+<p>З цікавого можна відзначити наявність методу <code>isInfinite()</code>, який повертає <code>true</code>, якщо передане в нього число — плюс або мінус нескінченність.</p>
+<p>Подібним чином працює й метод <code><span class="text-red">isNaN()</span></code> — перевіряє, чи є передане в нього число <code><span class="text-red">NaN</span></code> — спеціальною константою, що позначає невизначеність (<span class="term">Not a Number</span>, <span class="term">Не число</span>).</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task12.task1205"></div>
+<hr>
+<h2>3. Клас <code>Character</code></h2>
+<p>Клас <code>Character</code> цікавий насамперед великою кількістю утилітних статичних методів, які дають змогу перевіряти символи на належність до різних категорій.</p>
+<p>Приклади</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Методи</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Character.<span class="text-red">isAlphabetic</span>(int)</code></pre>
+        </td>
+        <td>Перевіряє, чи є символ символом алфавіту</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Character.<span class="text-red">isLetter</span>(char)</code></pre>
+        </td>
+        <td>Чи є символ літерою</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Character.<span class="text-red">isDigit</span>(char)</code></pre>
+        </td>
+        <td>Чи є символ цифрою</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Character.<span class="text-red">isSpaceChar</span>(char)</code></pre>
+        </td>
+        <td>Чи є символ пробілом, символом розриву рядка або символом кінця абзацу (коди: 12, 13, 14)</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Character.<span class="text-red">isWhitespace</span>(char)</code></pre>
+        </td>
+        <td>Чи є символ роздільником: пробіл, tab тощо</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Character.<span class="text-red">isLowerCase</span>(char)</code></pre>
+        </td>
+        <td>Символ у нижньому регістрі — малі літери?</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Character.<span class="text-red">isUpperCase</span>(char)</code></pre>
+        </td>
+        <td>Символ у верхньому регістрі — великі літери?</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Character.<span class="text-red">toLowerCase</span>(char)</code></pre>
+        </td>
+        <td>Перетворює символ у нижній регістр</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Character.<span class="text-red">toUpperCase</span>(char)</code></pre>
+        </td>
+        <td>Перетворює символ у верхній регістр</td>
+    </tr>
+    </tbody>
+</table>
+<p>Ці методи мають особливість: вони працюють з усіма відомими алфавітами, тобто, наприклад, символи арабських цифр визначатимуться як цифри і т. п.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task12.task1206"></div>
+<hr>
+<h2>4. Клас <code>Boolean</code></h2>
+<p>Клас <code>Boolean</code> дуже схожий на тип <code>boolean</code>. Різниця мінімальна.</p>
+<p>Нижче ми наведемо спрощений варіант класу <code>Boolean</code>:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>class <span class="text-neon">Boolean</span>
+{
+   public <span class="text-orange">static</span> final <span class="text-neon">Boolean</span> <span class="text-viola">TRUE</span> = new <span class="text-neon">Boolean</span>(true);
+   public <span class="text-orange">static</span> final <span class="text-neon">Boolean</span> <span class="text-viola">FALSE</span> = new <span class="text-neon">Boolean</span>(false);
+
+   private final boolean <span class="text-user">value</span>;
+
+   public <span class="text-neon">Boolean</span>(boolean <span class="text-green">value</span>)
+   {
+      this.<span class="text-user">value</span> = <span class="text-green">value</span>;
+   }
+
+   public boolean <span class="text-red">booleanValue</span>()
+   {
+      return <span class="text-user">value</span>;
+   }
+
+   public <span class="text-orange">static</span> <span class="text-neon">Boolean</span> valueOf(boolean <span class="text-green">value</span>)
+   {
+      return (<span class="text-green">value</span> ? <span class="text-viola">TRUE</span> : <span class="text-viola">FALSE</span>);
+   }
+}</code></pre>
+        </td>
+        <td style="width:320px"><br/><br/>Константи: <code><span class="text-viola">TRUE</span></code> і <code><span class="text-viola">FALSE</span></code> <br/><br/><br/>Змінна-значення <br/><br/>Конструктор класу <code><span class="text-neon">Boolean</span></code> <br/><br/><br/><br/><br/>Метод повертає значення внутрішньої змінної-значення <br/><br/><br/><br/>Цей статичний метод уміє перетворювати <code>true</code> на <code><span class="text-viola">TRUE</span></code> і <code>false</code> на <code><span class="text-viola">FALSE</span></code>.</td>
+    </tr>
+    </tbody>
+</table>
+<p>Клас <code>Boolean</code> має дві константи (два поля):</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Константи класу</th>
+        <th>Аналог типу boolean</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Boolean.TRUE</code></pre>
+        </td>
+        <td>
+            <pre><code>true</code></pre>
+        </td>
+        <td>істина</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Boolean.FALSE</code></pre>
+        </td>
+        <td>
+            <pre><code>false</code></pre>
+        </td>
+        <td>хибність</td>
+    </tr>
+    </tbody>
+</table>
+<p>Працювати з ними можна так само, як і з типом <code>boolean</code>:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>if (Boolean.TRUE)
+{
+}</code></pre>
+        </td>
+        <td><code>Boolean</code> — єдиний клас, який можна писати всередині умови</td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Boolean a = Boolean.TRUE;
+boolean b = Boolean.TRUE;
+boolean с = true;</code></pre>
+        </td>
+        <td>Усі три змінні дорівнюють <code>true</code>/<code>TRUE</code></td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Boolean a = Boolean.TRUE;
+Boolean b = Boolean.TRUE;
+if (a == b)</code></pre>
+        </td>
+        <td>Константи можна порівнювати і за допомогою <code>equals</code>, і за допомогою <code>==</code> <br/><br/>Так теж працюватиме.</td>
+    </tr>
+    </tbody>
+</table>
+<p>Autoboxing тут працює відмінно, тож можете користуватися цим класом так само, як типом <code>boolean</code>: ніяких підводних каменів тут немає.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Як записано</th>
+        <th>Як це працює</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">Boolean</span> a = true;
+<span class="text-neon">Boolean</span> b = true;
+<span class="text-neon">Boolean</span> c = false;
+<span class="text-viola">boolean</span> d = a;</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code><span class="text-neon">Boolean</span> a = <span class="text-neon">Boolean</span>.<span class="text-red">valueOf</span>(true);
+<span class="text-neon">Boolean</span> b = <span class="text-neon">Boolean</span>.<span class="text-red">valueOf</span>(true);
+<span class="text-neon">Boolean</span> c = <span class="text-neon">Boolean</span>.<span class="text-red">valueOf</span>(false);
+<span class="text-viola">boolean</span> d = a.<span class="text-red">booleanValue</span>();</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>А от як відбуваються порівняння між типом <code>boolean</code> і класом <code>Boolean</code>:</p>
+<pre class="lecture-code language-java"><code>boolean <span class="text-red">a </span>= true;
+Boolean <span class="text-green">b</span> = true; // дорівнюватиме Boolean.TRUE
+Boolean <span class="text-user">c</span> = true; // дорівнюватиме Boolean.TRUE
+
+<span class="text-red">a</span> == <span class="text-green">b</span>; // true (порівнюються як примітиви за значенням)
+<span class="text-red">a</span> == <span class="text-user">c</span>; // true (порівнюються як примітиви за значенням)
+<span class="text-green">b</span> == <span class="text-user">c</span>; // <span class="code text-green">true</span> (порівнюються за посиланням, але вказують на один і той самий об'єкт)</code></pre>
+<p>Якщо дуже потрібно створити незалежний об'єкт <code>Boolean</code>, то слід створити його явно:</p>
+<pre class="language-java"><code>boolean a = <span class="text-user">true</span>;
+Boolean b = <span class="text-red">new</span> <span class="text-neon">Boolean</span>(<span class="text-user">true</span>); // новий об'єкт Boolean
+Boolean c = <span class="text-user">true</span>; // дорівнюватиме Boolean.TRUE
+
+a == b; // true (порівнюються як примітиви за значенням)
+a == c; // true (порівнюються як примітиви за значенням)
+b == c; // <span class="code text-red">false</span> (порівнюються за посиланням, указують на різні об'єкти)</code></pre>
+<p>И ще один приклад: використання <code>Boolean</code> усередині <code>if</code>:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Boolean <span class="text-user">less</span> = (2 &lt; 3);
+if (<span class="text-user">less</span>)
+{
+&nbsp; &nbsp;...
+}</code></pre>
+        </td>
+        <td>Скомпілюється і працюватиме</td>
+    </tr>
+    </tbody>
+</table>
+<p>Скомпілюється, але не працюватиме:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Boolean <span class="text-user">less</span> = <span class="text-red">null</span>;
+if (<span class="text-user">less</span>)
+{
+&nbsp; &nbsp;...
+}</code></pre>
+        </td>
+        <td><br/><span class="text-red">Помилка</span>. У цьому рядку буде кинуто виняток</td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task12.task1207"></div>
+<hr>
+<h2>5. Кешування значень під час операції autoboxing</h2>
+<p>А от із класами-обгортками для цілочислових типів підводні камені є.</p>
+<p>Як вам уже відомо, коли ви порівнюєте <code>int</code> і <code>Integer</code>, <code>Integer</code> перетворюється на <code>int</code>:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Як записано</th>
+        <th>Як це працює</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="code text-green">a</span> = 5;
+Integer <span class="code text-user">b</span> = 5;
+if (<span class="code text-green">a</span> == <span class="code text-user">b</span>)
+{
+&nbsp; &nbsp;...
+}</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>int <span class="code text-green">a</span> = 5;
+Integer <span class="code text-user">b</span> = <span class="text-viola">Integer</span>.valueOf(5);
+if (<span class="code text-green">a</span> == <span class="code text-user">b</span>.<span class="text-red">intValue</span>())
+{
+&nbsp; &nbsp;...
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Якщо порівняти між собою два об'єкти класу <code>Integer</code>, перетворюватися на тип <code>int</code> вони не будуть:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Integer <span class="code text-green">a</span> = 500;
+Integer <span class="code text-user">b</span> = 500;
+int <span class="code text-orange">c</span> = 500;
+
+System.out.println(<span class="code text-green">a</span> == <span class="code text-user">b</span>); // порівняння посилань
+System.out.println(<span class="code text-green">a</span> == <span class="code text-orange">c</span>);
+System.out.println(<span class="code text-user">b</span> == <span class="code text-orange">c</span>);</code></pre>
+        </td>
+        <td><pre><code>
+
+
+
+<span class="text-red">false</span>
+true
+true</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Хоч <code><span class="text-green">a</span> == <span class="text-orange">c</span></code> і <code><span class="text-user">b</span> == <span class="text-orange">c</span></code>, але <code><span class="text-green">a</span> != <span class="text-user">b</span></code>, оскільки для порівняння <code><span class="text-green">a</span></code> і <code><span class="text-user">b</span></code> порівнюються посилання. І цього, в принципі, слід було очікувати.</p>
+<p><strong>Сюрприз</strong></p>
+<p>А от якщо ми замінимо <code>500</code> на <code>100</code>, отримаємо зовсім інший результат:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Integer <span class="code text-green">a</span> = 100;
+Integer <span class="code text-user">b</span> = 100;
+int <span class="code text-orange">c</span> = 100;
+
+System.out.println(<span class="code text-green">a</span> == <span class="code text-user">b</span>); // порівняння посилань
+System.out.println(<span class="code text-green">a</span> == <span class="code text-orange">c</span>);
+System.out.println(<span class="code text-user">b</span> == <span class="code text-orange">c</span>);</code></pre>
+        </td>
+        <td><pre><code>
+
+
+
+<span class="text-green">true</span>
+true
+true</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Річ у тім, що <strong>під час autoboxing <span class="text-red">не завжди</span> створюється справді новий об'єкт</strong> <code>Integer</code>. Для значень від <code>-128</code> до <code>127</code> включно об'єкти кешуються.</p>
+<p>У класі <code>Integer</code> є прихований масив, який зберігає об'єкти: <code>Integer(-128)</code>, <code>Integer(-127)</code>, ... <code>Integer(126)</code>, <code>Integer(127)</code></p>
+<p>Якщо ви напишете <code>Integer x = 128</code>, autoboxing створить новий об'єкт, а якщо <code>Integer x = 127</code>, autoboxing візьме готовий об'єкт із кешу (з масиву).</p>
+<p>Якщо ви не хочете, щоб об'єкт <code>Integer</code> було взято з кешу, вам доведеться створити його явно, а саме отак: <code>Integer x = new Integer(127);</code></p>
+<p>Такий кеш є у всіх класів-обгорток: <code>Integer</code>, <code>Long</code>, <code>Byte</code>, <code>Short</code>, <code>Boolean</code>. Щодо об'єктів <code>Boolean</code>, обидва їхні значення (<code><span class="text-viola">TRUE</span></code> і <code><span class="text-viola">FALSE</span></code>) є константами: по суті, теж кешуються.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task12.task1208"></div>

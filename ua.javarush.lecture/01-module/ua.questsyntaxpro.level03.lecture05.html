@@ -1,0 +1,103 @@
+﻿Порівняння посилань
+<p>----------------------------------------</p>
+Порівняння. Дуже часто програмісту потрібно порівнювати різні змінні між собою. І як ви вже встигли переконатися, не все настільки однозначно. Цілі числа порівнювати дуже легко — просто використовуйте знак ==, та й усе. Для порівняння дійсних чисел вам уже доведеться порівнювати їх різницю (точніше, модуль
+<p>----------------------------------------</p>
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="dec911e2-21fd-4479-aee4-68e3fc4455e6" data-max-width="1024" src="https://cdn.javarush.com/images/article/dec911e2-21fd-4479-aee4-68e3fc4455e6/original.png" alt=""/>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<h2>1. Порівняння</h2>
+<p>Дуже часто програмісту потрібно порівнювати різні змінні між собою. І як ви вже встигли переконатися, не все настільки однозначно.</p>
+<p><span class="term text-red">Цілі числа</span> порівнювати дуже легко — просто використовуйте <code>==</code>, та й усе. Для порівняння <span class="term text-viola">дійсних чисел</span> порівнювати їх різницю (точніше, модуль різниці) з яким-небудь дуже маленьким числом.</p>
+<p>Порівнювати <span class="term text-brown">рядки</span> ще складніше. А все через те, що, по-перше, рядки — це об'єкти, а по-друге, залежно від ситуації програмісту часто хочеться, щоб порівняння рядків відбувалося трішки по-іншому (з урахуванням або без урахування певних факторів).</p>
+<hr>
+<h2>2. Розташування рядків у пам'яті</h2>
+<p>Як ви вже встигли побачити, рядки в пам'яті зберігаються не так, як цілі та дійсні числа:</p>
+<p><img data-id="46bb328b-f3c2-424e-b9a0-1962b591f00b" src="https://cdn.javarush.com/images/article/46bb328b-f3c2-424e-b9a0-1962b591f00b/original.png" alt="Розташування рядків у пам'яті"/></p>
+<p>Для зберігання рядків використовується <strong>два блоки пам'яті</strong>: один блок зберігає власне текст (його розмір залежить від розміру тексту), а другий (розміром 4 байти) зберігає адресу першого блоку.</p>
+<p>Хоча досвідчений програміст в такій ситуації скаже щось на кшталт: «Змінна <code>str</code> типу <code>String</code> зберігає посилання на об'єкт типу <code>String</code>».</p>
+<hr>
+<h2><span>3. Присвоювання посилань на рядки</span></h2>
+<p><span>Перевага такого підходу очевидна, коли вам потрібно присвоїти одній рядковій змінній значення іншої рядкової змінної. Приклад:</span></p>
+<pre class="language-java"><code>String <span class="text-red">text</span> = <span class="text-green">"Це дуже важливе повідомлення"</span>;
+String <span class="text-user">message</span> = <span class="text-red">text</span>;</code></pre>
+<p>От що в підсумку буде в пам'яті:</p>
+<img data-max-width="1024" data-id="f237cde7-afd5-4d7a-88ae-d80b146bffd1" src="https://cdn.javarush.com/images/article/f237cde7-afd5-4d7a-88ae-d80b146bffd1/1024.jpeg" alt="">
+<p>У результаті цієї операції присвоювання об'єкт <code>String</code> залишиться на своєму місці, а в змінну <code><span class="text-user">message</span></code><strong> </strong>скопіюється тільки його адреса (посилання на об'єкт).</p>
+<hr>
+<h2>4. Робота з посиланнями та об'єктами</h2>
+<p>Якщо ви вирішите перетворити рядок у верхній регістр (великі літери), Java-машина зробить все правильно: у вас будуть два об'єкти типу <code>String</code>, і змінні <code><span class="text-red">text</span></code> і <code><span class="text-user">message</span></code> зберігатимуть посилання: кожна на свій об'єкт.</p>
+<p>Приклад:</p>
+<pre class="language-java"><code>String <span class="text-user">text</span> = <span class="text-green">"Це дуже важливе повідомлення"</span>;
+String message = <span class="text-user">text</span>.<span class="code text-viola">toUpperCase()</span>; </code></pre>
+<p>От що в підсумку буде в пам'яті:</p>
+<img data-max-width="1024" data-id="2e84e49a-e790-4590-b5f4-eaed2077f2a3" src="https://cdn.javarush.com/images/article/2e84e49a-e790-4590-b5f4-eaed2077f2a3/1024.jpeg" alt="">
+<p>Зверніть увагу на те, що метод <code class="text-viola">toUpperCase()</code> <span class="text-red">не змінює</span> той рядок, звідки його було викликано. Натомість він створює новий рядок (новий об'єкт) і повертає посилання на нього.</p>
+<p>Розгляньмо ще цікавіший приклад. Скажімо, ви вирішили передати рядок в об'єкт типу <code><span class="text-red">Scanner</span></code> (щоб він читав значення з цього рядка).</p>
+<p>Приклад:</p>
+<pre class="language-java"><code>String <span class="text-user">text</span> = <span class="text-green">"10 20 40 80"</span>;
+<span class="text-red">Scanner</span> <span class="text-orange">console</span> = new <span class="text-red">Scanner</span>(<span class="text-user">text</span>);
+int a = <span class="text-orange">console</span>.nextInt();
+int b = <span class="text-orange">console</span>.nextInt();</code></pre>
+<p>Докладніше про роботу класу <code><span class="text-red">Scanner</span></code> можна дізнатися <a href="https://javarush.com/groups/posts/4030-klass-scanner">за посиланням</a>.</p>
+<p>От як це все зберігатиметься в пам'яті:</p>
+<p><img data-id="6a49cfdd-5f64-4866-8e7f-c4f156b376a1" src="https://cdn.javarush.com/images/article/6a49cfdd-5f64-4866-8e7f-c4f156b376a1/original.png" alt="Робота з посиланнями та об'єктами. Scanner"/></p>
+<p>Водночас об'єкт типу <code>String</code> як був у пам'яті в одному екземплярі, так там і зберігається — всюди передаються та зберігаються лише посилання на нього.</p>
+<hr>
+<h2>5. Порівняння посилань на об'єкти типу <code>String</code></h2>
+<p>Ну й нарешті ми дійшли до найцікавішого — порівняння рядків.</p>
+<p>Для порівняння рядкових змінних можна використовувати два оператори: <code>==</code> (дорівнює) і <code>!=</code> (не дорівнює). Оператори «більше», «менше», «більше або дорівнює» використовувати не можна — компілятор не дозволить.</p>
+<p>Однак є цікавий нюанс: що у нас зберігається в рядкових змінних? Правильно: адреси (посилання) на об'єкти. Отже, саме ці адреси й будуть порівнюватися:</p>
+<pre class="language-java"><code>String <span class="text-green">text</span> = "Привіт";
+String <span class="text-user">message</span> = text;
+String <span class="text-red">s1</span> = <span class="text-green">text</span>.toUpperCase();
+String<span class="text-red"> s2</span> = <span class="text-green">text</span>.toUpperCase();<strong> </strong></code></pre>
+<p>От що буде в пам'яті:</p>
+<img data-max-width="1024" data-id="2f4ea305-0554-4b32-bf8e-25215c6541e1" src="https://cdn.javarush.com/images/article/2f4ea305-0554-4b32-bf8e-25215c6541e1/1024.jpeg" alt="">
+<p>Змінні <code><span class="text-user">message</span></code> і <code><span class="text-green">text</span></code> зберігають адресу (посилання) одного й того самого об'єкта. А от змінні <code><span class="text-red">s1</span></code> і <code><span class="text-red">s2</span></code> зберігають посилання на дуже схожі між собою об'єкти, але все ж таки не на один і той самий об'єкт.</p>
+<p>І якщо ви порівняєте в коді ці 4 змінні, то отримаєте такий результат:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="text-green">text</span> = "Привіт";
+String <span class="text-user">message</span> = <span class="text-green">text</span>;
+String <span class="text-red">s1</span> = text.toUpperCase();
+String <span class="text-red">s2</span> = text.toUpperCase();
+System.out.println(<span class="text-green">text</span> == <span class="text-user">message</span>);
+System.out.println(<span class="text-green">text</span> == <span class="text-red">s1</span>);
+System.out.println(<span class="text-red">s1</span> == <span class="text-red">s2</span>); </code></pre>
+        </td>
+        <td>
+                <pre>
+
+
+
+
+<code><span class="text-green">true</span>  <span class="text-muted">// адреси однакові</span>
+<span class="text-red">false</span> <span class="text-muted">// адреси різні</span>
+<span class="text-red">false</span> <span class="text-muted">// адреси різні</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<hr>
+
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="b3f30b2b-9cf9-4f57-8364-e952fa7f05cc" data-max-width="1024" src="https://cdn.javarush.com/images/article/b3f30b2b-9cf9-4f57-8364-e952fa7f05cc/original.png" alt=""/>
+        </div>
+    </div>
+</div>

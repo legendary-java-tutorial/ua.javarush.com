@@ -1,0 +1,300 @@
+﻿Цикл for-each
+<p>----------------------------------------</p>
+Передісторія появи ітератора. Ви вже познайомилися із множиною HashSet. І якщо ви справді розбиралися з нею, а не просто переглядали лекцію, то мали поставити собі запитання: Як вивести на екран список усіх елементів HashSet? Адже у множини немає методів get() і set()! І ця проблема існує не
+<p>----------------------------------------</p>
+<h2>1. Передісторія появи ітератора</h2>
+<p>Ви вже познайомилися із множиною <code>HashSet</code>. І якщо ви справді розбиралися з нею, а не просто переглядали лекцію, то мали поставити собі запитання:</p>
+<p><strong>Як вивести на екран список усіх елементів HashSet?</strong> Адже у множини немає методів <code>get()</code> і <code>set()</code>!</p>
+<p>І ця проблема існує не тільки для <code>HashSet</code>. Крім <code>HashSet</code>, є чимало різних колекцій, з яких не можна отримати елемент за номером, тому що їхні елементи невпорядковані.</p>
+<p>Свого часу програмісти винайшли багато складних структур даних, як-от граф, дерево або, скажімо, список списків.</p>
+<p>Багато контейнерів змінюють порядок своїх елементів під час додавання нових або видалення наявних елементів. Наприклад, є список, в якому зберігаються відсортовані елементи, але новий елемент практично завжди вставляється в середину списку.</p>
+<p>От ми й отримуємо ситуацію, коли є контейнер з елементами, елементи, власне, теж є, а чіткого порядку немає.</p>
+<p>Припустімо, ми хочемо скопіювати всі елементи з такої колекції в масив або список. Нам потрібно отримати всі елементи, і нам усе одно, в якому порядку ми їх обійдемо, головне — не повторюватися. Як нам це зробити?</p>
+<hr>
+<h2>2. Ітератор у колекції</h2>
+<p>Для вирішення описаної вище проблеми було запропоновано використовувати <span class="term">ітератор</span>.</p>
+<p>Ітератор — це спеціальний об'єкт у колекції, який дає змогу не повторюючись обійти всі елементи колекції.</p>
+<p>Щоб отримати ітератор для колекції, використовують такий код:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-neon">Iterator</span>&lt;<span class="text-viola">Тип</span>&gt; <span class="text-orange">it</span> = <span class="text-green">ім'я</span>.<span class="text-user">iterator</span>();</code></pre>
+</div>
+<p>де <code><span class="text-green">ім'я</span></code> — це ім'я змінної-колекції, <code><span class="text-viola">Тип</span></code> — це тип елементів колекції, <code><span class="text-user">iterator</span>()</code> — це метод колекції, <code><span class="text-orange">it</span></code> — це ім'я змінної-об'єкта-ітератора.</p>
+<p>Об'єкт-ітератор має 3 методи:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Метод</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-viola">Тип</span> <span class="text-red">next</span>()</code></pre>
+        </td>
+        <td>Повертає черговий елемент колекції</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>boolean <span class="text-red">hasNext</span>()</code></pre>
+        </td>
+        <td>Перевіряє, чи залишилися непройдені елементи</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>void <span class="text-red">remove</span>()</code></pre>
+        </td>
+        <td>Видаляє поточний елемент колекції</td>
+    </tr>
+    </tbody>
+</table>
+<p>Ці методи дещо подібні до методів класу Scanner: <code>nextInt()</code> і <code>hasNextInt()</code>.</p>
+<p>Метод <code><span class="text-red">next</span>()</code> повертає черговий елемент колекції, для якої було отримано ітератор.</p>
+<p>Метод <code><span class="text-red">hasNext</span>()</code> перевіряє, чи залишилися в колекції елементи, які ітератор ще не повернув.</p>
+<p>За допомогою цього коду можна вивести на екран усі елементи множини <code>HashSet</code>:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітки</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">HashSet</span>&lt;<span class="text-viola">String</span>&gt; <span class="code text-user">set</span> = new <span class="text-neon">HashSet</span>&lt;<span class="text-viola">String</span>&gt;();
+
+<span class="code text-user">set</span>.<span class="text-red">add</span>("Привіт");
+<span class="code text-user">set</span>.<span class="text-red">add</span>("Hello");
+<span class="code text-user">set</span>.<span class="text-red">add</span>("Hola");
+<span class="code text-user">set</span>.<span class="text-red">add</span>("Bonjour");
+<span class="code text-user">set</span>.<span class="text-red">add</span>("Ciao");
+<span class="code text-user">set</span>.<span class="text-red">add</span>("Namaste");
+
+Iterator&lt;String&gt; <span class="code text-orange">it</span> = <span class="code text-user">set</span>.<span class="text-red">iterator</span>();
+while (<span class="code text-orange">it</span>.<span class="text-red">hasNext</span>())
+{
+   <span class="text-viola">String</span> str = <span class="code text-orange">it</span>.<span class="text-red">next</span>();
+   System.out.println(<span class="code text-green">str</span>);
+}</code></pre>
+        </td>
+        <td>Створюємо об'єкт типу <code>HashSet</code>, який зберігає елементи типу <code>String</code>.<br/><br/><br/> Записуємо в <code>set</code> привітання різними мовами.<br/><br/><br/><br/><br/> Отримуємо об'єкт-ітератор для множини <code>set</code>.<br/> Поки ще є непройдені елементи<br/><br/> Отримуємо наступний елемент<br/> Виводимо елемент на екран</td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task13.task1303"></div>
+<hr>
+<h2>3. Цикл <code>for-each</code></h2>
+<p>Основний недолік ітератора полягає в тому, що з його використанням ми отримуємо ще більш громіздкий код, ніж з використанням циклу <code>for</code>.</p>
+<p>Порівняймо коди для виведення списку на екран, створені з використанням циклу <code>for</code> і з використанням ітератора:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Ітератор</th>
+        <th>Цикл for</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">ArrayList</span>&lt;<span class="text-viola">String</span>&gt; <span class="code text-user">list</span> = new <span class="text-neon">ArrayList</span>&lt;<span class="text-viola">String</span>&gt;();
+
+Iterator&lt;<span class="text-viola">String</span>&gt; <span class="code text-orange">it</span> = <span class="code text-user">list</span>.<span class="text-red">iterator</span>();
+while (<span class="code text-orange">it</span>.<span class="text-red">hasNext</span>())
+{
+<span class="text-viola">   String</span> <span class="code text-green">str</span> = it.next();
+   System.out.println(<span class="code text-green">str</span>);
+}</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code><span class="text-neon">ArrayList</span>&lt;<span class="text-viola">String</span>&gt; <span class="code text-user">list</span> = new <span class="text-neon">ArrayList</span>&lt;<span class="text-viola">String</span>&gt;();
+
+for (int i = 0; i &lt; <span class="code text-user">list</span>.<span class="text-red">size</span>(); i++)
+{
+   String <span class="code text-green">str</span> = <span class="code text-user">list</span>.<span class="text-red">get</span>(i);
+   System.out.println(<span class="code text-green">str</span>);
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Справді, обходити елементи списку <code>ArrayList</code> краще за допомогою циклу — код значно коротший.</p>
+<p>Однак розробники Java знову вирішили підсипати нам трохи <span class="term">синтаксичного цукру</span>.</p>
+<p>Вони додали в Java новий тип циклів — <code>for-each</code>. Загальний формат цього циклу такий:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code>for(<span class="text-viola">Тип</span> <span class="text-green">ім'я</span>:<span class="text-user">колекція</span>)</code></pre>
+</div>
+<p>де <code><span class="text-user">колекція</span></code> — це ім'я змінної-колекції, <code><span class="text-viola">Тип</span></code> — це тип елементів колекції, а <code><span class="text-green">ім'я</span></code> — це ім'я змінної, яка на кожному витку циклу набуває чергового значення з колекції.</p>
+<p>Цей цикл обходить усі елементи колекції за допомогою прихованого ітератора. Отак він працює:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Цикл for-each</th>
+        <th>Що бачить компілятор: цикл з ітератором</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">ArrayList</span>&lt;<span class="text-viola">String</span>&gt; <span class="code text-user">list</span> = new <span class="text-neon">ArrayList</span>&lt;<span class="text-viola">String</span>&gt;();
+
+for (<span class="text-viola">String</span> <span class="code text-green">str</span>: <span class="code text-user">list</span>)
+{
+   System.out.println(<span class="code text-green">str</span>);
+}</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code><span class="text-neon">ArrayList</span>&lt;<span class="text-viola">String</span>&gt; <span class="code text-user">list</span> = new <span class="text-neon">ArrayList</span>&lt;<span class="text-viola">String</span>&gt;();
+Iterator&lt;<span class="text-viola">String</span>&gt; <span class="code text-orange">it</span> = <span class="code text-user">list</span>.<span class="text-red">iterator</span>();
+
+while (<span class="code text-orange">it</span>.<span class="text-red">hasNext</span>())
+{
+   <span class="text-viola">String</span> <span class="code text-green">str</span> = <span class="code text-orange">it</span>.<span class="text-orange">next</span>();
+   System.out.println(<span class="code text-green">str</span>);
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Коли компілятор зустріне у вашому коді цикл <code>for-each</code>, він просто замінить його на код, наведений праворуч: додасть метод отримання ітератора та всі відсутні виклики методів.</p>
+<p>Програмісти дуже люблять цикл <code>for-each</code> і практично завжди використовують його, коли потрібно обійти всі елементи колекції.</p>
+<p>З використанням циклу <code>for-each</code> навіть обхід списку <code>ArrayList</code> буде коротшим:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Цикл for-each</th>
+        <th>Цикл for</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">ArrayList</span>&lt;<span class="text-viola">String</span>&gt; <span class="code text-user">list</span> = new <span class="text-neon">ArrayList</span>&lt;<span class="text-viola">String</span>&gt;();
+
+for (<span class="text-viola">String</span> <span class="code text-green">str</span>: <span class="code text-user">list</span>)
+{
+   System.out.println(<span class="code text-green">str</span>);
+}</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code><span class="text-neon">ArrayList</span>&lt;<span class="text-viola">String</span>&gt; <span class="code text-user">list</span> = new <span class="text-neon">ArrayList</span>&lt;<span class="text-viola">String</span>&gt;();
+
+for (int i = 0; i &lt; <span class="code text-user">list</span>.<span class="text-red">size</span>(); i++)
+{
+   String <span class="code text-green">str</span> = <span class="code text-user">list</span>.<span class="text-red">get</span>(i);
+   System.out.println(<span class="code text-green">str</span>);
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task13.task1304"></div>
+<hr>
+<h2>4. Видалення елемента в циклі <code>for-each</code></h2>
+<p>Цикл <code>for-each</code> має один недолік: він не вміє правильно видаляти елементи. Якщо ви напишете такий код, отримаєте помилку.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">ArrayList</span>&lt;<span class="text-viola">String</span>&gt; <span class="code text-user">list</span> = new <span class="text-neon">ArrayList</span>&lt;<span class="text-viola">String</span>&gt;();
+
+<span class="code text-user">list</span>.<span class="text-red">add</span>("Привіт");
+<span class="code text-user">list</span>.<span class="text-red">add</span>("Hello");
+<span class="code text-user">list</span>.<span class="text-red">add</span>("Hola");
+<span class="code text-user">list</span>.<span class="text-red">add</span>("Bonjour");
+<span class="code text-user">list</span>.<span class="text-red">add</span>("Cialo");
+<span class="code text-user">list</span>.<span class="text-red">add</span>("Namaste");
+
+for (<span class="text-viola">String</span> <span class="code text-green">str</span>: <span class="code text-user">list</span>)
+{
+   if (<span class="code text-green">str</span>.equals("Hello"))
+      <span class="code text-user">list</span>.<span class="text-red">remove</span>(<span class="code text-green">str</span>);
+}</code></pre>
+        </td>
+        <td><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><span class="text-red">Під час видалення станеться помилка!</span></td>
+    </tr>
+    </tbody>
+</table>
+<p>Це дуже гарний і зрозумілий код, але працювати він не буде.</p>
+<div class="lesson-note lesson-note--important">
+    <div class="lesson-note__container">
+        <div class="lesson-note__head">Важливо!</div>
+        <div class="lesson-note__content">
+            <p>Не можна змінювати колекцію, поки ви обходите її за допомогою ітератора.</p>
+        </div>
+    </div>
+</div>
+<p>Є три способи подолати це обмеження.</p>
+<p><strong>1 Використання іншого циклу</strong></p>
+<p>Якщо ви обходите колекцію <code>ArrayList</code>, можна скористатися звичайним циклом із лічильником <code>i</code>.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>for (int i = 0; i &lt; <span class="code text-user">list</span>.size(); i++)
+{
+   String <span class="code text-green">str</span> = <span class="code text-user">list</span>.get(i);
+
+   if (<span class="code text-green">str</span>.equals("Hello"))
+   {
+      <span class="code text-user">list</span>.<span class="text-red">remove</span>(str);
+      i--;    // потрібно зменшити i, тому що після видалення елементи зсунулися
+   }
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Однак цей варіант не підходить для колекцій <code>HashSet</code> і <code>HashMap</code>.</p>
+<p><strong>2 Явне використання ітератора</strong></p>
+<p>Можна в явний спосіб скористатися ітератором і його методом <code>remove()</code>.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Працюючий варіант</th>
+        <th><span class="text-red">Непрацюючий варіант</span></th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Iterator&lt;<span class="text-viola">String</span>&gt; <span class="code text-orange">it</span> = set.iterator();
+while (<span class="code text-orange">it</span>.<span class="text-red">hasNext</span>())
+{
+   String <span class="code text-green">str</span> = <span class="code text-orange">it</span>.<span class="text-red">next</span>();
+   if (<span class="code text-green">str</span>.equals("Hello"))
+       <span class="code text-orange">it</span>.<span class="text-red">remove</span>();
+}</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code><br/>for (<span class="text-viola">String</span> <span class="code text-green">str</span>: <span class="code text-user">list</span>)
+{
+   if (<span class="code text-green">str</span>.equals("Hello"))
+      <span class="code text-user">list</span>.<span class="text-red">remove</span>(<span class="code text-green">str</span>);
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Зверніть увагу, що метод <code>remove()</code> ми викликаємо для об'єкта-ітератора! Ітератор «знатиме» про видалення елемента і зможе правильно обробити цю ситуацію.</p>
+<p><strong>3 Використання копії колекції</strong></p>
+<p>Можна також створити копію колекції та використовувати її в циклі <code>for-each</code>, а видаляти елементи з колекції-оригіналу.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">ArrayList</span>&lt;<span class="text-viola">String</span>&gt; <span class="code text-user">listCopy</span> = new <span class="text-neon">ArrayList</span>(<span class="code text-user">list</span>);
+
+for (<span class="text-viola">String</span> <span class="code text-green">str</span>: <span class="code text-user">listCopy</span>)
+{
+   if (<span class="code text-green">str</span>.equals("Hello"))
+      <span class="code text-user">list</span>.<span class="text-red">remove</span>(<span class="code text-green">str</span>);
+}</code></pre>
+        </td>
+        <td>Копію колекції створити дуже легко<br/><br/><br/><br/> У циклі використовується ітератор колекції-копії.<br/> Елементи видаляються з колекції <code>list</code>.</td>
+    </tr>
+    </tbody>
+</table>
+<p>Копія колекції створюється досить швидко: під час копіювання елементи колекції не дублюються — у новій колекції зберігатимуться посилання на ті самі елементи, що й у старій.</p>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task13.task1305"></div>

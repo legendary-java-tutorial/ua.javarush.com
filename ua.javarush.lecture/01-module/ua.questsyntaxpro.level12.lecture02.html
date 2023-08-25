@@ -1,0 +1,253 @@
+﻿Колекції в Java: ArrayList
+<p>----------------------------------------</p>
+Клас ArrayList. Сьогодні ми вивчимо клас ArrayList. Це перший клас із так званих колекцій. Колекції в Java — настільки ємка й корисна річ, що їм присвячено цілий квест на JavaRush. Щоб повністю зрозуміти, як влаштовано колекції, і опанувати всі особливості роботи з ними, потрібно спочатку
+<p>----------------------------------------</p>
+<h2>1. Клас <code>ArrayList</code></h2>
+<p>Сьогодні ми вивчимо клас <code>ArrayList</code>. Це перший клас із так званих <strong>колекцій</strong>. Колекції в Java — настільки ємка й корисна річ, що їм присвячено цілий квест на JavaRush.</p>
+<p>Щоб повністю зрозуміти, як влаштовано колекції, і опанувати всі особливості роботи з ними, потрібно спочатку вивчити ООП, інтерфейси, успадкування, ази багатонитковості й багато іншого.</p>
+<p>Тому сьогодні ми просто ознайомимося з найпростішої колекцією, натомість на досить глибокому рівні, щоб ви розуміли, як нею користуватися та як вона працює. Отже, зустрічайте: <strong>колекція <code>ArrayList</code></strong>.</p>
+<p><strong>Передісторія</strong></p>
+<p>Почну з невеличкої передісторії. Програмістам дуже не подобалася одна властивість масиву — його розмір не можна змінювати. Що робити, якщо потрібно зберегти в масиві ще три елементи, а вільне місце лише одне?</p>
+<p>Єдиним розв'язанням проблеми браку місця в масиві було створення масиву дуже великого розміру, щоб усі елементи туди точно вмістилися. Проте це часто спричиняло нераціональні витрати пам'яті. Якщо зазвичай у масиві зберігалося два-три елементи, але існувала хоча б мізерна ймовірність, що їх там буде 100, доводилося створювати масив на 100 елементів.</p>
+<p>І що ж придумали програмісти? Вони написали клас <code>ArrayList</code> (масив-список), який виконував ту саму роботу, що й <code>Array</code> (масив), але міг змінювати свій розмір.</p>
+<p><strong>Клас ArrayList</strong></p>
+<p>Сама назва <code>ArrayList</code> походить від двох слів: Array + List. <code>Array</code> — це масив, а <code>List</code> — список.</p>
+<p>Усередині кожного об'єкта типу <code>ArrayList</code> зберігається звичайний масив елементів. Коли ви зчитуєте елементи з <code>ArrayList</code>, він зчитує їх зі свого внутрішнього масиву. Коли записуєте — записує їх у внутрішній масив.</p>
+<p>У класу ArrayList відсутні всі недоліки, притаманні масивам. Він уміє:</p>
+<ul>
+    <li>Зберігати елементи певного типу</li>
+    <li>Динамічно змінювати розмір списку</li>
+    <li>Додавати елементи в кінець списку</li>
+    <li>Вставляти елементи в початок і в середину списку</li>
+    <li>Видаляти елементи з будь-якого місця списку</li>
+</ul>
+<p>Докладніше — нижче:</p>
+<hr>
+<h2>2. Створення об’єкта <code>ArrayList</code></h2>
+<p>Щоб створити об'єкт класу <code>ArrayList</code>, потрібно написати отакий код:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm language-java"><code><span class="text-neon">ArrayList</span>&lt;<span class="text-viola">Тип</span>&gt; <span class="text-green">ім'я</span> = new <span class="text-neon">ArrayList</span>&lt;<span class="text-viola">Тип</span>&gt;();</code></pre>
+</div>
+<p>де <code><span class="text-neon">ArrayList</span></code> — це тип/клас колекції, <code><span class="text-viola">Тип</span></code> — це тип елементів, які зберігаються в колекції <code>ArrayList</code>, а <code><span class="text-green">ім'я</span></code> — це ім'я змінної типу <code>ArrayList&lt;Тип&gt;</code>.</p>
+<p>Тип змінної <code><span class="text-green">ім'я</span></code> складений — він складається аж із двох типів: спочатку вказують тип колекції, а в трикутних дужках — тип елементів, які ця колекція зберігає.</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-neon">ArrayList</span>&lt;<span class="text-viola">Integer</span>&gt; <span class="text-green">list</span> = new <span class="text-neon">ArrayList</span>&lt;<span class="text-viola">Integer</span>&gt;();</code></pre>
+        </td>
+        <td>Список цілих чисел</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-neon">ArrayList</span>&lt;<span class="text-viola">String</span>&gt; <span class="text-green">list</span> = new <span class="text-neon">ArrayList</span>&lt;<span class="text-viola">String</span>&gt;();</code></pre>
+        </td>
+        <td>Список рядків</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-neon">ArrayList</span>&lt;<span class="text-viola">Double</span>&gt; <span class="text-green">list</span> = new <span class="text-neon">ArrayList</span>&lt;<span class="text-viola">Double</span>&gt;();</code></pre>
+        </td>
+        <td>Список дійсних чисел</td>
+    </tr>
+    </tbody>
+</table>
+<p>Колекції, на відміну від масивів, не можуть зберігати примітивні типи: тільки <span class="term">типи-класи</span>. Тому якщо вам потрібна колекція зі значеннями типу <code>int</code>, використовуйте замість нього клас-обгортку — <code>Integer</code>.</p>
+<hr>
+<h2>3. Операції з <code>ArrayList</code></h2>
+<p>Спочатку довжина щойно створеного списку дорівнює нулю: він містить 0 елементів. Якщо до списку додати один елемент, довжина списку збільшиться на 1. Якщо видалити доданий елемент, довжина знову зменшиться до нуля.</p>
+<p>Докладніше дізнатися про методи класу <code>ArrayList</code> можна з таблиці:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Методи</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>void <span class="text-red">add</span>(<span class="text-viola">тип value</span>)</code></pre>
+        </td>
+        <td>Додає до списку переданий елемент</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>void <span class="text-red">add</span>(<span class="text-green">int index</span>, <span class="text-viola">тип value</span>)</code></pre>
+        </td>
+        <td>Додає елемент на певне місце у списку</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-viola">тип</span> <span class="text-red">get</span>(<span class="text-green">int index</span>)</code></pre>
+        </td>
+        <td>Повертає елемент із номером <code><span class="text-green">index</span></code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>void <span class="text-red">set</span>(<span class="text-green">int index</span>, <span class="text-viola"><span class="text-viola">тип</span> value</span>)</code></pre>
+        </td>
+        <td>Змінює значення елемента з номером <code><span class="text-green">index</span></code> на <code><span class="text-viola">value</span></code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-viola">тип</span> <span class="text-red">remove</span>(<span class="text-green">int index</span>)</code></pre>
+        </td>
+        <td>Видаляє елемент із номером <code><span class="text-green">index</span></code>. Повертає видалений елемент.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>boolean <span class="text-red">remove</span>(<span class="text-viola">тип value</span>)</code></pre>
+        </td>
+        <td>Видаляє елемент: потрібно передати сам елемент у список. Якщо таких елементів декілька, буде видалено перший з них</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>void <span class="text-red">clear</span>()</code></pre>
+        </td>
+        <td>Очищає список — видаляє всі елементи зі списку</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>boolean <span class="text-red">contains</span>(<span class="text-viola">тип value</span>)</code></pre>
+        </td>
+        <td>Перевіряє, чи міститься в списку елемент <code><span class="text-viola">value</span></code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>boolean <span class="text-red">isEmpty</span>()</code></pre>
+        </td>
+        <td>Перевіряє, порожній список чи ні (чи дорівнює довжина списку нулю)</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">size</span>()</code></pre>
+        </td>
+        <td>Повертає розмір списку — кількість елементів списку</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-viola">тип</span>[] <span class="text-red">toArray</span>(<span class="text-viola">тип</span>[] array)</code></pre>
+        </td>
+        <td>Повертає масив, який містить ті самі елементи, що й список.<br/><span>Масив потрібно передати в метод</span></td>
+    </tr>
+    </tbody>
+</table>
+<p>Ці методи дають змогу виконувати зі списком практично всі можливі операції: міняти елементи місцями, додавати елементи, видаляти елементи. Можна навіть очистити список за допомогою однієї команди або перетворити список на масив.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task12.task1209"></div>
+<hr>
+<h2>4. Порівняння <code>ArrayList</code> і <code>Array</code></h2>
+<p>Гадаю, без порівняння <code>ArrayList</code> і масиву нам не обійтися.</p>
+<p>Фактично з масивом можна виконувати лише 4 дії:</p>
+<ul>
+    <li>Створення масиву</li>
+    <li>Отримання елемента за номером</li>
+    <li>Встановлення елемента в масиві за номером</li>
+    <li>Отримання довжини масиву</li>
+</ul>
+<p>Ось аналоги операцій у <span class="term">масиві</span> та в <code>ArrayList</code>:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Масив</th>
+        <th>ArrayList</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-viola">String</span>[] <span class="text-user">array</span> = new <span class="text-viola">String</span>[<span class="text-user">10</span>];</code></pre>
+        </td>
+        <td>
+            <pre class="language-java"><code><span class="text-neon">ArrayList</span>&lt;<span class="text-viola">String</span>&gt; list = new&nbsp; <span class="text-neon">ArrayList</span>&lt;<span class="text-viola">String</span>&gt;();</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-viola">String</span> s = <span class="text-user">array</span>[<span class="text-user">0</span>];</code></pre>
+        </td>
+        <td>
+            <pre class="language-java"><code><span class="text-viola">String</span> s = <span class="text-user">list</span>.<span class="text-red">get</span>(0);</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-user">array</span>[<span class="text-user">0</span>] = <span class="text-green">"Бувай"</span>;</code></pre>
+        </td>
+        <td>
+            <pre class="language-java"><code><span class="text-user">list</span>.<span class="text-red">set</span>(0, <span class="text-green">"Бувай"</span>);</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-green">count</span> = <span class="text-user">array</span>.length;</code></pre>
+        </td>
+        <td>
+            <pre class="language-java"><code>int <span class="text-green">count</span> = <span class="text-user">list</span>.<span class="text-red">size</span>();</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Порівняймо роботу <code>ArrayList</code> і роботу з масивом. Для прикладу розв'яжімо таку задачу: «Ввести 10 рядків з клавіатури й вивести їх на екран у зворотному порядку».</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Використовуємо Array (масив)</th>
+        <th>Використовуємо ArrayList</th>
+    </tr>
+    <tr>
+        <td>
+                <pre class="language-java"><code>Scanner console = new Scanner(System.in);
+
+// введення рядків з клавіатури
+String[] list = new String[10];
+
+for (int i = 0; i &lt; list.length; i++)
+{
+    String s = console.nextLine();
+    list[i] = s;
+}
+
+// виведення вмісту масиву на екран
+for (int i = 0; i &lt; list.length; i++)
+{
+    int j = list.length - i - 1;
+    System.out.println(list[j]);
+}</code></pre>
+        </td>
+        <td>
+                <pre class="language-java"><code>Scanner console = new Scanner(System.in);
+
+// введення рядків з клавіатури
+ArrayList&lt;String&gt; list = new ArrayList&lt;String&gt;();
+
+for (int i = 0; i &lt; 10; i++)
+{
+    String s = console.nextLine();
+    list.add(s);
+}
+
+// виведення вмісту колекції на екран
+for (int i = 0; i &lt; list.size(); i++)
+{
+    int j = list.size() - i - 1;
+    System.out.println(list.get(j));
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Загалом можна провести точну аналогію, причому в масиві все виглядає нібито коротше й зрозуміліше. Але й в <code>ArrayList</code> не надто складно: отримати елемент — метод <code>get()</code>, змінити елемент — метод <code>set()</code>, отримати довжину списку — метод <code>size()</code>.</p>
+<p>Тож навіщо програмісти використовують клас <code>ArrayList</code>?</p>
+<p>Звичайно ж, основна причина в інших методах, яких у масиву немає й не буде:</p>
+<ul>
+    <li>Додавання елемента до списку</li>
+    <li>Додавання елемента в середину списку</li>
+    <li>Пошук елемента в списку</li>
+    <li>Видалення елемента зі списку</li>
+</ul>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task12.task1210"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task12.task1211"></div>

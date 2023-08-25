@@ -1,0 +1,336 @@
+Логічні операції
+<p>----------------------------------------</p>
+Булева логіка. У мові Java не можна записати вираз 18 &lt; age &lt; 65 – він буде синтаксично некоректним і програма не скомпілюється. Проте можна записати його так: (18 &lt; age) І (age &lt; 65) Зрозуміло, що замість слова І там буде інший логічний оператор
+<p>----------------------------------------</p>
+<div class="lesson-carousel lesson-carousel--comics lesson-carousel--desktop">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="d9506b54-e6a5-4df9-a41f-db1ab042a061" data-max-width="1024" src="https://cdn.javarush.com/images/article/d9506b54-e6a5-4df9-a41f-db1ab042a061/original.png" alt="">
+        </div>
+    </div>
+</div>
+<div class="lesson-carousel lesson-carousel--comics lesson-carousel--mobile">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="2890347a-c89c-423c-8e64-c03db0b20e14" data-max-width="512" src="https://cdn.javarush.com/images/article/2890347a-c89c-423c-8e64-c03db0b20e14/original.png" alt="">
+        </div>
+        <div class="lesson-carousel__item">
+            <img data-id="d2693924-cbcf-4c4c-9213-086c69724ac1" data-max-width="512" src="https://cdn.javarush.com/images/article/d2693924-cbcf-4c4c-9213-086c69724ac1/original.png" alt="">
+        </div>
+    </div>
+</div>
+<hr>
+
+<h2>1. Булева логіка</h2>
+<p>У мові Java не можна записати вираз <code><span class="text-red">18 &lt; age &lt; 65</span></code> — він буде
+синтаксично некоректним і програма не скомпілюється.</p>
+<p>Проте можна записати його так:</p>
+<div class="lesson-example lesson-example--center">
+        <pre class="lecture-code lecture-code--present language-java">
+            <code><span class="text-viola">(</span><span class="code"><span class="text-green">18 &lt; age</span></span><span class="text-viola">)</span> <span class="text-red">і</span> <span class="text-viola">(</span><span class="code"><span class="text-green">age &lt; 65</span></span><span class="text-viola">)</span></code>
+        </pre>
+</div>
+<p>Зрозуміло, що замість слова <code><span class="text-red">І</span></code> там буде інший <span class="term">логічний
+    оператор</span>, і зараз ми саме поговоримо про них детальніше.</p>
+<p>В Java є три логічні оператори: <code>AND</code> (і), <code>OR</code> (или) и <code>NOT</code> (не).</p>
+<p><span class="text-bold">Гарна новина:</span> використовуючи <span class="term text-viola">дужки</span>, можна побудувати логічні вирази будь-якої складності.</p>
+<p><span class="text-bold">Погана новина:</span> розробники Java вирішили замість слів <code class="text-red">and</code>, <code class="text-red">or</code> і <code class="text-red">not</code>, використовувати позначення з мови <span class="term">мови C</span>.</p>
+<p>Увага на екран:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="33.333%" class="text-center">Логічний оператор</th>
+        <th width="33.333%" class="text-center">Очікування</th>
+        <th width="33.333%" class="text-center">Реальність</th>
+    </tr>
+    <tr>
+        <td class="text-center"><code><span class="text-red">І</span></code> <span class="text-muted">(∧)</span></td>
+        <td class="text-center"><code class="text-red">and</code></td>
+        <td class="text-center"><code><span class="text-red">&&</span></code></td>
+    </tr>
+    <tr>
+        <td class="text-center"><code><span class="text-red">АБО</span></code> <span class="text-muted">(∨)</span></td>
+        <td class="text-center"><code class="text-red">or</code></td>
+        <td class="text-center"><code><span class="text-red">||</span></code></td>
+    </tr>
+    <tr>
+        <td class="text-center"><code><span class="text-red">НЕ</span></code> <span class="text-muted">(¬)</span></td>
+        <td class="text-center"><code class="text-red">not</code></td>
+        <td class="text-center"><code><span class="text-red">!</span></code></td>
+    </tr>
+    </tbody>
+</table>
+<p>Ось кілька прикладів використання логічних операторів в Java:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="33.333%" class="text-center">Вираз</th>
+        <th width="33.333%" class="text-center">Розшифрування</th>
+        <th width="33.333%" class="text-center">Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code>(0 &lt; a) <span class="text-red">&amp;&amp;</span> (a &lt; 100)</code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code>(0 &lt; a) <span class="code text-red">and</span> (a &lt; 100)</code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code>(0 &lt; a) <span class="text-red">І</span> (a &lt; 100)</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code>(<span class="text-red">!</span>a) <span class="text-red">&amp;&amp;</span> (<span class="text-red">!</span>b)</code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code>(<span class="code text-red">not</span> a) <span class="code text-red">and</span> (<span class="code text-red">not</span> b)</code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code>(<span class="text-red">НЕ</span> a) <span class="text-red">І</span> (<span class="text-red">НЕ</span> b)</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code><span class="text-red">!</span>(<span class="text-red">!</span>a <span class="text-red">||</span> <span class="text-red">!</span>b)</code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code><span class="code text-red">not</span>((<span class="code text-red">not</span> a) <span class="code text-red">or</span> (<span class="code text-red">not</span> b))</code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code><span class="text-red">НЕ</span>((<span class="text-red">НЕ</span> a) <span class="text-red">АБО</span> (<span class="text-red">НЕ</span> b))</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<h2>2. Приклади використання операторів порівняння та булевих змінних</h2>
+<p>Там, де можна написати логічний вираз, можна написати і логічну змінну.</p>
+<p>Наприклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="text-red">age</span> = <span class="text-user">35</span>;
+if (<span class="text-red">age </span>&gt;= <span class="text-user">18</span> &amp;&amp; <span class="text-red">age</span> &lt;= <span class="text-user">65</span>)
+   System.out.println(<span class="text-green">"Ви можете працювати"</span>);</code></pre>
+        </td>
+        <td>Якщо значення age лежить між <code>18</code> і <code>65</code>, на екран виводиться текст «ви можете працювати».</td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="text-red">age</span> = <span class="text-user">35</span>;
+boolean <span class="text-orange">isYoung</span> = (<span class="text-red">age </span>&lt; <span class="text-user">18</span>);
+if (!<span class="text-orange">isYoung</span> &amp;&amp; <span class="text-red">age</span> &lt;= <span class="text-user">65</span>)
+   System.out.println(<span class="text-green">"Ви можете працювати"</span>);</code></pre>
+        </td>
+        <td>Ми створили змінну <code>isYoung</code> і винесли до неї першу частину виразу. Тільки замінили <code>age &gt;= 18</code>
+        на <code>age &lt; 18</code>.</td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="text-red">age</span> = <span class="text-user">35;</span>
+boolean <span class="text-orange">isYoung</span> = (<span class="text-red">age</span> &lt; <span class="text-user">18</span>);
+boolean <span class="text-orange">isOld</span> = (<span class="text-red">age</span> &gt; <span class="text-user">65</span>);
+if (!<span class="text-orange">isYoung</span> &amp;&amp; !<span class="text-orange">isOld</span>)
+   System.out.println(<span class="text-green">"Ви можете працювати"</span>);</code></pre>
+        </td>
+        <td>Ми створили змінну isOld і винесли до неї другу частину виразу. Водночас замінили <code>age &lt;= 65</code> на
+        <code>age &gt; 65</code>.</td>
+    </tr>
+    </tbody>
+</table>
+<p>Ці три приклади еквівалентні. Тільки у другому ми винесли частину виразу з умови <code>if</code> в окрему логічну змінну – <code>isYoung</code>. У
+третьому прикладі ми винесли другу частину виразу у другу змінну — <code>isOld</code>.</p>
+<hr>
+<h2>3. Логічна арифметика</h2>
+<p>Стисло пройдемося логічними операціями.</p>
+<p>Оператор <code>AND</code>, він же <code>і</code>, він же <code>&&</code>, він же <span class="term">кон’юнкція</span>.</p>
+<table>
+    <tbody>
+    <tr>
+        <th class="text-center">Вираз</th>
+        <th class="text-center">Результат</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code><span class="text-green">true</span> &amp;&amp; <span class="text-green">true</span></code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code><span class="text-green">true</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code><span class="text-green">true</span> &amp;&amp; <span class="text-red">false</span></code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code><span class="text-red">false</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code><span class="text-red">false</span> &amp;&amp; <span class="text-green">true</span></code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code><span class="text-red">false</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code><span class="text-red">false</span> &amp;&amp; <span class="text-red">false</span></code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code><span class="text-red">false</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Іншими словами, результат виразу дорівнює <code>true</code> (істина), тільки якщо обидва значення, що беруть участь у виразі,
+дорівнюють <code>true</code> (істина). У решті випадків завжди <code>false</code> (неправда).</p>
+<p>Оператор OR, він же <code>АБО</code>, він же ||, він же <span class="term">диз’юнкція</span>.</p>
+<table>
+    <tbody>
+    <tr>
+        <th class="text-center">Вираз</th>
+        <th class="text-center">Результат</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code><span class="text-green">true</span> || <span class="text-green">true</span></code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code><span class="text-green">true</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code><span class="text-green">true</span> || <span class="text-red">false</span></code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code><span class="text-green">true</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code><span class="text-red">false</span> || <span class="text-green">true</span></code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code><span class="text-green">true</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code><span class="text-red">false</span> || <span class="text-red">false</span></code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code><span class="text-red">false</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Іншими словами, результат виразу дорівнює <code>true</code> (істина) завжди, якщо хоча б одне значення, що бере участь у виразі,
+дорівнює <code>true</code> (істина). Якщо обидва рівні <code>false</code>, то результат <code>false</code>.</p>
+<p>Оператор <code>NOT</code>, він же <code>НЕ</code>, він же <code>!</code>, він же <span class="term">інверсія</span>.</p>
+<table>
+    <tbody>
+    <tr>
+        <th class="text-center">Вираз</th>
+        <th class="text-center">Результат</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code>!<span class="text-green">true</span></code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code><span class="text-red">false</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code>!<span class="text-red">false</span></code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code><span class="text-green">true</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Міняє <code>true</code> на <code>false</code> і навпаки.</p>
+<p><strong>Корисні вирази:</strong></p>
+<table>
+    <tbody>
+    <tr>
+        <th class="text-center">Вираз</th>
+        <th class="text-center">Результат</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code>m &amp;&amp; !m</code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code><span class="text-red">false</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code>m || !m</code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code><span class="text-green">true</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code>!(a &amp;&amp; b)</code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code>!a || !b</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code>!(a || b)</code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code>!a &amp;&amp; !b</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+
+<div class="lesson-carousel lesson-carousel--comics lesson-carousel--desktop">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-max-width="1024" data-id="42656de6-fcaf-4dbe-803b-68b31707b4d6" src="https://cdn.javarush.com/images/article/42656de6-fcaf-4dbe-803b-68b31707b4d6/1024.jpeg" alt="">
+        </div>
+        <div class="lesson-carousel__item">
+            <img data-id="7ba59fa6-b3f5-4059-ac14-8536205938cc" data-max-width="1024" src="https://cdn.javarush.com/images/article/7ba59fa6-b3f5-4059-ac14-8536205938cc/original.png" alt="">
+        </div>
+    </div>
+</div>
+<div class="lesson-carousel lesson-carousel--comics lesson-carousel--mobile">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="eb989fa9-305e-49cb-a507-0f6a840d00bf" data-max-width="512" src="https://cdn.javarush.com/images/article/eb989fa9-305e-49cb-a507-0f6a840d00bf/original.png" alt="">
+        </div>
+        <div class="lesson-carousel__item">
+            <img data-id="940870f9-0217-4884-a4d4-c8ca5307569a" data-max-width="512" src="https://cdn.javarush.com/images/article/940870f9-0217-4884-a4d4-c8ca5307569a/original.png" alt="">
+        </div>
+        <div class="lesson-carousel__item">
+            <img data-id="85486495-665e-4c06-bfab-5146320c11a7" data-max-width="512" src="https://cdn.javarush.com/images/article/85486495-665e-4c06-bfab-5146320c11a7/original.png" alt="">
+        </div>
+        <div class="lesson-carousel__item">
+            <img data-id="0703a353-1b5d-459a-91a7-dcc5c48ab0f3" data-max-width="512" src="https://cdn.javarush.com/images/article/0703a353-1b5d-459a-91a7-dcc5c48ab0f3/original.png" alt="">
+        </div>
+    </div>
+</div>
+
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task03.task0306"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task03.task0307"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task03.task0308"></div>

@@ -1,0 +1,247 @@
+Потоки виведення
+<p>----------------------------------------</p>
+Клас OutputStream. З потоками введення ми щойно розібралися. Настав час поговорити про потоки виведення. Клас OutputStream є батьківським класом для всіх класів, які підтримують байтове виведення.
+<p>----------------------------------------</p>
+<h2>1. Клас <code>OutputStream</code></h2>
+<p>З потоками введення ми щойно розібралися. Настав час поговорити про потоки виведення.</p>
+<p>Клас <code>OutputStream</code> є батьківським класом для всіх класів, які підтримують байтове виведення. Це абстрактний
+клас, який сам нічого не робить: для цього він має класи-спадкоємці на всі випадки життя.</p>
+<p>Складнувато звучить. Простіше кажучи, цей клас оперує байтами, а не, наприклад, символами чи іншими типами даних. А те,
+що він абстрактний, означає, що ми зазвичай використовуємо не його, а один із його класів-спадкоємців. Наприклад,
+<code>FileOutputStream</code> та подібні до нього.</p>
+<p>Але повернемося до класу <code>OutputStream</code>. У цього класу є методи, які мають реалізовувати всі його
+класи-спадкоємці. Ось основні з них:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Методи</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>void <span class="text-red">write</span>(int b)</code></pre>
+        </td>
+        <td>Записує один байт (не <code>int</code>) в потік.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>void <span class="text-red">write</span>(byte[] buffer)</code></pre>
+        </td>
+        <td>Записує масив байт у потік</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>void <span class="text-red">write</span>(byte[] buffer, off, len)</code></pre>
+        </td>
+        <td>Записує частину масиву байт у потік</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>void <span class="text-red">flush</span>()</code></pre>
+        </td>
+        <td>Записує в потік усі дані, які зберігаються у буфері</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>void <span class="text-red">close</span>()</code></pre>
+        </td>
+        <td>Закриває потік</td>
+    </tr>
+    </tbody>
+</table>
+<p>Під час створення об’єкта класу-спадкоємця <code>InputStream</code> зазвичай вказується об’єкт-джерело, з якого
+<code>InputStream</code> читає дані. Під час створення об’єкта класу-спадкоємця <code>OutputStream</code> також зазвичай
+вказується цільовий об’єкт або цільовий потік, в який будуть записуватися дані.</p>
+<p>Коротко пройдемося всіма методами класу <code>OutputStream</code>:</p>
+<p><strong>Метод <code>write(int b)</code></strong></p>
+<p>Цей метод записує в потік виведення один байт (не <code>int</code>). Передане значення приводиться до типу байт, три
+перші байти відкидаються.</p>
+<p><strong>Метод <code>write(byte[] buffer)</code></strong></p>
+<p>Записує в потік виведення переданий масив байтів. Все.</p>
+<p><strong>Метод <code>write(byte[] buffer, int offset, int length)</code></strong></p>
+<p>Записує в потік виведення частину переданого масиву байтів. Змінна offset задає номер першого елемента масиву,
+<code>length</code>— довжина фрагмента, що записується.</p>
+<p><strong>Метод <code>flush()</code></strong></p>
+<p>Метод <code>flush()</code> використовується, щоб примусово записати у цільовий потік дані, які можуть кешуватися в
+поточному потоці. Актуально у разі використання буферизації та/або кількох об’єктів потоків, організованих у ланцюжок.</p>
+<p><strong>Метод <code>close()</code></strong></p>
+<p>Записує в цільовий об’єкт усі незаписані дані. Метод <code>close()</code> можна не викликати, якщо ви використовуєте
+<code>try</code>-with-resources.</p>
+<p>Приклад — копіювання файлу</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="code text-green">src</span> = "c:\\projects\\log.txt";
+String <span class="code text-user">dest</span> = "c:\\projects\\copy.txt";
+
+try(<span class="text-viola">FileInputStream</span> <span class="text-green">input</span> = new <span class="text-viola">FileInputStream</span>(<span class="code text-green">src</span>);
+<span class="text-viola">FileOutputStream</span> <span class="text-user">output</span> = new <span class="text-viola">FileOutputStream</span>(<span class="code text-user">dest</span>))
+{
+   byte[] <span class="code text-orange">buffer</span> = new byte[65536]; // 64Kb
+   while (<span class="text-green">input</span>.<span class="text-red">available</span>() &gt; 0)
+   {
+      int <span class="code text-neon">real</span> = <span class="text-green">input</span>.<span class="text-red">read</span>(<span class="code text-orange">buffer</span>);
+      <span class="text-user">output</span>.<span class="text-red">write</span>(<span class="code text-orange">buffer</span>, 0, <span class="code text-neon">real</span>);
+   }
+}</code></pre>
+        </td>
+        <td><br><br><br><code>InputStream</code> для читання з файлу<br>
+            <code>OutputStream</code> для запису у файл<br><br>
+            Буфер, в який ми будемо зчитувати дані<br>
+            Поки дані присутні в потоці<br><br>
+            Зчитуємо дані в буфер<br>
+            Записуємо дані з буфера у другий потік
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<h2>2. Клас <code>Writer</code></h2>
+<p>Клас <code>Writer</code> — це повний аналог класу <code>OutputStream</code>, і знову тільки з однією відмінністю: він
+працює із символами, <code>char</code>, замість байт.</p>
+<p>Це абстрактний клас: об’єкти класу <code>Writer</code> не можна створити. Його основна мета — бути єдиним батьківським
+класом для сотень класів-спадкоємців і задати для них загальні методи роботи з символьними потоками.</p>
+<p>Методи класу <code>Writer</code> (і всіх його класів-спадкоємців):</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Методи</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>void <span class="text-red">write</span>(int b)</code></pre>
+        </td>
+        <td>Записує один символ (не <code>int</code>) в потік.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>void <span class="text-red">write</span>(char[] buffer)</code></pre>
+        </td>
+        <td>Записує масив символів у потік</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>void <span class="text-red">write</span>(char[] buffer, off, len)</code></pre>
+        </td>
+        <td>Записує частину масиву символів у потік</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>void <span class="text-red">write</span>(String str)</code></pre>
+        </td>
+        <td>Записує рядок у потік</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>void <span class="text-red">write</span>(String str, off, len)</code></pre>
+        </td>
+        <td>Записує частину рядка у потік</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>void <span class="text-red">flush</span>()</code></pre>
+        </td>
+        <td>Записує в потік усі дані, які зберігаються у буфері</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>void <span class="text-red">close</span>()</code></pre>
+        </td>
+        <td>Закриває потік</td>
+    </tr>
+    </tbody>
+</table>
+<p>Методи дуже схожі на методи класу <code>OutputStream</code>, тільки працюють із символами замість байт.</p>
+<p>Короткий опис методів:</p>
+<p><strong>Метод <code>write(int b)</code></strong></p>
+<p>Цей метод записує в потік виведення один символ <code>char</code> (не <code>int</code>). Передане значення приводиться
+до типу <code>char</code>, два перші байти відкидаються.</p>
+<p><strong>Метод <code>write(char[] buffer)</code></strong></p>
+<p>Записує в потік виведення переданий масив символів.</p>
+<p><strong>Метод <code>write(char[] buffer, int offset, int length)</code></strong></p>
+<p>Записує в потік виведення частину переданого масиву символів. Змінна <code>offset</code> задає номер першого елемента
+масиву, <code>length</code> — довжина фрагмента, що записується.</p>
+<p><strong>Метод <code>write(String str)</code></strong></p>
+<p>Записує в потік виведення переданий рядок.</p>
+<p><strong>Метод <code>write(String str, int offset, int length)</code></strong></p>
+<p>Записує в потік виведення частину переданого рядка: рядок перетворять на масив символів. Змінна <code>offset</code>
+задає номер першого елемента масиву, <code>length</code> — довжина фрагмента, що записується.</p>
+<p><strong>Метод <code>flush()</code></strong></p>
+<p>Метод <code>flush()</code> використовується, щоб примусово записати у цільовий потік дані, які можуть кешуватися в
+поточному потоці. Актуально у разі використання буферизації та/або кількох об’єктів потоків, організованих у ланцюжок.</p>
+<p><strong>Метод <code>close()</code></strong></p>
+<p>Записує в цільовий об’єкт усі незаписані дані. Метод <code>close()</code> можна не викликати, якщо ви використовуєте
+<code>try</code>-with-resources.</p>
+<p>Приклад програми, яка копіює текстовий файл:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="code text-green">src</span> = "c:\\projects\\log.txt";
+String <span class="code text-user">dest</span> = "c:\\projects\\copy.txt";
+
+try(<span class="text-viola">FileReader</span> <span class="text-green">reader</span> = new <span class="text-viola">FileReader</span>(<span class="code text-green">src</span>);
+<span class="text-viola">FileWriter</span> <span class="text-user">writer</span> = new <span class="text-viola">FileWriter</span>(<span class="code text-user">dest</span>))
+{
+   char[] <span class="code text-orange">buffer</span> = new char[65536]; // 128Kb
+   while (<span class="text-green">reader</span>.<span class="text-red">ready</span>())
+   {
+      int <span class="code text-neon">real</span> = <span class="text-green">reader</span>.<span class="text-red">read</span>(<span class="code text-orange">buffer</span>);
+      <span class="text-user">writer</span>.write(<span class="code text-orange">buffer</span>, 0, <span class="code text-neon">real</span>);
+   }
+}</code></pre>
+        </td>
+        <td><br><br><br><code>Reader</code> для читання з файлу<br>
+            <code>Writer</code> для запису у файл<br><br>
+            Буфер, в який будемо зчитувати дані<br>
+            Поки дані є в потоці<br><br>
+            Читаємо дані у буфер<br>
+            Записуємо дані з буфера у другий потік
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Клас <code>StringWriter</code></strong></p>
+<p>Є ще один цікавий клас-спадкоємець від класу <code>Writer</code> — це <code>StringWriter</code>. У ньому знаходиться
+рядок, що змінюється, — об’єкт <code>StringBuffer</code>. І щоразу, коли ви щось «пишете» в об’єкт
+<code>StringWriter</code>, текст просто додається у внутрішній буфер.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>StringWriter writer = new StringWriter();
+writer.write("Hello");
+writer.write(String.valueOf(123));
+
+String result = writer.toString();</code></pre>
+        </td>
+        <td>Створюється цільовий символьний потік <code>StringWriter</code><br>
+            Рядок пишеться в буфер всередині <code>StringWriter</code><br>
+            Рядок пишеться в буфер всередині <code>StringWriter</code><br><br>
+            Перетворюємо вміст об’єкта до рядка
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>У цьому випадку клас <code>StringWriter</code> — це, по суті, обгортка над класом <code>StringBuffer</code>, проте клас
+<code>StringWriter</code> — це спадкоємець класу-потоку <code>Writer</code>, і він може використовуватися в ланцюжках із
+об’єктів-потоків. Доволі корисна властивість на практиці.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task15.task1528"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task15.task1529"></div>
+<hr>

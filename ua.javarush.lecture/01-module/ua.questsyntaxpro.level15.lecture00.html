@@ -1,0 +1,228 @@
+﻿Оператор try with resources
+<p>----------------------------------------</p>
+Зовнішні ресурси. Часом у процесі роботи Java-програма взаємодіє з об'єктами поза Java-машиною, наприклад із файлами на диску. Такі об'єкти називають зовнішніми ресурсами. Внутрішні ресурси — це об'єкти, створені всередині Java-машини. Зазвичай взаємодія відбувається за такою
+<p>----------------------------------------</p>
+<h2>1. Зовнішні ресурси</h2>
+<p>Часом у процесі роботи Java-програма взаємодіє з об'єктами поза Java-машиною, наприклад із файлами на диску. Такі об'єкти називають зовнішніми ресурсами. Внутрішні ресурси — це об'єкти, створені всередині Java-машини.</p>
+<p>Зазвичай взаємодія відбувається за такою схемою:</p>
+<img data-max-width="1024" data-id="39060a8c-3214-414d-bf69-24d933746fa0" src="https://cdn.javarush.com/images/article/39060a8c-3214-414d-bf69-24d933746fa0/1024.jpeg" alt="">
+<p><strong>Облік ресурсів</strong></p>
+<p>Операційна система веде суворий облік доступних ресурсів, а також контролює спільний доступ до них різних програм. Наприклад, якщо якась програма змінює певний файл, інша програма не може цей файл змінити (або видалити). Це стосується не тільки файлів, але цей приклад найзрозуміліший.</p>
+<p>Операційна система має функції (API), які дають програмі змогу захопити будь-який ресурс і/або вивільнити його. Якщо ресурс зайнятий, із ним може працювати тільки та програма, яка його захопила. Якщо ресурс вільний, будь-яка програма може його захопити.</p>
+<p>Уявіть, що у вашому офісі є чашки для спільного користування. Якщо хтось візьме чашку, ніхто інший вже не зможе її взяти. Але після того, як нею скористалися, вимили й поставили на місце, її знову може взяти хто завгодно. Інший приклад — місця в метро або в маршрутці: якщо місце вільне, його може зайняти будь-хто. Але якщо місце зайняте, ним розпоряджається той, хто його зайняв.</p>
+<p><strong>Захоплення зовнішніх ресурсів</strong></p>
+<p>Щоразу, коли ваша Java-програма починає працювати з певним файлом на диску, Java-машина запитує в операційної системи монопольний доступ до нього. Якщо ресурс вільний, Java-машина його захоплює.</p>
+<p>Однак після закінчення роботи з файлом цей ресурс (файл) потрібно вивільнити: повідомити операційній системі, що він вам більше не потрібен. <span class="text-viola">Якщо цього не зробити, ресурс і надалі буде закріплено за вашою програмою.</span></p>
+<p>Для кожної запущеної програми операційна система веде список зайнятих ресурсів. Якщо ваша програма перевищить дозволений їй ліміт ресурсів, нові ресурси операційна система вам уже не надасть.</p>
+<p>Хороша новина: коли ваша програма завершиться, всі ресурси автоматично вивільняться (це зробить сама операційна система).</p>
+<p>Погана новина: якщо ви пишете серверну програму (а дуже багато серверних програм пишуться мовою Java), пам'ятайте, що сервер має працювати протягом днів, тижнів, місяців без зупинки. І якщо ваша програма щодня відкриває по 100 файлів і не закриває їх, за пару тижнів вона вичерпає свій ліміт і впаде. Це не дуже схоже на довготривалу стабільну роботу.</p>
+<hr>
+<h2>2. Метод <code>close()</code></h2>
+<p>Класи, що використовують зовнішні ресурси, мають спеціальний метод для їх вивільнення — <code>close()</code>.</p>
+<p>Нижче наведемо приклад програми, яка щось пише у файл і закриває його за собою — вивільняє ресурси операційної системи. Її код має такий вигляд:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="text-green">path</span> = "c:\\projects\\log.txt";
+<span>FileOutputStream <span class="text-user">output</span> = new FileOutputStream(path);
+</span><span><span class="text-user">output</span></span>.write(1);
+<span><span class="text-user">output</span></span>.<span class="text-red">close</span>();</code></pre>
+        </td>
+        <td>Шлях до файлу<br/> Отримуємо об'єкт-файл: захоплюємо ресурс<br/> Пишемо у файл<br/> Закриваємо файл — вивільняємо ресурс</td>
+    </tr>
+    </tbody>
+</table>
+<p>Після завершення роботи з файлом (або іншим зовнішнім ресурсом) слід викликати для об'єкта, пов'язаного із зовнішнім ресурсом, метод <code>close()</code>.</p>
+<p><strong>Винятки</strong></p>
+<p>Начебто все просто. Однак під час роботи програми можуть виникнути винятки, і зовнішній ресурс не буде вивільнено. А це дуже погано.</p>
+<p>Для того щоб метод <code>close()</code> викликався завжди, потрібно обгорнути наш код блоком <code>try</code>-<code>catch</code>-<code>finally</code> і додати метод <code>close()</code> у блок <code>finally</code>. Цей код має приблизно такий вигляд:</p>
+<pre class="language-java"><code>try
+{
+   FileOutputStream output = new FileOutputStream(path);
+   output.write(1);
+   output.close();
+}
+catch (IOException e)
+{
+   e.printStackTrace();
+}
+finally
+{
+   <span class="text-user">output</span>.<span class="text-red">close</span>();
+}</code></pre>
+<p>Цей код не скомпілюється, тому що змінну <code>output</code> оголошено всередині блока <code>try {}</code>, а це означає, що в блоці <code>finally</code> її не видно.</p>
+<p>Виправляємо:</p>
+<pre class="language-java"><code>FileOutputStream output = new FileOutputStream(path);
+
+try
+{
+   output.write(1);
+   output.close();
+}
+catch (IOException e)
+{
+   e.printStackTrace();
+}
+finally
+{
+   <span class="text-user">output</span>.<span class="text-red">close</span>();
+}</code></pre>
+<p>Хороший код. Але якщо помилка виникне під час створення об'єкта <code>FileOutputStream</code>, цей код не працюватиме. А така ситуація може статися.</p>
+<p>Виправляємо:</p>
+<pre class="language-java"><code>FileOutputStream <span class="text-user">output</span> = null;
+
+try
+{
+   <span class="text-user">output</span> = new FileOutputStream(path);
+   <span class="text-user">output</span>.write(1);
+   <span class="text-user">output</span>.close();
+}
+catch (IOException e)
+{
+   e.printStackTrace();
+}
+finally
+{
+   <span class="text-user">output</span>.<span class="text-red">close</span>();
+}</code></pre>
+<p>Залишається ще декілька зауважень. По-перше, якщо під час створення об'єкта <code>FileOutputStream</code> станеться помилка, змінна <code>output</code> матиме значення null, і це слід врахувати в блоці finally.</p>
+<p>По-друге, метод <code>close()</code> викликається в блоці <code>finally</code> завжди, тобто в блоці <code>try</code> він не потрібен. Остаточний вигляд коду буде таким:</p>
+<pre class="language-java"><code>FileOutputStream <span class="text-user">output</span> = null;
+
+try
+{
+   <span class="text-user">output</span> = new FileOutputStream(path);
+   <span class="text-user">output</span>.write(1);
+}
+catch (IOException e)
+{
+   e.printStackTrace();
+}
+finally
+{
+   if (<span class="text-user">output</span> != null)
+      <span class="text-user">output</span>.<span class="text-red">close</span>();
+}</code></pre>
+<p>Навіть якщо не враховувати блок <code>catch</code>, який можна випустити, наш код із трьох рядків збільшився до 10. Хоча ми, власне, лише відкрили файл і записали в нього 1. Дещо громіздкий код, чи не так?</p>
+<hr>
+<h2>3. <code>try</code>-with-resources</h2>
+<p>Автори Java й тут підсипали нам дещицю синтаксичного цукру. У мові Java починаючи з 7-ї версії з'явився новий оператор <code>try</code>-with-resources (<code>try</code> із ресурсами)</p>
+<p>Він призначений саме для того, щоб справитися з проблемою обов'язкового виклику методу <code>close()</code>. Його загальний формат досить простий:</p>
+<div class="lesson-example lesson-example--center">
+<pre class="lecture-code lecture-code--present-sm language-java"><code><span class="text-red">try</span> (<span class="text-viola">Клас</span> <span class="code text-user">ім'я</span> = new <span class="text-viola">Клас</span>())
+{
+     <span class="text-user">Код, який працює зі змінною</span> <span class="text-user code">ім'я</span>
+}</code></pre>
+</div>
+<p>Це ще один варіант <span class="term">оператора</span> <code>try</code>. Після ключового слова <code>try</code> потрібно додати круглі дужки і створити всередині них об'єкти з зовнішніми ресурсами. Для об'єкта, зазначеного в круглих дужках, компілятор сам додасть секцію <code>finally</code> й виклик методу <code>close()</code>.</p>
+<p>Нижче наведено два еквівалентні приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Довгий код</th>
+        <th>Код із try-with-resources</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-red">FileOutputStream</span> <span class="text-user">output</span> = null;
+
+try
+{
+   <span class="text-user">output </span>= new FileOutputStream(path);
+   <span class="text-user">output</span>.write(1);
+}
+finally
+{
+   if (output != null)
+  <span class="text-user"> output</span>.close();
+}</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>try(<span class="text-red">FileOutputStream</span> output = new <span class="text-red">FileOutputStream</span>(path))
+{
+   <span class="text-user">output</span>.write(1);
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Код із використанням <code>try</code>-with-resources значно коротший і зрозуміліший. А що менше коду, то менше шансів зробити помилку.</p>
+<p>До речі, до оператора <code>try</code>-with-resources можна додавати блоки <code>catch</code> і <code>finally</code>. А можна і не додавати, якщо в них немає потреби.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task15.task1501"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task15.task1502"></div>
+<hr>
+<h2>4. Кілька змінних одночасно</h2>
+<p>Досить часто може виникати потреба відкрити кілька файлів одночасно. Припустімо, ви копіюєте файл і вам потрібні два об'єкти: файл, із якого ви копіюєте дані, і файл, в який ви копіюєте дані.</p>
+<p>У такому разі в операторі <code>try</code>-with-resources можна створити не один об'єкт, а декілька. Коди створення об'єктів слід розділяти крапкою з комою. Ця команда має такий загальний формат:</p>
+<div class="lesson-example lesson-example--center">
+<pre class="lecture-code lecture-code--present-sm language-java"><code><span class="text-red">try</span> (<span class="text-viola">Клас</span> <span class="code text-user">ім'я</span> = new <span class="text-viola">Клас</span>(); <span class="text-orange">Клас2</span> <span class="code text-user">ім'я2</span> = new <span class="text-orange">Клас2</span>())
+{
+   <span class="text-user">Код, який працює зі змінними <span class="code text-user">ім'я</span> та <span class="code text-user">ім'я2</span></span>
+}</code></pre>
+</div>
+<p>Приклад копіювання файлів:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Довгий код</th>
+        <th>Короткий код</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="code text-green">src</span> = "c:\\projects\\log.txt";
+String <span class="code text-user">dest</span> = "c:\\projects\\copy.txt";
+
+<span class="text-viola">FileInputStream</span> <span class="text-green">input</span> = null;
+<span class="text-viola">FileOutputStream</span> <span class="text-user">output</span> = null;
+
+try
+{
+   <span class="text-green">input</span> = new <span class="text-viola">FileInputStream</span>(<span class="code text-green">src</span>);
+   <span class="text-user">output</span> = new <span class="text-viola">FileOutputStream</span>(<span class="code text-user">dest</span>);
+
+   byte[] <span class="code text-orange">buffer</span> = <span class="text-green">input</span>.<span class="text-red">readAllBytes</span>();
+   <span class="text-user">output</span>.<span class="text-red">write</span>(<span class="code text-orange">buffer</span>);
+}
+finally
+{
+   if (<span class="text-green">input</span> != null)
+     <span class="text-green"> input</span>.<span class="text-red">close</span>();
+   if (<span class="text-user">output</span> != null)
+      <span class="text-user">output</span>.<span class="text-red">close</span>();
+}</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>String <span class="code text-green">src</span> = "c:\\projects\\log.txt";
+String <span class="code text-user">dest</span> = "c:\\projects\\copy.txt";
+
+try(<span class="text-viola">FileInputStream</span> <span class="text-green">input</span> = new <span class="text-viola">FileInputStream</span>(<span class="code text-green">src</span>);
+
+<span class="text-viola">FileOutputStream</span> <span class="text-user">output</span> = new <span class="text-viola">FileOutputStream</span>(<span class="code text-user">dest</span>))
+{
+   byte[] <span class="code text-orange">buffer</span> = <span class="text-green">input</span>.<span class="text-red">readAllBytes</span>();
+   <span class="text-user">output</span>.<span class="text-red">write</span>(<span class="code text-orange">buffer</span>);
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Дійсно, <code>try</code>-with-resources — таки чудова річ!</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task15.task1503"></div>
+
+<h2>5. Інтерфейс <code>AutoCloseable</code></h2>
+<p>Але й це ще не все. Уважний читач одразу почне шукати підступ — а які межі застосовності цього оператора?</p>
+<p>А як працюватиме оператор <code>try</code>-with-resources, якщо клас не має методу <code>close()</code>? Тоді нічого не буде викликано. Немає методу — немає проблем.</p>
+<p>А як працюватиме <code>try</code>-with-resources, якщо клас має кілька методів <code>close()</code>, яким потрібно передавати параметри? І цей клас не має методу <code>close()</code> без параметрів?</p>
+<p>Сподіваюся, ви дійсно поставили собі ці запитання, і, можливо, не тільки їх.</p>
+<p>Щоб такі запитання не виникали, автори Java створити спеціальний клас (інтерфейс) <code>AutoCloseable</code>, який має тільки один метод — <code>close()</code> без параметрів.</p>
+<p>А крім того, додали обмеження, що в <span class="text-orange"><code>try</code>-with-resources можна передавати тільки такі ресурси, які є об'єктами класів, успадкованих від <code>AutoCloseable.</code></span> Отже, ці об'єкти завжди матимуть метод <code>close()</code> без параметрів.</p>
+<p>До речі, як ви вважаєте, чи можна передати в <code>try</code>-with-resources такий ресурс, який є об'єктом класу, що має метод <code>close()</code> без параметрів, але не є спадкоємцем <code>AutoCloseable</code>?</p>
+<p><span class="text-red">Погана новина:</span> відповідь на це запитання — ні. Класи обов'язково мають реалізовувати інтерфейс <code>AutoCloseable</code>.</p>
+<p><span class="text-green">Хороша новина:</span> у Java дуже багато класів реалізовують цей інтерфейс, тож, найімовірніше, все працюватиме як слід.</p>

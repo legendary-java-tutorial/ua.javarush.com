@@ -1,0 +1,178 @@
+﻿Знайомство з колекцією LinkedList
+<p>----------------------------------------</p>
+Історія LinkedList. У Java є ще один клас-колекція, який дістався Java у спадок від мови C++. Це клас LinkedList, назва якого перекладається як «Зв'язаний список». Зовні LinkedList — це такий самий список, як ArrayList. Клас LinkedList має такі самі методи, що й клас ArrayList. Власне,
+<p>----------------------------------------</p>
+<h2>1. Історія <code>LinkedList</code></h2>
+<p>У Java є ще один клас-колекція, який дістався Java у спадок від мови C++. Це клас <code>LinkedList</code>, назва якого перекладається як «Зв'язаний список».</p>
+<p>Зовні <code>LinkedList</code> — це такий самий список, як <code>ArrayList</code>. <span class="text-green">Клас <code>LinkedList</code> має такі самі методи, що й клас <code><span class="text-green">ArrayList</span></code>.</span> Власне, ви завжди можете використовувати <code>LinkedList</code> замість <code>ArrayList</code>, і все працюватиме.</p>
+<p>Тож навіщо потрібен іще один клас-список?</p>
+<p>Вся річ у внутрішній будові класу <code>LinkedList</code>. Замість масиву в ньому використовується <span class="term">двобічно зв'язаний список</span>. Що це таке, розповімо далі.</p>
+<p>Завдяки іншій внутрішній будові клас <code>LinkedList</code> забезпечує найшвидше виконання операції вставлення елементів усередину списку.</p>
+<p>В інтернеті часто можна побачити таке порівняння класів <code>ArrayList</code> і <code>LinkedList</code>:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Операція</th>
+        <th>Метод</th>
+        <th>ArrayList</th>
+        <th>LinkedList</th>
+    </tr>
+    <tr>
+        <td><strong>Додавання елемента</strong></td>
+        <td>
+            <pre class="language-java"><code>add(value)</code></pre>
+        </td>
+        <td><span class="text-orange">Швидко</span></td>
+        <td><span class="text-green">Дуже швидко</span></td>
+    </tr>
+    <tr>
+        <td><strong>Вставляння елемента</strong></td>
+        <td>
+            <pre class="language-java"><code>add(index, value)</code></pre>
+        </td>
+        <td><span class="text-red">Повільно</span></td>
+        <td><span class="text-green">Дуже швидко</span></td>
+    </tr>
+    <tr>
+        <td><strong>Отримання елемента</strong></td>
+        <td>
+            <pre class="language-java"><code>get(index)</code></pre>
+        </td>
+        <td><span class="text-green">Дуже швидко</span></td>
+        <td><span class="text-red">Повільно</span></td>
+    </tr>
+    <tr>
+        <td><strong>Змінення елемента</strong></td>
+        <td>
+            <pre class="language-java"><code>set(index, value)</code></pre>
+        </td>
+        <td><span class="text-green">Дуже швидко</span></td>
+        <td><span class="text-red">Повільно</span></td>
+    </tr>
+    <tr>
+        <td><strong>Видалення елемента</strong></td>
+        <td>
+            <pre class="language-java"><code>remove(index)</code></pre>
+        </td>
+        <td><span class="text-red">Повільно</span></td>
+        <td><span class="text-green">Дуже швидко</span></td>
+    </tr>
+    </tbody>
+</table>
+<p>Начебто все зрозуміло: якщо потрібно вставляти елементи в список часто, використовуйте <code>LinkedList</code>, якщо рідко — <code>ArrayList</code>. Однак у реальності все дещо інакше.</p>
+<hr>
+<h2>2. Ніхто не використовує <code>LinkedList</code></h2>
+<p>Ніхто не використовує <code>LinkedList</code>.</p>
+<p>Нещодавно навіть сам автор коду класу <code>LinkedList</code> написав у Твіттері: «Друзі, хтось взагалі використовує <code>LinkedList</code>? Я за 20 років не використав його жодного разу!»</p>
+<p>Так у чому ж річ?</p>
+<p>По-перше, <strong>у класі <code>ArrayList</code> елементи всередину списку тепер вставляються дуже швидко.</strong> Під час додавання елемента всередину списку слід посунути всі елементи після потрібного на 1 позицію в бік кінця списку. Раніше це потребувало часу.</p>
+<p>Але зараз все змінилося. Усі елементи масиву розташовані поруч в одному блоці пам'яті, тому операція зсуву елементів масиву виконується дуже швидкою командою низького рівня <code><span class="text-viola">System</span>.<span class="text-red">arraycopy</span>()</code>.</p>
+<p>До того ж зараз процесори мають великий кеш, і зазвичай весь масив потрапляє в такий кеш, тому елементи масиву зсуваються навіть не в пам'яті, а в кеші процесора. Щоб посунути мільйон елементів, потрібно не більше мілісекунди.</p>
+<p>По-друге, <strong>клас <code>LinkedList</code> швидко вставляє елементи, якщо це робиться за допомогою ітератора.</strong> Якщо ви за допомогою ітератора перебираєте список <code>LinkedList</code> і постійно вставляєте нові елементи (або видаляєте наявні), це дійсно супершвидка операція.</p>
+<p>Якщо ж ви просто в циклі додаєте елементи всередину класу <code>LinkedList</code>, кожна швидка операція вставлення супроводжується повільною операцією «отримання елемента».</p>
+<p>У реальності ситуація така:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Операція</th>
+        <th>Метод</th>
+        <th>ArrayList</th>
+        <th>LinkedList</th>
+    </tr>
+    <tr>
+        <td><strong>Додавання елемента</strong></td>
+        <td>
+            <pre class="language-java"><code>add(value)</code></pre>
+        </td>
+        <td><span class="text-orange">Швидко</span></td>
+        <td><span class="text-green">Дуже швидко</span></td>
+    </tr>
+    <tr>
+        <td><strong>Вставляння елемента</strong></td>
+        <td>
+            <pre class="language-java"><code>add(index, value)</code></pre>
+        </td>
+        <td><span class="text-red">Повільно</span></td>
+        <td><span class="text-red">Дуже повільно</span></td>
+    </tr>
+    <tr>
+        <td><strong>Отримання елемента</strong></td>
+        <td>
+            <pre class="language-java"><code>get(index)</code></pre>
+        </td>
+        <td><span class="text-green">Дуже швидко</span></td>
+        <td><span class="text-red">Дуже повільно</span></td>
+    </tr>
+    <tr>
+        <td><strong>Змінення елемента</strong></td>
+        <td>
+            <pre class="language-java"><code>set(index, value)</code></pre>
+        </td>
+        <td><span class="text-green">Дуже швидко</span></td>
+        <td><span class="text-red">Дуже повільно</span></td>
+    </tr>
+    <tr>
+        <td><strong>Видалення елемента</strong></td>
+        <td>
+            <pre class="language-java"><code>remove(index)</code></pre>
+        </td>
+        <td><span class="text-red">Повільно</span></td>
+        <td><span class="text-red">Дуже повільно</span></td>
+    </tr>
+    <tr>
+        <td><strong>Вставляння за допомогою ітератора</strong></td>
+        <td>
+            <pre class="language-java"><code>it.add(value)</code></pre>
+        </td>
+        <td><span class="text-red">Повільно</span></td>
+        <td><span class="text-green">Дуже швидко</span></td>
+    </tr>
+    <tr>
+        <td><strong>Видалення за допомогою ітератора</strong></td>
+        <td>
+            <pre class="language-java"><code>it.remove()</code></pre>
+        </td>
+        <td><span class="text-red">Повільно</span></td>
+        <td><span class="text-green">Дуже швидко</span></td>
+    </tr>
+    </tbody>
+</table>
+<p>Чому ж операція отримання елемента в <code>LinkedList</code> така повільна?</p>
+<p>Відповідь на це запитання ви дізнаєтеся, коли трохи ознайомитеся з будовою <code>LinkedList</code></p>
+<hr>
+<h2>3. Будова <code>LinkedList</code></h2>
+<p>Внутрішня будова <code>LinkedList</code> відрізняється від будови <code>ArrayList</code>. Усередині класу немає масиву для зберігання елементів. Замість цього використовується структура даних, яка має назву «<span class="term">двобічно зв'язаний список».</span></p>
+<p>Кожен елемент двобічно зв'язаного списку зберігає посилання на попередній і наступний елементи. Це чимось нагадує чергу, де кожна людина запам'ятовує тих, хто стоїть перед нею та після неї.</p>
+<p>Отакий вигляд має цей список у пам'яті:</p>
+<p><img data-id="d442f51e-462d-4b3d-b27a-06223b6fa87c" src="https://cdn.javarush.com/images/article/d442f51e-462d-4b3d-b27a-06223b6fa87c/original.png" alt="Будова LinkedList"/></p>
+<p>З боків (сірий фон) — змінні <code>first</code> і <code>last</code>, які зберігають посилання на об'єкти типу <code>Node</code>.</p>
+<p>Усередині ви бачите ланцюжок об'єктів (саме об'єктів, а не змінних) типу <code>Node</code>. Кожен із них складається з трьох полів:</p>
+<ul>
+    <li><code>prev</code> — зберігає <strong>посилання</strong> на попередній об'єкт типу <code>Node</code> (жовтий фон).</li>
+    <li><code>value</code> — зберігає <strong>значення</strong>, тобто елемент списку (зелений фон).</li>
+    <li><code>next</code> — зберігає <strong>посилання</strong> на наступний об'єкт типу <code>Node</code> (синій фон).</li>
+</ul>
+<p>Другий об'єкт (адреса == F24) є наступним (<code>next</code>) для першого і попереднім (<code>prev</code>) для третього об'єкта. Жовте поле третього об'єкта містить посилання F24, і синє поле першого об'єкта містить посилання F24.</p>
+<p>Стрілки з першого й третього об'єктів вказують на той самий другий об'єкт. Тому правильніше було б намалювати стрілки так:</p>
+<p><img data-id="fddcb230-5458-4e57-a634-7c33ac221276" src="https://cdn.javarush.com/images/article/fddcb230-5458-4e57-a634-7c33ac221276/original.png" alt="Будова LinkedList 1"/></p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task13.task1313"></div>
+<hr>
+<h2>4. Вставляння елемента у зв'язаний список</h2>
+<p>Щоб додати людину в таку чергу, потрібно просто отримати згоду двох сусідів. Перший сусід запам'ятовує новачка як «ця людина за мною», а другий — як «ця людина переді мною».</p>
+<p>Тобто потрібно просто змінити посилання двох сусідніх об'єктів:</p>
+<p><img data-id="27db3545-28c0-4b56-995e-7c901fa6cad8" src="https://cdn.javarush.com/images/article/27db3545-28c0-4b56-995e-7c901fa6cad8/original.png" alt="Вставляння елемента у зв'язаний список"/></p>
+<p>Ми додали в наш список новий елемент і змінили посилання в другому й третьому об'єктах. Тепер новачок є наступним для другого об'єкта і попереднім для третього. Крім того, в самому об'єкті-новачку теж потрібно вказати правильні посилання: попередній об'єкт — другий, наступний об'єкт — третій.</p>
+<p>Видалення ще простіше. Якщо ми хочемо видалити зі списку, приміром, 100-й об'єкт, потрібно просто в 99-го об'єкта поміняти <code>next</code>, щоб він указував на 101-й об'єкт, а у 101-го об'єкта поміняти <code>prev</code>, щоб він указував на 99-й. І все.</p>
+<p>От тільки отримати 100-й об'єкт не так просто.</p>
+<hr>
+<h2>5. Отримання елемента списку</h2>
+<p>Щоб отримати 100-й елемент зв'язаного списку, потрібно:</p>
+<p>Отримати 1-й об'єкт: на нього посилається змінна <code>first</code> об'єкта <code>LinkedList</code>. 1-й об'єкт містить посилання (поле <code>next</code>) на 2-й об'єкт. За цим посиланням отримуємо другий об'єкт. 2-й об'єкт містить посилання на 3-й об'єкт і т. д.</p>
+<p>Щоб отримати посилання на 100-й об'єкт, нам потрібно послідовно перебрати всі об'єкти від 1-го до 100-го. А якщо нам потрібен мільйонний елемент списку, потрібно послідовно перебрати мільйон об'єктів!</p>
+<p>Ці об'єкти могли додаватися в список в різний час, вони розташовані в різних частинах пам'яті, тому навряд чи одночасно потраплять до кешу процесора. А це означає, що послідовний перебір елементів зв'язаного списку — справа не просто повільна, а дуже повільна.</p>
+<p>Отакі справи.</p>
+<p>Тож навіщо ми тут вивчаємо, як влаштовано цей повільний <code>LinkedList</code>?</p>
+<p>Річ у тім, що на співбесіді вас обов'язково запитають, <strong>чим <code>LinkedList</code> відрізняється від <code>ArrayList</code>.</strong> Неодмінно.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task13.task1314"></div>

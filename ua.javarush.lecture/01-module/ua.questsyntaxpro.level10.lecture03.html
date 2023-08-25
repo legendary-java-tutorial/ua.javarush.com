@@ -1,0 +1,165 @@
+﻿Особливості об'єктів у мові Java
+<p>----------------------------------------</p>
+Властивості: гетер і сетер. Коли великий проєкт розробляють десятки програмістів одночасно, нерідко виникають проблеми з тим, що програмісти по-різному поводяться з даними, які зберігаються в полях класу. Ніхто докладно не вивчає документацію щодо класів, або в ній може бути описано не всі
+<p>----------------------------------------</p>
+<h2>1. Властивості: гетер і сетер</h2>
+<p>Коли великий проєкт розробляють десятки програмістів одночасно, нерідко виникають проблеми з тим, що програмісти по-різному поводяться з даними, які зберігаються в полях класу.</p>
+<p>Ніхто докладно не вивчає документацію щодо класів, або в ній може бути описано не всі випадки, тому часто трапляються ситуації, коли дані всередині об'єкта «псуються» і об'єкт стає неприпустимим.</p>
+<p>Щоб уникнути таких ситуацій, у Java прийнято <strong>всі поля класу робити приватними (private)</strong>. Тільки методи класу можуть змінювати змінні класу, і ніякі методи з інших класів не мають безпосереднього доступу до змінних класу. Отак.</p>
+<p>Якщо ви хочете, щоб інші класи могли отримувати або змінювати дані всередині об'єктів вашого класу, потрібно додати в код вашого класу два методи — get-метод і set-метод. Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>class <span class="text-viola">Person</span>
+{
+   private String <span class="text-orange">name</span>;
+
+   public <span class="text-viola">Person</span>(String name)
+   {
+      this.<span class="text-orange">name</span> = name;
+   }
+
+   public String <span class="text-user">getName</span>()
+   {
+      return <span class="text-orange">name</span>;
+   }
+
+   public void <span class="text-user">setName</span>(String name)
+   {
+      this.<span class="text-orange">name</span> = name;
+   }
+}</code></pre>
+        </td>
+        <td><br/><br/><code>private</code>-поле name<br/> <br/><br/><br/>Ініціалізація поля за допомогою конструктора<br/> <br/><br/><code><span class="text-user">getName()</span></code> — метод повертає значення поля name<br/> <br/><br/><br/><br/><code><span class="text-user">setName()</span></code> — метод змінює значення поля name</td>
+    </tr>
+    </tbody>
+</table>
+<p>Жоден інший клас не зможе безпосередньо змінити значення поля name. Якщо комусь потрібно отримати значення поля name, доведеться викликати метод <code><span class="text-user"><span class="text-user">getName</span>()</span></code>&nbsp;для об'єкта типу <code><span class="text-viola">Person</span></code>. Якщо хочеться поміняти в коді значення поля name, потрібно буде викликати метод <code><span class="text-user"><span class="text-user">setName</span>()</span></code>&nbsp;для об'єкта типу <code><span class="text-viola">Person</span></code>.</p>
+<p>Метод<code><span class="text-red"> get</span>Name()</code> інакше називають «<strong>гетер</strong> поля name», а&nbsp; метод <code><span class="text-red">set</span>Name()</code> — «<strong>сетер</strong> поля name».</p>
+<p>Це дуже поширений підхід. У 80–90 % всього Java-коду ви ніколи не побачите публічних змінних класу. Натомість вони будуть оголошені <code>private</code> (або <code>protected</code>), і кожна змінна матиме публічні гетери й сетери.</p>
+<p>З таким підходом код стає довшим, але надійнішим.</p>
+<p>Безпосереднє звернення до змінної класу — це як <strong>поворот через подвійну суцільну лінію</strong>: простіше та швидше, але якщо так робитимуть усі, то всім буде від цього тільки гірше.</p>
+<p>Припустімо, ви хочете створити клас, який описує точку з координатами <code><span class="text-green">x</span></code> і <code><span class="text-user">y</span></code> на площині. Отак це зробив би програміст-початківець:</p>
+<pre class="language-java"><code>class <span class="text-viola">Point</span>
+{
+&nbsp; &nbsp;public int <span class="text-green">x</span>;
+&nbsp; &nbsp;public int <span class="text-user">y</span>;
+}</code></pre>
+<p>А отак це зробив би досвідчений Java-програміст:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>class <span class="text-viola">Point</span> {
+<strong>   private</strong> int <span class="text-green">x</span>;
+<strong>   private</strong> int <span class="text-user">y</span>;
+
+   public <span class="text-viola">Point</span>(int x, int y) {
+      this.<span class="text-green">x</span> = x;
+      this.<span class="text-user">y</span> = y;
+   }
+
+   public int <span class="text-green">getX</span>() {
+      return <span class="text-green">x</span>;
+   }
+
+   public void <span class="text-green">setX</span>(int x) {
+      this.<span class="text-green">x</span> = x;
+   }
+
+   public int <span class="text-user">getY</span>() {
+      return <span class="text-user">y</span>;
+   }
+
+   public void <span class="text-user">setY</span>(int y) {
+      this.<span class="text-user">y</span> = y;
+   }
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Код став довшим? Безумовно.</p>
+<p>Натомість у сетери й гетери можна додати валідацію параметрів. Наприклад, можна слідкувати за тим, щоб <code>x</code> та <code>y</code> завжди були більшими за нуль (або не меншими за нуль). Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>class <span class="text-viola">Point</span> {
+   <strong>private</strong> int <span class="text-green">x</span>;
+   <strong>private</strong> int <span class="text-user">y</span>;
+
+   public <span class="text-viola">Point</span>(int x, int y) {
+      this.<span class="text-green">x</span> = x &lt; 0 ? 0 : x;
+      this.<span class="text-user">y</span> = y &lt; 0 ? 0 : y;
+   }
+
+   public int <span class="text-green">getX</span>() {
+      return x;
+   }
+
+   public void <span class="text-green">setX</span>(int x) {
+      this.<span class="text-green">x</span> = x &lt; 0 ?&nbsp; 0 : x;
+   }
+
+   public int <span class="text-user">getY</span>() {
+      return <span class="text-user">y</span>;
+   }
+
+   public void <span class="text-user">setY</span>(int y) {
+      this.<span class="text-user">y</span> = y &lt; 0 ? 0 : y;
+   }
+}</code></pre>
+        </td>
+        <td></td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task10.task1007"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task10.task1008"></div>
+<hr>
+<h2>2. Тривалість життя об'єкта</h2>
+<p>Ви вже знаєте, що об'єкти створюють за допомогою оператора <code>new</code>, а от як їх видаляють? Не існують же вони вічно — для цього ніякої пам'яті не вистачить.</p>
+<p>У багатьох мовах програмування, як-от у С++, для видалення об'єкта є спеціальний оператор <code>delete</code>. А як вирішується це питання в Java?</p>
+<p>У мові Java все влаштовано трохи по-іншому, і оператора delete у Java немає. Чи означає це, що об'єкти в Java не видаляються? Ні, звичайно ж, видаляються. Інакше в Java-програмах швидко закінчилася би пам'ять, і про місяці безперервної роботи навіть і не йшлося б.</p>
+<p>У мові Java процес видалення об'єктів повністю автоматизовано — <strong>видаленням об'єктів займається сама Java-машина</strong>. Такий процес називають збиранням сміття (garbage collecting), а механізм, який збирає сміття, — <strong>збирачем сміття</strong> — <strong>Garbage Collector</strong> або скорочено <strong>GC</strong>.</p>
+<p>Тож як Java-машина дізнається, що якийсь об'єкт потрібно видалити й коли?</p>
+<p>Усі об'єкти збирач сміття розділяє на досяжні й недосяжні. Якщо на об'єкт є щонайменше одне посилання, він вважається досяжним. Якщо немає жодної змінної, що посилається на об'єкт, такий об'єкт вважається недосяжним і оголошується сміттям: значить, його можна видаляти.</p>
+<p>У Java не можна взяти й створити посилання на наявний об'єкт: його можна тільки присвоїти. Якщо ми видалили всі посилання на об'єкт, його втрачено назавжди.</p>
+<p><strong>Циклічні посилання</strong></p>
+<p>Описана вище логіка звучить чудово, доки ми не придумаємо простий контрприклад: у нас є два об'єкти, що посилаються один на одного (зберігають посилання один на одного). Більше ніхто жодного посилання на ці об'єкти не зберігає.</p>
+<p>До цих об'єктів не можна звернутися з іншого коду, проте посилання на них усе ж таки існують.</p>
+<p>Саме тому збирач сміття розділяє об'єкти не на «об'єкти з посиланнями» і «об'єкти без посилань», а на досяжні й недосяжні.</p>
+<p><strong>Досяжні об'єкти</strong></p>
+<p>Спочатку до списку досяжних додаються об'єкти, які на 100 % «живі». Наприклад, поточна нитка (<code>Thread.current()</code>) або Консоль (<code>System.in</code>).</p>
+<p>Відтак список досяжних об'єктів поповнюють ті, на які посилаються перші досяжні об'єкти. Потім ті, на які посилаються другі і т. д.</p>
+<p>Отже, якщо є якась група об'єктів, що посилаються тільки один на одного, але досяжні об'єкти до них жодним чином дістатися не можуть, такі об'єкти будуть вважатися сміттям і будуть видалені.</p>
+<hr>
+<h2>3. Збирання сміття</h2>
+<p><strong>Фрагментація пам'яті</strong></p>
+<p>Ще один важливий момент, пов'язаний з видаленням об'єктів, — фрагментація пам'яті. Якщо постійно створювати й видаляти об'єкти, скоро в пам'яті настане розгардіяш: заповнені ділянки пам'яті будуть увесь час перемежатися з вільними.</p>
+<p>І запросто може трапитися ситуація, коли ми не зможемо створити великий об'єкт (наприклад, масив на мільйон елементів) через відсутність великого шматка вільної пам'яті. Тобто вільна пам'ять нібито і є, і її багато, а от великого цільного шматка вільної пам'яті може й не бути.</p>
+<p><strong>Оптимізація (дефрагментація) пам'яті</strong></p>
+<p>Java-машина вирішує цю проблему специфічним чином. Приблизно отак:</p>
+<p>Пам'ять розділяється на дві частини. Усі об'єкти створюються (і видаляються) лише в одній її половині. Коли настає час усунути «дірки» в пам'яті, всі об'єкти з першої половини копіюються у другу половину. Однак копіюються вони вже впритул один до одного, щоб «дірок» не було.</p>
+<p>Цей процес має приблизно такий вигляд:</p>
+<p><strong>Етап 1: Після створення об'єктів</strong></p>
+<p><img data-id="a59a7336-f3ed-46a1-a893-ad0d48ae138d" src="https://cdn.javarush.com/images/article/a59a7336-f3ed-46a1-a893-ad0d48ae138d/original.png" alt="Збирання сміття в Java"/></p>
+<p><strong>Етап 2: Виникнення «дірок»</strong></p>
+<p><img data-id="b14e0c49-0572-407c-9985-90fdf064f678" src="https://cdn.javarush.com/images/article/b14e0c49-0572-407c-9985-90fdf064f678/original.png" alt="Збирання сміття в Java"/></p>
+<p><strong>Етап 3: Усунення «дірок»</strong></p>
+<p><img data-id="e5ff5f13-a12d-4c89-a720-4012d9205b84" src="https://cdn.javarush.com/images/article/e5ff5f13-a12d-4c89-a720-4012d9205b84/original.png" alt="Збирання сміття в Java"/></p>
+<p>Таким чином, навіть не потрібно видаляти об'єкти. Java-машина просто копіює всі досяжні об'єкти в нове місце, а всю ділянку пам'яті зі старими об'єктами оголошує вільною.</p>

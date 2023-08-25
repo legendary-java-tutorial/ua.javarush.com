@@ -1,0 +1,246 @@
+﻿Статичні класи
+<p>----------------------------------------</p>
+Внутрішні класи. Нещодавно ви дізналися, що є статичні змінні й статичні методи, однак, виявляється, є ще й статичні класи. &nbsp;Але почнемо здаля. У мові Java можна оголошувати класи всередині класів. І навіть класи всередині класів, які є всередині класів
+<p>----------------------------------------</p>
+<h2>1. Внутрішні класи</h2>
+<p>Нещодавно ви дізналися, що є статичні змінні й статичні методи, однак, виявляється, є ще й статичні класи. Але почнемо здаля.</p>
+<p>У мові Java можна оголошувати класи всередині класів. І навіть класи всередині класів, які є всередині класів усередині класів. Вигляд такого оголошення дуже простий:</p>
+<div class="lesson-example lesson-example--center">
+<pre class="lecture-code lecture-code--present-sm language-java"><code>class <span class="code text-viola">ЗовнішнійКлас</span>
+{
+   <span class="text-green">змінні класу</span>
+   <span class="text-user">методи класу
+</span>
+   class <span class="code text-neon">ВнутрішнійКлас</span>
+   {
+      <span class="text-green">змінні класу</span>
+      <span class="text-user">методи класу</span>
+   }
+}</code></pre>
+</div>
+<p>Просто оголошуємо один клас усередині іншого — і готово.</p>
+<p>Приклад:</p>
+<pre class="language-java"><code>public class <span class="code text-viola">Solution</span>
+{
+   static ArrayList&lt;<span class="text-neon">Point</span>&gt; <span class="text-green">points</span> = new ArrayList&lt;<span class="text-neon">Point</span>&gt;();
+
+   public static void main(String[] args)
+   {
+      <span class="text-neon">Point</span> <span class="text-orange">point</span> = new <span class="text-neon">Point</span>();
+      <span class="text-orange">point</span>.x = 100;
+      <span class="text-orange">point</span>.y = 200;
+      <span class="text-green">points</span>.add(<span class="text-orange">point</span>);
+   }
+
+   static class <span class="code text-neon">Point</span>
+   {
+      int x;
+      int y;
+   }
+}</code></pre>
+<p>Внутрішні класи можуть бути статичними й нестатичними. Статичні класи ще називають <strong>вкладеними</strong> (<span class="term">static nested class</span>), нестатичні називають просто <strong>внутрішніми</strong> класами (<span class="term">inner class</span>).</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task11.task1107"></div>
+<hr>
+<h2>2. Статичні класи</h2>
+<p>Статичні вкладені класи можна використовувати поза батьківським класом. Клас, який має модифікатор доступу public, можна використовувати в будь-якому місці програми. Такі класи майже нічим не відрізняються від будь-якого звичайного класу. Проте є кілька відмінностей.</p>
+<p><strong>Ім'я класу</strong></p>
+<p>Якщо потрібно звернутися до статичного вкладеного класу не з його батьківського класу, а з іншого місця в програмі, слід вказати ім'я класу: воно складається з імені батьківського класу та імені вкладеного класу. Загальний вигляд цього імені такий:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present"><code><span class="text-viola">БатьківськийКлас</span>.<span class="text-neon">ВкладенийКлас</span></code></pre>
+</div>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Батьківський клас</th>
+        <th>Вкладений клас</th>
+        <th>Повне ім'я вкладеного класу</th>
+    </tr>
+    <tr>
+        <td>
+            <pre><code><span class="text-viola">com.javarush.Solution</span></code></pre>
+        </td>
+        <td>
+            <pre><code><span class="text-neon">Point</span></code></pre>
+        </td>
+        <td>
+            <pre><code><span class="text-viola">com.javarush.Solution</span>.<span class="text-neon">Point</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code><span class="text-viola">java.util.Map</span></code></pre>
+        </td>
+        <td>
+            <pre><code><span class="text-neon">Entry</span></code></pre>
+        </td>
+        <td>
+            <pre><code><span class="text-viola">java.util.Map</span>.<span class="text-neon">Entry</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code><span class="text-viola">java.util.Files</span></code></pre>
+        </td>
+        <td>
+            <pre><code><span class="text-neon">DirectoryStream</span></code></pre>
+        </td>
+        <td>
+            <pre><code><span class="text-viola">java.util.Files</span>.<span class="text-neon">DirectoryStream</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code><span class="text-viola">java.nio.Windows<span class="text-viola">Path</span></span></code></pre>
+        </td>
+        <td>
+            <pre><code><span class="text-neon">Closeable</span></code></pre>
+        </td>
+        <td>
+            <pre><code><span class="text-viola">java.nio.WindowsPath</span>.<span class="text-neon">Closeable</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Якщо вкладений клас має свій вкладений клас, їхні імена просто склеюють через крапку.</p>
+<p>Типовий приклад вкладеного класу в JDK — це <a href="https://javarush.com/groups/posts/2542-otvetih-na-samihe-populjarnihe-voprosih-ob-interfeyse-map">клас Entry всередині класу Map</a>. Якщо ви хочете отримати множину пар елементів з об'єкта <code>HashMap</code>, то метод <code>entrySet()</code> поверне вам множину пар типу <code>Set<span class="text-viola">&lt;Map</span>.<span class="text-neon">Entry</span>&gt;</code>.</p>
+<p>Власне, запис <code><span class="text-viola">Map</span>.<span class="text-neon">Entry</span></code> — це і є зовнішній і внутрішній класи.</p>
+<p><strong>Створення об'єкта</strong></p>
+<p>Створити об'єкт вкладеного статичного класу дуже легко. Дивіться як:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm language-kava"><code><span class="text-viola">БатьківськийКлас</span>.<span class="text-neon">ВкладенийКлас</span> <span class="code text-green">ім'я</span> = new <span class="text-viola">БатьківськийКлас</span>.<span class="text-neon">ВкладенийКлас</span>();</code></pre>
+</div>
+<p>Усе так само, як зі звичайними класами, тільки ім'я подвійне.</p>
+<p><strong>Звернення до статичних методів</strong></p>
+<p>Якщо статичний клас має статичні методи, до них можна звертатися так само, як до статичних методів звичайних класів (тільки ім'я класу тепер подвійне).</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm"><code><span class="text-viola">БатьківськийКлас</span>.<span class="text-neon">ВкладенийКлас</span>.<span class="text-red">статичнийМетод</span>();</code></pre>
+</div>
+<p><strong>Звернення до статичних змінних</strong></p>
+<p>Звертатися до публічних статичних змінних вкладеного класу теж просто:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm"><code><span class="text-viola">БатьківськийКлас</span>.<span class="text-neon">ВкладенийКлас</span>.<span class="text-red">ім'яСтатичноїЗмінної</span>;</code></pre>
+</div>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task11.task1108"></div>
+<hr>
+<h2>3. Особливості статичних класів</h2>
+<p>Статичні внутрішні класи, <strong>по суті, не варто</strong> називати статичними. Вони поводяться <strong>так само, як і звичайні класи</strong>. Ніяких обмежень на звернення до них із нестатичних методів немає.</p>
+<p>Якщо ви працюєте з внутрішнім статичним класом усередині його батьківського класу, то взагалі не помітите жодної різниці між цим внутрішнім класом і звичайним класом (не вкладеним і не статичним).</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Внутрішній статичний клас Point</th>
+        <th>Звичайний клас Point</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public class <span class="code text-viola">Solution</span>
+{
+   static ArrayList&lt;<span class="text-neon">Point</span>&gt; <span class="text-green">points</span>;
+
+   public static void main(String[] args)
+   {
+      <span class="text-neon">Point</span> <span class="text-orange">point</span> = new <span class="code text-neon">Point</span>();
+      <span class="text-orange">point</span>.x = 100;
+      <span class="text-orange">point</span>.y = 200;
+      <span class="text-green">points</span> = new ArrayList&lt;<span class="text-neon">Point</span>&gt;();
+      <span class="text-green">points</span>.add(<span class="text-orange">point</span>);
+   }
+
+   static class <span class="code text-neon">Point</span>
+   {
+      int x;
+      int y;
+   }
+}</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>public class <span class="code text-viola">Solution</span>
+{
+   static ArrayList&lt;<span class="text-red">Point</span>&gt; <span class="text-green">points</span>;
+
+   public static void main(String[] args)
+   {
+      <span class="text-red">Point</span> <span class="text-orange">point</span> = new <span class="code text-red">Point</span>();
+      <span class="text-orange">point</span>.x = 100;
+      <span class="text-orange">point</span>.y = 200;
+      <span class="text-green">points</span> = new ArrayList&lt;<span class="text-red">Point</span>&gt;();
+      <span class="text-green">points</span>.add(<span class="text-orange">point</span>);
+   }
+}
+
+class <span class="code text-red">Point</span>
+{
+   int x;
+   int y;
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Якщо якийсь вкладений статичний клас перенести з батьківського класу назовні, нічого не зміниться, крім того, що <span class="text-orange">новий клас утратить здатність звертатися до приватних статичних (<code><span class="text-orange">private static</span></code>) змінних і методів колишнього батьківського класу.</span></p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Внутрішній статичний клас Point</th>
+        <th>Звичайний клас Point</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public class <span class="text-viola">Solution</span>
+<span>{
+</span>   private static ArrayList&lt;<span class="text-neon">Point</span>&gt; <span class="code text-green">points</span>;
+
+   static class <span class="code text-neon">Point</span>
+   {
+      int x;
+      int y;
+
+      public static void main(String[] args)
+      {
+         <span class="text-neon">Point</span> <span class="text-orange">point</span> = new <span class="code text-neon">Point</span>();
+         <span class="text-orange">point</span>.x = 100;
+         <span class="text-orange">point</span>.y = 200;
+
+         <span class="text-green">// працюватиме</span>
+         <span class="code text-green">points</span> = new ArrayList&lt;<span class="text-neon">Point</span>&gt;();
+         <span class="code text-green">points</span>.add(<span class="text-orange">point</span>);
+      }
+   }
+}</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>public class <span class="text-viola">Solution</span>
+{
+   private static ArrayList&lt;<span class="text-red">Point</span>&gt; <span class="code text-green">points</span>;
+}
+
+class <span class="code text-red">Point</span>
+{
+   int x;
+   int y;
+
+   public static void main(String[] args)
+   {
+      <span class="text-red">Point</span> <span class="text-orange">point</span> = new <span class="code text-red">Point</span>();
+      <span class="text-orange">point</span>.x = 100;
+      <span class="text-orange">point</span>.y = 200;
+
+      <span class="text-red">// тут буде помилка</span>
+      <span class="code text-green">points</span> = new ArrayList&lt;<span class="text-red">Point</span>&gt;();
+      <span class="code text-green">points</span>.add(<span class="text-orange">point</span>);
+   }
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Метод <code>main</code> у звичайному класі <code>Point</code> <span class="text-red">не може</span> звертатися до приватної статичної (<code>private static</code>) змінної <code class="text-green">points</code> класу <code><span class="text-viola">Solution</span></code>!</p>
+<p>Це, власне, і є <strong>основною відмінністю вкладеного статичного класу</strong> від звичайного класу. Методи вкладеного статичного класу мають доступ до всіх статичних змінних і методів свого батьківського класу, навіть якщо їх оголошено як <code>private</code>.</p>
+<p>Ну а якщо подумати, то що тут дивного? Модифікатор <code>private</code> прямо вказує, що до змінних і методів, позначених цим модифікатором, можна звертатися тільки зсередини їхнього класу. Внутрішній статичний клас міститься всередині батьківського класу? Якщо так, тоді ніяких проблем: звертайтеся скільки завгодно.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task11.task1109"></div>

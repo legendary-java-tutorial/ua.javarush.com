@@ -1,0 +1,354 @@
+﻿Клас Date
+<p>----------------------------------------</p>
+Клас Date і Unix-час. Від моменту виникнення мови Java в ній був спеціальний клас для роботи з часом і датою — клас Date. Із плином часу з'явилося ще кілька класів для роботи з датою, але клас Date програмісти використовують досі. Уся річ у тім, що він дуже
+<p>----------------------------------------</p>
+<h2>1. Клас <code>Date</code> і Unix-час</h2>
+<p>Від моменту виникнення мови Java в ній був спеціальний клас для роботи з часом і датою — <code>Date</code>. Із плином часу з'явилося ще кілька класів для роботи з датою, але клас <code>Date</code> програмісти використовують досі.</p>
+<p>Уся річ у тім, що він дуже простий і зручний. І ви як програміст <span class="text-bold">обов'язково зустрінете його в будь-якому реальному проєкті.</span> Використовувати цей клас чи ні — вибір за вами, але знати його ви мусите. Тому приділіть йому кілька хвилин свого дорогоцінного часу.</p>
+<p>Чим же такий хороший клас <code>Date</code>? Простотою.</p>
+<p>Клас <code>Date</code> зберігає інформацію про дату й час у вигляді <span class="text-bold">кількості мілісекунд, які минули з 1 січня 1970 року.</span> Це дуже багато мілісекунд, тому для їх зберігання використовується тип <code>long</code>.</p>
+<div class="lesson-note lesson-note--info">
+    <div class="lesson-note__container">
+        <div class="lesson-note__head">Цікаво</div>
+        <div class="lesson-note__content">
+            <p>Чому саме з 1970 року? Це так званий <span class="term">Unix-time</span>: саме так зберігає час операційна система Unix, яка є бабусею всіх сучасних операційних систем.</p>
+        </div>
+    </div>
+</div>
+<p>Натомість можна з легкістю дізнатися, скільки часу минуло між двома датами: досить відняти одну дату від іншої, і ми отримаємо різницю в часі між датами з точністю до мілісекунд.</p>
+<p>Ось кілька корисних прикладів роботи з класом <code>Date</code>.</p>
+<hr>
+<h2>2. Отримання поточної дати</h2>
+<p>Щоб отримати поточні час і дату, досить просто створити об'єкт типу <code>Date</code>. Кожен новий об'єкт зберігає час (момент) його створення. Вигляд відповідної команди дуже простий:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-neon">Date</span> <span class="code text-user">current</span> = new <span class="text-neon">Date</span>();</code></pre>
+</div>
+<p>Після виконання цієї команди змінна <code>current</code> зберігатиме посилання на створений об'єкт <code>Date</code>, у якому зберігається час його створення — кількість мілісекунд, що минули з 1 січня 1970 року.</p>
+<p><strong>Виведення поточної дати на екран</strong></p>
+<p>Для того щоб вивести на екран поточну дату, просто: а) створіть новий об'єкт <code>Date</code>, б) виведіть його на екран за допомогою методу <code>System.out.println()</code>.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">Date</span> <span class="code text-user">current</span> = new <span class="text-neon">Date</span>();
+<span>System.out.println(<span class="code text-user">current</span>);</span></code></pre>
+        </td>
+        <td>
+            <pre><code>Thu Feb 21 14:01:34 EET 2019</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Виведення на екран розшифровується так:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Текст</th>
+        <th>Розшифровка</th>
+    </tr>
+    <tr>
+        <td><strong><span class="text-red">Thu</span>rsday</strong></td>
+        <td>Четвер</td>
+    </tr>
+    <tr>
+        <td><strong><span class="text-red">Feb</span>ruary 21</strong></td>
+        <td>21 лютого</td>
+    </tr>
+    <tr>
+        <td><strong>14:01:34</strong></td>
+        <td>години : хвилини : секунди</td>
+    </tr>
+    <tr>
+        <td><strong>EET</strong></td>
+        <td>Часовий пояс: East European Time (східноєвропейський час)</td>
+    </tr>
+    <tr>
+        <td><strong>2019</strong></td>
+        <td>Рік</td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<h2>3. Задання певної дати</h2>
+<p>Як отримати поточний час, ми розібралися, а як створити об'єкт <code>Date</code>, який би містив іншу дату або час?</p>
+<p>Тут теж усе просто. Щоб задати певний день, слід написати такий код:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-neon">Date</span> <span class="code text-user">birthday</span> = new <span class="text-neon">Date</span>(<span class="text-red">рік</span>, <span class="text-red">місяць</span>, <span class="text-red">день</span>);</code></pre>
+</div>
+<p>Усе просто й очевидно, але є два нюанси:</p>
+<ol>
+    <li>Рік потрібно задавати від 1900.</li>
+    <li>Місяці нумеруються з нуля.</li>
+</ol>
+<div class="lesson-note lesson-note--info">
+    <div class="lesson-note__container">
+        <div class="lesson-note__head">Цікаво</div>
+        <div class="lesson-note__content">
+            <p>Це теж спадок від операційної системи Unix: там програмісти позначали рік двома цифрами. Замість 1977 писали просто 77. Тому 77 буде правильним роком, якщо ми ведемо відлік від 1900 року.</p>
+        </div>
+    </div>
+</div>
+<p>Приміром, я народився 21 березня 1989 року. Березень — третій місяць, значить, мені потрібно написати</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">Date</span> <span class="code text-user">current</span> = new <span class="text-neon">Date</span>(<span class="text-red">89</span>, <span class="text-red">2</span>, <span class="text-red">21</span>);
+<span>System.out.println(<span class="code text-user">current</span>);</span></code></pre>
+        </td>
+        <td>
+            <pre><code>Tue <span class="text-red">Mar</span> <span class="text-red">21</span>&nbsp;00:00:00 EET <span class="text-red">1989</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Місяці нумеруються з нуля, а дні — ні. Трохи дивно, еге ж?</p>
+<p><span class="text-viola">Вважаємо, справжні програмісти мусили пересилити себе і дні місяця теж нумерувати з нуля. Ох уже ці конформісти! 🙂</span></p>
+<p><strong>Задання певного часу</strong></p>
+<p>Задати певний час теж досить просто. Для цього слід написати таку команду:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm language-java"><code><span class="text-neon">Date</span> <span class="code text-user">birthday</span> = new <span class="text-neon">Date</span>(рік, місяць, день, <span class="text-red">години</span>, <span class="text-red">хвилини</span>, <span class="text-red">секунди</span>);</code></pre>
+</div>
+<p>Години, хвилини й секунди нумеруються з нуля: ваш внутрішній програміст може видихнути.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">Date</span> <span class="code text-user">current</span> = new <span class="text-neon">Date</span>(<span class="text-orange">105</span>, <span class="text-orange">5</span>, <span class="text-orange">4</span>, <span class="text-red">12</span>, <span class="text-red">15</span>, <span class="text-red">0</span>);
+<span>System.out.println(<span class="code text-user">current</span>);</span></code></pre>
+        </td>
+        <td>
+            <pre><code>Sat <span class="text-orange">Jun</span> <span class="text-orange">04</span> <span class="text-red">12:15:00</span> EEST <span class="text-orange">2005</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Ми задали час <span class="text-red">12:15</span> і дату <span class="text-orange">4 червня 2005 року</span>. Читається трохи важкувато для непрограміста, натомість працює як треба.</p>
+<hr>
+<h2>4. Робота із фрагментами дати</h2>
+<p>Об'єкт <code>Date</code> можна не просто виводити на екран. Він має <span class="text-red">методи</span>, що дають змогу отримати окремі фрагменти його дати:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Метод</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>int <span class="text-red">getYear</span>()</code></pre>
+        </td>
+        <td>Повертає рік дати відносно 1900 року.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>int <span class="text-red">getMonth</span>()</code></pre>
+        </td>
+        <td>Повертає місяць дати, місяці нумеруються з нуля</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>int <span class="text-red">getDate</span>()</code></pre>
+        </td>
+        <td>Повертає день місяця</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>int <span class="text-red">getDay</span>()</code></pre>
+        </td>
+        <td>Повертає день тижня</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>int <span class="text-red">getHours</span>()</code></pre>
+        </td>
+        <td>Повертає години</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>int <span class="text-red">getMinutes</span>()</code></pre>
+        </td>
+        <td>Повертає хвилини</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>int <span class="text-red">getSeconds</span>()</code></pre>
+        </td>
+        <td>Повертає секунди</td>
+    </tr>
+    </tbody>
+</table>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">Date</span> <span class="code text-user">current</span> = new <span class="text-neon">Date</span>(<span class="text-orange">105</span>, <span class="text-orange">5</span>, <span class="text-orange">4</span>, <span class="text-red">12</span>, <span class="text-red">15</span>, <span class="text-red">0</span>);
+System.out.println(<span class="code text-user">current</span>.<span class="text-user">getYear()</span>);
+System.out.println(<span class="code text-user">current</span>.<span class="text-user">getMonth()</span>);
+System.out.println(<span class="code text-user">current</span>.<span class="text-user">getDate()</span>);
+System.out.println(<span class="code text-user">current</span>.<span class="text-user">getDay()</span>);</code></pre>
+        </td>
+        <td><pre><code>
+105
+5
+4
+6</code></pre>
+        </td>
+        <td><br/>2005 рік<br/> червень<br/> день місяця<br/> субота</td>
+    </tr>
+    </tbody>
+</table>
+<p>До речі, в об'єкті <code>Date</code> окремі фрагменти дати можна не тільки отримувати, але й змінювати:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Метод</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <code>void <span class="text-red">setYear</span>(int year)</code>
+        </td>
+        <td>Змінює рік дати. Рік вказується відносно 1900 року</td>
+    </tr>
+    <tr>
+        <td>
+            <code>void <span class="text-red">setMonth</span>(int month)</code>
+        </td>
+        <td>Змінює місяць дати, місяці нумеруються з нуля</td>
+    </tr>
+    <tr>
+        <td>
+            <code>void <span class="text-red">setDate</span>(int date)</code>
+        </td>
+        <td>Змінює день місяця</td>
+    </tr>
+    <tr>
+        <td>
+            <code>void <span class="text-red">setHours</span>(int hours)</code>
+        </td>
+        <td>Змінює години</td>
+    </tr>
+    <tr>
+        <td>
+            <code>void <span class="text-red">setMinutes</span>(int minutes)</code>
+        </td>
+        <td>Змінює хвилини</td>
+    </tr>
+    <tr>
+        <td>
+            <code>void <span class="text-red">setSeconds</span>(int seconds)</code>
+        </td>
+        <td>Змінює секунди</td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<h2>5. Мілісекунди</h2>
+<p>Як ми вже говорили, в об'єкті <code>Date</code> зберігається кількість мілісекунд, які минули з 1 січня 1970 року.</p>
+<p>Якщо вона нам потрібна, ми можемо отримати її в об'єкта <code>Date</code>:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code>long <span class="code text-user">time</span> = date.<span class="text-red">getTime</span>();</code></pre>
+</div>
+<p>Метод <code><span class="text-red">getTime()</span></code> повертає кількість мілісекунд, яка зберігається в об'єкті <code>Date</code>.</p>
+<p>Ви можете не просто отримати кількість мілісекунд, але й змінити це число в наявному об'єкті:</p>
+<div class="lesson-example lesson-example--center">
+        <pre class="lecture-code lecture-code--present language-java"><code>Date <span class="code text-viola">date</span> = new Date();
+<span class="code text-viola">date</span>.<span class="text-red">setTime</span>(<span class="text-user">1117876500000L</span>);</code></pre>
+</div>
+<p>До речі, цю конструкцію можна скоротити, якщо передати час в об'єкт <code>Date</code> безпосередньо в момент його створення:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code>Date <span class="code text-viola">date</span> = new Date(<span class="text-user">1117876500000L</span>);</code></pre>
+</div>
+<hr>
+<h2>6. Порівняння дат</h2>
+<p>Якщо ви хочете порівняти дві дати й дізнатися, яка з них раніша, можна скористатися одним з трьох способів.</p>
+<p><span class="text-bold">Спосіб перший</span> — просто порівняти кількість мілісекунд, яка в них зберігається:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code>if (<span class="code text-user">date1</span>.getTime() <span class="text-red">&lt;</span> <span class="code text-green">date2</span>.getTime())</code></pre>
+</div>
+<p><span class="text-bold">Спосіб другий</span> — скористатися методом <code>before()</code> об'єкта <code>Date</code>:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code>if (<span class="code text-user">date1</span>.before(<span class="code text-green">date2</span>))</code></pre>
+</div>
+<p>Читається це так: якщо <code class="text-user">date1</code> перед <code class="text-green">date2</code>, то…</p>
+<p><span class="text-bold">Спосіб третій</span> — скористатися методом <code>after()</code> об'єкта <code>Date</code>:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code>if (<span class="code text-green">date2</span>.after(<span class="code text-user">date1</span>))</code></pre>
+</div>
+<p>Читається це так: якщо <code class="text-green">date2</code> після <code class="text-user">date1</code>, то…</p>
+<hr>
+<h2>7. Клас <code>DateFormat</code></h2>
+<p>Пам'ятаєте, коли ми виводили дату на екран, відображалося щось на кшталт <code>Thu Feb 21 14:01:34 EET 2019</code>? Начебто все правильно, але це, скоріше, відображення дати для програміста. А користувачам хотілося б бачити дату в зрозумілішому форматі. Приміром так: <code>Вівторок, 21 лютого</code>.</p>
+<p>І без року. Або з роком за потреби. Власне, хотілося б відображати дату різними способами.</p>
+<p>Для цього є спеціальний клас — <code>SimpleDateFormat</code>.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Date <span class="code text-user">current</span> = new Date(105, 5, 4, 12, 15, 0);
+<span class="text-neon">SimpleDateFormat</span> <span class="code text-red">formatter</span> = new <span class="text-neon">SimpleDateFormat</span>("MMM-dd-YYYY");
+String <span class="code text-viola">message</span> = <span class="code text-red">formatter</span>.format(<span class="code text-user">current</span>);
+System.out.println(<span class="code text-viola">message</span>);</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>Jun-04-2005</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Подивіться, що програма вивела на екран: <code>Jun-04-2005</code>. Зовсім не те, що раніше.</p>
+<p>А річ у тім, що ми відображали не сам об'єкт <code>Date</code>, а спеціальний рядок, отриманий шляхом виклику методу <code>format()</code> для об'єкта типу <code><span class="text-neon">SimpleDateFormat</span></code>. Проте головне тут навіть не це.</p>
+<p>Коли об'єкт <code><span class="text-neon">SimpleDateFormat</span></code>&nbsp;створюється, ми передаємо в нього як параметр рядок <code><span class="text-green">"MMM-dd-YYYY"</span></code>. От у цьому рядку й зашифровано формат дати, яку ви в результаті побачили на екрані.</p>
+<ul>
+    <li>MMM означає, що треба вивести назву місяця, скорочену до трьох літер</li>
+    <li>dd — вивести день місяця</li>
+    <li>YYYY — вивести рік, який складається з чотирьох цифр</li>
+</ul>
+<p>Якщо ми хочемо вивести місяць у вигляді цифр, потрібно замість <span class="text-green"><code>MMM</code></span>&nbsp;написати <span class="text-green"><code>MM</code></span>: вийде рядок <code><span class="text-green">"MM-dd-YYYY"</span></code>. На екран буде виведено <code>06-04-2005</code></p>
+<p>Детальніше ми розглянемо цей клас трохи згодом.</p>
+<hr>
+<h2>8. Метод <code>Date.parse</code></h2>
+<p>Клас <code>Date</code> уміє робити ще одну цікаву й корисну річ: отримувати дату з текстового рядка. Або, як кажуть програмісти, парсити рядок.</p>
+<p>Для цього клас має спеціальний метод — <code>parse()</code>. Процес парсингу має такий вигляд:</p>
+<div class="lesson-example lesson-example--center">
+        <pre class="lecture-code lecture-code--present-sm language-java"><code>Date <span class="code text-viola">date</span> = new Date();
+<span class="code text-viola">date</span>.setTime( <span class="text-neon">Date</span>.<span class="text-red">parse</span>(<span class="text-green">"Jul 06 12:15:00 2019"</span>) );</code></pre>
+</div>
+<p>До речі, цей код можна записати стисліше:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm language-java"><code>Date <span class="code text-viola">date</span> = new Date(<span class="text-green">"Jul 06 12:15:00 2019"</span>);</code></pre>
+</div>
+<p>Детальніше <span class="term">парсинг рядків</span> ми розглянемо в інших лекціях.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task16.task1601"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task16.task1602"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task16.task1603"></div>

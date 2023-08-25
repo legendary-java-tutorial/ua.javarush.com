@@ -1,0 +1,225 @@
+Види винятків
+<p>----------------------------------------</p>
+Види винятків. Усі винятки поділяються на 4 види, які насправді є класами, успадкованими один від одного.
+<p>----------------------------------------</p>
+<h2>1. Види винятків</h2>
+<p><img data-id="4ae02f99-979a-49ba-967e-148807de9218" src="https://cdn.javarush.com/images/article/4ae02f99-979a-49ba-967e-148807de9218/original.png" alt="Види виключень в Java"></p>
+<p>Усі винятки поділяються на 4 види, які насправді є класами, успадкованими один від одного.</p>
+<p><span class="text-bold">Клас <code>Throwable</code></span></p>
+<p><span class="text-green">Найбільш базовим класом для всіх винятків є клас <code>Throwable</code>. <span class="text-orange">Клас <code>Throwable</code> містить код, який записує поточний стек-трейс викликів функцій у масив.</span></span> Що таке стек-трейс викликів ми вивчимо трохи згодом.</p>
+<p><span class="text-red">В <strong>оператор throw</strong> можна передати лише об’єкт класу-спадкоємця <code>Throwable</code>.</span> І хоча теоретично можна написати код виду <code>throw new Throwable();</code> — так зазвичай ніхто не робить. Головна мета існування класу <code>Throwable</code> — єдиний клас-предок для всіх винятків.</p>
+<p><span class="text-bold">Клас <code>Error</code></span></p>
+<p>Наступним класом винятків є клас <code>Error</code> — прямий спадкоємець класу <code>Throwable</code>. <span class="text-red">Об’єкти типу <code>Error</code> (і його класів-спадкоємців) створює <strong>Java-машина у разі будь-яких серйозних проблем</strong>.</span> Наприклад, збій у роботі, брак пам’яті тощо.</p>
+<p>Зазвичай ви як програміст <strong>нічого не можете зробити</strong> у ситуації, коли в програмі виникла помилка типу
+<code>Error</code>: занадто серйозна така помилка. Все, що ви можете зробити, — повідомити користувача, що програма
+аварійно завершується, або записати всю відому інформацію про помилку в лог програми.</p>
+<p><span class="text-bold">Клас <code>Exception</code></span></p>
+<p>Винятки типу <code>Exception</code> (і <code>RuntimeException</code>) — це звичайні помилки, що виникають під час роботи
+багатьох методів. <span class="text-green">Мета кожного викинутого винятку — бути захопленим тим блоком <code>catch</code>, який знає, що потрібно зробити в цій ситуації.</span></p>
+<p><span class="text-red">Коли певний метод не може виконати свою роботу з якоїсь причини, він відразу повинен повідомити про це метод, що
+викликає, викидаючи виняток відповідного типу.</span></p>
+<p>Інакше кажучи, якщо якась змінна виявилася рівною <code>null</code>, метод викине <code>NullPointerException</code>,
+якщо метод передали неправильні аргументи — викине <code>InvalidArgumentException</code>, якщо в методі випадково було
+ділення на нуль — <code>ArithmeticException</code>.</p>
+<p><span class="text-bold">Клас <code>RuntimeException</code></span></p>
+<p><code>RuntimeException</code>— це різновид (підмножина) винятків <code>RuntimeException</code>. Можна навіть сказати, що
+<code>RuntimeException</code>— це полегшена версія звичайних винятків (<code>Exception</code>): до таких винятків
+висувається менше вимог та обмежень</p>
+<p>Про відмінність <code>Exception</code> та <code>RuntimeException</code> ви дізнаєтесь далі</p>
+<hr>
+<h2>2. Винятки, що перевіряються: <code>throws</code>, <span class="term">checked exceptions</span></h2>
+<p><img data-id="5c5a8939-dd12-4c70-aeda-00cb2909d340" src="https://cdn.javarush.com/images/article/5c5a8939-dd12-4c70-aeda-00cb2909d340/original.png" alt="Виключення що перевіряються: throws, checked exceptions">
+<p>Усі винятки в Java поділяються на 2 категорії —ті, що перевіряються (<span class="term">checked</span>) і ті, що не перевіряються (<span class="term">unchecked</span>).</p>
+<p><span class="text-green">Всі винятки, успадковані від класів <code><span class="text-green">RuntimeException</span></code> та <code><span class="text-green">Error</span></code>, вважаються <span class="term"><span class="text-green">unchecked-винятками</span></span>,</span> <span class="text-red">решта — <span class="term"><span class="text-red">checked-винятками</span></span>.</span></p>
+<div class="lesson-note lesson-note--important">
+    <div class="lesson-note__container">
+        <div class="lesson-note__head">Важливо!!</div>
+        <div class="lesson-note__content">
+            <p>Через 20 років після введення винятків, що перевіряються, майже всі Java-програмісти вважають це помилкою. 95 % усіх
+            винятків у популярних сучасних фреймворках — ті, що не перевіряються. Та сама мова C#, яка мало не скопіювала Java
+            повністю, не стала додавати <span class="term">checked-винятки</span>.</p>
+        </div>
+    </div>
+</div>
+<p>У чому ж основна відмінність <span class="term">checked-винятків</span> від <span class="term">unchecked</span>?</p>
+<p>До <span class="term">checked-винятків</span> є додаткові вимоги. Звучать вони приблизно так.</p>
+<p><strong>Вимога 1</strong></p>
+<p>Якщо <span class="text-red">метод викидає <span class="term">checked-виняток</span></span>, <span class="text-viola">він повинен містити тип цього винятку у своєму заголовку</span> (сигнатурі методу). <span class="text-green">Щоб усі методи, що викликають цей метод, знали про те, що в ньому може виникнути такий «важливий виняток».</span></p>
+<p>Вказувати <span class="text-red"><span class="term">checked-винятки</span></span> треба після <span class="code"><span class="text-orange"> параметрів методу</span></span> після ключового слова <code>throws</code> (не плутати з <code>throw</code>). Виглядає це приблизно так:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-green">тип</span> <span class="text-user">метод</span> (<span class="text-orange">параметри</span>) throws <span class="text-red">виняток</span></code></pre>
+</div>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>checked-виняток</th>
+        <th>unchecked-виняток</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public void calculate(int n) <strong>throws</strong> <span class="text-red">Exception</span>
+{
+   if (n == 0)
+      <strong>throw</strong> new <span class="text-red">Exception</span>("n дорівнює нулю!");
+}</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>public void calculate(n)
+<span>{
+</span>   if (n == 0)
+      throw new <span class="text-red">RuntimeException</span>("n дорівнює нулю!");
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><span class="text-green">У прикладі праворуч наш код викидає <span class="term"><span class="text-green">unchecked-виняток</span></span> — жодних додаткових дій не потрібно.</span> <span class="text-orange">У прикладі ліворуч метод викидає <span class="term"><span class="text-orange">checked-виняток</span></span>, тому в сигнатуру методу додали ключове слово <code>throws</code> і вказали тип винятку.</span></p>
+<p><span class="text-viola">Якщо метод планує викидати кілька <span class="term"><span class="text-viola">checked-винятків</span></span>, всі їх потрібно вказати після ключового слова <code>throws</code> через кому.</span> Порядок неважливий. Приклад:</p>
+<pre class="language-java"><code>public void calculate(int n) throws <span class="text-red">Exception</span>, <span class="text-red">IOException</span>
+{
+   if (n == 0)
+      throw new <span class="text-red">Exception</span>("n дорівнює нулю!");
+   if (n == 1)
+      throw new <span class="text-red">IOException</span>("n дорівнює одиниці");
+}</code></pre>
+<p><strong>Вимога 2</strong></p>
+<p>Якщо ви викликаєте метод, у якого в сигнатурі прописані <span class="term">checked-винятки</span>, то <span class="text-red"> ви не можете проігнорувати цей факт.</span></p>
+<p>Ви повинні або перехопити всі ці винятки, додавши блоки <code>catch</code> для кожного з них, або <span class="text-red">додати їх в <code><span class="text-red">throws</span></code> </span>свого методу.</p>
+<p>Ми ніби говоримо собі: <span class="text-orange">ці</span><span class="text-orange"> винятки настільки важливі, що ми обов’язково повинні їх перехопити. А якщо ми не знаємо, як їх перехопити, ми повинні
+повідомити тих, хто буде викликати наш метод, що в ньому можуть виникнути такі винятки.</span></p>
+<p>Приклад:</p>
+<p>Припустимо, що ми пишемо метод, який має створити світ, населений людьми. Початкова кількість людей передається як
+параметр. Тоді ми маємо додати винятки, якщо людей занадто мало.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Створюємо Землю</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public void <span class="text-red">створитиСвіт</span>(int n) throws <span class="text-viola">ПорожнійСвіт</span>,<span class="text-viola">СамотнійСвіт</span>
+{
+   if (n == 0)
+      throw new <span class="text-viola">ПорожнійСвіт</span>(<span class="text-green">"Людей!"</span>);
+   if (n == 1)
+      throw new <span class="text-viola">СамотнійСвіт</span>(<span class="text-green">"Занадто мало людей!"</span>);
+   System.out.println(<span class="text-green">"Создан: " </span>+ n);
+}</code></pre>
+        </td>
+        <td>Метод потенційно кидає два <span class="term">checked-винятки</span>:</p>
+            <ul>
+                <li><span class="text-red">ПорожнійСвіт</span></li>
+                <li><span class="text-red">СамотнійСвіт</span></li>
+            </ul>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Виклик цього методу можна обробити 3 способами:</p>
+<p><strong>1. Не перехоплюємо винятки, що виникають</strong></p>
+<p>Найчастіше це робиться у разі, коли в методі не відомо, як правильно обробити цю ситуацію.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public void <span class="text-user">створитиНаселенийСвіт</span>(int population)
+throws <span class="text-viola">ПорожнійСвіт</span>, <span class="text-viola">СамотнійСвіт</span>
+{
+   <span class="text-red">створитиСвіт</span>(population);
+}</code></pre>
+        </td>
+        <td>Метод, що викликає, не перехоплює винятки і змушений інформувати про них інших: додати їх собі в <code>throws</code></td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>2. Перехоплювати частину винятків</strong></p>
+<p>Обробляємо зрозумілі помилки, незрозумілі — прокидаємо в метод, що викликає. Для цього потрібно додати їх назву в
+throws:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public void <span class="text-user">створитиНепорожнійСвіт</span>(int population)
+throws <span class="text-viola">ПорожнійСвіт</span>
+{
+   try
+   {
+      <span class="text-red">створитиСвіт</span>(population);
+   }
+   catch (<span class="text-viola">СамотнійСвіт</span> e)
+   {
+      e.printStackTrace();
+   }
+}</code></pre>
+        </td>
+        <td>Метод, що викликає, перехоплює лише один <span class="term">checked-виняток</span> &#8211; <code><span class="text-viola">СамотнійСвіт</span></code>, другий він повинен додати у свою сигнатуру: вказати після слова <code>throws</code></td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>3. Перехоплюємо всі винятки</strong></p>
+<p>Якщо метод не прокидає винятки методу, що викликає, метод, що викликає, завжди буде впевнений, що все було виконано
+добре. І не зможе вжити жодних дій, щоб виправити ситуацію.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public void <strong><span class="text-user">створитиБудь-якийСвіт</span></strong>(int population)
+{
+   try
+   {
+      <span class="text-red">створитиСвіт</span>(population);
+   }
+   catch(<span class="text-viola">СамотнійСвіт</span> e)
+   {
+      e.printStackTrace();
+   }
+   catch(<span class="text-viola">ПорожнійСвіт</span> e)
+   {
+      e.printStackTrace();
+   }
+}</code></pre>
+        </td>
+        <td>У цьому методі перехоплюються всі помилки. Метод, що викликає, буде впевнений, що все пройшло чудово.</td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task14.task1408"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task14.task1409"></div>
+<hr>
+<h2>3. Множинне перехоплення винятків</h2>
+<p>Програмісти дуже не люблять дублювання коду. Навіть вигадали такий принцип розробки — <span class="term">DRY</span>: Don’t Repeat Yourself. Однак <span class="text-orange">час обробки винятків часто виникають ситуації, коли після блоку <code>try</code> слідує кілька блоків <code>catch</code> з однаковим кодом.</span></p>
+<p>Або може бути, наприклад, 3 <code>catch</code>-блоки з одним кодом і ще 2 <code>catch</code>-блоки з іншим. Стандартна
+взагалі-то ситуація, коли у вас у проєкті <span class="text-red">відповідально ставляться до обробки виключень.</span></p>
+<p>Починаючи з 7-ї версії, в мову Java додали можливість вказати кілька типів винятків в одному блоці <code>catch</code>.
+Виглядає це приблизно так:</p>
+<div class="lesson-example lesson-example--center">
+<pre class="lecture-code lecture-code--present-sm language-java"><code>try
+{
+   <span class="text-green">код, де може виникнути помилка</span>
+}
+catch(<span class="text-viola">ТипВинятку1</span> | <span class="text-viola">ТипВинятку2</span> | <span class="text-viola">ТипВинятку3</span> <span class="text-red">имя</span>)
+{
+   <span class="text-user">код обробки винятків</span>
+}</code></pre>
+</div>
+<p>Блоків <code>catch</code> може бути скільки завгодно. Однак в одному блоці <code>catch</code> не можна вказати винятки,
+які успадковуються один від одного. Тобто не можна написати <code>catch</code> (<code>Exception</code> |
+<code>RuntimeException</code> e), оскільки клас RuntimeException успадкований від <code>Exception</code>.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task14.task1412"></div>
+<hr>

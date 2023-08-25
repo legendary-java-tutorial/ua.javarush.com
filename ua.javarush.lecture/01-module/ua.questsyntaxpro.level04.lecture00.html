@@ -1,0 +1,370 @@
+﻿Цикли в Java
+<p>----------------------------------------</p>
+Цикли в нашому житті. У житті нам дуже часто доводиться багато разів виконувати одноманітні дії. Приміром, мені потрібно відсканувати книгу. Для цього я знов і знов повторюю одні й ті самі дії: Покласти аркуш книги на сканер Натиснути кнопку сканування Перегорнути аркуш книги Робити це вручну
+<p>----------------------------------------</p>
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="2bcc6669-ca39-4a45-9e14-0dc31a3a1c3e" data-max-width="1024" src="https://cdn.javarush.com/images/article/2bcc6669-ca39-4a45-9e14-0dc31a3a1c3e/original.png" alt=""/>
+        </div>
+        <div class="lesson-carousel__item">
+            <img data-id="eda8a571-0d1c-4a0d-ab84-322496fe00e8" data-max-width="1024" src="https://cdn.javarush.com/images/article/eda8a571-0d1c-4a0d-ab84-322496fe00e8/original.png" alt=""/>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<h2>1. Цикли в нашому житті</h2>
+<p>У житті нам дуже часто доводиться багато разів виконувати одноманітні дії. Приміром, мені потрібно відсканувати документ, який містить багато сторінок. Для цього я знов і знов повторюю одні й ті самі дії:</p>
+<ul>
+    <li>Покласти першу сторінку на сканер</li>
+    <li>Натиснути кнопку сканування</li>
+    <li>Покласти наступну сторінку</li>
+</ul>
+<p>Робити це вручну складно. Добре було б цей процес якось автоматизувати.</p>
+<p>Ось іще приклад: я хочу позначити всі непрочитані листи в поштовій скриньці як спам. Колись їх доводилося виділяти й позначати як спам по одному.</p>
+<p>Але програмісти — люди ледачі, тому цю функцію вже давно автоматизували: ви просто виділяєте потрібний список листів і натискаєте кнопку «позначити як спам», а ваш поштовий клієнт сам пробігає цим списком і переносить кожен лист у папку для спаму.</p>
+<p>Ну що сказати? Зручно, коли комп'ютер або програма можуть зробити сотні й тисячі рутинних операцій одним клацанням. Зараз і ви цьому навчитеся.</p>
+<hr>
+<h2>2. Цикл <code>while</code></h2>
+<p>Оператор if-else суттєво розширив наші можливості програмування: тепер можна писати програми, які виконують різні дії залежно від ситуації. Але є ще одна штука, яка зробить наші програми на порядок потужнішими — це <strong>цикли</strong>.</p>
+<p>У Java є 4 види циклів: <strong><code>while</code></strong>, <strong><code>for</code></strong>, <strong><code>for-each</code></strong> і <strong><code>do-while</code></strong>. Зараз ми розглянемо найперший із них.</p>
+<p>Оператор циклу <strong><code>while</code></strong> дуже простий і складається лише з двох частин: <span class="term text-red">умови</span> та <span class="term">тіла циклу</span>. Тіло циклу виконується знов і знов, доки умова дорівнює <code>true</code>. Цикл <code>while</code> має такий загальний вигляд:</p>
+<div class="lesson-example lesson-example--center">
+<pre class="lecture-code lecture-code--present language-java"><code>while (<span class="code text-red">умова</span>)
+   <span class="code  text-green">команда</span>;</code></pre>
+    <div class="lesson-example-caption">Формат циклу <code>while</code> із однією командою</div>
+</div>
+<div class="lesson-example lesson-example--center">
+<pre class="lecture-code lecture-code--present language-java"><code>while (<span class="code text-red">умова</span>)
+{
+&nbsp;  <span class="code text-user">блок команд</span>
+}</code></pre>
+    <div class="lesson-example-caption">Формат циклу <code>while</code> із блоком команд</div>
+</div>
+<p>Все дуже просто. <span class="term text-green">Команда</span> або <span class="term text-user">блок команд</span> виконуються знову й знову, доки <span class="term text-red">умова циклу</span> істинна, тобто дорівнює <code>true</code>.</p>
+<p>Ось як це працює. Спочатку перевіряється <span class="term text-red">умова</span>, і якщо вона істинна, виконується <span class="term">тіло циклу</span> (<span class="term text-green">команда</span> чи <span class="term text-user">блок команд</span>), потім знову перевіряється <span class="term text-red">умова</span> і знову виконується <span class="term">тіло циклу</span>. І так доти, доки <span class="term text-red">умова</span> не стане хибною.</p>
+<p>Якщо умова <strong>завжди</strong> буде <strong>істинною</strong>, цикл виконуватиметься нескінченно, і програма ніколи не припинить роботу.</p>
+<p>А якщо умова з <strong>першого разу</strong> виявиться <strong>хибною</strong>, тіло циклу не буде виконано жодного разу.</p>
+<hr>
+<h2>3. Приклади циклів</h2>
+<p>Ось декілька практичних прикладів використання циклів.</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="55%">Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="lecture-code language-java line-numbers"><code>int  <span class="text-red">n</span> = 5;
+while (<span class="text-red">n</span> &gt; 0)
+{
+&nbsp; &nbsp;System.out.println(<span class="text-red">n</span>);
+&nbsp;  <span class="text-red">n</span>--;
+}</code></pre>
+        </td>
+        <td>На екран буде виведено 5 рядків:<br/>
+            <pre><code>5
+4
+3
+2
+1
+</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<table>
+    <tbody>
+    <tr>
+        <th width="55%">Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int&nbsp; <span class="text-red">n </span>= 0;
+while (<span class="text-red">n</span> &lt; 10)
+{
+&nbsp; &nbsp;System.out.println(<span class="text-red">n</span>);
+&nbsp;  <span class="text-red">n</span>++;
+}</code></pre>
+        </td>
+        <td>На екран буде виведено 10 рядків:<br/>
+            <pre><code>0
+1
+...
+8
+9
+</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<table>
+    <tbody>
+    <tr>
+        <th width="55%">Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Scanner <span class="text-orange">console</span> = new Scanner(<span class="text-viola">System.in)</span>;
+<span>while(<span class="text-orange">console</span>.<span class="text-red">hasNextInt</span>())
+</span>{
+&nbsp; &nbsp;int <span class="text-green">x</span> = <span class="text-orange">console</span>.nextInt();
+}&nbsp;</code></pre>
+        </td>
+        <td>Програма зчитує числа з клавіатури, доки вводяться саме числа.</td>
+    </tr>
+    </tbody>
+</table>
+<table>
+    <tbody>
+    <tr>
+        <th width="55%">Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>while (true)
+   <span class="text-orange">System.out.println</span>("C");</code></pre>
+        </td>
+        <td>Програма буде <span class="text-red">безліч разів</span> виводити на екран літеру <code><span class="text-green">С</span></code>.</td>
+    </tr>
+    </tbody>
+</table>
+<table>
+    <tbody>
+    <tr>
+        <th width="55%">Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Scanner <span class="text-orange">console</span> = new Scanner(<span class="text-viola">System.in</span>);
+boolean <span class="text-red">isExit</span> = false;
+while (!<span class="text-red">isExit</span>)
+{
+&nbsp; &nbsp;String <span class="text-user">s</span> = <span class="text-orange">console</span>.<span class="text-red">nextLine</span>();
+&nbsp;  <span class="text-red">isExit</span> = <span class="text-user">s</span>.equals("exit");
+}</code></pre>
+        </td>
+        <td>Програма буде вводити рядки з клавіатури,
+            <p>доки не буде введено рядок <code><span class="text-green">exit</span></code>.</td>
+    </tr>
+    </tbody>
+</table>
+<p>Функція <code>equals()</code> у попередньому прикладі використовується для порівняння рядків. Якщо рядки однакові, функція поверне результат <code>true</code>, а якщо неоднакові, то поверне <code>false</code>.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task04.task0401"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task04.task0402"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task04.task0403"></div>
+<hr>
+<h2>4. Цикл у циклі</h2>
+<p>Під час розгляду умовного оператора ви бачили, що, комбінуючи кілька умовних операторів, можна реалізовувати складну логіку. Тобто всередину одного оператора <code>if</code> можна вкласти інший <code>if</code>.</p>
+<p>З циклами теж так можна. Щоб створити цикл у циклі, потрібно в тіло першого циклу вписати другий цикл. Ця конструкція має такий вигляд:</p>
+<div class="lesson-example lesson-example--center">
+<pre class="lecture-code lecture-code--present language-java"><code>while (<span class="text-orange">умова зовнішнього циклу</span>)
+{
+&nbsp; &nbsp;while (<span class="text-red">умова внутрішнього циклу</span>)
+&nbsp; &nbsp;{
+&nbsp; &nbsp;  <span class="text-user">блок команд</span>
+&nbsp; &nbsp;}
+}</code></pre>
+    <div class="lesson-example-caption">Цикл <code>while</code> (із <span class="term">блоком команд</span>) всередині іншого циклу <code>while</code></div>
+</div>
+<p>Розгляньмо три задачі.</p>
+<p><strong>Задача 1</strong>. Приміром, ми хочемо написати програму, яка 4 рази виводитиме на екран слово <code><span class="text-green">Мама</span></code>. Цикл — це саме те, що нам потрібно. І наш код мав би такий вигляд:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="50%">Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int&nbsp; <span class="text-red">n</span> = 0;
+while (<span class="text-red">n</span> &lt; 4)
+{
+&nbsp; &nbsp;System.out.println("Мама");
+&nbsp;  <span class="text-red">n</span>++;
+}</code></pre>
+        </td>
+        <td>
+            На екран буде виведено 4 рядки:<br/>
+            <pre><code>Мама
+Мама
+Мама
+Мама
+</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Задача 2.</strong> Нам потрібно написати програму, яка виводитиме 5 літер <code><span class="text-green">А</span></code> в одному рядку. Для цього нам знову-таки потрібен цикл. Цей код матиме такий вигляд:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="50%">Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="text-red">n</span> = 0;
+while (<span class="text-red">n</span> &lt; 5)
+{
+&nbsp; &nbsp;System.out.<strong><span class="text-viola">print</span></strong>("A");
+&nbsp;  <span class="text-red">n</span>++;
+}</code></pre>
+        </td>
+        <td>Замість <code>println</code> пишемо <code>print</code>, інакше кожна літера <code><span class="text-green">A</span></code>&nbsp;буде в окремому рядку.<br/><br/> На екран буде виведено:<br/>
+            <pre><code>AAAAA</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Задача 3.</strong> Нам потрібно вивести на екран прямокутник із літер <code>А</code> розміром 4 рядки на 5 стовпців. І ось для цього нам вже знадобляться вкладені цикли. Просто візьмімо перший приклад, де ми виводимо 4 рядки, і замінимо код, який виводить один рядок, на код із другого прикладу.</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="50%">Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java" style="margin-left: -7px;"><code style="padding-left: 7px;">int <span class="code text-red">n</span> = 0;
+
+<div class="code-fragment code-fragment--viola">while (<span class="code text-red">n</span> &lt; 4)
+{
+
+   int <span class="code text-user">m</span> = 0;
+
+   <div class="code-fragment code-fragment--green">while (<span class="code text-user">m</span> &lt; 5)
+{
+   System.out.print("А");
+   <span class="code text-user">m</span>++;
+}</div>
+
+   <span class="code text-neon">System.out.println();</span>
+
+   <span class="code text-red">n</span>++;
+
+}</div>
+&nbsp;</code></pre>
+        </td>
+        <td><span class="term text-viola">Зовнішній цикл</span> позначено фіолетовою рамкою, у ньому використовується змінна <code class="text-red">n</code>&nbsp;для підрахунку кількості витків циклу.<br/><br/> <span class="term text-green">Внутрішній цикл</span> позначено зеленою рамкою. Для підрахунку кількості витків циклу в ньому використовується змінна <code class="text-user">m</code>.<br/><br/> Після виконання внутрішнього циклу потрібно окремою командою <span class="term text-neon">перевести курсор</span> на наступний рядок, інакше програма виведе всі літери в один рядок.<br/><br/> На екран буде виведено:<br/>
+            <pre><code>ААААА
+ААААА
+ААААА
+ААААА</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Для підрахунку кількості виконаних витків у зовнішньому та внутрішньому циклах слід використовувати різні змінні. Крім того, після внутрішнього циклу довелося додати команду <code>System.out.println ()</code>, адже він друкує літери <code><span class="text-green">А</span></code> в одному рядку. Тому після виведення всіх літер треба якимось чином перевести курсор на новий рядок.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task04.task0404"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task04.task0405"></div>
+<hr>
+<h2>5. Порівняння циклів: Java і Pascal</h2>
+<p>Багато хто з вас вивчав у школі мову Pascal. Тому для кращого розуміння матеріалу ми наводимо порівняння циклів <code>while</code> у мовах Pascal і Java. Якщо ви не знайомі з мовою Pascal, просто пропустіть цей розділ.</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="50%">Pascal</th>
+        <th>Java</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-pascal"><code><span class="text-red">i</span> := 3;
+While <span class="text-red">i</span> &gt;= 0 Do
+   Begin
+      <span class="text-neon">WriteLn</span>(<span class="text-red">i</span>);
+   &nbsp;  <span class="text-red">i</span> := <span class="text-red">i</span> - 1;
+   End;</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>int <span class="text-red">i</span> = 3;
+while (<span class="text-red">i</span> &gt;= 0)
+{
+&nbsp;  <span class="text-neon">System.out.println</span>(<span class="text-red">i</span>);
+&nbsp;  <span class="text-red">i</span>--;
+}</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-pascal"><code><span class="text-red">i</span> := 0;
+While <span class="text-red">i</span> &lt; 3 Do
+&nbsp; &nbsp;Begin
+      <span class="text-neon">WriteLn</span>(<span class="text-red">i</span>);
+&nbsp;     <span class="text-red">i</span> := <span class="text-red">i</span> + 1;
+   End;</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>int <span class="text-red">i</span> = 0;
+while (<span class="text-red">i</span> &lt; 3)
+{
+&nbsp;  <span class="text-neon">System.out.println</span>(<span class="text-red">i</span>);
+&nbsp;  <span class="text-red">i</span>++;
+}</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-pascal"><code><span class="text-red">IsExit</span> := False;
+While Not <span class="text-red">isExit</span> Do
+&nbsp; &nbsp;Begin
+      <span class="text-neon">ReadLn</span>(<span class="text-orange">s</span>);
+   &nbsp;  <span class="text-red">isExit</span> :=&nbsp; (<span class="text-orange">s</span> = <span class="text-green">'exit'</span>);
+   End;</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>boolean <span class="text-red">isExit</span> = false;
+while (!<span class="text-red">isExit</span>)
+{
+&nbsp; &nbsp;String <span class="text-orange">s</span> = <span class="text-neon">console.nextLine</span>();
+&nbsp;  <span class="text-red">isExit</span> = <span class="text-orange">s</span>.equals(<span class="text-green">"exit"</span>);
+}</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-pascal"><code>While True Do
+   <span class="text-neon">WriteLn</span>(<span class="text-green">'C'</span>);</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>while (true)
+&nbsp;  <span class="text-neon">System.out.println</span>(<span class="text-green">"C"</span>);</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-pascal"><code>While True Do
+&nbsp; &nbsp;Begin
+&nbsp; &nbsp;  <span class="text-neon">ReadLn</span>(<span class="text-orange">s</span>);
+&nbsp; &nbsp; &nbsp;If <span class="text-orange">s</span> = <span class="text-green">'exit'</span> Then
+&nbsp; &nbsp;    Break;
+   End;</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>while (true)
+{
+&nbsp; &nbsp;String <span class="text-orange">s</span> = <span class="text-neon">console.nextLine</span>();
+&nbsp; &nbsp;if (<span class="text-orange">s</span>.equals(<span class="text-green">"exit"</span>))
+&nbsp; &nbsp; &nbsp;break;
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="348ea37d-2d4a-4dfc-bfc2-60319c274d53" data-max-width="1024" src="https://cdn.javarush.com/images/article/348ea37d-2d4a-4dfc-bfc2-60319c274d53/original.png" alt=""/>
+        </div>
+    </div>
+</div>

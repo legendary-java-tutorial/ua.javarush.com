@@ -1,0 +1,232 @@
+﻿Оператор множинного вибору в Java: switch
+<p>----------------------------------------</p>
+Оператор множинного вибору switch. У Java є ще один цікавий оператор, який дістався у спадок від бабусі (мови C++) — це оператор switch. Його ще називають оператором множинного вибору. Він має дещо громіздкий вигляд: switch(вираз) { case значення1: код1; &nbsp;&amp;nbsp
+<p>----------------------------------------</p>
+<h2>1. Оператор множинного вибору <code>switch</code></h2>
+<p><img data-id="80e8a97a-1dd1-4628-9e38-e9ea0a7b3d3c" src="https://cdn.javarush.com/images/article/80e8a97a-1dd1-4628-9e38-e9ea0a7b3d3c/original.png" alt="Оператор множинного вибору switch"/></p>
+<p>У Java є ще один цікавий оператор, який дістався у спадок від бабусі (мови C++) — це оператор <code>switch</code>. Його ще називають оператором множинного вибору. Він має дещо громіздкий вигляд:</p>
+<div class="lesson-example lesson-example--center">
+<pre class="lecture-code lecture-code--present language-java"><code>switch(<span class="text-green">вираз</span>)
+{
+   case <span class="text-user">значення1</span>: <span class="text-viola">код1</span>;
+   case <span class="text-user">значення2</span>: <span class="text-viola">код2</span>;
+   case <span class="text-user">значення3</span>: <span class="text-viola">код3</span>;
+}</code></pre>
+</div>
+<p>У дужках вказується який-небудь вираз або змінна. Якщо значення виразу дорівнює <code><span class="text-user">значення1</span></code>, виконується <code><span class="text-viola">код1</span></code>, якщо дорівнює <code><span class="text-user">значення2</span></code>, виконується <code><span class="text-viola">код2</span></code>, якщо дорівнює <code><span class="text-user">значення3</span></code>, виконується <code><span class="text-viola">код3</span></code>.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="code text-user">temperature</span> = 38;
+
+switch(<span class="code text-user">temperature</span>)
+{
+   case 36: System.out.println("Низька");
+   case 37: System.out.println("Нормальна");
+   case 38: System.out.println("Висока");
+} </code></pre>
+        </td>
+        <td>
+            <pre><code>Висока</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<h2>2. Оператор <code>break</code> в операторі <code>switch</code></h2>
+<p>Важливою особливістю роботи <code>switch</code> є те, що програма просто перестрибує на потрібний рядок (на потрібний блок коду) і потім виконує всі блоки коду до кінця оператора <code>switch</code>. Не тільки той блок коду, який відповідає значенню, переданому у <code>switch</code>, а всі блоки коду до кінця оператора <code>switch</code>.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="code text-user">temperature</span> = 36;
+
+switch(<span class="code text-user">temperature</span>)
+{
+   case 36: System.out.println("Низька");
+   case 37: System.out.println("Нормальна");
+   case 38: System.out.println("Висока");
+} </code></pre>
+        </td>
+        <td>
+                <pre><code>Низька
+Нормальна
+Висока</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Коли температура дорівнює 36, програма перейде всередині оператора <code>switch</code> на перший блок коду — перший рядок, і після його виконання буде виконано всі наступні блоки коду.</p>
+<p>Якщо ви хочете, щоб у кожному випадку виконувався <span class="text-red">тільки той блок коду</span>, на який перестрибнула програма, потрібно після цього блоку коду вставити оператор <code>break</code>.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="code text-user">temperature</span> = 36;
+
+switch(<span class="code text-user">temperature</span>)
+{
+   case 36:
+      System.out.println("Низька");
+      break;
+   case 37:
+      System.out.println("Нормальна");
+      break;
+   case 38:
+      System.out.println("Висока");
+}</code></pre>
+        </td>
+        <td>
+            <pre><code>Низька</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Після останнього варіанта в операторі <code>switch</code> можна <code>break</code> не вставляти — усе одно це останній блок коду.</p>
+<hr>
+<h2>3. Дія за замовчуванням: <code>default</code></h2>
+<p>Ще один важливий момент. А що станеться, якщо значення виразу в круглих дужках не збігається з жодним значенням, передбаченим у <code>switch</code>?</p>
+<p>Якщо відповідного варіанту не буде знайдено, робота оператора <code>switch</code> завершиться, і програма перейде до виконання коду після фігурної дужки, що закриває оператор <code>switch</code>.</p>
+<p>Проте можна налаштувати <code>switch</code> на поведінку, аналогічну гілці else в операторі <code>if-else</code>. Для цього потрібно скористатися ключовим словом <code>default</code>.</p>
+<p>Якщо жоден варіант <code>case</code> в операторі <code>switch</code> не збігається зі значенням виразу, то за наявності у <code>switch</code> варіанту <code>default</code> буде виконано цей код. Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="code text-user">temperature</span> = <span class="text-red">40</span>;
+switch(<span class="code text-user">temperature</span>)
+{
+   case 36:
+      System.out.println("Низька");
+      break;
+   case 37:
+      System.out.println("Нормальна");
+      break;
+   case 38:
+      System.out.println("Висока");
+      break;
+   <span class="code"><span class="token keyword">default</span></span>:
+      System.out.println("Викликайте швидку допомогу");
+}</code></pre>
+        </td>
+        <td>
+            <pre><code>Викликайте швидку допомогу</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<h2>4. Порівняння <code>switch</code> та <code>if-else</code></h2>
+<p>Оператор <code>switch</code> дещо схожий на оператор <code>if-else</code>, тільки трохи складніший.</p>
+<p>Ви завжди можете переписати код з оператором <code>switch</code> на код із декількох <code>if</code>-ів Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код з оператором switch</th>
+        <th>Код з оператором if-else</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="code text-user">temperature</span> = <span class="text-red">40</span>;
+switch(<span class="code text-user">temperature</span>)
+{
+   case 36:
+      System.out.println("Низька");
+      break;
+   case 37:
+      System.out.println("Нормальна");
+      break;
+   case 38:
+      System.out.println("Висока");
+      break;
+   default:
+      System.out.println("Викликайте швидку допомогу");
+} </code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>int <span class="code text-user">temperature</span> = <span class="text-red">40</span>;
+
+if (<span class="code text-user">temperature</span> == 36)
+{
+   System.out.println("Низька");
+}
+else if (<span class="code text-user">temperature</span> == 37)
+{
+   System.out.println("Нормальна");
+}
+else if (<span class="code text-user">temperature</span> == 38)
+{
+   System.out.println("Висока");
+}
+else
+{
+   System.out.println("Викликайте швидку допомогу");
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Код ліворуч працюватиме так само, як і код праворуч.</p>
+<p>Ланцюжок із декількох <code>if-else</code> краще використовувати тоді, коли всередині умови <code>if</code> для кожного окремого випадку є різні складні вирази.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task13.task1320"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task13.task1321"></div>
+<hr>
+<h2>5. Які типи даних можна використовувати як параметр оператора <code>switch</code>?</h2>
+<p>Не всі типи даних підходять для використання у варіантах <code>case</code> оператора <code>switch</code>. Наразі можна використовувати літерали таких типів:</p>
+<ul>
+    <li><span class="text-green">цілі типи: <code><span class="text-green">byte</span></code>, <code><span class="text-green">short</span></code>, <code><span class="text-green">int</span></code></span></li>
+    <li><span class="text-viola">тип <code><span class="text-viola">char</span></code></span></li>
+    <li><span class="text-user">тип <code><span class="text-user">String</span></code></span></li>
+    <li><span class="text-red">значення будь-якого <code><span class="text-red">enum</span></code>-типу</span></li>
+</ul>
+<p>Інші типи даних використовувати як значення case <span class="text-red">не можна</span>.</p>
+<p>Приклад використання <code>enum</code> в операторі <code>switch</code>:</p>
+<pre class="language-java"><code><span class="text-viola">Day</span> <span class="text-orange">day</span> = Day.<span class="text-user">MONDAY</span>;
+switch (<span class="text-orange">day</span>)
+{
+   case <span class="text-user">MONDAY</span>:
+      System.out.println("Понеділок");
+      break;
+   case <span class="text-user">TUESDAY</span>:
+      System.out.println("Вівторок");
+      break;
+   case <span class="text-user">WEDNESDAY</span>:
+      System.out.println("Середа");
+      break;
+   case <span class="text-user">THURSDAY</span>:
+      System.out.println("Четвер");
+      break;
+   case <span class="text-user">FRIDAY</span>:
+      System.out.println("П'ятниця");
+      break;
+   case <span class="text-user">SATURDAY</span>:
+      System.out.println("Субота");
+      break;
+   case <span class="text-user">SUNDAY</span>:
+      System.out.println("Неділя");
+      break;
+}</code></pre>
+<p>Примітка. Якщо в операторі <code>switch</code> використовується перелік <code>enum</code>, у <code>case</code> можна не писати ім'я класу перед кожним значенням. Досить просто вказати значення.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task13.task1322"></div>

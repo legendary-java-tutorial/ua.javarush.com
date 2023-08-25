@@ -1,0 +1,203 @@
+﻿Логічний тип boolean
+<p>----------------------------------------</p>
+Тип boolean. Як ми вже з'ясували, у Java є дуже корисний оператор — if-else. Він виконує один блок команд, якщо умова в дужках істинна, і другий блок команд — якщо умова хибна. Щоб було зручніше працювати з такими виразами (які можуть бути істинними або хибними), у мову Java додали
+<p>----------------------------------------</p>
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="1b47f8ca-37d9-4b93-82c9-8ceb273941c2" data-max-width="1024" src="https://cdn.javarush.com/images/article/1b47f8ca-37d9-4b93-82c9-8ceb273941c2/original.png" alt=""/>
+        </div>
+        <div class="lesson-carousel__item">
+            <img data-id="39956868-47af-41fd-940d-213966055708" data-max-width="1024" src="https://cdn.javarush.com/images/article/39956868-47af-41fd-940d-213966055708/original.png" alt=""/>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<h2>1. Тип <code>boolean</code></h2>
+<p>Як ми вже з'ясували, у Java є дуже корисний оператор — <code>if-else</code>. Він виконує один блок команд, якщо умова в дужках істинна, і другий блок команд — якщо умова хибна.</p>
+<p>Щоб було зручніше працювати з такими виразами (які можуть бути істинними або хибними), у мову Java додали спеціальний тип — <code><span class="text-viola">boolean</span></code>. Його головна особливість полягає в тому, що змінні цього типу можуть набувати лише двох значень: <code><span class="text-green">true</span></code> (<span class="text-green">істина</span>) і <code><span class="text-red">false</span></code> (<span class="text-red">хибність</span>).</p>
+<p>Жодне інше значення присвоїти змінній типу <code>boolean</code> неможливо. Компілятор не дозволить.</p>
+<p><span class="text-bold">І навіщо ж потрібен такий примітивний тип?</span></p>
+<p>Річ у тім, що в ньому можна зберігати значення логічних виразів. Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>boolean <span class="code text-viola">isOK</span> = <span class="code text-green">true</span>;</code></pre>
+        </td>
+        <td>Логічна змінна <code><span class="text-viola">isOK</span></code> містить значення <code><span class="text-green">true</span></code> (<span class="text-green">істина</span>)</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>boolean <span class="code text-viola">hasError</span> = <span class="code text-red">false</span>;</code></pre>
+        </td>
+        <td>Логічна змінна <code><span class="text-viola">hasError</span></code> містить значення <code><span class="text-red">false</span></code> (<span class="text-red">хибність</span>)</td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int age = <span class="text-user">70</span>;
+boolean <span class="code text-viola">isSenior</span> = <span class="code text-green">(age &gt; 65)</span>;</code></pre>
+        </td>
+        <td>Логічна змінна <code><span class="text-viola">isSenior</span></code> містить значення <code><span class="text-green">true</span></code> (<span class="text-green">істина</span>)</td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int record = <span class="text-user">612</span>;
+int value = <span class="text-user">615</span>;
+boolean <span class="code text-viola">hasNewRecord</span> = <span class="code text-green">(value &gt; record)</span>;</code></pre>
+        </td>
+        <td>Логічна змінна <code><span class="text-viola">hasNewRecord</span></code> містить значення <code><span class="text-green">true</span></code> (<span class="text-green">істина</span>)</td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int min = <span class="text-user">0</span>;
+int max = <span class="text-user">100</span>;
+int temperature = <span class="text-user">-20</span>;
+boolean <span class="code text-viola">isIce</span> = <span class="code text-green">(temperature &lt; min)</span>;
+boolean <span class="code text-viola">isSteam</span> = <span class="code text-red">(temperature &gt; max)</span>;</code></pre>
+        </td>
+        <td>
+            <p>Логічна змінна <code><span class="text-viola">isIce</span></code> містить значення <code><span class="text-green">true</span></code> (<span class="text-green">істина</span>)</p>
+            <p>Логічна змінна <code><span class="text-viola">isSteam</span></code> містить значення <code><span class="text-red">false</span></code> (<span class="text-red">хибність</span>)</td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<h2>2. Використання булевих змінних</h2>
+<p>Від булевих змінних було б мало користі, якби в них можна було тільки зберігати результати виразів. Уся річ у тім, що їх можна ще й використовувати. Де? Та скрізь, де можна написати логічний вираз.</p>
+<p>Наприклад, логічну змінну можна підставити в умову <code>if</code>:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Еквівалент</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="text-green">age</span> = <span class="text-user">70</span>;
+boolean <span class="code text-viola">isSenior</span> = (<span class="code text-viola">age &gt; 65</span>);
+if (<span class="code text-viola">isSenior</span>)
+   System.out.println("Час на пенсію");</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>int <span class="text-green">age</span> = <span class="text-user">70</span>;
+if (<span class="code text-viola">age &gt; 65</span>)
+   System.out.println("Час на пенсію");</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>У цьому прикладі користі від такої заміни небагато, але що більша програма, то складніші в ній умови. Найближчим часом ви в цьому переконаєтеся.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task03.task0304"></div>
+<hr>
+<h2>3. Оператори порівняння</h2>
+<p>У Java, як і в інших мовах програмування, часто доводиться порівнювати змінні між собою. І саме для порівняння в Java є такі оператори:</p>
+<table>
+    <tbody>
+    <tr>
+        <th class="text-center">Оператор</th>
+        <th class="text-center">Пояснення</th>
+        <th class="text-center">Приклад</th>
+    </tr>
+    <tr>
+        <td class="text-center"><code class="text-red">&lt;</code></td>
+        <td class="text-center">Менше</td>
+        <td class="text-center">
+            <code class="code-raw">a <span class="code text-red">&lt;</span> 10</code>
+        </td>
+    </tr>
+    <tr>
+        <td class="text-center"><code class="text-red">&gt;</code></td>
+        <td class="text-center">Більше</td>
+        <td class="text-center">
+            <code class="code-raw">b <span class="code text-red">&gt;</span> a</code>
+        </td>
+    </tr>
+    <tr>
+        <td class="text-center"><code class="text-red">&lt;=</code></td>
+        <td class="text-center">Менше або дорівнює (не більше)</td>
+        <td class="text-center">
+            <code class="code-raw">a <span class="code text-red">&lt;=</span> 10</code>
+        </td>
+    </tr>
+    <tr>
+        <td class="text-center"><code class="text-red">&gt;=</code></td>
+        <td class="text-center">Більше або дорівнює (не менше)</td>
+        <td class="text-center">
+            <code class="code-raw">speed <span class="code text-red">&gt;=</span> max</code>
+        </td>
+    </tr>
+    <tr>
+        <td class="text-center"><code class="text-red">==</code></td>
+        <td class="text-center">Дорівнює</td>
+        <td class="text-center">
+            <code class="code-raw">age <span class="code text-red">==</span> 18</code>
+        </td>
+    </tr>
+    <tr>
+        <td class="text-center"><code class="text-red">!=</code></td>
+        <td class="text-center">Не дорівнює</td>
+        <td class="text-center">
+            <code class="code-raw">time <span class="code text-red">!=</span> 0</code>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Результатом дії кожного з наведених вище операторів буде логічний вираз. Його можна зберегти в змінній типу <code>boolean</code> або ж використовувати як умову в операторі <code>if</code>.</p>
+<div class="lesson-note lesson-note--important">
+    <div class="lesson-note__container">
+        <div class="lesson-note__head">Важливий момент 1:</div>
+        <div class="lesson-note__content">
+            <p>Оператори, що складаються з двох символів, розривати не можна. </p>
+        </div>
+    </div>
+</div>
+<p>Тобто такий код не компілюватиметься:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm language-java text-center"><code>a <span class="code text-red">&lt;</span> <span class="code text-red">=</span> 10</code></pre>
+</div>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm language-java text-center"><code>speed <span class="code text-red">&gt;</span> <span class="code text-red">=</span> max</code></pre>
+</div>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm language-java text-center"><code>age <span class="code text-red">=</span> <span class="code text-red">=</span> 18</code></pre>
+</div>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm language-java text-center"><code>time <span class="code text-red">!</span> <span class="code text-red">=</span> 0</code></pre>
+</div>
+<div class="lesson-note lesson-note--important">
+    <div class="lesson-note__container">
+        <div class="lesson-note__head">Важливий момент 2:</div>
+        <div class="lesson-note__content">
+            <p>Зверніть увагу, що операторів <code><span class="text-red">=&gt;</span></code> й <code><span class="text-red">=&lt;</span></code> не існує: є лише <code class="text-red">&lt;=</code> та <code class="text-red">&gt;=</code>. Якщо ви напишете <span class="text-nowrap"><code>a <span class="text-red">=&lt;</span><span class="text-red"> </span>3</code></span>, ваш код просто не скомпілюється.</p>
+        </div>
+    </div>
+</div>
+<div class="lesson-note lesson-note--important">
+    <div class="lesson-note__container">
+        <div class="lesson-note__head">Важливий момент 3:</div>
+        <div class="lesson-note__content">
+            <p>У Java ви не можете записати вираз у вигляді <code><span class="text-red">18 <span class="text-red">&lt;</span> age <span class="text-red">&lt;</span> 65</span></code>. Адже вираз <code><span class="text-red">18 <span class="text-red">&lt;</span> age</span></code> матиме значення <code>true</code> або <code>false</code>. А порівнювати <code><span class="text-red">true &lt; 65</span></code> (різні типи) не можна. Принаймні в мові&nbsp;Java.</p>
+        </div>
+    </div>
+</div>
+<p>І що ж тоді робити? Відповідь на це запитання ви знайдете в наступній лекції.</p>
+
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task03.task0305"></div>
+<hr>
+
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="b7682e8a-53f4-4035-a6fa-376127a31216" data-max-width="1024" src="https://cdn.javarush.com/images/article/b7682e8a-53f4-4035-a6fa-376127a31216/original.png" alt=""/>
+        </div>
+    </div>
+</div>

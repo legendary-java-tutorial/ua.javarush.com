@@ -1,0 +1,163 @@
+﻿Робота з ArrayList, частина 2
+<p>----------------------------------------</p>
+Додавання елемента в середину (або в початок) списку. Якщо ж ми хочемо вставити елемент в середину списку, то всередині списку відбувається от що. Припустімо, у нас є список з 11 елементів: Ми хочемо вставити число 10 000 у список на позицію з номером 5. Для цього потрібно лише виконати команду: list.add(
+<p>----------------------------------------</p>
+<h2>1. Додавання елемента в середину (або в початок) списку</h2>
+<p>Якщо ж ми хочемо вставити елемент в середину списку, то всередині списку відбувається от що.</p>
+<p>Припустімо, у нас є список з 11 елементів:</p>
+<img data-max-width="1024" data-id="4e2b556f-61ff-4854-802c-ec6d84d0732f" src="https://cdn.javarush.com/images/article/4e2b556f-61ff-4854-802c-ec6d84d0732f/1024.jpeg" alt="">
+<p>Ми хочемо вставити число 10 000 у список на позицію з номером 5. Для цього потрібно лише виконати команду:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-green">list</span>.<span class="text-red">add</span>(<span class="text-user">5</span>, <span class="text-viola">10000</span>);</code></pre>
+</div>
+<p>де <code><span class="text-green">list</span></code>&nbsp;— це змінна типу <code>ArrayList</code>, метод <code><span class="text-red">add</span>(int index, тип value)</code> додає значення 10000 на позицію 5 у списку. От що в цьому разі відбудеться в методі <code>add()</code>:</p>
+<p>Крок 1: усі елементи масиву починаючи з 5-го буде зсунуто (скопійовано) на 1 елемент у напрямку кінця масиву:</p>
+<img data-max-width="1024" data-id="34711d95-bb78-47ff-9bd6-74d8842e1842" src="https://cdn.javarush.com/images/article/34711d95-bb78-47ff-9bd6-74d8842e1842/1024.jpeg" alt="">
+<p>Зверніть увагу: елементи в 5-й і 6-й комірках масиву тепер однакові.</p>
+<p>Крок 2: записуємо в 5-у комірку значення 10 000:</p>
+<img data-max-width="1024" data-id="090de7d9-41cc-4223-8e4f-041a7c2ad37c" src="https://cdn.javarush.com/images/article/090de7d9-41cc-4223-8e4f-041a7c2ad37c/1024.jpeg" alt="">
+<p>Тепер у списку є всі елементи масиву, а в п'ятій комірці записано число 10 000, як ми й хотіли.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task12.task1213"></div>
+<hr>
+<h2>2. Видалення елемента зі списку</h2>
+<p>Операція видалення елемента зі списку аналогічна його додаванню, тільки процес зворотний.</p>
+<p>Давайте видалимо зі списку елемент із номером 3. Для цього потрібно виконати команду:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-green">list</span>.<span class="text-red">remove</span>(<span class="text-user">3</span>);</code></pre>
+</div>
+<p>От що в цьому разі відбудеться в методі remove():</p>
+<p>Крок 1: елементи масиву починаючи з 4-го буде зсунуто (скопійовано) на одну позицію ближче до початку масиву:</p>
+<img data-max-width="1024" data-id="3bbb271a-b7f8-4663-8bcd-b50245e06ab0" src="https://cdn.javarush.com/images/article/3bbb271a-b7f8-4663-8bcd-b50245e06ab0/1024.jpeg" alt="">
+<p>Крок 2: значення змінної <code>size</code> буде зменшено на 1.</p>
+<img data-max-width="1024" data-id="52a9835b-2266-4b80-8fd6-1e4ca30c7f75" src="https://cdn.javarush.com/images/article/52a9835b-2266-4b80-8fd6-1e4ca30c7f75/1024.jpeg" alt="">
+<p>Зверніть увагу: кінець масиву виділено сірим кольором, і там є якісь значення. З технічного погляду це сміття. Його треба видалити, щоб не заважати процесу <span class="term">збирання сміття</span>.</p>
+<p>Крок 3: видалення сміття</p>
+<img data-max-width="1024" data-id="0dfad94e-2333-4b58-9d7f-2c90210522b8" src="https://cdn.javarush.com/images/article/0dfad94e-2333-4b58-9d7f-2c90210522b8/1024.jpeg" alt="">
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task12.task1214"></div>
+<hr>
+<h2>3. Практичні приклади роботи зі списком у Java</h2>
+<p>Напишімо кілька прикладів роботи зі списками.</p>
+<p>Занесімо до списку всі парні числа від 1 до 20:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітки</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">ArrayList</span>&lt;<span class="text-viola">Integer</span>&gt; list = new <span class="text-neon">ArrayList</span>&lt;<span class="text-viola">Integer</span>&gt;();
+
+for (int i = 1; i &lt;= 20; i++)
+&nbsp; &nbsp;if (i%2 == 0)
+&nbsp; &nbsp; &nbsp; <span class="text-user">list</span>.<span class="text-red">add</span>(i);</code></pre>
+        </td>
+        <td>Створюємо об'єкт-список<br/><br/> Цикл по всіх числах <code>1</code> .. <code>20</code><br/> Якщо число ділиться на <code>2</code> без остачі,<br/> додати його до списку</td>
+    </tr>
+    </tbody>
+</table>
+<p>А тепер виведімо всі елементи списку на екран:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітки</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">ArrayList</span>&lt;Integer&gt; <span class="text-user">list</span> = new <span class="text-neon">ArrayList</span>&lt;Integer&gt;();
+
+for (int i = 1; i &lt;= 20; i++)
+   if (i%2 == 0)
+      <span class="text-user">list</span>.<span class="text-red">add</span>(i);
+
+for (int i = 0; i &lt; <span class="text-user">list</span>.size(); i++)
+   System.out.println(<span class="text-user">list</span>.<span class="text-red">get</span>(i));</code></pre>
+        </td>
+        <td>Створюємо об'єкт-список<br/> Цикл по всіх числах <code>1</code> .. <code>20</code><br/><br/> Якщо число ділиться на <code>2</code> без остачі,<br/> додати його до списку<br/><br/> Цикл від нуля до розміру списку<br/> Виводимо кожний елемент на екран</td>
+    </tr>
+    </tbody>
+</table>
+<p>Видалення елементів:</p>
+<p>А тепер видалімо всі елементи, які діляться на 4. Зверніть увагу, що відразу після видалення одного елемента зі списку <span class="text-red">позиції решти елементів змінюються.</span></p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітки</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">ArrayList</span>&lt;Integer&gt; <span class="text-user">list</span> = new <span class="text-neon">ArrayList</span>&lt;Integer&gt;();
+
+for (int i = 1; i &lt;= 20; i++)
+   if (i%2 == 0)
+      <span class="text-user">list</span>.<span class="text-red">add</span>(i);
+
+for (int i = 0; i &lt; <span class="text-user">list</span>.<span class="text-red">size</span>(); i++)
+   if (<span class="text-user">list</span>.<span class="text-red">get</span>(i)%4 == 0)
+   {
+      <span class="text-user">list</span>.<span class="text-red">remove</span>(i);
+      i--;
+   }</code></pre>
+        </td>
+        <td>Створюємо об'єкт-список<br/><br/> Цикл по всіх числах <code>1</code> .. <code>20</code><br/> Якщо число ділиться на <code>2</code> без остачі,<br/> додати його до списку<br/><br/> Цикл від нуля до розміру списку<br/> Якщо елемент списку ділиться на <code>4</code> без остачі:<br/><br/> а) видаляємо елемент<br/> б) зменшуємо лічильник <code>i</code>, щоб на наступному витку циклу знову потрапити на той самий елемент</td>
+    </tr>
+    </tbody>
+</table>
+<p>Припустімо, вам потрібно видалити 3 останніх елементи списку.</p>
+<p>Як зробити це неправильно:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітки</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">ArrayList</span>&lt;Integer&gt; <span class="text-user">list</span> = new <span class="text-neon">ArrayList</span>&lt;Integer&gt;();
+
+for (int i = 1; i &lt;= 20; i++)
+   if (i%2 == 0)
+      <span class="text-user">list</span>.<span class="text-red">add</span>(i);
+
+int <span class="text-green">n</span> = <span class="text-user">list</span>.<span class="text-red">size</span>();
+<span class="text-user">list</span>.<span class="text-red">remove</span>(<span class="text-green">n</span> - 3);
+<span class="text-user">list</span>.<span class="text-red">remove</span>(<span class="text-green">n</span> - 2);
+<span class="text-user">list</span>.<span class="text-red">remove</span>(<span class="text-green">n</span> - 1);</code></pre>
+        </td>
+        <td>Створюємо об'єкт-список<br/><br/> У списку 10 елементів: <code>2</code>, <code>4</code>, <code>6</code>, ... <code>20</code><br/><br/><br/><br/> <code><span class="text-green">n</span> = 10</code><br/> <code><span class="text-green">n</span> - 3 = 7</code> (у списку залишилось 9 елементів)<br/> <code><span class="text-green">n</span> - 2 = 8</code> (у списку залишилось 8 елементів)<br/> <code><span class="text-green">n</span> - 1 = 9</code> (у списку залишилось 7 елементів)</td>
+    </tr>
+    </tbody>
+</table>
+<p>Після видалення 7-го й 8-го елементів у списку залишиться всього 8 елементів. Тому 9-й елемент видалити не вдасться — у програмі виникне помилка.</p>
+<p>Як видаляти елементи правильно:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Варіант 1</th>
+        <th>Варіант 2</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="text-green">n</span> = <span class="text-user">list</span>.<span class="text-red">size</span>();
+<span class="text-user">list</span>.<span class="text-red">remove</span>(<span class="text-green">n</span> - 3);
+<span class="text-user">list</span>.<span class="text-red">remove</span>(<span class="text-green">n</span> - 3);
+<span class="text-user">list</span>.<span class="text-red">remove</span>(<span class="text-green">n</span> - 3);
+</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>int <span class="text-green">n</span> = <span class="text-user">list</span>.<span class="text-red">size</span>();
+<span class="text-user">list</span>.<span class="text-red">remove</span>(<span class="text-green">n</span> - 1);
+<span class="text-user">list</span>.<span class="text-red">remove</span>(<span class="text-green">n</span> - 2);
+<span class="text-user">list</span>.<span class="text-red">remove</span>(<span class="text-green">n</span> - 3);
+</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Елементи потрібно видаляти або з кінця або просто в одному й тому самому місці, а після кожного видалення елементи зсуватимуться на одну позицію.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task12.task1215"></div>

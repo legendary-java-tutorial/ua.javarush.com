@@ -1,0 +1,290 @@
+﻿Знайомство з колекцією HashMap
+<p>----------------------------------------</p>
+Множина пар: ключ–значення. У Java є ще одна цікава колекція (в широкому сенсі) — це колекція Map. Точного перекладу її назви немає: найчастіше її називають «карта», «словник» або просто «мапа». Ця колекція схожа на колекцію Set, але зберігає не множину елементів,
+<p>----------------------------------------</p>
+<h2>1. Множина пар: ключ–значення</h2>
+<img data-max-width="1024" data-id="6e74a93d-91be-48c0-bdc2-6a19ddc92d9e" src="https://cdn.javarush.com/images/article/6e74a93d-91be-48c0-bdc2-6a19ddc92d9e/1024.jpeg" alt="">>
+<p>У Java є ще одна цікава колекція (в широкому сенсі) — це колекція <code>Map</code>. Точного перекладу її назви немає: найчастіше її називають «карта», «словник» або просто «мапа» — саме цей термін ми й використовуватимемо надалі.</p>
+<p>Ця колекція схожа на колекцію <code>Set</code>, але зберігає не множину елементів, а множину «пар елементів». Кожна пара елементів <code>Map</code> — це «ключ» і «значення».</p>
+<p>Припустімо, ви хочете зберігати в програмі імена працівників компанії та їхні зарплати або імена своїх колег та їхній вік. Тоді вам знадобиться така таблиця:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Ім'я</th>
+        <th>Вік</th>
+    </tr>
+    <tr>
+        <td>Сергій</td>
+        <td>21</td>
+    </tr>
+    <tr>
+        <td>Микола</td>
+        <td>22</td>
+    </tr>
+    <tr>
+        <td>Іван Петрович</td>
+        <td>48</td>
+    </tr>
+    <tr>
+        <td>Ганнуся</td>
+        <td>?</td>
+    </tr>
+    </tbody>
+</table>
+<p>Тут у кожному рядку зберігається пара значень. Ім'я будемо називати <span class="term">ключем пари</span>, а вік — <span class="term">значенням пари</span>.</p>
+<p>Увесь набір таких пар і буде називатися <span class="term">мапою</span> — <code>Map</code>.</p>
+<p>Ключем пари може бути що завгодно, але ключ не може мати значення <code>null</code>. Ключі мають бути унікальними: <span class="text-red">одна мапа не може містити два однакових ключі.</span></p>
+<hr>
+<h2>2. Клас <code>HashMap</code></h2>
+<p>Клас <code>HashMap</code> — це найпопулярніша колекція з усіх мап (<code>Map</code>). З одного боку, він дуже схожий на HashSet і має всі його методи, а з іншого — на список (<code>ArrayList</code>), якби індексами списку могли бути не числа, а слова.</p>
+<p>Створити об'єкт типу <code>HashMap</code> можна за допомогою такої команди:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm language-java"><code><span class="text-neon">HashMap</span>&lt;<span class="text-viola">TКлюч</span>, <span class="text-viola">TЗначення</span>&gt; <span class="text-green">ім'я</span> = new <span class="text-neon">HashMap</span>&lt;<span class="text-viola">TКлюч</span>, <span class="text-viola">TЗначення</span>&gt;();</code></pre>
+</div>
+<p>де <code><span class="text-viola">ТКлюч</span></code> — це тип ключів у парі елементів, <code><span class="text-viola">ТЗначення</span></code> — тип значень у парі елементів, які зберігатимуться в колекції <code><span class="text-neon">HashMap</span></code>.</p>
+<p>Клас <code>HashMap</code> має такі методи:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Метод</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>void <span class="text-red">put</span>(<span class="text-viola">ТКлюч</span> key, <span class="text-viola">ТЗначення</span> value)</code></pre>
+        </td>
+        <td>Додає в колекцію пару (<code>key</code>, <code>value</code>)</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-viola">ТЗначення</span> <span class="text-red">get</span>(<span class="text-viola">ТКлюч</span> key)</code></pre>
+        </td>
+        <td>Повертає значення відповідно до ключа.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>boolean <span class="text-red">containsKey</span>(<span class="text-viola">ТКлюч</span> key)</code></pre>
+        </td>
+        <td>Перевіряє наявність ключа в колекції</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>boolean <span class="text-red">containsValue</span>(<span class="text-viola">ТЗначення</span> value)</code></pre>
+        </td>
+        <td>Перевіряє наявність значення в колекції</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-viola">ТЗначення</span> <span class="text-red">remove</span>(<span class="text-viola">ТКлюч</span> key)</code></pre>
+        </td>
+        <td>Видаляє елемент із колекції</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>void <span class="text-red">clear</span>()</code></pre>
+        </td>
+        <td>Очищає колекцію: видаляє всі елементи</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">size</span>()</code></pre>
+        </td>
+        <td>Повертає кількість пар елементів у колекції</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Set&lt;<span class="text-viola">ТКлюч</span>&gt; <span class="text-red">keySet</span>()</code></pre>
+        </td>
+        <td>Повертає множину ключів колекції</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Collection&lt;<span class="text-viola">ТЗначення</span>&gt; <span class="text-red">values</span>()</code></pre>
+        </td>
+        <td>Повертає множину елементів колекції</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>Set&lt;<span class="text-neon">Map.Entry</span>&lt;<span class="text-viola">TКлюч</span>, <span class="text-viola">TЗначення</span>&gt;&gt; <span class="text-red">entrySet</span>()</code></pre>
+        </td>
+        <td>Повертає всі значення колекції у вигляді множини (<code>Set</code>), яка містить пари (<code>Map.Entry</code>).</td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Додавання елементів до <code>HashMap</code></strong></p>
+<p>Елементи додаються в мапу відразу парами: для цього використовується метод <code>put()</code>. Першим параметром передається ключ, а другим — значення.</p>
+<pre class="language-java"><code>HashMap&lt;<span class="text-green">String</span>, <span class="text-user">Integer</span>&gt; <span class="code text-orange">map</span> = new HashMap&lt;<span class="text-green">String</span>, <span class="text-user">Integer</span>&gt;();
+<span class="code text-orange">map</span>.<span class="text-red">put</span>("Сергій", 21);
+<span class="code text-orange">map</span>.<span class="text-red">put</span>("Микола", 22);
+<span class="code text-orange">map</span>.<span class="text-red">put</span>("Іван Петрович", 48);
+<span class="code text-orange">map</span>.<span class="text-red">put</span>("Ганнуся", null);</code></pre>
+<p><span class="text-orange">Якщо під час додавання елемента з'ясується, що елемент із таким ключем уже є, старе значення ключа буде замінено новим.</span></p>
+<p>Така поведінка робить <code>HashMap</code> схожим на масив або список, якби індексами в них були слова (<code>String</code>), а не числа.</p>
+<div class="lesson-note lesson-note--important">
+    <div class="lesson-note__container">
+        <div class="lesson-note__head">Важливо!</div>
+        <div class="lesson-note__content">
+            <p>Як Тип-Ключ і Тип-Значення можна використовувати практично будь-який тип. До Типу-Ключа є невеликі додаткові вимоги, але про них ви дізнаєтеся під час детального вивчення колекцій у квесті Java Collections.</p>
+        </div>
+    </div>
+</div>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task13.task1309"></div>
+<hr>
+<h2>3. Підмножини <code>HashMap</code>: множина ключів</h2>
+<p>Припустімо, ми хочемо просто вивести всі елементи <code>HashMap</code> на екран, як це зробити? Для цього потрібно зрозуміти, як перебрати всі елементи <code>HashMap</code>. Для цього є різні способи.</p>
+<p><strong>Найпростіший спосіб — використати цикл за ключами</strong></p>
+<p>Елементи класу <code>HashMap</code> не мають порядкових номерів, тому цикл із лічильником тут не підходить. Натомість можна отримати множину ключів за допомогою методу <code><span class="text-red">keySet</span>()</code>, а як перебирати множини, ви вже знаєте:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">HashMap</span>&lt;<span class="text-green">String</span>, <span class="text-user">Integer</span>&gt; <span class="code text-orange">map</span> = new <span class="text-neon">HashMap</span>&lt;<span class="text-green">String</span>, <span class="text-user">Integer</span>&gt;();
+<span class="code text-orange">map</span>.<span class="text-red">put</span>("Сергій", 21);
+<span class="code text-orange">map</span>.<span class="text-red">put</span>("Микола", 22);
+<span class="code text-orange">map</span>.<span class="text-red">put</span>("Іван Петрович", 48);
+<span class="code text-orange">map</span>.<span class="text-red">put</span>("Ганнуся", null);
+
+for (String <span class="code"><span class="text-green">key</span></span>: <span class="code text-orange">map</span>.<span class="text-red">keySet</span>())
+{
+   Integer <span class="code"><span class="text-user">value</span></span> = <span class="code text-orange">map</span>.<span class="text-red">get</span>(<span class="code"><span class="text-green">key</span></span>);
+   System.out.println(<span class="code"><span class="text-green">key</span></span> + " --&gt; " + <span class="code"><span class="text-user">value</span></span>);
+}</code></pre>
+        </td>
+        <td><br/><br/><br/><br/><br/><br/>Цикл за всіма ключами <code>map</code><br/><br/> Отримуємо значення за ключем</td>
+    </tr>
+    </tbody>
+</table>
+<p>Метод <code>keySet()</code> повертає множину ключів. Цю множину можна використати двома способами:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Короткий запис</th>
+        <th>Довгий запис</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>for (String <span class="code"><span class="text-green">key</span></span>: <span class="code text-orange">map</span>.<span class="text-red">keySet</span>())
+{
+   Integer <span class="code"><span class="text-user">value</span></span> = <span class="code text-orange">map</span>.<span class="text-red">get</span>(<span class="code"><span class="text-green">key</span></span>);
+   System.out.println(<span class="code"><span class="text-green">key</span></span> + " --&gt; " + <span class="code"><span class="text-user">value</span></span>);
+}</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>Set&lt;String&gt; <span class="code text-viola">keys</span> = <span class="code text-orange">map</span>.<span class="text-red">keySet</span>();
+
+for (String <span class="code"><span class="text-green">key</span></span>: <span class="code text-viola">keys</span>)
+{
+   Integer <span class="code"><span class="text-user">value</span></span> = <span class="code text-orange">map</span>.<span class="text-red">get</span>(<span class="code"><span class="text-green">key</span></span>);
+   System.out.println(<span class="code"><span class="text-green">key</span></span> + " --&gt; " + <span class="code"><span class="text-user">value</span></span>);
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task13.task1310"></div>
+<hr>
+<h2>4. Використання циклу за парами</h2>
+<p>Є складніший спосіб: можна перетворити <code>Map</code> на <span class="term">множину пар елементів</span>, а потім використати цикл за елементами множини, як ми вже робили раніше.</p>
+<p>Колекція <code>HashMap</code> має допоміжний клас для зберігання пари елементів. Він має приблизно такий вигляд:</p>
+<pre class="language-java"><code>class Entry&lt;<span class="text-green">KeyType</span>, <span class="text-user">ValueType</span>&gt;
+{
+   private <span class="text-green">KeyType</span> <span class="text-red">key</span>;
+   private <span class="text-user">ValueType</span> <span class="text-viola">value</span>;
+
+   public <span class="text-green">KeyType</span> getKey()
+   {
+      return this.<span class="text-red">key</span>;
+   }
+
+   public <span class="text-user">ValueType</span> getValue()
+   {
+      return this.<span class="text-viola">value</span>;
+   }
+}</code></pre>
+<p>Результат виклику методу <code><span class="text-red">entrySet</span>()</code> для об'єкта типу <code><span class="text-neon">HashMap</span>&lt;<span class="text-viola">ТКлюч, ТЗначення</span>&gt;</code> матиме тип <code><span class="text-neon">Set</span>&lt;<span class="text-orange">Entry</span>&lt;<span class="text-viola">ТКлюч, ТЗначення</span>&gt;&gt;</code>:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-neon">Set</span>&lt;<span class="text-orange">Entry</span>&lt;<span class="text-viola">Ключ</span>, <span class="text-viola">Значення</span>&gt;&gt; <span class="text-green">ім'я</span> = <span class="text-user">map</span>.<span class="text-red">entrySet</span>();</code></pre>
+</div>
+<p>Тут ми бачимо складний тип <code><span class="text-neon">Set</span></code> із параметром-значенням, а параметр-значення — це ще один складний тип (<code><span class="text-orange">Entry</span></code>), який до того ж має два параметри.</p>
+<p>Новачки можуть у цьому заплутатися. Проте якщо розберетеся, то зможете написати такий код:</p>
+<pre class="language-java"><code><span class="text-neon">HashMap</span>&lt;<span class="text-green">String</span>, <span class="text-user">Integer</span>&gt; <span class="code text-user">map</span> = new <span class="text-neon">HashMap</span>&lt;<span class="text-green">String</span>, <span class="text-user">Integer</span>&gt;();
+<span class="code text-user">map</span>.<span class="text-red">put</span>("Сергій", 21);
+<span class="code text-user">map</span>.<span class="text-red">put</span>("Микола", 22);
+<span class="code text-user">map</span>.<span class="text-red">put</span>("Іван Петрович", 48);
+<span class="code text-user">map</span>.<span class="text-red">put</span>("Ганнуся", null);
+
+Set&lt;Map.Entry&lt;<span class="text-green">String</span>, <span class="text-user">Integer</span>&gt;&gt; <span class="code text-viola">entries</span> = <span class="code text-user">map</span>.<span class="text-red">entrySet</span>();
+for(Map.Entry&lt;<span class="text-green">String</span>, <span class="text-user">Integer</span>&gt; <span class="code text-orange">pair</span>: <span class="code text-viola">entries</span>)
+{
+   String <span class="code"><span class="text-green">key</span></span> = <span class="code text-orange">pair</span>.getKey();
+   Integer <span class="code"><span class="text-user">value</span></span> = <span class="code text-orange">pair</span>.getValue();
+   System.out.println(<span class="code"><span class="text-green">key</span></span> + " --&gt; " + <span class="code"><span class="text-user">value</span></span>);
+}</code></pre>
+<p>Цей код можна трошки спростити.</p>
+<p>По-перше, можна не створювати окрему змінну для <code>entries</code>, а відразу викликати метод <code><span class="text-red">entrySet</span>()</code> всередині циклу <code>for</code>:</p>
+<pre class="language-java"><code>for(Map.Entry&lt;<span class="text-green">String</span>, <span class="text-user">Integer</span>&gt; <span class="code text-orange">pair</span>: <span class="code text-user">map</span>.<span class="text-red">entrySet</span>())
+{
+   String <span class="code"><span class="text-green">key</span></span> = <span class="code text-orange">pair</span>.getKey();
+   Integer <span class="code"><span class="text-user">value</span></span> = <span class="code text-orange">pair</span>.getValue();
+   System.out.println(<span class="code"><span class="text-green">key</span></span> + " --&gt; " + <span class="code"><span class="text-user">value</span></span>);
+}</code></pre>
+<p>По-друге, можна скористатися новим оператором <code>var</code>, який дає змогу автоматично вивести тип <span class="term">пари&nbsp;елементів</span>:</p>
+<pre class="language-java"><code>for(var <span class="code text-orange">pair</span>: <span class="code text-user">map</span>.entrySet())
+{
+   String <span class="code"><span class="text-green">key</span></span> = <span class="code text-orange">pair</span>.getKey();
+   Integer <span class="code"><span class="text-user">value</span></span> = <span class="code text-orange">pair</span>.getValue();
+   System.out.println(<span class="code"><span class="text-green">key</span></span> + " --&gt; " + <span class="code"><span class="text-user">value</span></span>);
+}</code></pre>
+<p>Непогано, чи не так?</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task13.task1311"></div>
+<hr>
+<h2>5. Порівняння <code>ArrayList</code> і <code>HashMap</code></h2>
+<p><code>HashMap</code> дуже нагадує <code>ArrayList</code>, в якому індексами є не цифри, а слова (або інший тип ключів).</p>
+<p>А якщо використовувати в <code>HashMap</code> ключ типу <code>Integer</code>, ця колекція стане ще більше схожою на <code>ArrayList</code>. Порівняйте:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код з ArrayList&lt;String&gt;</th>
+        <th>Код із HashMap&lt;Integer, String&gt;</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">ArrayList</span>&lt;String&gt; <span class="code text-user">list</span> = new <span class="text-neon">ArrayList</span>&lt;String&gt;();
+
+<span class="code text-user">list</span>.<span class="text-red">add</span>("Привіт");
+<span class="code text-user">list</span>.<span class="text-red">add</span>("Hello");
+
+String s = <span class="code text-user">list</span>.<span class="text-red">get</span>(0);
+<span class="code text-user">list</span>.<span class="text-red">set</span>(0, s + "!");
+
+for (String <span class="code text-orange">item</span>: <span class="code text-user">list</span>)
+{
+   System.out.println(<span class="code text-orange">item</span>);
+}</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code><span class="text-neon">HashMap</span>&lt;Integer, String&gt; <span class="code text-user">map</span> = new <span class="text-neon">HashMap</span>&lt;Integer, String&gt;();
+
+<span class="code text-user">map</span>.<span class="text-red">put</span>(0, "Привіт");
+<span class="code text-user">map</span>.<span class="text-red">put</span>(1, "Hello");
+
+String s = <span class="code text-user">map</span>.<span class="text-red">get</span>(0);
+<span class="code text-user">map</span>.<span class="text-red">put</span>(0, s + "!");
+
+for (String <span class="code text-orange">item</span>: <span class="code text-user">map</span>.<span class="text-red">values</span>())
+{
+   System.out.println(<span class="code text-orange">item</span>);
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task13.task1312"></div>

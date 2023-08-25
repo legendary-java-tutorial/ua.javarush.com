@@ -1,0 +1,235 @@
+﻿Особливості роботи з масивами
+<p>----------------------------------------</p>
+Масиви в пам'яті. Малюнки в попередніх прикладах трохи неточні. Під час створення масивів (як і під час створення рядків) у пам'яті виділяються два блоки: один для зберігання власне масиву (контейнера), а другий — під змінну, що зберігає його адресу. Уточнену ситуацію зображено на малюнку нижче
+<p>----------------------------------------</p>
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="21f4ada2-5241-4ba6-a71b-c67f81522c23" data-max-width="1024" src="https://cdn.javarush.com/images/article/21f4ada2-5241-4ba6-a71b-c67f81522c23/original.png" alt=""/>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<h2>1. Масиви в пам'яті</h2>
+<p>Малюнки в попередніх прикладах трохи неточні.</p>
+<p>Під час створення масивів (як і під час створення рядків) у пам'яті виділяються два блоки: один для зберігання власне <span class="term"><span class="text-green">масиву</span></span> (контейнера), а другий — під змінну, що зберігає його <span class="term"><span class="text-red">адресу</span></span>. Уточнену ситуацію зображено на малюнку нижче:</p>
+<img data-max-width="1024" data-id="73dbc462-aad0-4bc8-8397-2dc799c4cc20" src="https://cdn.javarush.com/images/article/73dbc462-aad0-4bc8-8397-2dc799c4cc20/1024.jpeg" alt="">
+<p>Зеленим кольором показано масив на <code>10</code> елементів типу <code>int</code> і змінну типу <code>int[]</code>, яка зберігає <span class="term"><span class="text-red">адресу</span></span> (посилання) масиву типу <code>int</code> у пам'яті.</p>
+<p>Для порівняння синім кольором позначено звичайну змінну типу <code>int</code>, яка зберігає значення <code class="text-user">199</code>.</p>
+<p>Чимось нагадує зберігання рядків у пам'яті, чи не так?</p>
+<p>Дійсно, рядки. І так само, як під час операцій з рядками, «змінні типу масив» можна присвоювати одна одній:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int[] <span class="text-red">a</span> = new int[10];
+<span class="text-red">a</span>[2] = 4;
+<span class="text-red">a</span>[7] = 9;
+int[] <span class="text-green">b</span> = <span class="text-red">a</span>;
+
+<span class="text-red">a</span>[9] = <span class="text-green">b</span>[2] + <span class="text-red">a</span>[7];</code></pre>
+        </td>
+        <td>Створюємо масив на <code>10</code> елементів типу <code>int</code>.<br/> У комірку з індексом <code>2</code> записуємо значення <code>4</code>.<br/> У комірку з індексом <code>7</code> записуємо значення <code>9</code>.<br/> У змінній <code><span class="text-green">b</span></code> зберігаємо адресу, записану в змінній <code><span class="text-red">a</span></code>.<br/> Тепер <code><span class="text-red">a</span></code> і <code><span class="text-green">b</span></code> вказують на один і той самий об'єкт-масив у пам'яті.<br/> У комірку з індексом <code>9</code> об'єкта-масиву записуємо суму значень, які зберігаються в комірках <code>2</code> (зберігається <code>4</code>) і <code>7</code> (зберігається <code>9</code>).</td>
+    </tr>
+    </tbody>
+</table>
+<p>При цьому об'єкт-масив залишатиметься на своєму місці, а змінні <code><span class="text-red">a</span></code> і <code><span class="text-green">b</span></code> зберігатимуть однакові адреси (посилання) на один і той самий об'єкт. Погляньте на малюнок:</p>
+<img data-max-width="1024" data-id="5ebcc5b8-559e-4e25-936e-b6486696bfff" src="https://cdn.javarush.com/images/article/5ebcc5b8-559e-4e25-936e-b6486696bfff/1024.jpeg" alt="">
+<hr>
+<h2>2. Детальніше про роботу з масивом</h2>
+<p>Масив можна створити з елементів будь-якого типу. Для цього потрібно лише до назви типу додати квадратні дужки. Загальний вигляд створення масиву такий:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-orange">тип</span>[] <span class="text-red">ім'я</span> = new <span class="text-orange">тип</span>[<span class="text-user">кількість</span>];</code></pre>
+</div>
+<p>де <span class="text-orange">тип</span> — це тип елементів (комірок) масиву, які ми в ньому зберігатимемо. <span class="text-red">Ім'я</span> — це ім'я змінної, за допомогою якого ми звертатимемося до масиву, а <span class="text-user">кількість</span> — це кількість комірок у масиві.</p>
+<p>У прикладі вище наведено канонічну форму: створення змінної-масиву та створення об'єкта-масиву. Насправді це дві незалежні конструкції.</p>
+<p>Можна створити змінну-масив і об'єкт-масив окремо.</p>
+<div class="lesson-example lesson-example--center">
+<pre class="lecture-code lecture-code--present language-java"><code><span class="text-orange">тип</span>[] <span class="text-red">ім'я</span>;
+<span class="text-red">ім'я</span> = new <span class="text-orange">тип</span>[<span class="text-user">кількість</span>];</code></pre>
+</div>
+<p>І ще один досить важливий момент:</p>
+<div class="lesson-note lesson-note--important">
+    <div class="lesson-note__container">
+        <div class="lesson-note__content">
+            У ролі <span class="term">індексу масиву</span> та <span class="term">кількості елементів масиву</span> можуть бути змінні та навіть цілі вирази.
+        </div>
+    </div>
+</div>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="text-green">n</span> = <span class="text-user">100</span>;
+int[] <span class="text-red">a</span> = new int[<span class="text-green">n</span>];</code></pre>
+        </td>
+        <td>Створення масиву з <code><span class="text-green">n</span></code> елементів</td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="text-green">n</span> = <span class="text-user">100</span>;
+int[] a = new int[<span class="text-green">n</span> * <span class="text-user">2</span> + <span class="text-user">3</span>];</code></pre>
+        </td>
+        <td>Створення масиву з <code>203</code> елементів</td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="text-green">n</span> = <span class="text-user">100</span>;
+int[] <span class="text-red">a</span> = new int[<span class="text-green">n</span>];
+<span class="text-red">a</span>[<span class="text-green">n</span>-<span class="text-user">1</span>] = <span class="text-user">2</span>;
+<span class="text-red">a</span>[<span class="text-green">n</span>-<span class="text-user">2</span>] = <span class="text-user">3</span>;
+<span class="text-red">a</span>[<span class="text-green">n</span>/5] = a[<span class="text-green">n</span>-<span class="text-user">1</span>] + a[<span class="text-green">n</span>-2]</code></pre>
+        </td>
+        <td><pre><code>
+
+<span class="token comment">// a[99] = 2;</span>
+<span class="token comment">// a[98] = 3;</span>
+<span class="token comment">// a[20] = a[99] + a[98];</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div class="lesson-note lesson-note--important">
+    <div class="lesson-note__container">
+        <div class="lesson-note__head">Важливо!</div>
+        <div class="lesson-note__content">
+            До речі, звертаємо вашу увагу, що якщо спробувати звернутися до комірки масиву за індексом, якого в масиві немає (у нашому випадку це всі цілі числа, крім чисел <code>0..99</code>), програма аварійно завершиться з помилкою <code><span class="text-red">ArrayIndexOfBoundException</span></code> — індекс поза межами масиву.
+        </div>
+    </div>
+</div>
+<hr>
+<h2>3. Довжина масиву</h2>
+<p>Як ви побачили в попередньому прикладі, можна окремо створити змінну типу масив і потім десь у коді присвоїти їй значення (посилання на об'єкт-масив). Можна зробити навіть так:</p>
+<table>
+    <tbody>
+    <tr>
+        <th> Код</th>
+        <th> Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int[] <span class="text-red">array</span>;
+if (<span class="text-viola">a</span> &lt; 10)
+   <span class="text-red">array</span> = new int[10];
+else
+   <span class="text-red">array</span> = new int[20];</code></pre>
+        </td>
+        <td>Створюємо змінну-масив типу <code>int[]</code><br/> Якщо змінна <code><span class="text-viola">a</span></code> менша за <code>10</code>,<br/> то створити масив із <code>10</code> елементів.<br/> Інакше<br/> створити масив із <code>20</code> елементів</td>
+    </tr>
+    </tbody>
+</table>
+<p>І як надалі працювати з таким масивом? Як дізнатися, скільки в ньому елементів?</p>
+<p>Для цього масив має спеціальну властивість (змінну) — <code>length</code>. І визначити довжину масиву можна за допомогою такого виразу:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-red">array</span>.<span class="text-user">length</span>;</code></pre>
+</div>
+<p>де <code><span class="text-red">array</span></code> — це ім'я змінної-масиву, а <code><span class="text-user">length</span></code> — це ім'я властивості об'єкта-масиву. Значення у властивості <code>length</code> змінити не можна: саму властивість <code>length</code> можна присвоювати іншим змінним, але їй жодного значення присвоїти не можна (програма просто не скомпілюється).</p>
+<p>Отак можна продовжити попередній приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int[] <span class="text-red">array</span>;
+if (<span class="text-viola">a</span> &lt; 10)
+   <span class="text-red">array</span> = new int[10];
+else
+   <span class="text-red">array</span> = new int[20];
+for (int <span class="text-green">i</span> = 0; <span class="text-green">i</span> &lt; <span class="text-red">array</span>.<span class="text-user">length</span>; <span class="text-green">i</span>++)
+{
+   System.out.println(<span class="text-red">array</span>[<span class="text-green">i</span>]);
+} </code></pre>
+        </td>
+        <td>Створюємо змінну-масив типу <code>int[]</code><br/> Якщо змінна <code><span class="text-viola">a</span></code> менша за <code>10</code>,<br/> то створити масив із <code>10</code> елементів.<br/> Інакше<br/> створити масив із <code>20</code> елементів<br/> Цикл по всіх елементах масиву: від <code>0</code> до довжини <code>array.length – 1</code></td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<h2>4. Резюмуємо факти про масиви в Java</h2>
+<p>Резюмуймо відомі факти про масиви:</p>
+<p><span class="text-bold">Факт 1.</span> Масив складається з багатьох комірок.</p>
+<p><span class="text-bold">Факт 2.</span> Доступ до конкретної комірки здійснюється за її номером.</p>
+<p><span class="text-bold">Факт 3.</span> Усі комірки — одного типу.</p>
+<p><span class="text-bold">Факт 4.</span> Початкове значення для всіх комірок — 0 і <code>null</code> (якщо в комірці зберігається адреса), <code>false</code> (для типу <code>boolean</code>). <a href="https://javarush.com/groups/posts/massivy-java">Докладніше про значення за замовчуванням ви дізнаєтеся з цієї лекції</a>.</p>
+<p><span class="text-bold">Факт 5.</span> <code>String[] list</code> — це просто оголошення змінної: сам контейнер (об'єкт-масив) ще не створено. Щоб із ним можна було працювати, потрібно створити масив (контейнер) і записати його в цю змінну, а потім вже ним користуватися. Див. приклади нижче.</p>
+<p><span class="text-bold">Факт 6.</span> Коли ми створюємо об'єкт-масив (контейнер), маємо вказати, якої він довжини, тобто скільки в ньому комірок. Для цього використовуємо таку команду: <code><span class="text-red">new TypeName[n]</span></code>;</p>
+<p><span class="text-bold">Факт 7.</span> Довжину масиву можна визначити за допомогою властивості <code>.length</code>.</p>
+<p><span class="text-bold">Факт 8.</span> Після створення масиву не можна змінити ані тип його елементів, ані їх кількість.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="text-red">s</span>;
+String[] <span class="text-green">list</span>;</code></pre>
+        </td>
+        <td>
+            <code><span class="text-red">s</span></code> дорівнює <code>null</code><br/> <code><span class="text-green">list</span></code> дорівнює <code>null</code>
+        </td>
+    </tr>
+    <tr>
+        <td>
+                <pre class="language-java"><code><span class="text-green">list</span> = new String[<span class="text-red">10</span>];
+int <span class="text-viola">n</span> = <span class="text-green">list</span>.length;</code></pre>
+        </td>
+        <td>
+            Змінна <code><span class="text-green">list</span></code> зберігає посилання на об'єкт — масив рядків із <code><span class="text-red">10</span></code> елементів.<br/> <code><span class="text-viola">n</span></code> дорівнює <code><span class="text-red">10</span></code>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-user">list</span> = new String[<span class="text-viola">0</span>];</code></pre>
+        </td>
+        <td>
+            <p>Тепер <code><span class="text-user">list</span></code> містить масив із <code><span class="text-viola">0</span></code> елементів. Масив є, але зберігати елементи в ньому не можна.</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+                <pre class="language-java"><code><span class="text-green">list</span> = null;
+System.out.println(<span class="text-green">list</span>[1]);</code></pre>
+        </td>
+        <td>
+            Буде згенеровано виняток (помилку програми) — програма аварійно завершиться. <code><span class="text-green">list</span></code> містить порожнє посилання — <code>null</code>
+        </td>
+    </tr>
+    <tr>
+        <td>
+                <pre class="language-java"><code><span class="text-user">list</span> = new String[10];
+System.out.println(<span class="text-user">list</span>[10]);</code></pre>
+        </td>
+        <td>
+            Буде згенеровано виняток (помилку програми) — вихід за межі масиву.<br/> Якщо <code><span class="text-user">list</span></code> містить <code>10</code> елементів/комірок, то ось їхні допустимі індекси: <code>0</code> <code>1</code> <code>2</code> <code>3</code> <code>4</code> <code>5</code> <code>6</code> <code>7</code> <code>8</code> <code>9</code> — загалом <code>10</code> значень.
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task05.task0504"></div>
+<hr>
+
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="54a209f8-62ce-411b-a54c-5abc94a6d7cd" data-max-width="1024" src="https://cdn.javarush.com/images/article/54a209f8-62ce-411b-a54c-5abc94a6d7cd/original.png" alt=""/>
+        </div>
+    </div>
+</div>

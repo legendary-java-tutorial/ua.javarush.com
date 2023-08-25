@@ -1,0 +1,339 @@
+﻿Введення з клавіатури
+<p>----------------------------------------</p>
+Читання з консолі, System.in У попередніх лекціях ми ознайомилися з командами виведення на екран. Для цього ми використовували об'єкт System.out і його методи print() і println(). Просто і зручно. Однак, як ви вже, напевно, здогадуєтеся, самого лише виведення на екран замало. Мета більшості програм —
+<p>----------------------------------------</p>
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="4d0c6191-ce70-4bca-954d-9d64dd31032e" data-max-width="1024" src="https://cdn.javarush.com/images/article/4d0c6191-ce70-4bca-954d-9d64dd31032e/original.png" alt=""/>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<h2>1. Читання з консолі, <code>System.in</code></h2>
+<p>У попередніх лекціях ми ознайомилися з командами виведення на екран. Для цього ми використовували об'єкт <code>System.out</code> і його методи <code>print()</code> і <code>println()</code>. Просто і зручно.</p>
+<p>Однак, як ви вже, напевно, здогадуєтеся, самого лише виведення на екран замало. Мета більшості програм — зробити щось корисне для користувача. Тому дуже часто є потреба в тому, щоб користувач міг вводити дані з клавіатури.</p>
+<p>Так само як для виведення, для введення даних теж є спеціальний об'єкт — <code class="text-green">System.in</code>. Але, на жаль, він не настільки зручний, як нам хотілося б. Цей об'єкт дає змогу зчитувати дані з клавіатури <span class="text-viola">по одному символу</span> за раз.</p>
+<p>Ось чому ми скористаємося ще одним класом, який у парі з об'єктом <code class="text-green">System.in</code> дасть нам усе, що потрібно. У Java вже давно є класи на всі випадки життя. З одним із них ми зараз і познайомимося.</p>
+<hr>
+<h2>2. <code>Клас Scanner</code></h2>
+<p>Клас <code class="text-viola">Scanner</code> (повне ім'я <code class="text-brown">java.util.Scanner</code>) вміє зчитувати дані з різних джерел: консолі, файлів, інтернету. Якщо ми хочемо, щоб він зчитував дані з клавіатури, ми маємо передати йому об'єкт <code class="text-green">System.in</code> як параметр — джерело даних. А об'єкт типу Scanner вже сам розбереться, що з ним робити.</p>
+<p>Зчитування з клавіатури за допомогою об'єкта типу <code class="text-viola">Scanner</code> матиме приблизно такий вигляд:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Scanner <span class="text-viola">console</span> = new <span class="code text-viola">Scanner</span>(<span class="code text-green">System.in</span>);
+String <span class="text-user">name</span> = <span class="text-viola">console</span>.<span class="code text-user">nextLine</span>();
+int <span class="text-red">age</span> = <span class="text-viola">console</span>.<span class="code text-red">nextInt</span>();</code></pre>
+        </td>
+        <td>Створюємо об'єкт класу <code class="text-viola">Scanner</code>.<br/> Читаємо з клавіатури <span class="term text-user">рядок тексту</span>.<br/> Читаємо з клавіатури <span class="term text-red">число</span>.</td>
+    </tr>
+    </tbody>
+</table>
+<p>На вигляд начебто нескладно, але чи так все просто насправді?</p>
+<p>Гадаю, у вас виникла купа запитань, і зараз ми на них відповімо.</p>
+<p>Але спершу наведемо приклад повної програми, в якій використовується клас <code class="text-viola">Scanner</code>:</p>
+<pre class="language-java"><code>import <span class="code text-brown">java.util.Scanner</span>;
+public class Solution {
+   public static void main(String[] args)
+   {
+      Scanner <span class="text-viola">console</span> = new <span class="code text-viola">Scanner</span>(<span class="code text-green">System.in</span>);
+      String <span class="text-user">name</span> = <span class="text-viola">console</span>.<span class="code text-user">nextLine</span>();
+      int <span class="text-red">age</span> = <span class="text-viola">console</span>.<span class="code text-red">nextInt</span>();
+
+      System.out.println("Name: " + <span class="text-user">name</span>);
+      System.out.println("Age: " + <span class="text-red">age</span>);
+   }
+}</code></pre>
+<hr>
+<h2>3. Створення об'єкта <code>Scanner</code></h2>
+<p>Перше запитання — що це за рядок <code>Scanner console = new Scanner(System.in);</code>?</p>
+<p>Такий рядок може збивати з пантелику, проте вам будуть постійно траплятися подібні речі. Отже, здається, настав час пояснити, що тут написано.</p>
+<p>Згадаймо, як ми зазвичай створюємо змінну з текстом:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-user">String</span> <span class="code text-user">str</span> = <span class="code text-green">"текст"</span>;</code></pre>
+    <div class="lesson-example-caption">Оголошення та ініціалізація рядкової змінної</div>
+</div>
+<p>Спочатку ми пишемо тип змінної (<code>String</code>), потім її ім'я (<code>str</code>) і, нарешті, після знака рівності пишемо значення.</p>
+<p>У нашому дивному рядку насправді все так само:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm language-java"><code><span class="text-viola">Scanner</span> <span class="code text-viola">console</span> = <span class="code text-green">new Scanner(System.in)</span>;</code></pre>
+    <div class="lesson-example-caption">Оголошення та ініціалізація змінної типу <code>Scanner</code></div>
+</div>
+<p>Усе, що записано ліворуч від <span class="term">знака рівності</span>, — це оголошення змінної типу <code><span class="text-viola">Scanner</span></code> з іменем <code class="text-viola">console</code>. Можна було назвати її, наприклад, <code class="text-viola">s</code>&nbsp;або <code class="text-viola">scanner</code>, або навіть <code class="text-viola">keyboard</code>. Тоді код мав би такий вигляд:</p>
+<pre class="language-java"><code><span class="text-viola">Scanner</span> <span class="code text-viola">s</span> = <span class="code text-green">new Scanner(System.in)</span>;
+String <span class="text-user">name</span> = <span class="code text-viola">s</span>.<span class="text-user">nextLine</span>();
+int <span class="text-red">age</span> = <span class="code text-viola">s</span>.<span class="text-red">nextInt</span>();</code></pre>
+<pre class="language-java"><code><span class="text-viola">Scanner</span> <span class="code text-viola">scanner</span> = <span class="code text-green">new Scanner(System.in)</span>;
+String <span class="text-user">name</span> = <span class="code text-viola">scanner</span>.<span class="text-user">nextLine</span>();
+int <span class="text-red">age</span> = <span class="code text-viola">scanner</span>.<span class="text-red">nextInt</span>();</code></pre>
+<pre class="language-java"><code><span class="text-viola">Scanner</span> <span class="code text-viola">keyboard</span> = <span class="code text-green">new Scanner(System.in)</span>;
+String <span class="text-user">name</span> = <span class="code text-viola">keyboard</span>.<span class="text-user">nextLine</span>();
+int <span class="text-red">age</span> = <span class="code text-viola">keyboard</span>.<span class="text-red">nextInt</span>();</code></pre>
+<p>Гадаю, тепер усе стало набагато ясніше.</p>
+<p>А от код, записаний праворуч від <span class="term">знака рівності</span>, трохи складніший. Ідеться про <code class="text-green">new Scanner(System.in);</code>&nbsp;Однак тут теж нічого надприродного немає.</p>
+<p>У цьому коді ми кажемо Java-машині: створи новий об'єкт (слово <code>new</code>) типу <code>Scanner</code>&nbsp;і передай у нього як параметр те, звідки новостворений об'єкт <code>Scanner</code> братиме дані, — об'єкт <code>System.in</code>.</p>
+<p>Після виконання всього цього рядка в нас з'явиться змінна з іменем <code class="text-viola">console</code>&nbsp;типу <code><span class="text-viola">Scanner</span></code>, за допомогою якої наша програма зможе зчитувати дані з клавіатури.</p>
+<hr>
+<h2>4. Виклик методів</h2>
+<p>У наведеному вище прикладі наша змінна <code>console</code> типу <code>Scanner</code> зберігала в собі посилання на об'єкт типу <code>Scanner</code>.</p>
+<p>Щоб викликати методи об'єкта, на який посилається змінна, потрібно після імені змінної поставити крапку, а потім ім'я методу й параметри. Загальний вигляд цієї команди такий:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="code text-viola">змінна</span>.<span class="code text-red">метод</span>(<span class="code text-green">параметри</span>);</code></pre>
+    <div class="lesson-example-caption">Виклик методу об'єкта, на який посилається змінна</div>
+</div>
+<p>Приклади:</p>
+<pre class="language-java"><code><span class="code text-viola">System.out</span>.<span class="code text-red">println</span>(<span class="code text-green">"Привіт"</span>);</code></pre>
+<pre class="language-java"><code><span class="code text-viola">System.out</span>.<span class="code text-red">println</span>(<span class="code text-green">1</span>);</code></pre>
+<p>Якщо ви не плануєте передавати у функцію параметри, потрібно ставити просто порожні дужки:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="code text-viola">змінна</span>.<span class="code text-red">метод</span>();</code></pre>
+    <div class="lesson-example-caption">Виклик методу без передавання параметрів</div>
+</div>
+<p>Приклад:</p>
+<pre class="language-java"><code><span class="code text-viola">System.out</span>.<span class="code text-red">println</span>();</code></pre>
+<hr>
+<h2>5. Введення даних з консолі</h2>
+<p>Вводити дані з клавіатури, коли в нас є об'єкт типу <code class="text-viola">Scanner</code>, дуже легко.</p>
+<p>Щоб <span class="term text-user">зчитати з клавіатури рядок</span>, потрібна команда</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code>String <span class="text-user">str</span> = <span class="code text-viola">console</span>.<span class="code text-user">nextLine</span>();</code></pre>
+</div>
+<p>Коли програма дійде до виконання цього рядка, вона зупиниться й очікуватиме, поки користувач уведе дані й натисне клавішу Enter. Після цього все, що ввів користувач, буде збережено в змінній <code><span class="text-user">str</span></code>.</p>
+<p>Щоб <span class="term text-red">зчитати з клавіатури число</span>, потрібна команда</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code>int <span class="text-red">number</span> = <span class="code text-viola">console</span>.<span class="code text-red">nextInt</span>();</code></pre>
+</div>
+<p>Тут усе аналогічно попередній команді. Коли програма дійде до виконання цього рядка, вона зупиниться й очікуватиме, поки користувач уведе дані й натисне клавішу Enter. Після цього все, що ввів користувач, буде перетворено на число і збережено в змінній <code><span class="text-red">number</span></code>.</p>
+<p>Якщо користувач увів дані, які неможливо перетворити на ціле число, виникне помилка в програмі, і вона завершиться.</p>
+<p>Щоб <span class="term text-neon">зчитати з клавіатури дробове число</span>, потрібна команда</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code>double <span class="text-neon">number</span> = <span class="code text-viola">console</span>.<span class="code text-neon">nextDouble</span>();</code></pre>
+</div>
+<p>Ця команда повністю аналогічна команді <code class="text-red">nextInt()</code>, лише з тією різницею, що вона перевіряє, чи можна введені дані перетворити на число <code class="text-neon">double</code>.</p>
+<p>Приклад програми, яка зчитує з клавіатури два числа й виводить їх суму:</p>
+<pre class="language-java"><code>import <span class="code text-brown">java.util.Scanner</span>;
+public class Solution {
+   public static void main(String[] args)
+   {
+      Scanner <span class="code text-viola">console</span> = new <span class="text-viola">Scanner</span>(<span class="code text-green">System.in</span>);
+      int <span class="text-red">a</span> = <span class="code text-viola">console</span>.<span class="code text-red">nextInt</span>();
+      int <span class="text-red">b</span> = <span class="code text-viola">console</span>.<span class="code text-red">nextInt</span>();
+
+      System.out.println(<span class="text-red">a</span> + <span class="text-red">b</span>);
+   }
+}</code></pre>
+<div class="lesson-note lesson-note--important">
+    <div class="lesson-note__container">
+        <div class="lesson-note__head">Примітка</div>
+        <div class="lesson-note__content">
+            <p>Користувач може ввести кілька чисел в одному рядку, розділивши їх пробілами: така ситуація буде коректно оброблена методами класу <code><span class="text-viola">Scanner</span></code>. Однак програма прочитає числа лише після того, як користувач натисне <code>Enter</code>.</p>
+        </div>
+    </div>
+</div>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task02.task0214"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task02.task0215"></div>
+<hr>
+<h2>6. Інші методи класу <code>Scanner</code></h2>
+<p>Це, до речі, були не всі методи класу <code>Scanner</code>. Повний список матиме приблизно такий вигляд:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Метод</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>nextByte()</code></pre>
+        </td>
+        <td>Зчитує дані та перетворює їх на тип <code>byte</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>nextShort()</code></pre>
+        </td>
+        <td>Зчитує дані та перетворює їх на тип <code>short</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>nextInt()</code></pre>
+        </td>
+        <td>Зчитує дані та перетворює їх на тип <code>int</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>nextLong()</code></pre>
+        </td>
+        <td>Зчитує дані та перетворює їх на тип <code>long</code></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>nextFloat()</code></pre>
+        </td>
+        <td>Зчитує дані та перетворює їх на тип <code>float</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>nextDouble()</code></pre>
+        </td>
+        <td>Зчитує дані та перетворює їх на тип <code>double</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>nextBoolean()</code></pre>
+        </td>
+        <td>Зчитує дані та перетворює їх на тип <code>boolean</code></td>
+    </tr>
+    <tr class="row-separator">
+        <td colspan="2"></td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>next()</code></pre>
+        </td>
+        <td>Зчитує одне «слово». Слова розділяються пробілами або Enter</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>nextLine()</code></pre>
+        </td>
+        <td>Зчитує весь рядок</td>
+    </tr>
+    </tbody>
+</table>
+<p>Крім того, є методи, які дають змогу перевірити тип іще не зчитаних даних (щоб знати, яким методом їх зчитувати).</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Метод</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>hasNextByte()</code></pre>
+        </td>
+        <td>Там тип <code>byte</code>? Чи можна його перетворити на тип <code>byte</code>?</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>hasNextShort()</code></pre>
+        </td>
+        <td>Там тип <code>short</code>? Чи можна його перетворити на тип <code>short</code>?</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>hasNextInt()</code></pre>
+        </td>
+        <td>Там тип <code>int</code>? Чи можна його перетворити на тип <code>int</code>?</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>hasNextLong()</code></pre>
+        </td>
+        <td>Там тип <code>long</code>? Чи можна його перетворити на тип <code>long</code>?</td>
+    </tr>
+    <tr class="row-separator">
+        <td colspan="2"></td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>hasNextFloat()</code></pre>
+        </td>
+        <td>Там тип <code>float</code>? Чи можна його перетворити на тип <code>float</code>?</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>hasNextDouble()</code></pre>
+        </td>
+        <td>Там тип <code>double</code>? Чи можна його перетворити на тип <code>double</code>?</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>hasNextBoolean()</code></pre>
+        </td>
+        <td>Там тип <code>boolean</code>? Чи можна його перетворити на тип <code>boolean</code>?</td>
+    </tr>
+    <tr class="row-separator">
+        <td colspan="2"></td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>hasNext()</code></pre>
+        </td>
+        <td>Там є ще одне слово?</td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>hasNextLine()</code></pre>
+        </td>
+        <td>Там є ще один рядок?</td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<h2>7. Введення даних з рядка</h2>
+<p>Ми вже говорили вище, що клас <code class="text-viola">Scanner</code> вміє зчитувати дані з різних джерел. І одне з цих джерел — <span class="term text-user">рядок тексту</span>.</p>
+<p>Отакий вигляд це має:</p>
+<div class="lesson-example lesson-example--center">
+        <pre class="lecture-code lecture-code--present language-java"><code>String <span class="text-user">str</span> = "<span class="code text-user">текст</span>";
+Scanner <span class="text-viola">scanner</span> = new <span class="code text-viola">Scanner</span>(<span class="text-user">str</span>);</code></pre>
+</div>
+<p>Замість об'єкта <code>System.in</code> ми під час створення об'єкта типу <code class="text-viola">Scanner</code> передаємо в нього рядок — <code><span class="text-user">str</span></code>. І тепер об'єкт <code><span class="text-viola">scanner</span></code> буде зчитувати дані з рядка. Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код програми:</th>
+        <th>Пояснення:</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>import <span class="code text-brown">java.util.Scanner</span>;
+public class Solution {
+   public static void main(String[] args)
+   {
+      String <span class="text-user">str</span> = "<span class="code text-user">10 20 40 60</span>";
+      Scanner <span class="text-viola">scanner</span> = new <span class="code text-viola">Scanner</span>(<span class="text-user">str</span>);
+      int <span class="text-red">a</span> = <span class="text-viola">scanner</span>.<span class="code text-red">nextInt</span>();
+      int <span class="text-red">b</span> = <span class="text-viola">scanner</span>.<span class="code text-red">nextInt</span>();
+
+      System.out.println(<span class="text-red">a</span> + <span class="text-red">b</span>);
+   }
+}</code></pre>
+        </td>
+        <td>
+                <pre>
+
+
+
+
+
+
+<span class="token comment">// a == 10;</span>
+<span class="token comment">// b == 20;</span>
+На екран буде виведено: <code>30</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<hr>
+
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="8b2f4643-c428-41c5-b665-40c5ab539415" data-max-width="1024" alt="" src="https://cdn.javarush.com/images/article/8b2f4643-c428-41c5-b665-40c5ab539415/original.png"/>
+        </div>
+    </div>
+</div>

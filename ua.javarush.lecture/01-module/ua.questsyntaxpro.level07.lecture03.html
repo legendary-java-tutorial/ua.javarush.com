@@ -1,0 +1,176 @@
+﻿Об'єкти в Java
+<p>----------------------------------------</p>
+Об'єкти. У мові Java все є об'єктами. Точніше, мало що в Java не є об'єктом. Наприклад, примітивні типи. Проте це скоріше виняток, аніж правило. Що ж таке об'єкт? Об'єкт — це дані й методи, згруповані разом для обробки цих даних. Коли ми говоримо
+<p>----------------------------------------</p>
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="6320ef5b-d6e3-471d-8116-22d4ed83b026" src="https://cdn.javarush.com/images/article/6320ef5b-d6e3-471d-8116-22d4ed83b026/original.png" alt=""/>
+        </div>
+    </div>
+</div>
+<hr>
+<h2>1. Об'єкти</h2>
+<p>У мові Java все є об'єктами.</p>
+<p>Точніше, мало що в Java не є об'єктом. Наприклад, примітивні типи. Проте це скоріше виняток, аніж правило.</p>
+<p>Що ж таке об'єкт?</p>
+<p>Об'єкт — це <strong>дані й методи, згруповані разом для обробки цих даних</strong>. Коли ми говоримо про дані, звичайно, маємо на увазі змінні.</p>
+<p>Про змінні об'єкта кажуть, що це «дані об'єкта» або «стан об'єкта».</p>
+<p>Про методи об'єкта кажуть, що це «поведінка об'єкта». Стан об'єкта (змінні об'єкта), зазвичай змінюють лише за допомогою методів того самого об'єкта. Змінювати змінні об'єкта безпосередньо (не через методи об'єкта) вважається поганим тоном.</p>
+<p><strong>Кожен об'єкт</strong>, так само як і кожна змінна, <strong>має тип</strong>. Цей тип визначається один раз під час створення об'єкта, і потім його змінити не можна. <strong>Типом об'єкта вважається його клас</strong>.</p>
+<p>Кожен об'єкт має власну копію змінних класу (полів класу). Якщо в класі було оголошено нестатичну змінну int a й ваша програма під час роботи створить 10 об'єктів цього класу, то кожен об'єкт матиме власну змінну int a.</p>
+<p><strong>Взаємодія з об'єктом</strong></p>
+<p>Найзручніший спосіб роботи з об'єктом — зберегти посилання на об'єкт у змінній, а потім викликати методи для цієї змінної. Це має вже знайомий вам вигляд:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-red">змінна</span>.<span class="text-green">метод</span>()</code></pre>
+</div>
+<p>де <code><span class="text-red">змінна</span></code> — це змінна, в якій зберігається посилання на об'єкт, а метод — це метод класу об'єкта.</p>
+<p>Для того щоб звернутися до поля (змінної) об'єкта, також потрібно використовувати <span class="term">оператор «крапка»</span>:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-red">змінна</span>.<span class="text-user">поле</span></code></pre>
+</div>
+<p>де <code><span class="text-red">змінна</span></code> — це змінна, в якій зберігається посилання на об'єкт, а поле — це змінна класу (поле об'єкта).</p>
+<hr>
+<h2>2. Оператор <code>new</code></h2>
+<p>Щоб створити об'єкт певного класу, потрібно скористатися оператором <code>new</code>. Отакий вигляд має створення об'єкта в загальному випадку:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-viola">Клас</span> <span class="text-red">змінна</span> = new <span class="text-viola">Клас</span>(<span class="text-neon">параметри</span>);</code></pre>
+</div>
+<p>де <code><span class="text-viola">Клас</span></code> — це ім'я класу для оголошення <code><span class="text-red">змінної</span></code>, а також ім'я класу створюваного об'єкта; змінна — це змінна, в якій зберігається посилання на створений об'єкт; а <code><span class="text-neon">параметри</span></code> — це параметри методу створення об'єкта.</p>
+<p>Які саме параметри матиме об'єкт, вирішують програмісти, які створюють клас об'єкта.</p>
+<p>Вам уже доводилося створювати об'єкти й навіть користуватися саме такою конструкцією. Сподіваємося, що ви цього не забули.</p>
+<pre class="language-java"><code><span class="text-viola">Scanner</span> <span class="text-red">console</span> = new <span class="text-viola">Scanner</span>(<span class="text-neon">System.in</span>);
+int x = <span class="text-red">console</span>.<span class="text-green">nextInt</span>();</code></pre>
+<p><code><span class="text-red"><span class="text-viola">Scanner </span>console</span></code> — це створення змінної <code><span class="text-red">console</span></code> типу <code><span class="text-viola">Scanner</span></code>. <code><span class="token keyword">new</span> <span class="text-viola">Scanner</span>(<span class="text-neon">System.in</span>)</code> — це створення об'єкта типу <code>Scanner</code>. А оператор присвоювання записує в змінну <code><span class="text-red">console</span></code> посилання на новостворений об'єкт.</p>
+<p>У другому рядку ми викликаємо метод <code><span class="text-green">nextInt</span>()</code> для об'єкта <code>Scanner</code> за допомогою змінної <code><span class="text-red">console</span></code>, яка зберігає посилання на об'єкт типу <code>Scanner</code>.</p>
+<p>Приклади створення об'єктів:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-viola">String</span> s = new <span class="text-viola">String</span>(<span class="text-green">"Привіт"</span>);</code></pre>
+        </td>
+        <td>Створює об'єкт типу <code>String</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-viola">Scanner</span> console = new <span class="text-viola">Scanner</span>("");</code></pre>
+        </td>
+        <td>Створює об'єкт типу <code>Scanner</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-viola">int[] </span>data = new <span class="text-viola">int</span>[<span class="text-user">10</span>];</code></pre>
+        </td>
+        <td>Створює об'єкт типу <code>int[]</code>: контейнер на <code>10</code> елементів типу <code>int</code></td>
+    </tr>
+    </tbody>
+</table>
+<p>Створений об'єкт називають <span class="term">об'єктом класу</span> або <span class="term">екземпляром класу</span>, а клас — <span class="term">класом об'єкта</span>. Наприклад: змінна <code>s</code> зберігає посилання на екземпляр класу <code>String</code>.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task07.task0712"></div>
+<hr>
+<h2>3. Знайомство з класами</h2>
+<p>Ви вже, напевно, переконалися, що використовувати класи, створені іншими програмістами, дуже зручно. А як щодо створення власних класів?</p>
+<p>Як зрозуміти, коли і де потрібен власний клас? І як його створити?</p>
+<p>Програмісти зазвичай створюють свої класи, коли хочуть увести в програму нову сутність. Незрозуміло? Тоді спробую пояснити, але почну здалеку.</p>
+<p><strong>Групування даних</strong></p>
+<p>Якщо трохи спростити, можна сказати, що об'єкт у Java — це область пам'яті, яка містить оголошені в класі змінні (поля класу). Або інакше — змінні, об'єднані в групи.</p>
+<p>Припустімо, ваша програма має зберігати координати <code>100</code> точок і метод для їх виведення на екран. Це можна зробити за допомогою масивів. Наприклад, отак:</p>
+<pre class="language-java"><code>class Solution
+{
+   public static void <span class="text-brown">printPoints</span>(int[] <span class="text-viola">x</span>, int[] <span class="text-user">y</span>, int[] <span class="text-neon">color</span>)
+   {
+     for (int <span class="text-red">i</span> = 0; <span class="text-red">i</span> &lt; <span class="text-viola">x</span>.length; <span class="text-red">i</span>++)
+       System.out.println("Колір точки x=" + <span class="text-viola">x</span>[<span class="text-red">i</span>] + ", y=" + <span class="text-user">y</span>[<span class="text-red">i</span>] + " " + <span class="text-neon">color</span>[<span class="text-red">i</span>]);
+   }
+
+   public static void main(String[] args)
+   {
+     int[] <span class="text-viola">x</span> = new int[<span class="text-user">100</span>];
+     int[] <span class="text-user">y</span> = new int[<span class="text-user">100</span>];
+     int[] <span class="text-neon">color</span> = new int[<span class="text-user">100</span>];
+     <span class="text-brown">printPoints</span>(<span class="text-viola">x</span>, <span class="text-user">y</span>, <span class="text-neon">color</span>);
+   }
+}</code></pre>
+<p>Було б набагато зручніше, якби ми відразу мали тип для зберігання всієї інформації про кожну точку: <code>x</code>, <code>y</code>, <code>колір</code>. А якщо в Java такого типу немає, можна його створити власноруч.</p>
+<p>Для цього напишемо код створення класу <code>Point</code>:</p>
+<pre class="language-java"><code>public class <span class="text-red">Point</span>
+{
+   public int <span class="text-viola">x</span>;
+   public int <span class="text-user">y</span>;
+   public int <span class="text-neon">color</span>;
+}</code></pre>
+<p>Тоді попередній код можна переписати отак:</p>
+<pre class="language-java"><code>class Solution
+{
+   public static void <span class="text-brown">printPoints</span>(<span class="text-red">Point</span>[] <span class="text-viola">points</span>)
+   {
+     for (int i = 0; i &lt; <span class="text-viola">points</span>.length; i++)
+       System.out.println("Колір точки x=" + <span class="text-viola">points</span>[i].x + ", y=" + <span class="text-viola">points</span>[i].y + " " + <span class="text-viola">points</span>[i].color);
+   }
+
+   public static void main(String[] args)
+   {
+     Point[] data = new <span class="text-red">Point</span>[<span class="text-user">100</span>];
+     for (int i = 0; i &lt; <span class="text-viola">data</span>.length; i++)
+       <span class="text-viola">data</span>[i] = new <span class="text-red">Point</span>();
+     <span class="text-brown">printPoints</span>(<span class="text-viola">data</span>);
+   }
+}</code></pre>
+<p>А тепер додамо в клас <code>Point</code> метод, який виводитиме інформацію про об'єкт:</p>
+<pre class="language-java"><code>public class <span class="text-red">Point</span>
+{
+   public int <span class="text-viola">x</span>;
+   public int <span class="text-user">y</span>;
+   public int <span class="text-neon">color</span>;
+   public void <span class="text-brown">print</span>()
+   {
+     System.out.println("Колір точки x=" + <span class="text-viola">x</span> + ", y=" + <span class="text-user">y</span> + " " + <span class="text-neon">color</span>);
+   }
+}</code></pre>
+<p>Тоді клас <code>Solution</code> матиме такий вигляд:</p>
+<pre class="language-java"><code>class Solution
+{
+   public static void <span class="text-brown">printPoints</span>(<span class="text-red">Point</span>[] points)
+   {
+     for (int i = 0; i &lt; <span class="text-viola">points</span>.length; i++)
+       <span class="text-viola">points</span>[i].<span class="text-viola">print</span>();
+   }
+
+   public static void main(String[] args)
+   {
+     Point[] data = new Point[<span class="text-user">100</span>];
+     for (int i = 0; i &lt; <span class="text-viola">data</span>.length; i++)
+       <span class="text-viola">data</span>[i] = new <span class="text-red">Point</span>();
+     <span class="text-brown">printPoints</span>(<span class="text-viola">data</span>);
+   }
+}</code></pre>
+<p>Ми красиво сховали всередину точки (клас <code>Point</code>) інформацію про її координати й метод, який виводить дані про стан об'єкта-точки на екран.</p>
+<p>Класи — це відповідь на зростання складності програм. Велика програма стає простішою, якщо її розділити на багато маленьких класів.</p>
+<hr>
+<h2>4. Об'єкти Mutable та Immutable</h2>
+<p>Колись давно ми з вами вивчали константи в мові Java та дійшли не дуже втішного висновку. Константи дають змогу захистити змінні від змін, але не здатні захистити від змін об'єкти, на які ці змінні посилаються.</p>
+<p>У відповідь на цю проблему в Java придумали об'єкти-константи. Їх ще називають immutable-об'єкти — незмінні об'єкти.</p>
+<p>До речі, ви навіть знаєте один такий клас, чиї об'єкти не можна змінювати, — клас <code>String</code>. Об'єкт класу <code>String</code> після створення завжди залишається незмінним. Як же розробники Java домоглися цього?</p>
+<p>По-перше, всі змінні класу <code>String</code> приховано — їх оголошено як <code>private</code>.</p>
+<p>По-друге, успадкування від класу <code>String</code> неможливе: оголошення класу містить модифікатор <code>final</code>.</p>
+<p>По-третє (і це найцікавіше), всі методи класу <code>String</code>, які теоретично мали б змінювати наявний об'єкт, не змінюють його, а повертають новий.</p>
+<p>Наприклад, метод <code>toUpperCase()</code> перетворює всі літери рядка на великі. Але замість того, щоб змінити об'єкт, для якого його викликано, цей метод повертає новий об'єкт типу <code>String</code>, що складається з великих літер:</p>
+<pre class="language-java"><code>String <span class="text-viola">text</span> = "Це дуже важливе повідомлення";
+String <span class="text-user">message</span> = <span class="text-viola">text</span>.toUpperCase();</code></pre>
+<p>От що буде в пам'яті після виконання цього коду:</p>
+<img data-max-width="1024" data-id="792df6f2-82dc-4ad8-9532-462d70c1970b" src="https://cdn.javarush.com/images/article/792df6f2-82dc-4ad8-9532-462d70c1970b/1024.jpeg" alt="">
+<p><span>Отже, можна сміливо передавати свої рядки в будь-які методи — їх ніхто не змінить.</span></p>
+<hr>
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="1b344342-205a-4270-a8d4-09528dabc056" src="https://cdn.javarush.com/images/article/1b344342-205a-4270-a8d4-09528dabc056/original.png" alt=""/>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,316 @@
+﻿Перетворення типів у Java
+<p>----------------------------------------</p>
+Перетворення типів. Змінні примітивних типів (за винятком типу boolean) використовуються для зберігання чисел різних типів. І хоча типи змінних є незмінними, є спосіб, який дозволяє перетворювати типи. Цей спосіб —&nbsp;присвоювання. Змінні різних типів можна присвоювати одна одній.
+<p>----------------------------------------</p>
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="d357f103-ce69-4779-8bfd-fe0c8e8109b4" src="https://cdn.javarush.com/images/article/d357f103-ce69-4779-8bfd-fe0c8e8109b4/original.png" alt=""/>
+        </div>
+    </div>
+</div>
+<hr>
+<h2>1. Перетворення типів</h2>
+<p><img data-id="ea235ad1-60a6-4063-9f51-24c7a82e9ef3" src="https://cdn.javarush.com/images/article/ea235ad1-60a6-4063-9f51-24c7a82e9ef3/original.jpg" alt="Перетворення типів у Java"/></p>
+<p>Змінні примітивних типів (за винятком типу <code>boolean</code>) використовуються для зберігання чисел різних типів. І хоча типи змінних є незмінними, є спосіб, який дозволяє перетворювати типи. Цей спосіб — <span class="term">присвоювання</span>.</p>
+<p>Змінні різних типів можна присвоювати одна одній. У цьому разі значення, взяте зі змінної одного типу, буде перетворено на значення іншого типу й присвоєно другій змінній. Можна виділити два види перетворення типів: розширення і звуження.</p>
+<p><strong>Розширення типу</strong> схоже на перекладання з маленького кошика у великий — операція проходить непомітно і безболісно. <strong>Звуження типу</strong> — це перекладання з великого кошика в маленький: місця може не вистачити, і щось доведеться викинути.</p>
+<p>Тут показано типи, відсортовані за розміром «кошика»:</p>
+<p><img data-id="5b2f1d28-0785-4131-bb55-854d83346e52" src="https://cdn.javarush.com/images/article/5b2f1d28-0785-4131-bb55-854d83346e52/original.png" alt="Перетворення типів у Java 2"/></p>
+<hr>
+<h2>2. Розширення типів</h2>
+<p>Часто може з'явитися потреба присвоїти змінній одного числового типу значення змінної іншого числового типу. Як же це зробити?</p>
+<p>У мові Java є 4 цілочислових типи:</p>
+<table>
+    <tbody>
+    <tr>
+        <th class="text-center">Тип</th>
+        <th class="text-center">Розмір</th>
+    </tr>
+    <tr>
+        <td class="text-center"><code>byte</code></td>
+        <td class="text-center"><code>1 байт</code></td>
+    </tr>
+    <tr>
+        <td class="text-center"><code>short</code></td>
+        <td class="text-center"><code>2 байти</code></td>
+    </tr>
+    <tr>
+        <td class="text-center"><code>int</code></td>
+        <td class="text-center"><code>4 байти</code></td>
+    </tr>
+    <tr>
+        <td class="text-center"><code>long</code></td>
+        <td class="text-center"><code>8 байтів</code></td>
+    </tr>
+    </tbody>
+</table>
+<p><span class="text-green">Змінній більшого розміру завжди можна присвоювати змінні меншого розміру.</span></p>
+<p>Змінній типу <code>long</code> можна без обмежень присвоювати змінні типу <code>int</code>, <code>short</code> і <code>byte</code>. Змінній типу <code>int</code> можна присвоювати змінні типу <code>short</code> і <code>byte</code>. А змінній типу <code>short</code> можна присвоювати змінні типу <code>byte</code>.</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>byte <span class="text-red">a</span> = 5;
+short <span class="text-green">b</span> = <span class="text-red">a</span>;
+int <span class="text-viola">c</span> = <span class="text-red">a</span> + <span class="text-green">b</span>;
+long <span class="text-neon">d</span> = <span class="text-viola">c</span> * <span class="text-viola">c</span>;</code></pre>
+        </td>
+        <td style="vertical-align: middle">Такий код чудово скомпілюється.</td>
+    </tr>
+    </tbody>
+</table>
+<p>Таке перетворення — від типу меншого розміру до більшого, називається <span class="term"><span class="text-green">розширенням типу</span></span>.</p>
+<p><strong>А як це діє для дійсних чисел?</strong></p>
+<p>З ними все так само — розмір має значення:</p>
+<table>
+    <tbody>
+    <tr>
+        <th class="text-center">Тип</th>
+        <th class="text-center">Розмір</th>
+    </tr>
+    <tr>
+        <td class="text-center"><code>float</code></td>
+        <td class="text-center"><code>4 байти</code></td>
+    </tr>
+    <tr>
+        <td class="text-center"><code>double</code></td>
+        <td class="text-center"><code>8 байтів</code></td>
+    </tr>
+    </tbody>
+</table>
+<p>Змінній типу <code>double</code> можна без проблем присвоїти змінну типу <code>float</code>. А от з цілочисловими типами цікавіше.</p>
+<p>Змінній типу <code>float</code> можна присвоїти змінну будь-якого цілочислового типу. Навіть типу <code>long</code>, довжина якого 8&nbsp;байтів. А змінній типу <code>double</code> можна взагалі присвоювати все що завгодно: змінну будь-якого цілочислового типу й змінну типу <code>float</code>:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+                <pre class="language-java"><code>long <span class="text-green">a</span> = 1234567890;
+float <span class="text-neon">b</span> = <span class="text-green">a</span>;
+double <span class="text-viola">c</span> = <span class="text-green">a</span>;</code></pre>
+        </td>
+        <td>
+                <pre><code>
+b == 1.234567<span class="text-red">94</span><span class="text-orange">E9</span>
+c == 1.23456789<span class="text-orange">E9</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Зверніть увагу, що перетворення на дійсний тип може призвести до втрати точності внаслідок браку значущих цифр.</p>
+<p>Під час перетворення цілих чисел на дробові можуть відкидатися наймолодші розряди числа. Але оскільки суть дробового числа в тому, щоб зберігати приблизне значення, таке присвоєння дозволено.</p>
+<hr>
+<h2>3. Звуження типів</h2>
+<p>А що там з іншими варіантами? Що робити, коли змінній типу <code>int</code> потрібно присвоїти значення змінної типу <code>long</code>?</p>
+<p>Уявіть, що змінна — це кошик. Маємо кошики різного розміру: 1, 2, 4 і 8 байтів. Якщо перекладати пиріжки з меншого кошика в більший, проблем не виникає. А от якщо перекладати пиріжки з більшого кошика в менший, частина пиріжків може не вміститися.</p>
+<p>Таке перетворення — від типу більшого розміру до меншого — називають <span class="term"><span class="text-red">звуженням типу</span></span>. У разі такого присвоювання частина числа може просто не вміститися в нову змінну і «залишитися за бортом».</p>
+<p>Під час звуження типу потрібно явно показати компілятору, що ми не помилилися, і відкидаємо частину числа свідомо. Для цього використовується оператор перетворення типу: це <strong>ім'я типу в круглих дужках</strong>.</p>
+<p>У таких ситуаціях <span class="term">Java-компілятор</span> вимагає від програміста вказувати оператор перетворення типу. Загальний вигляд цього оператора такий:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code>(<span class="text-red">тип</span>) <span class="text-green">вираз</span></code></pre>
+</div>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>long <span class="text-green">a</span> = 1;
+int <span class="text-green">b</span> = (<span class="text-red">int</span>) <span class="text-green">a</span>;
+short <span class="text-green">c</span> = (<span class="text-red">short</span>) <span class="text-green">b</span>;
+byte <span class="text-green">d</span> = (<span class="text-red">byte</span>)<span class="text-green"> c</span>;</code></pre>
+        </td>
+        <td style="vertical-align: middle;">Щоразу потрібно явно вказувати оператор перетворення типу</td>
+    </tr>
+    </tbody>
+</table>
+<p>У цьому випадку <code><span class="text-green">a</span></code> дорівнює <code>1</code>, і це здається зайвим. А якби <code><span class="text-green">a</span></code> мало більше значення?</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>long <span class="text-green">a</span> = 1000000;
+int <span class="text-green">b</span> = (<span class="text-red">int</span>) <span class="text-green">a</span>;
+short <span class="text-green">c</span> = (<span class="text-red">short</span>) <span class="text-green">b</span>;
+byte <span class="text-green">d</span> = (<span class="text-red">byte</span>) <span class="text-green">c</span>;</code></pre>
+        </td>
+        <td>
+                <pre><code>a == 1000000
+b == 1000000
+c == 16960
+d == 64</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Мільйон чудово вміщується і в тип <code>long</code>, і в тип <code>int</code>. А от під час присвоювання мільйона змінній типу <code>short</code> два перших байти було відкинуто, і залишилося тільки два останніх. А коли спробували записати мільйон у змінну типу <code>byte</code>, взагалі залишився тільки один останній байт.</p>
+<p>Будова чисел у пам'яті:</p>
+<table>
+    <tbody>
+    <tr>
+        <th class="text-center">Тип</th>
+        <th class="text-right">Двійковий запис</th>
+        <th class="text-center">Десятковий запис</th>
+    </tr>
+    <tr>
+        <td class="text-center"><code>int</code></td>
+        <td style="text-align: right;">0b<span class="text-viola">00000000</span><span class="text-user">00001111</span><span class="text-orange">01000010</span><span class="text-green">01000000</span></td>
+        <td class="text-center"><code>1,000,000</code></td>
+    </tr>
+    <tr>
+        <td class="text-center"><code>short</code></td>
+        <td style="text-align: right;">0b<span class="text-orange">01000010</span><span class="text-green">01000000</span></td>
+        <td class="text-center"><code>16,960</code></td>
+    </tr>
+    <tr>
+        <td class="text-center"><code>byte</code></td>
+        <td style="text-align: right;">0b<span class="text-green">01000000</span></td>
+        <td class="text-center"><code>64</code></td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Тип <code>char</code></strong></p>
+<p>Тип <code>char</code>, як і тип <code>short</code>, займає в пам'яті два байти, але для перетворення одного з цих типів на інший завжди потрібно використовувати оператор перетворення типу. Річ у тім, що тип <code>short</code> — знаковий і може містити значення від <code>-32768</code> до <code>+32767</code>, а тип <code>char</code> — беззнаковий і може містити значення від <code>0</code> до <code>65535</code>.</p>
+<p>У змінних типу <code>char</code> не можна зберігати від'ємні числа, які можуть зберігатися в змінних типу <code>short</code>. А в змінних типу <code>short</code> не можна зберігати числа, більші за <code>32767</code>, які можуть зберігатися у змінних типу <code>char</code>.</p>
+<hr>
+<h2>4. Тип виразу</h2>
+<p>А що робити, якщо в одному виразі використовуються змінні різних типів? Логічна відповідь — їх спочатку потрібно перетворити на один спільний тип. Але який?</p>
+<p><strong>Звісно ж, на тип більшого розміру.</strong></p>
+<p>У Java завжди відбувається перетворення на тип більшого розміру. У загальних рисах, спочатку відбувається розширення типу одного з членів операції, а вже потім — операція зі значеннями однакового типу.</p>
+<p>Якщо у виразі є типи <code>int</code> і <code>long</code>, значення типу <code>int</code> буде перетворено на тип <code>long</code>, і тільки після цього його можна буде використовувати в операції:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="text-red">a</span> = 1;
+long <span class="text-green">b</span> = 2;
+long <span class="text-viola">c</span> = <span class="text-red">a</span> + <span class="text-green">b</span>;</code></pre>
+        </td>
+        <td style="vertical-align: middle"><code><span class="text-red">a</span></code> буде розширено до типу <code>long</code>, і лише потім буде виконано додавання.</td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Числа з рухомою крапкою</strong></p>
+<p>Якщо вираз містить ціле число й число з рухомою крапкою (<code>float</code>/<code>double</code>), ціле число буде перетворено на число з рухомою крапкою (<code>float</code>/<code>double</code>), і тільки потім буде виконано операцію з ними.</p>
+<p>Якщо потрібно виконати операцію з числами <code>float</code> і <code>double</code>, то число типу <code>float</code> буде перетворено на тип <code>double</code>. Що, власне, й очікувалось.</p>
+<div class="lesson-note lesson-note--important">
+    <div class="lesson-note__container">
+        <div class="lesson-note__head">Сюрприз</div>
+        <div class="lesson-note__content">
+            <p>Типи <code>byte</code>, <code>short</code>, <code>char</code> під час взаємодії завжди перетворюються на тип <code>int</code>. Недарма ж тип <code>int</code> вважається стандартним цілочисловим типом.</p>
+        </div>
+    </div>
+</div>
+<p>Якщо помножити число типу <code>byte</code> на число типу <code>short</code>, отримаємо число типу <code>int</code>. Якщо помножити число типу <code>byte</code> на число типу <code>byte</code>, отримаємо число типу <code>int</code>. Навіть якщо скласти число типу <code>byte</code> і число типу <code>byte</code>, знову таки отримаємо число типу <code>int</code>.</p>
+<p>Для цього є кілька причин. Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>byte <span class="text-red">a</span> = 110;
+byte <span class="text-green">b</span> = 120;
+byte <span class="text-viola">c</span> = <span class="text-red">a</span> * <span class="text-green">b</span>;   <span class="text-red">// помилка</span></code></pre>
+        </td>
+        <td style="vertical-align: middle"><code>110 * 120</code> буде <code>13200</code>, це дещо перевищує максимальне значення типу <code>byte</code>: <code>127</code></td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>byte <span class="text-red">a</span> = 110;
+byte <span class="text-green">b</span> = 120;
+byte <span class="text-viola">c</span> = <span class="text-red">a</span> + <span class="text-green">b</span>;   <span class="text-red">// помилка</span></code></pre>
+        </td>
+        <td style="vertical-align: middle"><code>110 + 120</code> буде <code>230</code>, це теж дещо перевищує максимальне значення типу <code>byte</code>: <code>127</code></td>
+    </tr>
+    </tbody>
+</table>
+<p>У загальному випадку результатом множення числа довжиною 8 бітів (1 байт) на число довжиною 8 бітів (1 байт) буде число довжиною 16&nbsp;бітів (2 байти).</p>
+<p>Тому в усіх операціях з цілими типами, меншими за <code>int</code>, ці типи завжди відразу перетворюються на тип <code>int</code>. І якщо ви захочете зберегти результат обчислення у змінній, тип якої менший за <code>int</code>, вам завжди доведеться явно вказувати операцію перетворення типу.</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>byte <span class="text-red">a</span> = 110;
+byte <span class="text-green">b</span> = 120;
+byte <span class="text-viola">c</span> = (<span class="text-orange">byte</span>) (<span class="text-red">a</span> * <span class="text-green">b</span>);</code></pre>
+        </td>
+        <td style="vertical-align: middle">вираз <code>byte * byte</code> матиме тип <code>int</code></td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>byte <span class="text-red">a</span> = 110;
+byte <span class="text-green">b</span> = 120;
+byte <span class="text-viola">c</span> = (<span class="text-orange">byte</span>) (<span class="text-red">a</span> + <span class="text-green">b</span>);</code></pre>
+        </td>
+        <td style="vertical-align: middle">вираз <code>byte + byte</code> матиме тип <code>int</code></td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>byte <span class="text-red">a</span> = 1;
+byte <span class="text-green">b</span> = (<span class="text-orange">byte</span>) (<span class="text-red">a</span> + 1);</code></pre>
+        </td>
+        <td style="vertical-align: middle">вираз <code>byte + int</code> матиме тип <code>int</code><br/> одиниця — це літерал типу <code>int</code>.</td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<h2>5. Важливий момент</h2>
+<p><span class="text-orange">Операція перетворення типу має досить високий пріоритет.</span></p>
+<p>Тому якщо у виразі є, скажімо, операції додавання й перетворення типу, то перетворення типу буде виконано перед додаванням.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>byte a = 1;
+byte b = 2;
+byte c = <span class="text-red">(byte) a</span> * b;</code></pre>
+        </td>
+        <td style="vertical-align: middle">Оператор перетворення типу буде застосовано тільки до змінної <code><span class="text-red">a</span></code>, яка й без того має тип <code>byte</code>. Код не скомпілюється.</td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>byte a = 1;
+byte b = 2;
+byte c = <span class="text-orange">(byte) (a * b)</span>;</code></pre>
+        </td>
+        <td style="vertical-align: middle">А отак правильно.</td>
+    </tr>
+    </tbody>
+</table>
+<p>Якщо ви хочете перетворити на певний тип увесь вираз, а не тільки один із його елементів, <span class="text-green">візьміть увесь вираз в круглі дужки і поставте перед ним оператор приведення типу.</span></p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task07.task0708"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task07.task0709"></div>

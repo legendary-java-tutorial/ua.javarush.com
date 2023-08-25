@@ -1,0 +1,348 @@
+﻿Додаткові класи для роботи з рядками в Java
+<p>----------------------------------------</p>
+Клас StringTokenizer. Є ще кілька сценаріїв, які дуже часто використовуються для роботи з рядками. Як розділити рядок на частини? Для цього є декілька способів. Найпростіший спосіб розділити рядок на кілька частин — це скористатися методом split(). У нього потрібно передати як параметр
+<p>----------------------------------------</p>
+<h2>1. Клас <code>StringTokenizer</code></h2>
+<p>Є ще кілька сценаріїв, які дуже часто використовуються для роботи з рядками. Як розділити рядок на частини? Для цього є декілька способів.</p>
+<p><strong>Метод <code>split()</code></strong></p>
+<p>Найпростіший спосіб розділити рядок на кілька частин — це скористатися методом <code>split()</code>. У нього потрібно передати як параметр регулярний вираз: спеціальний шаблон рядка-роздільника. Що таке регулярний вираз, ви дізнаєтеся у квесті <span class="term">Java Multithreading</span>.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Результат</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="text-user">str</span> = <span class="text-green">"Good </span><span class="text-viola">ne</span><span class="text-green">ws everyo</span><span class="text-viola">ne</span><span class="text-green">!"</span>;
+String[] <span class="text-orange">strings</span> = <span class="text-user">str</span>.<span class="text-red">split</span>("ne");
+System.out.println(<span class="text-viola">Arrays.toString</span>(<span class="text-orange">strings</span>));</code></pre>
+        </td>
+        <td>Результатом буде масив із трьох рядків:
+            <pre><code>["Good ", "ws everyo", "!"]</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Це простий спосіб, але часом такий підхід є надмірним. Якщо роздільників багато, наприклад «пробіл», «enter», «tab», «крапка», доводиться конструювати досить складний регулярний вираз. Його складно читати, отож у нього складно вносити зміни.</p>
+<p><strong>Клас <code>StringTokenizer</code></strong></p>
+<p>У мові Java є спеціальний клас, призначений саме для розділення рядків на підрядки.</p>
+<p>Цей клас не використовує регулярні вирази, натомість в нього просто передається рядок, який складається із символів-роздільників. Переваги цього підходу в тому, що рядок не відразу розбивається на шматочки, а поступово аналізується від початку до кінця.</p>
+<p>Клас складається з конструктора і двох методів. У конструктор передається рядок, який потрібно розбити на частини, і рядок — набір символів, які використовуються як роздільники.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Методи</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String nextToken()</code></pre>
+        </td>
+        <td>Повертає наступний підрядок</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>boolean hasMoreTokens()</code></pre>
+        </td>
+        <td>Перевіряє, чи немає ще підрядків.</td>
+    </tr>
+    </tbody>
+</table>
+<p>Цей клас трохи нагадує клас <code>Scanner</code>, який теж має методи <code>nextLine()</code> і <code>hasNextLine()</code>.</p>
+<p>Для створення об'єкта <code>StringTokenizer</code> використовують таку команду:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm language-java"><code><span class="text-viola">StringTokenizer</span> <span class="text-user">ім'я</span> = new <span class="text-viola">StringTokenizer</span>(<span class="text-green">рядок</span>, <span class="text-orange">роздільники</span>);</code></pre>
+</div>
+<p>де рядок — це <code><span class="text-green">рядок</span></code>, який потрібно розділити на частини; а <code><span class="text-orange">роздільники</span></code> — це рядок, кожний символ в якому вважається символом-роздільником. Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String str = <span class="text-green">"Good news everyone!"</span>;
+
+<span class="text-viola">StringTokenizer</span> <span class="text-user">tokenizer</span> = new <span class="text-viola">StringTokenizer</span>(str,<span class="text-green">"ne"</span>);
+while (<span class="text-user">tokenizer</span>.<span class="text-red">hasMoreTokens</span>())
+{
+   String <span class="text-orange">token</span> = <span class="text-user">tokenizer</span>.<span class="text-red">nextToken</span>();
+   System.out.println(<span class="text-orange">token</span>);
+}</code></pre>
+        </td>
+        <td>
+                <pre><code>Good&nbsp;
+ws&nbsp;
+v
+ryo
+!</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Зауважте, що кожен символ у другому рядку, переданому в конструктор <code><span class="text-viola">StringTokenizer</span></code>, вважається роздільником.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task09.task0915"></div>
+<hr>
+<h2>2. Метод <code>String.format()</code> і клас <code>StringFormatter</code></h2>
+<p>Клас String має ще один цікавий метод — <code>format()</code>.</p>
+<p>Припустімо, у вас є різні змінні з даними. Як вивести їх на екран одним рядком? Наприклад, маємо дані (лівий стовпець), які ми хочемо вивести на екран у певному вигляді (правий стовпець):</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String name = "Amigo";
+int age = 12;
+String friend = "Diego";
+int weight = 200;</code></pre>
+        </td>
+        <td>
+            <pre><code>User = {name: Amigo, age: 12 years, friend: Diego, weight: 200 kg.}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Ваш код матиме приблизно такий вигляд:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код програми</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String name = "Amigo";
+int age = 12;
+String friend = "Diego";
+int weight = 200;
+
+System.out.println("User = {name: " + name + ", age:" + age + " years, friend: " + friend+", weight: " + weight + " kg.}");</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Такий код не дуже зручно читати. А якби імена змінних були довшими, код став би ще складнішим:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код програми</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String name = "Amigo";
+int age = 12;
+String friend = "Diego";
+int weight = 200;
+
+System.out.println("User = {name: " + user.getName() + ", age:" + user.getAge() + " years, friend: " + user.getFriends().get(0) + ", weight: " + user.getExtraInformation().getWeight() + " kg.}");</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Не дуже зручно читати, чи не так?</p>
+<p>Проте в реальних програмах така ситуація трапляється досить часто, тому я розповім, як спростити й скоротити цей код.</p>
+<p><strong><code>String.format</code></strong></p>
+<p>Клас String має статичний метод <code>format()</code>: він дає змогу визначити шаблон об'єднання рядка з даними. Загальний вигляд цієї команди такий:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code>String <span class="text-user">ім'я</span> = String.<span class="text-red">format</span>(<span class="text-green">шаблон</span>, <span class="text-orange">параметри</span>);</code></pre>
+</div>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Результат</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String.<span class="text-red">format</span>(<span class="text-green">"Age=%d, Name=%s"</span>, <span class="text-orange">age</span>, <span class="text-orange">name</span>);</code></pre>
+        </td>
+        <td>
+            <pre><code>Age=12, Name=Amigo</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String.<span class="text-red">format</span>(<span class="text-green">"Width=%d, Height=%d"</span>, <span class="text-orange">width</span>, <span class="text-orange">height</span>);</code></pre>
+        </td>
+        <td>
+            <pre><code>Width=20, Height=10</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre><code>String.<span class="text-red">format</span>(<span class="text-green">"Fullname=%s"</span>, <span class="text-orange">name</span>);</code></pre>
+        </td>
+        <td>
+            <pre><code>Fullname=Diego</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>У метод <code>format()</code> першим параметром передається рядок-шаблон, який містить увесь потрібний текст, а в ті місця, куди потрібно вставити дані, вписано спеціальні символи типу <code><span class="text-green">%d</span></code>, <code><span class="text-green">%s</span></code> тощо.</p>
+<p>Метод <code>format()</code> замінює ці символи <code><span class="text-green">%s</span></code> і <code><span class="text-green">%d</span></code> на параметри, вказані після рядка-шаблону. Коли потрібно підставити рядок, пишемо <code><span class="text-green">%s</span></code>, а коли число — <code><span class="text-green">%d</span></code>. Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Результат</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String s = String.<span class="text-red">format</span>(<span class="text-green">"a=%d, b=%d, c=%d"</span>, 1, 4, 3);</code></pre>
+        </td>
+        <td><code>s</code> дорівнюватиме <code><span class="text-green">"a=1, b=4, c=3"</span></code></td>
+    </tr>
+    </tbody>
+</table>
+<p>Скорочений перелік параметрів, які можна використовувати в шаблоні:</p>
+<table>
+    <tbody>
+    <tr>
+        <th class="text-center">Символ</th>
+        <th>Позначення</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code>%s</code></pre>
+        </td>
+        <td><code>String</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code>%d</code></pre>
+        </td>
+        <td>ціле число: <code>byte</code>, <code>short</code>, <code>int</code>, <code>long</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code>%f</code></pre>
+        </td>
+        <td>дійсне число: <code>float</code>, <code>double</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code>%b</code></pre>
+        </td>
+        <td><code>boolean</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code>%c</code></pre>
+        </td>
+        <td><code>char</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code>%t</code></pre>
+        </td>
+        <td><code>Date</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code>%%</code></pre>
+        </td>
+        <td>Символ <code>%</code></td>
+    </tr>
+    </tbody>
+</table>
+<p>Ці параметри вказують на тип даних, але є такі параметри, які вказують на порядок даних. Для того щоб вибрати параметр за номером (нумерація починається з одиниці), потрібно написати <code><span class="text-green">%</span><span class="text-red">1$</span><span class="text-green">d</span></code> замість <code><span class="text-green">%d</span></code>. Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Результат</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String s = String.format(<span class="text-green">"a=%3$d, b=%2$d, c=%d"</span>, 11, 12, 13);</code></pre>
+        </td>
+        <td><code>s</code> дорівнюватиме <code><span class="text-green">"a=13, b=12, c=11"</span></code></td>
+    </tr>
+    </tbody>
+</table>
+<p>Замість <code><span class="text-green">%3$d</span></code> підставиться 3-й параметр-змінна, замість <code><span class="text-green">%2$d</span></code> — 2-й параметр-змінна, а замість <code><span class="text-green">%d</span></code> — найперший параметр-змінна. Параметри шаблону <code><span class="text-green">%s</span></code>, <code><span class="text-green">%d</span></code> звертаються до параметрів-змінних незалежно від параметрів шаблону типу <code><span class="text-green">%3$d</span></code> або <code><span class="text-green">%2$s</span></code>.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task09.task0916"></div>
+<hr>
+<h2>3. String Pool</h2>
+<p>Усі рядки, що задано в коді як <a href="#">літерали</a>, під час роботи програми зберігаються в пам'яті в особливому місці, яке має назву <code>StringPool</code>. <strong><code>StringPool</code></strong> — це спеціальний простір, створений для оптимізації зберігання рядків.</p>
+<p>По-перше, рядки, визначені в коді, потрібно десь зберігати. Код — це команди, а дані (зокрема такі великі, як рядки) потрібно зберігати в пам'яті окремо від коду. У коді використовуються тільки посилання на об'єкти-рядки.</p>
+<p>По-друге, можна усі однакові літерали зберегти в пам'яті лише один раз. Отак воно й працює. Коли код вашого класу завантажується Java-машиною, усі рядкові літерали додаються до <code>StringPool</code> (якщо їх там ще немає). Якщо такий рядок у <code>StringPool</code> вже є, просто використовується посилання на цей рядок.</p>
+<p>Тому, якщо в коді присвоїти декільком змінним типу <code>String</code> однакові літерали, ці змінні будуть містити однакові посилання. У <code>StringPool</code> літерал додається тільки один раз, у решті випадків буде використовуватися посилання на рядок, уже завантажений у <code>StringPool</code>.</p>
+<p>Отак це працює:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Робота зі StringPool</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="text-green">a</span> = "Привіт";
+String <span class="text-user">b</span> = "Привіт";
+String <span class="text-orange">c</span> = "Бувай";</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code><span class="text-viola">String</span>[] <span class="text-red">pool</span> = {<span class="text-green">"Привіт"</span>, <span class="text-green">"Бувай"</span>};
+<span class="text-green">a</span> = <span class="text-red">pool</span>[<span class="text-user">0</span>];
+<span class="text-user">b</span> = <span class="text-red">pool</span>[<span class="text-user">0</span>];
+<span class="text-orange">c</span> = <span class="text-red">pool</span>[<span class="text-user">1</span>];</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Саме тому змінні <code><span class="text-green">a</span></code> і <code><span class="text-user">b</span></code> зберігатимуть однакові посилання.</p>
+<p><strong>Метод <code>intern()</code></strong></p>
+<p>І найцікавіше: будь-який рядок можна програмним шляхом додати до <code>StringPool</code>. Для цього потрібно просто викликати для змінної типу <code>String</code> метод <code>intern()</code>.</p>
+<p>Метод <code>intern()</code> додасть рядок до <code>StringPool</code>, якщо його там ще немає, і поверне посилання на рядок зі <code>StringPool</code>.</p>
+<p>Якщо за допомогою методу <code>intern()</code> додати до <code>StringPool</code> два ідентичних рядки, метод поверне однакові посилання. Цим можна користуватися для порівняння рядків за посиланнями. Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="text-green">a</span> = new String("Привіт");
+String <span class="text-user">b</span> = new String("Привіт");
+System.out.println(<span class="text-green">a</span> == <span class="text-user">b</span>);</code></pre>
+        </td>
+        <td>
+                <pre><code>
+
+<span class="text-red">false</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="text-green">a</span> = new String("Привіт");
+String <span class="text-user">b</span> = new String("Привіт");
+
+String <span class="text-green">t1</span> = <span class="text-green">a</span>.intern();
+String <span class="text-user">t2</span> = <span class="text-user">b</span>.intern();
+System.out.println(<span class="text-green">a</span> == <span class="text-user">b</span>);
+System.out.println(<span class="text-green">t1</span> == <span class="text-user">t2</span>);</code></pre>
+        </td>
+        <td>
+                <pre><code>
+
+
+
+
+<span class="text-red">false</span>
+<span class="text-green">true</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Навряд чи ви часто використовуватимете цей метод, <span class="text-orange">проте про нього зазвичай запитують на співбесідах</span>, тож його варто знати.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task09.task0917"></div>

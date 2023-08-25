@@ -1,0 +1,359 @@
+Приклади роботи з рядками
+<p>----------------------------------------</p>
+Конкатенація, перетворення до рядкового типу, перетворення рядка в число і назад
+<p>----------------------------------------</p>
+<h2>1. Конкатенація — склеювання рядків</h2>
+<p>Є дуже цікава і проста річ, яку можна робити з рядками Java — їх можна склеювати. Така операція має назву <span
+    class="term text-viola">конкатенація</span>. Аби легше запам’яталося — Кон-Коте-Нація. Хоча часто її називають
+«склеювання рядків» або навіть просто «додавання рядків».</p>
+<p>Щоб склеїти два рядки, потрібно використати знак <code class="text-viola">+</code>. Це дуже просто:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present"><code>"<span class="code text-user">значення1</span>" <span class="code text-viola">+</span> "<span class="code text-user">значення2</span>"</code></pre>
+    <div class="lesson-example-caption">Конкатенація двох рядків</div>
+</div>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="50%">Команда</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String <span class="code text-green">name</span> = "<span class="code text-user">Аня</span>" <span class="code text-viola">+</span> "<span class="code text-user">Аня</span>";</code></pre>
+        </td>
+        <td><code class="text-green">name</code> містить рядок <code class="text-user">АняАня</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String <span class="code text-brown">city</span> = "<span class="code text-user">New York</span>" <span class="code text-viola">+</span> "<span class="code text-user">Аня</span>";</code></pre>
+        </td>
+        <td><code class="text-brown">city</code> містить рядок <code class="text-user">New YorkАня</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String <span class="code text-yellow">message</span> = "<span class="code text-user">Hello! </span>" <span class="code text-viola">+</span> "<span class="code text-user">Аня</span>";</code></pre>
+        </td>
+        <td><code class="text-yellow">message</code> містить рядок <code class="text-user">Hello! Аня</code></td>
+    </tr>
+    </tbody>
+</table>
+<p>Ну і, звісно, одночасно можна додавати багато рядків, а також додавати рядки та змінні.</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Команда</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="code text-green">name</span> = "<span class="code text-user">Аня</span>";
+String <span class="code text-brown">city</span> = "<span class="code text-user">New York</span>";
+String <span class="code text-yellow">message</span> = "<span class="code text-user">Hello!</span>" + <span class="code text-brown">city</span> + <span class="code text-green">name</span> + <span class="code text-brown">city</span>;</code></pre>
+        </td>
+        <td>
+            <code class="text-green">name</code> містить рядок <code class="text-user">Аня</code><br>
+            <code class="text-brown">city</code> містить рядок <code class="text-user">New York</code><br>
+            <code class="text-yellow">message</code> містить рядок<br><code class="text-user">Hello!New YorkАняNew York</code></td>
+    </tr>
+    </tbody>
+</table>
+<p>У цьому прикладі видно, що у змінної <code class="text-yellow">message</code> погано читається, оскільки у ньому не
+вистачає пробілів. Щоб задати один пробіл або кілька, потрібно просто написати їх у коді і обернути у подвійні лапки. Це
+простіше, ніж здається:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java text-center"><code><span class="text-green">" "</span></code></pre>
+    <div class="lesson-example-caption">Рядок, що містить один пробіл</div>
+</div>
+<p>До речі, якщо між лапками зовсім не залишити місця (написати дві подвійні лапки підряд), вийде так званий «порожній
+рядок»:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java text-center"><code><span class="text-green">""</span></code></pre>
+    <div class="lesson-example-caption">Порожній рядок</div>
+</div>
+<p>З одного боку, він нібито і є, а з іншого – у разі його виведення на екран нічого не виводиться. І у разі склеювання з
+іншими рядками нічого не відбувається. Такий собі аналог нуля, тільки для рядків.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task02.task0207"></div>
+<hr>
+<h2>2. Перетворення до рядкового типу</h2>
+<p>Як вже зазначалося вище, розробники Java зробили так, що абсолютно всі змінні, об’єкти, вирази в Java можна перетворити
+на тип <code class="text-green">String</code>.</p>
+<p>До того ж це автоматично відбувається, коли ми додаємо тип <code class="text-green">String</code> до будь-якого <span
+    class="term text-red">іншого типу</span>. Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Команда</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="code text-red">a</span> = <span class="code text-user">5</span>;
+String <span class="code text-green">name</span> = "<span class="code text-user">Аня</span>" + <span class="code text-red">a</span>;</code></pre>
+        </td>
+        <td><code class="text-green">name</code> містить рядок <code class="text-user">Аня5</code></td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="code text-red">a</span> = <span class="code text-user">5</span>;
+String <span class="code text-green">city</span> = <span class="code text-red">a</span> + "<span class="code text-user">New York</span>" + <span class="code text-red">a</span>;</code></pre>
+        </td>
+        <td><code class="text-green">city</code> містить рядок <code class="text-user">5New York5</code></td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="code text-red">number</span> = <span class="code text-user">10</span>;
+String <span class="code text-green">code</span> = "<span class="code text-user">Yo</span>";
+String <span class="code text-green">message</span> = "<span class="code text-user">Hello! </span>" + <span class="code text-red">number</span> + <span class="code text-green">code</span>;</code></pre>
+        </td>
+        <td><code class="text-green">message</code> містить рядок <code class="text-user">Hello! 10Yo</code></td>
+    </tr>
+    </tbody>
+</table>
+<p>У всіх трьох прикладах ми спокійно додавали змінні типу <code class="text-red">int</code> і <code
+    class="text-green">String</code>, і в результаті завжди отримували тип <code class="text-green">String</code>.</p>
+<div class="lesson-note lesson-note--important">
+    <div class="lesson-note__container">
+        <div class="lesson-note__content">
+            <p>Арифметичні операції з типом <code class="text-green">String</code> проводити не можна. Навіть якщо рядок повністю
+            складається із цифр.</p>
+        </div>
+    </div>
+</div>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="54%">Команда</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="code text-red">a</span> = <span class="code text-user">5</span>;
+String <span class="code text-green">name</span> = "<span class="code text-user">1</span>" + <span class="code text-red">a</span>;</code></pre>
+        </td>
+        <td><code class="text-green">name</code> містить рядок <code class="text-user">15</code></td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="code text-red">a</span> = <span class="code text-user">5</span>;
+String <span class="code text-green">city</span> = <span class="code text-red">a</span> + "<span class="code text-user">9</span>" + <span class="code text-red">a</span>;</code></pre>
+        </td>
+        <td><code class="text-green">city</code> містить рядок <code class="text-user">595</code></td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="code text-red">number</span> = <span class="code text-user">10</span>;
+String <span class="code text-green">code</span> = "<span class="code text-user">10</span>";
+String <span class="code text-green">message</span> = "" + <span class="code text-red">number</span> + <span class="code text-green">code</span>;</code></pre>
+        </td>
+        <td><code class="text-green">message</code> містить рядок <code class="text-user">1010</code></td>
+    </tr>
+    </tbody>
+</table>
+<p>Операція додавання виконується зліва направо, тому результат може бути дещо несподіваним. Приклад:</p>
+<div class="lesson-example">
+    <table>
+        <tbody>
+        <tr>
+            <th width="51%">Команда</th>
+            <th>Примітка</th>
+        </tr>
+        <tr>
+            <td>
+    <pre class="language-java"><code>int <span class="code text-red">a</span> = <span class="code text-user">5</span>;
+String <span class="code text-green">name</span> = <span class="code text-red">a</span> + <span class="code text-red">a</span> + "<span class="code text-user">1</span>" + <span class="code text-red">a</span>;</code></pre>
+            </td>
+            <td>
+                <code class="text-green">name</code> містить рядок <code class="text-user">1015</code>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="lesson-example-caption">
+    Порядок виконання: <code class="code-raw">((<span class="code text-red">a</span> + <span class="code text-red">a</span>) + "<span class="code text-user">1</span>") + <span class="code text-red">a</span></code>
+    </div>
+</div>
+<hr>
+<h2>3. Перетворення рядка на число</h2>
+<p>Щоб перетворити число на рядок на Java, достатньо додати його і порожній рядок:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code>String <span class="code text-green">str</span> = <span class="text-green">""</span> + <span class="code text-red">число</span>;</code></pre>
+    <div class="lesson-example-caption">Перетворення числа на рядок</div>
+</div>
+<p>А ось що робити, якщо потрібно перетворити рядок на число? Проте будь-який рядок на число перетворювати не можна. Але
+якщо рядок містить тільки цифри, то все ж можна. Для цього є спеціальний <span class="term text-viola">метод</span> у
+класу <code class="text-brown">Integer</code>.</p>
+<p>Виглядає ця команда так:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code>int <span class="code text-red">x</span> = <span class="code text-brown">Integer</span>.<span class="code text-viola">parseInt</span>(<span class="code text-green">рядок</span>);</code></pre>
+</div>
+<p>Де <code class="code-raw">int <span class="code text-red">x</span></code> – це оголошення цілісної змінної <code class="text-red">x</code>, а <code
+    class="text-green">рядок</code> — це число, задане у вигляді рядка (рядок складається із цифр).</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Команда</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="code text-green">str</span> = "<span class="code text-user">123</span>";
+int <span class="code text-red">number</span> = <span class="code text-brown">Integer</span>.<span class="code text-viola">parseInt</span>(<span class="code text-green">str</span>);</code></pre>
+        </td>
+        <td><code class="text-red">number</code> містить число <code>123</code>;</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="code text-red">number</span> = <span class="code text-brown">Integer</span>.<span class="code text-viola">parseInt</span>("<span class="code text-user">321</span>");</code></pre>
+        </td>
+        <td><code class="text-red">number</code> містить число <code>321</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="code text-red">number</span> = <span class="code text-brown">Integer</span>.<span class="code text-viola">parseInt</span>("<span class="code text-user">321</span>" + 0);</code></pre>
+        </td>
+        <td><code class="text-red">number</code> містить число <code>3210</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="code text-red">number</span> = "<span class="code text-user">321</span>";</code></pre>
+        </td>
+        <td><span class="text-red">Не скомпілюється:</span> змінна типу <code>int</code>, а значення типу <code>String</code></td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<h2>4. Переведення об’єкта/примітива у рядок</h2>
+Для переведення екземпляра будь-якого Java-класу або будь-якого примітивного типу даних до рядкового представлення можна
+використовувати метод <code>String.valueOf()</code>:
+
+<pre class="lang-java line-numbers"><code>
+public class StringExamples {
+    public static void main(String[] args) {
+        String a = String.valueOf(1);
+        String b = String.valueOf(12.0D);
+        String c = String.valueOf(123.4F);
+        String d = String.valueOf(123456L);
+        String s = String.valueOf(true);
+
+        System.out.println(a);
+        System.out.println(b);
+        System.out.println(c);
+        System.out.println(d);
+        System.out.println(s);
+        
+        /*
+        Вивід:
+        1
+        12.0
+        123.4
+        123456
+        true
+         */
+    }
+}
+</code></pre>
+<hr>
+<h2>5. Деякі методи роботи з рядками</h2>
+<p>Ну і насамкінець хотілося б розповісти про кілька методів типу <code>String</code>.</p>
+<p><strong>Метод <code>length()</code></strong></p>
+<p>Метод <code class="text-red">length()</code> дає можливість дізнатися <span class="text-red">довжину рядка</span> –
+скільки в ньому символів.</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="50%">Команда</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="code text-green">name</span> = "<span class="code text-user">Rome</span>";
+int <span class="code text-viola">count</span> = <span class="code text-green">name</span>.<span class="code text-red">length()</span>;</code></pre>
+        </td>
+        <td><code class="text-viola">count</code> містить значення <code>4</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="code text-viola">count</span> = "".<span class="code text-red">length()</span>;</code></pre>
+        </td>
+        <td><code class="text-viola">count</code> містить значення <code>0</code></td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="code text-green">name</span> = "<span class="code text-user">Rom</span>";
+int <span class="code text-viola">count</span> = (<span class="code text-green">name</span> + <span class="code text-neon">12</span>).<span class="code text-red">length()</span>;</code></pre>
+        </td>
+        <td><code class="text-viola">count</code> містить значення <code>5</code></td>
+    </tr>
+    </tbody>
+</table>
+<p>Так, методи можна викликати у всього, що має тип <code class="text-green">String</code>, навіть у виразі:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present"><code>(<span class="code text-green">name</span> + <span class="code text-neon">12</span>).<span class="code text-red">length()</span></code></pre>
+    <div class="lesson-example-caption">Виклик методу <code>length()</code> у виразі типу <code>String</code></div>
+</div>
+<p><strong>Метод <code>toLowerCase()</code></strong></p>
+<p>Метод <code class="text-red">toLowerCase()</code> дає можливість перетворити всі символи рядка на <span class="text-red">маленькі</span> (рядкові):</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Команда</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="code text-green">name</span> = "<span class="code text-user">Rom</span>";
+String <span class="code text-green">name2</span> = <span class="code text-green">name</span>.<span class="code text-red">toLowerCase()</span>;</code></pre>
+        </td>
+        <td><code class="text-green">name2</code> містить рядок <code class="text-user">rom</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String <span class="code text-green">name</span> = "".<span class="code text-red">toLowerCase()</span>;</code></pre>
+        </td>
+        <td><code class="text-green">name</code> містить пустий рядок</td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="code text-green">name</span> = "<span class="code text-user">ROM123</span>";
+String <span class="code text-green">name2</span> = <span class="code text-green">name</span>.<span class="code text-red">toLowerCase()</span>;</code></pre>
+        </td>
+        <td><code class="text-green">name2</code> містить рядок <code class="text-user">rom123</code></td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Метод <code>toUpperCase()</code></strong></p>
+<p>Метод <code class="text-red">toUpperCase()</code> дає можливість перетворити всі символи рядка у <span class="text-red">великі</span> (заголовні):</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Команда</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="code text-green">name</span> = "<span class="code text-user">Rom</span>";
+String <span class="code text-green">name2</span> = <span class="code text-green">name</span>.<span class="code text-red">toUpperCase</span>();</code></pre>
+        </td>
+        <td><code class="text-green">name2</code> містить рядок <code class="text-user">ROM</code></td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>String <span class="code text-green">name</span> = <span class="text-green">"rom123"</span>;
+String <span class="code text-green">name2</span> = <span class="text-green">name</span>.<span class="code text-red">toUpperCase</span>();</code></pre>
+        </td>
+        <td><code class="text-green">name2</code> містить рядок <code class="text-user">ROM123</code></td>
+    </tr>
+    </tbody>
+</table>
+
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task02.task0212"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task02.task0213"></div>

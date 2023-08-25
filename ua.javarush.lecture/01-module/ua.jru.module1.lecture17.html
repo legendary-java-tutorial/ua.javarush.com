@@ -1,0 +1,405 @@
+Типи-обгортки
+<p>----------------------------------------</p>
+Список типів-обгорток. Усі ви знаєте, що в Java є 8 примітивних типів, які не є класами. З одного боку, це добре – вони прості та займають мало місця, а з іншого — іноді потрібні саме класи. Навіщо саме, ви дізнаєтесь у наступній лекції. Так що ж робити?
+<p>----------------------------------------</p>
+<h2>1. Список типів-обгорток</h2>
+<p>Всі ви знаєте, що Java має 8 примітивних типів, які не є класами. З одного боку, це добре: вони прості та займають мало
+місця, а з іншого — іноді потрібні саме класи. Навіщо саме вони, ви дізнаєтесь у наступній лекції.</p>
+<p>То що робити?</p>
+<p>Починаючи з п’ятої версії, в Java у примітивних типів з’явилися класи-близнюки. Кожен такий клас зберігає всередині одне
+поле із значенням певного типу. Такі класи ще називають <span class="term">типами-обгортками</span>, тому що вони ніби
+перетворюють примітивні значення в класи.</p>
+<p>Ось список таких типів, нічого не впізнаєте?</p>
+<table>
+    <tbody>
+    <tr>
+        <th class="text-center">Примітивний тип</th>
+        <th class="text-center">Клас-обгортка</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code><span class="text-green">byte</span></code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code><span class="text-green">Byte</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code><span class="text-green">short</span></code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code><span class="text-green">Short</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code><span class="text-green">int</span></code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code><span class="text-green">Integer</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code><span class="text-green">long</span></code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code><span class="text-green">Long</span></code></pre>
+        </td>
+    </tr>
+    <tr class="row-separator">
+        <td colspan="2"></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code><span class="text-user">float</span></code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code><span class="text-user">Float</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code><span class="text-user">double</span></code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code><span class="text-user">Double</span></code></pre>
+        </td>
+    </tr>
+    <tr class="row-separator">
+        <td colspan="2"></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code><span class="text-red">char</span></code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code><span class="text-red">Character</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="text-center"><code><span class="text-orange">boolean</span></code></pre>
+        </td>
+        <td>
+            <pre class="text-center"><code><span class="text-orange">Boolean</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Назви примітивних типів пишуться з маленької літери, а класів — із великої. Також назви класів трохи довші:
+<code>Integer</code> замість <code>int</code> і <code>Character</code> замість <code>char</code>.</p>
+<p>Усі об’єкти класів-обгорток є незмінними (<span class="term">immutable</span>).</p>
+<p>Спрощений код класу <code>Integer</code> має приблизно такий вид:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public class <span class="text-neon">Integer</span>
+{
+   private int <span class="text-user">value</span>;
+
+   <span class="text-neon">Integer</span>(int <span class="text-green">x</span>)
+   {
+      this.<span class="text-user">value</span> = <span class="text-green">x</span>;
+   }
+
+   public int <span class="text-red">intValue</span>()
+   {
+      return this.<span class="text-user">value</span>;
+   }
+
+   public static <span class="text-neon">Integer</span> <span class="text-red">valueOf</span>(int <span class="text-green">x</span>)
+   {
+      return new <span class="text-neon">Integer</span>(<span class="text-green">x</span>);
+   }
+}</code></pre>
+        </td>
+        <td><br><br>Змінна-значення<br><br>
+            Конструктор<br><br><br><br><br>
+            Метод повертає значення<br><br><br><br><br>
+            Статичний метод створює новий об’єкт <code><span class="text-neon">Integer</span></code> для змінної типу
+            <code>int</code></td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<h2>2. Перетворення типу <code>int</code> до <code>Integer</code></h2>
+<p>Типи-обгортки вважаються аналогами їх більш примітивних побратимів: можна легко створити відповідний об’єкт-обгортку для
+примітивного типу.</p>
+<p>Розберемо взаємодію примітивних типів та їх типів-обгорток на прикладі типу int. Ось який би мав вигляд код перетворення
+типу <code>int</code> до типу <code>Integer</code> і навпаки:</p>
+<p>Щоб перетворити тип <code>int</code> до типу <code>Integer</code>, потрібно написати код:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-neon">Integer</span> <span class="text-green">ім’я</span> = new <span class="text-neon">Integer</span>(<span class="text-user">значення</span>);</code></pre>
+</div>
+<p>де <code><span class="text-green">ім’я</span></code> — це ім’я змінної типу <code><span class="text-neon">Integer</span></code>, а <code><span class="text-user">значення</span></code> — це значення типу <code>int</code>, що перетворюється.</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-neon">Integer</span> <span class="text-green">age</span> = new <span class="text-neon">Integer</span>(<span class="text-user">18</span>);</code></pre>
+        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-neon">Integer</span> <span class="text-green">hundred</span> = new <span class="text-neon">Integer</span>(<span class="text-user">100</span>);</code></pre>
+        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-neon">Integer</span> <span class="text-green">zero</span> = new <span class="text-neon">Integer</span>(<span class="text-user">0</span>);</code></pre>
+        </td>
+        <td></td>
+    </tr>
+    </tbody>
+</table>
+<p>А щоб перетворити тип <code>Integer</code> до типу <code>int</code>, потрібно написати код:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-viola">int</span> <span class="text-user">ім’я</span> = <span class="text-green">змінна</span>.<span class="text-red">intValue</span>();</code></pre>
+</div>
+<p>де <code><span class="text-user">ім’я</span></code> — це ім’я змінної типу <code><span class="text-viola">int</span></code>, а <code><span class="text-green">змінна</span></code> — це змінна-посилання на об’єкт типу <code><span class="text-neon">Integer</span></code>.</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">Integer</span> <span class="text-green">age</span> = new <span class="text-neon">Integer</span>(<span class="text-user">18</span>);
+int <span class="text-user">x</span> = <span class="text-green">age</span>.<span class="text-red">intValue</span>();</code></pre>
+        </td>
+        <td>
+                <pre><code>
+x == 18</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">Integer</span> <span class="text-green">hundred</span> = new <span class="text-neon">Integer</span>(<span class="text-user">100</span>);
+int <span class="text-user">y</span> = <span class="text-green">hundred</span>.<span class="text-red">intValue</span>();</code></pre>
+        </td>
+        <td>
+                <pre><code>
+y == 100</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">Integer</span> <span class="text-green">zero</span> = new <span class="text-neon">Integer</span>(<span class="text-user">0</span>);
+int <span class="text-user">z</span> = <span class="text-green">zero</span>.<span class="text-red">intValue</span>();</code></pre>
+        </td>
+        <td>
+                <pre><code>
+
+z == 0</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="text-orange">i</span> = <span class="text-user">110</span>;
+<span class="text-neon">Integer</span> <span class="text-green">zero</span> = new <span class="text-neon">Integer</span>(<span class="text-orange">i</span>);
+int <span class="text-user">z</span> = <span class="text-green">zero</span>.<span class="text-red">intValue</span>();</code></pre>
+        </td>
+        <td>
+                <pre><code>
+z == 110</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<h2>3. Autoboxing i unboxing</h2>
+<p>Проте навіть прості операції із типом <code>Integer</code> писати непросто.</p>
+<p>Як ми говорили, тип <code>Integer</code> — незмінний (<span class="term">immutable</span>). Щоб створити об’єкт типу
+<code>Integer</code> із новим значенням типу <code>int</code>, потрібно явно створити новий об’єкт <code>Integer</code>.
+Проте отримати значення типу <code>int</code>, яке зберігається всередині об’єкта <code>Integer</code>, просто: потрібно
+викликати метод <code>intValue()</code>.</p>
+<p>Пример:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">Integer</span> <span class="text-user">a</span> = <span class="text-neon">Integer</span>.valueOf(<span class="text-user">5</span>);
+int <span class="text-green">b</span> = <span class="text-user">a</span>.<span class="text-red">intValue</span>();
+<span class="text-neon">Integer</span> <span class="text-orange">c</span> = new <span class="text-neon">Integer</span>(<span class="text-green">b</span> + <span class="text-user">5</span>)</code></pre>
+        </td>
+        <td>Перетворюємо <code>5</code> у клас <code>Integer</code><br>
+            Отримуємо значення з об’єкта <code>Integer</code><br>
+            Створюємо нове значення <code>Integer == 10</code></td>
+    </tr>
+    </tbody>
+</table>
+<p>Код досить громіздкий, не вважаєте?</p>
+<p>Розробники Java теж так вважають, тому вони навчили компілятор робити ці операції автоматично. Автоматичне перетворення
+<code>int</code> в <code>Integer</code> називається <span class="term"><strong>autoboxing</strong></span> (box —
+коробка, класти в коробку), а зворотна операція — <code>Integer</code> до <code>int</code> — <span
+    class="term"><strong>unboxing</strong></span>.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Ваш код</th>
+        <th>Що бачить компілятор</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-neon">Integer</span> <span class="code text-user">a</span> = 10;</code></pre>
+        </td>
+        <td>
+            <pre class="language-java"><code><span class="text-neon">Integer</span> <span class="code text-user">a</span> = <span class="text-neon">Integer</span>.valueOf(10);</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-viola">int</span> <span class="code text-green">b</span> = <span class="code text-user">a</span>;</code></pre>
+        </td>
+        <td>
+            <pre class="language-java"><code><span class="text-viola">int</span> <span class="code text-green">b</span> = <span class="code text-user">a</span>.<span class="text-red">intValue</span>();</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code><span class="text-neon">Integer</span> <span class="code text-orange">c</span> = <span class="code text-user">a</span> + <span class="code text-green">b</span>;</code></pre>
+        </td>
+        <td>
+            <pre class="language-java"><code><span class="text-neon">Integer</span> <span class="code text-orange">c</span> = <span class="text-neon">Integer</span>.valueOf(<span class="code text-user">a</span>.<span class="text-red">intValue</span>() + <span class="code text-green">b</span>);</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Завдяки autoboxing та unboxing ви можете спокійно присвоювати тип <code>int</code> типу <code>Integer</code> і навпаки. Можна писати вираз будь-якої складності і не робити відмінностей між типами <code>int</code> і <code>Integer</code>.</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Що згенерує компілятор</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Integer a = 5;
+int b = a;
+Integer c = a + b;
+int d = a + b + c;</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>Integer a = <span class="text-neon">Integer</span>.valueOf(5);
+int b = a.<span class="text-red">intValue</span>();
+Integer c = <span class="text-neon">Integer</span>.valueOf(a.<span class="text-red">intValue</span>() + b);
+int d = a.<span class="text-red">intValue</span>() + b + c.<span class="text-red">intValue</span>();</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Integer a = 5;
+int b = 5;
+
+if (a == b)
+{
+   ...
+}</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>Integer a = <span class="text-neon">Integer</span>.valueOf (5);
+int b = 5;
+
+if (a.<span class="text-red">intValue</span>() == b)
+{
+   ...
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task12.task1201"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task12.task1202"></div>
+<hr>
+<h2>4. Порівняння змінних класів-обгорток</h2>
+<p>Autoboxing і unboxing працюють дуже просто і прозоро: де потрібно — розставляються команди new <code>Integer()</code>, де потрібно —
+викликаються методи <code>intValue()</code>.</p>
+<p>Для вас як для програміста все працює легко та зрозуміло. Але врахуйте, <span class="text-green">якщо ви порівнюєте
+    <code><span class="text-green">Integer</span></code> і <code><span class="text-green">Integer</span></code>,
+    відбувається порівняння посилань, а чи не значень.</span></p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Integer <span class="code text-user">a</span> = 1000;
+Integer <span class="code text-green">b</span> = 1000;
+
+System.out.println(<span class="code text-user">a</span> == <span class="code text-green">b</span>);</code></pre>
+        </td>
+        <td><pre><code>
+
+
+<span class="text-red">false</span></code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Integer <span class="code text-user">a</span> = 1000;
+Integer <span class="code text-green">b</span> = 1000;
+
+System.out.println(<span class="code text-user">a</span>.<span class="text-red">equals</span>(<span class="code text-green">b</span>));</code></pre>
+        </td>
+        <td><pre><code>
+
+
+<span class="text-green">true</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Змінні <code><span class="text-user">a</span></code> і <code><span class="text-green">b</span></code> зберігають не
+значення (як типи <code>int</code>), а посилання на об’єкти. Тому важливо пам’ятати, як правильно їх порівнювати:</p>
+<table>
+    <tbody>
+    <tr>
+        <th><span class="text-red">Неправильно</span></th>
+        <th><span class="text-green">Правильно</span></th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Integer <span class="code text-user">a</span> = 1000;
+Integer <span class="code text-green">b</span> = 1000;
+if (<span class="code text-user">a</span> == <span class="code text-green">b</span>)
+{
+   ...
+}</code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>Integer <span class="code text-user">a</span> = 1000;
+Integer <span class="code text-green">b</span> = 1000;
+if (<span class="code text-user">a</span>.equals(<span class="code text-green">b</span>))
+{
+   ...
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task12.task1203"></div>

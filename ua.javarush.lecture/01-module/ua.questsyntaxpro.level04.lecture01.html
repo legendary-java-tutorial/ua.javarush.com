@@ -1,0 +1,135 @@
+﻿Переривання циклу
+<p>----------------------------------------</p>
+Команда break. Розгляньмо приклад із попереднього уроку: Код Пояснення Scanner console = new Scanner (System.in); boolean isExit = false; while (!isExit) { &nbsp; &nbsp;String s = console.nextLine(); &nbsp; isExit = s.equals("exit"); } Програма зчитуватиме
+<p>----------------------------------------</p>
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="d07f8f70-a8f8-4a89-b0c4-2a328a1231a9" data-max-width="1024" src="https://cdn.javarush.com/images/article/d07f8f70-a8f8-4a89-b0c4-2a328a1231a9/original.png" alt=""/>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<h2>1. Команда <code>break</code></h2>
+<p>Розгляньмо приклад із попереднього уроку:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Scanner <span class="text-orange">console</span> = new Scanner(<span class="text-viola">System.in</span>);
+boolean <span class="text-red">isExit</span> = false;
+while (!<span class="text-red">isExit</span>)
+{
+&nbsp; &nbsp;String <span class="text-user">s</span> = <span class="text-orange">console</span>.nextLine();
+&nbsp;  <span class="text-red">isExit</span> = <span class="text-user">s</span>.equals(<span class="text-green">"exit"</span>);
+}</code></pre>
+        </td>
+        <td>Програма зчитуватиме рядки з клавіатури,&nbsp;доки не буде введено рядок <code><span class="token string">exit</span></code>.</td>
+    </tr>
+    </tbody>
+</table>
+<p>Програма читає рядки з консолі, доки не буде введено слово <code><span class="token string">exit</span></code>. Якщо ввести це слово, змінна <code><span class="text-red">isExit</span></code>&nbsp;отримає значення <code>true</code>, а умова циклу <code>!<span class="text-red">isExit</span></code> набуде значення <code>false</code>, і цикл завершиться.</p>
+<p>У мові Java є спеціальний оператор <code class="text-red">break</code>, який дає змогу спростити такий код. Якщо виконати команду <code>break</code> всередині циклу, він одразу завершується, і програма починає виконувати команди, які йдуть після циклу. Команда дуже коротка:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java text-center"><code><span class="code text-red">break</span>;</code></pre>
+</div>
+<p>Ось як можна переписати розглянутий вище приклад, використовуючи команду <code>break</code>:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Scanner <span class="text-orange">console</span> = new Scanner(<span class="text-viola">System.in</span>);
+while (<span class="text-red">true</span>)
+{
+&nbsp; &nbsp;String <span class="text-user">s</span> = <span class="text-orange">console</span>.nextLine();
+&nbsp; &nbsp;if (<span class="text-user">s</span>.equals(<span class="text-green">"exit"</span>))
+     <span class="code text-red">break</span>;
+}</code></pre>
+        </td>
+        <td>Програма зчитуватиме рядки з клавіатури,&nbsp;доки не буде введено рядок <code><span class="token string">exit</span></code>.</td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task04.task0406"></div>
+<hr>
+<h2>2. Команда continue</h2>
+<p>Проте <code>break</code> — це не єдиний оператор, за допомогою якого можна керувати виконанням циклів. У мові Java є ще один оператор — <code>continue</code>. Якщо виконати команду <code>continue</code> всередині циклу, поточний виток циклу завершиться достроково.</p>
+<p>Одноразове виконання тіла циклу називають витком циклу. На відміну від команди <code>break</code>, команда <code>continue</code> перериває поточний виток циклу, але не сам цикл. Ця команда також коротка:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java text-center"><code><span class="code text-red">continue</span>;</code></pre>
+</div>
+<p>Цей оператор <code class="text-red">continue</code> дуже зручно використовувати в циклах, коли потрібно «пропускати» виконання тіла циклу в деяких ситуаціях.</p>
+<p>Задача: нам потрібно написати програму, яка виводить на екран <code>20</code> чисел від <code>1</code> до <code>20</code> й водночас пропускає числа, що діляться на <code>7</code>. Цей код матиме такий вигляд:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="text-green">i</span> = 1;
+while (<span class="text-green">i</span> &lt;= 20)
+{
+&nbsp; &nbsp;if ( (<span class="text-green">i</span> % 7) == 0 )
+     <span class="code text-red">continue</span>;
+&nbsp;  <span class="text-brown">System.out.println</span>(i);
+&nbsp;  <span class="text-green">i</span>++;
+}</code></pre>
+        </td>
+        <td>Програма виводить на екран числа від <code>1</code> до <code>20</code>. Якщо число ділиться на <code>7</code> (остача від ділення на <code>7</code> дорівнює <code>0</code>), виведення на екран не виконується.</td>
+    </tr>
+    </tbody>
+</table>
+<p>Насправді такий код <span class="text-red">не працюватиме,</span> тому що <code>i</code> назавжди застигне на значенні <code>7</code>. Адже через виклик команди <code>continue</code> було пропущено дві команди — <code><span class="text-brown">System.out.println</span>(i)</code> та <code>i++</code>. Тому коли змінна <code>і</code> досягне значення <code>7</code>, вона більше не змінюватиметься, і цикл буде виконуватися вічно.</p>
+<p>Ми навмисно написали такий код, бо це дуже поширена помилка. Як же його виправити?</p>
+<p>Тут можливі два варіанти:</p>
+<p><span class="text-bold">Варіант 1:</span> змінювати <code>i</code> перед викликом <code class="text-red">continue</code>, але після виклику <code>i % 7</code></p>
+<p><span class="text-bold">Варіант 2:</span> завжди збільшувати <code>i</code> на початку циклу. Але тоді початковим значенням <code>i</code> має бути <code>0</code>.</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="50%">Варіант 1</th>
+        <th>Варіант 2</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="text-green">i</span> = 1;
+while (<span class="text-green">i</span> &lt;= 20)
+{
+&nbsp; &nbsp;if ( (<span class="text-green">i</span> % 7) == 0 )
+&nbsp; &nbsp;{
+&nbsp; &nbsp;  <span class="text-green">i</span>++;
+     <span class="code text-red">continue</span>;
+&nbsp; &nbsp;}
+&nbsp; &nbsp;
+&nbsp;  <span class="text-brown">System.out.println</span>(<span class="text-green">i</span>);
+&nbsp;  <span class="text-green">i</span>++;
+<span>}</span></code></pre>
+        </td>
+        <td>
+<pre class="language-java"><code>int <span class="text-green">i</span> = 0;
+while (<span class="text-green">i</span> &lt; 20)
+{
+&nbsp;  <span class="text-green">i</span>++;
+&nbsp; &nbsp;if ( (<span class="text-green">i</span> % 7) == 0)
+     <span class="code text-red">continue</span>;
+&nbsp;  <span class="text-brown">System.out.println</span>(i);
+}</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task04.task0407"></div>

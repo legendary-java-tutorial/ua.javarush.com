@@ -1,0 +1,443 @@
+﻿Робота з рядками в Java
+<p>----------------------------------------</p>
+Порівняння рядків. Порівняння — це одна з найпопулярніших операцій із рядками. Клас String має понад десять різних методів для порівняння рядків між собою. Далі ми розглянемо 8 основних методів. Методи Опис boolean equals(String str) Рядки вважаються рівними,
+<p>----------------------------------------</p>
+<h2>1. Порівняння рядків</h2>
+<p>Порівняння — це одна з найпопулярніших операцій із рядками. Клас String має понад десять різних методів для порівняння рядків між собою. Далі ми розглянемо вісім основних методів.</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="50%">Методи</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>boolean <span class="text-red">equals</span>(String str)</code></pre>
+        </td>
+        <td>Рядки вважаються однаковими (рівними), якщо всі їхні символи збігаються.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>boolean <span class="text-red">equalsIgnoreCase</span>(String str)</code></pre>
+        </td>
+        <td>Порівнює рядки, ігноруючи регістр (розмір) літер.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">compareTo</span>(String str)</code></pre>
+        </td>
+        <td>Порівнює рядки лексикографічно. Повертає: 0, якщо рядки однакові; число менше за нуль, якщо поточний рядок менший за рядок-параметр; число більше за нуль, якщо поточний рядок більший за рядок-параметр.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">compareToIgnoreCase</span>(String str)</code></pre>
+        </td>
+        <td>Порівнює рядки лексикографічно, ігноруючи регістр літер. Повертає: 0, якщо рядки однакові; число менше за нуль, якщо поточний рядок менший за рядок-параметр; число більше за нуль, якщо поточний рядок більший за рядок-параметр.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>boolean <span class="text-red">regionMatches</span>(int toffset, String str, int offset, int len)</code></pre>
+        </td>
+        <td>Порівнює частини рядків.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>boolean <span class="text-red">startsWith</span>(String prefix)</code></pre>
+        </td>
+        <td>Перевіряє, чи починається поточний рядок із підрядка <code>prefix</code>.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>boolean <span class="text-red">endsWith</span>(String suffix)</code></pre>
+        </td>
+        <td>Перевіряє, чи закінчується поточний рядок підрядком <code>suffix</code>.</td>
+    </tr>
+    </tbody>
+</table>
+<p>Припустімо, нам потрібно написати програму, яка просить користувача ввести шлях до файлу й перевіряє, що це за файл, за розширенням його імені. Код такої програми матиме такий вигляд:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="60%">Код</th>
+        <th>Примітки</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Scanner <span class="text-orange">console</span> = new Scanner(System.in);
+String <span class="text-green">path</span> = <span class="text-orange">console</span>.nextLine();
+
+if (<span class="text-green">path</span>.<span class="text-red">endsWith</span>(<span class="text-green">".jpg"</span>) || <span class="text-green">path</span>.<span class="text-red">endsWith</span>(<span class="text-green">".jpeg"</span>))
+{
+   System.out.println(<span class="text-green">"Це Jpeg!"</span>);
+}
+else if (<span class="text-green">path</span>.<span class="text-red">endsWith</span>(<span class="text-green">".htm"</span>) || <span class="text-green">path</span>.<span class="text-red">endsWith</span>(<span class="text-green">".html"</span>))
+{
+   System.out.println(<span class="text-green">"Це HTML-сторінка"</span>);
+}
+else if (<span class="text-green">path</span>.<span class="text-red">endsWith</span>(<span class="text-green">".doc"</span>) || <span class="text-green">path</span>.<span class="text-red">endsWith</span>(<span class="text-green">".docx"</span>))
+{
+   System.out.println(<span class="text-green">"Це документ Word"</span>);
+}
+else
+{
+   System.out.println(<span class="text-green">"Невідомий формат"</span>);
+}</code></pre>
+        </td>
+        <td>Створення об'єкта <code>Scanner</code><br/> Читання рядка з консолі<br/><br/> Перевірка, чи закінчується рядок <code><span class="text-green">path</span></code> заданим підрядком</td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task09.task0912"></div>
+<hr>
+<h2>2. Пошук підрядків</h2>
+<p>Друга за популярністю операція після порівняння рядків — це пошук одного рядка в іншому. Для цього клас String теж має кілька методів:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="50%">Методи</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">indexOf</span>(String str)</code></pre>
+        </td>
+        <td>Шукає рядок <code>str</code> в поточному рядку. Повертає індекс першого символу знайденого рядка.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">indexOf</span>(String str, int <span class="text-green">index</span>)</code></pre>
+        </td>
+        <td>Шукає рядок <code>str</code> в поточному рядку, починаючи із символу з індексом <code><span class="text-green">index</span></code>. Повертає індекс першого символу знайденого рядка.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">lastIndexOf</span>(String str)</code></pre>
+        </td>
+        <td>Шукає рядок <code>str</code> в поточному рядку, починаючи з кінця. Повертає індекс першого символу знайденого рядка (тобто індекс останнього входження).</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">lastIndexOf</span>(String str, int <span class="text-green">index</span>)</code></pre>
+        </td>
+        <td>Шукає рядок <code>str</code> в поточному рядку ззаду наперед, починаючи із символу з індексом <code><span class="text-green">index</span></code>; повертає індекс першого символу знайденого рядка (тобто індекс останнього входження).</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>boolean <span class="text-red">matches</span>(String regex)</code></pre>
+        </td>
+        <td>Перевіряє, чи збігається поточний рядок із шаблоном, який задано регулярним виразом.</td>
+    </tr>
+    </tbody>
+</table>
+<p>Методи <code>indexOf(String)</code> і <code>indexOf (String, index)</code> часто використовуються разом. Перший дає змогу знайти перше входження переданого підрядка в поточному рядку. А другий метод знаходить друге, третє і т. д. входження завдяки тому, що пропускає перші index символів.</p>
+<p>Припустімо, маємо таку URL-адресу: «<span class="text-orange"><strong>https://domen.com/about/reviews</strong></span>», і хочемо замінити ім'я домену на <span class="text-orange"><strong>javarush.com</strong></span>. Домени в URL-адресах можуть бути різними, але ми можемо виділити їх за такими ознаками:</p>
+<ul>
+    <li>Імені домену передують дві скісні риски <code>//</code></li>
+    <li>Після імені домену ставиться одна скісна риска <code>/</code></li>
+</ul>
+<p>Цю програму можна написати отак:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітки</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>Scanner <span class="text-orange">console</span> = new Scanner(System.in);
+String <span class="text-green">path</span> = <span class="text-orange">console</span>.nextLine();
+
+int <span class="text-user">index</span> = <span class="text-green">path</span>.<span class="text-red">indexOf</span>("//");
+int <span class="text-user">index2</span> = <span class="text-green">path</span>.<span class="text-red">indexOf</span>("/", <span class="text-user">index</span> + 2);
+
+String <span class="text-orange">first</span> = <span class="text-green">path</span>.<span class="text-red">substring</span>(0, <span class="text-user">index</span> + 2);
+String <span class="text-orange">last</span> = <span class="text-green">path</span>.<span class="text-red">substring</span>(<span class="text-user">index2</span>);
+
+String <span class="text-viola">result</span> = <span class="text-orange">first</span> + <span class="text-green">"javarush.com"</span> + <span class="text-orange">last</span>;
+System.out.println(<span class="text-viola">result</span>);</code></pre>
+        </td>
+        <td>Створення об'єкта Scanner<br/> Читання рядка з консолі<br/><br/> Отримуємо індекс першого входження рядка <code>//</code><br/> Отримуємо індекс першого входження рядка <code>/</code>, але шукаємо тільки після символів <code>//</code>.<br/> Отримуємо рядок від початку і закінчуючи символами <code>//</code><br/> Отримуємо рядок від <code>/</code> і до кінця.<br/><br/> Склеюємо рядки і отримуємо новий домен.</td>
+    </tr>
+    </tbody>
+</table>
+<p>Методи <code>lastIndexOf(String)</code> і <code>lastIndexOf(String, index)</code> працюють так само, тільки пошук ведеться у зворотному напрямку, починаючи з кінця рядка.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task09.task0913"></div>
+<hr>
+<h2>3. Створення підрядків</h2>
+<p>Наступною за популярністю після порівняння рядків і пошуку підрядків є операція отримання підрядка з рядка. У попередньому прикладі ви бачили виклик методу <code>substring()</code>, який повертав частину рядка.</p>
+<p>Наводимо 8 методів отримання підрядків із поточного рядка:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="50%">Методи</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String <span class="text-red">substring</span>(int beginIndex, int endIndex)</code></pre>
+        </td>
+        <td>Повертає підрядок, визначений інтервалом символів <code>beginIndex..endIndex</code>.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String <span class="text-red">repeat</span>(int count)</code></pre>
+        </td>
+        <td>Повторює поточний рядок n разів.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String <span class="text-red">replace</span>(char oldChar, char newChar)</code></pre>
+        </td>
+        <td>Повертає новий рядок, де символ <code>oldChar</code> замінено на символ <code>newChar</code>.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String <span class="text-red">replaceFirst</span>(String regex, String replacement)</code></pre>
+        </td>
+        <td>Замінює в поточному рядку підрядок, визначений регулярним виразом, на заданий підрядок.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String <span class="text-red">replaceAll</span>(String regex, String replacement)</code></pre>
+        </td>
+        <td>Замінює в поточному рядку всі підрядки, визначені регулярним виразом, на заданий підрядок.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String <span class="text-red">toLowerCase</span>()</code></pre>
+        </td>
+        <td>Перетворює всі літери в рядку на малі.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String <span class="text-red">toUpperCase</span>()</code></pre>
+        </td>
+        <td>Перетворює всі літери в рядку на великі.</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String <span class="text-red">trim</span>()</code></pre>
+        </td>
+        <td>Видаляє всі пробіли на початку та в кінці рядка.</td>
+    </tr>
+    </tbody>
+</table>
+<p>Короткий опис цих методів:</p>
+<p><strong>Метод <code>substring(int beginIndex, int endIndex)</code></strong></p>
+<p>Метод <code>substring</code> повертає новий рядок, який містить символи поточного рядка починаючи із символу з індексом <code>beginIndex</code> і закінчуючи символом до індексу <code>endIndex</code>. Не забувайте, що в Java інтервали не включають елементи з кінцевим індексом, тобто символ з індексом <code>endIndex</code> у новий рядок не входить. Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="50%">Код</th>
+        <th>Результат</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>"<span class="text-red">При</span>віт".substring(0, 3);</code></pre>
+        </td>
+        <td>
+            <pre><code>"При"</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>"П<span class="text-red">рив</span>іт".substring(1, 4);</code></pre>
+        </td>
+        <td>
+            <pre><code>"рив"</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>"П<span class="text-red">ривіт</span>".substring(1, 6);</code></pre>
+        </td>
+        <td>
+            <pre><code>"ривіт"</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>"П<span class="text-red">ривіт</span>".substring(1);</code></pre>
+        </td>
+        <td>
+            <pre><code>"ривіт"</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Якщо параметр <code>endIndex</code> не вказано (а так можна), вибирається підрядок починаючи від символу <code>beginIndex</code> і до кінця рядка.</p>
+<p><strong>Метод <code>repeat(int n)</code></strong></p>
+<p>Метод repeat просто повторює поточний рядок <code>n</code> разів. Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="50%">Код</th>
+        <th>Результат</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>"Привіт".repeat(3);</code></pre>
+        </td>
+        <td>
+            <pre><code>"ПривітПривітПривіт"</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>"Привіт".repeat(2);</code></pre>
+        </td>
+        <td>
+            <pre><code>"ПривітПривіт"</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>"Привіт".repeat(1);</code></pre>
+        </td>
+        <td>
+            <pre><code>"Привіт"</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>"Привіт".repeat(0);</code></pre>
+        </td>
+        <td>
+            <pre><code>""</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Метод <code>replace(char oldChar, char newChar)</code></strong></p>
+<p>Метод <code>replace()</code> повертає новий рядок, де всі символи <code>oldChar</code> замінено на символ <code>newChar</code>. Довжина рядка під час цієї операції не змінюється. Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="50%">Код</th>
+        <th>Результат</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>"Привіт".replace('Я', 'я');</code></pre>
+        </td>
+        <td>
+            <pre><code>"Привіт"</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>"Привіт".replace('т', 'д');</code></pre>
+        </td>
+        <td>
+            <pre><code>"Привід"</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>"Привіт".replace('и', 'е');</code></pre>
+        </td>
+        <td>
+            <pre><code>"Превіт"</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>"Привіт".replace('и', 'і');</code></pre>
+        </td>
+        <td>
+            <pre><code>"Прівіт"</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Методи <code>replaceFirst()</code> і <code>replaceAll()</code></strong></p>
+<p>Метод <code>replaceAll()</code> замінює всі входження підрядка, переданого в першому параметрі, на підрядок, переданий у другому параметрі. Метод <code>replaceFirst()</code> замінює перше входження підрядка, переданого в першому параметрі, на підрядок, переданий у другому параметрі. Підрядок, який потрібно замінити, визначається регулярним виразом. Регулярні вирази ми розглядатимемо в квесті <span class="term">Java Multithreading</span>.</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="50%">Код</th>
+        <th>Результат</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>"Good news everyone!".replaceAll("e.", "EX");</code></pre>
+        </td>
+        <td>
+            <pre><code>"Good nEXs EXEXyonEX"</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>"Good news everyone!".replaceAll("o.", "-o-");</code></pre>
+        </td>
+        <td>
+            <pre><code>"G-o-d news every-o-e!"</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>"Good news everyone!".replaceFirst("e.", "EX");</code></pre>
+        </td>
+        <td>
+            <pre><code>"Good nEXs everyone!"</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>"Good news everyone!".replaceFirst("o.", "-o-");</code></pre>
+        </td>
+        <td>
+            <pre><code>"G-o-d news everyone!"</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p><strong>Методи <code>toLowerCase() і toUpperCase()</code></strong></p>
+<p>З цими методами ви познайомилися ще тоді, коли тільки починали вивчати методи класу <code>String</code>.</p>
+<p><strong>Метод <code>trim()</code></strong></p>
+<p>Метод <code>trim()</code> видаляє пробіли на початку та в кінці рядка. Пробіли всередині рядка ігноруються. Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th width="50%">Код</th>
+        <th>Результат</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>"     ".trim();</code></pre>
+        </td>
+        <td>
+            <pre><code>""</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>"Привіт".trim();</code></pre>
+        </td>
+        <td>
+            <pre><code>"Привіт"</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>" Привіт\n як справи?\n   ".trim();</code></pre>
+        </td>
+        <td>
+            <pre><code>"Привіт<span class="text-invisible">\n</span> як справи?<span class="text-invisible">\n</span>"</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>"  Пароль\n   \n ".trim();</code></pre>
+        </td>
+        <td>
+            <pre><code>"Пароль<span class="text-invisible">\n</span>   <span class="text-invisible">\n</span>"</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task09.task0914"></div>

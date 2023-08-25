@@ -1,0 +1,336 @@
+﻿Параметри функцій в Java
+<p>----------------------------------------</p>
+Передавання параметрів. А тепер починається найцікавіше. Як ви вже, напевно, знаєте завдяки знайомству з методами типу System.out.println(), у методи можна передавати параметри. І це значно збільшує користь від створення й використання методів. Як же нам оголосити метод з параметрами
+<p>----------------------------------------</p>
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="b64c7454-1c2b-4359-b9c1-d717c12c81ed" src="https://cdn.javarush.com/images/article/b64c7454-1c2b-4359-b9c1-d717c12c81ed/original.png" alt=""/>
+        </div>
+    </div>
+</div>
+<h2>1. Передавання параметрів</h2>
+<p>А тепер починається найцікавіше. Як ви вже, напевно, знаєте завдяки знайомству з методами типу <code>System.out.println()</code>, у методи можна передавати параметри. І це значно збільшує користь від створення й використання методів.</p>
+<p>Як же оголосити метод з параметрами? Насправді це досить просто:</p>
+<div class="lesson-example lesson-example--center">
+<pre class="lecture-code lecture-code--present language-java"><code>public static void <span class="text-red">ім'я</span>(<span class="text-neon">параметри</span>)
+{
+&nbsp;  <span class="text-green">код методу</span>
+}</code></pre>
+</div>
+<p>де <code><span class="text-red">ім'я</span></code>&nbsp;— це унікальне ім'я методу, <code><span class="text-green">код методу</span></code>&nbsp;— це команди, з яких він складається, а <code><span class="text-neon">параметри</span></code>&nbsp;— це параметри методу, перелічені через кому. Подивіться на цей шаблон в деталях:</p>
+<div class="lesson-example lesson-example--center">
+<pre class="lecture-code lecture-code--present-sm language-java"><code>public static void <span class="text-red">ім'я</span>(<span class="text-neon">тип1 ім'я1</span>, <span class="text-neon">тип2 ім'я2</span>, <span class="text-neon">тип3 ім'я3</span>)
+<span>{
+</span>&nbsp;  <span class="text-green">код методу</span>
+}</code></pre>
+</div>
+<p>Приклади:</p>
+<table>
+    <thead>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>
+<pre class="language-java"><code>public static void <span class="text-red">print</span>(<span class="text-neon">String str</span>)
+{
+}</code></pre>
+        </td>
+        <td>Оголошено метод <code><span class="text-red">print</span></code> з параметром<br/> <code>String str</code></td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public static void <span class="text-red">print</span>(<span class="text-neon">String str</span>, <span class="text-neon">int count</span>)
+{
+}</code></pre>
+        </td>
+        <td>Оголошено метод <code><span class="text-red">print</span></code> із двома параметрами<br/> <code>String str</code><br/> <code>int count</code>
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public static void <span class="text-red">write</span>(<span class="text-neon">int x</span>, <span class="text-neon">int y</span>)
+{
+}</code></pre>
+        </td>
+        <td>Оголошено метод <code><span class="text-red">write</span></code> із двома параметрами<br/> <code>int x</code><br/> <code>int y</code></td>
+    </tr>
+    </tbody>
+</table>
+<p>Якщо нашому метод параметри не потрібні, просто залишаємо круглі дужки порожніми.</p>
+<p>Параметри — це спеціальні змінні методу. З їх допомогою в метод можна передавати різні значення під час його виклику.</p>
+<p>Для прикладу спробуймо написати метод, який виводить на екран рядок тексту задану кількість разів.</p>
+<p>Як написати код для кількаразового виведення рядка на екран, ви вже знаєте. Але який саме рядок виводити? І скільки разів? Ось для цього нам і знадобляться параметри.</p>
+<p>Код цієї задачі матиме такий вигляд:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>class Solution
+{
+&nbsp; &nbsp;public static void <span class="text-red">printLines</span>(String <span class="text-neon">text</span>, int <span class="text-neon">count</span>)
+&nbsp; &nbsp;{
+&nbsp; &nbsp; &nbsp;for (int i = 0; i &lt; <span class="text-neon">count</span>; i++)
+&nbsp; &nbsp; &nbsp;  System.out.println(<span class="text-neon">text</span>);
+&nbsp; &nbsp;}
+
+&nbsp; &nbsp;public static void main(String[] args)
+&nbsp; &nbsp;{
+&nbsp; &nbsp;  <span class="text-red">printLines</span>(<span class="text-green">"Привіт"</span>, <span class="text-user">10</span>);
+&nbsp; &nbsp;  <span class="text-red">printLines</span>(<span class="text-green">"Бувай"</span>, <span class="text-user">20</span>);
+&nbsp; &nbsp;}
+}</code></pre>
+        </td>
+        <td><br/><br/>Оголосили метод <code><span class="text-red">printLines</span></code> з параметрами:<br/> <code>String text</code>, <code>int count</code><br/> Метод виводить на екран <code><span class="text-neon">count</span></code> разів рядок <code><span class="text-neon">text</span></code><br/><br/><br/><br/> <br/><br/>Викликаємо метод <code><span class="text-red">printLines</span></code> з різними параметрами</td>
+    </tr>
+    </tbody>
+</table>
+<p>Кожного разу, коли викликається метод, його змінним-параметрам присвоюються передані значення, і лише потім починається виконання команд усередині методу.</p>
+<hr>
+<h2>2. Аргументи методу</h2>
+<p>Ще трохи вашої уваги хочемо звернути на виклик методу з параметрами.</p>
+<p>Значення, що передаються в метод під час його виклику, прийнято називати аргументами методу.</p>
+<p>Розгляньмо приклад ще раз:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>class Solution
+{
+&nbsp; &nbsp;public static void <span class="text-red">printLines</span>(String <span class="text-neon">text</span>, int <span class="text-neon">count</span>)
+&nbsp; &nbsp;{
+&nbsp; &nbsp; &nbsp;for (int i = 0; i &lt; <span class="text-neon">count</span>; i++)
+&nbsp; &nbsp; &nbsp;  System.out.println(<span class="text-neon">text</span>);
+&nbsp; &nbsp;}
+
+&nbsp; &nbsp;public static void main(String[] args)
+&nbsp; &nbsp;{
+&nbsp; &nbsp;  <span class="text-red">printLines</span>(<span class="text-green">"Привіт"</span>, <span class="text-user">10</span>);
+&nbsp; &nbsp;  <span class="text-red">printLines</span>(<span class="text-green">"Бувай"</span>, <span class="text-user">20</span>);
+&nbsp; &nbsp;}
+}</code></pre>
+        </td>
+        <td><br/><br/>Оголосили метод <code><span class="text-red">printLines</span></code> з параметрами:<br/> <code>String text</code>, <code>int count</code><br/> Метод виводить на екран <code><span class="text-neon">count</span></code> разів рядок <code><span class="text-neon">text</span></code><br/><br/><br/> <br/><br/>Викликаємо метод <code><span class="text-red">printLines</span></code> з параметрами<br/> <code class="text-nowrap">text = "Привіт"; count = 10;</code><br/> <code class="text-nowrap">text = "Бувай"; count = 20;</code></td>
+    </tr>
+    </tbody>
+</table>
+<p>Коли метод <code><span class="text-red">printLines</span></code>&nbsp;було викликано вперше, його змінним-параметрам було присвоєно такі значення: <br/><code>String text = "Привіт", int count = 10</code>.</p>
+<p>Коли метод <code><span class="text-red">printLines</span></code> було викликано вдруге, його змінним-параметрам було присвоєно інші значення: <br/><code>String text = "Бувай", int count = 20</code>.</p>
+<p>Параметри методу — це саме змінні, яким присвоюються певні значення під час виклику методу. Самі ж значення <code class="token string">"Привіт"</code>, <code class="token string">"Бувай"</code>, <code class="token number">10</code> і <code class="token number">20</code> називають аргументами методу.</p>
+<hr>
+<h2>3. Конфлікт імен змінних під час виклику методу</h2>
+<p>Як аргументи методу можна використовувати змінні. Це просто й зрозуміло, але потенційно може спричиняти деякі складнощі. Розгляньмо той самий приклад, але винесемо аргументи в окремі змінні:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>class Solution
+{
+&nbsp; &nbsp;public static void <span class="text-red">printLines</span>(String <span class="text-neon">text</span>, int <span class="text-neon">count</span>)
+&nbsp; &nbsp;{
+&nbsp; &nbsp; &nbsp;for (int i = 0; i &lt; <span class="text-neon">count</span>; i++)
+  &nbsp; &nbsp; &nbsp;System.out.print(<span class="text-neon">text</span>);
+&nbsp; &nbsp;}
+
+&nbsp; &nbsp;public static void main(String[] args)
+&nbsp; &nbsp;{
+&nbsp; &nbsp; &nbsp;String <span class="text-viola">str</span> = <span class="text-green">"Привіт"</span>;
+&nbsp; &nbsp; &nbsp;int <span class="text-viola">n</span> = <span class="text-user">10</span>;
+&nbsp; &nbsp;  <span class="text-red">printLines</span>(<span class="text-viola">str</span>, <span class="text-viola">n</span>);
+&nbsp; &nbsp;}
+}</code></pre>
+        </td>
+        <td><br/><br/>Оголосили метод <code><span class="text-red">printLines</span></code> з параметрами:<br/> <code>String text</code>, <code>int count</code><br/> Метод виводить на екран <code><span class="text-neon">count</span></code> разів рядок <code><span class="text-neon">text</span></code><br/><br/><br/><br/> <br/><br/><br/><br/>Викликаємо метод <code><span class="text-red">printLines</span></code> з параметрами:<br/> <code><span class="text-neon">text</span> = <span class="text-viola">str</span>;</code><br/> <code><span class="text-neon">count</span> = <span class="text-viola">n</span>;</code>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Поки що нічого складного: у нас є змінна <code><span class="text-viola">str</span></code>, її значення присвоюється змінній <code><span class="text-neon">text</span></code> під час виклику методу. У нас є змінна <code><span class="text-viola">n</span></code>, її значення присвоюється змінній <code><span class="text-neon">count</span></code> під час виклику методу. Досі все зрозуміло.</p>
+<p>А тепер перейменуймо наші змінні в методі <code>main</code>:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>class Solution
+{
+&nbsp; &nbsp;public static void <span class="text-red">printLines</span>(String <span class="text-neon">text</span>, int <span class="text-neon">count</span>)
+&nbsp; &nbsp;{
+&nbsp; &nbsp; &nbsp;for (int i = 0; i &lt; <span class="text-neon">count</span>; i++)
+&nbsp; &nbsp; &nbsp; &nbsp;System.out.print(<span class="text-neon">text</span>);
+&nbsp; &nbsp;}
+
+&nbsp; &nbsp;<span>public static void main(String[] args)
+&nbsp; &nbsp;</span>{
+&nbsp; &nbsp;  String <span class="text-viola">text</span> = <span class="text-green">"Привіт"</span>;
+&nbsp; &nbsp; &nbsp;int <span class="text-viola">count</span> = <span class="text-user">10</span>;
+&nbsp; &nbsp;  <span class="text-red">printLines</span>(<span class="text-viola">text</span>, <span class="text-viola">count</span>);
+&nbsp; &nbsp;}
+}</code></pre>
+        </td>
+        <td><br/><br/>Оголосили метод <code><span class="text-red">printLines</span></code> з параметрами:<br/> <code>String text</code>, <code>int count</code><br/> Метод виводить на екран <code><span class="text-viola">count</span></code> разів рядок <code><span class="text-viola">text</span></code><br/><br/><br/><br/> <br/><br/><br/><br/>Викликаємо метод <code><span class="text-red">printLines</span></code> з параметрами:<br/> <code><span class="text-neon">text</span> = <span class="text-viola">text</span>;</code><br/> <code><span class="text-neon">count</span> = <span class="text-viola">count</span>;</code></td>
+    </tr>
+    </tbody>
+</table>
+<p>Зверніть увагу на дві речі.</p>
+<p>Перше: у нас є змінні з однаковими іменами в різних методах. Це <strong>різні</strong> змінні (ми їх спеціально пофарбували різними кольорами). Усе працює так само, як і в попередньому прикладі, коли змінні в методі <code>main</code> називалися <code><span class="text-viola">str</span></code> і <code><span class="text-viola">n</span></code>.</p>
+<p>Друге: під час виклику методу ніякого чаклунства не відбувається. Змінним-параметрам просто присвоюються значення аргументів, незалежно від того, чи це конкретні числа, рядки, змінні або вирази.</p>
+<p>Після перейменування змінних у методі main нічого не змінилося. Це як були <strong>різні змінні в різних методах</strong>, так і залишились. Жодного магічного зв'язку між змінними <code><span class="text-viola">text</span></code>&nbsp;і <code><span class="text-neon">text</span></code>&nbsp;немає.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task06.task0603"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task06.task0604"></div>
+<hr>
+<h2>4. Передавання посилань в методи</h2>
+<p>Сподіваємося, ви зрозуміли все з попередньої лекції, тому що зараз ми знову розглянемо передавання аргументів у методи, тільки докладніше.</p>
+<p>Як ви вже знаєте, деякі змінні в Java зберігають не самі значення, а адресу (посилання) блока пам'яті, в якому ці значення розміщені. Так працюють, наприклад, змінні-рядки або змінні-масиви.</p>
+<p>Коли ви присвоюєте змінній-масиву іншу змінну-масив, що відбувається? Правильно. Дві змінні починають посилатися на один і той самий контейнер у пам'яті:</p>
+<img data-max-width="1024" data-id="da52f802-009c-4ee4-b4e8-65d3f033ea9b" src="https://cdn.javarush.com/images/article/da52f802-009c-4ee4-b4e8-65d3f033ea9b/1024.jpeg" alt="">
+<p>А що відбудеться, якщо одна з цих змінних буде змінною-параметром методу?</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>class Solution
+{
+&nbsp; &nbsp;public static void <span class="text-red">sum</span>(int[] <span class="text-neon">data</span>)
+&nbsp; &nbsp;{
+&nbsp; &nbsp; &nbsp;int <span class="text-green">summa</span> = 0;
+&nbsp; &nbsp; &nbsp;for (int i = 0; i &lt; <span class="text-neon">data</span>.length; i++)
+&nbsp; &nbsp; &nbsp;  <span class="text-green">summa</span> = <span class="text-green">summa</span> + <span class="text-neon">data</span>[i];
+&nbsp; &nbsp; &nbsp;System.out.println(<span class="text-green">summa</span>);
+&nbsp; &nbsp;}
+&nbsp; &nbsp;
+&nbsp; &nbsp;public static void main(String[] args)
+&nbsp; &nbsp;{
+&nbsp; &nbsp; &nbsp;int[] <span class="text-viola">months</span> = {31, 28, 31, 30, 31, 30, 31, 31, 30};
+&nbsp; &nbsp;  <span class="text-red">sum</span>(<span class="text-viola">months</span>);
+&nbsp; &nbsp;}
+}</code></pre>
+        </td>
+        <td><br/><br/>Метод <code><span class="text-red">sum</span></code> обчислює суму чисел переданого масиву й виводить її на екран</td>
+    </tr>
+    </tbody>
+</table>
+<p>Відбудеться точнісінько те саме: змінна-параметр <code><span class="text-neon">data</span></code>&nbsp;міститиме посилання на той самий контейнер, що й змінна <code><span class="text-viola">months</span></code>. Під час виклику методу просто буде здійснено присвоювання <code><span class="text-neon">data</span> = <span class="text-viola">months</span></code>.</p>
+<p>А оскільки обидві змінні посилаються на один і той самий контейнер цілих чисел, то метод <code><span class="text-red">sum</span></code>&nbsp;може не просто читати значення з масиву, а й змінювати їх!</p>
+<p>Приміром, ми можемо написати свій власний метод, який заповнює двовимірний масив однаковими значеннями. Отакий вигляд міг би мати цей метод:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>class Solution
+{
+&nbsp; &nbsp;public static void <span class="text-red">fill</span>(int[][] <span class="text-neon">data</span>, int <span class="text-green">value</span>)
+&nbsp; &nbsp;{
+&nbsp; &nbsp; &nbsp;for (int i = 0; i &lt; <span class="text-neon">data</span>.length; i++)
+&nbsp; &nbsp; &nbsp;{
+&nbsp; &nbsp; &nbsp; &nbsp;for (int j = 0; j &lt; <span class="text-neon">data</span>[i].length; j++)
+&nbsp; &nbsp; &nbsp; &nbsp;  <span class="text-neon">data</span>[i][j] = <span class="text-green">value</span>;
+&nbsp; &nbsp; &nbsp;}
+&nbsp; }
+
+&nbsp; &nbsp;public static void main(String[] args)
+&nbsp; &nbsp;{
+&nbsp; &nbsp; &nbsp;int[][] <span class="text-viola">months</span> = {{31, 28}, {31, 30, 31}, {30, 31, 31}};
+&nbsp; &nbsp;  <span class="text-red">fill</span> (<span class="text-viola">months</span>, 8);
+&nbsp; &nbsp;}
+}</code></pre>
+        </td>
+        <td><br/><br/>Метод <code><span class="text-red">fill</span></code>&nbsp;пробігає всіма комірками переданого двовимірного масиву та присвоює їм значення <code><span class="text-green">value</span></code>.<br/><br/><br/><br/><br/><br/><br/><br/><br/> Створюємо двовимірний масив.<br/> Заповнюємо весь масив числом <code>8</code>.</td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task06.task0605"></div>
+<hr>
+<h2>5. Методи з однаковими іменами</h2>
+<p>А зараз знову повернемося до імен методів.</p>
+<p>Стандарти Java вимагають, щоб усі методи всередині одного класу мали унікальні імена. Тобто неможливо оголосити в одному класі два однакові методи.</p>
+<p>Тільки от у процесі перевірки методів на однаковість враховуються <span class="text-green">не лише імена, але й типи параметрів</span>! <span class="text-red">Причому імена змінних-параметрів не враховуються</span>. Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Пояснення</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>void <span class="text-red">fill</span>(<span class="text-neon">int[]</span> data, <span class="text-green">int</span> value) {
+}
+void <span class="text-red">fill</span>(<span class="text-neon">int[][]</span> data, <span class="text-green">int</span> value) {
+}
+void <span class="text-red">fill</span>(<span class="text-neon">int[][][]</span> data, <span class="text-green">int</span> value) &nbsp;{
+}</code></pre>
+        </td>
+        <td style="vertical-align: middle">Ці три методи вважаються <span class="text-green">різними</span>. Їх можна оголосити в одному класі.</td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>void <span class="text-red">print</span>(<span class="text-neon">String</span> str) {
+}
+void <span class="text-red">print</span>(<span class="text-neon">String</span> str, <span class="text-neon">String</span> str2) {
+}
+void <span class="text-red">print</span>(<span class="text-neon">int</span> val) {
+}
+void <span class="text-red">print</span>(<span class="text-neon">double</span> val) {
+}
+void <span class="text-red">print</span>()&nbsp;{
+}</code></pre>
+        </td>
+        <td style="vertical-align: middle">Усі ці п'ять методів вважаються <span class="text-green">різними</span>. Їх можна оголосити в одному класі.</td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>void <span class="text-red">sum</span>(<span class="text-green">int</span> x, <span class="text-green">int</span> y) {
+}
+void <span class="text-red">sum</span>(<span class="text-green">int</span> data, <span class="text-green">int</span> value) {
+}</code></pre>
+        </td>
+        <td style="vertical-align: middle">Ці два методи вважаються <span class="text-red">однаковими</span> (їх не можна оголосити в одному класі).</td>
+    </tr>
+    </tbody>
+</table>
+<p>Чому ж одні методи вважаються <span class="text-green">однаковими</span>, а інші — <span class="text-red">різними</span>? І чому не враховуються імена змінних-параметрів під час визначення унікальності методу?</p>
+<p>Навіщо взагалі потрібна унікальність? Річ у тім, що коли компілятор компілює вашу програму, він має точно знати, яку саме функцію/метод ви викликаєте в певному місці.</p>
+<p>Наприклад, ви пишете <code>System.out.println(<span class="text-green">"Привіт"</span>)</code>. Компілятор розумний, і він легко зробить висновок, що тут викликається метод <code>println()</code> з параметром типу <code>String</code>.</p>
+<p>А якщо ви напишете <code>System.out.println(<span class="text-user">1.0</span>)</code>, компілятор побачить тут виклик методу <code>println()</code> з параметром типу <code>double</code>.</p>
+<p>Компілятор стежить, щоб під час виклику методу типи аргументів і параметрів збігалися, а на ім'я аргументу не звертає уваги. У Java імена змінних-параметрів жодним чином не допомагають компілятору визначити метод, який викликається. Тому вони й не враховуються під час визначення унікальності методу.</p>
+<p>Ім'я методу й типи його параметрів називають <strong>сигнатурою методу</strong>. Приклад: <code>sum(int, int)</code></p>
+<p>Кожен клас має містити не методи з унікальними іменами, а <span class="text-red">методи з унікальними сигнатурами</span>.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task06.task0606"></div>
+<hr>
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="71263f9d-2577-488f-988b-f22ed95b98ea" src="https://cdn.javarush.com/images/article/71263f9d-2577-488f-988b-f22ed95b98ea/original.png" alt=""/>
+        </div>
+    </div>
+</div>

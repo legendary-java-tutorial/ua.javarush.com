@@ -1,0 +1,298 @@
+﻿Видимість змінних
+<p>----------------------------------------</p>
+Локальні змінні. Поговорімо трохи серйозніше про змінні. Натомість цього разу розгляньмо не їхню внутрішню будову, а взаємодію змінних із кодом, в якому вони знаходяться. Усі змінні, оголошені всередині методів, називають локальними. Локальна змінна існує
+<p>----------------------------------------</p>
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="12ac731e-4128-4fce-b592-68e364a8b371" src="https://cdn.javarush.com/images/article/12ac731e-4128-4fce-b592-68e364a8b371/original.png" alt=""/>
+        </div>
+    </div>
+</div>
+<hr>
+<h2>1. Локальні змінні</h2>
+<p>Поговорімо трохи серйозніше про змінні. Натомість цього разу розгляньмо не їхню внутрішню будову, а взаємодію змінних із кодом, в якому вони знаходяться.</p>
+<p>Усі змінні, оголошені всередині методів, називають <span class="term">локальними змінними</span>. <span class="text-orange">Локальна змінна існує тільки в тому блоці коду, в якому її оголошено.</span> Точніше, вона існує з моменту оголошення й до кінця блока коду, в якому її оголошено.</p>
+<p>Для простоти розгляньмо приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Доступність змінних</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public static void main(String[] args)
+{
+   int <span class="text-red">a</span> = 5;
+   if (<span class="text-red">a</span> &lt; 10)
+   {
+     int <span class="text-neon">b</span> = 10;
+     while (true)
+     {
+       int <span class="text-green">x</span> = <span class="text-red">a </span>+ <span class="text-neon">b</span>;
+       System.out.println(<span class="text-green">x</span>);
+     }
+     System.out.println(<span class="text-neon">b</span>);
+   }
+
+}</code></pre>
+        </td>
+        <td>
+                <pre><code>
+
+<span class="text-red">a</span>
+<span class="text-red">a</span>
+<span class="text-red">a</span>
+<span class="text-red">a</span>, <span class="text-neon">b</span>
+<span class="text-red">a</span>, <span class="text-neon">b</span>
+<span class="text-red">a</span>, <span class="text-neon">b</span>
+<span class="text-red">a</span>, <span class="text-neon">b</span>, <span class="text-green">x</span>
+<span class="text-red">a</span>, <span class="text-neon">b</span>, <span class="text-green">x</span>
+<span class="text-red">a</span>, <span class="text-neon">b</span>
+<span class="text-red">a</span>, <span class="text-neon">b</span>
+<span class="text-red">a</span>
+<span class="text-red">a</span>
+
+</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Обговорімо доступність локальних змінних іще раз. Є блок коду, обмежений фігурними дужками: це може бути тіло методу, тіло циклу або просто блок коду умовного оператора. Змінна, оголошена у блоці коду, існує до кінця цього блока коду.</p>
+<p>Якщо змінну оголосити в тілі циклу, вона існуватиме лише в тілі циклу, створюючись і знищуючись на кожному витку циклу.</p>
+<div class="lesson-note lesson-note--important">
+    <div class="lesson-note__container">
+        <div class="lesson-note__content">
+            Неможливо оголосити дві локальні змінні з однаковими іменами в одному методі — програма не скомпілюється. Але можна це зробити, якщо блоки коду, в яких оголошено змінні, не перетинаються.
+        </div>
+    </div>
+</div>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Доступність змінних</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public static void main(String[] args)
+{
+   int <span class="text-red">a</span> = 5;
+   if (<span class="text-red">a</span> &lt; 10)
+   {
+     int <span class="text-green">b</span> = 10;
+     System.out.println(<span class="text-green">b</span>);
+   }
+
+   if (<span class="text-red">a</span> &lt; 20)
+   {
+     int <span class="text-neon">b</span> = 20;
+     System.out.println(<span class="text-neon">b</span>);
+   }
+}</code></pre>
+        </td>
+        <td>
+                <pre><code>
+
+<span class="text-red">a</span>
+<span class="text-red">a</span>
+<span class="text-red">a</span>
+<span class="text-red">a</span>, <span class="text-green">b</span>
+<span class="text-red">a</span>, <span class="text-green">b</span>
+<span class="text-red">a</span>
+<span class="text-red">a</span>
+<span class="text-red">a</span>
+<span class="text-red">a</span>
+<span class="text-red">a</span>, <span class="text-neon">b</span>
+<span class="text-red">a</span>, <span class="text-neon">b</span>
+<span class="text-red">a</span>
+
+</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Другу локальну змінну з іменем <code><span class="text-neon">b</span></code>&nbsp;ми змогли оголосити лише тому, що першу змінну <code><span class="text-green">b</span></code>&nbsp;не видно в блоці коду, де оголошено другу змінну <code><span class="text-neon">b</span></code>.</p>
+<hr>
+<h2>2. Змінні-параметри</h2>
+<p>Як ми вже казали раніше, у кожного методу можуть бути змінні-параметри. А що можна сказати про їх видимість і час життя?</p>
+<p>Тут усе досить просто. Змінні-параметри створюються, коли керування передається в код методу (код методу починає виконуватися), і видаляються, коли робота методу завершується. Їх видно в усьому тілі методу.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Доступність змінних</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public static void main(String[] <span class="text-neon">args</span>)
+{
+   int <span class="text-red">a</span> = 5;
+   if (<span class="text-red">a</span> &lt; 10)
+   {
+     int <span class="text-viola">b</span> = 10;
+     while (true)
+     {
+       int <span class="text-green">x</span> = <span class="text-red">a </span>+ <span class="text-viola">b</span>;
+       System.out.println(<span class="text-green">x</span>);
+     }
+     System.out.println(<span class="text-viola">b</span>);
+   }
+
+}</code></pre>
+        </td>
+        <td>
+                <pre><code>
+<span class="text-neon">args</span>
+<span class="text-neon">args</span>, <span class="text-red">a</span>
+<span class="text-neon">args</span>, <span class="text-red">a</span>
+<span class="text-neon">args</span>, <span class="text-red">a</span>
+<span class="text-neon">args</span>, <span class="text-red">a</span>, <span class="text-viola">b</span>
+<span class="text-neon">args</span>, <span class="text-red">a</span>, <span class="text-viola">b</span>
+<span class="text-neon">args</span>, <span class="text-red">a</span>, <span class="text-viola">b</span>
+<span class="text-neon">args</span>, <span class="text-red">a</span>, <span class="text-viola">b</span>, <span class="text-green">x</span>
+<span class="text-neon">args</span>, <span class="text-red">a</span>, <span class="text-viola">b</span>, <span class="text-green">x</span>
+<span class="text-neon">args</span>, <span class="text-red">a</span>, <span class="text-viola">b</span>
+<span class="text-neon">args</span>, <span class="text-red">a</span>, <span class="text-viola">b</span>
+<span class="text-neon">args</span>, <span class="text-red">a</span>
+<span class="text-neon">args</span>, <span class="text-red">a</span>
+
+</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Як ми вже зазначали, <code><span class="text-neon">args</span></code> — це просто змінна типу масив рядків. І подібно до всіх змінних-параметрів вона доступна всюди всередині тіла методу. Хоча в наших прикладах ми її зазвичай ігноруємо.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task06.task0612"></div>
+<hr>
+<h2>3. Змінні класу</h2>
+<p>Як ви пам'ятаєте з лекцій 1-го рівня, клас може містити функції та змінні. Функції при цьому прийнято називати «методами класу», а змінні — «змінними класу» або «полями класу». На практиці в межах Java це синоніми.</p>
+<p>Що ж таке змінні (або поля) класу?</p>
+<p>Змінні класу — це змінні, оголошені не в методі, а в класі.</p>
+<p>До них можна звертатися з будь-якого методу класу. У загальних рисах, <span class="term">змінні класу</span> — це <strong>спільні</strong> змінні для всіх методів класу.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Доступність змінних</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public class Solution
+{
+   public int <span class="text-user">count</span> = 0;
+   public int <span class="text-green">sum</span> = 0;
+
+   public void add(int <span class="text-neon">data</span>)
+   {
+     <span class="text-green">sum</span> = <span class="text-green">sum</span> + <span class="text-neon">data</span>;
+     <span class="text-user">count</span>++;
+   }
+
+   public void remove(int <span class="text-red">data</span>)
+   {
+     <span class="text-green">sum</span> = <span class="text-green">sum</span> - <span class="text-red">data</span>;
+     <span class="text-user">count</span>--;
+   }
+}</code></pre>
+        </td>
+        <td>
+                <pre><code>
+
+<span class="text-user">count</span>
+<span class="text-user">count</span>, <span class="text-green">sum</span>
+<span class="text-user">count</span>, <span class="text-green">sum</span>
+<span class="text-user">count</span>, <span class="text-green">sum</span>
+<span class="text-user">count</span>, <span class="text-green">sum</span>, <span class="text-neon">data</span>
+<span class="text-user">count</span>, <span class="text-green">sum</span>, <span class="text-neon">data</span>
+<span class="text-user">count</span>, <span class="text-green">sum</span>, <span class="text-neon">data</span>
+<span class="text-user">count</span>, <span class="text-green">sum</span>
+<span class="text-user">count</span>, <span class="text-green">sum</span>
+<span class="text-user">count</span>, <span class="text-green">sum</span>
+<span class="text-user">count</span>, <span class="text-green">sum</span>, <span class="text-red">data</span>
+<span class="text-user">count</span>, <span class="text-green">sum</span>, <span class="text-red">data</span>
+<span class="text-user">count</span>, <span class="text-green">sum</span>, <span class="text-red">data</span>
+<span class="text-user">count</span>, <span class="text-green">sum</span>
+<span class="text-user">count</span>, <span class="text-green">sum</span>
+
+</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>У цьому прикладі маємо два методи — <code>add()</code> і <code>remove()</code>. Метод <code>add()</code> збільшує змінні класу <code><span class="text-green">sum</span></code> і <code><span class="text-user">count</span></code>, а метод <code>remove()</code> зменшує змінні <code><span class="text-green">sum</span></code>&nbsp;і <code><span class="text-user">count</span></code>. Обидва методи працюють зі спільними змінними класу.</p>
+<p>Локальні змінні існують, поки виконується метод. А <strong>змінні класу</strong> існують стільки часу, скільки існує об'єкт класу, до якого вони належать. Детальніше про об'єкти класу ви дізнаєтеся на наступному рівні.</p>
+<hr>
+<h2>4. Статичні змінні</h2>
+<p>Змінні класу, як і методи класу, бувають статичними й нестатичними (звичайними). <strong>Статичні методи можуть звертатися лише до статичних змінних.</strong></p>
+<p>На 11-му рівні ми розглянемо будову статичних змінних і методів і зрозуміємо причини таких обмежень.</p>
+<p>Щоб зробити змінну класу статичною, потрібно перед її оголошенням написати ключове слово <code>static</code>.</p>
+<p>Статичні змінні прив'язані не до об'єкта класу, в якому їх оголошено, а власне до класу. Тому вони існують, навіть якщо <strong>не створено жодного об'єкта типу класу</strong>. Звертатися до них із інших класів можна&nbsp;за допомогою такої конструкції:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-orange">ClassName</span>.<span class="text-red">variableName</span></code></pre>
+</div>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Доступність змінних</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public class Solution
+{
+   public void add(int <span class="text-neon">data</span>)
+   {
+     <span class="text-viola">Storage</span>.<span class="text-green">sum</span> = <span class="text-viola">Storage</span>.<span class="text-green">sum</span> + <span class="text-neon">data</span>;
+     <span class="text-viola">Storage</span>.<span class="text-user">count</span>++;
+   }
+
+   public void remove(int <span class="text-red">data</span>)
+   {
+     <span class="text-viola">Storage</span>.<span class="text-green">sum</span> = <span class="text-viola">Storage</span>.<span class="text-green">sum</span> - <span class="text-red">data</span>;
+     <span class="text-viola">Storage</span>.<span class="text-user">count</span>--;
+   }
+}
+
+public class <span class="text-viola">Storage</span>
+{
+   public static int <span class="text-user">count</span> = 0;
+   public static int <span class="text-green">sum</span> = 0;
+}</code></pre>
+        </td>
+        <td>
+                <pre><code>
+<span class="text-viola">Storage</span>.<span class="text-user">count</span>, <span class="text-viola">Storage</span>.<span class="text-green">sum</span>
+<span class="text-viola">Storage</span>.<span class="text-user">count</span>, <span class="text-viola">Storage</span>.<span class="text-green">sum</span>
+<span class="text-viola">Storage</span>.<span class="text-user">count</span>, <span class="text-viola">Storage</span>.<span class="text-green">sum</span>, <span class="text-neon">data</span>
+<span class="text-viola">Storage</span>.<span class="text-user">count</span>, <span class="text-viola">Storage</span>.<span class="text-green">sum</span>, <span class="text-neon">data</span>
+<span class="text-viola">Storage</span>.<span class="text-user">count</span>, <span class="text-viola">Storage</span>.<span class="text-green">sum</span>, <span class="text-neon">data</span>
+<span class="text-viola">Storage</span>.<span class="text-user">count</span>, <span class="text-viola">Storage</span>.<span class="text-green">sum</span>
+<span class="text-viola">Storage</span>.<span class="text-user">count</span>, <span class="text-viola">Storage</span>.<span class="text-green">sum</span>
+<span class="text-viola">Storage</span>.<span class="text-user">count</span>, <span class="text-viola">Storage</span>.<span class="text-green">sum</span>
+<span class="text-viola">Storage</span>.<span class="text-user">count</span>, <span class="text-viola">Storage</span>.<span class="text-green">sum</span>, <span class="text-red">data</span>
+<span class="text-viola">Storage</span>.<span class="text-user">count</span>, <span class="text-viola">Storage</span>.<span class="text-green">sum</span>, <span class="text-red">data</span>
+<span class="text-viola">Storage</span>.<span class="text-user">count</span>, <span class="text-viola">Storage</span>.<span class="text-green">sum</span>, <span class="text-red">data</span>
+<span class="text-viola">Storage</span>.<span class="text-user">count</span>, <span class="text-viola">Storage</span>.<span class="text-green">sum</span>
+
+
+
+<span class="text-viola">Storage</span>.<span class="text-user">count</span>, <span class="text-viola">Storage</span>.<span class="text-green">sum</span>
+<span class="text-viola">Storage</span>.<span class="text-user">count</span>, <span class="text-viola">Storage</span>.<span class="text-green">sum</span>
+<span class="text-viola">Storage</span>.<span class="text-user">count</span>, <span class="text-viola">Storage</span>.<span class="text-green">sum</span>
+
+</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>У наведеному вище прикладі ми створили окремий клас <code><span class="text-viola">Storage</span></code>, винесли в нього змінні <code><span class="text-user">count</span></code>&nbsp;і <code><span class="text-green">sum</span></code>&nbsp;і оголосили їх <span class="term">статичними</span>. До публічних статичних змінних можна звертатися з будь-якого методу програми (та й не тільки з методу).</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task06.task0613"></div>
+<hr>

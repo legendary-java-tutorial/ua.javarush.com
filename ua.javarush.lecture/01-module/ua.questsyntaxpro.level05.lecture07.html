@@ -1,0 +1,261 @@
+﻿Клас Arrays, частина 2
+<p>----------------------------------------</p>
+Метод Arrays.fill(). Дуже часто у Java-програмістів під час роботи з масивами виникає задача — заповнити масив однаковими значеннями. &nbsp;Можна, звісно, написати цикл і просто в циклі присвоїти кожній комірці масиву певне значення: int [] x = new int[100]; for (int i=0;i&lt; x.leng
+<p>----------------------------------------</p>
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="249b3429-55ba-4b75-bbbe-1e7f291ad29d" data-max-width="1024" src="https://cdn.javarush.com/images/article/249b3429-55ba-4b75-bbbe-1e7f291ad29d/original.png" alt=""/>
+        </div>
+        <div class="lesson-carousel__item">
+            <img data-id="b3941dd8-e7ee-4336-9445-df016920f8d6" data-max-width="1024" src="https://cdn.javarush.com/images/article/b3941dd8-e7ee-4336-9445-df016920f8d6/original.png" alt=""/>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<h2>1. Метод <code>Arrays.fill()</code></h2>
+<p>Дуже часто у Java-програмістів під час роботи з масивами виникає задача — заповнити масив однаковими значеннями. Можна, звісно, написати цикл і просто в циклі присвоїти кожній комірці масиву певне значення:</p>
+<pre class="language-java"><code>int[] <span class="text-green">x</span> = new int[100];
+for (int i = 0; i &lt; <span class="text-green">x</span>.length; i++)
+<span class="text-green">x</span>[i] = <span class="text-neon">999</span>;</code></pre>
+<p>А можна просто викликати метод <code>Arrays.fill()</code>, який робить абсолютно те саме: заповнює переданий масив переданим значенням. Отакий вигляд має це виклик:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-red">Arrays</span>.<span class="text-viola">fill</span>(<span class="text-green">ім'я</span>, <span class="text-neon">значення</span>)</code></pre>
+</div>
+<p>І код із прикладу вище можна зробити трохи компактнішим і зрозумілішим:</p>
+<pre class="language-java"><code>int[] <span class="text-green">x</span> = new int[100];
+<span class="text-red">Arrays</span>.<span class="text-viola">fill</span>(<span class="text-green">x</span>, <span class="text-neon">999</span>);</code></pre>
+<p>А ще за допомогою методу <code>Arrays.fill()</code> можна заповнити певним значенням не весь масив, а його частину:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-red">Arrays</span>.<span class="text-viola">fill</span>(<span class="text-green">ім'я</span>, <span class="text-orange">перший</span>, <span class="text-orange">останній</span>, <span class="text-neon">значення</span>)</code></pre>
+</div>
+<p>де перший і останній — це номери першої та останньої комірок, які потрібно заповнити.</p>
+<div class="lesson-note lesson-note--important">
+    <div class="lesson-note__container">
+        <div class="lesson-note__content">
+            <div class="text-center">
+                За старою доброю традицією Java останній елемент не входить в діапазон.
+            </div>
+        </div>
+    </div>
+</div>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <td>
+<pre class="language-java"><code>int[] <span class="text-green">x</span> = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+<span class="text-red">Arrays</span>.<span class="text-viola">fill</span>(<span class="text-green">x</span>, <span class="text-orange">3</span>, <span class="text-orange">7</span>, <span class="text-neon">999</span>);
+
+
+String <span class="text-viola">str</span> = Arrays.toString(<span class="text-green">x</span>);</code></pre>
+        </td>
+        <td><br/><br/>Заповнюємо комірки <code>x[3]</code>, <code>x[4]</code>, <code>x[5]</code>, <code>x[6]</code> значеннями <code>999</code>. Нумерація комірок масиву з нуля!<br/><br/> Змінна <code><span class="text-viola">str</span></code> містить значення:<br/>
+            <pre><code><span class="text-muted">"</span>[1, 2, 3, 999, 999, 999, 999, 8, 9, 10]<span class="text-muted">"</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Метод <code>Arrays.fill()</code> працює лише з одновимірними масивами. Якщо в нього передати двовимірний масив, цей масив буде оброблено як одновимірний, з усіма наслідками, що звідси випливають.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task05.task0516"></div>
+<hr>
+<h2>2. Метод <code>Arrays.copyOf()</code></h2>
+<p>Як ви вже знаєте, розмір контейнера масиву після його створення змінити не можна.</p>
+<p>А якщо дуже хочеться?</p>
+<p>Ну, якщо дуже хочеться, то можна:</p>
+<ul>
+    <li>Створити новий масив потрібної довжини</li>
+    <li>Скопіювати в нього всі елементи з першого масиву</li>
+</ul>
+<p>Саме це, до речі, й робить метод <code>Arrays.copyOf()</code>. Викликають його в такий спосіб:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code>тип[] <span class="text-orange">ім'я2</span> = <span class="text-red">Arrays</span>.<span class="text-viola">copyOf</span>(<span class="text-green">ім'я</span>, <span class="text-neon">довжина</span>);</code></pre>
+</div>
+<p>Цей метод <strong>не змінює наявний масив</strong>, натомість він <strong>створює новий масив</strong> і копіює в нього елементи старого.</p>
+<p>Якщо елементи не вмістилися (<span class="text-neon">довжина</span> менша за довжину<span class="text-green"> наявного масиву</span>), то зайві значення ігноруються.</p>
+<p>Якщо довжина нового масиву більша за довжину старого, комірки буде заповнено нулями.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <td>
+<pre class="language-java"><code>int[] <span class="text-orange">x</span> = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+int[] <span class="text-orange">x2</span> = <span class="text-red">Arrays</span>.<span class="text-viola">copyOf</span>(<span class="text-orange">x</span>, <span class="text-neon">5</span>);
+String <span class="text-green">str2</span> = <span class="text-red">Arrays</span>.toString(<span class="text-orange">x2</span>);
+
+int[] <span class="text-orange">x3</span> = <span class="text-red">Arrays</span>.<span class="text-viola">copyOf</span>(<span class="text-orange">x</span>, <span class="text-neon">15</span>);
+String <span class="text-green">str3</span> = <span class="text-red">Arrays</span>.toString(<span class="text-orange">x3</span>);</code></pre>
+        </td>
+        <td><br/><br/>Змінна <code><span class="text-green">str2</span></code> містить значення:<br/>
+            <pre><code><span class="text-muted">"</span>[1, 2, 3, 4, 5]<span class="text-muted">"</span></code></pre>
+            <br/> Змінна <code><span class="text-green">str3</span></code> містить значення:<br/>
+            <pre><code class="text-nowrap"><span class="text-muted">"</span>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 0, 0, 0, 0, 0]<span class="text-muted">"</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<h2>3. Метод <code>Arrays.copyOfRange()</code></h2>
+<p>А що робити, якщо ви хочете отримати масив довжиною 5 із масиву довжиною 10, але щоб новий масив містив не перші 5 елементів старого, а останні?</p>
+<p>Саме на цей випадок вам стане в пригоді ще один метод класу <code>Arrays</code> — метод <code>Arrays.copyOfRange()</code>. Викликають його в такий спосіб:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm"><code>тип[] <span class="text-orange">ім'я2</span> = Arrays.<span class="text-viola">copyOfRange</span>(<span class="text-green">ім'я</span>, <span class="text-neon">перший</span>, <span class="text-neon">останній</span>);</code></pre>
+</div>
+<p>Цей метод теж створює новий масив, але заповнює його даними з довільного місця початкового масиву. Перший і останній тут — це номери першої та останньої комірок, які потрібно скопіювати.</p>
+<div class="lesson-note lesson-note--important">
+    <div class="lesson-note__container">
+        <div class="lesson-note__content">
+            <div class="text-center">
+                За старою доброю традицією Java останній елемент не входить в діапазон.
+            </div>
+        </div>
+    </div>
+</div>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <td>
+<pre class="language-java"><code>int[] <span class="text-orange">x</span> = {11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
+
+int[] <span class="text-orange">x2</span> = <span class="text-red">Arrays</span>.<span class="text-viola">copyOfRange</span>(<span class="text-orange">x</span>, <span class="text-neon">5</span>, <span class="text-neon">10</span>);
+String <span class="text-green">str2</span> = <span class="text-red">Arrays</span>.toString(<span class="text-orange">x2</span>);
+
+int[] <span class="text-orange">x3</span> = <span class="text-red">Arrays</span>.<span class="text-viola">copyOfRange</span>(<span class="text-orange">x</span>, <span class="text-neon">5</span>, <span class="text-neon">15</span>);
+String <span class="text-green">str3</span> = <span class="text-red">Arrays</span>.toString(<span class="text-orange">x3</span>);</code></pre>
+        </td>
+        <td><br/><br/>Змінна <code><span class="text-green">str2</span></code> містить значення:<br/>
+            <pre><code><span class="text-muted">"</span>[16, 17, 18, 19, 20]<span class="text-muted">"</span></code></pre>
+            <br/> Змінна <code><span class="text-green">str3</span></code> містить значення:<br/>
+            <pre><code><span class="text-muted">"</span>[16, 17, 18, 19, 20, 0, 0, 0, 0, 0]<span class="text-muted">"</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task05.task0517"></div>
+<hr>
+<h2>4. Метод <code>Arrays.sort()</code></h2>
+<p>Ну й найсмачніше — <strong>сортування</strong>. У програмуванні сортувати масиви доводиться дуже часто. Три найчастіші дії під час роботи з масивами:</p>
+<ul>
+    <li>Сортування масиву</li>
+    <li>Пошук мінімального (або максимального) елемента масиву</li>
+    <li>Визначення індексу елемента в масиві (пошук елемента в масиві)</li>
+</ul>
+<p>І саме тому розробники Java включили в клас <code>Arrays</code> метод<code> sort()</code>. Викликають його в такий спосіб:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code><span class="text-red">Arrays</span>.<span class="text-viola">sort</span>(<span class="text-neon">ім'я</span>);</code></pre>
+</div>
+<p>Цей метод сортує переданий масив за зростанням.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <td>
+<pre class="language-java"><code>int[] <span class="text-neon">x</span> = {11, -2, 3, 0, 999, -20, 8, -20, 99, -20};
+
+<span class="text-red">Arrays</span>.<span class="text-viola">sort</span>(<span class="text-neon">x</span>);
+
+String <span class="text-green">str</span> = <span class="text-red">Arrays</span>.toString(<span class="text-neon">x</span>);</code></pre>
+        </td>
+        <td><br/><br/><br/>Змінна <code><span class="text-green">str</span></code> містить значення:<br/>
+            <pre><code><span class="text-muted">"</span>[-20, -20, -20, -2, 0, 3, 8, 11, 99, 999]<span class="text-muted">"</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Чудово, правда? Викликали один метод — і маєте ще й відсортований масив. Краса та й годі.</p>
+<p>До речі, сортувати можна не тільки весь масив, а також його частину. Викликають його в такий спосіб:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm language-java"><code><span class="text-red">Arrays</span>.<span class="text-viola">sort</span>(<span class="text-neon">ім'я</span>, <span class="text-orange">перший</span>, <span class="text-orange">останній</span>);</code></pre>
+</div>
+<p>де <span class="text-orange">перший</span> і <span class="text-orange">останній</span> — це номери першої та останньої комірок, до яких треба застосувати сортування.</p>
+<div class="lesson-note lesson-note--important">
+    <div class="lesson-note__container">
+        <div class="lesson-note__content">
+            <div class="text-center">
+                За старою доброю традицією Java останній елемент не входить в діапазон.
+            </div>
+        </div>
+    </div>
+</div>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <td>
+<pre class="language-java"><code>int[] <span class="text-neon">x</span> = {11, -2, 3, 0, <span class="text-brown">999</span>, <span class="text-brown">-20</span>, <span class="text-brown">8</span>, <span class="text-brown">-20</span>, 99, -20};
+
+<span class="text-red">Arrays</span>.<span class="text-viola">sort</span>(<span class="text-neon">x</span>, <span class="text-orange">4</span>, <span class="text-orange">8</span>);
+String <span class="text-green">str</span> = <span class="text-red">Arrays</span>.toString(<span class="text-neon">x</span>);</code></pre>
+        </td>
+        <td><br/><br/>Змінна <code><span class="text-green">str</span></code> містить значення:<br/>
+            <pre><code><span class="text-muted">"</span>[11, -2, 3, 0, <span class="text-brown">-20</span>, <span class="text-brown">-20</span>, <span class="text-brown">8</span>, <span class="text-brown">999</span>, 99, -20]<span class="text-muted">"</span></code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>У Java для сортування масивів використовують найшвидший алгоритм сортування — <span class="term">QuickSort</span>. Швидкість сортування цим методом залежить від розміру масиву й обчислюється за формулою N*Log(N).</p>
+<p>Сортування масиву з 1000 елементів налічуватиме близько 3000 порівнянь комірок масиву. Сортування масиву з мільйона елементів налічуватиме близько 6 мільйонів порівнянь.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task05.task0518"></div>
+<hr>
+<h2>5. Метод <code>Arrays.binarySearch()</code></h2>
+<p>Ну й останній із найцікавіших методів класу <code>Arrays</code> уміє шукати задане значення в масиві. Це не звичайний пошук, а так званий <span class="term">бінарний пошук</span>. Суть його полягає от у чому:</p>
+<ul>
+    <li>Спочатку виконується сортування масиву</li>
+    <li>Потім середній елемент масиву порівнюється із шуканим (з тим, який ми шукаємо).</li>
+    <li>Якщо шуканий елемент більший за середній, пошук продовжується в правій половині масиву.</li>
+    <li>Якщо шуканий елемент менший за середній, пошук продовжується в лівій половині масиву.</li>
+</ul>
+<p>Оскільки масив відсортований, можна за одне порівняння відкинути половину масиву. Відтак на наступному кроці відкинути ще половину і т. д.</p>
+<p>Завдяки такому підходу бінарний пошук дуже швидкий. У масиві з мільйона (!) елементів він може знайти індекс потрібного елемента всього за 20 порівнянь. Мінус такого підходу в тому, що спершу масив треба відсортувати, а сортування теж потребує часу.</p>
+<p>Викликають його в такий спосіб:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code>int <span class="text-green">index</span> = <span class="text-red">Arrays</span>.<span class="text-viola">binarySearch</span>(<span class="text-orange">ім'я</span>, <span class="text-neon">значення</span>);</code></pre>
+</div>
+<p>де <code><span class="text-orange">ім'я</span></code> — це ім'я масиву, який потрібно передати вже відсортованим (наприклад, за допомогою функції <code>Arrays.sort()</code>), <code><span class="text-neon">значення</span></code> — це той елемент, який ми шукаємо в масиві. Метод повертає результат — <span class="term">індекс&nbsp;шуканого елемента в масиві</span> (номер комірки масиву).</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <td>
+<pre class="language-java"><code>int[] <span class="text-orange">x</span> = {11, -2, 3, 0, 999, -20, 8, -20, 99, -20};
+<span class="text-red">Arrays</span>.<span class="text-viola">sort</span>(<span class="text-orange">x</span>);
+
+int <span class="text-green">index1</span> = <span class="text-red">Arrays</span>.<span class="text-viola">binarySearch</span>(<span class="text-orange">x</span>, <span class="text-neon">0</span>);
+int <span class="text-green">index2</span> = <span class="text-red">Arrays</span>.<span class="text-viola">binarySearch</span>(<span class="text-orange">x</span>, <span class="text-neon">-20</span>);
+int <span class="text-green">index3</span> = <span class="text-red">Arrays</span>.<span class="text-viola">binarySearch</span>(<span class="text-orange">x</span>, <span class="text-neon">99</span>);
+int <span class="text-green">index4</span> = <span class="text-red">Arrays</span>.<span class="text-viola">binarySearch</span>(<span class="text-orange">x</span>, <span class="text-neon">5</span>);</code></pre>
+        </td>
+        <td><code><span class="text-orange">x</span></code> містить:<br/>
+            <pre><code>{-20, -20, -20, -2, 0, 3, 8, 11, 99, 999}</code></pre>
+            <br/> <code>4</code><br/> <code>1</code> (також підходили індекси <code>0</code> і <code>2</code>)<br/> <code>8</code><br/> <code>-7</code></td>
+    </tr>
+    </tbody>
+</table>
+<p>Якщо шуканих елементів у масиві <strong>декілька</strong>, метод просто поверне номер одного з них (немає гарантій, що це буде найперший або, навпаки, останній з однакових елементів).</p>
+<p>Якщо елемент у масиві <strong>не знайдено, індекс буде від'ємним.</strong></p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task05.task0519"></div>
+<hr>
+<h2>6. Посилання на Oracle: документація щодо класу <code>Arrays</code></h2>
+<p>Якщо ви неабияк зацікавилися, повну інформацію щодо класу <code>Arrays</code> і всіх його методів можна знайти в офіційній документації на сайті Oracle:</p>
+<p><a href="https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html">https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html</a></p>
+<p>Можете почитати, приміром, про методи <code>Arrays.mismatch()</code> і <code>Arrays.compare()</code>. Певно, знайдете в них для себе щось корисне.</p>
+<p>І хай вас не бентежить кількість методів — там кожен метод має 5–10 копій, які відрізняються тільки типом параметрів.</p>
+
+<hr>
+
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="90eb1cf0-0152-4ec9-9625-88d647c369ce" data-max-width="1024" src="https://cdn.javarush.com/images/article/90eb1cf0-0152-4ec9-9625-88d647c369ce/original.png" alt=""/>
+        </div>
+    </div>
+</div>

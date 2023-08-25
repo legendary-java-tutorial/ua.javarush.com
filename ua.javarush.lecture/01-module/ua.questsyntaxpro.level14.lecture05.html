@@ -1,0 +1,334 @@
+﻿Stack trace
+<p>----------------------------------------</p>
+Отримання траси стеку. Мова програмування Java надає програмісту дуже багато способів отримати інформацію про те, що наразі відбувається в програмі. І це не просто слова. Наприклад, програми мовою C++ після компіляції перетворюються на один великий файл машинного коду, і все, що під час
+<p>----------------------------------------</p>
+<h2>1. Отримання траси стеку</h2>
+<p><img data-id="7114320a-70d7-440e-98f0-163dc19e2e5d" src="https://cdn.javarush.com/images/article/7114320a-70d7-440e-98f0-163dc19e2e5d/original.png" alt="Отримання траси стеку"/></p>
+<p>Мова програмування Java надає програмісту дуже багато способів отримати інформацію про те, що наразі відбувається в програмі. І це не просто слова.</p>
+<p>Наприклад, програми мовою C++ після компіляції перетворюються на один великий файл машинного коду, і все, що під час виконання є доступним програмісту, — це адреса шматка пам'яті з машинним кодом, який зараз виконується. Негусто, еге ж?</p>
+<p>А от у Java навіть після компіляції класи залишаються класами, методи й змінні нікуди не діваються, і програміст має багато способів отримати дані про те, що наразі відбувається в програмі.</p>
+<p><strong>Траса стеку</strong></p>
+<p>Наприклад, у будь-який момент роботи програми можна дізнатися клас та ім'я методу, який зараз виконується. І навіть не тільки отримати ім'я одного методу, а інформацію про весь ланцюжок викликів методів від поточного до методу <code>main()</code>.</p>
+<p>Список, який складається з поточного методу; методу, що його викликав; методу, що викликав цей другий метод і т. д., називається <span class="term">stack trace</span> (траса стеку). Отримати його можна за допомогою команди</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present-sm language-java"><code><span class="text-viola">StackTraceElement</span>[] <span class="code text-green">methods</span> = <span class="text-neon">Thread.currentThread</span>().<span class="text-red">getStackTrace</span>();</code></pre>
+</div>
+<p>Її також можна записати у два рядки:</p>
+<div class="lesson-example lesson-example--center">
+        <pre class="lecture-code lecture-code--present-sm language-java"><code><span class="text-neon">Thread</span> <span class="code text-user">current</span> = <span class="text-neon">Thread.currentThread</span>();
+<span class="text-viola">StackTraceElement</span>[] <span class="code text-green">methods</span> = <span class="code text-user">current</span>.<span class="text-red">getStackTrace</span>();</code></pre>
+</div>
+<p>Статичний метод <code>currentThread()</code> класу <code>Thread</code> повертає посилання на об'єкт типу <code>Thread</code>, який містить інформацію про поточну нитку (про поточний потік виконання). Докладніше про нитки ви дізнаєтеся на 7-му й 8-му рівнях квесту <span class="term">Java&nbsp;Core</span>.</p>
+<p>У цього об'єкта <code>Thread</code> є метод <code>getStackTrace()</code>, який повертає масив елементів <code>StackTraceElement</code>, де кожен з елементів містить інформацію про один метод. Усі елементи разом і утворюють <span class="term">трасу стеку</span>.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java line-numbers"><code>public class Main
+{
+   public static void <span class="text-red">main</span>(String[] args)
+   {
+      <span class="text-user">test</span>();
+   }
+
+   public static void <span class="text-user">test</span>()
+   {
+      <span class="text-neon">Thread</span> <span class="code text-user">current</span> = <span class="text-neon">Thread.currentThread</span>();
+      <span class="text-viola">StackTraceElement</span>[] <span class="code text-green">methods</span> = <span class="code text-user">current</span>.<span class="text-red">getStackTrace</span>();
+
+      for(var <span class="code text-orange">info</span>: <span class="code text-green">methods</span>)
+         System.out.println(<span class="code text-orange">info</span>);
+   }
+}</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td><pre class="language-java"><code>java.base/java.lang.Thread.<span class="text-red">getStackTrace</span>(Thread.java:1606)
+Main.<span class="text-user">test</span>(Main.java:11)
+Main.<span class="text-red">main</span>(Main.java:5)
+</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Як ми бачимо з виведення на екран, у наведеному прикладі метод <code>getStackTrace()</code> повернув масив з трьох елементів:</p>
+<ul>
+    <li>Метод <code><span class="text-red">getStackTrace</span>()</code> класу <code>Thread</code></li>
+    <li>Метод <code><span class="text-user">test</span>()</code> класу <code>Main</code></li>
+    <li>Метод <code><span class="text-red">main</span>()</code> класу <code>Main</code></li>
+</ul>
+<p>З цієї траси стеку можна зробити такий висновок:</p>
+<ul>
+    <li>Метод <code>Thread.getStackTrace()</code> було викликано з методу <code>Main.test()</code> у рядку 11 файлу Main.java</li>
+    <li>Метод <code>Main.test()</code> було викликано з методу <code>Main.main()</code> у рядку 5 файлу Main.java</li>
+    <li>Метод <code>Main.main()</code> ніхто не викликав — це перший метод у ланцюжку викликів.</li>
+</ul>
+<p>До речі, на екрані було відображено лише частину всієї наявної інформації. Решту можна отримати безпосередньо з об'єкта <code>StackTraceElement</code></p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task14.task1413"></div>
+<hr>
+<h2>2. <code>StackTraceElement</code></h2>
+<p>Клас <code>StackTraceElement</code>, як випливає з його назви, створено для зберігання інформації щодо одного елемента <span class="term">траси стеку</span> — тобто щодо одного методу з траси стеку (<code>StackTrace</code>).</p>
+<p>Об'єкти цього класу мають такі методи:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Метод</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String <span class="text-red">getClassName</span>()</code></pre>
+        </td>
+        <td>Повертає ім'я класу</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String <span class="text-red">getMethodName</span>()</code></pre>
+        </td>
+        <td>Повертає ім'я методу</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String <span class="text-red">getFileName</span>()</code></pre>
+        </td>
+        <td>Повертає ім'я файлу (в одному файлі може бути багато класів)</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">getLineNumber</span>()</code></pre>
+        </td>
+        <td>Повертає номер рядка (у файлі), в якому був виклик методу</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String <span class="text-red">getModuleName</span>()</code></pre>
+        </td>
+        <td>Повертає ім'я модуля (може бути <code>null</code>)</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>String <span class="text-red">getModuleVersion</span>()</code></pre>
+        </td>
+        <td>Повертає версію модуля (може бути <code>null</code>)</td>
+    </tr>
+    </tbody>
+</table>
+<p>За допомогою цих методів можна отримати повнішу інформацію щодо поточного стеку викликів:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Виведення на екран</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>public class Main
+{
+   public static void <span class="text-red">main</span>(String[] args)
+   {
+      <span class="text-user">test</span>();
+   }
+
+   public static void <span class="text-user">test</span>()
+   {
+      Thread <span class="code text-user">current</span> = <span class="text-neon">Thread.currentThread</span>();
+      <span class="text-viola">StackTraceElement</span>[] <span class="code text-green">methods</span> = <span class="code text-user">current</span>.<span class="text-red">getStackTrace</span>();
+
+      for(StackTraceElement <span class="code text-orange">info</span>: <span class="code text-green">methods</span>)
+      {
+         System.out.println(<span class="code text-orange">info</span>.<span class="text-red">getClassName</span>());
+         System.out.println(<span class="code text-orange">info</span>.<span class="text-red">getMethodName</span>());
+
+         System.out.println(<span class="code text-orange">info</span>.<span class="text-red">getFileName</span>());
+         System.out.println(<span class="code text-orange">info</span>.<span class="text-red">getLineNumber</span>());
+
+         System.out.println(<span class="code text-orange">info</span>.<span class="text-red">getModuleName</span>());
+         System.out.println(<span class="code text-orange">info</span>.<span class="text-red">getModuleVersion</span>());
+         System.out.println();
+      }
+   }
+}</code></pre>
+        </td>
+        <td><pre><code>java.lang.Thread
+getStackTrace
+Thread.java
+1606
+java.base
+11.0.2
+
+Main
+test
+Main.java
+11
+null
+null
+
+Main
+main
+Main.java
+5
+null
+null</code></pre>
+        </td>
+        <td class="text-nowrap">ім'я класу<br/> ім'я методу<br/> ім'я файлу<br/> номер рядка<br/> ім'я модуля<br/> версія модуля<br/><br/> ім'я класу<br/> ім'я методу<br/> ім'я файлу<br/> номер рядка<br/> ім'я модуля<br/> версія модуля<br/><br/> ім'я класу<br/> ім'я методу<br/> ім'я файлу<br/> номер рядка<br/> ім'я модуля<br/> версія модуля</td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task14.task1414"></div>
+<hr>
+<h2>3. Стек</h2>
+<p>Що таке <span class="term">Stack Trace</span> (траса стеку), ви вже знаєте, а що ж таке власне <span class="term">Stack</span> (стек)?</p>
+<p>Стек — це структура зберігання даних, в яку можна додавати елементи і з якої можна їх забирати. Причому брати елементи можна лише з кінця: спочатку доданий останнім, потім — передостанній і т. д.</p>
+<p>Сама назва Stack перекладається з англійської як «стіс», а стек дійсно дуже схожий на стіс паперу. Якщо ви покладете на стіс паперу аркуші 1, 2 і 3, узяти їх ви зможете лише в зворотному порядку: спочатку третій, потім другий, і тільки потім перший.</p>
+<p>У Java навіть є спеціальна колекція з такою поведінкою і такою самою назвою — Stack. Цей клас своєю поведінкою дуже схожий на <code>ArrayList</code> і <code>LinkedList</code>. &nbsp;Натомість він ще має методи, що реалізують поведінку стеку:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Методи</th>
+        <th>Опис</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>T <span class="text-red">push</span>(T obj)</code></pre>
+        </td>
+        <td>Додає елемент <code>obj</code> у кінець списку (на верх стосу)</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>T <span class="text-red">pop</span>()</code></pre>
+        </td>
+        <td>Забирає елемент з верху стосу (висота стосу зменшується)</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>T <span class="text-red">peek</span>()</code></pre>
+        </td>
+        <td>Повертає елемент з верху стосу (стіс не змінюється)</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>boolean <span class="text-red">empty</span>()</code></pre>
+        </td>
+        <td>Перевіряє, чи не є колекція порожньою</td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">search</span>(Object obj)</code></pre>
+        </td>
+        <td>Шукає об'єкт із колекції, повертає його <code>index</code></td>
+    </tr>
+    </tbody>
+</table>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Вміст стеку (вершина — праворуч)</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code><span class="text-neon">Stack</span>&lt;<span class="text-viola">Integer</span>&gt; <span class="code text-user">stack</span> = new <span class="text-neon">Stack</span>&lt;<span class="text-viola">Integer</span>&gt;():
+<span class="code text-user">stack</span>.<span class="text-red">push</span>(1);
+<span class="code text-user">stack</span>.<span class="text-red">push</span>(2);
+<span class="code text-user">stack</span>.<span class="text-red">push</span>(3);
+int x = <span class="code text-user">stack</span>.<span class="text-red">pop</span>();
+<span class="code text-user">stack</span>.<span class="text-red">push</span>(4);
+int y = <span class="code text-user">stack</span>.<span class="text-red">peek</span>();
+<span class="code text-user">stack</span>.<span class="text-red">pop</span>();
+<span class="code text-user">stack</span>.<span class="text-red">pop</span>();</code></pre>
+        </td>
+        <td>
+                <pre><code>
+[1]
+[1, 2]
+[1, 2, 3]
+[1, 2]
+[1, 2, 4]
+[1, 2, 4]
+[1, 2]
+[1]
+</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Стек використовується в програмуванні досить часто. Тож це корисна колекція.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task14.task1415"></div>
+<hr>
+<h2>4. Виведення траси стеку під час обробки помилок</h2>
+<p>Чому ж список викликів методів назвали <span class="term">StackTrace</span>? А тому, що якщо уявити список методів у вигляді стосу аркушів з іменами методів, то під час виклику чергового методу на цей стіс кладеться аркуш з іменем методу, на нього — наступний і т. д.</p>
+<p>Коли метод завершується, аркуш з верху стопки видаляється. Не можна видалити аркуш із середини стосу, не видаливши всі аркуші, які лежать на ньому, — не можна припинити роботу методу, не завершивши всі викликані ним методи в ланцюжку викликів.</p>
+<p><strong>Винятки</strong></p>
+<p>Ще одне цікаве застосування стеку — обробка винятків.</p>
+<p><span class="text-red">Коли в програмі виникає помилка і створюється виняток</span>, <span class="text-green">у нього записується поточна <strong>stack trace</strong></span>: <span class="text-orange">масив, який складається зі списку методів починаючи з методу main і закінчуючи методом, де сталася помилка.</span> Там навіть є рядок, в якому було створено виняток!</p>
+<p>Ця траса стеку для виявлення помилки зберігається всередині винятку, і її можна легко витягти звідти за допомогою методу <code>StackTraceElement[] <span class="text-red">getStackTrace</span>()</code></p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>try
+{
+   // тут може виникнути виняток
+}
+catch(<span class="text-neon">Exception <span class="code">e</span></span>)
+{
+   <span class="text-viola">StackTraceElement</span>[] <span class="text-user">methods</span> = <span class="text-viola">e</span>.<span class="text-red">getStackTrace</span>()
+}</code></pre>
+        </td>
+        <td><br/><br/><br/><br/> Захоплюємо виняток<br/><br/> Отримуємо з нього трасу стеку на момент виникнення помилки.
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>Це метод класу <code>Throwable</code>, а отже, усі його класи-спадкоємці (тобто взагалі всі винятки) мають метод <code>getStackTrace()</code>. Дуже зручно, чи не так?</p>
+<p><strong>Друк траси стеку для виявлення помилки</strong></p>
+<p>До речі, клас <code>Throwable</code> має ще один метод для роботи зі stack trace: він виводить у консоль усю інформацію щодо траси стеку, яка зберігається всередині винятку. Цей метод так і називається: <code>printStackTrace()</code>.</p>
+<p>Викликати його можна для будь-якого винятку, що дуже зручно.</p>
+<p>Приклад:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Код</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>try
+{
+   // тут може виникнути виняток
+}
+catch(<span class="text-neon">Exception <span class="code">e</span></span>)
+{
+   <span class="text-viola">e</span>.<span class="text-red">printStackTrace</span>();
+}</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <th>Виведення на екран</th>
+    </tr>
+    <tr>
+        <td><pre><code>java.base/java.lang.Thread.<span class="text-red">getStackTrace</span>(Thread.java:1606)
+Main.<span class="text-user">test</span>(Main.java:11)
+Main.<span class="text-red">main</span>(Main.java:5)</code></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task14.task1416"></div>

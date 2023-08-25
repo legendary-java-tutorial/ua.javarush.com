@@ -1,0 +1,243 @@
+﻿Операції над змінними типу int
+<p>----------------------------------------</p>
+Обчислення цілочислових виразів Праворуч від оператора присвоювання (знаку рівності) може бути будь-який вираз — комбінація чисел, змінних і знаків +, -, *, /. Крім того, можна використовувати дужки ( ). У мові Java, так само як і в математиці, спочатку обчислюються вирази всередині дужок, а потім — поза ними.
+<p>----------------------------------------</p>
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="f99519e0-aac6-4b22-b35c-b95e7bdc520f" data-max-width="1024" alt="" src="https://cdn.javarush.com/images/article/f99519e0-aac6-4b22-b35c-b95e7bdc520f/original.png"/>
+        </div>
+        <div class="lesson-carousel__item">
+            <img data-id="03550f4c-aabb-4541-85cc-af8d1e4e4553" data-max-width="1024" alt="" src="https://cdn.javarush.com/images/article/03550f4c-aabb-4541-85cc-af8d1e4e4553/original.png"/>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<h2>1. Обчислення цілочислових виразів</h2>
+<p>Праворуч від <span class="term text-user">оператора присвоювання</span> (знаку рівності) може бути будь-який <span class="term text-viola">вираз</span> — комбінація чисел, змінних і знаків <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>.</p>
+<p>Крім того, можна використовувати дужки <code>( )</code>. У мові Java, так само як і в математиці, спочатку обчислюються вирази всередині дужок, а потім — поза ними.</p>
+<p>Множення й ділення мають однаковий пріоритет, і він вищий за пріоритет додавання й віднімання.</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Команда</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="code text-green">a</span> <span class="code text-user">=</span> <span class="code text-viola">(2 + 2) * 2</span>;</code></pre>
+        </td>
+        <td>Змінна матиме значення <code><span class="text-viola">8</span></code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="code text-green">b</span> <span class="code text-user">=</span> <span class="code text-viola">(6 - 3) / (9 - 6)</span>;</code></pre>
+        </td>
+        <td>Змінна матиме значення <code><span class="text-viola">1</span></code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="code text-green">c</span> <span class="code text-user">=</span> <span class="code text-viola">(-2) * (-3)</span>;</code></pre>
+        </td>
+        <td>Змінна матиме значення <code><span class="text-viola">6</span></code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="code text-green">d</span> <span class="code text-user">=</span> <span class="code text-red">3 / 0</span>;</code></pre>
+        </td>
+        <td>Під час виконання цієї команди станеться <span class="text-red">помилка</span> «ділення на нуль», і програма завершиться.</td>
+    </tr>
+    </tbody>
+</table>
+<p>У виразах можна також використовувати змінні.</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Команда</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="code text-green">a</span> = <span class="code text-viola">1</span>;
+int <span class="code text-green">b</span> = <span class="code text-viola">2</span>;
+int <span class="code text-green">c</span> = <span class="code text-viola">a * b + 2</span>;</code></pre>
+        </td>
+        <td>Змінна <code><span class="text-green">a</span></code>&nbsp;матиме значення <code><span class="text-viola">1</span></code><br/> Змінна <code><span class="text-green">b</span></code>&nbsp;матиме значення <code><span class="text-viola">2</span></code><br/> Змінна <code><span class="text-green">c</span></code>&nbsp;матиме значення <code><span class="text-viola">4</span></code></td>
+    </tr>
+    </tbody>
+</table>
+<p>До того ж та сама змінна може одночасно використовуватися ліворуч і праворуч від <span class="term text-user">оператора присвоювання</span>:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Команда</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="code text-green">x</span> <span class="code text-user">=</span> <span class="code text-viola">5</span>;
+<span class="code text-green">x</span> <span class="code text-user">=</span> <span class="code text-viola">x + 1</span>;
+<span class="code text-green">x</span> <span class="code text-user">=</span> <span class="code text-viola">x + 1</span>;
+<span class="code text-green">x</span> <span class="code text-user">=</span> <span class="code text-viola">x + 1</span>;
+<span class="code text-green">x</span> <span class="code text-user">=</span> <span class="code text-viola">x + 1</span>;
+<span class="code text-green">x</span> <span class="code text-user">=</span> <span class="code text-viola">x + 1</span>;</code></pre>
+        </td>
+        <td>Змінна <code><span class="text-green">x</span></code>&nbsp;матиме значення <code><span class="text-viola">5</span></code><br/> Змінна <code><span class="text-green">x</span></code>&nbsp;матиме значення <code><span class="text-viola">6</span></code><br/> Змінна <code><span class="text-green">x</span></code>&nbsp;матиме значення <code><span class="text-viola">7</span></code><br/> Змінна <code><span class="text-green">x</span></code>&nbsp;матиме значення <code><span class="text-viola">8</span></code><br/> Змінна <code><span class="text-green">x</span></code>&nbsp;матиме значення <code><span class="text-viola">9</span></code><br/> Змінна <code><span class="text-green">x</span></code>&nbsp;матиме значення <code><span class="text-viola">10</span></code></td>
+    </tr>
+    </tbody>
+</table>
+<p>Річ у тім, що в мові Java символ <code class="text-user">=</code> — це <span class="text-red">не знак рівності</span>, а команда, яка записує у <span class="term text-green">змінну</span> ліворуч від знаку <code class="text-user">=</code> результат обчислення значення <span class="term text-viola">виразу праворуч</span> від знаку <code class="text-user">=</code>.</p>
+<hr>
+<h2>2. Ділення цілих чисел</h2>
+<p>У Java в результаті ділення <strong>цілого числа</strong> на <strong>ціле число</strong> завжди отримуємо <strong>ціле число</strong>, а остача від ділення відкидається. Можна сказати, що результат ділення завжди округлюється до меншого цілого числа.</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Команда</th>
+        <th>Результат ділення</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">a</span> = 5 / 2;</code></pre>
+        </td>
+        <td><code>2,5</code></td>
+        <td>Змінна <code><span class="text-red">a</span></code> матиме значення <code>2</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">b</span> = 20 / 3;</code></pre>
+        </td>
+        <td><code>6.6667</code></td>
+        <td>Змінна <code><span class="text-red">b</span></code> матиме значення <code>6</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">c</span> = 6 / 5;</code></pre>
+        </td>
+        <td><code>1,2</code></td>
+        <td>Змінна <code><span class="text-red">с</span></code> матиме значення <code>1</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">d</span> = 1 / 2;</code></pre>
+        </td>
+        <td><code>0,5</code></td>
+        <td>Змінна <code><span class="text-red">d</span></code> матиме значення <code>0</code></td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task02.task0202"></div>
+<hr>
+<h2>3. Остача від ділення цілих чисел</h2>
+<p>Крім операторів множення й ділення, для цілих чисел у Java є ще й оператор «<strong>остача від ділення</strong>». Цей оператор має вигляд <code class="text-red">%</code> — знак відсотка. Це саме остача від ділення цілого числа на ціле, а не дробова частина.</p>
+<p>Приклади:</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Команда</th>
+        <th>Результат ділення</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">a</span> = 5 % 2;</code></pre>
+        </td>
+        <td><code>2</code> і <code>1</code> в остачі</td>
+        <td>Змінна <code><span class="text-red">а</span></code> матиме значення <code>1</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">b</span> = 20 % 4;</code></pre>
+        </td>
+        <td><code>5</code> і <code>0</code> в остачі</td>
+        <td>Змінна <code><span class="text-red">b</span></code> матиме значення <code>0</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">c</span> = 9 % 5;</code></pre>
+        </td>
+        <td><code>1</code> і <code>4</code> в остачі</td>
+        <td>Змінна <code><span class="text-red">с</span></code> матиме значення <code>4</code></td>
+    </tr>
+    <tr>
+        <td>
+            <pre class="language-java"><code>int <span class="text-red">d</span> = 1 % 2;</code></pre>
+        </td>
+        <td><code>0</code> і <code>1</code> в остачі</td>
+        <td>Змінна <code><span class="text-red">d</span></code> матиме значення <code>1</code></td>
+    </tr>
+    </tbody>
+</table>
+<p>Це дуже корисний оператор, який використовується досить часто. Наприклад, щоб дізнатися, чи <strong>є число парним</strong>, достатньо поділити його на <code>2</code> та порівняти остачу від ділення з нулем. Якщо остача від ділення дорівнює нулю, то число є парним, якщо остача дорівнює одиниці — непарним.</p>
+<p>Ця перевірка має такий вигляд:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java"><code>(<span class="text-red">a</span> % 2) == 0</code></pre>
+</div>
+<p>де, як ви вже здогадалися, <code>a % 2</code> — це команда отримання остачі від ділення на <code>2</code> (тобто <code>0</code> чи <code>1</code>), а знак <code>==</code> використовується для порівняння з нулем.</p>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task02.task0203"></div>
+<hr>
+<h2>4. Інкремент і декремент</h2>
+<p>У програмуванні доволі часто потрібно збільшувати або зменшувати змінну на одиницю. Для цих дій в Java є спеціальні команди.</p>
+<p>Оператор <span class="term text-green">інкремент</span> (збільшення на 1) має такий вигляд:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java text-center"><code><span class="text-viola">a</span><span class="text-green">++</span>;</code></pre>
+    <div class="lesson-example-caption">Збільшення на 1</div>
+</div>
+<p>Ця команда виконує таку саму дію, що й команда <code><span class="text-viola">a</span> = <span class="text-viola">a</span> <span class="text-green">+ 1</span>;</code> — збільшує змінну <code><span class="text-viola">a</span></code> на число 1.</p>
+<p>Оператор <span class="term text-red">декремент</span> (зменшення на 1) має такий вигляд:</p>
+<div class="lesson-example lesson-example--center">
+    <pre class="lecture-code lecture-code--present language-java text-center"><code><span class="text-viola">a</span><span class="text-red">--</span>;</code></pre>
+    <div class="lesson-example-caption">Зменшення на 1</div>
+</div>
+<p>Ця команда виконує таку саму дію, що й команда <code><span class="text-viola">a</span> = <span class="text-viola">a</span> <span class="text-red">- 1</span>;</code> — зменшує змінну <code><span class="text-viola">a</span></code> на число 1.</p>
+<p>Приклади</p>
+<table>
+    <tbody>
+    <tr>
+        <th>Команда</th>
+        <th>Примітка</th>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="text-red">x</span> = 5;
+<span class="text-red">x</span>++;
+<span class="text-red">x</span>++;
+<span class="text-red">x</span>++;
+<span class="text-red">x</span>++;
+<span class="text-red">x</span>++;</code></pre>
+        </td>
+        <td>Змінна <code><span class="text-red">x</span></code>&nbsp;матиме значення <code>5</code><br/> Змінна <code><span class="text-red">x</span></code>&nbsp;матиме значення <code>6</code><br/> Змінна <code><span class="text-red">x</span></code>&nbsp;матиме значення <code>7</code><br/> Змінна <code><span class="text-red">x</span></code>&nbsp;матиме значення <code>8</code><br/> Змінна <code><span class="text-red">x</span></code>&nbsp;матиме значення <code>9</code><br/> Змінна <code><span class="text-red">x</span></code>&nbsp;матиме значення <code>10</code></td>
+    </tr>
+    <tr>
+        <td>
+<pre class="language-java"><code>int <span class="text-red">x</span> = 5;
+<span class="text-red">x</span>--;
+<span class="text-red">x</span>--;
+<span class="text-red">x</span>--;
+<span class="text-red">x</span>--;
+<span class="text-red">x</span>--;
+<span class="text-red">x</span>--;</code></pre>
+        </td>
+        <td>Змінна <code><span class="text-red">x</span></code>&nbsp;матиме значення <code>5</code><br/> Змінна <code><span class="text-red">x</span></code>&nbsp;матиме значення <code>4</code><br/> Змінна <code><span class="text-red">x</span></code>&nbsp;матиме значення <code>3</code><br/> Змінна <code><span class="text-red">x</span></code>&nbsp;матиме значення <code>2</code><br/> Змінна <code><span class="text-red">x</span></code>&nbsp;матиме значення <code>1</code><br/> Змінна <code><span class="text-red">x</span></code>&nbsp;матиме значення <code>0</code><br/> Змінна <code><span class="text-red">x</span></code>&nbsp;матиме значення <code>-1</code></td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task02.task0204"></div>
+<div class="task-widget-container" showCover="true" taskKey="ua.javarush.task.pro.task02.task0205"></div>
+<hr>
+
+<div class="lesson-carousel lesson-carousel--comics">
+    <div class="lesson-carousel__list">
+        <div class="lesson-carousel__item">
+            <img data-id="1435e985-c1e7-48e6-bdc5-3b26d688ad3a" data-max-width="1024" src="https://cdn.javarush.com/images/article/1435e985-c1e7-48e6-bdc5-3b26d688ad3a/original.png" alt=""/>
+        </div>
+    </div>
+</div>
