@@ -4,11 +4,11 @@ Maven.
 Перший запит до бази даних.
 Повний лістинг програми.
 <p>----------------------------------------</p>
-<h2>Maven</h2>
+<h2>1. Maven</h2>
 
-<p>Найважливіша деталь – сама бібліотека JDBC Driver для MySQL сервера. Вона просто так не з'явиться на твоєму комп'ютері, тому тобі треба її додати.</p>
+<p>Найважливіша деталь — сама бібліотека JDBC Driver для MySQL сервера. Вона просто так не з'явиться на твоєму комп'ютері — треба її додати.</p>
 
-<p>Якщо ти використовуєш Maven, то тобі потрібно допомогти йому – вказати потрібну бібліотеку.</p>
+<p>Якщо ти використовуєш Maven, тобі потрібно допомогти йому: вказати потрібну бібліотеку.</p>
 
 <p>JDBC-драйвер <strong>для MySQL</strong>:</p>
 
@@ -19,7 +19,7 @@ Maven.
     &lt;/dependency></strong>
 </code></pre>
 
-<p>Просто додай цей код у твій <strong>pom.xml</strong>.</p>
+<p>Просто додай цей код до твого <strong>pom.xml</strong>.</p>
 
 <p>Також наведу ще кілька популярних драйверів.</p>
 
@@ -50,11 +50,11 @@ Maven.
 &lt;/dependency></strong>
 </code></pre>
 
-<h2>Перший запит до бази даних</h2>
+<h2>2. Перший запит до бази даних</h2>
 
-<p>Усі необхідні бібліотеки підключені, тепер настав час запустити твою першу програму з доступом до бази даних. Писатимемо весь код у методі <span class="code text-orange">main()</span>.</p>
+<p>Усі необхідні бібліотеки підключені — тепер настав час запустити твою першу програму з доступом до бази даних. Писатимемо весь код у методі <span class="code text-orange">main()</span>.</p>
 
-<p><strong>Етап 1</strong>. Додай перед методом <span class="code text-orange">main()</span> кілька імпортів – це суттєво полегшить тобі життя:</p>
+<p><strong>Етап 1</strong>. Додай перед методом <span class="code text-orange">main()</span> кілька імпортів — це суттєво полегшить тобі життя:</p>
 
 <pre class='language-java line-numbers'><code>
 import java.sql.DriverManager;
@@ -71,7 +71,7 @@ import java.sql.ResultSet;
               "login", "password");
 </code></pre>
 
-<p>Можна і в один рядок – як тобі буде зручніше. Логін та пароль, ясна річ, потрібно підставити реальні від твого локального MySQL-сервера.</p>
+<p>Можна і в один рядок — як тобі буде зручніше. Логін та пароль, ясна річ, потрібно підставити реальні від твого локального MySQL-сервера.</p>
 
 <p><strong>Етап 3</strong>. Створюємо запит до бази даних. Давай дістанемо всіх користувачів із таблиці user. Тоді тобі потрібно буде додати такий рядок коду:</p>
  
@@ -80,11 +80,11 @@ import java.sql.ResultSet;
     ResultSet results = statement.executeQuery("SELECT * FROM user");
 </code></pre>
  
-<p>Це аж два рядки. У першій ми створюємо об'єкт <mark class="green">Statement</mark>, а в другій за його допомогою виконуємо запит до бази даних. Метод <span class="code text-orange">executeQuery()</span> виконує запит до бази даних та повертає об'єкт типу <mark class="green">ResultSet</mark>.</p>
+<p>Це аж два рядки. У першому ми створюємо об'єкт <mark class="green">Statement</mark>, а в другому за його допомогою виконуємо запит до бази даних. Метод <span class="code text-orange">executeQuery()</span> виконує запит до бази даних та повертає об'єкт типу <mark class="green">ResultSet</mark>.</p>
 
 <p><strong>Етап 4</strong>. Виведемо на екран дані, що містяться в об'єкті <mark class="green">ResultSet</mark>.</p>
 
-<p><mark class="green">ResultSet</mark> - це не безліч, він просто так називається. У ньому зберігається результат виконання запиту. Цей об'єкт чимось схожий на ітератор: він дозволяє встановлювати/міняти поточний рядок результату, а потім із цього поточного рядка можна отримати дані. Додай у ваш приклад такий код:</p>
+<p><mark class="green">ResultSet</mark> — це не множина, він просто так називається. У ньому зберігається результат виконання запиту. Цей об'єкт чимось схожий на ітератор: він дозволяє встановлювати/міняти поточний рядок результату, а потім із цього поточного рядка можна отримати дані. Додай до свого прикладу такий код:</p>
 
 <pre class='language-java line-numbers'><code>
     while (results.next()) {
@@ -99,12 +99,12 @@ import java.sql.ResultSet;
 <p>Потім з поточного рядка об'єкта <mark class="green">ResultSet</mark> можна отримати дані з його колонок:</p>
 
 <ul>
-<li><span class="code text-orange">getRow()</span> – повертає номер поточного рядка в об'єкті <mark class="green">ResultSet</mark></li>
-<li><span class="code text-orange">getInt(N)</span> – поверне дані N-ї колонки поточного рядка як тип int</li>
-<li><span class="code text-orange">getString(N)</span> – поверне дані N-ї колонки поточного рядка як тип String</li>
+<li><span class="code text-orange">getRow()</span> — поверне номер поточного рядка в об'єкті <mark class="green">ResultSet</mark></li>
+<li><span class="code text-orange">getInt(N)</span> — поверне дані N-ї колонки поточного рядка як тип int</li>
+<li><span class="code text-orange">getString(N)</span> — поверне дані N-ї колонки поточного рядка як тип String</li>
 </ul>
  
-<h2>Повний лістинг програми</h2>
+<h2>3. Повний лістинг програми</h2>
 
 <p>Щоб мінімізувати помилки, наведу нижче повний лістинг програми:</p>
 
@@ -116,7 +116,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
  
-public class JdbcApplicatin {
+public class JdbcApplication {
     public static void main(String[] args) throws Exception{
  Connection connection = DriverManager.getConnection(
           "jdbc:mysql://localhost:3306/test",
@@ -135,7 +135,7 @@ public class JdbcApplicatin {
 }
 </code></pre>
 
-<p>І мій висновок на екран після запуску програми:</p>
+<p>І ось моє виведення на екран після запуску програми:</p>
 
 <table>
 <tbody>
@@ -149,7 +149,7 @@ public class JdbcApplicatin {
 <td>2. 2</td><td>Петров Микола</tr>
 </tr>
 <tr>
-<td>3. 3</td><td>Сідорів Віталій</td>
+<td>3. 3</td><td>Сідоров Віталій</td>
 </tr>
 <tr>
 <td colspan=4><span class="text-user">Process finished with exit code 0</span></td>

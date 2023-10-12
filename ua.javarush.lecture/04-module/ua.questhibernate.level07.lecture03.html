@@ -4,7 +4,7 @@
 JDBC та NULL.
 Що не так з типами даних у JDBC?
 <p>----------------------------------------</p>
-<h2>Типи даних</h2>
+<h2>1. Типи даних</h2>
 
 <p>Давай звернемо увагу на таблицю:</p>
 
@@ -30,9 +30,9 @@ JDBC та NULL.
 </tbody>
 </table>
 
-<p>У третій колонці ми бачимо типи: <strong>INT</strong>, <strong>VARCHAR</strong>, <strong>DATE</strong>. Це типи SQL-сервера. Значить, сервер віддає дані з тими типами, про які він знає. Як же ці типи перетворюються на типи Java?</p>
+<p>У третій колонці ми бачимо типи: <strong>INT</strong>, <strong>VARCHAR</strong>, <strong>DATE</strong>. Це типи SQL-сервера. Отже, сервер віддає дані з тими типами, про які він знає. Як же ці типи перетворюються на типи Java?</p>
 
-<p>Це саме є одна з речей, яка була стандартизована разом з JDBC. Автори JDBC почали з того, що зафіксували список SQL-типів. Є спеціальний клас із константами:</p>
+<p>Це і є одна з речей, яку було стандартизовано разом з JDBC. Автори JDBC почали з того, що зафіксували список SQL-типів. Є спеціальний клас із константами:</p>
 
 <pre class='language-java line-numbers'><code>
 class java.sql.Types {
@@ -46,7 +46,7 @@ class java.sql.Types {
 }
 </code></pre>
 
-<p>Число – це не порядковий номер у класі, а ID-тип у списку SQL-типів у специфікації SQL. Саме ці числа ти бачив у прикладі на початку лекції.</p>
+<p>Число — це не порядковий номер у класі, а ID-тип у списку SQL-типів у специфікації SQL. Саме ці числа ти бачив у прикладі на початку лекції.</p>
 
 <p>Також у класі ResultSet є методи, які вміють перетворювати одні типи даних на інші. Не всі типи можна перетворити один на одного, але логіка досить зрозуміла. Ось тобі хороша таблиця спочатку:</p>
  
@@ -98,7 +98,7 @@ class java.sql.Types {
 
 <p>До речі, а ти звернув увагу на метод <span class="code text-orange">getInt()</span>? </p>
 
-<h2>JDBC та NULL</h2>
+<h2>2. JDBC та NULL</h2>
 
 <p>Ти звернув увагу, що не так з методом <span class="code text-orange">getInt()</span> у класу <span class="code"><span class="text-green"> ResultSet</span></span>? Давай подивимося ще раз на його сигнатуру:</p>
  
@@ -107,24 +107,24 @@ class java.sql.Types {
 int getInt(column)</code></pre>
     </div>
 
-<p>Це метод повертає <strong>int</strong>, а не Integer. Тому що під час створення JDBC-типу Integer ще не було. Гаразд, припустимо. Тоді маю запитання:</p>
+<p>Цей метод повертає <strong>int</strong>, а не Integer, тому що під час створення JDBC-типу Integer ще не було. Гаразд, припустимо. Тоді маю запитання:</p>
 
-<p><strong>У мене є таблиця в базі денних, яка має колонку з типом INT NULL, яка може набувати значень INT, але також може бути і NULL. Як мені отримати значення null із цієї колонки?</strong></p>
+<p><strong>У мене є таблиця в базі даних, що має колонку з типом INT NULL, яка може набувати значень INT, але також може бути й NULL. Як мені отримати значення null із цієї колонки?</strong></p>
 
-<p>Не хвилюйся, всі за тебе вже вигадали.</p>
+<p>Не хвилюйся, все продумали вже до тебе.</p>
 
-<p><strong>Рішення перше</strong>. Якщо SQL-тип у Java представлений типом посилань, таким як Date або String, то <span class="text-green">проблеми немає</span>. Змінні цього типу можуть набувати null.</p>
+<p><strong>Рішення перше</strong>. Якщо SQL-тип у Java представлений типом посилань, як-от Date або String, то <span class="text-green">проблеми немає</span>. Змінні цього типу можуть набувати null.</p>
 
-<p><strong>Рішення друге</strong>. Примітивні типи не можуть приймати значення null, тому методи типу <span class="code text-orange">getInt()</span> просто <span class="text-user">повертатимуть значення за умовчанням</span>. Для int це 0, для float = 0.0f, для double = 0.0d тощо.</p>
+<p><strong>Рішення друге</strong>. Примітивні типи не можуть приймати значення null, тому методи типу <span class="code text-orange">getInt()</span> просто <span class="text-user">повертатимуть значення за замовчуванням</span>. Для int це 0, для float = 0.0f, для double = 0.0d тощо.</p>
 
 <p>А як тоді зрозуміти, що було в колонці: 0 чи NULL? І на це питання партія має відповідь.</p>
 
-<p><strong>Рішення третє</strong>. У класу ResultSet є спеціальний метод, який повертає true, якщо щойно замість NULL метод повернув інше значення. span>.</p>
+<p><strong>Рішення третє</strong>. У класу ResultSet є спеціальний метод, <span class="text-red">який повертає true, якщо щойно замість NULL метод повернув інше значення</span>.</p>
 
 <p>Все працює саме так, як я написав. Приклад:</p>
 
 <pre class='language-java line-numbers'><code>
-    ResultSet results = staatement.executeQuery("SELECT * FROM user");
+    ResultSet results = statement.executeQuery("SELECT * FROM user");
     int level = results.getInt("level");
  
  if (results.wasNull()) {
@@ -134,12 +134,12 @@ int getInt(column)</code></pre>
     }
 </code></pre>
 
-<p>Якщо при зверненні до методу <span class="code text-orange">getInt()</span> він повинен був повернути null, то метод <span class="code text-orange">wasNull()</ span> поверне true, інакше метод <span class="code text-orange">wasNull()</span> поверне false.</p>
+<p>Якщо під час звернення до методу <span class="code text-orange">getInt()</span> він повинен був повернути null, то метод <span class="code text-orange">wasNull()</span> поверне true, інакше метод <span class="code text-orange">wasNull()</span> поверне false.</p>
 
 <p>Це працює не тільки для примітивних типів:</p>
 
 <pre class='language-java line-numbers'><code>
-ResultSet results = staatement.executeQuery("SELECT * FROM user");
+ResultSet results = statement.executeQuery("SELECT * FROM user");
     String name = results.getString("name");
  
  if (results.wasNull()) {
@@ -149,11 +149,11 @@ ResultSet results = staatement.executeQuery("SELECT * FROM user");
     }
 </code></pre>
 
-<p>Це, звичайно, милиця. Натомість жодних проблем з <span class="text-red"><span class="text-bold">NullPointerException</span></span>. Потрібно у всьому бачити позитивні сторони :)</p>
+<p>Це, звісно, костиль. Натомість жодних проблем з <span class="text-red"><span class="text-bold">NullPointerException</span></span>. Потрібно у всьому бачити позитивні сторони :)</p>
 
-<h2>Що не так з типами даних у JDBC?</h2>
+<h2>3. Що не так з типами даних у JDBC?</h2>
 
-<p>Продовжуємо тест на уважність. Подивися уважно на метод <span class="code text-orange">getDate(column)</span>? Що з ним не так? Цей метод має такий тип результату:</p>
+<p>Продовжуємо тест на уважність. Подивися на метод <span class="code text-orange">getDate(column)</span>. Що з ним не так? Цей метод має такий тип результату:</p>
  
     <div class="lesson-example lesson-example-center">
     <pre class="lecture-code lecture-code--present language-java"><code>
@@ -168,19 +168,19 @@ java.sql.Date</code></pre>
 java.util.Date</code></pre>
     </div>
 
-<p>У них різні пакети! Це взагалі різні типи даних. А причина ось у чому…</p>
+<p>У них різні пакети! Це взагалі різні типи даних. А причина ось у чому...</p>
 
 <p>Бази даних ще з 70-х років 20 століття підтримують 3 типи даних для зберігання часу:</p>
 
 <ul>
-<li>DATE – зберігає дату: рік, місяць, день.</li>
-<li>TIME – зберігає час: години, хвилини, секунди.</li>
-<li>TIMESTAMP – зберігає конкретний момент часу: дата, час та мілісекунди.</li>
+<li>DATE — зберігає дату: рік, місяць, день.</li>
+<li>TIME — зберігає час: години, хвилини, секунди.</li>
+<li>TIMESTAMP — зберігає конкретний момент часу: дата, час та мілісекунди.</li>
 </ul>
 
-<p>Мова Java перші 10 років свого існування мала лише один тип даних - <span class="code"><span class="text-green">java.util.Date</span></span>, яка зберігав момент часу у форматі UNIX TIME: кількість мілісекунд, яка пройшла з початку 1970 року.</p>
+<p>Мова Java перші 10 років свого існування мала лише один тип даних — <span class="code"><span class="text-green">java.util.Date</span></span>, який зберігав момент часу у форматі UNIX TIME: кількість мілісекунд, яка пройшла з початку 1970 року.</p>
 
-<p>Тому творці стандарту JDBC додали в Java ще три типи даних — спеціально для JDBC:</p>
+<p>Тому творці стандарту JDBC додали до Java ще три типи даних — спеціально для JDBC:</p>
 
 <ul>
 <li>java.sql.Date</li>
@@ -188,7 +188,7 @@ java.util.Date</code></pre>
 <li>java.sqlTimestamp</li>
 </ul>
 
-<p>І тому методи інтерфейсу <span class="text-neon"><span class="text-bold"><em>ResultSet</em></span></span> містять фіксовані типи даних:</ >
+<p>І тому методи інтерфейсу <span class="text-neon"><span class="text-bold"><em>ResultSet</em></span></span> містять фіксовані типи даних:</p>
  
 <table>
 <tbody>
@@ -215,7 +215,7 @@ java.util.Date</code></pre>
 </tbody>
 </table>
 
-<p>І саме цей тип ви бачите тут:</p>
+<p>І саме цей тип ти бачиш тут:</p>
 
 <table>
 <tbody>
@@ -240,7 +240,7 @@ java.util.Date</code></pre>
 </tbody>
 </table>
  
-<p>Здогадався, чого тут не вистачає? Типи даних, які з'явилися в Java DateTime API:</p>
+<p>Здогадуєшся, чого тут не вистачає? Типів даних, які з'явилися в Java DateTime API:</p>
 
 <ul>
 <li><span class="code"><span class="text-green">LocalDate</span></span></li>

@@ -4,8 +4,8 @@
 Приклад роботи з HQL
 Використання select
 <p>----------------------------------------</p>
-<h2>1.1 Знайомство з HQL</h2>
-<p>Раніше ти познайомився з Hibernate, а тепер я познайомлю тебе з <strong>HQL</strong>, він же <strong>Hibernate Query Language</strong>. Фактично, це SQL перероблений під написання запитів в Hibernate. Він має кілька ключових відмінностей.</p>
+<h2>1. Знайомство з HQL</h2>
+<p>Раніше ми познайомилися з Hibernate, а тепер я познайомлю тебе з <strong>HQL</strong>, він же — <strong>Hibernate Query Language</strong>. Фактично, це SQL перероблений під написання запитів в Hibernate. Він має кілька ключових відмінностей.</p>
 <ol>
 <li>Використання <strong>імені класу</strong> замість імені таблиці.</li>
 <li>Використання <strong>імені поля класу</strong> замість імені колонки таблиці.</li>
@@ -17,13 +17,13 @@
 <span class="text-brown">from</span>
         </code></pre>
 </div>
-<p>Це все, для порівняння наведемо аналогічний запит на SQL:</p>
+<p>Це все. Для порівняння наведемо аналогічний запит на SQL:</p>
  <div class="lesson-example lesson-example-center">
     <pre class="lecture-code lecture-code--present language-java"><code>
 <span class="text-brown">select</span> * <span class="text-brown">from</span> user
         </code></pre>
 </div>
-<p>Тут <code>User</code> – це ім'я класу, а <code>user</code> – це ім'я таблиці.</p>
+<p>Тут <code>User</code> — це ім'я класу, а <code>user</code> — це ім'я таблиці.</p>
 <p>Цілком Java код виглядатиме ось так:</p>
 <pre class='line-numbers'><code>
 <span class="text-brown">public List&lt;User&gt; getAllUsers()</span> {
@@ -32,16 +32,16 @@
     }
 }
 </code></pre>
-<p>В іншому HQL дуже схожий на SQL – у ньому теж є оператори:</p>
+<p>В іншому HQL дуже схожий на SQL — у ньому теж є оператори:</p>
 <ul>
 <li><code>WHERE</code></li>
 <li><code>ORDER BY</code></li>
 <li><code>GROUP BY</code></li>
 <li><code>HAVING</code></li>
 </ul>
-<h2>1.2 Приклад роботи з HQL</h2>
+<h2>2. Приклад роботи з HQL</h2>
 <p>Можливо, попередній приклад трохи збиває з пантелику через однакові назви таблиць і полів. Давай придумаємо спеціальний приклад, де з цим було б легше.</p>
-<p>Нехай у нас є таблиця <strong>user_data</strong>, яка містить такі поля:</p>
+<p>Скажімо, в нас є таблиця <strong>user_data</strong>, яка містить такі поля:</p>
 <ul>
 <li><strong>id</strong> INT</li>
 <li><strong>user_name</strong> VARCHAR(100)</li>
@@ -96,16 +96,16 @@ class User {
     </tr>
     </tbody>
 </table>
-<p>Запити дуже схожі, і читати HQL-запити, коли ти знайомий з іменами класів та їх полів так само легко, як читати SQL-запити. Писати, можливо, трохи складніше, але знову ж таки на HQL рідко пишуть дуже складні запити.</p>
-<h2>1.3 Використання select</h2>
-<p>У HQL можна використовувати <code>select</code>, коли тип даних результату не збігається з типом зазначеним у <code>from</code>.</p>
+<p>Запити дуже схожі, і читати HQL-запити, коли ти знайомий з іменами класів та їх полів так само легко, як читати SQL-запити. Писати, можливо, трохи складніше, але знову ж таки, на HQL рідко пишуть дуже складні запити.</p>
+<h2>3. Використання select</h2>
+<p>У HQL можна використовувати <code>select</code>, коли тип даних результату не збігається з типом, зазначеним у <code>from</code>.</p>
 <p>Наприклад, ми хочемо отримати імена всіх користувачів, які є в нашій таблиці <strong>user_data</strong>, тоді потрібно написати такий запит:</p>
  <div class="lesson-example lesson-example-center">
     <pre class="lecture-code lecture-code--present language-java"><code>
 <span class="text-brown">select</span> name <span class="text-brown">from</span>
         </code></pre>
 </div>
-<p>Також якщо серед імен є дублікати, то можна скористатися оператором <code>DISTINCT</code>:</p>
+<p>Також якщо серед імен є дублікати, можна скористатися оператором <code>DISTINCT</code>:</p>
  <div class="lesson-example lesson-example-center">
     <pre class="lecture-code lecture-code--present language-java"><code>
 <span class="text-brown">select distinct</span> name <span class="text-brown">from</span>
@@ -118,7 +118,7 @@ class User {
 
         </code></pre>
 </div>
-<p>Ну і повністю у вигляді Java-коду цей запит буде виглядати так:</p>
+<p>Ну і повністю у Java-коді цей запит буде виглядати так:</p>
 <pre class='language-java line-numbers'><code>
 <span class="text-brown">public List&lt;String&gt; getUserNames()</span> {
     try (Session <span class="text-user">session</span> = sessionFactory.openSession()) {
@@ -128,4 +128,4 @@ class User {
     }
 }
 </code></pre>
-<p>Зверніть увагу, запит має повернути список імен. Імена мають тип String, тому і тип функції, і тип параметра класу Query мають тип String.</p>
+<p>Зверни увагу: запит має повернути список імен. Імена мають тип String, тому і тип функції, і тип параметра класу Query мають тип String.</p>

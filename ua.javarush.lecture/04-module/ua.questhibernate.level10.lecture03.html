@@ -4,13 +4,13 @@
 Метод setParameterList()
 Захист від SQL Injection
 <p>----------------------------------------</p>
-<h2>4.1 Параметри до запитів</h2>
+<h2>1. Параметри до запитів</h2>
 <p>Hibernate дозволяє надсилати параметри запитам. Таким чином сильно спрощується вся робота із запитами та базою даних.</p>
-<p>Дуже рідко можна зустріти незмінні запити. Адже спочатку здається, що тобі потрібно повернути з бази просто список товарів. А потім з'ясовується, що потрібний актуальний список товарів для певного користувача на певну дату. Відсортований за потрібним полем, і ще не весь список, а певна сторінка: наприклад, товари з 21 по 30-й.</p>
-<p>І саме це завдання вирішують параметризовані запити. Ти пишеш на HQL запит, а потім значення, які можна змінити, заміняєте на “спеціальні імена” – параметри. І потім окремо під час виконання запиту можна передати значення цих параметрів.</p>
+<p>Дуже рідко можна зустріти незмінні запити. Адже спочатку здається, що тобі потрібно повернути з бази просто список товарів. А потім з'ясовується, що потрібний актуальний список товарів для певного користувача на певну дату. Відсортований за потрібним полем, і не весь список, а певна сторінка: наприклад, товари з 21 до 30-го.</p>
+<p>І саме це завдання вирішують параметризовані запити. Ти пишеш на HQL запит, а потім значення, які можна змінити, заміняєш на “спеціальні імена” — параметри. І потім окремо під час виконання запиту можна передати значення цих параметрів.</p>
 <p>Давай напишемо HQL-запит, який повертатиме всі завдання для користувача з певним ім'ям:</p>
 <pre class='language-java line-numbers'><code>
-<span class="text-brown">from</span> EmployeeTask <span class="text-brown">where</span> employee.name = <span class="text-user">"Іван Іванович"< /span>
+<span class="text-brown">from</span> EmployeeTask <span class="text-brown">where</span> employee.name = <span class="text-user">"Іван Іванович"</span>
 </code></pre>
 <p>А тепер замінимо ім'я на параметр:</p>
 <pre class='language-java line-numbers'><code>
@@ -24,16 +24,16 @@ Query&lt;<span class="token keyword">EmployeeTask</span>&gt; <span class="text-v
 List&lt;<span class="token keyword">EmployeeTask</span>&gt; resultLIst = <span class="text-viola">query</span>.<span class="text-red">list</span>();
 
 </code></pre>
-<p>Також замість імені параметр, можна використовувати просто номер:</p>
+<p>Також замість імені параметра можна використовувати просто номер:</p>
 <pre class='line-numbers'><code>
 String hql = <span class="text-green">"from EmployeeTask where employee.name = :1"</span>;
 Query&lt;<span class="token keyword">EmployeeTask</span>&gt; <span class="text-viola">query</span> = <span class="text-user">session</span>.createQuery( hql, <span class="token keyword">EmployeeTask</span> . class);
-<span class="text-viola">query</span>.setParameter(<span class="text-green">1</span>, <span class="text-user">"Іване Івановичу"</ span>);
+<span class="text-viola">query</span>.setParameter(<span class="text-green">1</span>, <span class="text-user">"Іване Івановичу"</span>);
 List&lt;<span class="token keyword">EmployeeTask</span>&gt; resultLIst = <span class="text-viola">query</span>.<span class="text-red">list</span>();
 
 </code></pre>
-<p>Хоча краще, звичайно, використовувати ім'я – читати та підтримувати такий код набагато легше. </p>
-<h2>4.2 Метод setParameterList().</h2>
+<p>Хоча краще, звісно, використовувати ім'я — читати та підтримувати такий код набагато легше. </p>
+<h2>2. Метод setParameterList().</h2>
 <p>Також трапляються випадки, коли значення параметра не одне, а представляє список об'єктів. Наприклад, ми хочемо перевірити, що професії співробітників містяться у певному списку.</p>
 <p>Як би це можна було зробити:</p>
 <pre class='ine-numbers'><code>
@@ -42,23 +42,23 @@ Query&lt;<span class="token keyword">EmployeeTask</span>&gt; <span class="text-v
 <span class="text-viola">query</span>.setParameterList(<span class="text-green">"occupation_list"</span>, <span class="text-user">new String[] {"Програміст", "Тестувальник"}</span>);
 List&lt;<span class="token keyword">EmployeeTask</span>&gt; resultLIst = <span class="text-viola">query</span>.list();
 </code></pre>
-<p>В якості значення параметра можна передати 4 види списку:</p>
+<p>Як значення параметра можна передати 4 види списку:</p>
 <ul>
 <li>масив об'єктів: Object[]</li>
 <li>колекція: Collection</li>
 <li>типізований масив: T[]</li>
 <li>типізована колекція: Collection&lt;T&gt;</li>
 </ul>
-<p>Якщо ти вирішив передавати типізовану колекцію або масив, то потрібно передати тип даних третім параметром. Приклад:</p>
+<p>Якщо ти вирішиш передавати типізовану колекцію або масив, потрібно передати тип даних третім параметром. Приклад:</p>
 <pre class='ine-numbers'><code>
 String hql = <span class="text-green">"з EmployeeTask where occupation IN (:occupation_list)"</span>;
 Query&lt;<span class="token keyword">EmployeeTask</span>&gt; <span class="text-viola">query</span> = <span class="text-user">session</span>.createQuery( hql, <span class="token keyword">EmployeeTask</span> . class);
 <span class="text-viola">query</span>.setParameterList(<span class="text-green">"occupation_list"</span>, <span class="text-user">new String[] {"Програміст", "Тестувальник"}</span>, <span class="text-red">String.class</span>);
 List&lt;<span class="token keyword">EmployeeTask</span>&gt; resultLIst = <span class="text-viola">query</span>.list();
 </code></pre>
-<p>Під час використання параметрів-списків також можна використовувати номер замість імені параметра. Але знов-таки з ім'ям зручніше.</p>
-<h2>4.3 Захист від SQL Injection</h2>
-<p>Одне з найважливіших призначень параметрів – це захист бази від SQL-ін'єкцій. Багато програмістів-новачків замість використання параметрів просто б склеїли рядок з кількох частин.</p>
+<p>Під час використання параметрів-списків також можна використовувати номер замість імені параметра. Але знову ж таки, з ім'ям зручніше.</p>
+<h2>3. Захист від SQL Injection</h2>
+<p>Одне з найважливіших призначень параметрів — це захист бази від SQL-ін'єкцій. Багато програмістів-новачків замість використання параметрів просто б склеїли рядок з кількох частин.</p>
 <p>Замість того, щоб написати так:</p>
 <pre class='line-numbers'><code>
 String hql = <span class="text-green">"з EmployeeTask where employee.name = :username"</span>;
@@ -72,7 +72,7 @@ String hql = <span class="text-green">"від EmployeeTask where employee.name =
 Query&lt;<span class="token keyword">EmployeeTask</span>&gt; <span class="text-viola">query</span> = <span class="text-user">session</span>.createQuery( hql, <span class="token keyword">EmployeeTask</span> . class);
 List&lt;<span class="token keyword">EmployeeTask</span>&gt; resultLIst = <span class="text-viola">query</span>.<span class="text-red">list</span>();
 </code></pre>
-<p><mark class="red">Ніколи так не робіть!</mark> Ніколи не склеюй SQL/HQL-запит із кількох частин. Тому що рано чи пізно ім'я користувача прийде з клієнта. І злісний хакер як ім'я клієнта передасть вам рядок типу <code class="text-red">""Іван"; DROP TABLE user;"</code></p>
+<p><mark class="red">Ніколи так не роби!</mark> Ніколи не склеюй SQL/HQL-запит із кількох частин. Тому що рано чи пізно ім'я користувача прийде з клієнта. І злісний хакер як ім'я клієнта передасть тобі рядок типу <code class="text-red">""Іван"; DROP TABLE user;"</code></p>
 <p>І тоді твій запит до бази даних набуде вигляду:</p>
 <pre class='line-numbers'><code>
 від EmployeeTask where employee.name = "Іван"; <span class="text-brown">DROP TABLE user</span>;

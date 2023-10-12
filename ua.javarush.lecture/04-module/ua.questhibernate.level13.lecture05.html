@@ -7,7 +7,7 @@ REMOVE, DELETE, DETACH
 Параметр Orphan removal
 Параметр fetch
 <p>----------------------------------------</p>
-<h2>6.1 Глибоке керування залежностями</h2>
+<h2>1. Глибоке керування залежностями</h2>
 <p>І ще трохи корисного та цікавого про анотації <strong>@OneToMany</strong> та їм подібні. Вони мають 4 параметри, що часто використовуються:</p>
 <ul>
 <li><strong>cascade</strong>= CascadeType.ALL</li>
@@ -31,7 +31,7 @@ REMOVE, DELETE, DETACH
 <li><strong>LOCK</strong></li>
 </ul>
 <p>Тут є, звичайно, сильна паралель з базою даних та їх CONSTRANIS. Проте є й відмінності. Hibernate намагається максимально приховувати реальну роботу з базою даних, так що ці Hibernate Cascades – це саме про Entity-об'єкти.</p>
-<h2>6.2 CascadeType</h2>
+<h2>2. CascadeType</h2>
 <p>Параметр cascade описує, що має відбуватися із залежними об'єктами, якщо ми змінюємо їхній батьківський (головний об'єкт). Найчастіше цей параметр використовується разом із анотаціями, які описують залежності об'єктів:</p>
 <p>Приклад:</p>
 <pre><code>OneToOne(cascade = <span class="text-brown">CascadeType</span>.<span class="text-red">ALL</span>)
@@ -43,7 +43,7 @@ REMOVE, DELETE, DETACH
 <pre><code>@Cascade({ <span class="text-brown">org.hibernate.annotations.CascadeType</span>.<span class="text-red">ALL</span> })
 </code></pre>
 <p>Тепер давай докладніше поговоримо про те, що ці анотації означають.</p>
-<h2>6.3 ALL, PERSIST, MERGE</h2>
+<h2>3. ALL, PERSIST, MERGE</h2>
 <p><code>CascadeType.ALL</code> означає, що <strong>всі дії</strong>, які ми виконуємо з батьківським об'єктом, потрібно повторити і для його залежних об'єктів.</p>
 <p><code>CascadeType.PERSIST</code> означає, що якщо ми зберігаємо в базу батьківський об'єкт, то це потрібно зробити і з його залежними об'єктами. Приклад:</p>
 <pre class='line-numbers'><code>
@@ -67,8 +67,8 @@ EmployeeTask <span class="text-user">task</span> = new EmployeeTask();
 <span class="text-brown">session</span>.<span class="text-red">flush</span>();
 </code></pre>
 <p>Ми зберігаємо лише об'єкт типу Employee, його залежний об'єкт EmployeeTask буде збережено в базу автоматично.</p>
-<p><code>CascadeType.MERGE</code> означає, що якщо ми оновлюємо в базі батьківський об'єкт, то це потрібно зробити і з його залежними об'єктами.</p>
-<h2>6.4 REMOVE, DELETE, DETACH</h2>
+<p><code>CascadeType.MERGE</code> означає, що якщо ми оновлюємо в базі батьківський об'єкт, це потрібно зробити і з його залежними об'єктами.</p>
+<h2>4. REMOVE, DELETE, DETACH</h2>
 <p><code>CascadeType.REMOVE</code> означає, що якщо ми видаляємо в базі батьківський об'єкт, то це потрібно зробити і з його залежними об'єктами.</p>
 <p><code>CascadeType.DELETE</code> означає те саме. Це синоніми. Просто з різних специфікацій.</p>
 <p><code>CascadeType.DETACH</code> означає, що якщо ми видаляємо батьківський об'єкт із сесії, то це ж потрібно зробити і з його залежними об'єктами. Приклад:</p>
@@ -99,14 +99,14 @@ assertThat(session.contains(<span class="text-user">task</span>)).isTrue();
 assertThat(session.contains(<span class="text-viola">director</span>)).isFalse();
 assertThat(session.contains(<span class="text-user">task</span>)).isFalse();
 </code></pre>
-<p><code>CascadeType.REFRESH</code> та <code>CascadeType.SAVE_UPDATE</code> працюють так само, як ми очікуємо – дублюють дії, які виконуються з батьківським об'єктом до його залежного об'єкта. </p>
-<h2>6.5 Параметр Orphan removal</h2>
+<p><code>CascadeType.REFRESH</code> та <code>CascadeType.SAVE_UPDATE</code> працюють так само, як ми очікуємо — дублюють дії, які виконуються з батьківським об'єктом до його залежного об'єкта. </p>
+<h2>5. Параметр Orphan removal</h2>
 <p>Також іноді ти міг зустріти параметр <code>orphan</code>. Це скорочення від терміну Orphan removal. Він використовується для того, щоб не залишалося дочірніх сутностей без батьківських.</p>
 <pre><code>OneToOne(orphan = <span class="text-brown">true</span>)
 </code></pre>
-<p>Якщо цей параметр виставлено в true, то дочірня сутність буде видалена, якщо на неї зникли <mark class="red">всі посилання</mark>. Це не зовсім те саме, що і <code>Cascade.REMOVE</code>.</p>
-<p>У тебе може бути ситуація, коли кілька батьківських сутностей посилаються на одну дочірню. Тоді вигідно, щоб вона видалялася не разом із видаленням батьківської сутності, а лише якщо всі посилання на неї будуть обнулені.</p>
-<p>Допустимо, у тебе є клас:</p>
+<p>Якщо цей параметр виставлено в true, то дочірню сутність буде видалено, якщо на неї зникли <mark class="red">всі посилання</mark>. Це не зовсім те саме, що <code>Cascade.REMOVE</code>.</p>
+<p>У тебе може бути ситуація, коли кілька батьківських сутностей посилаються на одну дочірню. Тоді вигідно, щоб вона видалялася не разом із видаленням батьківської сутності, а лише якщо всі посилання на неї обнуляться.</p>
+<p>Припустимо, у тебе є клас:</p>
 <pre class='line-numbers'><code>
 <span class="text-brown">@Entity
 @Table(name</span>=<span class="text-green">"user"</span><span class="text-brown">)</span>
@@ -127,11 +127,11 @@ EmployeeTask <span class="text-user">task</span> = <span class="text-viola">dire
 <span class="text-brown">session</span>.<span class="text-red">flush</span>();
 </code></pre>
 </p>
-<p>Об'єкт EmployeeTask буде видалено, оскільки на нього не залишилося посилань. Батьківський об'єкт при цьому ніхто не видаляв.</p>
-<h2>6.6 Параметр fetch</h2>
+<p>Об'єкт EmployeeTask буде видалено, оскільки на нього не залишилося посилань. Водночас батьківський об'єкт ніхто не видаляв.</p>
+<h2>6. Параметр fetch</h2>
 <p>Параметр fetch дозволяє керувати режимами завантаження залежних об'єктів. Зазвичай він набуває одного з двох значень:</p>
 <ul>
 <li><code>FetchType.LAZY</code></li>
 <li><code>FetchType.EAGER</code></li>
 </ul>
-<p>Це дуже цікава тема з різним підводним камінням, так що краще я розповім про це в окремій лекції.</p>
+<p>Це дуже цікава тема з різними підводними каменями, тож краще я розповім про це в окремій лекції.</p>

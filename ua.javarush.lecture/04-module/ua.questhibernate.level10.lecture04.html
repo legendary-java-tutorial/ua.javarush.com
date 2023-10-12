@@ -4,20 +4,20 @@
 Сортування результатів.
 Функції у HQL.
 <p>----------------------------------------</p>
-<h2>Робота зі сторінками: LIMIT та OFFSET</h2>
+<h2>1. Робота зі сторінками: LIMIT та OFFSET</h2>
 
-<p>Дуже часто дані з бази даних витягуються сторінками. Тому що саме так зручно працювати із великими списками. Спочатку запитаємо рядки з 1 до 20, потім з 21 до 40 і так далі. </p>
+<p>Дуже часто інформація з бази даних витягується сторінками. Тому що саме так зручно працювати із великими списками. Спочатку зробимо запит на рядки з 1 до 20, потім з 21 до 40 і так далі. </p>
 
-<p>Це настільки поширена ситуація, що в SQL з'явилися спеціальні оператори для цього LIMIT та OFFSET.</p>
+<p>Це настільки поширена ситуація, що в SQL з'явилися спеціальні оператори для цього — LIMIT та OFFSET.</p>
 
 <p>Аналоги цих операторів є і в Hibernate. Тільки їх одразу вирішили зробити у вигляді окремих методів:</p>
 
 <ul>
-<li><span class="code text-orange">setFirstResult()</span> – аналог <strong>OFFSET</strong>.</li>
-<li><span class="code text-orange">setMaxResults()</span> – аналог <strong>LIMIT</strong>.</li>
+<li><span class="code text-orange">setFirstResult()</span> — аналог <strong>OFFSET</strong>.</li>
+<li><span class="code text-orange">setMaxResults()</span> — аналог <strong>LIMIT</strong>.</li>
 </ul>
 
-<p>Писати запити з цих методів дуже просто. Давай напишемо запит, де попросимо повернути 20 завдань, починаючи з 41. Ось як це виглядатиме:</p>
+<p>Писати запити з цими методами дуже просто. Давай напишемо запит, де попросимо повернути 20 завдань, починаючи з 41. Ось як це виглядатиме:</p>
          
 <pre class='language-java line-numbers'><code>
            Query&lt;EmployeeTask> query = session.createQuery( "from EmployeeTask", EmployeeTask.class);
@@ -26,9 +26,9 @@
            List&lt;EmployeeTask> resultLIst = query.list();
 </code></pre>
  
-<h2>Сортування результатів</h2>
+<h2>2. Сортування результатів</h2>
 
-<p>Як отримувати частину рядків результату запиту, ми розібралися. Наступне питання – сортування.</p>
+<p>Як отримувати частину рядків результату запиту, ми розібралися. Наступне питання — сортування.</p>
 
 <p>Сортування в Hibernate пишеться прямо в HQL-запиті і виглядає загалом очікувано: </p>
  
@@ -41,7 +41,7 @@
  
     <div class="lesson-example lesson-example-center">
     <pre class="lecture-code lecture-code--present language-java"><code>
-<span class="text-red">from</span> Employee <span class="text-red">відповідь</span> joinDate <span class="text-red">desc</span></ code></pre>
+<span class="text-red">from</span> Employee <span class="text-red">відповідь</span> joinDate <span class="text-red">desc</span></code></pre>
     </div>
 
 <p>Так само, як і в SQL, ти можеш сортувати за кількома полями:</p>
@@ -51,7 +51,7 @@
 <span class="text-red">from</span> Employee <span class="text-red">відповідь</span> joinDate <span class="text-red">desc</span>, name <span class="text-red">asc</span></code></pre>
     </div>
  
-<p>Крім того, поле для сортування можна передати як параметр:</p>
+<p>До того ж, поле для сортування можна передати як параметр:</p>
          
 <pre class='language-java line-numbers'><code>
            String hql = "з EmployeeTask where employee.name = :username order by :ord";
@@ -62,7 +62,7 @@
            List&lt;EmployeeTask> resultLIst = query.list();
 </code></pre>
  
-<h2>Функції в HQL</h2>
+<h2>3. Функції в HQL</h2>
 
 <p>Так само, як і в SQL у HQL, можна використовувати різні функції.</p>
 
@@ -80,7 +80,7 @@
 </tr>
 <tr>
 <td><span class="code text-orange">sum()</span></td>
-<td>Вважає суму значень</td>
+<td>Рахує суму значень</td>
 </tr>
 <tr>
 <td><span class="code text-orange">min()</span></td>
@@ -97,11 +97,11 @@
 </tbody>
 </table>
 
-<p>Як ти, сподіваюся, пам'ятаєш, агрегатні функції – це ті, які можна використовувати разом із group by. Group By працює так само, як у SQL, тому повторюватися не будемо.</p>
+<p>Як ти, сподіваюся, пам'ятаєш, агрегатні функції — це ті, які можна використовувати разом із group by. Group By працює так само, як у SQL, тому повторюватися не будемо.</p>
 
-<p>Ну і, звичайно, <strong>звичайні функції</strong>. Зі звичайними функціями все набагато простіше – їх виконує SQL-сервер, Hibernate'у потрібно лише правильно згенерувати запит з їх використанням.</p>
+<p>Ну і, звісно, <strong>звичайні функції</strong>. Зі звичайними функціями все набагато простіше — їх виконує SQL-сервер, Hibernate потрібно лише правильно згенерувати запит з їх використанням.</p>
 
-<p>Тому Hibernate підтримує всі функції, які підтримує SQL-сервер. А тип SQL-сервера задається параметром sqlDialect, коли конфігуруєш свій SessionFactory.</p>
+<p>Тому Hibernate підтримує всі функції, які підтримує SQL-сервер. А тип SQL-сервера встановлюється параметром sqlDialect, коли конфігуруєш свій SessionFactory.</p>
 
 <p>Давай знайдемо кількість завдань, призначених для користувача:</p>
          

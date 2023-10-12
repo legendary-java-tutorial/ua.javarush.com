@@ -4,60 +4,60 @@
 Методи класу Query
 Методи класу Scroll
 <p>----------------------------------------</p>
-<h2>2.1 Знайомство з класами Query</h2>
-<p>До речі, ще один важливий момент – це допоміжний клас Query. Ти міг його бачити ось у цьому прикладі:</p>
+<h2>1. Знайомство з класами Query</h2>
+<p>До речі, ще один важливий момент — це допоміжний клас Query. Ти міг його бачити ось у цьому прикладі:</p>
 <pre class='language-java line-numbers'><code>
-<span class="text-brown">public List&lt;Employee&gt; getAllEmployes()</span> {
+<span class="text-brown">public List&lt;Employee&gt; getAllEmployees()</span> {
     try (Session <span class="text-user">session</span> = <span class="text-yellow">sessionFactory</span>.openSession()) {
-            Query&lt;Employee&gt; <span class="text-viola">query</span> = <span class="text-user">session</span>.createQuery("from Employee", <span class="token keyword">Employee< /span>.class);
+            Query&lt;Employee&gt; <span class="text-viola">query</span> = <span class="text-user">session</span>.createQuery("from Employee", <span class="token keyword">Employee</span>.class);
             return <span class="text-viola">query</span>.list();
     }
 }
 </code></pre>
-<p>Насправді, Query – це інтерфейс і має кілька реалізацій на різні випадки. Але для простоти я продовжуватиму називати його класом. Це, скажімо так, клас у широкому значенні – у термінах ОВП.</p>
+<p>Насправді Query — це інтерфейс, і він має кілька реалізацій на різні випадки. Але для простоти я продовжуватиму називати його класом. Це, скажімо так, клас у широкому значенні — у термінах ОВП.</p>
 <p>Примітка. Раніше було два класи:</p>
 <ul>
 <li><strong>Query</strong> для опису запиту.</li>
 <li><strong>TypedQuery</strong> для опису запиту із заздалегідь відомим типом.</li>
 </ul>
-<p>Перший з'явився, коли Hibernate вже був, а дженериків ще не було. Потім, після виходу JDK 5, Hibernate додали ще один клас – TypedQuery, який вже підтримував типізацію результату запиту.</p>
+<p>Перший з'явився, коли Hibernate вже був, а дженериків ще не було. Потім, після виходу JDK 5, до Hibernate додали ще один клас — TypedQuery, який вже підтримував типізацію результату запиту.</p>
 <p>Але, наскільки я пам'ятаю, починаючи з 5-ї версії Hibernate залишили лише один типізований клас, і він тепер називається Query.</p>
 <p>Стандартний спосіб створення Query:</p>
 <pre class='line-numbers'><code>
 Query<span class="token keyword">&lt;Employee&gt;</span> <span class="text-viola">query</span> = <span class="text-user">session</span>. createQuery(<span class="text-green">"з Employee"</span>, <span class="token keyword">Employee</span>.class);
 </code></pre>
-<p>Об'єкти Query ти створювати навчився, а як ці запити виконати?</p>
-<p>Тут все ще простіше – ми просто викликаємо метод <strong>list()</strong> біля об'єкта Query:</p>
+<p>Об'єкти Query ти тепер вмієш створювати, а як ці запити виконати?</p>
+<p>Тут все ще простіше — ми просто викликаємо метод <strong>list()</strong> біля об'єкта Query:</p>
 <pre class='line-numbers'><code>
 Query<span class="token keyword">&lt;Employee&gt;</span> <span class="text-viola">query</span> = <span class="text-user">session</span>. createQuery(<span class="text-green">"з Employee"</span>, <span class="token keyword">Employee</span>.class);
 List<span class="token keyword">&lt;Employee&gt;</span> resultList = <span class="text-viola">query</span>.<span class="text-red">list</span >();
 </code></pre>
-<p>У методу <strong>list()</strong> є JPA-синонім, метод який робить те саме, але називається <strong>getResultList()</strong>. Ти можеш іноді зустріти його в коді, написаному іншими програмістами.</p>
+<p>У методу <strong>list()</strong> є JPA-синонім; метод, який робить те саме, але називається <strong>getResultList()</strong>. Ти можеш іноді зустріти його в коді, написаному іншими програмістами.</p>
 <p>До речі, якщо запит має на увазі, що результат буде в єдиному результаті, то для виклику запиту простіше використовувати метод <strong>uniqueResult()</strong>.</p>
 <pre class='line-numbers'><code>
 Query<span class="token keyword">&lt;Employee&gt;</span> <span class="text-viola">query</span> = <span class="text-user">session</span>. createQuery(<span class="text-green">"з Employee where id = 1"</span>, <span class="token keyword">Employee</span>.class);
 <span class="token keyword">Employee</span> result = <span class="text-viola">query</span>.<span class="text-red">uniqueResult</span>();
 </code></pre>
-<p>У методу <strong>uniqueResult()</strong> є JPA-синонім – метод <strong>singleResult()</strong>. Він з'явився для сумісності Hibernate із стандартом JPA. Робить він абсолютно те саме.</p>
-<h2>2.2 Методи класу Query</h2>
+<p>У методу <strong>uniqueResult()</strong> є JPA-синонім — метод <strong>singleResult()</strong>. Він з'явився для сумісності Hibernate зі стандартом JPA. Робить він абсолютно те саме.</p>
+<h2>2. Методи класу Query</h2>
 <p>Насправді, клас Query має дуже багато різних методів. Нижче я розповім ще про три з них.</p>
-<p>По-перше, це метод <strong>stream()</strong>. І його JPA-синонім <strong>getResultStream()</strong>.</p>
-<p>Обидва ці методи повертають потік даних замість списку. Такий підхід може бути дуже ефективним, коли тобі не потрібні всі об'єкти, отримані в результаті виконання запиту. Або є ймовірність, що будуть використані лише перші з них.</p>
+<p>По-перше, це метод <strong>stream()</strong> і його JPA-синонім <strong>getResultStream()</strong>.</p>
+<p>Обидва методи повертають потік даних замість списку. Такий підхід може бути дуже ефективним, коли тобі не потрібні всі об'єкти, отримані в результаті виконання запиту. Або є ймовірність, що будуть використовуватися лише перші з них.</p>
 <p>Приклад:</p>
 <pre class='line-numbers'><code>
 Query<span class="token keyword">&lt;Employee&gt;</span> <span class="text-viola">query</span> = <span class="text-user">session</span>. createQuery(<span class="text-green">"з Employee where id &gt; 100"</span>, <span class="token keyword">Employee</span>.class);
 Stream<span class="token keyword">&lt;Employee&gt;</span> stream = <span class="text-viola">query</span>.<span class="text-red">stream</span >();
 </code></pre>
-<p>Другий метод – це метод <strong>executeUpdate()</strong>. Ти можеш написати запит, який щось змінить у базі даних. На цей випадок потрібно, щоб Hibernate не використовував read-only транзакцію при зверненні до бази даних.</p>
+<p>Другий метод — це метод <strong>executeUpdate()</strong>. Ти можеш написати запит, який щось змінить у базі даних. На цей випадок потрібно, щоб Hibernate не використовував read-only транзакцію при зверненні до бази даних.</p>
 <p>Приклад запиту: ми вирішили підняти рівень усіх користувачів на 1.</p>
 <pre class='line-numbers'><code>
 Query<span class="token keyword">&lt;User&gt;</span> <span class="text-viola">query</span> = <span class="text-user">session</span>. createQuery(<span class="text-green">"update User set level=level+1"</span>, <span class="token keyword">User</span>.class);
 int count = <span class="text-viola">query</span>.<span class="text-red">executeUpdate</span>();
 </code></pre>
 <p>Метод <strong>executeUpdate()</strong> поверне кількість рядків, які були реально змінені.</p>
-<p>І нарешті третій метод – це <strong>scroll()</strong>. Про нього ми розповімо трохи докладніше.</p>
-<h2>2.3 Методи класу Scroll</h2>
-<p>Цей метод чимось схожий на метод <strong>stream()</strong>. Тільки він дає змогу переміщатися за списком результатів, не витягуючи результати взагалі. Тобто ти можеш виконати запит, потім проскролити його на мільйонний рядок результату та почати читати звідти дані.</p>
+<p>І нарешті третій метод — це <strong>scroll()</strong>. Про нього ми розповімо трохи докладніше.</p>
+<h2>3. Методи класу Scroll</h2>
+<p>Цей метод чимось схожий на метод <strong>stream()</strong>. Тільки він дає змогу переміщуватися списком результатів без витягування результатів взагалі. Тобто ти можеш виконати запит, потім проскролити його на мільйонний рядок результату та почати читати звідти дані.</p>
 <p>Такий просунутий ітератор.</p>
 <pre class='line-numbers'><code>
 Query<span class="token keyword">&lt;Employee&gt;</span> <span class="text-viola">query</span> = <span class="text-user">session</span>. createQuery(<span class="text-green">"з Employee where id &gt; 100"</span>, <span class="token keyword">Employee</span>.class);
@@ -109,7 +109,7 @@ ScrollableResults<span class="token keyword">&lt;Employee&gt;</span> scroll = <s
     </tr>
     </tbody>
 </table>
-<p>Допустимо, ти виконав запит і хочеш отримати останній елемент. Ось як це можна зробити:</p>
+<p>Припустимо, ти виконав запит і хочеш отримати останній елемент. Ось як це можна зробити:</p>
 <pre class='line-numbers'><code>
 Query<span class="token keyword">&lt;Employee&gt;</span> <span class="text-viola">query</span> = <span class="text-user">session</span>. createQuery(<span class="text-green">"з Employee where id &gt; 100"</span>, <span class="token keyword">Employee</span>.class);
 ScrollableResults<span class="token keyword">&lt;Employee&gt;</span> scroll = <span class="text-viola">query</span>.<span class="text-red">scroll</span >();

@@ -1,23 +1,23 @@
 LazyCollectionOption.EXTRA
 <p>----------------------------------------</p>
 Знайомимося з LazyCollectionOption.EXTRA.
-Найсильніша перевага LazyCollectionOption.EXTRA.
+Головна перевага LazyCollectionOption.EXTRA.
 N+1 Problem.
 <p>----------------------------------------</p>
-<h2>Знайомся з LazyCollectionOption.EXTRA</h2>
+<h2>1. Знайомимося з LazyCollectionOption.EXTRA</h2>
 
-<p>Але найбільший інтерес представляє значення LazyCollectionOption.EXTRA. Якщо ти вказуєш його як значення анотації <span class="text-yellow"><span class="text-bold">@LazyCollection</span></span>, то Hibernate відтягуватиме завантаження елементів колекції якомога довше.< /p>
+<p>Але найбільший інтерес являє собою значення LazyCollectionOption.EXTRA. Якщо ти вказуєш його як значення анотації <span class="text-yellow"><span class="text-bold">@LazyCollection</span></span>, то Hibernate відтягуватиме завантаження елементів колекції якомога довше.</p>
 
 <p>Якщо ти спробуєш отримати кількість елементів колекції:</p>
  
 <pre class='language-java line-numbers'><code>
 User user = session.load(User.class, 1);
 List&lt;Comment> comments = user.getComments();
-int count = commetns.size();
+int count = comments.size();
 </code></pre>
 <p>То для всього цього коду Hibernate виконає лише один запит:</p>
  
-<pre><code><strong><span class="text-red">SELECT</span> COUNT(<span class="text-green">id</span>) <span class="text-red ">FROM</span> <span class="text-orange">comment</span> <span class="text-red">WHERE</span> <span class="text-green">user_id</ span>=1;</strong>
+<pre><code><strong><span class="text-red">SELECT</span> COUNT(<span class="text-green">id</span>) <span class="text-red ">FROM</span> <span class="text-orange">comment</span> <span class="text-red">WHERE</span> <span class="text-green">user_id</span>=1;</strong>
 </code></pre>
  
 <p>Але якщо ти хочеш отримати один коментар із колекції, наприклад, номер 3:</p>
@@ -25,12 +25,12 @@ int count = commetns.size();
 <pre class='language-java line-numbers'><code>
 User user = session.load(User.class, 1);
 List&lt;Comment> comments = user.getComments();
-Comment comment = commetns.get(3);
+Comment comment = comments.get(3);
 </code></pre>
  
 <p>То виникне питання: а як Hibernate повинен дізнатися, що елемент саме третій, не завантажуючи на згадку всі елементи?</p>
 
-<p>Для вирішення цієї проблеми пропонується зробити в таблиці comment додаткову колонку, яка зберігатиме порядковий номер коментаря в колекції коментарів. А також для цього потрібна спеціальна інструкція - <span class="text-yellow"><span class="text-bold">@OrderColumn</span></span>.</p>
+<p>Для вирішення цієї проблеми пропонується зробити в таблиці comment додаткову колонку, яка зберігатиме порядковий номер коментаря в колекції коментарів. Також для цього потрібна спеціальна анотація — <span class="text-yellow"><span class="text-bold">@OrderColumn</span></span>.</p>
 
 <p>Ось як виглядатиме це рішення:</p>
 
@@ -48,11 +48,11 @@ class User {
 }
 </code></pre>
 
-<h2>Головна перевага LazyCollectionOption.EXTRA</h2>
+<h2>2. Головна перевага LazyCollectionOption.EXTRA</h2>
 
-<p>Найсильнішу перевагу LazyCollectionOption.EXTRA ми спостерігаємо, коли вказуємо її в анотації <span class="text-yellow"><span class="text-bold">@ManyToMany</span></span>. Візьмемо наш старий випадок, коли ми маємо Employee, Task, і можна призначати багато завдань на одного користувача.</p>
+<p>Найбільшу перевагу LazyCollectionOption.EXTRA ми можемо спостерігати, коли вказуємо її в анотації <span class="text-yellow"><span class="text-bold">@ManyToMany</span></span>. Візьмемо наш старий випадок, коли ми маємо Employee, Task, і можна призначати багато завдань на одного користувача.</p>
 
-<p>Наші Java-класи при цьому виглядають так:</p>
+<p>Наші Java-класи виглядають так:</p>
 
 <p><strong>Клас Employee</strong>:</p>
 
@@ -103,9 +103,9 @@ session.update(task);
 session.flush();
 </code></pre>
  
-<p>Так ось, якщо поле employees у класі Task має анотацію LazyCollectionOption.EXTRA, то колекції employees (у класу Task) та колекції task (у класу Employee) взагалі <strong>не будуть завантажені з бази жодного разу</strong>. </p>
+<p>Так ось, якщо поле employees у класі Task має анотацію LazyCollectionOption.EXTRA, колекції employees (у класу Task) та колекції task (у класу Employee) взагалі <strong>не будуть завантажені з бази жодного разу</strong>. </p>
 
-<p>При виконанні цього коду буде вставлено лише один запис до службової таблиці employee_task, яка, як ти пам'ятаєш, виглядає приблизно так:</p>
+<p>Під час виконання цього коду буде вставлено лише один запис до службової таблиці employee_task, яка, як ти пам'ятаєш, виглядає приблизно так:</p>
 
 <strong>Таблиця employee_task</strong>:
 
@@ -150,13 +150,13 @@ session.flush();
 </tbody>
 </table>
  
-<p>Зеленим кольором виділено доданий рядок. Щоб додати цей рядок, не потрібно завантажувати колекції з бази - Hibernate обійдеться без цього. Це саме той випадок, коли LazyCollectionOption.EXTRA дуже прискорює роботу з базою.</p>
+<p>Зеленим кольором виділено доданий рядок. Щоб додати цей рядок, не потрібно завантажувати колекції з бази — Hibernate обійдеться без цього. Це саме той випадок, коли LazyCollectionOption.EXTRA дуже прискорює роботу з базою.</p>
 
-<h2>N+1 Problem</h2>
+<h2>3. N+1 Problem</h2>
 
-<p>Але, звичайно, має цей режим і зворотний бік. Так, анотація LazyCollectionOption.EXTRA породжує проблему <strong>N+1 Problem</strong>.</p>
+<p>Але, звісно, має цей режим і зворотний бік. Так, анотація LazyCollectionOption.EXTRA породжує проблему <strong>N+1 Problem</strong>.</p>
 
-<p>Якщо ти вирішиш пройтися по всіх коментарях свого користувача:</p>
+<p>Якщо ти вирішиш пройтися всіма коментарями свого користувача:</p>
  
 <pre class='language-java line-numbers'><code>
 User user = session.load(User.class, 1);
@@ -166,6 +166,6 @@ for (Comment comment : comments) {
 }
 </code></pre>
  
-<p>Те Hibernate буде виконувати за окремим запитом для кожного об'єкта Comment. А також ще один додатковий запит, щоб отримати кількість усіх коментарів. Це може суттєво уповільнити роботу коду.</p>
+<p>То Hibernate буде виконувати за окремим запитом для кожного об'єкта Comment. А також ще один додатковий запит, щоб отримати кількість усіх коментарів. Це може суттєво уповільнити роботу коду.</p>
 
-<p>Якщо у твого користувача 1000 коментарів, то для виконання цього коду Hibernate зробить 1001 запит до бази, хоча міг би обійтися й одним. Якби знав, що тобі знадобляться всі об'єкти даного класу.</p>
+<p>Якщо у твого користувача 1000 коментарів, то для виконання цього коду Hibernate зробить 1001 запит до бази, хоча міг би обійтися й одним. Якби знав, що тобі знадобляться всі об'єкти цього класу.</p>

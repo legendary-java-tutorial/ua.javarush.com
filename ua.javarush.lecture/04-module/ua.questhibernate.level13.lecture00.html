@@ -2,22 +2,22 @@
 <p>----------------------------------------</p>
 Список колекцій.
 Допоміжна таблиця.
-Колекція набір.
+Колекція Set.
 Колекція List.
 Колекція Map.
 <p>----------------------------------------</p>
-<h2>Список колекцій</h2>
+<h2>1. Список колекцій</h2>
 
-Що ж, ти познайомився з тим, як мапити прості типи. Тепер настав час перейти до питань цікавіше – як мапити колекції об'єктів.</p>
+Що ж, ми познайомилися з тим, як мапити прості типи. Тепер настав час перейти до питань цікавіше — як мапити колекції об'єктів.</p>
 
 <p>А об'єкти у нас можуть бути у 5 групах:</p>
 
 <ul>
-<li><strong>Array</strong> – масив об'єктів</li>
-<li><strong>List</strong> – список об'єктів</li>
-<li><strong>Set</strong> – безліч об'єктів</li>
-<li><strong>Map</strong> – словник об'єктів</li>
-<li><strong>Collection</strong> – колекція об'єктів</li>
+<li><strong>Array</strong> — масив об'єктів</li>
+<li><strong>List</strong> — список об'єктів</li>
+<li><strong>Set</strong> — множина об'єктів</li>
+<li><strong>Map</strong> — словник об'єктів</li>
+<li><strong>Collection</strong> — колекція об'єктів</li>
 
 </ul><p>І приклад класу з полем-колекцією:</p>
 
@@ -34,9 +34,9 @@ class User {
 }
 </code></pre>
 
-<p>Так що ж це за чарівна анотація така, яка дозволить нам зберігати не одне поле, а багато значень?</p>
+<p>То що ж це за чарівна анотація така, яка дозволить нам зберігати не одне поле, а багато значень?</p>
 
-<p>Ця інструкція називається <span class="text-yellow"><span class="text-bold">@ElementCollection</span></span>. Приклад:</p>
+<p>Ця анотація називається <span class="text-yellow"><span class="text-bold">@ElementCollection</span></span>. Приклад:</p>
 
 <pre class='language-java line-numbers'><code>
 @Entity
@@ -53,27 +53,27 @@ class User {
 
 <p>Пишеться вона дуже просто, а ось працює нетривіально.</p>
 
-<h2>Допоміжна таблиця</h2>
+<h2>2. Допоміжна таблиця</h2>
 
 <p>Всі поля Entity-класу, які містять багато елементів і позначаються за допомогою анотації <span class="text-yellow"><span class="text-bold">@ElementCollection</span></span> містяться в базі даних у спеціальній допоміжній таблиці. Що, власне, логічно.</p>
 
-<p>Ця таблиця може містити дані у двох видах:</p>
+<p>Ця таблиця може містити дані у двох форматах:</p>
 
 <ul>
 <li><strong>Упорядковані</strong> (List, Map) містять три колонки:
 <ul>
-<li><strong>Key Column</strong> (Foreign Key) – посилання на ID об'єкта-батька.</li>
-<li><strong>Index Column</strong> – позиція/індекс у колекції.</li>
-<li><strong>Element Column</strong> – значення.</li>
+<li><strong>Key Column</strong> (Foreign Key) — посилання на ID об'єкта-батька.</li>
+<li><strong>Index Column</strong> — позиція/індекс у колекції.</li>
+<li><strong>Element Column</strong> — значення.</li>
 </ul></li>
 <li><strong>Неупорядковані</strong> (Set) містять дві колонки:
 <ul>
-<li><strong>Key Column</strong> (Foreign Key) – посилання на ID об'єкта-батька.</li>
-<li><strong>Element Column</strong> – значення.</li>
+<li><strong>Key Column</strong> (Foreign Key) — посилання на ID об'єкта-батька.</li>
+<li><strong>Element Column</strong> — значення.</li>
 </ul></li>
 </ul>
 
-<p>Також ти можеш задати ім'я цієї таблиці явно за допомогою анотації:</p>
+<p>Також ти можеш зазначити ім'я цієї таблиці явно за допомогою анотації:</p>
  
     <div class="lesson-example lesson-example-center">
     <pre class="lecture-code lecture-code--present language-java"><code>
@@ -98,9 +98,9 @@ class User {
 
 <p><strong>Важливо!</strong> Якщо анотація <span class="text-yellow"><span class="text-bold">@CollectionTable</span></span> не вказана, то Hibernate сам побудує ім'я таблиці на основі імені класу та імені поля: клас <span class="code"><span class="text-green">User</span></span> та поле <mark>messages</mark> дадуть ім'я таблиці "User_messages".</p>
  
-<h2>Колекція Set</h2>
+<h2>3. Колекція Set</h2>
 
-<p>Але давай не віддаватимемо на відкуп Hibernate створення допоміжної таблиці та створимо її самі. Спочатку нам потрібно створити таблицю із двома колонками:</p>
+<p>Але давай не віддаватимемо на відкуп Hibernate створення допоміжної таблиці та зробимо її самі. Спочатку нам потрібно створити таблицю із двома колонками:</p>
 
 <pre class='language-java line-numbers'><code>
 CREATE TABLE user_message {
@@ -109,7 +109,7 @@ CREATE TABLE user_message {
 };
 </code></pre>
 
-<p>Зверніть увагу, що ця таблиця не має своєї id-колонки. Це і є основною ознакою допоміжних таблиць. З іншими видами допоміжних таблиць ти познайомишся трохи згодом.</p>
+<p>Зверни увагу, що ця таблиця не має своєї id-колонки. Це і є основною ознакою допоміжних таблиць. З іншими видами допоміжних таблиць ти познайомишся трохи згодом.</p>
 
 <p>Тепер потрібно замапитти цю таблицю на наше поле <mark>messages</mark> у класі <span class="code"><span class="text-green">User</span></span>. Виглядатиме ця справа так:</p>
 
@@ -130,11 +130,11 @@ class User {
 
 <p>Тут варто звернути увагу на дві речі.</p>
 
-<p>По-перше, колонка message, вказана за допомогою анотації <span class="text-yellow"><span class="text-bold">@Column(name = "message")</span></span > знаходиться в допоміжній таблиці user_message, а не в таблиці user.</p>
+<p>По-перше, колонка message, вказана за допомогою анотації <span class="text-yellow"><span class="text-bold">@Column(name = "message")</span></span> знаходиться в допоміжній таблиці user_message, а не в таблиці user.</p>
 
-<p>По-друге, в анотації <span class="text-yellow"><span class="text-bold">@JoinColumn(name = "user_id")</span></span> ми вказали ім'я колонки user_id, який посилається на id таблиці user. Це, щоб Hibernate знав, як їх правильно об'єднувати.</p>
+<p>По-друге, в анотації <span class="text-yellow"><span class="text-bold">@JoinColumn(name = "user_id")</span></span> ми вказали ім'я колонки user_id, який посилається на id таблиці user. Це для того, щоб Hibernate знав, як їх правильно об'єднувати.</p>
 
-<h2>Колекція List</h2>
+<h2>4. Колекція List</h2>
 
 <p>Якщо ти хочеш зберігати у допоміжній таблиці впорядковані елементи списку чи масиву, то тобі знадобиться таблиця з трьома колонками:</p>
 
@@ -146,7 +146,7 @@ CREATE TABLE user_message {
 };
 </code></pre>
 
-<p>Якщо не подобається ім'я колонки "index", або ти не можеш його змінити, то можна вказати інше ім'я під час мапінгу. Для цього потрібно використовувати інструкцію <span class="text-yellow"><span class="text-bold">@Index</span></span>.</p>
+<p>Якщо не подобається ім'я колонки "index", або ти не можеш його змінити, можна вказати інше ім'я під час мапінгу. Для цього потрібно використовувати анотацію <span class="text-yellow"><span class="text-bold">@Index</span></span>.</p>
 
 <p>Приклад:</p>
 
@@ -167,7 +167,7 @@ class User {
 }
 </code></pre>
 
-<h2>Колекція Map</h2>
+<h2>5. Колекція Map</h2>
 
 <p>І нарешті, ти хочеш зберігати не просто колекцію, а HashMap, і тобі для нього потрібні дві колонки у допоміжній таблиці:</p>
 
@@ -179,7 +179,7 @@ CREATE TABLE user_message {
 };
 </code></pre>
 
-<p>Для того щоб вказати ключ для Map тобі знадобиться інструкція <span class="text-yellow"><span class="text-bold">@MapKeyColumn</span></span>.</p>
+<p>Щоб вказати ключ для Map тобі знадобиться анотація <span class="text-yellow"><span class="text-bold">@MapKeyColumn</span></span>.</p>
 
 <p>Приклад:</p>
 
@@ -199,4 +199,4 @@ class User {
 }
 </code></pre>
 
-<p>Детальнішу інформацію ти зможеш знайти у офіційній документації</a>.</p>
+<p>Детальнішу інформацію ти зможеш знайти <a href="https://docs.jboss.org/hibernate/orm/6.0/userguide/html_single/Hibernate_User_Guide.html#collections-array" target="_blank">в офіційній документації</a>.</p>

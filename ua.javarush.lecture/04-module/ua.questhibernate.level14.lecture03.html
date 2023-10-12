@@ -3,9 +3,9 @@ JOIN FETCH
 Опис проблеми.
 Обмеження JOIN FETCH.
 <p>----------------------------------------</p>
-<h2>Опис проблеми</h2>
+<h2>1. Опис проблеми</h2>
 
-<p>Як ми вже сказали вище, анотація <span class="text-yellow"><span class="text-bold">LazyCollectionOption.EXTRA</span></span> має проблему — вона виконує за окремим запитом до бази кожного об'єкта. Потрібно якось пояснити Hibernate, що ми хочемо, щоб він одразу завантажив усі дочірні об'єкти для батьківських об'єктів.</p>
+<p>Як ми вже сказали вище, анотація <span class="text-yellow"><span class="text-bold">LazyCollectionOption.EXTRA</span></span> має проблему: вона виконує за окремим запитом до бази кожного об'єкта. Потрібно якось пояснити Hibernate, що ми хочемо, щоб він одразу завантажив усі дочірні об'єкти для батьківських об'єктів.</p>
 
 <p>Розробники Hibernate запропонували вирішення цієї проблеми — оператор <span class="text-viola"><strong>join fetch</strong></span> у HQL.</p>
 
@@ -21,7 +21,7 @@ JOIN FETCH
  
 <pre><code><strong><span class="text-red">select</span> task <span class="text-red">from</span> Task t <span class="text-red ">order by</span> t.deadline</strong></code></pre>
  
-<p>Поки що все зрозуміло. Але поле <mark>employee</mark> класу <span class="code"><span class="text-green">Task</span></span> міститиме колекцію співробітників Employee, яка позначена інструкцією <span class ="text-yellow"><span class="text-bold">EXTRA</span></span>. І об'єкти цієї колекції не будуть завантажені.</p>
+<p>Поки що все зрозуміло. Але поле <mark>employee</mark> класу <span class="code"><span class="text-green">Task</span></span> міститиме колекцію співробітників Employee, яка позначена анотацією <span class ="text-yellow"><span class="text-bold">EXTRA</span></span>. І об'єкти цієї колекції не будуть завантажені.</p>
 
 <h4>Варіант 2</h4>
 
@@ -29,9 +29,9 @@ JOIN FETCH
  
 <pre><code><strong><span class="text-red">select</span> task <span class="text-red">from</span> Task t <span class="text-red ">join fetch</span> t.employee <span class="text-red">Order by</span> t.deadline</strong></code></pre>
  
-<p>За допомогою ми явно пов'язуємо сутності Task та Employee у нашому запиті. Hibernate про це і так знає, тому що ми використовуємо інструкції <span class="text-yellow"><span class="text-bold">@ManyToMany</span></span> для цих полів.</p>
+<p>За допомогою цього ми явно пов'язуємо сутності Task та Employee у нашому запиті. Hibernate про це і так знає, тому що ми використовуємо анотації <span class="text-yellow"><span class="text-bold">@ManyToMany</span></span> для цих полів.</p>
 
-<p>Але нам потрібно <strong>оператор <span class="text-viola">join</span></strong>, щоб доповнити його <strong>оператором <span class="text-viola">fetch</ span></strong> та отримати <strong><span class="text-viola">join fetch</span></strong>. Саме в такий спосіб ми вказуємо Hibernate, що об'єкти в колекціях Task.employee потрібно завантажити з бази під час виконання нашого запиту.</p>
+<p>Але нам потрібен <strong>оператор <span class="text-viola">join</span></strong>, щоб доповнити його <strong>оператором <span class="text-viola">fetch</span></strong> та отримати <strong><span class="text-viola">join fetch</span></strong>. Саме в такий спосіб ми вказуємо Hibernate, що об'єкти в колекціях Task.employee потрібно завантажити з бази під час виконання нашого запиту.</p>
 
 <h4>Варіант 3</h4>
 
@@ -49,7 +49,7 @@ JOIN FETCH
  
 <pre><code><em><span class="text-red">select distinct</span> task <span class="text-red">from</span> Task t <span class="text- red">Left Join Fetch</span> t.employee <span class="text-red">Order by</span> t.deadline</em></code></pre>
   
-<p>Саме так у 4 кроки ми дійшли того запиту, з якого почали. Ну а Java-код виглядатиме цілком очікувано:</p>
+<p>Саме так у 4 кроки ми дійшли до того запиту, з якого почали. Ну а Java-код виглядатиме цілком очікувано:</p>
  
 <pre class='language-java line-numbers'><code>
            String hql = "select distinct task from Task t left join fetch t.employee order by t.deadline";
@@ -57,13 +57,13 @@ JOIN FETCH
            return query.list();
 </code></pre>
  
-<h2>Обмеження JOIN FETCH</h2>
+<h2>2. Обмеження JOIN FETCH</h2>
 
-<p>Ніхто не ідеальний. Оператор JOIN FETCH також. Він має чимало обмежень. І перше з них - це використання методів <span class="code text-orange">setMaxResults()</span> і <span class="code text-orange">setFirstResult()</span>.</p>
+<p>Ніхто не ідеальний. Оператор JOIN FETCH також. Він має чимало обмежень. І перше з них — це використання методів <span class="code text-orange">setMaxResults()</span> і <span class="code text-orange">setFirstResult()</span>.</p>
 
-<p>Для оператора JOIN FETCH наш Hibernate згенерує дуже складний запит, у якому поєднати в одну три таблиці: employee, task та employee_task. Фактично це запит не співробітників чи завдань, а всіх відомих пар співробітник-завдання.</p>
+<p>Для оператора JOIN FETCH наш Hibernate згенерує дуже складний запит, у якому треба об'єднати в одну три таблиці: employee, task та employee_task. Фактично це запит не співробітників чи завдань, а всіх відомих пар співробітник-завдання.</p>
 
-<p>І SQL може застосувати свої оператори LIMIT та OFFSET саме до цього запиту пар співробітник-завдання. У той же час з HQL запиту явно випливає, що ми хочемо отримати саме завдання (Task), і якщо ми переділимо свої параметри FirstResult та MaxResult, то вони мають належати саме до об'єктів Task.</p>
+<p>І SQL може застосувати свої оператори LIMIT та OFFSET саме до цього запиту пар співробітник-завдання. У той же час з HQL запиту явно випливає, що ми хочемо отримати саме завдання (Task), і якщо ми переробимо свої параметри FirstResult та MaxResult, то вони мають належати саме до об'єктів Task.</p>
 
 <p>Якщо ти напишеш такий код:</p>
  
@@ -75,17 +75,17 @@ JOIN FETCH
            return query.list();
 </code></pre>
  
-<p>Те Hibernate не зможе правильно перетворити FirstResult і MaxResult на параметри OFFSET і LIMIT у SQL-запиту.</p>
+<p>То Hibernate не зможе правильно перетворити FirstResult і MaxResult на параметри OFFSET і LIMIT у SQL-запиту.</p>
 
 <p>Замість цього він зробить три речі:</p>
 
 <ul>
-<li>SQL-запит вибере взагалі всі дані з таблиці та поверне їх Hibernate</li>
-<li>Hibernate сам у себе в пам'яті відбере потрібні записи та поверне їх тобі</li>
+<li>SQL-запит обере взагалі всі дані з таблиці та поверне їх Hibernate</li>
+<li>Hibernate у себе в пам'яті відбере потрібні записи та поверне їх тобі</li>
 <li>Hibernate видасть попередження</li>
 </ul>
 
-<p>Попередження буде таким типом:</p>
+<p>Попередження буде виглядати якось так:</p>
  
 <pre><code>WARN [org.hibernate.hql.internal.ast.QueryTranslatorImpl] HHH000104:
 <span class="text-red">firstResult/maxResults specified with collection fetch; applying in memory!</span></code></pre>

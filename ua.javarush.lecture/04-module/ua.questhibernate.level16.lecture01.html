@@ -1,26 +1,26 @@
 Criteria API, частина 2
 <p>----------------------------------------</p>
-Угруповання та агрегуючі функції.
+Групування та агрегуючі функції.
 CriteriaUpdate.
 CriteriaDelete.
 Користь від Criteria API.
 <p>----------------------------------------</p>
-<h2>Угруповання та функції агрегування</h2>
+<h2>1. Групування та функції агрегування</h2>
 
-<p>Як робити прості запити на Criteria API, ти вже розібрався. Давай подивимося, як робити складніші запити.</p>
+<p>Як робити прості запити на Criteria API ми вже розібралися. Давай подивимося, як робити складніші запити.</p>
 
 <p>Наприклад, ми хочемо написати запит, щоб визначити кількість співробітників у компанії. Ось як він виглядатиме на HQL:</p>
  
 <pre><code><strong><span class="text-red">select count</span>(*) <span class="text-red">from</span> <span class="text- orange">Employee</span></strong></code></pre>
  
-<p>А ось так на Criteria API:</p>
+<p>А ось так — на Criteria API:</p>
  
 <pre class='language-java line-numbers'><code>
 CriteriaQuery&lt;Long> critQuery = builder.createQuery(Long.class);
 critQuery.select(builder.count(critQuery.from(Employee.class)));
 </code></pre>
  
-<p>Повністю весь Java-код буде виглядати так:</p>
+<p>Повністю Java-код буде виглядати так:</p>
 
 <pre class='language-java line-numbers'><code>
 CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -41,7 +41,7 @@ Query&lt;Long> query = session.createQuery(hqlQuery);
 Long count = query.getSingleResult();
 </code></pre>
  
-<p>Тепер давай спробуємо порахувати середню зарплату в компанії. Запит на HQL виглядатиме так:</p>
+<p>Тепер давай спробуємо порахувати середню зарплатню в компанії. Запит на HQL виглядатиме так:</p>
  
 <pre><code><strong><span class="text-red">select avg</span>(<span class="text-green">salary</span>) <span class="text-red ">from</span> <span class="text-orange">Employee</span></strong></code></pre>
  
@@ -64,13 +64,13 @@ Query&lt;Double> query = session.createQuery(critQuery);
 Double avgSalary = query.getSingleResult();
 </code></pre>
  
-<h2>CriteriaUpdate</h2>
+<h2>2. CriteriaUpdate</h2>
 
-<p>Змінювати таблицю так само легко, як і отримувати дані. Для цього у CriteriaBuilder є спеціальний метод - <span class="code text-orange">createCriteriaUpdate()</span>, який створює об'єкт <mark class="green">CriteriaUpdate&lt;T></mark>, що оновлює сутності в базі.</p>
+<p>Змінювати таблицю так само легко, як і отримувати дані. Для цього у CriteriaBuilder є спеціальний метод — <span class="code text-orange">createCriteriaUpdate()</span>, який створює об'єкт <mark class="green">CriteriaUpdate&lt;T></mark>, що оновлює сутності в базі.</p>
 
-<p>Давай підвищимо зарплату співробітникам, які отримують менше ніж 10 тисяч. Ось як виглядатиме цей запит на HQL:</p>
+<p>Давай підвищимо зарплату співробітникам, які отримують менше 10 тисяч. Ось як виглядатиме цей запит на HQL:</p>
  
-<pre><code><strong><span class="text-red">update</span> <span class="text-orange">Employee</span> <span class="text-red">set </span> <span class="text-green">salary</span> = <span class="text-green">salary</span>+<span class="text-user">20000</span > <span class="text-red">where</span> <span class="text-green">salary</span>&lt;=<span class="text-neon">10000</span>< /strong></code></pre>
+<pre><code><strong><span class="text-red">update</span> <span class="text-orange">Employee</span> <span class="text-red">set </span> <span class="text-green">salary</span> = <span class="text-green">salary</span>+<span class="text-user">20000</span > <span class="text-red">where</span> <span class="text-green">salary</span>&lt;=<span class="text-neon">10000</span></strong></code></pre>
  
 <p>А ось так він виглядатиме на Criteria API:</p>
  
@@ -85,9 +85,9 @@ session.createQuery(criteriaUpdate).executeUpdate();
 transaction.commit();
 </code></pre>
  
-<h2>CriteriaDelete</h2>
+<h2>3. CriteriaDelete</h2>
 
-<p>А видаляти записи набагато простіше, ніж змінювати. Для цього є спеціальний метод <span class="code text-orange">createCriteriaDelete()</span>, який створює об'єкт <mark class="green">CriteriaDelete&lt;T></mark>.</p>
+<p>Видаляти записи набагато простіше, ніж змінювати. Для цього є спеціальний метод <span class="code text-orange">createCriteriaDelete()</span>, який створює об'єкт <mark class="green">CriteriaDelete&lt;T></mark>.</p>
 
 <p>Давай скоротимо всіх співробітників, які не мають жодної цінності: їхня зарплата менша за 10 тисяч. Ось як виглядатиме цей запит на HQL:</p>
  
@@ -105,16 +105,16 @@ session.createQuery(criteriaDelete).executeUpdate();
 transaction.commit();
 </code></pre>
  
-<h2>Корисність від Criteria API</h2>
+<h2>4. Користь від Criteria API</h2>
 
-<p>Так у чому користь від Criteria API? Запити громіздкі, на HQL точно буде компактніше.</p>
+<p>Так у чому ж користь від Criteria API? Запити громіздкі, на HQL точно буде компактніше.</p>
 
-<p>По-перше, запити на HQL не такі короткі, якщо тобі потрібно передавати в них параметри. Порівняй:</p>
+<p>По-перше, запити на HQL не такі короткі, якщо тобі потрібно передавати до них параметри. Порівняй:</p>
 
 <table>
 <tbody>
 <tr>
-<th><strong>Вважаємо кількість співробітників із зарплатою меншою за 10 тисяч</strong></th>
+<th><strong>Рахуємо кількість співробітників із зарплатою меншою за 10 тисяч</strong></th>
 </tr>
 <tr>
 <th>HQL</th>
@@ -122,8 +122,8 @@ transaction.commit();
 <tr>
 <td><pre><code><strong>String <span class="text-red">hqlQuery</span> = <span class="text-green">"from Employee where salary &lt; :sal"< /span>;
 Query&lt;<span class="text-orange">Employee</span>> <span class="text-viola">query</span> = <span class="text-user">session</span>. createQuery(<span class="text-red">hqlQuery</span>);
-<span class="text-viola">query</span>.setParametr(<span class="text-green">"sal"</span>, <span class="text-neon">10000</span >);
-List&lt;<span class="text-orange">Employee</span>> results = <span class="text-viola">query</span>.getResultList();</strong></code></ pre></td>
+<span class="text-viola">query</span>.setParameter(<span class="text-green">"sal"</span>, <span class="text-neon">10000</span >);
+List&lt;<span class="text-orange">Employee</span>> results = <span class="text-viola">query</span>.getResultList();</strong></code></pre></td>
 </tr>
 <tr>
 <th>Criteria API</th>
@@ -140,31 +140,31 @@ List&lt;Employee> results = query.getResultList();</strong>
 </tbody>
 </table>
 
-<p>По-друге, часто буває ситуація, коли запит потрібно сконструювати динамічно. Наприклад, у тебе на web-сторінці є фільтрація співробітників, квартир та чого завгодно. І якщо користувачеві якийсь параметр не важливий, він його просто не вказує. Відповідно, на сервер замість нього передається null.</p>
+<p>По-друге, часто буває ситуація, коли запит потрібно сконструювати динамічно. Наприклад, у тебе на вебсторінці є фільтрація співробітників, квартир та чого завгодно. І якщо користувачеві якийсь параметр не важливий, він його просто не вказує. Відповідно, на сервер замість нього передається null.</p>
 
 <p>Ось тобі завдання: відібрати співробітників із певною професією (occupation), зарплатою (salary) та роком найму (YEAR (join_date)). Але якщо будь-яке значення параметра дорівнює null, то не використовувати його у фільтрі.</p>
 
 <p>Тоді запит на HQL буде виглядати приблизно так:</p>
  
 <pre class='language-java line-numbers'><code>
-від Employee
+from Employee
 where (occupation = :ocp)
    and (salary =: sal)
    and (YEAR(join_date) = :jny)
 </code></pre>
  
-<p>Але працювати правильно він не буде, тому що ми хочемо, щоб якщо параметр "jny" був null, то запит виглядав би так:</p>
+<p>Але працювати правильно він не буде, оскільки ми хочемо, щоб запит виглядав таким чином, якщо параметр "jny" — null:</p>
  
 <pre class='language-java line-numbers'><code>
-від Employee
+from Employee
 where (occupation = :ocp)
    and (salary =: sal)
 </code></pre>
  
-<p>Можна спробувати переписати запит з перевіркою параметра на null, тоді ми отримаємо щось на кшталт цього:</p>
+<p>Можна спробувати переписати запит з перевіркою параметра на null. Тоді ми отримаємо щось на кшталт цього:</p>
  
 <pre class='language-java line-numbers'><code>
-від Employee
+from Employee
 where (occupation = :ocp or :ocp is null)
    and (salary = :sal or :sal is null)
    and (YEAR(join_date)= :jny or :jny is null)
@@ -175,7 +175,7 @@ where (occupation = :ocp or :ocp is null)
 <p>Адже фільтр можна ускладнити ще сильніше. Як щодо пошуку користувачів, які мають завдання зі словом "купити"? Чи користувачів, які мають прострочені завдання?</p>
  
 <pre class='language-java line-numbers'><code>
-від Employee
+from Employee
 where (occupation = :ocp)
    and (salary =: sal)
    and (YEAR(join_date) = :jny)
@@ -185,6 +185,6 @@ where (occupation = :ocp)
  
 <p>Якщо ти в такому запиті десь запишеш <strong>or is null</strong>, це не скасує join між таблицями.</p>
 
-<p>Так що на практиці, коли ти робиш будь-який складний фільтр по полях кількох таблиць, Criteria API можуть просто виручати тебе. Такі справи.</p>
+<p>Отже на практиці, коли ти робиш будь-який складний фільтр за полями кількох таблиць, Criteria API можуть виручати тебе. Такі справи.</p>
 
-<p>Докладніше можна ознайомитися в <a href="https://docs.jboss.org/hibernate/orm/6.0/userguide/html_single/Hibernate_User_Guide.html#criteria-typedquery" target="_blank">офіційної документації< /a>.</p>
+<p>Докладніше з темою можна ознайомитися в <a href="https://docs.jboss.org/hibernate/orm/6.0/userguide/html_single/Hibernate_User_Guide.html#criteria-typedquery" target="_blank">офіційній документації</a>.</p>

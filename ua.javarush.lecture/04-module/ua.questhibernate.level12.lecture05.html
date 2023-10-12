@@ -4,7 +4,7 @@
 Зберігаємо картинки прямо в базі
 XML та JSON
 <p>----------------------------------------</p>
-<h2>6.1 Зберігаємо файли на сервері</h2>
+<h2>1. Зберігаємо файли на сервері</h2>
 <p>Іноді в базі даних потрібно зберегти бінарні об'єкти. Наприклад, файли. Якщо файл великий, то розумніше зберігати його в окремій папці на диску, а в базі даних зберігати його шляхи. Приклад:</p>
 <pre><code>c:\db-files\users\12355\avatar.jpg
 </code></pre>
@@ -14,14 +14,14 @@ XML та JSON
 <p>У базі зручно зберігати відносний шлях, тому що з нього потім легко отримати URL:</p>
 <pre><code>https://storage.javarush.ru/users/12355/avatar.jpg
 </code></pre>
-<p>Ми просто приклеюємо відносний шлях до імені сервера і готові.</p>
-<h2>6.2 Зберігаємо картинки прямо в базі</h2>
-<p>Однак, якщо картинки маленькі, їх можна зберігати у базі і віддавати клієнту як набір байт. Для таких випадків SQL має спеціальний тип даних <strong>BLOB</strong> – Binary Large Object. Точніше, їх навіть два:</p>
+<p>Ми просто приклеюємо відносний шлях до імені сервера — і готово.</p>
+<h2>2. Зберігаємо картинки прямо в базі</h2>
+<p>Однак, якщо картинки маленькі, їх можна зберігати у базі і віддавати клієнту як набір байт. Для таких випадків SQL має спеціальний тип даних <strong>BLOB</strong> — Binary Large Object. Точніше, їх навіть два:</p>
 <ul>
-<li><strong>CLOB</strong> – Character Large Object,</li>
-<li><strong>BLOB</strong> – Binary Large Object.</li>
+<li><strong>CLOB</strong> — Character Large Object,</li>
+<li><strong>BLOB</strong> — Binary Large Object.</li>
 </ul>
-<p>CLOB використовується для збереження великих текстів. А BLOB для зберігання бінарних даних, таких як невеликі картинки, відео тощо.</p>
+<p>CLOB використовується для збереження великих текстів. А BLOB — для зберігання бінарних даних, таких як невеликі картинки, відео тощо.</p>
 <p>Приклад:</p>
 <pre class='language-java line-numbers'><code>
 @Entity
@@ -41,7 +41,7 @@ public class User {
 // ...
 }
 </code></pre>
-<p>Аннотація <code>@Lob</code> підказує Hibernate, що в полі зберігається <strong>Large Object</strong>. А <code>columnDefinition="BLOB"</code> вже говорить про те, як це все зберегти в базі.</p>
+<p>Анотація <code>@Lob</code> підказує Hibernate, що в полі зберігається <strong>Large Object</strong>. А <code>columnDefinition="BLOB"</code> вже говорить про те, як це все зберегти в базі.</p>
 <p>Давай напишемо приклад коду, який зберігає в базі нового користувача та його фото:</p>
 <pre class='language-java line-numbers'><code>
 byte[] <span class="text-USER">imageBuffer</span> = Files.readAllBytes(Paths.get("C:/temp/avatar.png"))
@@ -53,13 +53,13 @@ User <span class="text-brown">user</span> = new User();
  
 session.persist(<span class="text-brown">user</span>);
 </code></pre>
-<h2>6.3 XML та JSON</h2>
+<h2>3. XML та JSON</h2>
 <p>Hibernate має цікаву підтримку JSON як тип даних. Він дозволяє зберегти HashMap рядків у вигляді єдиного об'єкта JSON. Якщо СУБД вміє працювати з JSON, то це виглядає так:</p>
 <pre class='language-java line-numbers'><code>
 <span class="text-brown">@JdbcTypeCode</span>(<span class="text-red">SqlTypes.JSON</span>)
 private Map&lt;<span class="text-user">String, String</span>&gt; properties;
 </code></pre>
-<p>Hibernate бере на себе турботу, щоб об'єкт типу <code>Map&lt;String, String&gt;</code> був серіалізований у єдиний JSON-об'єкт. Також при читанні об'єкта з бази перетворює JSON-об'єкт на набір <code>Map&lt;String, String&gt;</code>.</p>
+<p>Hibernate бере на себе турботу про те, щоб об'єкт типу <code>Map&lt;String, String&gt;</code> був серіалізований до єдиний JSON-об'єкта. Також під час читання об'єкта з бази перетворює JSON-об'єкт на набір <code>Map&lt;String, String&gt;</code>.</p>
 <p>Щось схоже Hibernate може зробити і з XML:</p>
 <pre class='language-java line-numbers'><code>
 <span class="text-brown">@JdbcTypeCode</span>(<span class="text-red">SqlTypes.SQLXML</span>)

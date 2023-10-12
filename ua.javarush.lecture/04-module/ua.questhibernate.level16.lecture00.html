@@ -1,10 +1,10 @@
 Criteria API
 <p>----------------------------------------</p>
-Ознайомлення з Criteria API.
+Знайомство з Criteria API.
 Приклади роботи з Criteria API.
-Розширена робота з Criteria API.
+Просунута робота з Criteria API.
 <p>----------------------------------------</p>
-<h2>Знайомство з Criteria API</h2>
+<h2>1. Знайомство з Criteria API</h2>
 
 <p>У Hibernate є два способи написання запитів до бази:</p>
 
@@ -13,9 +13,9 @@ Criteria API
 <li><strong>Criteria API</strong></li>
 </ul>
 
-<p>З першим ти вже давно познайомився, настав час познайомитись із Criteria API. Це дуже потужний інструмент, в якийсь момент він був навіть популярнішим за HQL. Зараз він уже не такий популярний, але для деяких завдань він безумовно буде кращим рішенням, ніж HQL.</p>
+<p>З першим ми вже давно познайомилися, настав час дізнатися про Criteria API. Це дуже потужний інструмент, і в якийсь момент він був навіть популярнішим за HQL. Зараз він уже не такий популярний, але для деяких завдань він безумовно буде кращим рішенням, ніж HQL.</p>
 
-<p>У жодному разі, не можна вивчати Hibernate і не познайомитися з Criteria API. Давай напишемо невеликий приклад, а потім його розберемо. Наприклад, запитаємо всіх співробітників (Employee) із бази. Ось що в нас вийде:</p>
+<p>У жодному разі не можна вивчати Hibernate і не познайомитися з Criteria API. Давай напишемо невеликий приклад, а потім його розберемо. Скажімо, зробимо запит на всіх співробітників (Employee) із бази. Ось що в нас вийде:</p>
  
 <pre class='language-java line-numbers'><code>
 CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -37,7 +37,7 @@ Query&lt;Employee> query = session.createQuery(hqlQuery);
 List&lt;Employee> results = query.getResultList();
 </code></pre>
  
-<p>Зверніть увагу, що два останні рядки в обох прикладів практично ідентичні: ми створюємо об'єкт Query і за його допомогою отримуємо List. Це натякає на те, що інші рядки роблять щось ідентичне.</p>
+<p>Зверни увагу, що два останні рядки в обох прикладах практично ідентичні: ми створюємо об'єкт Query і за його допомогою отримуємо List. Це натякає на те, що інші рядки роблять щось ідентичне.</p>
 
 <p>Подивися на рядки 3 та 4 першого прикладу:</p>
  
@@ -60,7 +60,7 @@ critQuery.<span class="text-red">select</span>(critQuery.<span class="text-red">
  
 <p>Так, це таке хитре конструювання запиту SELECT FROM.</p>
  
-<h2>Приклади роботи з Criteria API</h2>
+<h2>2. Приклади роботи з Criteria API</h2>
 
 <p>Для кращого розуміння я просто наведу кілька прикладів.</p>
 
@@ -118,7 +118,7 @@ critQuery.select(critQuery.from(Employee.class)).where(builder.isNotNull(root.ge
 
 <p>Також за допомогою <mark class="green">CriteriaBuilder</mark> ти можеш конструювати різні умови для WHERE.</p>
 
-<h2>Просунута робота з Criteria API</h2>
+<h2>3. Просунута робота з Criteria API</h2>
 
 <p>За допомогою Criteria API можна сформулювати запит будь-якої складності. І це чудова новина. Наприклад, ти хочеш складну умову для WHERE. Ось як це можна зробити:</p>
  
@@ -129,7 +129,7 @@ Predicate testers = builder.like(root.get("occupation"), "тест%");
 critQuery.select(critQuery.from(Employee.class)).where(builder.or(greaterThan, testers));
 </code></pre>
  
-<p>Якщо ти хочеш написати AND замість OR, то тобі потрібно поміняти лише останній рядок:</p>
+<p>Якщо ти хочеш написати AND замість OR, тобі потрібно поміняти лише останній рядок:</p>
  
 <pre class='language-java line-numbers'><code>
 critQuery.select(critQuery.from(Employee.class)).where(builder.and(greaterThan, testers));
@@ -197,18 +197,18 @@ critQuery.where( builder.and(greaterThan, testers) );
 critQuery.orderBy( builder.asc(root.get("salary"), builder.desc(root.get("joinDate") )
 </code></pre>
  
-<p>Ти просто викликаєш у об'єкта <mark class="green">CrteriaQuery</mark> метод <span class="code text-orange">orderBy()</span> і передаєш у нього потрібні параметри.</p> >
+<p>Ти просто викликаєш в об'єкта <mark class="green">CriteriaQuery</mark> метод <span class="code text-orange">orderBy()</span> і передаєш у нього потрібні параметри.</p> >
 
 <p>Ось як цей же запит буде виглядати на HQL. Порівняй:</p>
  
 <pre><code><strong><span class="text-red">select</span> * <span class="text-red">from</span> <span class="text-orange"> Employee</span>
 <span class="text-red">where</span> (…) <span class="text-red">and</span> (…)
-<span class="text-red">Order by</span> <span class="text-green">'salary'</span> <span class="text-red">asc</span>, < span class="text-green">'joinDate'</span> <span class="text-red">desc</span></strong></code></pre>
+<span class="text-red">Order by</span> <span class="text-green">'salary'</span> <span class="text-red">asc</span>, <span class="text-green">'joinDate'</span> <span class="text-red">desc</span></strong></code></pre>
  
 <p>Тільки потрібно запам'ятати 3 речі:</p>
 
 <ul>
-<li>Ключові оператори типу SELECT, FROM, WHERE викликаються у об'єкта <mark class="green">CriteriaQuery</mark>.</li>
-<li>Допоміжні оператори типу AND, OR, DESC викликаються у об'єкта <mark class="green">CriteriaBuilder</mark>.</li>
+<li>Ключові оператори типу SELECT, FROM, WHERE викликаються в об'єкта <mark class="green">CriteriaQuery</mark>.</li>
+<li>Допоміжні оператори типу AND, OR, DESC викликаються в об'єкта <mark class="green">CriteriaBuilder</mark>.</li>
 <li>Імена полів беруться через <span class="code text-orange">get()</span> у об'єкта <mark class="green">Root</mark>.</li>
 </ul>

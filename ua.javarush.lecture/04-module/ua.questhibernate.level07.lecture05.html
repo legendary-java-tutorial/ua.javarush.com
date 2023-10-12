@@ -4,26 +4,26 @@
 executeUpdate().
 execute().
 <p>----------------------------------------</p>
-<h2>Знайомство з Statement </h2>
+<h2>1. Знайомство з Statement </h2>
 
-<p>Всі SQL-запити можна умовно розділити на дві групи:</p>
+<p>Усі SQL-запити можна умовно розділити на дві групи:</p>
 
 <ul>
 <li><strong>Отримання даних</strong> — до них належить оператор <span class="text-viola">SELECT</span>.</li>
-<li><strong>Зміна даних</strong> — до них належать оператори <span class="text-viola">INSERT</span>, <span class="text-viola">UPDATE</span> та < span class="text-viola">DELETE</span>.</li>
+<li><strong>Зміна даних</strong> — до них належать оператори <span class="text-viola">INSERT</span>, <span class="text-viola">UPDATE</span> та <span class="text-viola">DELETE</span>.</li>
 </ul>
 
-<p>Для першої групи використовується вже знайомий нам метод інтерфейсу <span class="text-neon"><span class="text-bold"><em>Statement</em></span></span> — < span class="code text-orange">executeQuery()</span>. У принципі для початку цього цілком достатньо. Він покриває дуже великий відсоток запитів, які доведеться використовувати на реальній роботі.</p>
+<p>Для першої групи використовується вже знайомий нам метод інтерфейсу <span class="text-neon"><span class="text-bold"><em>Statement</em></span></span> — <span class="code text-orange">executeQuery()</span>. У принципі для початку цього цілком достатньо. Він покриває дуже великий відсоток запитів, які доведеться використовувати в реальній роботі.</p>
 
-<p>Пізніше ми познайомимося з додатковими можливостями, але зараз раджу запам'ятати — якщо ти хочеш просто отримати дані з таблиці, то метод <span class="code text-orange">executeQuery()</span> в переважній більшості випадків буде найправильнішим вибором.</p>
+<p>Пізніше ми познайомимося з додатковими можливостями, але зараз раджу запам'ятати ось таке: якщо ти хочеш просто отримати дані з таблиці, то метод <span class="code text-orange">executeQuery()</span> в переважній більшості випадків буде найкращим вибором.</p>
 
-<p>Для другої групи запитів потрібно використовувати інший метод інтерфейсу Statement - <span class="code text-orange">executeUpdate()</span>. На відміну від методу <span class="code text-orange">executeQuery()</span>, який повертає ResultSet, цей метод повертає ціле число, яке говорить <span class="text-green">кілька рядків у таблиці було змінено під час виконання вашого запиту</span>.</p>
+<p>Для другої групи запитів потрібно використовувати інший метод інтерфейсу Statement — <span class="code text-orange">executeUpdate()</span>. На відміну від методу <span class="code text-orange">executeQuery()</span>, який повертає ResultSet, цей метод повертає ціле число, яке говорить, <span class="text-green">скільки рядків у таблиці було змінено під час виконання твого запиту</span>.</p>
 
-<p>Наприклад, ти можеш оператором <span class="text-viola">DELETE FROM</span> employee видалити всі рядки (тому будьте дуже обережні). У цьому випадку метод <span class="code text-orange">executeUpdate()</span> поверне кількість видалених рядків. У деяких ситуаціях знання кількості змінених рядків буває зручним для побудови алгоритмів роботи з даними.</p>
+<p>Наприклад, ти можеш оператором <span class="text-viola">DELETE FROM</span> employee видалити всі рядки (тому будь обережніше). У цьому випадку метод <span class="code text-orange">executeUpdate()</span> поверне кількість видалених рядків. У деяких ситуаціях знання кількості змінених рядків буває зручним для побудови алгоритмів роботи з даними.</p>
 
-<p>У принципі із цим запитань можна закінчити — головне ми вже побачили. Для вибірки даних - <span class="code text-orange">executeQuery()</span>. Для зміни даних - <span class="code text-orange">executeUpdate()</span>.</p>
+<p>У принципі із цим питанням можна закінчити — головне ми вже побачили. Для вибірки даних — <span class="code text-orange">executeQuery()</span>. Для зміни даних — <span class="code text-orange">executeUpdate()</span>.</p>
 
-<p>Отримаємо <span class="text-neon">кількість користувачів у таблиці <strong>user</strong></span> за допомогою методу <span class="code text-orange">executeQuery()</span >:</p>
+<p>Отримаємо <span class="text-neon">кількість користувачів у таблиці <strong>user</strong></span> за допомогою методу <span class="code text-orange">executeQuery()</span>:</p>
  
 <pre class='language-java line-numbers'><code>
 ResultSet results = statement.executeQuery("SELECT Count(*) FROM user");
@@ -31,9 +31,9 @@ results.next();
     int count = results.getInt(1);
 </code></pre>
  
-<h2>executeUpdate()</h2>
+<h2>2. executeUpdate()</h2>
 
-<p>Метод <span class="code text-orange">executeUpdate()</span> використовується тоді, коли ваш запит щось змінює в таблиці. Це може бути будь-що:</p>
+<p>Метод <span class="code text-orange">executeUpdate()</span> використовується тоді, коли твій запит щось змінює в таблиці. Це може бути будь-що:</p>
 
 <ul>
 <li>оператор <span class="text-viola">UPDATE</span></li>
@@ -42,23 +42,23 @@ results.next();
 <li>оператор <span class="text-viola">CALL PROCEDURE</span></li>
 </ul>
 
-<p>Цей метод повертає кількість змінених (або віддалених) рядків.</p>
+<p>Цей метод повертає кількість змінених (або видалених) рядків.</p>
 
-<p>Давай напишемо запит, який збільшить зарплату всіх наших співробітників на 1000 рублів.</p>
+<p>Давай напишемо запит, який збільшить зарплату всіх наших співробітників на 1000 гривень.</p>
  
 <pre class='language-java line-numbers'><code>
    int rowsCount = statement.executeUpdate("UPDATE employee SET salary = salary+1000");
 </code></pre>
  
-<p>Після того, як я виконав цей код, на своїй таблиці він повернув число 6. У моїй таблиці було 6 рядків. Отже, всі рядки були змінені.</p>
+<p>Після того, як я виконав цей код, на своїй таблиці він повернув число 6. У моїй таблиці було 6 рядків. Отже, всі рядки змінилися.</p>
 
-<h2>execute () </h2>
+<h2>3. execute () </h2>
 
-<p>Іноді у твоєму житті можуть виникнути ситуації, коли ти точно не знаєш, який запит тобі доводиться виконувати — вибірка чи зміна даних. На цей випадок творці JDBC додали до нього ще один універсальний метод - <span class="code text-orange">execute()</span>.</p>
+<p>Іноді у твоєму житті можуть виникнути ситуації, коли ти точно не знаєш, який запит тобі доводиться виконувати — вибірка чи зміна даних. На цей випадок творці JDBC додали до нього ще один універсальний метод — <span class="code text-orange">execute()</span>.</p>
 
-<p>Цей метод можна використовувати замість <span class="code text-orange">executeQuery()</span> та <span class="code text-orange">executeUpdate()</span> методів. А чи пам'ятаєш, чим ці методи відрізнялися? Правильно. Тип результату. Тому творці JDBC вигадали таке рішення.</p>
+<p>Цей метод можна використовувати замість <span class="code text-orange">executeQuery()</span> та <span class="code text-orange">executeUpdate()</span>. А чи пам'ятаєш ти, чим ці методи відрізнялися? Правильно. Тип результату. Тому творці JDBC вигадали таке рішення.</p>
 
-<p>Метод <span class="code text-orange">execute()</span> повертає boolean. Якщо це значення дорівнює <span class="text-green"><em>true</em></span>, значить виконувався запит на отримання даних, і тобі потрібно викликати метод <span class="code text-orange" >getResultSet()</span>, щоб отримати дані. Приклад:</p>
+<p>Метод <span class="code text-orange">execute()</span> повертає boolean. Якщо це значення дорівнює <span class="text-green"><em>true</em></span>, значить виконувався запит на отримання даних, і тобі потрібно викликати метод <span class="code text-orange" >getResultSet()</span>, щоб отримати їх. Приклад:</p>
  
 <pre class='language-java line-numbers'><code>
     boolean hasResults = statement.execute("SELECT Count(*) FROM user");
@@ -69,7 +69,7 @@ results.next();
  }
 </code></pre>
  
-<p>Якщо це значення дорівнює <span class="text-red"><em>false</em></span>, значить виконувався запит на зміну даних, і тобі потрібно викликати метод <span class="code text -orange">getUpdateCount()</span>, щоб отримати кількість змінених рядків. Приклад:</p>
+<p>Якщо це значення дорівнює <span class="text-red"><em>false</em></span>, виконувався запит на зміну даних, і тобі потрібно викликати метод <span class="code text -orange">getUpdateCount()</span>, щоб отримати кількість змінених рядків. Приклад:</p>
  
 <pre class='language-java line-numbers'><code>
     boolean hasResults = statement.execute("UPDATE employee SET salary = salary+1000");

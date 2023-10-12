@@ -1,13 +1,13 @@
 Корисні сценарії мапінгу даних
 <p>----------------------------------------</p>
 Мапимо enum.
-Мапім Boolean.
+Мапимо Boolean.
 Обчислювані поля.
 @Embedded.
 <p>----------------------------------------</p>
-<h2>Мапім enum</h2>
+<h2>1. Мапимо enum</h2>
 
-<p>Як мапіті примітивні типи даних ми вже розібралися: використовуємо анотації <span class="text-yellow"><span class="text-bold">@Column</span></span> та анотацію <span class= "text-yellow"><span class="text-bold">@Type</span></span>. Але не всі випадки можна покрити цими інструкціями. І найчастіший випадок – це <strong>enum</strong>.</p>
+<p>Як мапити примітивні типи даних ми вже розібралися: використовуємо анотацію <span class="text-yellow"><span class="text-bold">@Column</span></span> та анотацію <span class= "text-yellow"><span class="text-bold">@Type</span></span>. Але не всі випадки можна покрити цими анотаціями. І найчастіший випадок — це <strong>enum</strong>.</p>
 
 <p>Java-об'єкти типу enum можуть зберігатися в базі у двох варіантах:</p>
 
@@ -16,7 +16,7 @@
 <li>у вигляді рядка</li>
 </ul>
 
-<p>Давай напишемо невеликий приклад, де користувач матиме улюблений колір, який задається за допомогою enum.</p>
+<p>Давай напишемо невеликий приклад, де користувач матиме улюблений колір, який встановлюється за допомогою enum.</p>
 
 <pre class='language-java line-numbers'><code>
 enum Color {
@@ -47,13 +47,13 @@ class User
 }
 </code></pre>
 
-<p>Якщо ми хочемо, щоб Hibernate зберігав тип Color у базу <strong>як числа</strong>, то потрібно полю <mark>favoriteColor</mark> додати інструкцію:</p>
+<p>Якщо ми хочемо, щоб Hibernate зберігав тип Color у базі <strong>як числа</strong>, то потрібно полю <mark>favoriteColor</mark> додати анотацію:</p>
  
 <pre class='language-java line-numbers'><code>
 @Enumerated(EnumType.ORDINAL)
 </code></pre>
  
-<p>Якщо ми хочемо, щоб значення зберігалися <strong>як рядки</strong>, потрібно додати інструкцію:</p>
+<p>Якщо ми хочемо, щоб значення зберігалися <strong>як рядки</strong>, потрібно додати анотацію:</p>
  
 <pre class='language-java line-numbers'><code>
 @Enumerated(EnumType.STRING)
@@ -78,9 +78,9 @@ class User
 }
 </code></pre>
 
-<h2>Мапім Boolean</h2>
+<h2>2. Мапимо Boolean</h2>
 
-<p>Другий корисний сценарій – це мапінг типу Boolean. Так вже історично склалося, що SQL немає свого типу даних для Boolean і замість нього там використовують усе що завгодно.</p>
+<p>Другий корисний сценарій — це мапінг типу Boolean. Так вже історично склалося, що SQL не має свого типу даних для Boolean, і замість нього там використовують усе що завгодно.</p>
 
 <p>Три найпоширеніші варіанти:</p>
 
@@ -90,7 +90,7 @@ class User
 <li>'Y' або 'N'</li>
 </ul>
 
-<p>Загалом, якщо ти проектуватимеш свою базу, то краще відразу пиши тип BIT. Ну а повний мапінг для нього виглядатиме так:</p>
+<p>Загалом, якщо ти проєктуватимеш свою базу, краще одразу пиши тип BIT. Ну а повний мапінг для нього виглядатиме так:</p>
  
 <pre class='language-java line-numbers'><code>
 @Column(name = "is_correct", columnDefinition = "BIT")
@@ -98,13 +98,13 @@ class User
     private Boolean isCorrect;
 </code></pre>
  
-<p>Ну, а якщо базу даних проектуєш не ти, то дивись таблицю вище та думай, як правильно замапити потрібні тобі типи.</p>
+<p>Ну а якщо базу даних проєктуєш не ти, то дивись таблицю вище та думай, як правильно замапити потрібні тобі типи.</p>
 
-<h2>Полі, що обчислюються</h2>
+<h2>3. Обчислювані поля</h2>
 
-<p>Іноді кількість полів в Entity-класі та кількість колонок у таблиці не збігаються. Це може мати кілька причин.</p>
+<p>Іноді кількість полів в Entity-класі та кількість колонок у таблиці не збігаються. Це може статися через кілька причин.</p>
 
-<p>Найпоширеніша – це коли в нашому Entity-класі є якесь поле, яке ми <span class="text-red">не хочемо зберігати</span> в базу даних. З цим все зрозуміло - просто додай такому полю інструкцію <span class="text-yellow"><span class="text-bold">@Transient</span></span> і Hibernate проігнорує його при роботі з базою даних. </p>
+<p>Найпоширеніша — це коли в нашому Entity-класі є якесь поле, яке ми <span class="text-red">не хочемо зберігати</span> в базі даних. З цим все зрозуміло — просто додай такому полю анотацію <span class="text-yellow"><span class="text-bold">@Transient</span></span>, і Hibernate проігнорує його під час роботи з базою даних. </p>
 
 <p>Приклад:</p>
  
@@ -123,7 +123,7 @@ public class Square {
 }
 </code></pre>
  
-<p>Це хороший варіант, але під час читання об'єкта з бази поле total буде null. А нам хотілося б, щоб він містив твір width*height. Таке також можна зробити в Hibernate. Для цього є спеціальна інструкція <span class="text-yellow"><span class="text-bold">@Formula</span></span>.</p>
+<p>Це хороший варіант, але під час читання об'єкта з бази поле total буде null. А нам хотілося б, щоб він містив добуток width*height. Таке теж можна зробити в Hibernate. Для цього є спеціальна анотація <span class="text-yellow"><span class="text-bold">@Formula</span></span>.</p>
  
 <pre class='language-java line-numbers'><code>
 @Entity(name = "Square")
@@ -140,17 +140,17 @@ public class Square {
 }
 </code></pre>
  
-<p>Таке поле не буде зберігатися в базі даних, а при читанні об'єкта з бази в нього буде записуватися значення обчислене за формулою.</p>
+<p>Таке поле не буде зберігатися в базі даних, а під час читання об'єкта з бази до нього буде записуватися значення, обчислене за формулою.</p>
 
 <p>SQL-запит буде виглядати приблизно так:</p>
  
-<pre><code><span class="text-red">SELECT</span> <span class="text-green">id</span>, <span class="text-green">width</ span>, <span class="text-green">height</span>, (<span class="text-green">width</span>* <span class="text-green">height</span >) <span class="text-red">AS</span> <span class="text-viola">total</span> <span class="text-red">FROM</span> <span class ="text-orange">Square</span>;</code></pre>
+<pre><code><span class="text-red">SELECT</span> <span class="text-green">id</span>, <span class="text-green">width</span>, <span class="text-green">height</span>, (<span class="text-green">width</span>* <span class="text-green">height</span >) <span class="text-red">AS</span> <span class="text-viola">total</span> <span class="text-red">FROM</span> <span class ="text-orange">Square</span>;</code></pre>
  
-<h2>@Embedded</h2>
+<h2>4. @Embedded</h2>
 
-<p>Ще одна корисна інструкція – це <span class="text-yellow"><span class="text-bold">@Embedded</span></span>. Вона дозволяє розглядати поля дочірнього об'єкта як поля самого Entity-класу.</p>
+<p>Ще одна корисна анотація — це <span class="text-yellow"><span class="text-bold">@Embedded</span></span>. Вона дозволяє розглядати поля дочірнього об'єкта як поля самого Entity-класу.</p>
 
-<p>Допустимо, у тебе є клас <span class="code"><span class="text-green">User</span></span> і ти вирішив додати до нього адресу:</p>
+<p>Припустимо, у тебе є клас <span class="code"><span class="text-green">User</span></span>, і ти вирішив додати до нього адресу:</p>
 
 <pre class='language-java line-numbers'><code>
 @Entity
@@ -174,9 +174,9 @@ class User
 }
 </code></pre>
 
-<p>Все ніби добре, але з погляду Java було б логічно винести адресу в окремий клас. Адреса все-таки окрема сутність. Але як це зробити, якщо у базі вся ця інформація зберігається саме в таблиці user?</p>
+<p>Все ніби добре, але з погляду Java було б логічно винести адресу до окремого класу. Адреса — все ж таки окрема сутність. Але як це зробити, якщо у базі вся ця інформація зберігається саме в таблиці user?</p>
 
-<p>Нам допоможе анотація <span class="text-yellow"><span class="text-bold">@Embedded</span></span>. Спочатку ми створимо клас <span class="code"><span class="text-green">UserAddress</span></span> і винесемо всю інформацію за адресою користувача:</p>
+<p>Нам допоможе анотація <span class="text-yellow"><span class="text-bold">@Embedded</span></span>. Спочатку ми створимо клас <span class="code"><span class="text-green">UserAddress</span></span> і винесемо всю інформацію про адресу користувача:</p>
 
 <pre class='language-java line-numbers'><code>
 @Embeddable
@@ -213,6 +213,6 @@ class User
 
 <p>Завдяки анотації <span class="text-yellow"><span class="text-bold">@Embedded</span></span> під час збереження об'єкта Hibernate зрозуміє, що поля класу <span class=" code"><span class="text-green">UserAddress</span></span> потрібно обробляти як поля самого класу <span class="code"><span class="text-green">User</span ></span>.</p>
 
-<p><strong>Важливо!</strong> Якщо ти вирішиш додати до свого класу <span class="code"><span class="text-green">User</span></span> два поля <span class="code"><span class="text-green">UserAddress</span></span>, то використовувати <span class="text-yellow"><span class="text-bold">@Embedded </span></span> вже не вийде: у тебе буде дублікат полів і тобі потрібно якось їх розділити. Робиться це за допомогою перевизначення анотацій: за допомогою анотації <span class="text-yellow"><span class="text-bold">@AttributeOverrides</span></span>.</p>
+<p><strong>Важливо!</strong> Якщо ти вирішиш додати до свого класу <span class="code"><span class="text-green">User</span></span> два поля <span class="code"><span class="text-green">UserAddress</span></span>, то використовувати <span class="text-yellow"><span class="text-bold">@Embedded </span></span> вже не вийде: у тебе буде дублікат полів і потрібно буде якось їх розділити. Робиться це за допомогою перевизначення анотацій: за допомогою анотації <span class="text-yellow"><span class="text-bold">@AttributeOverrides</span></span>.</p>
 
-<p>Я хочу, щоб ти це знав, але детально тут ми все це розбирати не будемо. Думаю, тобі цього вистачить, щоб голову поламати. Для цікавих можу залишити посилання <a href="https://docs.jboss.org/hibernate/orm/6.0/userguide/html_single/Hibernate_User_Guide.html#naming" target="_blank">офіційну документацію</a>. </p>
+<p>Я хочу, щоб ти це знав, але детально тут ми все це розбирати не будемо. Думаю, тобі цього вистачить, щоб голову поламати. Якщо дуже цікаво дізнатися більше, можу залишити посилання на <a href="https://docs.jboss.org/hibernate/orm/6.0/userguide/html_single/Hibernate_User_Guide.html#naming" target="_blank">офіційну документацію</a>. </p>

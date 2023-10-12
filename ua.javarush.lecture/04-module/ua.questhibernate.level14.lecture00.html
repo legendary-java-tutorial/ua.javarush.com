@@ -4,9 +4,9 @@ Lazy Loading
 Погіршуємо ситуацію з колекціями
 Світло в кінці тунелю
 <p>----------------------------------------</p>
-<h2>1.1 Передісторія проблеми</h2>
-<p>Коли ти почнеш працювати з реальними базами даних, то одразу згадаєш фразу “Передчасна оптимізація – корінь усіх лих”. Тільки ось згадаєш ти її у негативному ключі. Працюючи з базою даних без оптимізації не обійтися. І працювати з нею потрібно вже на етапі проектування.</p>
-<p>Hibernate робить роботу з базою даних дуже зручною. Ти легко можеш отримати будь-які дочірні об'єкти, просто правильно розставивши анотації <code>@OneToMany</code> та <code>@ManyToMany</code>. Приклад:</p>
+<h2>1. Передісторія проблеми</h2>
+<p>Коли ти почнеш працювати з реальними базами даних, одразу згадуєш фразу “Передчасна оптимізація — корінь усіх лих”. Тільки ось згадуєш ти її у негативному ключі. Під час роботи з базою даних без оптимізації не обійтися. І працювати з нею потрібно вже на етапі проєктування.</p>
+<p>З Hibernate робота з базою даних стає дуже зручною. Ти легко можеш отримати будь-які дочірні об'єкти, якщо правильно розставити анотації <code>@OneToMany</code> та <code>@ManyToMany</code>. Приклад:</p>
 <pre class='line-numbers'><code>
 <span class="text-brown">@Entity
 @Table(name</span>=<span class="text-green">"user"</span><span class="text-brown">)</span>
@@ -25,10 +25,10 @@ class User {
 User user = session.get(User.class, 1);
 List&lt;Comment&gt; comments = user.getComments();
 </code></pre>
-<p>І на тебе тут чекатиме великий сюрприз. Користувач має кілька тисяч коментарів. Якщо ти напишеш такий код, Hibernate, звичайно, завантажить всі коментарі користувача. Але це буде дуже повільно, коментарі займуть багато пам'яті тощо.</p>
-<p>Тому так писати не можна! Теоретично – можна, а на практиці – ні.</p>
-<h2>1.2 Ускладнюємо ситуацію з колекціями</h2>
-<p>Проблема ще цікавіша. Адже зазвичай тобі ніколи не потрібні усі коментарі користувача. Навіть якщо ти їх відображаєш десь на клієнті, волієш робити це частинами – сторінками.</p>
+<p>І на тебе тут чекатиме великий сюрприз. Користувач має кілька тисяч коментарів. Якщо ти напишеш такий код, Hibernate, звісно, завантажить всі коментарі користувача. Але це буде дуже повільно: коментарі займуть багато пам'яті тощо.</p>
+<p>Тому так писати не можна! Теоретично — можна, а на практиці — ні.</p>
+<h2>2. Ускладнюємо ситуацію з колекціями</h2>
+<p>Проблема ще цікавіша. Адже зазвичай тобі ніколи не потрібні усі коментарі користувача. Навіть якщо ти їх відображаєш десь на клієнті, волієш робити це частинами — сторінками.</p>
 <p>Тому тобі потрібні такі методи:</p>
 <pre class='line-numbers'><code>
 public class CommentsManager {
@@ -48,9 +48,9 @@ public class CommentsManager {
  
 }
 </code></pre>
-<p>Перший метод повертає лише одну сторінку коментарів – 50 штук. Другий спосіб повертає кількість сторінок коментарів. І це найжахливіше. Для того, щоб просто дізнатися кількість коментарів, тобі довелося завантажити з бази всі коментарі!</p>
-<h2> 1.3 Світло в кінці тунелю</h2>
-<p>Тож нашими чудовими дочірніми колекціями ніхто не користується. Ні, їх звичайно використовують, але лише як частина HQL-запитів. Наприклад:</p>
+<p>Перший метод повертає лише одну сторінку коментарів — 50 штук. Другий спосіб повертає кількість сторінок коментарів. І це найжахливіше. Щоб просто дізнатися кількість коментарів, тобі довелося завантажити з бази всі коментарі!</p>
+<h2>3. Світло в кінці тунелю</h2>
+<p>Тож нашими чудовими дочірніми колекціями ніхто не користується. Ні, їх звісно використовують, але лише як частину HQL-запитів. Наприклад:</p>
 <pre class='line-numbers'><code>
 public class CommentsManager {
       private static final <span class="text-viola">PAGE_SIZE</span> = 50;
@@ -58,7 +58,7 @@ public class CommentsManager {
        public List&lt;<span class="token keyword">Comment</span>&gt; <span class="text-brown">getCommentsPage</span>(int <span class="text-green">userId</span>, int <span class="text-yellow">pageIndex</span>) {
            String hql = <span class="text-green">"select comments from User where id = :id"</span>;
            Query&lt;<span class="token keyword">Comment</span>&gt; <span class="text-viola">query</span> = session.createQuery( hql, <span class="token keyword">Comment</span>.class);
-           <span class="text-viola">query</span>.setParametr(<span class="text-green">"id"</span>, <span class="text-green">userId</span >);
+           <span class="text-viola">query</span>.setParameter(<span class="text-green">"id"</span>, <span class="text-green">userId</span >);
            <span class="text-viola">query</span>.setOffset(<span class="text-yellow">pageIndex</span> * <span class="text-viola">PAGE_SIZE</span>) ;
            <span class="text-viola">query</span>.setLimit(<span class="text-viola">PAGE_SIZE</span>);
            return <span class="text-viola">query</span>.<span class="text-red">list</span>();
@@ -67,10 +67,10 @@ public class CommentsManager {
       public int getCommentsPageCount(int <span class="text-green">userId</span>) {
            String hql = <span class="text-green">"select count(comments) from User where id = :id"</span>;
            Query&lt;<span class="token keyword">Integer</span>&gt; <span class="text-viola">query</span> = session.createQuery( hql, <span class="token keyword">Integer</span>.class);
-           <span class="text-viola">query</span>.setParametr(<span class="text-green">"id"</span>, <span class="text-green">userId</span >);
+           <span class="text-viola">query</span>.setParameter(<span class="text-green">"id"</span>, <span class="text-green">userId</span >);
            return Math.ceil(<span class="text-viola">query</span>.<span class="text-red">singleResult</span>()/<span class="text-viola">PAGE_SIZE </span>);
      }
  
 }
 </code></pre>
-<p>Добре новина – ми можемо реалізувати наші методи так, щоб не потрібно було завантажувати зайві дані з бази. Погана новина – так просто працювати з нашими колекціями не можна.</p>
+<p>Добра новина: ми можемо реалізувати наші методи так, щоб не потрібно було завантажувати зайві дані з бази. Погана новина: так просто працювати з нашими колекціями не можна.</p>

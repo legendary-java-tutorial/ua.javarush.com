@@ -1,1 +1,278 @@
-  BigData: Hadoop <p>----------------------------------------</p> Загальна інформація про Hadoop. Запуск програм MapReduce на Hadoop. Спосіб №1. Hadoop Streaming. Спосіб №2: використовуємо Java. <p>----------------------------------------</p> <h2> 4.1 Загальна інформація про Hadoop </h2> <img data-max-width="1024" data-id="c546b694-2382-4fae-8483-aa03dd05b7c0" src="https://cdn.javarush.com/images/ article/c546b694-2382-4fae-8483-aa03dd05b7c0/original.png" alt=""> <p>Парадигму MapReduce запропонувала компанія Google у 2004 році у своїй статті <a href="http://research.google.com/ archive/mapreduce.html" target="_blank">MapReduce: Simplified Data Processing on Large Clusters</a>. Оскільки запропонована стаття містила опис парадигми, але реалізація була відсутня – кілька програмістів із Yahoo запропонували свою реалізацію в рамках робіт над web-краулером nutch. Докладніше історію Hadoop можна почитати у статті <a href="https://gigaom.com/2013/03/04/the-history-of-hadoop-from-4-nodes-to-the-future-of-data /" target="_blank">History of Hadoop: З 4-х днів до майбутнього data</a>.</p> <p>Спочатку Hadoop був, в першу чергу, інструментом для зберігання даних і запуску MapReduce-задач , зараз Hadoop являє собою великий стек технологій, так чи інакше пов'язаних з обробкою великих даних (не тільки за допомогою MapReduce). </p> <p>Основними (core) компонентами Hadoop є: </p> <ul> <li><strong><a href="http://hadoop.apache.org/docs/r1.2.1/hdfs_design .html" target="_blank">Hadoop Distributed File System (HDFS)</a></strong> – розподілена файлова система, що дозволяє зберігати інформацію практично необмеженого обсягу. </li> <li><strong><a href="http://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/YARN.html" target="_blank">Hadoop YARN</a></strong> – фреймворк для управління ресурсами кластера та менеджменту завдань, у тому числі включає фреймворк MapReduce. </li> <li><strong>Hadoop common</strong> </li> </ul> <p>Також існує велика кількість проектів безпосередньо пов'язаних з Hadoop, але не входять до Hadoop core: </p> <ul > <li><strong><a href="https://hive.apache.org/" target="_blank">Hive</a></strong> – інструмент для SQL-like запитів над великими даними (перетворює) SQL-запити в серію MapReduce-завдань); </li> <li><strong><a href="https://pig.apache.org/" target="_blank">Pig</a></strong> – мова програмування для аналізу даних на високому рівні . Один рядок коду цією мовою може перетворитися на послідовність MapReduce-завдань; </li> <li><strong><a href="http://hbase.apache.org/" target="_blank">Hbase</a></strong> – колонкова база даних, що реалізує парадигму BigTable; </li> <li><strong><a href="http://cassandra.apache.org/" target="_blank">Cassandra</a></strong> – високопродуктивна розподілена key-value база даних; </li> <li><strong><a href="https://zookeeper.apache.org/" target="_blank">ZooKeeper</a></strong> – сервіс для розподіленого зберігання конфігурації та синхронізації змін цієї конфігурації; </li> <li><strong><a href="http://mahout.apache.org/" target="_blank">Mahout</a></strong> – бібліотека та движок машинного навчання на великих даних . </li> </ul> <p>Особливо хотілося б відзначити проект <a href="http://spark.apache.org/" target="_blank">Apache Spark</a>, який є двигуном для розподіленої обробки даних. Apache Spark зазвичай використовує компоненти Hadoop, такі як HDFS та YARN для своєї роботи, при цьому сам останнім часом став популярнішим, ніж Hadoop: </p> <img data-max-width="1024" data-id="5ddec7de- cdcd-4830-84e0-04be56c9ad55" src="https://cdn.javarush.com/images/article/5ddec7de-cdcd-4830-84e0-04be56c9ad55/original.png" alt=""> <p> компонент будуть присвячені окремі статті цього циклу матеріалів, а поки що розберемо, яким чином можна почати працювати з Hadoop і застосовувати його на практиці. </p> <h2>4.2 Запуск MapReduce програм на Hadoop </h2> <p>Тепер розглянемо, як запустити MapReduce-завдання на Hadoop. Як завдання скористаємося класичним прикладом <strong>WordCount</strong>, який був розібраний у попередній лекції. </p> <p><strong>Нагадаю формулювання завдання:</strong> є набір документів. Необхідно для кожного слова, що зустрічається в наборі документів, порахувати скільки разів зустрічається слово в наборі. </p> <h4>Рішення: </h4> <p>Map розбиває документ на слова і повертає безліч пар (word, 1). </p> <p>Reduce підсумовує входження кожного слова: </p> <table> <tbody> <tr> <td><pre><code>def map(doc): for word in doc.split(): <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> ></pre> </td> </tr> </tbody> </table> <p>Тепер завдання запрограмувати це рішення у вигляді коду, який можна буде виконати на Hadoop та запустити. </p> <h2>4.3 Спосіб №1. Hadoop Streaming </h2> <p>Найпростіший спосіб запустити MapReduce-програму на Hadoop – скористатися streaming-інтерфейсом Hadoop. Streaming-інтерфейс передбачає, що <strong>map</strong> та <strong>reduce</strong> реалізовані у вигляді програм, які приймають дані зі stdin та видають результат на <strong>stdout</strong>. </p> <p>Програма, яка виконує функцію map називається mapper. Програма, яка виконує <strong>reduce</strong>, називається відповідно <strong>reducer</strong>. </p> <p>Streaming інтерфейс передбачає за умовчанням, що один вхідний рядок у <strong>mapper</strong> або <strong>reducer</strong> відповідає одному вхідному запису для <strong>map</strong>. </p> <p>Виведення mapper'a потрапляє на вхід reducer'у у вигляді пар (ключ, значення), при цьому всі пари, що відповідають одному ключу: </p> <ul> <li>Гарантовано будуть оброблені одним запуском reducer'a; </li> <li>Будуть подані на вхід поспіль (тобто якщо один reducer обробляє кілька різних ключів – вхід буде згрупований по ключу). </li> </ul> <p>Отже, реалізуємо mapper і reducer на python: </p> <pre><code>#mapper.py import sys def : yield word.lower(), 1 for line в sys.stdin: для key, значення в do_map(line): print(key + "\t" + str(value)) #reducer.py import sys def do_reduce(word , values): return word, sum(values) prev_key = None values = [] for line в sys.stdin: key, value = line.split("\t") if key != prev_key and prev_key is not None: result_key , result_value = do_reduce(prev_key, values) print(result_key + "\t" + str(result_value)) values = [] prev_key = key values.append(int(value)) if prev_key is not None: result_key, result_value (prev_key, values) print(result_key + "\t" + str(result_value)) </code></pre> <p>Дані, які обробляти Hadoop повинні зберігатися на HDFS. Завантажимо наші статті та покладемо на HDFS. Для цього потрібно скористатися командою <strong>hadoop fs</strong>: </p> <pre><code>wget https://www.dropbox.com/s/opp5psid1x3jt41/lenta_articles.tar.gz tar xzvf lenta_articles.tar .gz hadoop fs -put lenta_articles </code></pre> <p>Утиліта hadoop fs підтримує велику кількість методів для маніпуляцій з файловою системою, багато з яких один в один повторюють стандартні утиліти linux.</p> <p>Тепер запустимо streaming-завдання: </p> <pre><code>yarn jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar\ -input lenta_articles\ -output lenta_wordcount\ -file mapper.py\ -file reducer. py\ -mapper "python mapper.py"\ -reducer "python reducer.py" </code></pre> <p>Утиліта yarn служить для запуску та керування різними програмами (у тому числі map-reduce based) на кластері . Hadoop-streaming.jar – це якраз один із прикладів такого yarn-додатку. </p> <p>Далі йдуть параметри запуску: </p> <ul> <li>input – папка з вихідними даними на hdfs; </li> <li>output – папка на hdfs, куди потрібно покласти результат; </li> <li>file – файли, які потрібні у процесі роботи map-reduce завдання; </li> <li>mapper – консольна команда, яка використовуватиметься для map-стадії; </li> <li>reduce – консольна команда, яка буде використовуватися для reduce-стадії. </li> </ul> <p>Після запуску в консолі можна буде побачити прогрес виконання завдання та URL для перегляду більш детальної інформації про завдання. </p> <img data-max-width="512" data-id="0b59ba71-046d-4419-8028-f2d6818cc431" src="https://cdn.javarush.com/images/article/0b59ba71-046d -4419-8028-f2d6818cc431/original.png" alt=""> <p>В інтерфейсі доступному за цією URL можна дізнатися більш детальний статус виконання завдання, подивитися логи кожного мапера і редьюсера (що дуже корисно у разі завдань, що впали). </p> <img data-max-width="512" data-id="e3d88205-3283-4d00-809b-1e5f8b7ddcbc" src="https://cdn.javarush.com/images/article/e3d88205-328 -4d00-809b-1e5f8b7ddcbc/original.png" alt=""> <p>Результат роботи після успішного виконання складається на HDFS в папку, яку ми вказали в полі output. Переглянути її зміст можна за допомогою команди hadoop fs -ls lenta_wordcount. </p> <p>Сам результат можна отримати таким чином: </p> <pre><code>hadoop fs -text lenta_wordcount/* | sort-n-k2,2 | tail -n5 з 41 що 43 на 82 і 111 в 194 </code></pre> <p>Команда hadoop fs -text видає вміст папки в текстовому вигляді. Я відсортував результат за кількістю слів. Як і очікувалося, найчастіші слова в мові - прийменники.</p> <h2>4.4 Спосіб №2: використовуємо Java</h2> <p>Сам по собі Hadoop написаний на java, і нативний інтерфейс у Hadoop-a теж java -Based. Покажемо, як виглядає нативний java-додаток для wordcount: </p> <pre class='language-java line-numbers'><code> import java.io.IOException; import java.util.StringTokenizer; import org.apache.hadoop.conf.Configuration; import org.apache.hadoop.fs.Path; import org.apache.hadoop.io.IntWritable; import org.apache.hadoop.io.Text; import org.apache.hadoop.mapreduce.Job; import org.apache.hadoop.mapreduce.Mapper; import org.apache.hadoop.mapreduce.Reducer; import org.apache.hadoop.mapreduce.lib.input.FileInputFormat; import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat; public class WordCount { public static class TokenizerMapper extends Mapper&lt;Object, Text, Text, IntWritable>{ private final static IntWritable one = new IntWritable(1); private Text word = new Text(); public void map(Object key, Text value, Context context ) throws IOException, InterruptedException { StringTokenizer itr = new StringTokenizer(value.toString()); while (itr.hasMoreTokens()) { word.set(itr.nextToken()); context.write(word, one); } } } public static class IntSumReducer extends Reducer&lt;Text,IntWritable,Text,IntWritable> { private IntWritable result = new IntWritable(); public void reduce(Text key, Iterable<IntWritable> values, Context context ) throws IOException, InterruptedException { int sum = 0; for (IntWritable val: values) { sum += val.get(); } result.set(sum); context.write(key, result); } } public static void main(String[] args) throws Exception { Configuration conf = new Configuration(); Job job = Job.getInstance(conf, "word count"); job.setJarByClass(WordCount.class); job.setMapperClass(TokenizerMapper.class); job.setReducerClass(IntSumReducer.class); job.setOutputKeyClass(Text.class); job.setOutputValueClass(IntWritable.class); FileInputFormat.addInputPath(job, new Path("hdfs://localhost/user/cloudera/lenta_articles")); FileOutputFormat.setOutputPath(job, new Path("hdfs://localhost/user/cloudera/lenta_wordcount")); System.exit(job.waitForCompletion(true) ? 0 : 1); } } </code></pre> <p>Цей клас робить абсолютно те саме, що наш приклад на Python. Ми створюємо класи TokenizerMapper та IntSumReducer, успадковуючи їх від класів Mapper та Reducer відповідно. Класи, що передаються як параметри шаблону, вказують типи вхідних та вихідних значень. Нативний API передбачає, що функції map на вхід подається пара ключ-значення. Оскільки в нашому випадку ключ порожній - як тип ключа ми визначаємо просто Object. </p> <p>У методі Main ми заводимо mapreduce-завдання та визначаємо її параметри – ім'я, mapper та reducer, шлях у HDFS, де знаходяться вхідні дані та куди покласти результат. Для компіляції нам потрібні hadoop-івські бібліотеки. Я використовую для складання Maven, для якого у cloudera є репозиторій. Інструкції щодо його налаштування можна знайти за посиланням. У результаті файл pom.xmp (який використовується maven'ом для опису складання проекту) у мене вийшов наступний): </p> <pre><code>&lt;?xml version="1.0" encoding="UTF-8"? > &lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http ://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"> &lt;modelVersion>4.0.0&lt;/modelVersion> &lt;repositories> &lt;repository> &lt;id>cloudera&lt;/id> &lt;url>https://repository.cloudera.com/artifactory/cloudera-repos/&lt;/url> &lt;/repository> &lt;/repositories> &lt; dependencies> &lt;dependency> &lt;groupId>org.apache.hadoop&lt;/groupId> &lt;artifactId>hadoop-common&lt;/artifactId> &lt;version>2.6.0-cdh5.4.2&lt;/version> &lt;/dependency > &lt;dependency> &lt;groupId>org.apache.hadoop&lt;/groupId> &lt;artifactId>hadoop-auth&lt;/artifactId> &lt;version>2.6.0-cdh5.4.2&lt;/version> &lt;/dependency> &lt;dependency> &lt;groupId>org.apache.hadoop&lt;/groupId> &lt;artifactId>hadoop-hdfs&lt;/artifactId> &lt;version>2.6.0-cdh5.4.2&lt;/version> &lt;/dependency> ;dependency> &lt;groupId>org.apache.hadoop&lt;/groupId> &lt;artifactId>hadoop-mapreduce-client-app&lt;/artifactId> &lt;version>2.6.0-cdh5.4.2&lt;/version> &lt; dependency> &lt;/dependencies> &lt;groupId>org.dca.examples&lt;/groupId> &lt;artifactId>wordcount&lt;/artifactId> &lt;version>1.0-SNAPSHOT&lt;/version> &lt;/project> </code>< /pre> <p>Зберемо проект у jar-пакет: </p> <pre><code>mvn clean package </code></pre> <p>Після складання проекту в jar-файл запуск відбувається схожим чином, як і у разі streaming-інтерфейсу: </p> <pre><code>yarn jar wordcount-1.0-SNAPSHOT.jar WordCount </code></pre> <p>Чекаємо виконання та перевіряємо результат:</p> <pre ><code>hadoop fs -text lenta_wordcount/* | sort-n-k2,2 | tail -n5 з 41 що 43 на 82 і 111 в 194 </code></pre><p>Як неважко здогадатися, результат виконання нашої нативної програми збігається з результатом streaming-додатку, який ми запустили попереднім способом.</p>
+  BigData: Hadoop
+  <p>----------------------------------------</p>
+  Загальна інформація про Hadoop.
+  Запуск програм MapReduce на Hadoop.
+  Спосіб №1. Hadoop Streaming.
+  Спосіб №2: використовуємо Java.
+  <p>----------------------------------------</p>
+  <h2>1. Загальна інформація про Hadoop </h2>
+  <img data-max-width="1024" data-id="c546b694-2382-4fae-8483-aa03dd05b7c0" src="https://cdn.javarush.com/images/ article/c546b694-2382-4fae-8483-aa03dd05b7c0/original.png" alt="">
+  <p>Парадигму MapReduce запропонувала компанія Google у 2004 році у своїй статті <a href="http://research.google.com/ archive/mapreduce.html" target="_blank">MapReduce: Simplified Data Processing on Large Clusters</a>. Оскільки запропонована стаття містила опис парадигми, але реалізація була відсутня, кілька програмістів із Yahoo запропонували свою реалізацію в межах робіт над web-краулером nutch. Докладніше історію Hadoop можна почитати у статті <a href="https://gigaom.com/2013/03/04/the-history-of-hadoop-from-4-nodes-to-the-future-of-data /" target="_blank">History of Hadoop: З 4-х днів до майбутнього data</a>.</p>
+  <p>Спочатку Hadoop був, в першу чергу, інструментом для зберігання даних і запуску MapReduce-задач. Зараз Hadoop являє собою великий стек технологій, так чи інакше пов'язаних з обробкою великих даних (не тільки за допомогою MapReduce). </p>
+  <p>Основними (core) компонентами Hadoop є: </p>
+  <ul>
+      <li><strong><a href="http://hadoop.apache.org/docs/r1.2.1/hdfs_design .html" target="_blank">Hadoop Distributed File System (HDFS)</a></strong> — розподілена файлова система, що дозволяє зберігати інформацію практично необмеженого обсягу. </li>
+      <li><strong><a href="http://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/YARN.html" target="_blank">Hadoop YARN</a></strong> — фреймворк для управління ресурсами кластера та менеджменту завдань, у тому числі включає фреймворк MapReduce. </li>
+      <li><strong>Hadoop common</strong> </li>
+  </ul>
+  <p>Також існує велика кількість проєктів, безпосередньо пов'язаних з Hadoop, але які не входять до Hadoop core: </p>
+  <ul>
+      <li><strong><a href="https://hive.apache.org/" target="_blank">Hive</a></strong> — інструмент для SQL-like запитів над великими даними (перетворює SQL-запити в серію MapReduce-завдань); </li>
+      <li><strong><a href="https://pig.apache.org/" target="_blank">Pig</a></strong> — мова програмування для аналізу даних на високому рівні. Один рядок коду цією мовою може перетворитися на послідовність MapReduce-завдань; </li>
+      <li><strong><a href="http://hbase.apache.org/" target="_blank">Hbase</a></strong> — колонкова база даних, що реалізує парадигму BigTable; </li>
+      <li><strong><a href="http://cassandra.apache.org/" target="_blank">Cassandra</a></strong> — високопродуктивна розподілена key-value база даних; </li>
+      <li><strong><a href="https://zookeeper.apache.org/" target="_blank">ZooKeeper</a></strong> — сервіс для розподіленого зберігання конфігурації та синхронізації змін цієї конфігурації; </li>
+      <li><strong><a href="http://mahout.apache.org/" target="_blank">Mahout</a></strong> — бібліотека та движок машинного навчання на великих даних. </li>
+  </ul>
+  <p>Особливо хотілося б відзначити проєкт <a href="http://spark.apache.org/" target="_blank">Apache Spark</a>, який є рушієм для розподіленої обробки даних. Apache Spark зазвичай використовує компоненти Hadoop, такі як HDFS та YARN для своєї роботи, при цьому сам останнім часом став популярнішим, ніж Hadoop: </p>
+  <img data-max-width="1024" data-id="5ddec7de- cdcd-4830-84e0-04be56c9ad55" src="https://cdn.javarush.com/images/article/5ddec7de-cdcd-4830-84e0-04be56c9ad55/original.png" alt="">
+  <p>Деяким з переразованих компонент будуть присвячені окремі статті цього циклу матеріалів, а поки що розберемо, яким чином можна почати працювати з Hadoop і застосовувати його на практиці. </p>
+  <h2>2. Запуск MapReduce програм на Hadoop </h2>
+  <p>Тепер розглянемо, як запустити MapReduce-завдання на Hadoop. Як завдання скористаємося класичним прикладом <strong>WordCount</strong>, який був розібраний у попередній лекції. </p>
+  <p><strong>Нагадаю формулювання завдання:</strong> є набір документів. Необхідно для кожного слова, що зустрічається в наборі документів, порахувати скільки разів зустрічається слово в наборі. </p>
+  <h4>Рішення: </h4>
+  <p>Map розбиває документ на слова і повертає безліч пар (word, 1). </p>
+  <p>Reduce підсумовує входження кожного слова: </p>
+
+  <table>
+      <tbody>
+      <tr>
+          <td><pre><code>def map(doc):
+for word in doc.split():
+	yield word, 1
+</code></pre></td>
+      </tr>
+      <tr>
+          <td><pre><code>def reduce(word, values):
+	yield word, sum(values)
+</code></pre> </td>
+      </tr>
+      </tbody>
+  </table>
+  <p>Тепер завдання — запрограмувати це рішення у вигляді коду, який можна буде виконати на Hadoop та запустити. </p>
+  <h2>3. Спосіб №1. Hadoop Streaming </h2>
+  <p>Найпростіший спосіб запустити MapReduce-програму на Hadoop — скористатися streaming-інтерфейсом Hadoop. Streaming-інтерфейс передбачає, що <strong>map</strong> та <strong>reduce</strong> реалізовані у вигляді програм, які приймають дані зі stdin та видають результат на <strong>stdout</strong>. </p>
+  <p>Програма, яка виконує функцію map називається mapper. Програма, яка виконує <strong>reduce</strong>, називається відповідно <strong>reducer</strong>. </p>
+  <p>Streaming інтерфейс за замовчуванням передбачає, що один вхідний рядок до <strong>mapper</strong> або <strong>reducer</strong> відповідає одному вхідному запису для <strong>map</strong>. </p>
+  <p>Виведення mapper-a потрапляє на вхід reducer-у у вигляді пар (ключ, значення), водночас всі пари, що відповідають одному ключу: </p>
+  <ul>
+      <li>Гарантовано будуть оброблені одним запуском reducer-a; </li>
+      <li>Будуть подані на вхід підряд (тобто якщо один reducer обробляє кілька різних ключів, вхід буде згрупований за ключем). </li>
+  </ul>
+  <p>Отже, реалізуємо mapper і reducer на python: </p>
+
+  <pre><code>#mapper.py
+import sys
+
+def do_map(doc):
+for word in doc.split():
+	yield word.lower(), 1
+
+for line in sys.stdin:
+	for key, value in do_map(line):
+    	print(key + "\t" + str(value))
+
+#reducer.py
+import sys
+
+def do_reduce(word, values):
+	return word, sum(values)
+
+prev_key = None
+values = []
+
+for line in sys.stdin:
+	key, value = line.split("\t")
+	if key != prev_key and prev_key is not None:
+    	result_key, result_value = do_reduce(prev_key, values)
+    	print(result_key + "\t" + str(result_value))
+    	values = []
+	prev_key = key
+	values.append(int(value))
+
+if prev_key is not None:
+	result_key, result_value = do_reduce(prev_key, values)
+	print(result_key + "\t" + str(result_value))
+</code></pre>
+  <p>Дані, які буде обробляти Hadoop, повинні зберігатися на HDFS. Завантажимо наші статті та покладемо на HDFS. Для цього потрібно скористатися командою <strong>hadoop fs</strong>: </p>
+
+  <pre><code>wget https://www.dropbox.com/s/opp5psid1x3jt41/lenta_articles.tar.gz
+tar xzvf lenta_articles.tar.gz
+hadoop fs -put lenta_articles
+</code></pre>
+  <p>Утиліта hadoop fs підтримує велику кількість методів для маніпуляцій з файловою системою, багато з яких один в один повторюють стандартні утиліти linux.</p>
+  <p>Тепер запустимо streaming-завдання: </p>
+
+  <pre><code>yarn jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar\
+ -input lenta_articles\
+ -output lenta_wordcount\
+ -file mapper.py\
+ -file reducer.py\
+ -mapper "python mapper.py"\
+ -reducer "python reducer.py"
+</code></pre>
+  <p>Утиліта yarn служить для запуску та керування різними програмами (у тому числі map-reduce based) на кластері. Hadoop-streaming.jar — це саме один із прикладів такого yarn-додатку. </p>
+  <p>Далі йдуть параметри запуску: </p>
+  <ul>
+      <li>input — папка з вихідними даними на hdfs; </li>
+      <li>output — папка на hdfs, куди потрібно покласти результат; </li>
+      <li>file — файли, які потрібні у процесі роботи map-reduce завдання; </li>
+      <li>mapper — консольна команда, яка використовуватиметься для map-стадії; </li>
+      <li>reduce — консольна команда, яка буде використовуватися для reduce-стадії. </li>
+  </ul>
+  <p>Після запуску в консолі можна буде побачити прогрес виконання завдання та URL для перегляду більш детальної інформації про завдання. </p>
+  <img data-max-width="512" data-id="0b59ba71-046d-4419-8028-f2d6818cc431" src="https://cdn.javarush.com/images/article/0b59ba71-046d -4419-8028-f2d6818cc431/original.png" alt="">
+  <p>В інтерфейсі доступному за цією URL можна дізнатися більш детальний статус виконання завдання, подивитися логи кожного мапера і редьюсера (що дуже корисно у випадку із завданнями, що впали). </p>
+  <img data-max-width="512" data-id="e3d88205-3283-4d00-809b-1e5f8b7ddcbc" src="https://cdn.javarush.com/images/article/e3d88205-328 -4d00-809b-1e5f8b7ddcbc/original.png" alt="">
+  <p>Результат роботи після успішного виконання складається на HDFS в папку, яку ми вказали в полі output. Переглянути її зміст можна за допомогою команди hadoop fs -ls lenta_wordcount. </p>
+  <p>Сам результат можна отримати таким чином: </p>
+
+  <pre><code>hadoop fs -text lenta_wordcount/* | sort -n -k2,2 | tail -n5
+с
+41
+що
+43
+на
+82
+і
+111
+в
+194
+</code></pre>
+  <p>Команда hadoop fs -text видає вміст папки в текстовому вигляді. Я відсортував результат за кількістю слів. Як і очікувалося, найчастіші слова в мові — прийменники.</p>
+  <h2>4.4 Спосіб №2: використовуємо Java</h2>
+  <p>Сам по собі Hadoop написаний на java, і нативний інтерфейс у Hadoop-і теж Java-based. Покажемо, як виглядає нативний java-додаток для wordcount: </p>
+
+  <pre class='language-java line-numbers'><code>
+import java.io.IOException;
+import java.util.StringTokenizer;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+public class WordCount {
+
+	public static class TokenizerMapper
+        	extends Mapper&lt;Object, Text, Text, IntWritable>{
+
+    	private final static IntWritable one = new IntWritable(1);
+    	private Text word = new Text();
+
+    	public void map(Object key, Text value, Context context
+    	) throws IOException, InterruptedException {
+        	StringTokenizer itr = new StringTokenizer(value.toString());
+        	while (itr.hasMoreTokens()) {
+            	word.set(itr.nextToken());
+            	context.write(word, one);
+        	}
+    	}
+	}
+
+	public static class IntSumReducer
+        	extends Reducer&lt;Text,IntWritable,Text,IntWritable> {
+    	private IntWritable result = new IntWritable();
+
+    	public void reduce(Text key, Iterable<IntWritable> values,
+                       	Context context
+    	) throws IOException, InterruptedException {
+        	int sum = 0;
+        	for (IntWritable val : values) {
+            	sum += val.get();
+        	}
+        	result.set(sum);
+        	context.write(key, result);
+    	}
+	}
+
+	public static void main(String[] args) throws Exception {
+    	Configuration conf = new Configuration();
+    	Job job = Job.getInstance(conf, "word count");
+    	job.setJarByClass(WordCount.class);
+    	job.setMapperClass(TokenizerMapper.class);
+    	job.setReducerClass(IntSumReducer.class);
+    	job.setOutputKeyClass(Text.class);
+    	job.setOutputValueClass(IntWritable.class);
+    	FileInputFormat.addInputPath(job, new Path("hdfs://localhost/user/cloudera/lenta_articles"));
+    	FileOutputFormat.setOutputPath(job, new Path("hdfs://localhost/user/cloudera/lenta_wordcount"));
+    	System.exit(job.waitForCompletion(true) ? 0 : 1);
+	}
+}
+</code></pre>
+  <p>Цей клас робить абсолютно те саме, що наш приклад на Python. Ми створюємо класи TokenizerMapper та IntSumReducer, успадковуючи їх від класів Mapper та Reducer відповідно. Класи, що передаються як параметри шаблону, вказують типи вхідних та вихідних значень. Нативний API передбачає, що функції map на вхід подається пара ключ-значення. Оскільки в нашому випадку ключ порожній, як тип ключа ми визначаємо просто Object. </p>
+  <p>У методі Main ми заводимо mapreduce-завдання та визначаємо її параметри: ім'я, mapper та reducer, шлях у HDFS, де знаходяться вхідні дані та куди покласти результат. Для компіляції нам потрібні hadoop-івські бібліотеки. Я використовую для складання Maven, для якого у cloudera є репозиторій. Інструкції щодо його налаштування можна знайти за посиланням. У результаті файл pom.xmp (який використовується maven-ом для опису складання проєкту) у мене вийшов такий: </p>
+
+  <pre><code>&lt;?xml version="1.0" encoding="UTF-8"?>
+&lt;project xmlns="http://maven.apache.org/POM/4.0.0"
+     	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	&lt;modelVersion>4.0.0&lt;/modelVersion>
+
+	&lt;repositories>
+    	&lt;repository>
+        	&lt;id>cloudera&lt;/id>
+        	&lt;url>https://repository.cloudera.com/artifactory/cloudera-repos/&lt;/url>
+    	&lt;/repository>
+	&lt;/repositories>
+
+	&lt;dependencies>
+    	&lt;dependency>
+        	&lt;groupId>org.apache.hadoop&lt;/groupId>
+        	&lt;artifactId>hadoop-common&lt;/artifactId>
+        	&lt;version>2.6.0-cdh5.4.2&lt;/version>
+    	&lt;/dependency>
+
+    	&lt;dependency>
+        	&lt;groupId>org.apache.hadoop&lt;/groupId>
+        	&lt;artifactId>hadoop-auth&lt;/artifactId>
+        	&lt;version>2.6.0-cdh5.4.2&lt;/version>
+    	&lt;/dependency>
+
+    	&lt;dependency>
+        	&lt;groupId>org.apache.hadoop&lt;/groupId>
+        	&lt;artifactId>hadoop-hdfs&lt;/artifactId>
+        	&lt;version>2.6.0-cdh5.4.2&lt;/version>
+    	&lt;/dependency>
+
+    	&lt;dependency>
+        	&lt;groupId>org.apache.hadoop&lt;/groupId>
+        	&lt;artifactId>hadoop-mapreduce-client-app&lt;/artifactId>
+        	&lt;version>2.6.0-cdh5.4.2&lt;/version>
+    	&lt;/dependency>
+
+	&lt;/dependencies>
+
+	&lt;groupId>org.dca.examples&lt;/groupId>
+	&lt;artifactId>wordcount&lt;/artifactId>
+	&lt;version>1.0-SNAPSHOT&lt;/version>
+
+&lt;/project>
+</code></pre>
+  <p>Зберемо проект у jar-пакет: </p>
+  <pre><code>mvn clean package
+</code></pre>
+  <p>Після складання проєкту до jar-файлу запуск відбувається схожим чином, як і у разі streaming-інтерфейсу: </p>
+
+  <pre><code>yarn jar wordcount-1.0-SNAPSHOT.jar  WordCount
+</code></pre>
+  <p>Чекаємо виконання та перевіряємо результат:</p>
+
+  <pre><code>hadoop fs -text lenta_wordcount/* | sort -n -k2,2 | tail -n5
+з
+41
+що
+43
+на
+82
+і
+111
+в
+194
+</code></pre>
+  <p>Як можна здогадатися, результат виконання нашої нативної програми збігається з результатом streaming-додатку, який ми запустили попереднім способом.</p>

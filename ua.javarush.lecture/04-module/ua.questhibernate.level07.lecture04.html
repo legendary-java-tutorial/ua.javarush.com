@@ -5,20 +5,20 @@
 Отримання дати.
 Налаштування часового поясу MySQL.
 <p>----------------------------------------</p>
-<h2>Сучасний стан справ з часом</h2>
+<h2>1. Сучасний стан справ з часом</h2>
 
 <p>З часів, коли вигадали JDBC і стандартизували його інтерфейси, минуло років 20, і за цей час багато чого змінилося.</p>
 
-<p>По-перше, світ став глобальним, і тепер один сервер може обслуговувати користувачів з усього світу. Швидкість інтернету вирішила. Тому <strong>SQL був доданий ще один тип даних</strong> для роботи з часом. Тепер типи виглядають так:</p>
+<p>По-перше, світ став глобальним, і тепер один сервер може обслуговувати користувачів з усього світу. Швидкість інтернету цьому посприяла. Тому до <strong>SQL додався ще один тип даних</strong> для роботи з часом. Тепер типи виглядають так:</p>
 
 <ul>
-<li><strong>DATE</strong> – зберігає дату: рік, місяць, день.</li>
-<li><strong>TIME</strong> – зберігає час: години, хвилини, секунди.</li>
-<li><strong>TIMESTAMP</strong> – зберігає конкретний момент часу: дата, час та мілісекунди.</li>
-<li><span class="text-red"><span class="text-bold">TIMESTAMP WITH TIME ZONE</span></span> – TIMESTAMP та тимчасова зона (ім'я зони або усунення).</li >
+<li><strong>DATE</strong> — зберігає дату: рік, місяць, день.</li>
+<li><strong>TIME</strong> — зберігає час: години, хвилини, секунди.</li>
+<li><strong>TIMESTAMP</strong> — зберігає конкретний момент часу: дата, час та мілісекунди.</li>
+<li><span class="text-red"><span class="text-bold">TIMESTAMP WITH TIME ZONE</span></span> — TIMESTAMP та часова зона (ім'я зони або усунення).</li>
 </ul>
 
-<p>По-друге, у Java з'явився DateTime API для глобальної роботи з часом. У ньому з'явилися такі класи:</p>
+<p>По-друге, у Java з'явився DateTime API для глобальної роботи з часом. У ньому є такі класи:</p>
 
 <ul>
 <li><strong>Дата та час</strong>:
@@ -33,22 +33,22 @@
 <li><span class="code"><span class="text-green">java.time.OffsetDateTime</span></span></li>
 <li><span class="code"><span class="text-green">java.time.ZonedDateTime</span></span></li>
 </ul></li>
-<li><strong>Час з часовим поясом</strong>:
+<li><strong>Час із часовим поясом</strong>:
 <ul>
 <li><span class="code"><span class="text-green">java.time.OffsetDateTime</span></span></li>
 <li><span class="code"><span class="text-green">java.time.ZonedDateTime</span></span></li>
 </ul></li>
 </ul>
 
-<p>Третій цікавий момент полягає в тому, що дуже <span class="text-green">багатьом SQL-клієнтам хотілося б отримувати час із сервера вже у своїй локальній зоні</span>. Перетворювати час на льоту, звичайно, можна, але це не зручно, та й помилки бувають.</p>
+<p>Третій цікавий момент полягає в тому, що дуже <span class="text-green">багатьом SQL-клієнтам хотілося б отримувати час із сервера вже у своїй локальній зоні</span>. Перетворювати час на льоту, звісно, можна, але це не зручно, та й помилки бувають.</p>
 
-<p>Наприклад, я хочу отримати з бази всі завдання сьогодні. SQL-сервер має функцію <strong>CURDATE()</strong> для цієї справи. Тільки сервер знаходиться в США, а я - в Японії. І хотілося б, щоб він мені повернув усі записи за “моє сьогодні”, а не “його сьогодні”.</p>
+<p>Наприклад, я хочу отримати з бази всі завдання на сьогодні. SQL-сервер має функцію <strong>CURDATE()</strong> для цієї справи. Ось тільки сервер знаходиться в США, а я — в Японії. І хотілося б, щоб він мені повернув усі записи за “моє сьогодні”, а не “його сьогодні”.</p>
 
 <p>Загалом SQL-сервер теж повинен вміти по-розумному працювати з клієнтами в різних часових зонах.</p>
 
-<h2>Сучасні проблеми потребують сучасних рішень</h2>
+<h2>2. Сучасні проблеми потребують сучасних рішень</h2>
 
-<p>В принципі, нові типи з Java DateTime API та типи з SQL можна зручно зіставляти. Для того щоб представити <strong>тип <span class="text-red">DATE</span></strong> в Java потрібно використовувати клас <span class="code"><span class="text-green"> java.time.LocalDate</span></span> з JDK 8 DateTime API.</p>
+<p>В принципі, нові типи з Java DateTime API та типи з SQL можна зручно зіставляти. Щоб представити <strong>тип <span class="text-red">DATE</span></strong> в Java потрібно використовувати клас <span class="code"><span class="text-green"> java.time.LocalDate</span></span> з JDK 8 DateTime API.</p>
 
 <p>Тип TIME з бази даних можна представити двома типами з Java: <span class="code"><span class="text-green">java.time.LocalTime</span></span> та <span class ="code"><span class="text-green">java.time.OffsetTime</span></span>. Теж нічого складного.</p>
 
@@ -68,7 +68,7 @@
 <li><span class="code"><span class="text-green">java.time.ZonedDateTime</span></span></li>
 </ul>
 
-<p>Оскільки ти вже знайомий з DateTime API, то запам'ятати цю справу тобі не складе :)</p>
+<p>Оскільки ти вже багато чого знаєш про DateTime API, запам'ятати все це тобі не складе :)</p>
 
 <p>Запишу у вигляді таблиці, так буде простіше:</p>
 
@@ -102,18 +102,18 @@
 </tbody>
 </table>
  
-<h2>Отримання дати</h2>
+<h2>3. Отримання дати</h2>
 
 <p>У мене для тебе гарна новина. Перша за довгий час. <span class="text-green">Ми можемо обійти обмеження методу <span class="code text-orange">getDate()</span>, який повертає тип java.sql Date.</span></p>
 
-<p>Справа в тому, що об'єкт <mark class="green">ResultSet</mark> має ще один цікавий метод — <span class="code text-orange">getObject()</span>. Цей метод приймає два параметри: колонку і тип і повертає значення колонки, перетворене до заданого типу. Загальний вид методу такий:</p>
+<p>Справа в тому, що об'єкт <mark class="green">ResultSet</mark> має ще один цікавий метод — <span class="code text-orange">getObject()</span>. Цей метод приймає два параметри — колонку і тип, — і повертає значення колонки, перетворене до вказаного типу. Загальний вид методу такий:</p>
  
     <div class="lesson-example lesson-example-center">
     <pre class="lecture-code lecture-code--present language-java"><code>
 <span class="text-user">Ім'яКласу</span> <span class="text-green">ім'я</span> = <span class="text-red">getObject</span>(<span class ="text-orange">column</span>, <span class="text-user">Ім'яКласу</span>);</code></pre>
     </div>
 
-<p>І якщо ви хочете перетворити тип <strong>DATE</strong> на тип <span class="code"><span class="text-green">java.time.LocalDate</span></span> , то потрібно написати щось на кшталт:</p>
+<p>І якщо ти хочеш перетворити тип <strong>DATE</strong> на тип <span class="code"><span class="text-green">java.time.LocalDate</span></span>, потрібно написати щось на кшталт:</p>
  
 <pre class='language-java line-numbers'><code>
   LocalDate localDate = results.getObject(4, LocalDate.class);
@@ -128,9 +128,9 @@
   java.time.ZonedDateTime zoned = results.getObject(9, java.time. ZonedDateTime.class);
 </code></pre>
  
-<p><strong>Важливо!</strong> <span class="text-red">Цей код не буде працювати, якщо у вас застарілий MySQL JDBC Driver</span>. Зверни увагу на версію “mysql-connector-java”, прописану у твоєму pom.xml, або додану до Libraries у налаштуваннях проекту.</p>
+<p><strong>Важливо!</strong> <span class="text-red">Цей код не буде працювати, якщо у тебе застарілий MySQL JDBC Driver</span>. Зверни увагу на версію “mysql-connector-java”, прописану у твоєму pom.xml, або додану до Libraries до налаштувань проєкту.</p>
 
-<p>До речі, у такий же спосіб можна обійти і неможливість зберігати null у примітивних типів. Якщо стовпчик таблиці має тип INT, тобто пара способів отримати з неї null. Дивись приклад нижче:</p>
+<p>До речі, у такий же спосіб можна обійти і неможливість зберігати null у примітивних типів. Якщо стовпчик таблиці має тип INT, є пара способів отримати з неї null. Дивись приклад нижче:</p>
  
 <pre class='language-java line-numbers'><code>
   Integer id1 = results.getObject(8, Integer.class); //так працюватиме
@@ -139,14 +139,14 @@
   int id4 = results.getObject(8, int.class); //метод поверне null, JVM кине NPE
 </code></pre>
  
-<h2>Налаштування часового поясу в MySQL</h2>
+<h2>4. Налаштування часового поясу в MySQL</h2>
 
 З MySQL теж сталося багато цікавого. Як ти знаєш, під час створення з'єднання з MySQL до нього можна додавати різні <strong>параметри</strong>:
  
-<pre><code><span class="text-red">mysql</span>://<span class="text-green">localhost</span>:<span class="text-neon"> 3306</span>/<span class="text-viola">db_scheme</span>?<span class="text-green">ім'я</span>=<span class="text-user">значення< /span>&<span class="text-green">ім'я</span>=<span class="text-user">значення</span>
+<pre><code><span class="text-red">mysql</span>://<span class="text-green">localhost</span>:<span class="text-neon"> 3306</span>/<span class="text-viola">db_scheme</span>?<span class="text-green">ім'я</span>=<span class="text-user">значення</span>&<span class="text-green">ім'я</span>=<span class="text-user">значення</span>
 </code></pre>
  
-<p>Так ось, для роботи з тимчасовими зонами MySQL додали три параметри. Ці параметри ти можеш надсилати, коли встановлюєш з'єднання з сервером.</p>
+<p>Так ось, для роботи з часовими зонами до MySQL додали три параметри. Ці параметри ти можеш надсилати, коли встановлюєш з'єднання з сервером.</p>
 
 <p>Нижче я наведу таблицю з ними:</p>
  
@@ -175,11 +175,11 @@
 </tbody>
 </table>
  
-<p>За допомогою параметра <span class="text-green">connectionTimeZone</span> ми вибираємо часову зону (часовий пояс), в якій будуть виконуватися всі запити. З точки зору клієнта сервер працює у зазначеній тимчасовій зоні.</p>
+<p>За допомогою параметра <span class="text-green">connectionTimeZone</span> ми обираємо часову зону (часовий пояс), в якій будуть виконуватися всі запити. З точки зору клієнта сервер працює у зазначеній часовій зоні.</p>
 
 <p>Параметр <span class="text-green">forceConnectionTimeZoneToSession</span> змушує ігнорувати змінну time_zone сесії та замінити її на connectionTimeZone.</p>
 
-<p>І нарешті параметр <span class="text-green">preserveInstants</span> керує перетворення точного-моменту-часу між JVM timeZone та connectionTimeZone.</p>
+<p>І нарешті, параметр <span class="text-green">preserveInstants</span> управляє перетворенням точного-моменту-часу між JVM timeZone та connectionTimeZone.</p>
 
 <p>Найчастіші конфігурації такі:</p>
 
@@ -187,7 +187,7 @@
 <li><p><strong>connectionTimeZone=LOCAL & forceConnectionTimeZoneToSession=false</strong> — відповідає старому MySQL JDBC драйверу версії 5.1 з параметром useLegacyDatetimeCode=true.</p></li>
 <li><p><strong>connectionTimeZone=LOCAL & forceConnectionTimeZoneToSession=true</strong> — новий режим, який забезпечує найбільш природний спосіб обробки значень дати та часу.</p></li>
 <li><p><strong>connectionTimeZone=SERVER & preserveInstants=true</strong> — відповідає старому MySQL JDBC драйверу версії 5.1 з параметром useLegacyDatetimeCode=false.</p></li>
-<li><p><strong>connectionTimeZone=user_defined & preserveInstants=true</strong> — допомагає подолати ситуацію, коли часовий пояс сервера не може бути розпізнаний конектором, тому що він встановлений як загальна абревіатура, така як CET/CEST.< /p></li>
+<li><p><strong>connectionTimeZone=user_defined & preserveInstants=true</strong> — допомагає подолати ситуацію, коли часовий пояс сервера не може бути розпізнаний конектором, тому що він вказаний як загальна абревіатура, така як CET/CEST.</p></li>
 </ul>
 
-<p>Так, дати — тема цікава і проблем із ними багато. Як то кажуть: це, звичайно, страшно, але і я не сикло! :)</p>
+<p>Так, дати — тема цікава, і проблем із ними багато. Як то кажуть: сміливий наскок — половина-спасіння.</p>

@@ -2,10 +2,10 @@
 <p>----------------------------------------</p>
 Повний перелік типів даних JDBC.
 Тип даних BLOB.
-Зберігаємо Java-об'єкт у базу.
+Зберігаємо Java-об'єкт до бази.
 Читаємо Java-об'єкт із бази.
 <p>----------------------------------------</p>
-<h2>Повний список типів даних JDBC</h2>
+<h2>1. Повний список типів даних JDBC</h2>
 
 <p>Окрім відомих тобі типів даних, JDBC дозволяє працювати з багатьма рідними типами даних для СУБД. Нижче я наведу список типів та функції для їх отримання:</p>
  
@@ -132,11 +132,11 @@
  
 <p>Примітивні типи ми з тобою вже розглядали. Давай спробуємо попрацювати з об'єктами.</p>
 
-<h2>Тип даних BLOB</h2>
+<h2>2. Тип даних BLOB</h2>
 
-<p>Якщо ти хочеш зберегти якийсь об'єкт у базу даних, то найпростіший спосіб зробити це – скориставшись SQL-типом BLOB. JDBC має його аналог, який називається Blob.</p>
+<p>Якщо ти хочеш зберегти якийсь об'єкт у базу даних, то найпростіший спосіб зробити це — скористатись SQL-типом BLOB. JDBC має його аналог, який називається Blob.</p>
 
-<p>BLOB розшифровується як <strong><span class="text-red">B</span>inary <span class="text-red">L</span>arge <span class="text-red" >Ob</span>ject</strong>. Він використовується для зберігання масиву байт. Тип Blob у JDBC є інтерфейсом і в нього можна класти (і отримувати) дані двома способами:</p>
+<p>BLOB розшифровується як <strong><span class="text-red">B</span>inary <span class="text-red">L</span>arge <span class="text-red">Ob</span>ject</strong>. Він використовується для зберігання масиву байт. Тип Blob у JDBC є інтерфейсом? і в нього можна класти (і отримувати з нього) дані двома способами:</p>
 
 <ul>
 <li>За допомогою <span class="text-green"><span class="text-bold">InputStream</span></span></li>
@@ -160,7 +160,7 @@ Statement statement = connection.createStatement();
   String insertQuery = "INSERT INTO images(name, image) VALUES (?, ?)";
   PreparedStatement statement = connection.prepareStatement(insertQuery);
  
-  // Створюємо об'єкт Blob і отримуємо у нього OtputStream для запису даних
+  // Створюємо об'єкт Blob і отримуємо в нього OutputStream для запису даних
   Blob blob = connection.createBlob();
  
   // Заповнюємо Blob даними …
@@ -171,7 +171,7 @@ Statement statement = connection.createStatement();
   statement.execute();
 </code></pre>
 
-<p>Заповнити Blob даними можна двома способами. Перший - через <span class="text-green"><span class="text-bold">OutputSteam</span></span>:</p>
+<p>Заповнити Blob даними можна двома способами. Перший — через <span class="text-green"><span class="text-bold">OutputSteam</span></span>:</p>
 
 <pre class='language-java line-numbers'><code>
   Path avatar = Paths.get("E:\images\cat.jpg");
@@ -187,9 +187,9 @@ Statement statement = connection.createStatement();
   blob.setBytes(1, content);
 </code></pre>
  
-<h2>Зберігаємо Java-об'єкт у базу</h2>
+<h2>3. Зберігаємо Java-об'єкт до бази</h2>
 
-<p>Ми навчилися зберігати в базу бінарні об'єкти: масиви байт, байтові потоки тощо. А що щодо Java-об'єктів? Як зберегти Java-об'єкт у базі даних?</p>
+<p>Ми навчилися зберігати до бази бінарні об'єкти: масиви байт, байтові потоки тощо. А як щодо Java-об'єктів? Як зберегти Java-об'єкт у базі даних?</p>
 
 <p>Припустимо, у нас є Java-клас <span class="code"><span class="text-green">Employee</span></span>, який описує співробітника компанії:</p>
 
@@ -221,7 +221,7 @@ CREATE TABLE employee {
 
 <pre class='language-java line-numbers'><code>
 public static boolean addEmployee(Connection connection, Employee employee) throws Exception {
-    // Створюємо та готуємо запит на вставку даних у таблицю
+    // Створюємо та готуємо запит на вставлення даних до таблиці
     String insertQuery = "INSERT INTO employee(name, occupation, salary, join_date ) VALUES (?, ?, ?, ?)";
     PreparedStatement statement = connection.prepareStatement(insertQuery);
  
@@ -239,12 +239,12 @@ public static boolean addEmployee(Connection connection, Employee employee) thro
 
 <p>Просто та зрозуміло. Метод буде добре працювати.</p>
 
-<h2>Читаємо Java-об'єкт з бази</h2>
+<h2>4. Читаємо Java-об'єкт з бази</h2>
 
 <p>Записувати об'єкт у базу ми навчилися, тепер давай напишемо код, щоб читати об'єкт із бази. Почнемо з коду, який читає об'єкт із бази за його ID:</p>
 
 <pre class='language-java line-numbers'><code>
-public static Employee getEployeeById(Connection connection, int id) throws Exception {
+public static Employee getEmployeeById(Connection connection, int id) throws Exception {
     // Створюємо та готуємо запит для отримання співробітника з таблиці
     PreparedStatement statement = connection.prepareStatement("SELECT * FROM employee WHERE id = ?");
     statement.setInt(1, id);
@@ -268,7 +268,7 @@ public static Employee getEployeeById(Connection connection, int id) throws Exce
 <p>А якщо нам потрібний не один об'єкт, а кілька? Такий запит також написати просто. Давай отримаємо всіх співробітників нашої компанії:</p>
 
 <pre class='language-java line-numbers'><code>
-    public static List&lt;Employee> getAllEployees(Connection connection) throws Exception {
+    public static List&lt;Employee> getAllEmployees(Connection connection) throws Exception {
     // Створюємо та виконуємо запит для отримання співробітників з таблиці
     Statement statement = connection.createStatement();
     ResultSet results = statement.executeQuery("SELECT * FROM employee");
@@ -291,4 +291,4 @@ list.add(employee);
 
 <p>До речі, якщо таких методів буде багато, то в кожному з них доведеться писати однаковий код з перетворення рядка <span class="code">ResultSet</span> на об'єкт <mark class="green">Employee</mark >. Отже, цей код можна винести в окремий метод.</p>
 
-<p>Особливо це може бути корисно, якщо клас <span class="code"><span class="text-green">Employee</span></span> містить складні поля типу Enum, InputStream, або посилання на інші об'єкти, які ми хочемо зберігати в базі.</p>
+<p>Це може бути корисно, якщо клас <span class="code"><span class="text-green">Employee</span></span> містить складні поля типу Enum, InputStream, або посилання на інші об'єкти, які ми хочемо зберігати в базі.</p>

@@ -4,9 +4,9 @@
 Порівняння з NULL
 IS NULL та IS NOT NULL
 <p>----------------------------------------</p>
-<h2>5.1 Відсутність значення</h2>
-<p>У мові SQL, як і мові Java, є спеціальне ключове слово позначення відсутності значення – це null. Або як це часто пишуть - <code>NULL</code>.</p>
-<p>Використання <code>NULL</code> у SQL дуже схоже використання null в Java. У Java можуть бути об'єкти, поля яких містять null-значення. У SQL можуть бути таблиці, рядки яких містять значення NULL.</p>
+<h2>1. Відсутність значення</h2>
+<p>У мові SQL, як і в мові Java, є спеціальне ключове слово на позначення відсутності значення — це null. Або як це часто пишуть — <code>NULL</code>.</p>
+<p>Використання <code>NULL</code> у SQL дуже схоже на використання null в Java. У Java можуть бути об'єкти, поля яких містять null-значення. У SQL можуть бути таблиці, рядки яких містять значення NULL.</p>
 <p>Давай я спеціально додам до нашої таблиці product пару продуктів без бренду. Якщо бренд продукту невідомий, то значення буде <code>NULL</code>.</p>
 <p>Щоб відобразити такі продукти, відсортуємо нашу таблицю <strong>product</strong> за <strong>id</strong> у зворотному порядку та візьмемо 10 записів. Запит буде мати такий вигляд:</p>
  <div class="lesson-example lesson-example-center">
@@ -28,7 +28,7 @@ IS NULL та IS NOT NULL
     </tr>
     <tr>
         <td>15</td>
-        <td>Заклепування</td>
+        <td>Заклепка</td>
         <td><span class="text-red">NULL</span></td>
         <td>0.01</td>
         <td>1000</td>
@@ -99,7 +99,7 @@ IS NULL та IS NOT NULL
     </tbody>
 </table>
 <p>Так, я додав до таблиці заклепки та шурупи. У них є ціна та кількість, але немає бренду.</p>
-<h2>5.2 Порівняння з NULL</h2>
+<h2>2. Порівняння з NULL</h2>
 <p>Пам'ятаєш, що тебе іноді дратувало в Java при використанні null? Що не можна порівнювати змінні, які можуть посилатися на null-значення через equals(). Приклад:</p>
 <pre class='language-java line-numbers'><code>
 Product <span class="text-green">product1</span> = новий Product();
@@ -108,7 +108,7 @@ if (<span class="text-user">product2</span>.equals(<span class="text-green">prod
 …
 }
 </code></pre>
-<p>Ти не повіриш, але в мові SQL на тебе теж чекають нюанси при роботі з NULL-значеннями. І звучить цей нюанс приблизно так: ніщо не дорівнює NULL</mark>.</p>
+<p>Ти не повіриш, але в мові SQL на тебе теж чекають нюанси під час роботи з NULL-значеннями. І звучить цей нюанс приблизно так: ніщо не дорівнює NULL</mark>.</p>
 <p>Якщо спробуєш відфільтрувати всі продукти, чий бренд дорівнює <code>null</code>:</p>
  <div class="lesson-example lesson-example-center">
     <pre class="lecture-code lecture-code--present language-java"><code>
@@ -128,14 +128,14 @@ if (<span class="text-user">product2</span>.equals(<span class="text-green">prod
     </tr>
     </tbody>
 </table>
-<p>Але якщо в запиті написати, що <strong>brand</strong> не дорівнює <code>NULL</code>, отримаєш той самий результат: </p>
+<p>Але якщо в запиті вказати, що <strong>brand</strong> не дорівнює <code>NULL</code>, отримаєш той самий результат: </p>
  <div class="lesson-example lesson-example-center">
     <pre class="lecture-code lecture-code--present language-java"><code>
 <span class="text-red">SELECT</span> * <span class="text-red">FROM</span> <span class="text-yellow">product</span>
 <span class="text-red">WHERE</span> <span class="text-green">brand</span> != <span class="text-red">NULL</span>
         </code></pre>
 </div>
-<p>Ти знову отримаєш порожню таблицю:</p>
+<p>Знову порожня таблиця:</p>
 <table>
     <tbody>
     <tr>
@@ -174,20 +174,20 @@ if (<span class="text-user">product2</span>.equals(<span class="text-green">prod
     </tbody>
 </table>
 <p>Так, <mark class="red">навіть якщо порівнювати NULL з NULL, то у відповіді буде NULL</mark>.</p>
-<h2>5.3 IS NULL та IS NOT NULL</h2>
-<p>Так як нам перевірити, що якесь поле (або якась колонка) має значення <code>NULL</code>? А для цього у мові SQL є спеціальний вираз - <code>IS NULL</code>. Це виглядає так.</p>
+<h2>3. IS NULL та IS NOT NULL</h2>
+<p>Тож як нам перевірити, що якесь поле (або якась колонка) має значення <code>NULL</code>? А для цього у мові SQL є спеціальний вираз — <code>IS NULL</code>. Це виглядає так.</p>
  <div class="lesson-example lesson-example-center">
     <pre class="lecture-code lecture-code--present language-java"><code>
 <span class="text-green">змінна</span> <span class="text-red">IS NULL</span>
         </code></pre>
 </div>
-<p>Якщо ти хочеш перевірити, чи не дорівнює колонка твоєї таблиці <code>NULL</code>, то потрібно писати <code>IS NOT NULL</code>:</p>
+<p>Якщо ти хочеш перевірити, чи не дорівнює колонка твоєї таблиці <code>NULL</code>, потрібно писати <code>IS NOT NULL</code>:</p>
  <div class="lesson-example lesson-example-center">
     <pre class="lecture-code lecture-code--present language-java"><code>
 <span class="text-green">змінна</span> <span class="text-red">IS NOT NULL</span>
         </code></pre>
 </div>
-<p>Давай напишемо запит, який відбере всі продукти з таблиці product, бренд якого дорівнює <code>NULL</code>. Виглядатиме такий запит так:</p>
+<p>Давай напишемо запит, який відбере всі продукти з таблиці product, бренд якого дорівнює <code>NULL</code>. Виглядатиме цей запит таким чином:</p>
  <div class="lesson-example lesson-example-center">
     <pre class="lecture-code lecture-code--present language-java"><code>
 <span class="text-red">SELECT</span> * <span class="text-red">FROM</span> <span class="text-yellow">product</span>
@@ -213,7 +213,7 @@ if (<span class="text-user">product2</span>.equals(<span class="text-green">prod
     </tr>
     <tr>
         <td>15</td>
-        <td>Заклепування</td>
+        <td>Заклепка</td>
         <td><span class="text-red">NULL</span></td>
         <td>0.01</td>
         <td>1000</td>
@@ -260,7 +260,7 @@ if (<span class="text-user">product2</span>.equals(<span class="text-green">prod
     </tr>
     <tr>
         <td>15</td>
-        <td>Заклепування</td>
+        <td>Заклепка</td>
         <td><span class="text-red">NULL</span></td>
         <td>0.01</td>
         <td>1000</td>

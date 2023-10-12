@@ -3,9 +3,9 @@ Joined Table
 Опис
 @PrimaryKeyJoinColumn.
 <p>----------------------------------------</p>
-<h2>Опис</h2>
+<h2>1. Опис</h2>
 
-<p>Ще одна стратегія зберігання ієрархії класів у базі даних називається Joined Table. Для неї є спеціальна інструкція:</p>
+<p>Ще одна стратегія зберігання ієрархії класів у базі даних називається Joined Table. Для неї є спеціальна анотація:</p>
  
     <div class="lesson-example lesson-example-center">
     <pre class="lecture-code lecture-code--present language-java"><code>
@@ -40,7 +40,7 @@ class Client extends User {
 }
 </code></pre>
 
-<p>При використанні цієї інструкції Hibernate чекатиме в базі окрему таблицю для кожного класу та його підкласів. Під час вибірки даних із них доведеться використовувати SQL-оператор JOIN.</p>
+<p>При використанні цієї анотації Hibernate чекатиме в базі на окрему таблицю для кожного класу та його підкласів. Під час вибірки даних із них доведеться використовувати SQL-оператор JOIN.</p>
 
 <p>Приклад схеми бази даних:</p>
 
@@ -72,9 +72,9 @@ CREATE TABLE client {
  
 <pre><code><strong><span class="text-red">SELECT</span> u.id, u.name, u.birthday, c.address <span class="text-red">FROM </span>user u <span class="text-red">JOIN</span> client c <span class="text-red">ON</span> u.id = c.id;</strong> </code></pre>
  
-<h2>@PrimaryKeyJoinColumn</h2>
+<h2>2. @PrimaryKeyJoinColumn</h2>
 
-<p>Дочірні Entity-класи мають колонку в таблиці, яка посилається на id об'єкта батьківського Entity-класу. Ім'я цієї колонки за промовчанням дорівнює імені колонки батьківського класу.</p>
+<p>Дочірні Entity-класи мають колонку в таблиці, яка посилається на id об'єкта батьківського Entity-класу. Ім'я цієї колонки за замовчуванням дорівнює імені колонки батьківського класу.</p>
 
 <p>Приклад:</p>
 

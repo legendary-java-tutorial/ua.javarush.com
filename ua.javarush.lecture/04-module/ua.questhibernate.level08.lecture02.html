@@ -1,19 +1,19 @@
 Виклик функцій SQL-сервера
 <p>----------------------------------------</p>
-Зміннийдержавний.
+CallableStatement.
 Batching запитів.
 <p>----------------------------------------</p>
-<h2>CallableStatement</h2>
+<h2>1. CallableStatement</h2>
 
 <p>У JDBC є ще один інтерфейс для більш складних сценаріїв. Він успадкований від <span class="text-neon"><span class="text-bold"><em>PreparedStatement</em></span></span> і називається <span class="text-neon" ><span class="text-bold"><em>CallableStatement</em></span></span>.</p>
 
 <p>Він використовується для виклику (Call) процедур, що зберігаються в базі даних. Особливість такого виклику в тому, що крім результату <span class="code"><span class="text-green">ResultSet</span></span> такій процедурі, що зберігається, можна ще й передати параметри.</p>
 
-<p>А що тут нового, спитаєш ти? <span class="text-neon"><span class="text-bold"><em>PreparedStatement</em></span></span> теж має результат <span class="code"><span class ="text-green">ResultSet</span></span> і в нього також можна передавати параметри. Так, все вірно, але особливість процедур, що зберігаються в тому, що через параметри вони можуть не тільки отримувати, а й повертати дані.</p>
+<p>А що тут нового, спитаєш ти? <span class="text-neon"><span class="text-bold"><em>PreparedStatement</em></span></span> теж має результат <span class="code"><span class ="text-green">ResultSet</span></span>, і до нього також можна передавати параметри. Так, все вірно, але особливість процедур, що зберігаються в тому, що через параметри вони можуть не лише отримувати, а й повертати дані.</p>
 
 <p>Збережена процедура викликається з параметрами <strong>IN</strong>, <strong>OUT</strong> та <strong>INOUT</strong>. Вона повертає один або кілька об'єктів <span class="code"><span class="text-green">ResultSet</span></span>. Для створення об'єкта <span class="text-neon"><span class="text-bold"><em>CallableStatement</em></span></span> призначений метод <span class="code text-orange ">Connection.prepareCall()</span>.</p>
 
-<p>Ось уяви, що в тебе є процедура ADD, що зберігається, яка приймає параметри a, b і c. Ця процедура складає a і b і поміщає результат додавання до змінної с.</p>
+<p>Ось уяви, що в тебе є процедура ADD, що зберігається, яка приймає параметри a, b і c. Ця процедура складає a та b й поміщає результат додавання до змінної с.</p>
 
 <p>Давай напишемо код, де спробуємо її викликати:</p>
 
@@ -23,12 +23,12 @@ Batching запитів.
  
  // Створення об'єкта CallableStatement. Він виконує попередню обробку
  // виклику процедури, що зберігається. Знаки питання
- // вказують, де мають бути підставлені вхідні параметри, а де вихідні
+ // вказують, де треба підставити вхідні параметри, а де вихідні
  // Перші два параметри є вхідними,
- // а третій - вихідним.
+ // а третій — вихідним.
  CallableStatement statement = connection.prepareCall("CALL MYLIBRARY.ADD(?, ?, ?)");
  
- // Налаштування вхідних параметрів. Передаємо у процедуру 123 та 234
+ // Налаштування вхідних параметрів. Передаємо до процедури 123 та 234
  statement.setInt (1, 123);
  statement.setInt (2, 234);
  
@@ -46,20 +46,20 @@ Batching запитів.
  connection.close();
 </code></pre>
 
-<p>Робота майже як з <span class="text-neon"><span class="text-bold"><em>PreparedStatement</em></span></span>, тільки є нюанс. Наша функція ADD повертає у третьому параметрі результат додавання. Тільки об'єкт <span class="text-neon"><span class="text-bold"><em>CallableStatement</em></span></span> про це нічого не знає. Тому ми говоримо йому про це явно, викликавши метод <span class="code text-orange">registerOutParameter()</span>:</p>
+<p>Робота майже як з <span class="text-neon"><span class="text-bold"><em>PreparedStatement</em></span></span>, тільки є нюанс. Наша функція ADD повертає у третьому параметрі результат додавання. Тільки об'єкт <span class="text-neon"><span class="text-bold"><em>CallableStatement</em></span></span> про це нічого не знає. Тому ми говоримо йому про це явно, за допомогою виклику методу <span class="code text-orange">registerOutParameter()</span>:</p>
  
     <div class="lesson-example lesson-example-center">
     <pre class="lecture-code lecture-code--present language-java"><code>
-<span class="text-red">registerOutParameter</span>(<span class="text-green">номерПараметра</span>, <span class="text-user">типПараметра</span>)</ code></pre>
+<span class="text-red">registerOutParameter</span>(<span class="text-green">номерПараметра</span>, <span class="text-user">типПараметра</span>)</code></pre>
     </div>
 
-<p>Після цього можна викликати процедуру через метод <span class="code text-orange">execute()</span> і потім читати дані з третього параметра за допомогою методу <span class="code text-orange">getInt ()</span>.</p>
+<p>Після цього можна викликати процедуру методом <span class="code text-orange">execute()</span> і потім читати дані з третього параметра за допомогою методу <span class="code text-orange">getInt ()</span>.</p>
 
-<h2>Batching запитів</h2>
+<h2>2. Batching запитів</h2>
 
-<p>У реальних проектах часто виникає ситуація, коли необхідно зробити дуже багато однотипних запитів (найчастіше в цьому випадку зустрічається <span class="text-neon"><span class="text-bold"><em>PreparedStatement</ em></span></span>), наприклад, треба вставити кілька десятків або сотень записів.</p>
+<p>У реальних проектах часто виникає ситуація, коли необхідно зробити дуже багато однотипних запитів (найчастіше в цьому випадку зустрічається <span class="text-neon"><span class="text-bold"><em>PreparedStatement</em></span></span>). Наприклад, треба вставити кілька десятків або сотень записів.</p>
 
-<p>Якщо виконувати кожен запит окремо, це займе купу часу і знизить продуктивність програми. Щоб запобігти цьому, можна використовувати batch-режим вставки. Він полягає в тому, що ти накопичуєш деякий буфер своїми запитами, а потім виконуєш їх одразу.</p>
+<p>Якщо виконувати кожен запит окремо, це займе купу часу і знизить продуктивність програми. Щоб запобігти цьому, можна використовувати batch-режим вставлення. Він полягає в тому, що ти накопичуєш деякий буфер своїми запитами, а потім виконуєш їх одразу.</p>
 
 <p>Як приклад наведу шматочок коду:</p>
 
@@ -74,15 +74,15 @@ stmt.setString(1, "FirstName_" + i);
     stmt.setString(3, "phone_" + i);
     stmt.setString(4, "email_" + i);
 // Запит не виконується, а вкладається в буфер,
-// який потім виконується відразу всім команд
+// який потім виконується одразу для всіх команд
 stmt.addBatch();
 }
 // Виконуємо всі запити разом
 int[] results = stmt.executeBatch();
 </code></pre>
 
-<p>Замість виконання запиту <span class="code text-orange">execute()</span>, ми складаємо його в пакет за допомогою методу <span class="code text-orange">addBatch( )</span>.</p>
+<p>Замість виконання запиту <span class="code text-orange">execute()</span> ми складаємо його в пакет за допомогою методу <span class="code text-orange">addBatch( )</span>.</p>
 
-<p>А потім, коли набралося кілька сотень запитів, можна їх разом відправити на сервер, викликавши команду <span class="code text-orange">executeBatch()</span>.</p>
+<p>А потім, коли набралося кілька сотень запитів, можна їх разом надіслати на сервер викликом команди <span class="code text-orange">executeBatch()</span>.</p>
 
-<p><strong>Корисно.</strong> Метод <span class="code text-orange">executeBatch()</span> повертає масив цілих чисел - int[]. Кожний осередок цього масиву містить число, яке означає кількість рядків, змінених відповідним запитом. Якщо запит номер 3 у batch'і змінив 5 рядків, то 3-й осередок масиву міститиме число 5.</p>
+<p><strong>Корисно.</strong> Метод <span class="code text-orange">executeBatch()</span> повертає масив цілих чисел — int[]. Кожна ячейка цього масиву містить число, яке означає кількість рядків, змінених відповідним запитом. Якщо запит номер 3 у batch-і змінив 5 рядків, то 3-тя ячейка масиву міститиме число 5.</p>

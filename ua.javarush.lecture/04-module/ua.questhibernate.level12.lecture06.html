@@ -4,15 +4,15 @@
 Створюємо власний тип даних
 Реєстрація свого типу
 <p>----------------------------------------</p>
-<h2>7.1 Створення власного конвертера типів</h2>
-<p>Іноді виникають ситуації, коли хочеш зберегти в одну колонку таблиці досить складний тип даних. Якщо Hibernate знає, як перетворити його на рядок (і назад), то все добре. Якщо ж ні, то тобі доведеться написати власний конвертер даних.</p>
-<p>Припустимо, хтось вирішив зберігати рік народження користувача у базі у вигляді <code>ГГ.ММ.ДД</code>, наприклад: <code>98.12.15</code>. Тобі ж потрібно перетворити його до звичайної дати: <code>15/12/1998</code>. Тоді доведеться написати власний конвертер.</p>
+<h2>1. Створення власного конвертера типів</h2>
+<p>Іноді виникають ситуації, коли ти хочеш зберегти до одної колонки таблиці досить складний тип даних. Якщо Hibernate знає, як перетворити його на рядок (і назад), то все добре. Якщо ж ні, то тобі доведеться написати власний конвертер даних.</p>
+<p>Припустимо, хтось вирішив зберігати рік народження користувача у базі у вигляді <code>ГГ.ММ.ДД</code>, наприклад: <code>98.12.15</code>. Тобі ж потрібно перетворити його на звичайну дату: <code>15/12/1998</code>. Тоді доведеться написати власний конвертер.</p>
 <p>Для цього потрібно реалізувати інтерфейс <code>AttributeConverter&lt;EntityType, DbType&gt;</code>.</p>
 <pre class='line-numbers'><code>
 @Converter(autoApply = true)
 public class <span class="text-viola">DateConverter</span> implements <span class="text-brown">AttributeConverter</span>&lt;<span class="text-user">java.time.LocalDate , String</span>&gt; {
  
-    public <span class="text-green">String</span> <span class="text-red">convertToDatabaseColumn</span>(<span class="text-user">java.time.LocalDate date</ span>) {
+    public <span class="text-green">String</span> <span class="text-red">convertToDatabaseColumn</span>(<span class="text-user">java.time.LocalDate date</span>) {
     return <span class="text-user">date</span>.format("YY.MM.DD");
     }
  
@@ -22,7 +22,7 @@ public class <span class="text-viola">DateConverter</span> implements <span clas
     }
 }
 </code></pre>
-<p>І, звичайно, цей конвертер можна додати до будь-якого поля (за умови збігу типів):</p>
+<p>І, звісно, цей конвертер можна додати до будь-якого поля (за умови збігу типів):</p>
 <pre class='line-numbers'><code>
 <span class="text-brown">@Entity
 @Table(name</span>=<span class="text-green">"user"</span><span class="text-brown">)</span>
@@ -36,10 +36,10 @@ class User {
    public java.time.LocalDate date;
 }
 </code></pre>
-<p>Конвертери часто доводиться використовувати, якщо не ти проектував базу даних. Дані там можуть бути у "дивних форматах". Дати можуть зберігатися як рядки, Boolean як CHAR зі значеннями Y та N тощо.</p>
-<h2>7.2 Створюємо власний тип даних</h2>
-<p>Пам'ятаєш таблицю зі списком типів, які відомі Hibernate? Я про типи, які вказуються разом із анотацією <code>@Type</code>. Ти можеш написати свій власний тип даних, який можна використовувати так само, як і інші вбудовані типи в Hibernate.</p>
-<p>Наприклад, ми хочемо мати тип LocalTime, який зберігатиметься в базу не як TIME, а як VARCHAR. І, наприклад, ми маємо доступ до такої бази, і нам не дозволяють поміняти типи даних у її колонках. Тоді ми можемо написати свій Hibernate-тип. Назвемо його LocalTimeString.</p>
+<p>Конвертери часто доводиться використовувати, якщо не ти проєктував базу даних. Дані там можуть бути у "дивних форматах". Дати можуть зберігатися як рядки, Boolean як CHAR зі значеннями Y та N тощо.</p>
+<h2>2. Створюємо власний тип даних</h2>
+<p>Пам'ятаєш таблицю зі списком типів, які відомі Hibernate? Я про типи, які вказуються разом із анотацією <code>@Type</code>. Ти можеш написати власний тип даних, який можна використовувати так само, як і інші вбудовані типи в Hibernate.</p>
+<p>Наприклад, ми хочемо мати тип LocalTime, який зберігатиметься в базі не як TIME, а як VARCHAR. І, наприклад, ми маємо доступ до такої бази, і нам не дозволяють поміняти типи даних у її колонках. Тоді ми можемо написати свій Hibernate-тип. Назвемо його LocalTimeString.</p>
 <p>Для початку нам знадобиться невеликий клас, який описуватиме наш новий тип:</p>
 <pre class='language-java line-numbers'><code>
 public class <span class="text-yellow">LocalTimeStringType</span> extends <span class="text-brown">AbstractSingleColumnStandardBasicType<</span>&lt;<span class="text-user">LocalTime</span >&gt; {
@@ -56,8 +56,8 @@ public class <span class="text-yellow">LocalTimeStringType</span> extends <span 
     }
 }
 </code></pre>
-<p>Це щось на зразок Enum, який складається з одного значення. Набір таких одиноких Енама і є всі типи відомі Hibernate.</p>
-<p>Також нам знадобиться клас – аналог конвертера, який міститиме два методи – <code>wrap()</code> і <code>unwrap()</code> для перетворення значень типу LocalTime в String.</p>
+<p>Це щось на зразок Enum, який складається з одного значення. Набір таких одиноких енамів і є всіма типами, відомими Hibernate.</p>
+<p>Також нам знадобиться клас — аналог конвертера, який міститиме два методи — <code>wrap()</code> і <code>unwrap()</code> для перетворення значень типу LocalTime в String.</p>
 <p>Ось так він виглядатиме без реалізації методів:</p>
 <pre class='language-java line-numbers'><code>
 public class <span class="text-viola">LocalTimeStringJavaDescriptor</span> extends <span class="text-brown">AbstractTypeDescriptor</span>&lt;<span class="text-user">LocalTime</span> &gt; {
@@ -119,7 +119,7 @@ class User
    public java.time.LocalTime time;
 }
 </code></pre>
-<h2>7.3 Реєстрація свого типу</h2>
+<h2>3. Реєстрація свого типу</h2>
 <p>Також можеш зареєструвати свій тип даних під час конфігурування Hibernate. Це трохи нетривіально.</p>
 <pre class='line-numbers'><code>
 ServiceRegistry serviceRegistry = StandardServiceRegistryBuilder()

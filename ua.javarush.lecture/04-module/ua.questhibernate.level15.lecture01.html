@@ -3,9 +3,9 @@
 Опис
 Як дані зберігаються.
 <p>----------------------------------------</p>
-<h2>Опис</h2>
+<h2>1. Опис</h2>
 
-<p>Наступний підхід до зберігання ієрархії класів – це <span class="text-green">зберігати всі класи ієрархії в одній таблиці</span>. Така стратегія називається <strong>Single Table</strong>.</p>
+<p>Наступний підхід до зберігання ієрархії класів — це <span class="text-green">зберігати всі класи ієрархії в одній таблиці</span>. Така стратегія називається <strong>Single Table</strong>.</p>
 
 <p>Наприклад, так:</p>
 
@@ -24,7 +24,7 @@ CREATE TABLE user_ employee_client {
 
 <p>Тобто, у нас є одна таблиця, у якої колонки для всіх класів нашої ієрархії позначені різними кольорами. Також є спеціальна службова колонка <strong>DTYPE VARCHAR</strong>, де Hibernate зберігатиме ім'я Entity-класу.</p>
 
-<p>Справа залишилася за малим – пояснити Hibernate, що дані Entity-класів тепер зберігаються у базі в одній таблиці. Зробити це можна за допомогою анотації <span class="text-yellow"><span class="text-bold">@Inheritance</span></span>:</p>
+<p>Залишилося небагато: треба пояснити Hibernate, що дані Entity-класів тепер зберігаються у базі в одній таблиці. Зробити це можна за допомогою анотації <span class="text-yellow"><span class="text-bold">@Inheritance</span></span>:</p>
  
     <div class="lesson-example lesson-example-center">
     <pre class="lecture-code lecture-code--present language-java"><code>
@@ -59,14 +59,14 @@ class Client extends User {
 }
 </code></pre>
 
-<h2>Як дані зберігаються</h2>
+<h2>2. Як дані зберігаються</h2>
 
-<p>Тепер давай напишемо приклад, де створимо парочку наших сутностей та збережемо їх у базу:</p>
+<p>Тепер давай напишемо приклад, де створимо парочку наших сутностей та збережемо їх до бази:</p>
 
 <pre class='language-java line-numbers'><code>
 Employee employee = New Employee();
 employee.id = 101;
-employee.name = "Іванів";
+employee.name = "Іванов";
 employee.birthday = LocalDate.of("01-01-1999");
 employee.occupation = "Програміст"
 employee.salary = 100000;
@@ -75,7 +75,7 @@ session.persist(employee);
  
 Client client = new Client();
 client.id = 102;
-client.name = "Петрів";
+client.name = "Петров";
 client.birthday = LocalDate.of("15-11-1988");
 client.address = "Шандара";
 session.persist(client);
@@ -91,11 +91,11 @@ INSERT INTO user_ employee_client (id, name, birthday, address, DTYPE)
 VALUES (102, 'Петрів', '15-11-1988', 'Шандара', 'Client')
 </code></pre>
  
-<p>При збереженні даних у таблицю Hibernate передає лише відомі йому поля сутностей. Це означає, що невказані колонки матимуть значення NULL.</p>
+<p>Під час збереження даних до таблиці Hibernate передає лише відомі йому поля сутностей. Це означає, що не вказані колонки матимуть значення NULL.</p>
 
-<p>А це означає, що ти не можеш вказати для колонки occupation тип NOT NULL, тому що при зберіганні клієнта в цій же таблиці його occupation буде NULL. Це один із мінусів зберігання різних сутностей в одній таблиці.</p>
+<p>А це означає, що ти не можеш вказати для колонки occupation тип NOT NULL, тому що під час зберігання клієнта в цій же таблиці його occupation буде NULL. Це один із мінусів зберігання різних сутностей в одній таблиці.</p>
 
-<p>Останнє поле SQL-запиту – це колонка DTYPE, у ній передається ім'я Entity-класу. Він використовується Hibernate, коли ти хочеш прочитати дані зі своєї таблиці.</p>
+<p>Останнє поле SQL-запиту — це колонка DTYPE, у ній передається ім'я Entity-класу. Він використовується Hibernate, коли ти хочеш прочитати дані зі своєї таблиці.</p>
 
 <p>Приклад:</p>
  
@@ -107,4 +107,4 @@ VALUES (102, 'Петрів', '15-11-1988', 'Шандара', 'Client')
 
 <p>У нашому випадку в списку accounts будуть два об'єкти: типу Employee та типу Client.</p>
 
-<p>HQL рулює.</p>
+<p>HQL рулить.</p>

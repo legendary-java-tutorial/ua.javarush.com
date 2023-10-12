@@ -4,7 +4,7 @@
 Запит до кількох таблиць.
 Забираємо безглузді рядки.
 <p>----------------------------------------</p>
-<h2>Залежна таблиця </h2>
+<h2>1. Залежна таблиця </h2>
 
 <p>Тепер трохи ускладнимо наші запити. Додамо до нашої бази даних нову таблицю <strong>task</strong> із завданнями для наших співробітників. І подивимося, які в ній записи:</p>
  
@@ -74,7 +74,7 @@
 </tbody>
 </table>
  
-<p>У цій таблиці є всього 4 колонки: </p>
+<p>У цій таблиці є лише 4 колонки: </p>
 
 <ul>
 <li><strong>id</strong> — унікальний номер завдання (та рядки у таблиці); </li>
@@ -83,25 +83,25 @@
 <li><strong>deadline</strong> — час, до якого потрібно виконати завдання.</li>
 </ul>
 
-<p>Зверніть увагу на кілька нюансів. Завдання N6 не має employee_id, ми не маємо прибиральниці. Завдання є, а виконавця немає. Таке буває.</p>
+<p>Зверни увагу на кілька нюансів. Завдання N6 не має employee_id: ми не маємо прибиральниці. Завдання є, а виконавця немає. Таке буває.</p>
  
 <p>Також завдання 6-9 не мають встановленого дедлайну. Таке буває, коли завдання має виконуватися регулярно і безперервно. Наприклад, офіс потрібно прибирати щодня, та й насолоджуватися життям теж потрібно щодня :) </p>
  
 <p>Якщо в одній таблиці використовуються ID з іншої таблиці, то така таблиця називається <strong>залежною</strong>. </p>
  
-<h2>Запит до кількох таблиць </h2>
+<h2>2. Запит до кількох таблиць </h2>
  
-<p>Ось ми бачимо в таблиці task, що є два завдання "Насолоджується життям". Як нам дізнатися, хто саме ці щасливчики? </p>
+<p>Ось ми бачимо в таблиці task, що є два завдання "Насолоджуватися життям". Як нам дізнатися, хто саме ці щасливчики? </p>
 
-<p>Для цього SQL можна виконати запит відразу до двох таблиць. Взагалі SQL можна виконувати запит до будь-якої кількості таблиць одночасно. Загальний формат такого запиту: </p>
+<p>Для цього SQL можна виконати запит відразу до двох таблиць. Взагалі в SQL можна виконувати запит до будь-якої кількості таблиць одночасно. Загальний формат такого запиту: </p>
  
 <pre><code><span class="text-bold"><span class="text-red">SELECT</span> <span class="text-green">колонки </span>
 <span class="text-red">FROM</span> <span class="text-orange">таблиця1</span>, <span class="text-orange">таблиця2</span>, <span class ="text-orange">таблицяN</span></span>
 </code></pre>
 
-<p>Важливо! Якщо ти напишеш запит до кількох таблиць одночасно, то в результаті отримаєш так званий <strong>декартовий твір</strong> рядків таблиць. До кожного рядка з першої таблиці буде приклеєно кожен рядок з другої таблиці і так далі.</p>
+<p>Важливо! Якщо ти напишеш запит до кількох таблиць одночасно, в результаті отримаєш так званий <strong>декартовий твір</strong> рядків таблиць. До кожного рядка з першої таблиці буде приклеєно кожен рядок з другої таблиці і так далі.</p>
  
-<p>Тобто, якщо в першій таблиці у вас 5 рядків, а в другій 10, то всього у вас буде 50 рядків. На мові Java цей запит виглядав би приблизно так: </p>
+<p>Тобто, якщо в першій таблиці у тебе 5 рядків, а в другій — 10, загалом у тебе буде 50 рядків. На мові Java цей запит виглядав би приблизно так: </p>
  
 <pre class='language-java line-numbers'><code>
 for (String <span class="text-green">row1</span> : <span class="text-orange">table1</span>)
@@ -113,14 +113,14 @@ for (String <span class="text-green">row2</span> : <span class="text-orange">tab
 }
 </code></pre>
 
-<p>Давай напишемо наш запит відразу до двох таблиць і загостримо, що вийде: </p>
+<p>Давай напишемо наш запит одразу до двох таблиць і подивимося, що вийде: </p>
  
     <div class="lesson-example lesson-example-center">
     <pre class="lecture-code lecture-code--present language-java"><code>
 <span class="text-red">SELECT</span> * <span class="text-red">FROM</span> <span class="text-orange">employee</span>, <span class ="text-orange">task</span></code></pre>
     </div>
  
-<p>І результат такого запиту: </p>
+<p>Ось результат такого запиту: </p>
 
 <table>
 <tbody>
@@ -138,7 +138,7 @@ for (String <span class="text-green">row2</span> : <span class="text-orange">tab
 </tr>
 <tr>
 <td>1 </td>
-<td>Іванов Іван </td>
+<td>Шевченко Ігор </td>
 <td>Програміст </td>
 <td>100000</td>
 <td>25 </td>
@@ -149,7 +149,7 @@ for (String <span class="text-green">row2</span> : <span class="text-orange">tab
 </tr>
 <tr>
 <td>2 </td>
-<td>Петров Петро </td>
+<td>Коваленко Максим </td>
 <td>Програміст </td>
 <td>80000</td>
 <td>23 </td>
@@ -160,7 +160,7 @@ for (String <span class="text-green">row2</span> : <span class="text-orange">tab
 </tr>
 <tr>
 <td>3 </td>
-<td>Іванов Сергій </td>
+<td>Шевченко Данило </td>
 <td>Тестувальник </td>
 <td>40000</td>
 <td>30</td>
@@ -171,7 +171,7 @@ for (String <span class="text-green">row2</span> : <span class="text-orange">tab
 </tr>
 <tr>
 <td>4</td>
-<td>Рабінович Мойша</td>
+<td>Мельник Степан</td>
 <td>Директор </td>
 <td>200000</td>
 <td>35 </td>
@@ -193,7 +193,7 @@ for (String <span class="text-green">row2</span> : <span class="text-orange">tab
 </tr>
 <tr>
 <td>6 </td>
-<td>Васька </td>
+<td>Пончик </td>
 <td>кіт </td>
 <td>1000 </td>
 <td>3 </td>
@@ -204,7 +204,7 @@ for (String <span class="text-green">row2</span> : <span class="text-orange">tab
 </tr>
 <tr>
 <td>1 </td>
-<td>Іванов Іван </td>
+<td>Шевченко Ігор </td>
 <td>Програміст </td>
 <td>100000</td>
 <td>25 </td>
@@ -215,7 +215,7 @@ for (String <span class="text-green">row2</span> : <span class="text-orange">tab
 </tr>
 <tr>
 <td>2 </td>
-<td>Петров Петро </td>
+<td>Коваленко Максим </td>
 <td>Програміст </td>
 <td>80000</td>
 <td>23 </td>
@@ -226,7 +226,7 @@ for (String <span class="text-green">row2</span> : <span class="text-orange">tab
 </tr>
 <tr>
 <td>3 </td>
-<td>Іванов Сергій </td>
+<td>Шевченко Данило </td>
 <td>Тестувальник </td>
 <td>40000</td>
 <td>30</td>
@@ -237,7 +237,7 @@ for (String <span class="text-green">row2</span> : <span class="text-orange">tab
 </tr>
 <tr>
 <td>4 </td>
-<td>Рабінович Мойша </td>
+<td>Мельник Степан </td>
 <td>Директор </td>
 <td>200000</td>
 <td>35 </td>
@@ -260,17 +260,17 @@ for (String <span class="text-green">row2</span> : <span class="text-orange">tab
 </tbody>
 </table>
  
-<p>Усього рядків результату у нас 48, але тут я навів лише 11. Інакше просто місця не вистачить. </p>
+<p>Загалом рядків результату у нас 48, але тут я навів лише 11. Інакше просто місця не вистачить. </p>
 
 <p>Зверни увагу на три речі: </p>
 
 <ul>
 <li>Колонки з однаковими іменами: <strong>id</strong>. Це id із таблиці <strong>employee</strong> та id із таблиці <strong>task</strong>. </li>
 <li>Рядки кожної таблиці повторюються. У лівій колонці після ID 6 знову йде ID = 1. </li>
-<li>У нас є безглузді рядки, коли, наприклад, id (з таблиці employee) дорівнює 6 і в тому ж рядку employee_id дорівнює 1. </li>
+<li>У нас є безглузді рядки, коли, наприклад, id (з таблиці employee) дорівнює 6, і в тому ж рядку employee_id дорівнює 1. </li>
 </ul>
  
-<h2>Забираємо безглузді рядки </h2>
+<h2>3. Забираємо безглузді рядки </h2>
  
 <p>У нашій результуючій таблиці, яка є декартовим твором всіх рядків двох таблиць <strong>employee</strong> та <strong>task</strong> дуже багато рядків. </p>
 
@@ -299,7 +299,7 @@ for (String <span class="text-green">row2</span> : <span class="text-orange">tab
 </tr>
 <tr>
 <td>1 </td>
-<td>Іванов Іван </td>
+<td>Шевченко Ігор </td>
 <td>Програміст </td>
 <td>100000</td>
 <td>25 </td>
@@ -310,7 +310,7 @@ for (String <span class="text-green">row2</span> : <span class="text-orange">tab
 </tr>
 <tr>
 <td>2 </td>
-<td>Петров Петро </td>
+<td>Коваленко Максим </td>
 <td>Програміст </td>
 <td>80000</td>
 <td>23 </td>
@@ -321,7 +321,7 @@ for (String <span class="text-green">row2</span> : <span class="text-orange">tab
 </tr>
 <tr>
 <td>4 </td>
-<td>Рабінович Мойша </td>
+<td>Мельник Степан </td>
 <td>Директор </td>
 <td>200000</td>
 <td>35 </td>
@@ -365,7 +365,7 @@ for (String <span class="text-green">row2</span> : <span class="text-orange">tab
 </tr>
 <tr>
 <td>6 </td>
-<td>Васька </td>
+<td>Пончик </td>
 <td>кіт </td>
 <td>1000 </td>
 <td>3 </td>

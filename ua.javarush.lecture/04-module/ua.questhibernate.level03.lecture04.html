@@ -1,14 +1,14 @@
 Підзапити
 <p>----------------------------------------</p>
-Вкладені запити до SQL.
-Підзапит із скалярним результатом.
+Вкладені запити в SQL.
+Підзапит зі скалярним результатом.
 Підзапит зі списком значень.
 <p>----------------------------------------</p>
-<h2>Вкладені запити в SQL</h2>
+<h2>1. Вкладені запити в SQL</h2>
  
 <p>Мова SQL дозволяє вкладати одні запити до інших запитів. Це дає можливість написати один дуже великий запит, який робитиме щось велике та складне, хоча при цьому читабельність коду значно знижується.</p>
  
-<p>Залежно від того, скільки значень повертають підзапити, змінюється область, де їх можна застосовувати. Усього можливі три варіанти: </p>
+<p>Залежно від того, скільки значень повертають підзапити, змінюється область, де їх можна застосовувати. Загалом можливі три варіанти: </p>
  
 <ul>
 <li>Підзапит повертає <strong>одне єдине значення</strong> (одна колонка та один рядок). </li>
@@ -18,7 +18,7 @@
 
 <p>Давай розберемо один приклад для кожного випадку.</p>
  
-<h2>Підзапит із скалярним результатом </h2>
+<h2>2. Підзапит зі скалярним результатом </h2>
  
 <p>Давай знайдемо список усіх наших співробітників з таблиці employee, чия зарплата вища за середню по компанії. Як нам це зробити?</p>
  
@@ -27,7 +27,7 @@
 <pre><code><strong><span class="text-red">SELECT</span> <span class="text-user">AVG(<span class="text-green">salary</span >)</span> <span class="text-red">FROM</span> <span class="text-orange">employee</span></strong>
 </code></pre>
 
-<p>МиSQL повернув нам значення: <strong>76833.3333</strong>. </p>
+<p>MySQL повернув нам значення: <strong>76833.3333</strong>. </p>
 
 <p>Як тепер знайти список усіх співробітників, чия зарплата вища за середню? Теж дуже просто: </p>
  
@@ -47,32 +47,32 @@
 </tr>
 <tr>
 <td>1 </td>
-<td>Іванов Іван </td>
+<td>Шевченко Ігор </td>
 <td>Програміст </td>
 <td>100000</td>
 </tr>
 <tr>
 <td>2 </td>
-<td>Петров Петро </td>
+<td>Коваленко Максим </td>
 <td>Програміст </td>
 <td>80000</td>
 </tr>
 <tr>
 <td>4 </td>
-<td>Рабінович Мойша </td>
+<td>Мельник Степан </td>
 <td>Директор </td>
 <td>200000</td>
 </tr>
 </tbody>
 </table>
  
-<p>А тепер ми просто сумісний обидва запити, підставивши замість значення 76833 перший запит: </p>
+<p>А тепер ми просто поєднаємо обидва запити, підставивши замість значення 76833 перший запит: </p>
 
-<pre><code><strong><span class="text-red">SELECT</span> <span class="text-neon">*</span> <span class="text-red">FROM </span> <span class="text-orange">employee</span>
-   <span class="text-red">WHERE</span> <span class="text-green">salary</span> > <span class="term">(<span class="text-red"> SELECT</span> <span class="text-neon">AVG(<span class="text-green">salary</span>)</span> <span class="text-red">FROM</ span><span class="text-orange">employee</span>)</span></strong>
+<pre><code><strong>   <span class="text-red">SELECT</span> <span class="text-neon">*</span> <span class="text-red">FROM</span> <span class="text-orange">employee</span>
+   <span class="text-red">WHERE</span> <span class="text-green">salary</span> > <span class="term">(<span class="text-red">SELECT</span> <span class="text-neon">AVG(<span class="text-green">salary</span>)</span> <span class="text-red">FROM</span> <span class="text-orange">employee</span>)</span> </strong>
 </code></pre>
 
-<p>Результат цього запиту буде таким же:</p>
+<p>Результат цього запиту буде таким самим:</p>
  
 <table>
 <tbody>
@@ -84,46 +84,46 @@
 </tr>
 <tr>
 <td>1 </td>
-<td>Іванов Іван </td>
+<td>Шевченко Ігор </td>
 <td>Програміст </td>
 <td>100000</td>
 </tr>
 <tr>
 <td>2 </td>
-<td>Петров Петро </td>
+<td>Коваленко Максим </td>
 <td>Програміст </td>
 <td>80000</td>
 </tr>
 <tr>
 <td>4 </td>
-<td>Рабінович Мойша </td>
+<td>Мельник Степан </td>
 <td>Директор </td>
 <td>200000</td>
 </tr>
 </tbody>
 </table>
  
-<h2>Підзапит зі списком значень</h2>
+<h2>3. Підзапит зі списком значень</h2>
  
-<p>Пам'ятаєш колись давно ми мали завдання – знайти всі записи з однієї таблиці, для яких немає відповідних записів з іншої? </p>
+<p>Пам'ятаєш, колись давно ми мали завдання — знайти всі записи з однієї таблиці, для яких немає відповідних записів з іншої? </p>
 
 <p>Там ще була така картинка: </p>
 
 <img data-max-width="512" data-id="a0eff64c-0bb4-4480-833e-c1305cd03a5e" src="https://cdn.javarush.com/images/article/a0eff64c-0bb4-4480-83 -c1305cd03a5e/original.png" alt="">
 
-<p>Якщо не помиляюся, завдання звучить так: відобразіть <strong>список усіх співробітників з таблиці employee, для яких немає завдань у таблиці task</strong>. </p>
+<p>Якщо не помиляюся, завдання звучить так: відобразити <strong>список усіх співробітників з таблиці employee, для яких немає завдань у таблиці task</strong>. </p>
 
 <p>Давай теж знайдемо рішення у два етапи. </p>
 
-<p>Спочатку напишемо запит, який поверне id всіх співробітників, які мають завдання у таблиці task. Тільки не забудьте дві речі: </p>
+<p>Спочатку напишемо запит, який поверне id всіх співробітників, які мають завдання у таблиці task. Тільки не забувай про дві речі: </p>
 
 <ul>
-<li>прибрати дублікати – використовуйте ключове слово DISTINCT. </li>
-<li>заберіть значення NULL з результату. </li>
+<li>прибрати дублікати — використовуй ключове слово DISTINCT. </li>
+<li>забрати значення NULL з результату. </li>
 </ul>
  
 <pre><code><strong><span class="text-red">SELECT DISTINCT</span> <span class="text-user">employee_id</span> <span class="text-red"> FROM</span> <span class="text-orange">task</span>
-   <span class="text-red">WHERE</span> <span class="text-user">employee_id</span> <span class="text-red">IS NOT NULL</span></strong >
+   <span class="text-red">WHERE</span> <span class="text-user">employee_id</span> <span class="text-red">IS NOT NULL</span></strong>
 </code></pre>
 
 <p>І ось ми отримали гарний результат такого запиту: </p>
@@ -152,7 +152,7 @@
 </table>
 
 <p>Давай для зручності тимчасово запишемо його у вигляді послідовності: 1,2,5,4,6.
-Тепер напишемо другий запит – до таблиці employee, яка поверне нам список співробітників, id яких не містяться в першому списку: </p>
+Тепер напишемо другий запит — до таблиці employee, яка поверне нам список співробітників, id яких не містяться в першому списку: </p>
  
 <pre><code><strong><span class="text-red">SELECT</span> * <span class="text-red">FROM</span> <span class="text-orange"> employee</span>
 <span class="text-red">WHERE</span> <span class="text-green">id</span> <span class="text-red">NOT IN</span> <span class= "text-user">(1,2,5,4,6)</span></strong>
@@ -172,7 +172,7 @@
 </tr>
 <tr>
 <td>3 </td>
-<td>Іванов Сергій </td>
+<td>Шевченко Данило </td>
 <td>Тестувальник </td>
 <td>40000</td>
 <td>30</td>
@@ -181,11 +181,11 @@
 </tbody>
 </table>
  
-<p>А тепер можна, як і в попередньому прикладі, поєднати обидва запити, просто підставивши замість списку ID тіло першого запиту. </p>
-  
-<pre><code><strong><span class="text-red">SELECT</span> <span class="text-user">*</span> <span class="text-red">FROM </span> <span class="text-orange">employee</span>
-   <span class="text-red">WHERE</span> <span class="text-green">id</span> <span class="text-red">NOT IN</span> <span class= "text-user">(</span>
-      <span class="text-red">SELECT DISTINCT</span> <span class="text-user">employee_id</span> <span class="text-red">FROM</span> <span class= "text-orange">task</span>
-      <span class="text-red">WHERE</span> <span class="text-user">employee_id</span> <span class="text-red">IS NOT NULL </span>
+<p>А тепер можна, як і в попередньому прикладі, поєднати обидва запити, підставивши замість списку ID тіло першого запиту. </p>
+
+<pre><code><strong> <span class="text-red">SELECT</span> <span class="text-user">*</span> <span class="text-red">FROM</span> <span class="text-orange">employee</span>
+   <span class="text-red">WHERE</span> <span class="text-green">id</span> <span class="text-red">NOT IN</span> <span class="text-user">( </span>
+      	<span class="text-red">SELECT DISTINCT</span> <span class="text-user">employee_id</span> <span class="text-red">FROM</span> <span class="text-orange">task </span>
+      	<span class="text-red">WHERE</span> <span class="text-user">employee_id</span> <span class="text-red">IS NOT NULL </span>
    <span class="text-user">)</span></strong>
 </code></pre>

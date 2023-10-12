@@ -1,51 +1,51 @@
-Проект на тему: Hibernate #1
+Проєкт на тему: Hibernate (1)
 <p>----------------------------------------</p>
-Проект на тему: Hibernate (1)
+Проєкт на тему: Hibernate (1)
 <p>----------------------------------------</p>
-<p>Пам'ятаєте проект із третього модуля по фронтенду, де потрібно було реалізувати адмінку для rpg для серверного API? Якщо хтось пам'ятає – там на сервері як сховище використовувалася карта. Звичайно, у реальному житті такі сховища не використовують, а використовують бази даних. Метою цього проекту буде написати альтернативну реалізацію шару репозиторію з використанням Hibernate.</p>
+<p>Пам'ятаєш проєкт із третього модуля, з фронтенду, де тобі було потрібно реалізувати адмінку для rpg для серверного API? Там на сервері як сховище використовувалася карта. Звісно, в реальному житті такі сховища не використовують, а натомість надають перевагу базам даних. Метою цього проєкту буде написати альтернативну реалізацію шару репозиторію з використанням Hibernate.</p>
 <h3>Для цього потрібно:</h3>
 <ol>
-<li><a href="https://github.com/vasylmalik/project-hibernate-1" target="_blank">Зробити fork з репозиторію</a></li>
-<li>Скачати свою версію проекту до себе на комп'ютер.</li>
+<li><a href="https://github.com/vasylmalik/project-hibernate-1" target="_blank">Зробити fork з цього репозиторію.</a></li>
+<li>Завантажити свою версію проєкту до себе на комп'ютер.</li>
 <li>Додати залежності до pom.xml:</li>
 <ul>
 <li>mysql: mysql-connector-java: 8.0.30</li>
 <li>org.hibernate: hibernate-core-jakarta: 5.6.11.Final</li>
 </ul>
 <li>Зробити maven білд (mvn clean install). Для різноманітності використовуємо Java версії 1.8.</li>
-<li>Додати конфігурацію запуску через Ідею. Реалізацію цього пункту можна переглянути в лекції https://javarush.com/quests/lectures/jru.module3.lecture02" target="_blank">https://javarush.com/quests/lectures/jru. module3.lecture02</a> (пункт 4). Єдина відмінність – інша назва артефакту. Якщо все зробив правильно і запустив програму – побачиш приблизно таку картину: <img data-max-width="800" data-id="9eda0904-cc48-446b-9497-de55b337e8ca" src="https://cdn.javarush". com/images/article/9eda0904-cc48-446b-9497-de55b337e8ca/800.jpeg" alt="">
+<li>Додати конфігурацію запуску через IDEA. Реалізацію цього пункту можна переглянути <a href="https://javarush.com/quests/lectures/jru.module3.lecture02" target="_blank">в цій лекції</a> у пункті 4. Єдина відмінність — у назві артефакту. Якщо все зробити правильно і запустити програму, побачиш щось типу такого: <img data-max-width="800" data-id="9eda0904-cc48-446b-9497-de55b337e8ca" src="https://cdn.javarush.com/images/article/9eda0904-cc48-446b-9497-de55b337e8ca/800.jpeg" alt="">
 </li>
 <li>У Workbench виконати скрипт створення схеми rpg:
 <pre><code>CREATE SCHEMA `rpg`;
 </code></pre></li>
-<li><span class="text-red">Опційно</span>. Якщо хочеш подивитися яку очікується поведінку, можеш у класі <code>com.game.service.PlayerService</code> у параметрі конструктора значення анотації <code>@Qualifier</code> змінити з <strong>«db»</strong> на <strong>«memory»</strong>. У цьому випадку Spring буде використовувати як реалізацію інтерфейсу <code>IPlayerRepository</code> клас <code>PlayerRepositoryMemory</code>. Після тесту не забудь змінити значення анотації <code>@Qualifier</code> назад на <strong>«db»</strong>.</li>
-<li>Розставити всі необхідні інструкції в ентіті-класі <code>com.game.entity.Player</code>. Таблиця має називатися "player", схема "rpg". Для єнамів використовуй <code>@Enumerated(EnumType.ORDINAL)</code> крім анотації <code>@Column</code>. Нагадаю, що довжина поля name має бути до 12 символів, поля title – до 30 символів. Абсолютно всі поля не мають бути null.</li>
-<li>У класі <code>PlayerRepositoryDB</code> додай <strong>private final</strong> поле <code>SessionFactory sessionFactory</code>, у конструкторі класу ініціалізуй це поле. Проперти використовуй як у звичайних завданнях (працюватимемо з БД MySQL версії 8). З цікавого – додай
+<li><span class="text-red">За бажанням</span>. Якщо хочеш поглянути на поведінку, яка очікується, можеш у параметрі конструктора класу <code>com.game.service.PlayerService</code> змінити значення анотації <code>@Qualifier</code> з <strong>«db»</strong> на <strong>«memory»</strong>. У такому випадку Spring буде використовувати клас <code>PlayerRepositoryMemory</code> як реалізацію інтерфейсу <code>IPlayerRepository</code>. Після тесту не забудь змінити значення анотації <code>@Qualifier</code> назад на <strong>«db»</strong>.</li>
+<li>Розставити всі необхідні анотації в entity-класі <code>com.game.entity.Player</code>. Таблиця має називатися "player", схема — "rpg". Для enum-ів використовуй <code>@Enumerated(EnumType.ORDINAL)</code>, окрім анотації <code>@Column</code>. Нагадаю, що довжина поля name має бути до 12 символів, поля title — до 30 символів. Жодне з полів не має бути null.</li>
+<li>У класі <code>PlayerRepositoryDB</code> додай <strong>private final</strong> поле <code>SessionFactory sessionFactory</code>, у конструкторі класу ініціалізуй це поле. Проперті використовуй так само як і у звичайних завданнях (працюватимемо з БД MySQL версії 8). З цікавого — додай
 <pre><code>properties.put(Environment.HBM2DDL_AUTO, "update");
-</code></pre>Це дозволить не створювати таблицю вручну (або через виконання SQL скрипта).</li>
+</code></pre>Це дасть змогу не створювати таблицю вручну (або через виконання SQL скрипта).</li>
 <li>Реалізуй усі методи класу. Для різноманітності давай вчинимо так:</li>
 <ul>
-<li>Метод <code>getAll</code> реалізуй через <code>NativeQuery</code></li>
-<li>Метод <code>getAllCount</code> реалізуй через <code>NamedQuery</code></li>
+<li>Метод <code>getAll</code> реалізуй через <code>NativeQuery</code>.</li>
+<li>Метод <code>getAllCount</code> реалізуй через <code>NamedQuery</code>.</li>
 <li>У методі <code>beforeStop</code> виклич у <code>sessionFactory</code> метод <code>close</code>. За рахунок наявності анотації над методом <code>@PreDestroy</code> Spring викличе цей метод перед зупинкою програми, і це дозволить валідно звільнити всі ресурси системи.</li>
-<li>Реалізація інших методів на твій розсуд. Але не забувай про транзакції та коміти для методів, які як-небудь змінюють вміст БД.</li>
+<li>Реалізація інших методів залишається на твій розсуд. Але не забувай про транзакції та коміти для методів, що будь-яким чином змінюють вміст БД.</li>
 </ul>
-<li>Запусти програму. Якщо все зробив правильно – ти отримаєш робочу програму. Ось тільки даних там немає, так що виконай через Workbench скрипт <strong>init.sql</strong> (з ресурсів), щоб вони з'явилися. Після цього в браузері натисніть на F5 і перевіряй, що всі методи ти реалізував правильно.</li>
+<li>Запусти програму. Якщо все виконано правильно, ти отримаєш робочу програму. Ось тільки даних там немає, отже виконай через Workbench скрипт <strong>init.sql</strong> (з ресурсів), щоб вони з'явилися. Після цього в браузері натисни на F5 і перевіряй, що всі методи реалізовані правильно.</li>
 <li>Було цікаво подивитися, які саме запити виконує Hibernate, тому додамо логування запитів. Для цього додай в pom.xml залежність <strong>p6spy:p6spy:3.9.1</strong>. У папці ресурсів створи файл <strong>spy.properties</strong>, у якому вкажи:
 <pre><code>driverlist=com.mysql.cj.jdbc.Driver
 dateformat=yyyy-MM-dd hh:mm:ss a
 appender=com.p6spy.engine.spy.appender.StdoutLogger
 logMessageFormat=com.p6spy.engine.spy.appender.MultiLineFormat
 </code></pre>
-І в конструкторі класу PlayerRepositoryDB зміни дві опції:
+Після цього конструкторі класу PlayerRepositoryDB зміни дві опції:
 <pre><code>properties.put(Environment.DRIVER, "com.p6spy.engine.spy.P6SpyDriver");
 properties.put(Environment.URL, "jdbc:p6spy:mysql://localhost:3306/rpg");
 </code></pre>
-Тепер у виведенні сервера по кожному запиту ти бачитимеш 2 рядки. Перша – який стейтмент підготовлений, другий – запит із вставленими параметрами.
+Тепер у виведенні сервера щодо кожного запиту ти бачитимеш 2 рядки. Перший — який стейтмент підготовлений, другий — запит зі вставленими параметрами.
 <img data-max-width="800" data-id="8f743666-c999-425e-afc1-92c9fe28783f" src="https://cdn.javarush.com/images/article/8f743666-c999-425e -92c9fe28783f/800.jpeg" alt="">
 </li>
 </ol>
-<p>От і все, проект готовий, вітаю тебе!</p>
+<p>От і все, проєкт готовий, вітаю тебе!</p>
 <p>Насправді, для роботи з Hibernate зі Spring використовується інший підхід, про який ми розповімо в п'ятому модулі.</p>
 <hr>
-<a href="https://youtu.be/G7D03pCZXOw" target="_blank">Розбір проекту.</a>
+<a href="https://youtu.be/G7D03pCZXOw" target="_blank">Розбір проєкту.</a>

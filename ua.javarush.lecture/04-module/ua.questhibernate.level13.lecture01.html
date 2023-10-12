@@ -5,7 +5,7 @@
 Анотація @ManyToOne
 Приклади запитів
 <p>----------------------------------------</p>
-<h2>2.1 Зв'язок на рівні таблиць</h2>
+<h2>1. Зв'язок на рівні таблиць</h2>
 <p>Ми познайомилися з тим, як Hibernate зберігає колекції у допоміжних таблицях. Тепер розберемося, як організувати зв'язки між повноцінними таблицями, які зберігають справжні Entity-класи.</p>
 <p>Усього між Entity-класами в Hibernate є чотири види відносин:</p>
 <ul>
@@ -14,8 +14,8 @@
 <li><span class="text-brown">малі</span>-to-<span class="text-green">one</span></li>
 <li><span class="text-brown">малі</span>-to-<span class="text-brown">many</span></li>
 </ul>
-<p>І почнемо ми розбір із найпростішого варіанту - <span class="text-brown">many</span>-to-<span class="text-green">one</span>.</p>
-<p>З таким ставленням між таблицями в SQL ти вже стикався. Ось як воно зазвичай виглядає:</p>
+<p>І почнемо ми розбір із найпростішого варіанту — <span class="text-brown">many</span>-to-<span class="text-green">one</span>.</p>
+<p>З таким відношенням між таблицями в SQL ти вже стикався. Ось як воно зазвичай виглядає:</p>
 <table>
     <tbody>
     <tr>
@@ -28,7 +28,7 @@
     </tr>
     <tr>
         <td>1</td>
-        <td>Іванов Іван</td>
+        <td>Шевченко Ігор</td>
         <td>Програміст</td>
         <td>100000</td>
         <td>25</td>
@@ -36,7 +36,7 @@
     </tr>
     <tr>
         <td>2</td>
-        <td>Петров Петро</td>
+        <td>Коваленко Максим</td>
         <td>Програміст</td>
         <td>80000</td>
         <td>23</td>
@@ -44,7 +44,7 @@
     </tr>
     <tr>
         <td>3</td>
-        <td>Іванов Сергій</td>
+        <td>Шевченко Данило</td>
         <td>Тестувальник</td>
         <td>40000</td>
         <td>30</td>
@@ -52,7 +52,7 @@
     </tr>
     <tr>
         <td>4</td>
-        <td>Рабінович Мойша</td>
+        <td>Мельник Степан</td>
         <td>Директор</td>
         <td>200000</td>
         <td>35</td>
@@ -68,7 +68,7 @@
     </tr>
     <tr>
         <td>6</td>
-        <td>Васька</td>
+        <td>Пончик</td>
         <td>Кіт</td>
         <td>1000</td>
         <td>3</td>
@@ -148,14 +148,14 @@
 </table>
 <p>У цій таблиці є всього 4 колонки:</p>
 <ul>
-<li><strong>id</strong> – унікальний номер завдання (та рядки в таблиці);</li>
+<li><strong>id</strong> — унікальний номер завдання (та рядки в таблиці);</li>
 <li><span class="text-red">
-<strong>employee_id</strong></span> – ID співробітника з таблиці employee, на якого призначено завдання;</li>
-<li><strong>name</strong> – назва та опис завдання;</li>
-<li><strong>deadline</strong> – час, до якого потрібно виконати завдання.</li>
+<strong>employee_id</strong></span> — ID співробітника з таблиці employee, на якого призначено завдання;</li>
+<li><strong>name</strong> — назва та опис завдання;</li>
+<li><strong>deadline</strong> — час, до якого потрібно виконати завдання.</li>
 </ul>
 <p>Ми бачимо, що багато рядків таблиці task можуть посилатися на один запис employee таблиці. Такий зв'язок на рівні таблиць називається <strong>багато до одного</strong> (many-to-one).</p>
-<h2>2.2 Зв'язок рівня Java-класів</h2>
+<h2>2. Зв'язок рівня Java-класів</h2>
 <p>Крім зв'язку лише на рівні таблиць, можна ще організувати зв'язок лише на рівні Entity-класів в Hibernate. Це робиться за допомогою анотації <code>@ManyToOne</code>.</p>
 <p>Але для початку просто створимо два класи: <strong>Employee</strong> та <strong>EmployeeTask</strong>:</p>
 <pre class='line-numbers'><code>
@@ -198,8 +198,8 @@ class EmployeeTask {
 }
 </code></pre>
 <p>З цими класами все добре, але між ними немає жодного зв'язку, який би відображав той факт, що поле employeeId класу EmployeeTask посилається на поле id класу Employee. Настав час це виправити</p>
-<h2>2.3 Анотація @ManyToOne.</h2>
-<p>По-перше, Java ми звикли оперувати об'єктами (і посиланнями на об'єкти), а не їх id. Так що насамперед давайте замість поля employeeId у класі EmployeeTask просто вкажемо посилання на об'єкт типу Employee. Ось як виглядатиме наш новий клас:</p>
+<h2>3. Анотація @ManyToOne.</h2>
+<p>По-перше, в Java ми звикли оперувати об'єктами (і посиланнями на об'єкти), а не їхніми id. Так що насамперед давайте замість поля employeeId у класі EmployeeTask просто вкажемо посилання на об'єкт типу Employee. Ось як виглядатиме наш новий клас:</p>
 <pre class='line-numbers'><code>
 <span class="text-brown">@Entity
 @Table(name</span>=<span class="text-green">"task"</span><span class="text-brown">)</span>
@@ -219,17 +219,17 @@ class EmployeeTask {
 }
 </code></pre>
 <p>За допомогою <strong>анотації</strong> <code>@ManyToOne</code> ми вказали, що багато об'єктів EmployeeTask можуть посилатися на один об'єкт типу Employee. Також за допомогою <strong>анотації</strong> <code>@JoinColumn</code> ми вказали, в якій колонці нашої таблиці зберігається id об'єкта Employee.</p>
-<h2>2.4 Приклади запитів</h2>
-<p>А тепер покажемо кілька прикладів, як Hibernate вміє працювати з такими зв'язаними класами.</p>
+<h2>4. Приклади запитів</h2>
+<p>А тепер розглянемо кілька прикладів того, як Hibernate вміє працювати з такими зв'язаними класами.</p>
 <h3>Сценарій перший</h3>
 <p>Давай напишемо запит, щоб дізнатися про всі завдання, які були призначені на певного користувача. Ось як цей запит буде виглядати на HQL:</p>
-<pre><code><span class="text-brown">from</span> EmployeeTask <span class="text-brown">where</span> employee.name = <span class="text-user" >"Іван Іванович"</span>
+<pre><code><span class="text-brown">from</span> EmployeeTask <span class="text-brown">where</span> employee.name = <span class="text-user" >"Шевченко Ігор"</span>
 </code></pre>
 <p>Ти можеш просто звертатися до полів залежних класів через точку. Це дуже зручно. Але давай все ж запишемо цей запит у вигляді Java-коду:</p>
 <pre class='line-numbers'><code>
 String hql = <span class="text-green">"з EmployeeTask where employee.name = :username"</span>;
 Query&lt;<span class="token keyword">EmployeeTask</span>&gt; <span class="text-viola">query</span> = <span class="text-user">session</span>.createQuery( hql, <span class="token keyword">EmployeeTask</span> . class);
-<span class="text-viola">query</span>.setParameter(<span class="text-green">"username"</span>, <span class="text-user">"Іван Іванович" </span>);
+<span class="text-viola">query</span>.setParameter(<span class="text-green">"username"</span>, <span class="text-user">"Шевченко Ігор" </span>);
 List&lt;<span class="token keyword">EmployeeTask</span>&gt; resultLIst = <span class="text-viola">query</span>.<span class="text-red">list</span>();
 </code></pre>
 <h3>Сценарій другий</h3>
@@ -243,7 +243,7 @@ List&lt;<span class="token keyword">EmployeeTask</span>&gt; resultLIst = <span c
 <p>А тепер запишемо цей же запит на HQL:</p>
 <pre><code><span class="text-brown">select distinct</span> employee <span class="text-brown">from</span> EmployeeTask <span class="text-brown">where </span> deadline &lt; CURDATE();
 </code></pre>
-<p>Employee у цьому запиті – це поле класу EmployeeTask</p>
+<p>Employee у цьому запиті — це поле класу EmployeeTask</p>
 <h3>Ситуація третя</h3>
 <p>Призначимо всі непризначені завдання на директора. Запит на SQL виглядатиме так:</p>
 <pre><code>
@@ -257,8 +257,8 @@ List&lt;<span class="token keyword">EmployeeTask</span>&gt; resultLIst = <span c
 Employee <span class="text-brown">director</span> = <span class="text-user">session</span>.get(Employee.class, 4);
  
 String hql = <span class="text-green">"update EmployeeTask set employee = :user where employee is null"</span>;
-Query&lt;<span class="token keyword">EmployeeTask</span>&gt; <span class="text-viola">query</span> = <span class="text-user">session</span>.createQuery(hql, <span class="token keyword">EmployeeTask</span> . class);
-<span class="text-viola">query</span>.setParameter(<span class="text-green">"user"</span>, <span class="text-brown">director</span >);
+Query&lt;<span class="token keyword">EmployeeTask</span>&gt; <span class="text-viola">query</span> = <span class="text-user">session</span>.createQuery(hql, <span class="token keyword">EmployeeTask</span>.class);
+<span class="text-viola">query</span>.setParameter(<span class="text-green">"user"</span>, <span class="text-brown">director</span>);
 <span class="text-viola">query</span>.<span class="text-red">executeUpdate</span>();
 
 </code></pre>
